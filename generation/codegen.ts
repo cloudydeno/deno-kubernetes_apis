@@ -10,11 +10,13 @@ export async function writeApiModule(surface: SurfaceMap, api: SurfaceApi) {
 
   await Deno.mkdir(modRoot, {recursive: true});
 
-  if (api.apiGroup !== 'meta') {
+  if (api.operations.length > 0) {
     await Deno.writeTextFile(path.join(modRoot, 'mod.ts'),
       generateModuleTypescript(surface, api));
+    console.log('Wrote', path.join(modRoot, 'mod.ts'));
   }
 
   await Deno.writeTextFile(path.join(modRoot, 'structs.ts'),
     generateStructsTypescript(surface, api));
+  console.log('Wrote', path.join(modRoot, 'structs.ts'));
 }

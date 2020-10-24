@@ -1,5 +1,6 @@
 import {OpenAPI2, OpenAPI2PathObject, OpenAPI2Methods, OpenAPI2PathMethod, OpenAPI2RequestParameter, OpenAPI2PathResponse, OpenAPI2SchemaObject, MethodList} from './openapi.ts';
 import { ApiOperation } from "./describe-api.ts";
+import { ShapeLibrary } from "./describe-shapes.ts";
 
 export class SurfaceMap {
   wholeSpec: OpenAPI2;
@@ -12,8 +13,14 @@ export class SurfaceMap {
 
       apiGroup: 'meta',
       apiVersion: 'v1',
-      friendlyName: 'Metav1',
+      apiGroupVersion: 'meta/v1',
+      friendlyName: 'MetaV1',
       moduleName: `meta@v1`,
+
+      operations: new Array,
+      definitions: new Map,
+      kinds: new Map,
+      shapes: new ShapeLibrary('io.k8s.apimachinery.pkg.apis.meta.v1.', this.byDefPrefix),
     });
   }
 
@@ -21,8 +28,8 @@ export class SurfaceMap {
   byPathPrefix = new Map<string,SurfaceApi>();
   byDefPrefix = new Map<string,SurfaceApi>();
 
-  operations = new Map<SurfaceApi, Array<SurfaceOperation>>();
-  metaDefs = new Map<string, OpenAPI2SchemaObject>();
+  // operations = new Map<SurfaceApi, Array<SurfaceOperation>>();
+  // metaDefs = new Map<string, OpenAPI2SchemaObject>();
 
   recognizePath(path: string): (SurfaceApi & {
     operations: Array<SurfaceOperation>;
@@ -37,10 +44,7 @@ export class SurfaceMap {
     // [ "/apis/apps", "v1", "namespaces/{namespace}/daemonsets" ]
 
     const existing = this.byPathPrefix.get(apiRoot);
-    if (existing) return {
-      ...existing,
-      operations: this.operations.get(existing) ?? [],
-    }
+    if (existing) return existing;
 
     const apiGroup = apiGroupPath === '/api' ? 'core' : apiGroupPath.slice(6);
     const apiGroupMaybe = apiGroupPath === '/api' ? '' : apiGroupPath.slice(6);
@@ -51,30 +55,33 @@ export class SurfaceMap {
     const versionName = apiVersion
       .replace(/(^|[.-])[a-z]/g, x => x.slice(-1).toUpperCase());
 
+    const shapePrefix = Object
+      .entries(this.wholeSpec.definitions)
+      .filter(([_, x]) => x["x-kubernetes-group-version-kind"]?.every(y => y.group === apiGroupMaybe && y.version === apiVersion))
+      .map(([x]) => x.slice(0, x.lastIndexOf('.')+1))[0] ?? 'BUG';
+
     const api: SurfaceApi = {
       apiRoot: apiRoot,
       apiGroup: apiGroup,
       apiVersion: apiVersion,
+      apiGroupVersion: [...(apiGroupMaybe ? [apiGroup] : []), apiVersion].join('/'),
       friendlyName: groupName + versionName,
       moduleName: `${apiGroup}@${apiVersion}`,
-      shapePrefix: Object
-        .entries(this.wholeSpec.definitions)
-        .filter(([_, x]) => x["x-kubernetes-group-version-kind"]?.every(y => y.group === apiGroupMaybe && y.version === apiVersion))
-        .map(([x]) => x.slice(0, x.lastIndexOf('.')+1))[0] ?? 'BUG',
+      shapePrefix: shapePrefix,
+      operations: new Array,
+      definitions: new Map,
+      kinds: new Map,
+      shapes: new ShapeLibrary(shapePrefix, this.byDefPrefix),
     };
     this.registerApi(api);
 
-    return {
-      ...api,
-      operations: this.operations.get(api) ?? [],
-    };
+    return api;
   }
 
   registerApi(api: SurfaceApi) {
     this.byPathPrefix.set(api.apiRoot, api);
     this.byDefPrefix.set(api.shapePrefix, api);
     this.allApis.push(api);
-    this.operations.set(api, []);
   }
 }
 
@@ -82,18 +89,31 @@ export interface SurfaceApi {
   apiRoot: string;
   apiGroup: string;
   apiVersion: string;
+  apiGroupVersion: string;
   moduleName: string;
   friendlyName: string;
   shapePrefix: string;
 
-  // operations: SurfaceOperation[];
-  // schemas: Map<string,OpenAPI2SchemaObject>;
+  operations: Array<SurfaceOperation>,
+  definitions: Map<string,OpenAPI2SchemaObject>,
+  kinds: Map<string,SurfaceKind>,
+  shapes: ShapeLibrary,
 }
 
 export type SurfaceOperation = OpenAPI2PathMethod & {
   parameters: OpenAPI2RequestParameter[],
   subPath: string;
   method: OpenAPI2Methods;
+}
+
+export interface SurfaceKind {
+  name: string;
+  listName: string | null;
+  plural: string | null;
+  singular: string | null;
+  isNamespaced: boolean;
+  // subresources: Record<string,unknown>;
+  // operations: Array<ApiOperation>;
 }
 
 export function describeSurface(wholeSpec: OpenAPI2) {
@@ -156,12 +176,25 @@ export function describeSurface(wholeSpec: OpenAPI2) {
     // }
   }
 
-  for (const [defId, schema] of Object.entries(wholeSpec.definitions)) {
-    const defPrefix = defId.slice(0, defId.lastIndexOf('.')+1);
-    if (!surface.byDefPrefix.has(defPrefix)) {
-      surface.metaDefs.set(defId, schema);
+  for (const api of surface.allApis) {
+    const defs = new Map<string, OpenAPI2SchemaObject>();
+    for (const [defId, schema] of Object.entries(wholeSpec.definitions)) {
+      if (!defId.startsWith(api.shapePrefix)) continue;
+      const defName = defId.slice(api.shapePrefix.length);
+      // console.log(defName)
+      defs.set(defName, schema);
     }
+    // console.log(api.shapes, defs)
+    api.shapes.loadShapes(defs);
   }
+
+  // for (const [defId, schema] of Object.entries(wholeSpec.definitions)) {
+  //   const defPrefix = defId.slice(0, defId.lastIndexOf('.')+1);
+  //   const api = surface.byDefPrefix.get(defPrefix);
+  //   if (api) {
+  //     api.definitions.set(defId.slice(defPrefix.length), schema);
+  //   }
+  // }
 
   // console.log(Array.from(shapes.shapes.keys()).sort())
   // console.log(Array.from(shapes.localShapes.keys()).sort())

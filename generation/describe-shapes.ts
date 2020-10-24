@@ -1,80 +1,84 @@
 import { OpenAPI2SchemaObject, GroupVersionKind } from "./openapi.ts";
+import { SurfaceApi } from "./describe-surface.ts";
 
 export class ShapeLibrary {
-  availableNames: Record<string, OpenAPI2SchemaObject | undefined>;
   localApi: string;
-  constructor(availableNames: Record<string, OpenAPI2SchemaObject>, apiGroup: string, apiVersion: string) {
-    this.availableNames = availableNames;
+  otherPrefixes: Map<string, SurfaceApi>;
+  constructor(localPrefix: string, otherPrefixes: Map<string, SurfaceApi>) {
+    this.localApi = localPrefix;
+    Object.defineProperty(this, 'otherPrefixes', {
+      enumerable: false,
+      value: null,
+      writable: true,
+    });
+    this.otherPrefixes = otherPrefixes;
+  }
 
-    this.localApi = '';
-    if (apiGroup === 'meta') {
-      this.localApi = `io.k8s.apimachinery.pkg.apis.meta.${apiVersion}.`;
-    }
-    for (const [path, schema] of Object.entries(availableNames)) {
-      const kinds = schema["x-kubernetes-group-version-kind"]
-      if (!kinds || kinds.length !== 1) continue;
-      const [kind] = kinds;
-      if (kind.group !== apiGroup) continue;
-      if (kind.version !== apiVersion) continue;
-      if (!path.endsWith(kind.kind)) continue;
-      this.localApi = path.slice(0, -kind.kind.length);
-      break;
-    }
-    if (!this.localApi) throw new Error(
-      `Failed to find API path for ${apiGroup} ${apiVersion}`);
+  availableNames = new Map<string, OpenAPI2SchemaObject>();
+  shapes = new Map<string,ApiShape>();
+  // localShapes = new Map<string, ApiShape>();
+  // remoteShapes = new Map<string, ApiShape>();
 
-    for (const [path, schema] of Object.entries(availableNames)) {
-      if (path.startsWith(this.localApi) && schema.type === 'object') {
+  loadShapes(definitions: Map<string, OpenAPI2SchemaObject>) {
+    this.availableNames = definitions;
+    for (const [path, schema] of definitions.entries()) {
+      // if (this.localApi.includes('meta')) console.log(path, schema)
+      if (schema.type === 'object') {
         // console.log(path);
-        this.readSchema({$ref: `#/definitions/${path}`})
+        this.readSchema({$ref: `#/definitions/${this.localApi}${path}`}, path)
       }
     }
   }
 
-  shapes = new Map<string,ApiShape>();
-  localShapes = new Map<string, ApiShape>();
-  remoteShapes = new Map<string, ApiShape>();
+  referencedLibraries = new Set<SurfaceApi>();
 
-  readSchema(schema: OpenAPI2SchemaObject): ApiShape {
+  readSchema(schema: OpenAPI2SchemaObject, localName: string | null): ApiShape {
     if (schema.$ref) {
-      let shape = this.shapes.get(schema.$ref);
+      const localDefPref = `#/definitions/${this.localApi}`;
+      // console.log(schema.$ref, schema.$ref.startsWith(localDefPref), this.shapes.get(schema.$ref.slice(localDefPref.length)));
+      let shape = schema.$ref.startsWith(localDefPref)
+        ? this.shapes.get(schema.$ref.slice(localDefPref.length))
+        : undefined;
       if (!shape) {
         shape = this.resolveRef(schema);
-        this.shapes.set(schema.$ref, shape);
+        // this.shapes.set(schema.$ref, shape);
       }
       return shape;
 
     } else if (schema.properties) {
       if (schema.additionalProperties) throw new Error(`TODO: complex obj`)
       const fields = new Map<string,ApiShape>();
-      for (const [key, val] of Object.entries(schema.properties)) {
-        // console.log(key, JSON.stringify(val))
-        fields.set(key, this.readSchema(val));
-      }
-      // if (schema.description?.includes('lists and various')) throw new Error('todo')
-      return {
+      const shape: ApiShape = {
         type: 'structure',
         description: schema.description,
         required: schema.required ?? [],
         fields,
       };
+      if (localName) this.shapes.set(localName, shape);
+
+      for (const [key, val] of Object.entries(schema.properties)) {
+        // console.log(key, JSON.stringify(val))
+        fields.set(key, this.readSchema(val, null));
+      }
+      // if (schema.description?.includes('lists and various')) throw new Error('todo')
+      return shape;
 
     } else if (schema.type === 'array' && schema.items) {
       return {
         type: 'list',
         description: schema.description,
-        inner: this.readSchema(schema.items),
+        inner: this.readSchema(schema.items, null),
       };
 
     } else if (schema.type === 'object' && typeof schema.additionalProperties === 'object') {
       return {
         type: 'map',
         description: schema.description,
-        inner: this.readSchema(schema.additionalProperties),
+        inner: this.readSchema(schema.additionalProperties, null),
       };
 
     } else if (schema.type === 'object') {
-      console.log('WARN: found empty object');
+      // console.log('WARN: found empty object');
       return {
         type: 'structure',
         description: schema.description,
@@ -90,7 +94,7 @@ export class ShapeLibrary {
         description: schema.description,
       };
 
-    } else if (schema.type === 'integer') {
+    } else if (schema.type === 'integer' || schema.type === 'number') {
       return {
         type: 'number',
         format: schema.format,
@@ -116,26 +120,79 @@ export class ShapeLibrary {
         description: schema.description,
       };
 
+    } else if (localName === 'JSONSchemaPropsOrBool') {
+      return {
+        type: 'any',
+        description: schema.description,
+        reference: 'JSONSchemaProps | boolean',
+      };
+
+    } else if (localName === 'JSONSchemaPropsOrStringArray') {
+      return {
+        type: 'any',
+        description: schema.description,
+        reference: 'JSONSchemaProps | string[]',
+      };
+
+    } else if (localName === 'JSONSchemaPropsOrArray') {
+      return {
+        type: 'any',
+        description: schema.description,
+        reference: 'JSONSchemaProps | JSONSchemaProps[]',
+      };
+
+    } else if (localName === 'JSON') {
+      return {
+        type: 'any',
+        description: schema.description,
+        reference: 'JSON[] | Record<string, JSON> | number | string | boolean | null',
+      };
+
     }
-    console.log('TODO', schema);
+    console.log('TODO', schema, localName);
     throw new Error(`TODO`);
   }
 
   resolveRef(schema: OpenAPI2SchemaObject): ApiShape {
     const prefix = '#/definitions/';
     if (!schema.$ref.startsWith(prefix)) {
-      console.log('TODO', schema);
+      console.log('TODO 322', schema);
       throw new Error(`TODO resolveSchema ${schema.$ref}`);
     }
-
     const defId = schema.$ref.slice(prefix.length);
-    const definition = this.availableNames[defId];
-    if (!definition) throw new Error(`Def ${defId} not found`);
-    const shape = this.readSchema(definition);
-    shape.reference = defId;
 
-    const isLocal = defId.startsWith(this.localApi);
-    (isLocal ? this.localShapes : this.remoteShapes).set(defId, shape);
+    switch (defId) {
+      case 'io.k8s.apimachinery.pkg.runtime.RawExtension':
+        return {type: 'any', reference: 'unknown'};
+      case 'io.k8s.apimachinery.pkg.api.resource.Quantity':
+      case 'io.k8s.apimachinery.pkg.api.resource.Quantity_v2':
+        return {type: 'any', reference: 'quantity'};
+      case 'io.k8s.apimachinery.pkg.util.intstr.IntOrString':
+        return {type: 'string', format: 'int-or-string'};
+    }
+
+    if (!defId.startsWith(this.localApi)) {
+      const defName = defId.slice(defId.lastIndexOf('.')+1);
+      const defPrefix = defId.slice(0, -defName.length);
+      // console.log('foreign', [defName, defPrefix]);
+      const api = this.otherPrefixes.get(defPrefix);
+      if (!api) throw new Error(`Foreign not found ${schema.$ref}`);
+      this.referencedLibraries.add(api);
+      return {
+        type: 'foreign',
+        api, name: defName,
+      };
+    }
+
+    const defName = defId.slice(this.localApi.length);
+    const definition = this.availableNames.get(defName);
+    if (!definition) throw new Error(`Local Def ${defName} not found`);
+    const shape = this.readSchema(definition, defName);
+
+    // todo: remove?
+    shape.reference = defName;
+
+    this.shapes.set(defName, shape);
 
     const kinds = definition["x-kubernetes-group-version-kind"]
     if (kinds?.length === 1) {
@@ -154,6 +211,7 @@ export type ApiShape =
 | PrimitiveShape
 | WrapperShape
 | StructureShape
+| ForeignShape
 ;
 
 export interface ShapeMeta {
@@ -185,4 +243,10 @@ export interface StructureShape extends ShapeMeta {
   type: 'structure';
   required: string[];
   fields: Map<string,ApiShape>;
+}
+
+export interface ForeignShape extends ShapeMeta {
+  type: 'foreign';
+  api: SurfaceApi;
+  name: string;
 }

@@ -6,19 +6,20 @@ import { describeSurface } from "./describe-surface.ts";
 const data = await Deno.readTextFile('openapi.json');
 const wholeSpec: OpenAPI2 = JSON.parse(data);
 const surface = describeSurface(wholeSpec);
-// console.log(surface.allApis.slice(0, 5));
-// console.log(surface.allApis.map(x => [x.apiRoot, x.shapePrefix]));
 
-const wg69 = surface.allApis.find(x => x.apiGroup === 'pet.wg69.net' && x.apiVersion === 'v1');
-if (!wg69) throw new Error(`TODO`);
-// const wg69api = describeApi(surface, wg69);
-await writeApiModule(surface, wg69);
-// // console.log(wg69api.kinds);
+function writeApi(apiGroup: string, apiVersion: string) {
+  const api = surface.allApis.find(x => x.apiGroup === apiGroup && x.apiVersion === apiVersion);
+  if (!api) throw new Error(`TODO`);
+  return writeApiModule(surface, api);
+}
 
-// await writeApiModule(describeApi(wholeSpec, 'meta', 'v1'));
-// await writeApiModule(describeApi(wholeSpec, 'core', 'v1'));
-// await writeApiModule(describeApi(wholeSpec, 'acme.cert-manager.io', 'v1beta1'));
-// await writeApiModule(describeApi(wholeSpec, 'policy', 'v1beta1'));
-// await writeApiModule(describeApi(wholeSpec, 'extensions', 'v1beta1'));
-// await writeApiModule(describeApi(wholeSpec, 'batch', 'v1'));
-// await writeApiModule(describeApi(wholeSpec, 'batch', 'v1beta1'));
+await writeApi('meta', 'v1');
+await writeApi('pet.wg69.net', 'v1');
+// await writeApi('batch', 'v1');
+// await writeApi('batch', 'v1beta1');
+await writeApi('core', 'v1');
+// await writeApi('acme.cert-manager.io', 'v1beta1');
+// await writeApi('policy', 'v1beta1');
+// await writeApi('extensions', 'v1beta1');
+// await writeApi('autoscaling', 'v1');
+// await writeApi('authentication.k8s.io', 'v1');

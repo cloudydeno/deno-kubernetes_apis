@@ -1,28 +1,33 @@
 import {OpenAPI2, OpenAPI2Methods, OpenAPI2PathMethod, OpenAPI2RequestParameter, MethodList} from './openapi.ts';
 import { ShapeLibrary, ApiShape } from "./describe-shapes.ts";
-import { SurfaceMap, SurfaceApi } from './describe-surface.ts';
+import { SurfaceMap, SurfaceApi, SurfaceOperation } from './describe-surface.ts';
 
 export function describeApi(surface: SurfaceMap, api: SurfaceApi) {
-  const shapes = new ShapeLibrary(surface.wholeSpec.definitions, api.apiGroup === 'core' ? '' : api.apiGroup, api.apiVersion);
+  // const shapes = new ShapeLibrary(surface.wholeSpec.definitions, api);
 
-  const apiDesc = new ApiDescription(api.apiGroup, api.apiVersion, shapes);
-  const {apiRoot, apiGroupInner, apiName} = apiDesc;
+  const apiDesc = new ApiDescription(api.apiGroup, api.apiVersion, api.shapes);
+  // const {apiRoot} = api;
+  // const apiGroupInner = api.apiGroup === 'core' ? '' : api.apiGroup;
+  const apiName = api.friendlyName;
 
-  console.error('API Base:', apiDesc.apiRootParts);
-  console.error('API Name:', apiDesc.apiName);
+  // console.error('API Base:', apiDesc.apiRootParts);
+  // console.error('API Name:', apiDesc.apiName);
 
-  for (const [path, pathObj] of Object.entries(surface.wholeSpec.paths)) {
-    if (!path.startsWith(apiRoot+'/')) continue;
-    for (const method of MethodList) {
-      if (!(method in pathObj)) continue;
-      const methodObj = pathObj[method];
-      if (!methodObj["x-kubernetes-group-version-kind"]) continue;
-      const {group, version, kind} = methodObj["x-kubernetes-group-version-kind"];
-      if (group != apiGroupInner) continue;
-      if (version != api.apiVersion) continue;
-      const subPath = path.slice(apiRoot.length+1);
+  for (const operation of api.operations) {
+
+  // }
+  // for (const [path, pathObj] of Object.entries(surface.wholeSpec.paths)) {
+  //   if (!path.startsWith(apiRoot+'/')) continue;
+  //   for (const method of MethodList) {
+  //     if (!(method in pathObj)) continue;
+  //     const methodObj = pathObj[method];
+      if (!operation["x-kubernetes-group-version-kind"]) continue;
+      const {group, version, kind} = operation["x-kubernetes-group-version-kind"];
+      // if (group != apiGroupInner) continue;
+      // if (version != api.apiVersion) continue;
+      const subPath = operation.subPath;
       if (subPath.startsWith('watch/')) continue; // deprecated anyway
-      if (methodObj.operationId.endsWith('WithPath')) continue; // TODO: special proxy routes
+      if (operation.operationId.endsWith('WithPath')) continue; // TODO: special proxy routes
 
       if (!apiDesc.kinds.has(kind)) {
         apiDesc.kinds.set(kind, new ApiKind(kind));
@@ -38,13 +43,13 @@ export function describeApi(surface: SurfaceMap, api: SurfaceApi) {
         kindObj.isNamespaced = true;
       }
 
-      const op = new ApiOperation(apiName, subPath, method, methodObj, pathObj.parameters, shapes);
+      const op = new ApiOperation(apiName, operation, api.shapes);
 
       kindObj.operations.push(op);
       // console.log(method, subPath, methodObj, pathObj.parameters);
       // relevantActions.push(new ApiAction(method, subPath, methodObj, pathObj.parameters));
       // break;
-    }
+    // }
   }
 
   // console.log(Array.from(shapes.shapes.keys()).sort())
@@ -66,28 +71,28 @@ export class ApiDescription {
 
   kinds = new Map<string, ApiKind>();
 
-  get isCoreApi(): boolean {
-    return this.apiGroup === 'core';
-  }
-  /** Empty string for 'core' APIs */
-  get apiGroupInner(): string {
-    return this.isCoreApi ? '' : this.apiGroup;
-  }
-  /** CamelCased version of the first part of the apiGroup */
-  get apiName(): string {
-    const groupName = this.apiGroup
-      .replace(/\.k8s\.io$/, '')
-      .replace(/(^|[.-])[a-z]/g, x => x.slice(-1).toUpperCase());
-    const versionName = this.apiVersion
-      .replace(/(^|[.-])[a-z]/g, x => x.slice(-1).toUpperCase());
-    return groupName + versionName;
-  }
-  get apiRoot(): string {
-    return `/${this.isCoreApi ? 'api' : `apis/${this.apiGroup}`}/${this.apiVersion}`;
-  }
-  get apiRootParts(): string[] {
-    return [...(this.isCoreApi ? ['api'] : ['apis', this.apiGroup]), this.apiVersion];
-  }
+  // get isCoreApi(): boolean {
+  //   return this.apiGroup === 'core';
+  // }
+  // /** Empty string for 'core' APIs */
+  // get apiGroupInner(): string {
+  //   return this.isCoreApi ? '' : this.apiGroup;
+  // }
+  // /** CamelCased version of the first part of the apiGroup */
+  // get apiName(): string {
+  //   const groupName = this.apiGroup
+  //     .replace(/\.k8s\.io$/, '')
+  //     .replace(/(^|[.-])[a-z]/g, x => x.slice(-1).toUpperCase());
+  //   const versionName = this.apiVersion
+  //     .replace(/(^|[.-])[a-z]/g, x => x.slice(-1).toUpperCase());
+  //   return groupName + versionName;
+  // }
+  // get apiRoot(): string {
+  //   return `/${this.isCoreApi ? 'api' : `apis/${this.apiGroup}`}/${this.apiVersion}`;
+  // }
+  // get apiRootParts(): string[] {
+  //   return [...(this.isCoreApi ? ['api'] : ['apis', this.apiGroup]), this.apiVersion];
+  // }
 }
 
 export class ApiKind {
@@ -116,26 +121,26 @@ export class ApiOperation {
   params: OpenAPI2RequestParameter[];
   action?: string;
 
-  constructor(apiName: string, subPath: string, method: OpenAPI2Methods, methodObj: OpenAPI2PathMethod, extraParams: OpenAPI2RequestParameter[], shapes: ShapeLibrary) {
-    this.path = subPath;
-    this.method = method;
-    this.description = methodObj.description;
-    this.consumes = methodObj.consumes;
-    this.produces = methodObj.produces;
-    this.operationId = methodObj.operationId;
-    this.params = new Array().concat(methodObj.parameters ?? [], extraParams);
-    this.action = methodObj['x-kubernetes-action'];
+  constructor(apiName: string, operation: SurfaceOperation, shapes: ShapeLibrary) {
+    this.path = operation.subPath;
+    this.method = operation.method;
+    this.description = operation.description;
+    this.consumes = operation.consumes;
+    this.produces = operation.produces;
+    this.operationId = operation.operationId;
+    this.params = operation.parameters;
+    this.action = operation['x-kubernetes-action'];
 
     this.responses = Object.create(null);
-    for (const [status, resp] of Object.entries(methodObj.responses)) {
+    for (const [status, resp] of Object.entries(operation.responses)) {
       this.responses[parseInt(status)] = {
         description: resp.description,
-        shape: resp.schema?.$ref ? shapes.readSchema(resp.schema) : null,
+        shape: resp.schema?.$ref ? shapes.readSchema(resp.schema, null) : null,
       };
     }
 
-    const kind = methodObj['x-kubernetes-group-version-kind']?.kind ?? 'Bug';
-    let [operationPrefix, operationSuffix] = methodObj.operationId.split(apiName);
+    const kind = operation['x-kubernetes-group-version-kind']?.kind ?? 'Bug';
+    let [operationPrefix, operationSuffix] = operation.operationId.split(apiName);
 
     if (operationSuffix.includes('Namespaced')) {
       operationSuffix = operationSuffix.replace('Namespaced', '');
