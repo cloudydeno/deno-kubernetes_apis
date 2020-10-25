@@ -37,17 +37,20 @@ export class KubectlRestClient implements RestClient {
     }
     console.log(method.toUpperCase(), path);
 
-    // TODO: request bodies
-
     const p = Deno.run({
-      cmd: ["kubectl", command, "--raw", path],
+      cmd: ["kubectl", command, ...(opts.body ? ['-f', '-'] : []), "--raw", path],
+      stdin: opts.body ? 'piped' : undefined,
       stdout: "piped",
     });
+    if (p.stdin) {
+      await p.stdin.write(new TextEncoder().encode(JSON.stringify(opts.body)));
+      p.stdin.close();
+    }
+    const rawOutput = await p.output();
     const { code } = await p.status();
     if (code !== 0) {
       throw new Error(`Failed to call kubectl: code ${code}`);
     }
-    const rawOutput = await p.output();
 
     if (opts.accept === 'application/json') {
       const data = new TextDecoder("utf-8").decode(rawOutput);

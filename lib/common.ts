@@ -22,12 +22,25 @@ export interface RestClient {
   // subPath(strings: TemplateStringsArray, ...params: string[]): RestClient;
 }
 
+export async function* readAllPages<T>(pageFunc: (token?: string) => Promise<{metadata: {continue?: string | null}, items: T[]}>) {
+  let pageToken: string | undefined;
+  do {
+    const page = await pageFunc(pageToken ?? undefined);
+    yield* page.items;
+    pageToken = page.metadata.continue ?? undefined;
+  } while (pageToken);
+}
+
 
 // Things that JSON can encode directly
 export type JSONPrimitive = string | number | boolean | null | undefined;
 export type JSONValue = JSONPrimitive | JSONObject | JSONArray;
 export type JSONObject = {[key: string]: JSONValue};
 export type JSONArray = JSONValue[];
+
+export function identity(input: JSONValue) {
+  return input;
+}
 
 export function readOpt<T>(input: JSONValue, mapper: (raw: JSONValue) => T): T | null | undefined {
   if (input == null) return input;
@@ -42,6 +55,11 @@ export function checkNum(input: JSONValue): number {
   if (input == null) throw new Error(`Type a3sf`);
   if (typeof input !== 'number') throw new Error(`Type asdfsgs`);
   return input;
+}
+export function checkStrOrNum(input: JSONValue): string | number {
+  if (input == null) throw new Error(`Type a3sf`);
+  if (typeof input === 'string' || typeof input === 'number') return input;
+  throw new Error(`Type sdgssdf`);
 }
 export function checkBool(input: JSONValue): boolean {
   if (input == null) throw new Error(`Type a3sf`);

@@ -1,6 +1,4 @@
 import * as path from "https://deno.land/std@0.70.0/path/mod.ts";
-import { ApiDescription } from "./describe-api.ts";
-import { ApiShape } from "./describe-shapes.ts";
 import { generateModuleTypescript } from "./codegen-mod.ts";
 import { generateStructsTypescript } from "./codegen-structs.ts";
 import { SurfaceApi, SurfaceMap } from "./describe-surface.ts";

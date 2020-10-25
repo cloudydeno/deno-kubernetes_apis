@@ -31,7 +31,7 @@ export type OpenAPI2Type =
 // export type OpenAPI2Reference = { $ref: string };
 
 export interface OpenAPI2SchemaObject {
-  $ref: string;
+  $ref?: string;
 
   additionalProperties?: OpenAPI2SchemaObject | boolean;
   allOf?: OpenAPI2SchemaObject[];

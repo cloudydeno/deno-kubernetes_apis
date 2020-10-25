@@ -152,7 +152,7 @@ export class ShapeLibrary {
 
   resolveRef(schema: OpenAPI2SchemaObject): ApiShape {
     const prefix = '#/definitions/';
-    if (!schema.$ref.startsWith(prefix)) {
+    if (!schema.$ref?.startsWith(prefix)) {
       console.log('TODO 322', schema);
       throw new Error(`TODO resolveSchema ${schema.$ref}`);
     }
