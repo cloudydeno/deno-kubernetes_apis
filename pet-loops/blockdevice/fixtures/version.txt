@@ -1,0 +1,14 @@
+smartctl 7.1 2019-12-30 r5022 [x86_64-linux-5.7.16-200.fc32.x86_64] (local build)
+Copyright (C) 2002-19, Bruce Allen, Christian Franke, www.smartmontools.org
+
+smartctl comes with ABSOLUTELY NO WARRANTY. This is free
+software, and you are welcome to redistribute it under
+the terms of the GNU General Public License; either
+version 2, or (at your option) any later version.
+See http://www.gnu.org for further details.
+
+smartmontools release 7.1 dated 2019-12-30 at 15:00:11 UTC
+smartmontools SVN rev 5022 dated 2019-12-30 at 15:00:49
+smartmontools build host: x86_64-redhat-linux-gnu
+smartmontools build with: C++14, GCC 10.0.1 20200126 (Red Hat 10.0.1-0.6)
+smartmontools configure arguments: '--build=x86_64-redhat-linux-gnu' '--host=x86_64-redhat-linux-gnu' '--program-prefix=' '--disable-dependency-tracking' '--prefix=/usr' '--exec-prefix=/usr' '--bindir=/usr/bin' '--sbindir=/usr/sbin' '--sysconfdir=/etc' '--datadir=/usr/share' '--includedir=/usr/include' '--libdir=/usr/lib64' '--libexecdir=/usr/libexec' '--localstatedir=/var' '--sharedstatedir=/var/lib' '--mandir=/usr/share/man' '--infodir=/usr/share/info' '--with-selinux' '--with-libcap-ng=yes' '--with-libsystemd' '--with-systemdsystemunitdir=/usr/lib/systemd/system' '--sysconfdir=/etc/smartmontools/' '--with-systemdenvfile=/etc/sysconfig/smartmontools' 'build_alias=x86_64-redhat-linux-gnu' 'host_alias=x86_64-redhat-linux-gnu' 'CXXFLAGS=-O2 -g -pipe -Wall -Werror=format-security -Wp,-D_FORTIFY_SOURCE=2 -Wp,-D_GLIBCXX_ASSERTIONS -fexceptions -fstack-protector-strong -grecord-gcc-switches -specs=/usr/lib/rpm/redhat/redhat-hardened-cc1 -specs=/usr/lib/rpm/redhat/redhat-annobin-cc1 -m64 -mtune=generic -fasynchronous-unwind-tables -fstack-clash-protection -fcf-protection' 'LDFLAGS=-Wl,-z,relro -Wl,--as-needed  -Wl,-z,now -specs=/usr/lib/rpm/redhat/redhat-hardened-ld' 'CFLAGS=-O2 -g -pipe -Wall -Werror=format-security -Wp,-D_FORTIFY_SOURCE=2 -Wp,-D_GLIBCXX_ASSERTIONS -fexceptions -fstack-protector-strong -grecord-gcc-switches -specs=/usr/lib/rpm/redhat/redhat-hardened-cc1 -specs=/usr/lib/rpm/redhat/redhat-annobin-cc1 -m64 -mtune=generic -fasynchronous-unwind-tables -fstack-clash-protection -fcf-protection' 'PKG_CONFIG_PATH=:/usr/lib64/pkgconfig:/usr/share/pkgconfig'
