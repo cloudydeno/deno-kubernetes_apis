@@ -1,6 +1,7 @@
-import { ApiDescription, describeApi } from "./describe-api.ts";
-import { ApiShape } from "./describe-shapes.ts";
+import { ApiShape, StructureShape } from "./describe-shapes.ts";
 import { SurfaceMap, SurfaceApi } from "./describe-surface.ts";
+
+type ExtraStructsList = Array<{name: string, struct: StructureShape}>;
 
 export function generateStructsTypescript(surface: SurfaceMap, apiS: SurfaceApi): string {
   const chunks = new Array<string>();
@@ -11,7 +12,7 @@ export function generateStructsTypescript(surface: SurfaceMap, apiS: SurfaceApi)
     chunks.push(`import * as ${otherApi.friendlyName} from "../${otherApi.moduleName}/structs.ts";`);
   }
 
-  const api = describeApi(surface, apiS);
+  // const api = describeApi(surface, apiS);
 
   if (apiS.apiGroup === 'meta') {
     chunks.push(`
@@ -47,27 +48,69 @@ export function generateStructsTypescript(surface: SurfaceMap, apiS: SurfaceApi)
       case 'structure':
 
         const isKind = shape.kind
-          && api.kinds.has(shape.kind.kind);
+          && apiS.kinds.has(shape.kind.kind);
         const isKindList = shape.kind
           && shape.kind.kind.endsWith('List')
-          && api.kinds.has(shape.kind.kind.slice(0, -4));
+          && apiS.kinds.has(shape.kind.kind.slice(0, -4));
+        // console.log(shape.kind?.kind, apiS.kinds.has(shape.kind?.kind ?? ''), apiS.kinds.has(shape.kind?.kind.slice(0, -4) ?? ''))
+
+        const extraStructs = new Array<{name: string, struct: StructureShape}>();
 
         if (isKind) {
           chunks.push(`export type ${name} = Kind<${JSON.stringify(shape.kind?.kind)}> & ${name}Fields;`);
           chunks.push(`export interface ${name}Fields {`);
           for (const [field, inner] of shape.fields) {
             if (['apiVersion', 'kind'].includes(field)) continue;
-            chunks.push(`  ${field}${shape.required.includes(field) ? '' : '?'}: ${generateType(inner)};`);
+            const isReq = shape.required.includes(field);
+            chunks.push(`  ${field}${isReq ? '' : '?'}: ${generateType(inner)}${isReq ? '' : ' | null'};`);
           }
           chunks.push(`}`);
 
+          chunks.push(`export function to${name}Fields(input: c.JSONValue): ${name}Fields {`);
+          chunks.push(`  const obj = c.checkObj(input);`);
+          chunks.push(`  return {`);
+          for (const [field, inner] of shape.fields) {
+            if (['apiVersion', 'kind'].includes(field)) continue;
+            const stack = generateReadStack(inner, `${name}Fields_${field}`, extraStructs);
+            if (!shape.required.includes(field)) {
+              stack.unshift('c.readOpt');
+            }
+            chunks.push(`    ${field}: ${printReadStack(stack, `obj[${JSON.stringify(field)}]`)},`);
+          }
+          chunks.push(`  }}`);
+
+          chunks.push(`export function to${name}(input: c.JSONValue): ${name} {`);
+          // chunks.push(`  const obj = c.checkObj(input);`);
+          chunks.push(`  const {apiVersion, kind, ...fields} = c.checkObj(input);`);
+          // chunks.push(`  if (typeof apiVersion !== 'string') throw new Error("Type apiv mis 1");`);
+          chunks.push(`  if (apiVersion !== ${JSON.stringify(apiS.apiGroupVersion)}) throw new Error("Type apiv mis 2");`);
+          // chunks.push(`  if (typeof kind !== 'string') throw new Error("Type kind mis 1");`);
+          chunks.push(`  if (kind !== ${JSON.stringify(shape.kind?.kind)}) throw new Error("Type kind mis 2");`);
+          chunks.push(`  return {`);
+          chunks.push(`    apiVersion, kind,`);
+          chunks.push(`    ...to${name}Fields(fields),`);
+          chunks.push(`  }}`);
+
+
         } else if (isKindList) {
-          chunks.push(`export type ${name} = Kind<${JSON.stringify(shape.kind?.kind)}> & ListOf<${name.slice(0, -4)}Fields>;`);
+          chunks.push(`export type ${name} = Kind<${JSON.stringify(shape.kind?.kind)}> & ListOf<${name.slice(0, -4)}>;`);
           // for (const [field, inner] of shape.fields) {
           //   if (['apiVersion', 'kind', 'items', 'metadata'].includes(field)) continue;
           //   chunks.push(`  ${field}${shape.required.includes(field) ? '' : '?'}: ${generateType(inner)};`);
           // }
           // chunks.push(`};`);
+
+          chunks.push(`export function to${name}(input: c.JSONValue): ${name} {`);
+          // chunks.push(`  const obj = c.checkObj(input);`);
+          chunks.push(`  const {apiVersion, kind, metadata, items} = c.checkObj(input);`);
+          chunks.push(`  if (apiVersion !== ${JSON.stringify(apiS.apiGroupVersion)}) throw new Error("Type apiv mis 2");`);
+          chunks.push(`  if (kind !== "${name}") throw new Error("Type kind mis 2");`);
+          chunks.push(`  return {`);
+          chunks.push(`    apiVersion, kind,`);
+          chunks.push(`    metadata: MetaV1.toListMeta(metadata),`);
+          chunks.push(`    items: c.readList(items, to${name.slice(0, -4)}),`);
+          chunks.push(`  }}`);
+
 
         } else {
           chunks.push(`export interface ${name} {`);
@@ -78,16 +121,14 @@ export function generateStructsTypescript(surface: SurfaceMap, apiS: SurfaceApi)
           chunks.push(`}`);
 
           chunks.push(`export function to${name}(input: c.JSONValue): ${name} {`);
-          chunks.push(`  if (input == null) throw new Error("Type structInitA");`);
-          chunks.push(`  if (typeof input !== 'object') throw new Error("Type structInitB");`);
-          chunks.push(`  if (Array.isArray(input)) throw new Error("Type structInitC");`);
+          chunks.push(`  const obj = c.checkObj(input);`);
           chunks.push(`  return {`);
           for (const [field, inner] of shape.fields) {
-            const stack = generateReadStack(inner);
+            const stack = generateReadStack(inner, `${name}_${field}`, extraStructs);
             if (!shape.required.includes(field)) {
               stack.unshift('c.readOpt');
             }
-            chunks.push(`    ${field}: ${printReadStack(stack, `input[${JSON.stringify(field)}]`)},`);
+            chunks.push(`    ${field}: ${printReadStack(stack, `obj[${JSON.stringify(field)}]`)},`);
           }
           chunks.push(`  }}`);
 
@@ -115,6 +156,27 @@ export function generateStructsTypescript(surface: SurfaceMap, apiS: SurfaceApi)
 
         }
         // console.log(shape)
+
+        while (true) {
+          const extraStruct = extraStructs.shift();
+          if (!extraStruct) break;
+
+          chunks.push(`export function to${extraStruct.name}(input: c.JSONValue) {`);
+          chunks.push(`  const obj = c.checkObj(input);`);
+          chunks.push(`  return {`);
+          for (const [field, inner] of extraStruct.struct.fields) {
+            const stack = generateReadStack(inner, `${extraStruct.name}_${field}`, extraStructs);
+            if (!extraStruct.struct.required.includes(field)) {
+              stack.unshift('c.readOpt');
+            }
+            chunks.push(`    ${field}: ${printReadStack(stack, `obj[${JSON.stringify(field)}]`)},`);
+          }
+          chunks.push(`  }}`);
+
+          // function toBlockDeviceFields_status_smartReport_attributes(input: c.JSONValue) {
+        //   const obj = c.checkObj(input);
+      }
+
         break;
 
       case 'string':
@@ -149,7 +211,8 @@ export function generateStructsTypescript(surface: SurfaceMap, apiS: SurfaceApi)
         const chunks = new Array<string>();
         chunks.push('{');
         for (const [field, inner] of shape.fields) {
-          chunks.push(`  ${field}${shape.required.includes(field) ? '' : '?'}: ${generateType(inner)};`);
+          const isReq = shape.required.includes(field);
+          chunks.push(`  ${field}${isReq ? '' : '?'}: ${generateType(inner)}${isReq ? '' : ' | null'};`);
         }
         chunks.push('}');
         return chunks.join('\n').replace(/\n/g, '\n  ');
@@ -195,28 +258,23 @@ export function generateStructsTypescript(surface: SurfaceMap, apiS: SurfaceApi)
     return `unknown /* ${shape.type} ${shape.reference} */`;
   }
 
-  function generateReadStack(shape: ApiShape): string[] {
+  function generateReadStack(shape: ApiShape, curName: string, extraStructs: ExtraStructsList): string[] {
     if (shape.reference && shape.type === 'structure') {
       return ['to'+shape.reference];
     }
 
     switch (shape.type) {
-      // case 'structure': {
-      //   const chunks = new Array<string>();
-      //   chunks.push('{');
-      //   for (const [field, inner] of shape.fields) {
-      //     chunks.push(`  ${field}${shape.required.includes(field) ? '' : '?'}: ${generateType(inner)};`);
-      //   }
-      //   chunks.push('}');
-      //   return chunks.join('\n').replace(/\n/g, '\n  ');
-      // }
+      case 'structure': {
+        extraStructs.push({name: curName, struct: shape});
+        return [`to${curName}`];
+      }
 
       case 'list': {
-        return ['c.readList', ...generateReadStack(shape.inner)];
+        return ['c.readList', ...generateReadStack(shape.inner, curName, extraStructs)];
       }
 
       case 'map': {
-        return ['c.readMap', ...generateReadStack(shape.inner)];
+        return ['c.readMap', ...generateReadStack(shape.inner, curName, extraStructs)];
       }
 
       case 'foreign': {
@@ -247,7 +305,7 @@ export function generateStructsTypescript(surface: SurfaceMap, apiS: SurfaceApi)
 
         switch (shape.reference) {
           case 'unknown':
-            return []; // no transform
+            return [/*none*/];
           case 'quantity':
             return ['c.toQuantity'];
         }
@@ -262,16 +320,19 @@ export function generateStructsTypescript(surface: SurfaceMap, apiS: SurfaceApi)
   return chunks.join('\n');
 }
 
+const letters = 'xyzabc';
 function printReadStack(stack: string[], rootExpr: string): string {
   const top = stack.shift();
   if (!top) return rootExpr;
   let inner = stack.pop();
   if (!inner) return `${top}(${rootExpr})`;
 
+  let idx = 0;
   while (true) {
     const mid = stack.pop();
     if (!mid) break;
-    inner = `x => ${mid}(x, ${inner})`;
+    const x = letters[idx++];
+    inner = `${x} => ${mid}(${x}, ${inner})`;
   }
   return `${top}(${rootExpr}, ${inner})`;
 }

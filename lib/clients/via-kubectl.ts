@@ -1,4 +1,5 @@
-import { RestClient, HttpMethods, RequestOptions, PathedRestClient } from './common.ts';
+import { RestClient, HttpMethods, RequestOptions } from '../common.ts';
+import { PathedRestClient } from './common.ts';
 
 /**
  * A RestClient for easily running on a developer's local machine.
@@ -17,7 +18,7 @@ import { RestClient, HttpMethods, RequestOptions, PathedRestClient } from './com
  */
 
 export class KubectlRestClient implements RestClient {
-  async performRequest(method: HttpMethods, opts: RequestOptions={}): Promise<Object> {
+  async performRequest(method: HttpMethods, opts: RequestOptions={}): Promise<any> {
     const command = {
       get: 'get',
       post: 'create',
@@ -30,8 +31,9 @@ export class KubectlRestClient implements RestClient {
     if (!command) throw new Error(`KubectlRestClient cannot perform HTTP ${method.toUpperCase()}`);
 
     let path = opts.path || '/';
-    if (opts.querystring) {
-      path += `?${opts.querystring}`;
+    const query = opts.querystring?.toString() ?? '';
+    if (query) {
+      path += (path.includes('?') ? '&' : '?') + query;
     }
     console.log(method.toUpperCase(), path);
 
@@ -46,14 +48,19 @@ export class KubectlRestClient implements RestClient {
       throw new Error(`Failed to call kubectl: code ${code}`);
     }
     const rawOutput = await p.output();
-    const data = new TextDecoder("utf-8").decode(rawOutput);
-    return JSON.parse(data);
+
+    if (opts.accept === 'application/json') {
+      const data = new TextDecoder("utf-8").decode(rawOutput);
+      return JSON.parse(data);
+    } else {
+      return rawOutput;
+    }
   }
 
-  subPath(strings: TemplateStringsArray, ...names: string[]): RestClient {
-    const path = String.raw(strings, ...names.map(encodeURIComponent));
-    if (!path.startsWith('/')) throw new Error(
-      `BUG: must use absolute paths when pathing a RestClient`);
-    return new PathedRestClient(this, path);
-  }
+  // subPath(strings: TemplateStringsArray, ...names: string[]): RestClient {
+  //   const path = String.raw(strings, ...names.map(encodeURIComponent));
+  //   if (!path.startsWith('/')) throw new Error(
+  //     `BUG: must use absolute paths when pathing a RestClient`);
+  //   return new PathedRestClient(this, path);
+  // }
 }

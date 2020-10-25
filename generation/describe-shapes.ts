@@ -16,8 +16,7 @@ export class ShapeLibrary {
 
   availableNames = new Map<string, OpenAPI2SchemaObject>();
   shapes = new Map<string,ApiShape>();
-  // localShapes = new Map<string, ApiShape>();
-  // remoteShapes = new Map<string, ApiShape>();
+  referencedLibraries = new Set<SurfaceApi>();
 
   loadShapes(definitions: Map<string, OpenAPI2SchemaObject>) {
     this.availableNames = definitions;
@@ -29,8 +28,6 @@ export class ShapeLibrary {
       }
     }
   }
-
-  referencedLibraries = new Set<SurfaceApi>();
 
   readSchema(schema: OpenAPI2SchemaObject, localName: string | null): ApiShape {
     if (schema.$ref) {

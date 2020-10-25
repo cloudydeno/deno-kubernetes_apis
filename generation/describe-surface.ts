@@ -1,5 +1,8 @@
-import {OpenAPI2, OpenAPI2PathObject, OpenAPI2Methods, OpenAPI2PathMethod, OpenAPI2RequestParameter, OpenAPI2PathResponse, OpenAPI2SchemaObject, MethodList} from './openapi.ts';
-import { ApiOperation } from "./describe-api.ts";
+import {
+  OpenAPI2Methods, MethodList,
+  OpenAPI2, OpenAPI2SchemaObject,
+  OpenAPI2PathMethod, OpenAPI2RequestParameter,
+} from './openapi.ts';
 import { ShapeLibrary } from "./describe-shapes.ts";
 
 export class SurfaceMap {
@@ -27,9 +30,6 @@ export class SurfaceMap {
   allApis = new Array<SurfaceApi>();
   byPathPrefix = new Map<string,SurfaceApi>();
   byDefPrefix = new Map<string,SurfaceApi>();
-
-  // operations = new Map<SurfaceApi, Array<SurfaceOperation>>();
-  // metaDefs = new Map<string, OpenAPI2SchemaObject>();
 
   recognizePath(path: string): (SurfaceApi & {
     operations: Array<SurfaceOperation>;
@@ -104,7 +104,10 @@ export type SurfaceOperation = OpenAPI2PathMethod & {
   parameters: OpenAPI2RequestParameter[],
   subPath: string;
   method: OpenAPI2Methods;
+  scope: OpScope;
+  operationName: string;
 }
+type OpScope = 'Cluster' | 'AllNamespaces' | 'Namespaced';
 
 export interface SurfaceKind {
   name: string;
@@ -128,16 +131,64 @@ export function describeSurface(wholeSpec: OpenAPI2) {
 
     const api = surface.recognizePath(path);
     if (api) {
+
+      const subPath = path.slice(api.apiRoot.length);
+      if (subPath.startsWith('watch/')) continue; // deprecated anyway
+
       for (const method of MethodList) {
         if (!(method in pathObj)) continue;
         const methodObj = pathObj[method];
+
+        if (methodObj.operationId.endsWith('WithPath')) continue; // TODO: special proxy routes
+
+        const kind = methodObj['x-kubernetes-group-version-kind']?.kind ?? 'Bug';
+        let [operationPrefix, operationSuffix] = methodObj.operationId.split(api.friendlyName);
+
+        let scope: OpScope = 'Cluster';
+        if (operationSuffix.includes('Namespaced')) {
+          operationSuffix = operationSuffix.replace('Namespaced', '');
+          scope = 'Namespaced';
+        } else if (operationSuffix.includes('ForAllNamespaces')) {
+          // operationSuffix = operationSuffix.replace('ForAllNamespaces', 'Globally');
+          scope = 'AllNamespaces';
+        }
+
+        let opName = '';
+        if (operationSuffix.includes(kind)) {
+          let [opMidA, opMidB] = operationSuffix.split(kind);
+          opName = [operationPrefix, kind, opMidA, opMidB].join('');
+        } else {
+          opName = [operationPrefix, operationSuffix].join('');
+        }
+        // console.log(this.scope, opName);
+
         api.operations.push({
           ...methodObj,
           parameters: new Array<OpenAPI2RequestParameter>()
             .concat(methodObj.parameters ?? [], pathObj.parameters ?? []),
-          subPath: path.slice(api.apiRoot.length),
+          subPath: subPath,
           method: method,
+          operationName: opName,
+          scope: scope,
         });
+
+        const kindTuple = methodObj['x-kubernetes-group-version-kind'];
+        if (kindTuple) {
+          let kindObj = api.kinds.get(kindTuple.kind);
+          if (!kindObj) {
+            kindObj = {
+              name: kindTuple.kind,
+              plural: kindTuple.kind+'s',
+              singular: kindTuple.kind,
+              listName: kindTuple.kind+'List',
+              isNamespaced: false,
+            };
+            api.kinds.set(kindTuple.kind, kindObj);
+          }
+          if (subPath.startsWith('namespaces/{namespace}/')) {
+            kindObj.isNamespaced = true;
+          }
+        }
       }
     }
 

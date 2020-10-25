@@ -1,3 +1,28 @@
+// The API contract that all generated code expects
+
+export type HttpMethods =
+  | "get"
+  | "post"
+  | "delete"
+  | "put"
+  | "patch"
+  | "options"
+  | "head";
+
+export interface RequestOptions {
+  querystring?: URLSearchParams,
+  accept?: string,
+  path?: string,
+  body?: JSONValue,
+}
+
+export interface RestClient {
+  performRequest(method: HttpMethods, opts?: RequestOptions & {accept: 'application/json'}): Promise<JSONValue>;
+  performRequest(method: HttpMethods, opts?: RequestOptions): Promise<Uint8Array>;
+  // subPath(strings: TemplateStringsArray, ...params: string[]): RestClient;
+}
+
+
 // Things that JSON can encode directly
 export type JSONPrimitive = string | number | boolean | null | undefined;
 export type JSONValue = JSONPrimitive | JSONObject | JSONArray;
@@ -37,16 +62,20 @@ export function readList<V>(input: JSONValue, encoder: (x: JSONValue) => V): Arr
   return input.map(encoder);
 }
 export function readMap<V>(input: JSONValue, valEncoder: (x: JSONValue) => V): Record<string,V> {
-  if (input == null) throw new Error(`Type zxvdef`);
-  if (typeof input !== 'object') throw new Error("Type structInitB");
-  if (Array.isArray(input)) throw new Error("Type structInitC");
+  const obj = checkObj(input);
   const map: Record<string,V> = Object.create(null);
-  for (const [key, val] of Object.entries(input)) {
+  for (const [key, val] of Object.entries(obj)) {
     map[key] = valEncoder(val);
   }
   return map;
 }
 
+export function checkObj(input: JSONValue): JSONObject {
+  if (input == null) throw new Error("Type structInitA");
+  if (typeof input !== 'object') throw new Error("Type structInitB");
+  if (Array.isArray(input)) throw new Error("Type structInitC");
+  return input;
+}
 
 // function throwMissingKeys(missingKeys: Iterable<string>, hadKeys: Iterable<string>): never {
 //   throw new Error(`BUG: JSON object `+
@@ -97,6 +126,11 @@ export function readMap<V>(input: JSONValue, valEncoder: (x: JSONValue) => V): R
 // }
 
 
+// Some schemas don't actually belong to any proper versioned API so I'm just putting them here.
+
+// https://github.com/kubernetes/apimachinery/blob/master/pkg/api/resource/quantity.go
+const binarySuffixes  = ['Ki', 'Mi', 'Gi', 'Ti', 'Pi', 'Ei'];
+const decimalSuffixes = ['k',  'M',  'G',  'T',  'P',  'E'];
 export class Quantity {
   number: number;
   suffix: string;
@@ -104,8 +138,13 @@ export class Quantity {
     this.number = number;
     this.suffix = suffix;
   }
+  toString(): string {
+    return `${this.number}${this.suffix}`;
+  }
 }
 export function toQuantity(raw: JSONValue): Quantity {
   const str = checkStr(raw);
-  throw new Error("TODO: toQuantity for "+str);
+  const [suffix] = str.match(/(?:[KMGTPE]i|[mkMGTPE]|[eE][-+]?[0-9.]+)$/) ?? [''];
+  const number = str.slice(0, str.length-suffix.length);
+  return new Quantity(parseInt(number, 10), suffix);
 }
