@@ -22,6 +22,9 @@ export interface RestClient {
   // subPath(strings: TemplateStringsArray, ...params: string[]): RestClient;
 }
 
+
+// Helper function for users (maybe could live elsewhere)
+
 export async function* readAllPages<T>(pageFunc: (token?: string) => Promise<{metadata: {continue?: string | null}, items: T[]}>) {
   let pageToken: string | undefined;
   do {
@@ -30,6 +33,9 @@ export async function* readAllPages<T>(pageFunc: (token?: string) => Promise<{me
     pageToken = page.metadata.continue ?? undefined;
   } while (pageToken);
 }
+
+
+// Small routines used by the actual APIs
 
 
 // Things that JSON can encode directly
@@ -56,23 +62,10 @@ export function checkNum(input: JSONValue): number {
   if (typeof input !== 'number') throw new Error(`Type asdfsgs`);
   return input;
 }
-export function checkStrOrNum(input: JSONValue): string | number {
-  if (input == null) throw new Error(`Type a3sf`);
-  if (typeof input === 'string' || typeof input === 'number') return input;
-  throw new Error(`Type sdgssdf`);
-}
 export function checkBool(input: JSONValue): boolean {
   if (input == null) throw new Error(`Type a3sf`);
   if (typeof input !== 'boolean') throw new Error(`Type asdfsgs`);
   return input;
-}
-export function readDate(input: JSONValue): Date {
-  if (input == null) throw new Error(`Type a3sf`);
-  if (typeof input !== 'string') throw new Error(`Type asdfsgs`);
-  if (!input.includes('T')) throw new Error(`Type dateasdf`);
-  const d = new Date(input);
-  if (isNaN(d.valueOf())) throw new Error(`Type date nan`);
-  return d;
 }
 export function readList<V>(input: JSONValue, encoder: (x: JSONValue) => V): Array<V> {
   if (input == null) throw new Error(`Type zxvdef`);
@@ -101,22 +94,6 @@ export function checkObj(input: JSONValue): JSONObject {
 //     } - had keys ${JSON.stringify(Array.from(hadKeys))}`);
 // }
 
-// export function serializeDate_unixTimestamp(input: Date | number | null | undefined): JSONValue {
-//   if (input == null) return input;
-//   const date = typeof input === 'number' ? new Date(input*1000) : input;
-//   return Math.floor(date.valueOf() / 1000);
-// }
-// export function serializeDate_iso8601(input: Date | number | null | undefined): JSONValue {
-//   if (input == null) return input;
-//   const date = typeof input === 'number' ? new Date(input*1000) : input;
-//   return date.toISOString();
-// }
-// export function serializeDate_rfc822(input: Date | number | null | undefined): JSONValue {
-//   if (input == null) return input;
-//   const date = typeof input === 'number' ? new Date(input*1000) : input;
-//   return date.toUTCString();
-// }
-
 // export function serializeBlob(input: string | Uint8Array | null | undefined): JSONValue {
 //   if (!input) return input;
 //   if (typeof input === 'string') {
@@ -124,6 +101,16 @@ export function checkObj(input: JSONValue): JSONObject {
 //   }
 //   return Base64.fromUint8Array(input);
 // }
+
+export function writeMap<T,U extends JSONValue>(input: Record<string,T> | null | undefined, valEncoder: (x: T) => U): JSONValue {
+  if (input == null) return input;
+  // const obj = checkObj(input);
+  const map: Record<string,U> = Object.create(null);
+  for (const [key, val] of Object.entries(input)) {
+    if (val != null) map[key] = valEncoder(val);
+  }
+  return map;
+}
 
 // export function serializeMap<T,U extends JSONValue>(input: {[key: string]: T} | null | undefined, encoder: (x: T) => U): JSONValue {
 //   if (input == null) return input;
@@ -144,6 +131,7 @@ export function checkObj(input: JSONValue): JSONObject {
 // }
 
 
+
 // Some schemas don't actually belong to any proper versioned API so I'm just putting them here.
 
 // https://github.com/kubernetes/apimachinery/blob/master/pkg/api/resource/quantity.go
@@ -156,7 +144,7 @@ export class Quantity {
     this.number = number;
     this.suffix = suffix;
   }
-  toString(): string {
+  serialize(): string {
     return `${this.number}${this.suffix}`;
   }
 }
@@ -165,4 +153,49 @@ export function toQuantity(raw: JSONValue): Quantity {
   const [suffix] = str.match(/(?:[KMGTPE]i|[mkMGTPE]|[eE][-+]?[0-9.]+)$/) ?? [''];
   const number = str.slice(0, str.length-suffix.length);
   return new Quantity(parseInt(number, 10), suffix);
+}
+export function fromQuantity(val: Quantity): JSONValue {
+  return val?.serialize();
+}
+
+
+
+export class MicroTime {
+  constructor() {
+    throw new Error("TODO: MicroTime");
+  }
+}
+export function toMicroTime(raw: JSONValue): MicroTime {
+  const str = checkStr(raw);
+  throw new Error("TODO: toMicroTime for "+str);
+}
+export function fromMicroTime(val: MicroTime): JSONValue {
+  // const str = c.checkStr(raw);
+  throw new Error("TODO: fromMicroTime for "+JSON.stringify(val));
+}
+
+
+export type Time = Date;
+export function toTime(input: JSONValue): Time {
+  if (input == null) throw new Error(`Type a3sf`);
+  if (typeof input !== 'string') throw new Error(`Type asdfsgs`);
+  if (!input.includes('T')) throw new Error(`Type dateasdf`);
+  const d = new Date(input);
+  if (isNaN(d.valueOf())) throw new Error(`Type date nan`);
+  return d;
+}
+export function fromTime(input: Time | number | null | undefined): JSONValue {
+  if (input == null) return input;
+  const date = typeof input === 'number' ? new Date(input*1000) : input;
+  return date.toISOString();
+}
+
+export type IntOrString = number | string;
+export function toIntOrString(input: JSONValue): string | number {
+  if (input == null) throw new Error(`Type a3sf`);
+  if (typeof input === 'string' || typeof input === 'number') return input;
+  throw new Error(`Type sdgssdf`);
+}
+export function fromIntOrString(val: string | number): JSONValue {
+  return val;
 }

@@ -84,14 +84,37 @@ export class ShapeLibrary {
       };
 
     } else if (schema.type === 'string') {
+      if (schema.format === "date-time") {
+        return {
+          type: 'special',
+          name: 'Time',
+          description: schema.description,
+        };
+      }
+      if (schema.format === "int-or-string") {
+        return {
+          type: 'special',
+          name: 'IntOrString',
+          description: schema.description,
+        };
+      }
+
+      let enumVals = schema.enum;
+      // const enumHeuristic = schema.description?.match(/(?:One of|Valid values are) ((?:["']?[^\. ,]+["']?(?:,|, and|\.) ?)+)/);
+      // if (enumHeuristic && enumHeuristic[1]) {
+      //   enumVals = enumHeuristic[1].split(',').map(x => x.replace(/['"]/g, ' ').trim());
+      // }
+
       return {
         type: 'string',
         format: schema.format,
-        enum: schema.enum,
+        enum: enumVals,
         description: schema.description,
       };
 
     } else if (schema.type === 'integer' || schema.type === 'number') {
+      if (schema.format === "date-time") throw new Error(`EROR: numeric date/time`);
+      if (schema.format === "int-or-string") throw new Error(`EROR: numeric int-or-string`);
       return {
         type: 'number',
         format: schema.format,
@@ -106,8 +129,8 @@ export class ShapeLibrary {
 
     } else if (schema['x-kubernetes-int-or-string']) {
       return {
-        type: 'string',
-        format: 'int-or-string',
+        type: 'special',
+        name: 'IntOrString',
         description: schema.description,
       };
 
@@ -163,9 +186,13 @@ export class ShapeLibrary {
         return {type: 'any', reference: 'unknown'};
       case 'io.k8s.apimachinery.pkg.api.resource.Quantity':
       case 'io.k8s.apimachinery.pkg.api.resource.Quantity_v2':
-        return {type: 'any', reference: 'quantity'};
+        return {type: 'special', name: 'Quantity'};
+      case 'io.k8s.apimachinery.pkg.apis.meta.v1.Time':
+        return {type: 'special', name: 'Time'};
+      case 'io.k8s.apimachinery.pkg.apis.meta.v1.MicroTime':
+        return {type: 'special', name: 'MicroTime'};
       case 'io.k8s.apimachinery.pkg.util.intstr.IntOrString':
-        return {type: 'string', format: 'int-or-string'};
+        return {type: 'special', name: 'IntOrString'};
     }
 
     if (!defId.startsWith(this.localApi)) {
@@ -209,6 +236,7 @@ export type ApiShape =
 | WrapperShape
 | StructureShape
 | ForeignShape
+| SpecialShape
 ;
 
 export interface ShapeMeta {
@@ -227,7 +255,7 @@ export interface BooleanShape extends ShapeMeta {
 
 export interface PrimitiveShape extends ShapeMeta {
   type: 'string' | "number";
-  format?: "byte" | "date-time" | "double" | "int32" | "int64" | "int-or-string";
+  format?: "byte" | "double" | "int32" | "int64";
   enum?: string[];
 }
 
@@ -246,4 +274,9 @@ export interface ForeignShape extends ShapeMeta {
   type: 'foreign';
   api: SurfaceApi;
   name: string;
+}
+
+export interface SpecialShape extends ShapeMeta {
+  type: 'special';
+  name: "IntOrString" | "Quantity" | "Time" | "MicroTime";
 }

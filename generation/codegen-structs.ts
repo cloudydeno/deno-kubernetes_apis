@@ -1,7 +1,127 @@
-import { ApiShape, StructureShape } from "./describe-shapes.ts";
+import { ApiShape, ForeignShape, SpecialShape, StructureShape } from "./describe-shapes.ts";
 import { SurfaceMap, SurfaceApi } from "./describe-surface.ts";
 
 type ExtraStructsList = Array<{name: string, struct: StructureShape}>;
+
+function nameForeignWriteFunc(shape: ForeignShape | SpecialShape): string {
+  // if (shape.api.apiGroup === 'meta' && shape.name === 'Time') {
+  //   return 'c.writeDate';
+  // }
+  const module = shape.type === 'special' ? 'c' : shape.api.friendlyName;
+  return `${module}.from${shape.name}`;
+}
+
+function pushAll<T>(array: T[], items: T[]) {
+  for (const item of items) {
+    array.push(item);
+  }
+}
+
+export function generateFromStruct(topShape: ApiShape, inputRef: string): string[] {
+  const chunks = new Array<string>();
+  chunks.push(`...${inputRef},`);
+
+  if (topShape.type !== 'structure') throw new Error(`TODO`);
+  for (const [name, shape] of topShape.fields) {
+    const fieldRef = `${inputRef}.${name}`;
+    switch (shape.type) {
+      // case 'list':
+      case 'string': {
+        // if (shape.format === 'date-time') {
+        //   chunks.push(`${name}: c.writeDate(${fieldRef}),`);
+        // }
+        break;
+      }
+      case 'structure': {
+        if (shape.reference) {
+          chunks.push(`${name}: ${fieldRef} != null ? from${shape.reference}(${fieldRef}) : undefined,`);
+        } else {
+          chunks.push(`${name}: ${fieldRef} != null ? {`);
+          pushAll(chunks, generateFromStruct(shape, fieldRef).map(x => `  ${x}`));
+          chunks.push(`} : undefined,`);
+        }
+        break;
+      }
+      case 'foreign':
+      case 'special': {
+        const readFunc = nameForeignWriteFunc(shape);
+        chunks.push(`${name}: ${fieldRef} != null ? ${readFunc}(${fieldRef}) : undefined,`);
+        break;
+      }
+      case 'list': {
+        switch (shape.inner.type) {
+          case 'structure': {
+            if (shape.inner.reference) {
+              chunks.push(`${name}: ${fieldRef}?.map(from${shape.inner.reference}),`);
+            } else {
+              chunks.push(`${name}: ${fieldRef}?.map(x => ({`);
+              pushAll(chunks, generateFromStruct(shape.inner, 'x').map(x => `  ${x}`));
+              chunks.push(`})),`);
+            }
+            break;
+          }
+          case 'foreign':
+          case 'special': {
+            const readFunc = nameForeignWriteFunc(shape.inner);
+            chunks.push(`${name}: ${fieldRef}?.map(${readFunc}),`);
+            break;
+          }
+          default:
+            chunks.push(`// TODO: ${name} list of ${shape.inner.type}`);
+        }
+        break;
+      }
+      case 'map': {
+        switch (shape.inner.type) {
+          // case 'structure': {
+          //   chunks.push(`${name}: ${fieldRef}?.map(from${shape.inner.reference}),`);
+          //   break;
+          // }
+          case 'foreign':
+          case 'special': {
+            const readFunc = nameForeignWriteFunc(shape.inner);
+            chunks.push(`${name}: c.writeMap(${fieldRef}, ${readFunc}),`);
+            break;
+          }
+          case 'any': {
+            switch (shape.inner.reference) {
+          //     case 'quantity': {
+          //       chunks.push(`${name}: c.writeMap(${fieldRef}, x => x.serialize()),`);
+          //       break;
+          //     }
+              default:
+                chunks.push(`// TODO: ${name} map of ${shape.inner.type} ${shape.inner.reference}`);
+            }
+            break;
+          }
+          default:
+            chunks.push(`// TODO: ${name} map of ${shape.inner.type}`);
+        }
+        break;
+      }
+      case 'any': {
+        switch (shape.reference) {
+          case 'unknown': {
+            chunks.push(`${name}: ${fieldRef} as c.JSONValue,`);
+            break;
+          }
+          case 'quantity': {
+            chunks.push(`${name}: ${fieldRef}?.serialize(),`);
+            break;
+          }
+          default:
+            chunks.push(`// TODO: ${name} ${shape.type} ${shape.reference}`);
+        }
+        break;
+      }
+      default:
+        chunks.push(`// TODO: ${name} ${shape.type}`);
+    }
+  }
+
+  chunks.push('// TODO!');
+  return chunks;
+}
 
 export function generateStructsTypescript(surface: SurfaceMap, apiS: SurfaceApi): string {
   const chunks = new Array<string>();
@@ -13,19 +133,7 @@ export function generateStructsTypescript(surface: SurfaceMap, apiS: SurfaceApi)
   //   chunks.push(`import * as ${otherApi.friendlyName} from "../${otherApi.moduleName}/structs.ts";`);
   // }
 
-  // const api = describeApi(surface, apiS);
-
-  if (apiS.apiGroup === 'meta') {
-    chunks.push(`
-      export class MicroTime {
-        constructor() {}
-      }
-      export function toMicroTime(raw: c.JSONValue): MicroTime {
-        const str = c.checkStr(raw);
-        throw new Error("TODO: toMicroTime for "+str);
-      }
-    `.replace(/\n      /g, '\n').trimEnd());
-  } else {
+  if (apiS.apiGroup !== 'meta') {
     // chunks.push(`import * as MetaV1 from "../meta@v1/structs.ts";`);
     chunks.push(``);
     chunks.push(`type Kind<T extends string> = {`);
@@ -93,6 +201,36 @@ export function generateStructsTypescript(surface: SurfaceMap, apiS: SurfaceApi)
           chunks.push(`  }}`);
 
 
+          chunks.push(`export function from${name}(input: ${name}): c.JSONValue {`);
+          chunks.push(`  return {`);
+          chunks.push(...generateFromStruct(shape, 'input').map(x => `    ${x}`));
+          // chunks.push(`    ...input,`);
+          // chunks.push(`    metadata: input.metadata ? {`);
+          // chunks.push(`      ...input.metadata,`);
+          // chunks.push(`      name: input.metadata.name,`);
+          // chunks.push(`      namespace: input.metadata.namespace,`);
+          // chunks.push(`      creationTimestamp: input.metadata.creationTimestamp?.toISOString(),`);
+          // chunks.push(`      deletionTimestamp: input.metadata.deletionTimestamp?.toISOString(),`);
+          // chunks.push(`      managedFields: input.metadata.managedFields?.map(x => ({`);
+          // chunks.push(`        ...x,`);
+          // chunks.push(`        time: x.time?.toISOString(),`);
+          // chunks.push(`        fieldsV1: {...x.fieldsV1},`);
+          // chunks.push(`      })),`);
+          // chunks.push(`      ownerReferences: input.metadata.ownerReferences?.map(x => ({...x})),`);
+          // chunks.push(`    } : input.metadata,`);
+          // chunks.push(`    spec: {`);
+          // chunks.push(`      ...input.spec,`);
+          // chunks.push(`    },`);
+          // chunks.push(`    status: input.status ? {`);
+          // chunks.push(`      ...input.status,`);
+          // chunks.push(`      smartReport: input.status.smartReport ? {`);
+          // chunks.push(`        ...input.status.smartReport,`);
+          // chunks.push(`        collectionTime: input.status.smartReport.collectionTime.toISOString(),`);
+          // chunks.push(`      } : input.status.smartReport,`);
+          // chunks.push(`    } : input.status,`);
+          chunks.push(`  }}`);
+
+
         } else if (isKindList) {
           chunks.push(`export type ${name} = Kind<${JSON.stringify(shape.kind?.kind)}> & ListOf<${name.slice(0, -4)}Fields>;`);
           // for (const [field, inner] of shape.fields) {
@@ -131,6 +269,11 @@ export function generateStructsTypescript(surface: SurfaceMap, apiS: SurfaceApi)
             }
             chunks.push(`    ${field}: ${printReadStack(stack, `obj[${JSON.stringify(field)}]`)},`);
           }
+          chunks.push(`  }}`);
+
+          chunks.push(`export function from${name}(input: ${name}): c.JSONValue {`);
+          chunks.push(`  return {`);
+          chunks.push(...generateFromStruct(shape, 'input').map(x => `    ${x}`));
           chunks.push(`  }}`);
 
           // export function toAPIGroup(input: c.JSONValue): APIGroup {
@@ -239,11 +382,11 @@ export function generateStructsTypescript(surface: SurfaceMap, apiS: SurfaceApi)
       }
 
       case 'string': {
-        if (shape.format === 'date-time' || shape.reference === 'io.k8s.apimachinery.pkg.apis.meta.v1.Time') {
-          return 'Date';
-        } else if (shape.format === 'int-or-string') {
-          return 'number | string';
-        } else if (shape.enum) {
+        // if (shape.format === 'date-time' || shape.reference === 'io.k8s.apimachinery.pkg.apis.meta.v1.Time') {
+        //   return 'Date';
+        // } else if (shape.format === 'int-or-string') {
+        //   return 'number | string';
+        if (shape.enum) {
           return shape.enum.map(x => JSON.stringify(x)).join(' | ');
         } else {
           return 'string';
@@ -255,10 +398,13 @@ export function generateStructsTypescript(surface: SurfaceMap, apiS: SurfaceApi)
       case 'boolean':
         return `boolean`;
 
+      case 'special':
+        return `c.${shape.name}`;
+
       case 'any': {
-        if (shape.reference === 'quantity') {
-          return 'c.Quantity';
-        }
+        // if (shape.reference === 'quantity') {
+        //   return 'c.Quantity';
+        // }
         break;
       }
 
@@ -286,22 +432,26 @@ export function generateStructsTypescript(surface: SurfaceMap, apiS: SurfaceApi)
       }
 
       case 'foreign': {
-        if (shape.api.apiGroup === 'meta' && shape.name === 'Time') {
-          return ['c.readDate'];
-        }
+        // if (shape.api.apiGroup === 'meta' && shape.name === 'Time') {
+        //   return ['c.readDate'];
+        // }
         return [`${shape.api.friendlyName}.to${shape.name}`];
       }
 
+      case 'special': {
+        return [`c.to${shape.name}`];
+      }
+
       case 'string': {
-        if (shape.format === 'date-time'/* || shape.reference === 'io.k8s.apimachinery.pkg.apis.meta.v1.Time'*/) {
-          return ['c.readDate'];
-        } else if (shape.format === 'int-or-string') {
-          return ['c.checkStrOrNum'];
+        // if (shape.format === 'date-time'/* || shape.reference === 'io.k8s.apimachinery.pkg.apis.meta.v1.Time'*/) {
+        //   return ['c.readDate'];
+        // } else if (shape.format === 'int-or-string') {
+        //   return ['c.checkStrOrNum'];
         // } else if (shape.enum) {
         //   return [shape.enum.map(x => JSON.stringify(x)).join(' | ')];
-        } else {
+        // } else {
           return ['c.checkStr'];
-        }
+        // }
       }
 
       case 'number':
@@ -314,8 +464,8 @@ export function generateStructsTypescript(surface: SurfaceMap, apiS: SurfaceApi)
         switch (shape.reference) {
           case 'unknown':
             return ['c.identity'];
-          case 'quantity':
-            return ['c.toQuantity'];
+          // case 'quantity':
+          //   return ['c.toQuantity'];
         }
         break;
       }
