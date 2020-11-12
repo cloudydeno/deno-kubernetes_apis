@@ -237,6 +237,17 @@ export function describeSurface(wholeSpec: OpenAPI2) {
     }
     // console.log(api.shapes, defs)
     api.shapes.loadShapes(defs);
+
+    for (const op of api.operations) {
+      for (const param of op.parameters) {
+        api.shapes.readSchema(param.schema ?? {type: param.type}, null);
+      }
+      for (const resp of Object.values(op.responses)) {
+        if (resp.schema?.$ref) {
+          api.shapes.readSchema(resp.schema, null);
+        }
+      }
+    }
   }
 
   // for (const [defId, schema] of Object.entries(wholeSpec.definitions)) {
