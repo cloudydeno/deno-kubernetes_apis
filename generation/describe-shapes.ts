@@ -137,6 +137,7 @@ export class ShapeLibrary {
     } else if (schema['x-kubernetes-preserve-unknown-fields']) {
       return {
         type: 'any',
+        reference: 'unknown',
         description: schema.description,
       };
 

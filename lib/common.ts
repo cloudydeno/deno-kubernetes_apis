@@ -131,6 +131,13 @@ export function writeMap<T,U extends JSONValue>(input: Record<string,T> | null |
 // }
 
 
+// Semi-questionable method of expressing an "open string union" in Typescript
+export type UnexpectedEnumValue = string & {unexpected: never};
+export function readEnum<T extends string>(raw: unknown): T {
+  if (typeof raw === "string") return raw as T;
+  throw new Error(`Required enum value wasn't given`);
+}
+
 
 // Some schemas don't actually belong to any proper versioned API so I'm just putting them here.
 
@@ -157,7 +164,6 @@ export function toQuantity(raw: JSONValue): Quantity {
 export function fromQuantity(val: Quantity): JSONValue {
   return val?.serialize();
 }
-
 
 
 export class MicroTime {
@@ -189,6 +195,7 @@ export function fromTime(input: Time | number | null | undefined): JSONValue {
   const date = typeof input === 'number' ? new Date(input*1000) : input;
   return date.toISOString();
 }
+
 
 export type IntOrString = number | string;
 export function toIntOrString(input: JSONValue): string | number {

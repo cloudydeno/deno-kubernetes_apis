@@ -387,7 +387,7 @@ export function generateStructsTypescript(surface: SurfaceMap, apiS: SurfaceApi)
         // } else if (shape.format === 'int-or-string') {
         //   return 'number | string';
         if (shape.enum) {
-          return shape.enum.map(x => JSON.stringify(x)).join(' | ');
+          return shape.enum.map(x => JSON.stringify(x)).concat('c.UnexpectedEnumValue').join(' | ');
         } else {
           return 'string';
         }
@@ -447,11 +447,11 @@ export function generateStructsTypescript(surface: SurfaceMap, apiS: SurfaceApi)
         //   return ['c.readDate'];
         // } else if (shape.format === 'int-or-string') {
         //   return ['c.checkStrOrNum'];
-        // } else if (shape.enum) {
-        //   return [shape.enum.map(x => JSON.stringify(x)).join(' | ')];
-        // } else {
+        if (shape.enum) {
+          return ['(x => c.readEnum<'+shape.enum.map(x => JSON.stringify(x)).concat('c.UnexpectedEnumValue').join(' | ')+'>(x))'];
+        } else {
           return ['c.checkStr'];
-        // }
+        }
       }
 
       case 'number':
