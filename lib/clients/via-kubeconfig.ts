@@ -1,4 +1,4 @@
-import { RestClient, HttpMethods, RequestOptions, PathedRestClient } from './common.ts';
+import { RestClient, HttpMethods, RequestOptions } from './common.ts';
 
 /**
  * A RestClient for code which is running within a Kubernetes pod and would like to
@@ -27,7 +27,8 @@ import { RestClient, HttpMethods, RequestOptions, PathedRestClient } from './com
  * This requires more permissions; for the momen
  */
 
-export class KubeConfigRestClient /*implements RestClient*/ {
+export default KubeConfigRestClient;
+export class KubeConfigRestClient implements RestClient {
   constructor(kubeConfig: KubeConfig, httpClient: Deno.HttpClient) {
     throw new Error(`TODO: implement :)`);
   }
@@ -60,13 +61,6 @@ export class KubeConfigRestClient /*implements RestClient*/ {
 
     throw new Error(`TODO: implement`);
   }
-
-  subPath(strings: TemplateStringsArray, ...names: string[]): RestClient {
-    const path = String.raw(strings, ...names.map(encodeURIComponent));
-    if (!path.startsWith('/')) throw new Error(
-      `BUG: must use absolute paths when pathing a RestClient`);
-    return new PathedRestClient(this, path);
-  }
 }
 
 
@@ -75,7 +69,7 @@ export class KubeConfigRestClient /*implements RestClient*/ {
 
 
 import { join } from "https://deno.land/std@0.70.0/path/mod.ts";
-import * as YAML from "https://deno.land/std/encoding/yaml.ts";
+import * as YAML from "https://deno.land/std@0.70.0/encoding/yaml.ts";
 
 
 export async function readKubeConfig(path?: string): Promise<KubeConfig> {

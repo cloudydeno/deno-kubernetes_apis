@@ -1,4 +1,4 @@
-import { RestClient, HttpMethods, RequestOptions, PathedRestClient } from './common.ts';
+import { RestClient, HttpMethods, RequestOptions } from './common.ts';
 import { join } from "https://deno.land/std@0.70.0/path/mod.ts";
 
 /**
@@ -16,6 +16,7 @@ import { join } from "https://deno.land/std@0.70.0/path/mod.ts";
  * so KUBERNETES_SERVER_HOST can't be used at this time, and would need --allow-env anyway.
  */
 
+export default InClusterRestClient;
 export class InClusterRestClient implements RestClient {
   readonly baseUrl: string;
   readonly secretsPath: string;
@@ -55,12 +56,5 @@ export class InClusterRestClient implements RestClient {
     })
 
     return resp.json();
-  }
-
-  subPath(strings: TemplateStringsArray, ...names: string[]): RestClient {
-    const path = String.raw(strings, ...names.map(encodeURIComponent));
-    if (!path.startsWith('/')) throw new Error(
-      `BUG: must use absolute paths when pathing a RestClient`);
-    return new PathedRestClient(this, path);
   }
 }

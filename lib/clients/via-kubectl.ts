@@ -1,5 +1,4 @@
 import { RestClient, HttpMethods, RequestOptions } from '../common.ts';
-import { PathedRestClient } from './common.ts';
 
 /**
  * A RestClient for easily running on a developer's local machine.
@@ -17,6 +16,7 @@ import { PathedRestClient } from './common.ts';
  * so KUBERNETES_SERVER_HOST can't be used at this time, and would need --allow-env anyway.
  */
 
+export default KubectlRestClient;
 export class KubectlRestClient implements RestClient {
   async performRequest(method: HttpMethods, opts: RequestOptions={}): Promise<any> {
     const command = {
@@ -59,11 +59,4 @@ export class KubectlRestClient implements RestClient {
       return rawOutput;
     }
   }
-
-  // subPath(strings: TemplateStringsArray, ...names: string[]): RestClient {
-  //   const path = String.raw(strings, ...names.map(encodeURIComponent));
-  //   if (!path.startsWith('/')) throw new Error(
-  //     `BUG: must use absolute paths when pathing a RestClient`);
-  //   return new PathedRestClient(this, path);
-  // }
 }
