@@ -166,6 +166,21 @@ export function fromQuantity(val: Quantity): JSONValue {
   return val?.serialize();
 }
 
+export type Time = Date;
+export function toTime(input: JSONValue): Time {
+  if (input == null) throw new Error(`Type a3sf`);
+  if (typeof input !== 'string') throw new Error(`Type asdfsgs`);
+  if (!input.includes('T')) throw new Error(`Type dateasdf`);
+  const d = new Date(input);
+  if (isNaN(d.valueOf())) throw new Error(`Type date nan`);
+  return d;
+}
+export function fromTime(input: Time | number | null | undefined): JSONValue {
+  if (input == null) return input;
+  const date = typeof input === 'number' ? new Date(input*1000) : input;
+  return date.toISOString();
+}
+
 
 export class MicroTime {
   constructor() {
@@ -182,19 +197,18 @@ export function fromMicroTime(val: MicroTime): JSONValue {
 }
 
 
-export type Time = Date;
-export function toTime(input: JSONValue): Time {
-  if (input == null) throw new Error(`Type a3sf`);
-  if (typeof input !== 'string') throw new Error(`Type asdfsgs`);
-  if (!input.includes('T')) throw new Error(`Type dateasdf`);
-  const d = new Date(input);
-  if (isNaN(d.valueOf())) throw new Error(`Type date nan`);
-  return d;
+export class Duration {
+  constructor() {
+    throw new Error("TODO: Duration");
+  }
 }
-export function fromTime(input: Time | number | null | undefined): JSONValue {
-  if (input == null) return input;
-  const date = typeof input === 'number' ? new Date(input*1000) : input;
-  return date.toISOString();
+export function toDuration(raw: JSONValue): Duration {
+  const str = checkStr(raw);
+  throw new Error("TODO: toDuration for "+str);
+}
+export function fromDuration(val: Duration): JSONValue {
+  // const str = c.checkStr(raw);
+  throw new Error("TODO: fromDuration for "+JSON.stringify(val));
 }
 
 

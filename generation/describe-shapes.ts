@@ -192,6 +192,8 @@ export class ShapeLibrary {
         return {type: 'special', name: 'Time'};
       case 'io.k8s.apimachinery.pkg.apis.meta.v1.MicroTime':
         return {type: 'special', name: 'MicroTime'};
+      case 'io.k8s.apimachinery.pkg.apis.meta.v1.Duration':
+        return {type: 'special', name: 'Duration'};
       case 'io.k8s.apimachinery.pkg.util.intstr.IntOrString':
         return {type: 'special', name: 'IntOrString'};
     }
@@ -279,5 +281,5 @@ export interface ForeignShape extends ShapeMeta {
 
 export interface SpecialShape extends ShapeMeta {
   type: 'special';
-  name: "IntOrString" | "Quantity" | "Time" | "MicroTime";
+  name: "IntOrString" | "Quantity" | "Time" | "MicroTime" | "Duration";
 }
