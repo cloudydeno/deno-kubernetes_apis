@@ -20,6 +20,7 @@ export interface RestClient {
   performRequest(method: HttpMethods, opts?: RequestOptions & {accept: 'application/json'}): Promise<JSONValue>;
   performRequest(method: HttpMethods, opts?: RequestOptions): Promise<Uint8Array>;
   // subPath(strings: TemplateStringsArray, ...params: string[]): RestClient;
+  namespace?: string;
 }
 
 

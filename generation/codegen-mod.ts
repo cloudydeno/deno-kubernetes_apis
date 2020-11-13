@@ -23,7 +23,11 @@ export function generateModuleTypescript(surface: SurfaceMap, api: SurfaceApi): 
 
   if (hasNamespaced) {
     chunks.push(`  namespace(name: string) {`);
-    chunks.push(`    return new ${api.friendlyName}NamespacedApi(this.#client, \`\${this.#root}namespaces/\${name}/\`);`);
+    chunks.push(`    return new ${api.friendlyName}NamespacedApi(this.#client, name);`);
+    chunks.push(`  }`);
+    chunks.push(`  myNamespace() {`);
+    chunks.push(`    if (!this.#client.namespace) throw new Error("No current namespace is set");`);
+    chunks.push(`    return new ${api.friendlyName}NamespacedApi(this.#client, this.#client.namespace);`);
     chunks.push(`  }\n`);
   }
 
@@ -38,9 +42,9 @@ export function generateModuleTypescript(surface: SurfaceMap, api: SurfaceApi): 
     chunks.push(`export class ${api.friendlyName}NamespacedApi {`);
     chunks.push(`  #client: c.RestClient`);
     chunks.push(`  #root: string`);
-    chunks.push(`  constructor(client: c.RestClient, apiRoot: string) {`);
+    chunks.push(`  constructor(client: c.RestClient, namespace: string) {`);
     chunks.push(`    this.#client = client;`);
-    chunks.push(`    this.#root = apiRoot;`);
+    chunks.push(`    this.#root = \`${JSON.stringify(api.apiRoot+'namespaces/').slice(1,-1)}\${namespace}/\`;`);
     chunks.push(`  }\n`);
 
     for (const op of api.operations) {

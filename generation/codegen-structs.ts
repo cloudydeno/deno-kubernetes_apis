@@ -135,6 +135,7 @@ export function generateStructsTypescript(surface: SurfaceMap, apiS: SurfaceApi)
 
   if (apiS.apiGroup !== 'meta') {
     // chunks.push(`import * as MetaV1 from "../meta@v1/structs.ts";`);
+    foreignApis.add(surface.allApis.find(x => x.friendlyName === 'MetaV1')!);
     chunks.push(``);
     chunks.push(`type Kind<T extends string> = {`);
     chunks.push(`  apiVersion: "${apiS.apiGroupVersion}";`);

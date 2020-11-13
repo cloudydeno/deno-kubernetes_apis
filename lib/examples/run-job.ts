@@ -1,24 +1,8 @@
-import { KubectlRestClient } from '../clients/via-kubectl.ts';
-import { RestClient, readAllPages } from "../common.ts";
-// import { PetWg69NetV1Api } from "../apis/pet.wg69.net@v1/mod.ts";
-// import { AppsV1Api } from "../apis/apps@v1/mod.ts";
+import { autoDetectClient } from '../clients/mod.ts';
 import { CoreV1Api } from "../apis/core@v1/mod.ts";
 import { BatchV1Api } from "../apis/batch@v1/mod.ts";
 
-const restClient: RestClient = new KubectlRestClient();
-
-// const appsApi = new AppsV1Api(restClient);
-// for await (const deploy of readAllPages(t => appsApi.listDeploymentForAllNamespaces({
-//   limit: 5,
-//   continue: t,
-// }))) {
-//   console.log(deploy.metadata?.namespace, deploy.metadata?.name);
-// }
-
-// const coreApi = new CoreV1Api(restClient);
-// const nodes = await coreApi.readNode('pet-ausbox');
-// console.log(nodes.status);
-
+const restClient = await autoDetectClient();
 const batchApi = new BatchV1Api(restClient).namespace("dust-poc");
 const coreApi = new CoreV1Api(restClient).namespace("dust-poc");
 // console.log(await batchApi.listJob());

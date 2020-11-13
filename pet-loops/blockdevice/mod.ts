@@ -1,10 +1,10 @@
 import { dumpAll } from "./smartctl.ts";
 import { PetWg69NetV1Api, BlockDevice } from "../../lib/apis/pet.wg69.net@v1/mod.ts";
-import { KubectlRestClient } from "../../lib/clients/via-kubectl.ts";
+import {autoDetectClient} from "../../lib/clients/mod.ts";
 
 const nodeName = Deno.args[0];
 if (!nodeName) throw new Error(`Provide a node name as the first argument! (using downward API in Kubernetes, probably)`);
-const petApi = new PetWg69NetV1Api(new KubectlRestClient());
+const petApi = new PetWg69NetV1Api(await autoDetectClient());
 
 const knownDevs = await petApi.listBlockDevice({
   labelSelector: `pet.wg69.net/node=${nodeName}`,

@@ -16,8 +16,10 @@ import { RestClient, HttpMethods, RequestOptions } from '../common.ts';
  * so KUBERNETES_SERVER_HOST can't be used at this time, and would need --allow-env anyway.
  */
 
-export default KubectlRestClient;
-export class KubectlRestClient implements RestClient {
+export default KubectlRawRestClient;
+export class KubectlRawRestClient implements RestClient {
+  namespace = undefined; // TODO: read from `kubectl config view --output=json`
+
   async performRequest(method: HttpMethods, opts: RequestOptions={}): Promise<any> {
     const command = {
       get: 'get',
@@ -28,7 +30,7 @@ export class KubectlRestClient implements RestClient {
       options: '',
       head: '',
     }[method];
-    if (!command) throw new Error(`KubectlRestClient cannot perform HTTP ${method.toUpperCase()}`);
+    if (!command) throw new Error(`KubectlRawRestClient cannot perform HTTP ${method.toUpperCase()}`);
 
     let path = opts.path || '/';
     const query = opts.querystring?.toString() ?? '';

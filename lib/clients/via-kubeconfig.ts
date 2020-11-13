@@ -1,4 +1,4 @@
-import { RestClient, HttpMethods, RequestOptions } from './common.ts';
+import { RestClient, HttpMethods, RequestOptions } from '../common.ts';
 
 /**
  * A RestClient for code which is running within a Kubernetes pod and would like to
@@ -29,9 +29,11 @@ import { RestClient, HttpMethods, RequestOptions } from './common.ts';
 
 export default KubeConfigRestClient;
 export class KubeConfigRestClient implements RestClient {
-  constructor(kubeConfig: KubeConfig, httpClient: Deno.HttpClient) {
+  constructor(kubeConfig: KubeConfig, httpClient: Deno.HttpClient, namespace?: string) {
+    this.namespace = namespace;
     throw new Error(`TODO: implement :)`);
   }
+  namespace?: string;
 
   static async fromKubeConfig(path?: string): Promise<KubeConfigRestClient> {
 
@@ -48,11 +50,11 @@ export class KubeConfigRestClient implements RestClient {
       caFile: caPath,
     });
 
-    return new KubeConfigRestClient(config, httpClient);
+    return new KubeConfigRestClient(config, httpClient, context.namespace);
   }
 
 
-  async performRequest(method: HttpMethods, opts: RequestOptions={}): Promise<Object> {
+  async performRequest(method: HttpMethods, opts: RequestOptions={}): Promise<any> {
     let path = opts.path || '/';
     if (opts.querystring) {
       path += `?${opts.querystring}`;
@@ -104,7 +106,7 @@ export class KubeConfig implements KubeConfig {
     Object.assign(this, kubeconfig);
   }
 
-  fetchCurrentContext(): {context: ContextConfig, cluster: ClusterConfig, user: UserConfig} {
+  fetchCurrentContext() {
     const current = this.contexts.find(x => x.name === this["current-context"]);
     if (!current) throw new Error(`No context is selected in kubeconfig`);
 
@@ -124,6 +126,7 @@ function isKubeConfig(data: any): data is KubeConfig {
 export interface ContextConfig {
   'cluster': string;
   'user': string;
+  'namespace'?: string;
 }
 
 export interface ClusterConfig {
