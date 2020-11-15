@@ -29,6 +29,8 @@ export interface RestClient {
 
 // Helpers used to validate/transform structures from or for the wire
 
+export {transformWatchStream} from './streaming.ts';
+
 // Things that JSON can encode directly
 export type JSONPrimitive = string | number | boolean | null | undefined;
 export type JSONValue = JSONPrimitive | JSONObject | JSONArray;

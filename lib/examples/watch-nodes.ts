@@ -9,7 +9,7 @@ const coordApi = new CoordinationV1Api(restClient).namespace("kube-node-lease");
 
 // console.log(await coordApi.listLease({resourceVersion: '0'}))
 
-const leaseWatcher = new Reflector(opts => coordApi.listLease(opts), opts => coordApi.watchLease(opts));
+const leaseWatcher = new Reflector(opts => coordApi.getLeaseList(opts), opts => coordApi.watchLeaseList(opts));
 leaseWatcher.run();
 
 await new Promise(ok => setTimeout(ok, 2000));

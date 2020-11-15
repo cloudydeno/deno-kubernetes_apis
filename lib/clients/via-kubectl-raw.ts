@@ -89,6 +89,7 @@ export class KubectlRawRestClient implements RestClient {
       // so let's wait to return the stream until the first read returns
       return new Promise((ok, err) => {
         let isFirstRead = true;
+        const startTime = new Date;
 
         // Convert Deno.Reader|Deno.Closer into a ReadableStream (like 'fetch' gives)
         const stream = readableStreamFromReaderCloser({
@@ -101,8 +102,10 @@ export class KubectlRawRestClient implements RestClient {
             // if we EOFd, check the process status
             if (num === null) {
               const stat = await status;
+              // if it took multiple minutes to fail, probably just failed unrelated
+              const delayMillis = new Date().valueOf() - startTime.valueOf();
               // TODO: some way of passing an error through the ReadableStream?
-              if (stat.code !== 0) {
+              if (stat.code !== 0 && delayMillis < 3*60*1000) {
                 // might not be too late to fail the call more properly
                 err(new Error(`kubectl stream ended with code ${stat.code}`));
                 return num;

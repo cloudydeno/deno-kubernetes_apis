@@ -192,7 +192,7 @@ type KindIdsReq = { metadata: {
 } };
 type ListOf<T> = { metadata: MetaV1.ListMeta; items: Array<T> };
 type ListOpts = { abortSignal?: AbortSignal, resourceVersion?: string; limit?: number; continue?: string };
-type WatchOpts = { abortSignal?: AbortSignal, resourceVersion?: string; timeoutSeconds?: number; };
+type WatchOpts = { abortSignal?: AbortSignal, resourceVersion?: string; timeoutSeconds?: number; allowWatchBookmarks?: boolean };
 
 type VersionRef = { metadata: { resourceVersion: string | null }}; // WeakMap key
 
@@ -205,7 +205,7 @@ export type WatchEventSynced = {
   'object': {metadata: {}};
 };
 
-type ReflectorEvent<T> = WatchEvent<T> | WatchEventSynced;
+type ReflectorEvent<T> = WatchEvent<T & KindIdsReq> | WatchEventSynced;
 type NextEvent<T> = {evt: ReflectorEvent<T>, ref: VersionRef};
 
 export class Reflector<T extends KindIds> {
@@ -219,6 +219,13 @@ export class Reflector<T extends KindIds> {
   #resources = new Map<string, T & KindIdsReq>();
   #latestVersion?: string;
   // #latestEvent?: ReflectorEvent<T>;
+
+  getCached(namespace: string, name: string): (T & KindIdsReq) | undefined {
+    return this.#resources.get(`${namespace||''}/${name}`);
+  }
+  listCached(): Iterable<T & KindIdsReq> {
+    return this.#resources.values();
+  }
 
   #cancelled = false;
   // #cancel?: () => void;
@@ -311,10 +318,13 @@ export class Reflector<T extends KindIds> {
         metadata: {resourceVersion: listVer}},
       }, listVer); // finally set this.#latestVersion
 
-      // TODO: watch in a loop
-      // TODO: handle broken stream (disconnected, etc)
+      // loop watching as long as our resourceVersion is valid
 loop: while (!this.#cancelled) {
-        const watch = await this.#watcher({resourceVersion: this.#latestVersion, abortSignal});
+        const watch = await this.#watcher({
+          resourceVersion: this.#latestVersion,
+          allowWatchBookmarks: true,
+          abortSignal,
+        });
         for await (const evt of watch) {
           if (this.#cancelled) return;
 
@@ -343,7 +353,7 @@ loop: while (!this.#cancelled) {
             } else {
               this.#resources.set(key, evt.object);
             }
-            this._emit(evt, evt.object.metadata.resourceVersion);
+            this._emit({type: evt.type, object: evt.object}, evt.object.metadata.resourceVersion);
           }
 
         }
@@ -357,7 +367,7 @@ loop: while (!this.#cancelled) {
     }
   }
 
-  async *observeAll(): AsyncIterableIterator<WatchEvent<T> | WatchEventSynced> {
+  async *observeAll(): AsyncIterableIterator<ReflectorEvent<T>> {
     // take snapshots for consistent state
     const knownVer = this.#latestVersion;
     const knownRef = this.#latestRef;
