@@ -154,9 +154,23 @@ export function describeSurface(wholeSpec: OpenAPI2) {
         }
 
         let opName = '';
+        let isListOp = false;
         if (operationSuffix.includes(kind)) {
           let [opMidA, opMidB] = operationSuffix.split(kind);
-          opName = [operationPrefix, kind, opMidA, opMidB].join('');
+
+          if (operationPrefix === 'list') {
+            isListOp = true;
+            opName = ['get', kind, 'List', opMidB].join('');
+          } else if (opMidA === 'Collection') {
+            isListOp = true;
+            opName = [operationPrefix, kind, 'List', opMidB].join('');
+          } else if (operationPrefix === 'read') {
+            opName = ['get', opMidA, kind, opMidB].join('');
+          } else {
+            opName = [operationPrefix, opMidA, kind, opMidB].join('');
+          }
+          // if (opMidA && opMidA !== 'Collection')
+          // console.log([operationPrefix, kind, opMidA, opMidB])
         } else {
           opName = [operationPrefix, operationSuffix].join('');
         }
@@ -165,12 +179,26 @@ export function describeSurface(wholeSpec: OpenAPI2) {
         api.operations.push({
           ...methodObj,
           parameters: new Array<OpenAPI2RequestParameter>()
-            .concat(methodObj.parameters ?? [], pathObj.parameters ?? []),
+            .concat(methodObj.parameters ?? [], pathObj.parameters ?? [])
+            .filter(x => !['allowWatchBookmarks', 'watch', 'pretty'].includes(x.name)),
           subPath: subPath,
           method: method,
           operationName: opName,
           scope: scope,
         });
+
+        if (methodObj.parameters?.some(x => x.name === 'watch') && opName.startsWith('get')) {
+          api.operations.push({
+            ...methodObj,
+            parameters: new Array<OpenAPI2RequestParameter>()
+              .concat(methodObj.parameters ?? [], pathObj.parameters ?? [])
+              .filter(x => !['continue', 'limit', 'watch', 'pretty'].includes(x.name)),
+            subPath: subPath,
+            method: method,
+            operationName: opName.replace(/^get/, 'watch'),
+            scope: scope,
+          });
+        }
 
         const kindTuple = methodObj['x-kubernetes-group-version-kind'];
         if (kindTuple) {
