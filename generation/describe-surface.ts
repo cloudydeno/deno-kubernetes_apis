@@ -188,7 +188,10 @@ export function describeSurface(wholeSpec: OpenAPI2) {
           scope: scope,
         });
 
-        if (allParams.some(x => x.name === 'watch') && opName.startsWith('get')) {
+        if (allParams.some(x => x.name === 'watch')
+            && opName.startsWith('get')
+            && !['ComponentStatus', 'NodeMetrics', 'PodMetrics'].includes(kind)
+        ) {
           api.operations.push({
             ...methodObj,
             parameters: allParams.filter(x => !['continue', 'limit', 'watch', 'pretty'].includes(x.name)),

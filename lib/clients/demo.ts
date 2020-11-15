@@ -1,6 +1,6 @@
-import {KubectlRestClient} from './via-kubectl.ts';
+import {KubectlRawRestClient} from './via-kubectl-raw.ts';
 
-const client = new KubectlRestClient();
+const client = new KubectlRawRestClient();
 
 // Build a querystring object
 const querystring = new URLSearchParams();
