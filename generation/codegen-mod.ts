@@ -133,6 +133,7 @@ export function generateModuleTypescript(surface: SurfaceMap, api: SurfaceApi): 
       const bodyName = bodyArg[1].type === 'foreign' ? bodyArg[1].name : bodyArg[1].reference;
       chunks.push(`      body: ${bodyApi.friendlyName}.from${bodyName}(body),`);
     }
+    chunks.push(`      abortSignal: opts.abortSignal,`);
     chunks.push(`    });`);
 
     if (accept === 'text/plain') {
@@ -195,14 +196,15 @@ export function generateModuleTypescript(surface: SurfaceMap, api: SurfaceApi): 
     for (const arg of args) {
       sigs.push(`${arg[0].name}: ${writeType(arg[1])}`);
     }
-    if (opts.length > 0) {
+    // if (opts.length > 0) {
       const allAreOpt = opts.every(x => !x[0].required);
       const lines = new Array<string>();
       for (const opt of opts) {
         lines.push(`  ${opt[0].name}${opt[0].required ? '' : '?'}: ${writeType(opt[1])};`)
       }
+      lines.push(`  abortSignal?: AbortSignal;`);
       sigs.push(`opts: {\n${lines.join('\n')}\n}${allAreOpt ? ' = {}' : ''}`);
-    }
+    // }
     return sigs.join(', ').replace(/\n/g, '\n'+indent);
   }
 

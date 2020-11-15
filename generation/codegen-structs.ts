@@ -4,9 +4,7 @@ import { SurfaceMap, SurfaceApi } from "./describe-surface.ts";
 type ExtraStructsList = Array<{name: string, struct: StructureShape}>;
 
 function nameForeignWriteFunc(shape: ForeignShape | SpecialShape): string {
-  // if (shape.api.apiGroup === 'meta' && shape.name === 'Time') {
-  //   return 'c.writeDate';
-  // }
+  if (shape.type === 'special' && shape.name === 'IntOrString') return '';
   const module = shape.type === 'special' ? 'c' : shape.api.friendlyName;
   return `${module}.from${shape.name}`;
 }
@@ -25,27 +23,25 @@ export function generateFromStruct(topShape: ApiShape, inputRef: string): string
   for (const [name, shape] of topShape.fields) {
     const fieldRef = `${inputRef}.${name}`;
     switch (shape.type) {
-      // case 'list':
-      case 'string': {
-        // if (shape.format === 'date-time') {
-        //   chunks.push(`${name}: c.writeDate(${fieldRef}),`);
-        // }
-        break;
-      }
       case 'structure': {
         if (shape.reference) {
           chunks.push(`${name}: ${fieldRef} != null ? from${shape.reference}(${fieldRef}) : undefined,`);
         } else {
-          chunks.push(`${name}: ${fieldRef} != null ? {`);
-          pushAll(chunks, generateFromStruct(shape, fieldRef).map(x => `  ${x}`));
-          chunks.push(`} : undefined,`);
+          const innerLines = generateFromStruct(shape, fieldRef);
+          if (innerLines.length > 1) {
+            chunks.push(`${name}: ${fieldRef} != null ? {`);
+            pushAll(chunks, innerLines.map(x => `  ${x}`));
+            chunks.push(`} : undefined,`);
+          }
         }
         break;
       }
       case 'foreign':
       case 'special': {
         const readFunc = nameForeignWriteFunc(shape);
-        chunks.push(`${name}: ${fieldRef} != null ? ${readFunc}(${fieldRef}) : undefined,`);
+        if (readFunc) {
+          chunks.push(`${name}: ${fieldRef} != null ? ${readFunc}(${fieldRef}) : undefined,`);
+        }
         break;
       }
       case 'list': {
@@ -54,20 +50,25 @@ export function generateFromStruct(topShape: ApiShape, inputRef: string): string
             if (shape.inner.reference) {
               chunks.push(`${name}: ${fieldRef}?.map(from${shape.inner.reference}),`);
             } else {
-              chunks.push(`${name}: ${fieldRef}?.map(x => ({`);
-              pushAll(chunks, generateFromStruct(shape.inner, 'x').map(x => `  ${x}`));
-              chunks.push(`})),`);
+              const innerLines = generateFromStruct(shape.inner, 'x');
+              if (innerLines.length > 1) {
+                chunks.push(`${name}: ${fieldRef}?.map(x => ({`);
+                pushAll(chunks, innerLines.map(x => `  ${x}`));
+                chunks.push(`})),`);
+              }
             }
             break;
           }
           case 'foreign':
           case 'special': {
             const readFunc = nameForeignWriteFunc(shape.inner);
-            chunks.push(`${name}: ${fieldRef}?.map(${readFunc}),`);
+            if (readFunc) {
+              chunks.push(`${name}: ${fieldRef}?.map(${readFunc}),`);
+            }
             break;
           }
           default:
-            chunks.push(`// TODO: ${name} list of ${shape.inner.type}`);
+            // chunks.push(`// TODO: ${name} list of ${shape.inner.type}`);
         }
         break;
       }
@@ -80,46 +81,40 @@ export function generateFromStruct(topShape: ApiShape, inputRef: string): string
           case 'foreign':
           case 'special': {
             const readFunc = nameForeignWriteFunc(shape.inner);
-            chunks.push(`${name}: c.writeMap(${fieldRef}, ${readFunc}),`);
+            if (readFunc) {
+              chunks.push(`${name}: c.writeMap(${fieldRef}, ${readFunc}),`);
+            }
             break;
           }
           case 'any': {
             switch (shape.inner.reference) {
-          //     case 'quantity': {
-          //       chunks.push(`${name}: c.writeMap(${fieldRef}, x => x.serialize()),`);
-          //       break;
-          //     }
               default:
-                chunks.push(`// TODO: ${name} map of ${shape.inner.type} ${shape.inner.reference}`);
+                // chunks.push(`// TODO: ${name} map of ${shape.inner.type} ${shape.inner.reference}`);
             }
             break;
           }
           default:
-            chunks.push(`// TODO: ${name} map of ${shape.inner.type}`);
+            // chunks.push(`// TODO: ${name} map of ${shape.inner.type}`);
         }
         break;
       }
       case 'any': {
         switch (shape.reference) {
           case 'unknown': {
-            chunks.push(`${name}: ${fieldRef} as c.JSONValue,`);
-            break;
-          }
-          case 'quantity': {
-            chunks.push(`${name}: ${fieldRef}?.serialize(),`);
+            // chunks.push(`${name}: ${fieldRef} as c.JSONValue,`);
             break;
           }
           default:
-            chunks.push(`// TODO: ${name} ${shape.type} ${shape.reference}`);
+            // chunks.push(`// TODO: ${name} ${shape.type} ${shape.reference}`);
         }
         break;
       }
       default:
-        chunks.push(`// TODO: ${name} ${shape.type}`);
+        // chunks.push(`// TODO: ${name} ${shape.type}`);
     }
   }
 
-  chunks.push('// TODO!');
+  // chunks.push('// TODO!');
   return chunks;
 }
 
@@ -129,9 +124,6 @@ export function generateStructsTypescript(surface: SurfaceMap, apiS: SurfaceApi)
   chunks.push(`import * as c from "../../common.ts";`);
 
   const foreignApis = new Set<SurfaceApi>();
-  // for (const otherApi of apiS.shapes.referencedLibraries) {
-  //   chunks.push(`import * as ${otherApi.friendlyName} from "../${otherApi.moduleName}/structs.ts";`);
-  // }
 
   if (apiS.apiGroup !== 'meta') {
     // chunks.push(`import * as MetaV1 from "../meta@v1/structs.ts";`);
@@ -205,30 +197,6 @@ export function generateStructsTypescript(surface: SurfaceMap, apiS: SurfaceApi)
           chunks.push(`export function from${name}(input: ${name}): c.JSONValue {`);
           chunks.push(`  return {`);
           chunks.push(...generateFromStruct(shape, 'input').map(x => `    ${x}`));
-          // chunks.push(`    ...input,`);
-          // chunks.push(`    metadata: input.metadata ? {`);
-          // chunks.push(`      ...input.metadata,`);
-          // chunks.push(`      name: input.metadata.name,`);
-          // chunks.push(`      namespace: input.metadata.namespace,`);
-          // chunks.push(`      creationTimestamp: input.metadata.creationTimestamp?.toISOString(),`);
-          // chunks.push(`      deletionTimestamp: input.metadata.deletionTimestamp?.toISOString(),`);
-          // chunks.push(`      managedFields: input.metadata.managedFields?.map(x => ({`);
-          // chunks.push(`        ...x,`);
-          // chunks.push(`        time: x.time?.toISOString(),`);
-          // chunks.push(`        fieldsV1: {...x.fieldsV1},`);
-          // chunks.push(`      })),`);
-          // chunks.push(`      ownerReferences: input.metadata.ownerReferences?.map(x => ({...x})),`);
-          // chunks.push(`    } : input.metadata,`);
-          // chunks.push(`    spec: {`);
-          // chunks.push(`      ...input.spec,`);
-          // chunks.push(`    },`);
-          // chunks.push(`    status: input.status ? {`);
-          // chunks.push(`      ...input.status,`);
-          // chunks.push(`      smartReport: input.status.smartReport ? {`);
-          // chunks.push(`        ...input.status.smartReport,`);
-          // chunks.push(`        collectionTime: input.status.smartReport.collectionTime.toISOString(),`);
-          // chunks.push(`      } : input.status.smartReport,`);
-          // chunks.push(`    } : input.status,`);
           chunks.push(`  }}`);
 
 
@@ -241,7 +209,6 @@ export function generateStructsTypescript(surface: SurfaceMap, apiS: SurfaceApi)
           // chunks.push(`};`);
 
           chunks.push(`export function to${name}(input: c.JSONValue): ${name} {`);
-          // chunks.push(`  const obj = c.checkObj(input);`);
           chunks.push(`  const {apiVersion, kind, metadata, items} = c.checkObj(input);`);
           chunks.push(`  if (apiVersion !== ${JSON.stringify(apiS.apiGroupVersion)}) throw new Error("Type apiv mis 2");`);
           chunks.push(`  if (kind !== "${name}") throw new Error("Type kind mis 2");`);
@@ -276,31 +243,7 @@ export function generateStructsTypescript(surface: SurfaceMap, apiS: SurfaceApi)
           chunks.push(`  return {`);
           chunks.push(...generateFromStruct(shape, 'input').map(x => `    ${x}`));
           chunks.push(`  }}`);
-
-          // export function toAPIGroup(input: c.JSONValue): APIGroup {
-          //   if (input == null) throw new Error(`Type structInitA`);
-          //   if (typeof input !== 'object') throw new Error(`Type structInitB`);
-          //   if (Array.isArray(input)) throw new Error(`Type structInitC`);
-          //   return {
-          //     apiVersion: c.opt(input['apiVersion'], c.readString),
-          //     kind: c.opt(input['kind'], c.readString),
-          //     name: c.readString(input.name),
-          //     preferredVersion: c.opt(input['preferredVersion'], toGroupVersionForDiscovery),
-          //     serverAddressByClientCIDRs: c.opt(input['serverAddressByClientCIDRs'], x => c.readList(x, toServerAddressByClientCIDR)),
-          //     versions: c.readList(input['versions'], toGroupVersionForDiscovery),
-          //   };
-          // }
-          // export function fromAPIGroup(input: APIGroup): c.JSONValue {
-          //   return {
-          //     apiVersion: input['apiVersion'],
-          //     kind: input['kind'],
-          //     name: input['name'],
-          //     versions: [],
-          //   };
-          // }
-
         }
-        // console.log(shape)
 
         while (true) {
           const extraStruct = extraStructs.shift();
@@ -317,10 +260,7 @@ export function generateStructsTypescript(surface: SurfaceMap, apiS: SurfaceApi)
             chunks.push(`    ${field}: ${printReadStack(stack, `obj[${JSON.stringify(field)}]`)},`);
           }
           chunks.push(`  }}`);
-
-          // function toBlockDeviceFields_status_smartReport_attributes(input: c.JSONValue) {
-        //   const obj = c.checkObj(input);
-      }
+        }
 
         break;
 
@@ -343,18 +283,7 @@ export function generateStructsTypescript(surface: SurfaceMap, apiS: SurfaceApi)
 
   function generateType(shape: ApiShape): string {
     if (shape.reference && shape.type === 'structure') {
-    // if (shape.reference) {
-      // console.log(shape.reference.startsWith(api.shapes.localApi));
-      // console.log(shape.reference, Array.from(api.shapes.localShapes.keys()))
-      // console.log(api.shapes.localShapes.has(shape.reference));
       return shape.reference;
-      // if (api.shapes.shapes.has(shape.reference)) {
-      //   return shape.reference.split('.').slice(-1)[0];
-      // } else if (shape.reference.startsWith('io.k8s.apimachinery.pkg.apis.meta.v1.')) {
-      //   return `MetaV1.${shape.reference.split('.').slice(-1)[0]}`;
-      // }
-      // return `unknown /* ${shape.type} ${shape.reference} */`;
-
     }
 
     switch (shape.type) {
@@ -383,10 +312,6 @@ export function generateStructsTypescript(surface: SurfaceMap, apiS: SurfaceApi)
       }
 
       case 'string': {
-        // if (shape.format === 'date-time' || shape.reference === 'io.k8s.apimachinery.pkg.apis.meta.v1.Time') {
-        //   return 'Date';
-        // } else if (shape.format === 'int-or-string') {
-        //   return 'number | string';
         if (shape.enum) {
           return shape.enum.map(x => JSON.stringify(x)).concat('c.UnexpectedEnumValue').join(' | ');
         } else {
@@ -403,9 +328,9 @@ export function generateStructsTypescript(surface: SurfaceMap, apiS: SurfaceApi)
         return `c.${shape.name}`;
 
       case 'any': {
-        // if (shape.reference === 'quantity') {
-        //   return 'c.Quantity';
-        // }
+        if (shape.reference === 'unknown') {
+          return 'c.JSONValue';
+        }
         break;
       }
 
@@ -433,9 +358,6 @@ export function generateStructsTypescript(surface: SurfaceMap, apiS: SurfaceApi)
       }
 
       case 'foreign': {
-        // if (shape.api.apiGroup === 'meta' && shape.name === 'Time') {
-        //   return ['c.readDate'];
-        // }
         return [`${shape.api.friendlyName}.to${shape.name}`];
       }
 
@@ -444,10 +366,6 @@ export function generateStructsTypescript(surface: SurfaceMap, apiS: SurfaceApi)
       }
 
       case 'string': {
-        // if (shape.format === 'date-time'/* || shape.reference === 'io.k8s.apimachinery.pkg.apis.meta.v1.Time'*/) {
-        //   return ['c.readDate'];
-        // } else if (shape.format === 'int-or-string') {
-        //   return ['c.checkStrOrNum'];
         if (shape.enum) {
           return ['(x => c.readEnum<'+shape.enum.map(x => JSON.stringify(x)).concat('c.UnexpectedEnumValue').join(' | ')+'>(x))'];
         } else {
@@ -465,8 +383,6 @@ export function generateStructsTypescript(surface: SurfaceMap, apiS: SurfaceApi)
         switch (shape.reference) {
           case 'unknown':
             return ['c.identity'];
-          // case 'quantity':
-          //   return ['c.toQuantity'];
         }
         break;
       }

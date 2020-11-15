@@ -176,23 +176,22 @@ export function describeSurface(wholeSpec: OpenAPI2) {
         }
         // console.log(this.scope, opName);
 
+        const allParams = new Array<OpenAPI2RequestParameter>()
+          .concat(methodObj.parameters ?? [], pathObj.parameters ?? []);
+
         api.operations.push({
           ...methodObj,
-          parameters: new Array<OpenAPI2RequestParameter>()
-            .concat(methodObj.parameters ?? [], pathObj.parameters ?? [])
-            .filter(x => !['allowWatchBookmarks', 'watch', 'pretty'].includes(x.name)),
+          parameters: allParams.filter(x => !['allowWatchBookmarks', 'watch', 'pretty'].includes(x.name)),
           subPath: subPath,
           method: method,
           operationName: opName,
           scope: scope,
         });
 
-        if (methodObj.parameters?.some(x => x.name === 'watch') && opName.startsWith('get')) {
+        if (allParams.some(x => x.name === 'watch') && opName.startsWith('get')) {
           api.operations.push({
             ...methodObj,
-            parameters: new Array<OpenAPI2RequestParameter>()
-              .concat(methodObj.parameters ?? [], pathObj.parameters ?? [])
-              .filter(x => !['continue', 'limit', 'watch', 'pretty'].includes(x.name)),
+            parameters: allParams.filter(x => !['continue', 'limit', 'watch', 'pretty'].includes(x.name)),
             subPath: subPath,
             method: method,
             operationName: opName.replace(/^get/, 'watch'),
