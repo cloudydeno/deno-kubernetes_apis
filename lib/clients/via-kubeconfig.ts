@@ -27,7 +27,6 @@ import { RestClient, HttpMethods, RequestOptions } from '../common.ts';
  * This requires more permissions; for the momen
  */
 
-export default KubeConfigRestClient;
 export class KubeConfigRestClient implements RestClient {
   constructor(kubeConfig: KubeConfig, httpClient: Deno.HttpClient, namespace?: string) {
     this.namespace = namespace;
@@ -59,7 +58,7 @@ export class KubeConfigRestClient implements RestClient {
     if (opts.querystring) {
       path += `?${opts.querystring}`;
     }
-    console.log(method.toUpperCase(), path);
+    console.error(method.toUpperCase(), path);
 
     throw new Error(`TODO: implement`);
   }
@@ -160,3 +159,4 @@ export interface UserAuthProvider {
   'expiry-key': string;
   'token-key': string;
 }
+export default KubeConfigRestClient;

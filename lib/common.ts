@@ -10,34 +10,24 @@ export type HttpMethods =
   | "head";
 
 export interface RequestOptions {
-  querystring?: URLSearchParams,
-  accept?: string,
-  path?: string,
-  body?: JSONValue,
+  querystring?: URLSearchParams;
+  accept?: string;
+  path?: string;
+  body?: JSONValue;
+  bodyStream?: ReadableStream<Uint8Array>;
+  streaming?: true;
+  abortSignal?: AbortSignal;
 }
 
 export interface RestClient {
+  performRequest(method: HttpMethods, opts?: RequestOptions & {streaming: true}): Promise<ReadableStream<Uint8Array>>;
   performRequest(method: HttpMethods, opts?: RequestOptions & {accept: 'application/json'}): Promise<JSONValue>;
   performRequest(method: HttpMethods, opts?: RequestOptions): Promise<Uint8Array>;
-  // subPath(strings: TemplateStringsArray, ...params: string[]): RestClient;
   namespace?: string;
 }
 
 
-// Helper function for users (maybe could live elsewhere)
-
-export async function* readAllPages<T>(pageFunc: (token?: string) => Promise<{metadata: {continue?: string | null}, items: T[]}>) {
-  let pageToken: string | undefined;
-  do {
-    const page = await pageFunc(pageToken ?? undefined);
-    yield* page.items;
-    pageToken = page.metadata.continue ?? undefined;
-  } while (pageToken);
-}
-
-
-// Small routines used by the actual APIs
-
+// Helpers used to validate/transform structures from or for the wire
 
 // Things that JSON can encode directly
 export type JSONPrimitive = string | number | boolean | null | undefined;
@@ -183,17 +173,29 @@ export function fromTime(input: Time | number | null | undefined): JSONValue {
 
 
 export class MicroTime {
-  constructor() {
-    throw new Error("TODO: MicroTime");
+  baseDate: Date;
+  micros: number;
+  constructor(baseDate: Date, micros: number) {
+    this.baseDate = baseDate;
+    this.micros = micros;
+  }
+  toISOString(): string {
+    const suffix = '.' + this.micros.toString(10).padStart(6, '0') + 'Z';
+    return this.baseDate.toISOString().replace(/\.(\d+)Z$/, suffix);
   }
 }
 export function toMicroTime(raw: JSONValue): MicroTime {
   const str = checkStr(raw);
-  throw new Error("TODO: toMicroTime for "+str);
+  const microsMatch = str.match(/\.(\d+)Z$/);
+  if (!microsMatch) throw new Error("TODO: toMicroTime for "+str);
+  const date = new Date(str.slice(0, microsMatch.index)+'Z');
+  if (isNaN(date.valueOf())) throw new Error("BUG: toMicroTime NaN for "+str);
+  const micros = parseInt(microsMatch[1]);
+  return new MicroTime(date, micros);
 }
 export function fromMicroTime(val: MicroTime): JSONValue {
-  // const str = c.checkStr(raw);
-  throw new Error("TODO: fromMicroTime for "+JSON.stringify(val));
+  if (val == null) return val;
+  return val.toISOString();
 }
 
 

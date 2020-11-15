@@ -1,5 +1,8 @@
 import { RestClient, HttpMethods, RequestOptions } from '../common.ts';
-import { join } from "https://deno.land/std@0.70.0/path/mod.ts";
+
+function join(...args: string[]) {
+  return args.join('/');
+}
 
 /**
  * A RestClient for code which is running within a Kubernetes pod and would like to
@@ -16,7 +19,6 @@ import { join } from "https://deno.land/std@0.70.0/path/mod.ts";
  * so KUBERNETES_SERVER_HOST can't be used at this time, and would need --allow-env anyway.
  */
 
-export default InClusterUnstableRestClient;
 export class InClusterUnstableRestClient implements RestClient {
   readonly baseUrl: string;
   readonly secretsPath: string;
@@ -41,18 +43,27 @@ export class InClusterUnstableRestClient implements RestClient {
     if (opts.querystring) {
       path += `?${opts.querystring}`;
     }
-    console.log(method.toUpperCase(), path);
+    console.error(method.toUpperCase(), path);
 
     const resp = await fetch(this.baseUrl + path, {
       method: method,
-      body: JSON.stringify(opts.body),
+      body: opts.bodyStream ?? JSON.stringify(opts.body),
       redirect: 'error',
+      signal: opts.abortSignal,
       headers: {
         'Authorization': `Bearer ${this.#token}`,
+        'Accept': opts.accept ?? 'application/octet-stream',
       },
       client: this.#httpClient,
-    })
+    });
 
-    return resp.json();
+    if (opts.streaming) {
+      return resp.body;
+    } else if (opts.accept === 'application/json') {
+      return resp.json();
+    } else {
+      return new Uint8Array(await resp.arrayBuffer());
+    }
   }
 }
+export default InClusterUnstableRestClient;

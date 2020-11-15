@@ -9,9 +9,10 @@ import { RestClient, HttpMethods, RequestOptions } from '../common.ts';
  *   --allow-net=localhost:8001
  *
  * Pro: Any valid kubeconfig will be supported automatically :)
- * Con: You're expected to bring your own kubectl proxy:
+ *      And there are no limitations on possible requests.
+ * Con: You're expected to bring your own `kubectl proxy`, and thus:
  *   - Your kubernetes API will be available to anything else on localhost
- *   - Extra resources used constantly if running in-cluster
+ *   - Extra resources used constantly by the `kubectl proxy` program
  *   - If you don't have `kubectl proxy` running, all requests will fail
  */
 

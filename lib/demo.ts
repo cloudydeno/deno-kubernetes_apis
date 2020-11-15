@@ -1,10 +1,11 @@
-import { KubectlRestClient } from './clients/via-kubectl.ts';
-import { RestClient, readAllPages } from "./common.ts";
+import { KubectlRawRestClient } from './clients/via-kubectl-raw.ts';
+import { RestClient } from "./common.ts";
 import { PetWg69NetV1Api } from "./apis/pet.wg69.net@v1/mod.ts";
 import { AppsV1Api } from "./apis/apps@v1/mod.ts";
 import { CoreV1Api } from "./apis/core@v1/mod.ts";
+import { readAllPages } from "./streaming.ts";
 
-const restClient: RestClient = new KubectlRestClient();
+const restClient: RestClient = new KubectlRawRestClient();
 
 // const blkJson = await restClient.performRequest("get", {
 //   path: '/apis/pet.wg69.net/v1/blockdevices',

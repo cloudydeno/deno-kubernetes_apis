@@ -24,7 +24,7 @@ export async function autoDetectClient(): Promise<RestClient> {
   try {
     return new InClusterRestClient();
   } catch (err) {
-    console.log('InCluster client failed:', err);
+    console.log('InCluster client failed:', err.name);
   }
 
   // TODO: try hitting localhost:9001 (for KubectlProxyRestClient)
