@@ -4,6 +4,7 @@ export interface GetListOpts {
   labelSelector?: string;
   limit?: number;
   resourceVersion?: string;
+  resourceVersionMatch?: "Exact" | "NotOlderThan";
   timeoutSeconds?: number;
   abortSignal?: AbortSignal;
 };
@@ -14,6 +15,7 @@ export function formatGetListOpts(opts: GetListOpts): URLSearchParams {
   if (opts["labelSelector"] != null) query.append("labelSelector", opts["labelSelector"]);
   if (opts["limit"] != null) query.append("limit", String(opts["limit"]));
   if (opts["resourceVersion"] != null) query.append("resourceVersion", opts["resourceVersion"]);
+  if (opts["resourceVersionMatch"] != null) query.append("resourceVersionMatch", opts["resourceVersionMatch"]);
   if (opts["timeoutSeconds"] != null) query.append("timeoutSeconds", String(opts["timeoutSeconds"]));
   return query;
 }
@@ -23,6 +25,7 @@ export interface WatchListOpts {
   fieldSelector?: string;
   labelSelector?: string;
   resourceVersion?: string;
+  resourceVersionMatch?: "Exact" | "NotOlderThan";
   timeoutSeconds?: number;
   abortSignal?: AbortSignal;
 };
@@ -32,6 +35,7 @@ export function formatWatchListOpts(opts: WatchListOpts): URLSearchParams {
   if (opts["fieldSelector"] != null) query.append("fieldSelector", opts["fieldSelector"]);
   if (opts["labelSelector"] != null) query.append("labelSelector", opts["labelSelector"]);
   if (opts["resourceVersion"] != null) query.append("resourceVersion", opts["resourceVersion"]);
+  if (opts["resourceVersionMatch"] != null) query.append("resourceVersionMatch", opts["resourceVersionMatch"]);
   if (opts["timeoutSeconds"] != null) query.append("timeoutSeconds", String(opts["timeoutSeconds"]));
   return query;
 }
@@ -58,6 +62,7 @@ export interface DeleteListOpts {
   orphanDependents?: boolean;
   propagationPolicy?: string;
   resourceVersion?: string;
+  resourceVersionMatch?: "Exact" | "NotOlderThan";
   timeoutSeconds?: number;
   abortSignal?: AbortSignal;
 };
@@ -72,6 +77,7 @@ export function formatDeleteListOpts(opts: DeleteListOpts): URLSearchParams {
   if (opts["orphanDependents"] != null) query.append("orphanDependents", opts["orphanDependents"] ? '1' : '0');
   if (opts["propagationPolicy"] != null) query.append("propagationPolicy", opts["propagationPolicy"]);
   if (opts["resourceVersion"] != null) query.append("resourceVersion", opts["resourceVersion"]);
+  if (opts["resourceVersionMatch"] != null) query.append("resourceVersionMatch", opts["resourceVersionMatch"]);
   if (opts["timeoutSeconds"] != null) query.append("timeoutSeconds", String(opts["timeoutSeconds"]));
   return query;
 }

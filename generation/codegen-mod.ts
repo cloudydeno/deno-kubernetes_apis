@@ -3,10 +3,10 @@ import { OpenAPI2RequestParameter } from "./openapi.ts";
 import { ApiShape } from "./describe-shapes.ts";
 
 const knownOpts: Record<string,string|undefined> = {
-  'continue,fieldSelector,labelSelector,limit,resourceVersion,timeoutSeconds': 'GetListOpts',
-  'allowWatchBookmarks,fieldSelector,labelSelector,resourceVersion,timeoutSeconds': 'WatchListOpts',
+  'continue,fieldSelector,labelSelector,limit,resourceVersion,resourceVersionMatch,timeoutSeconds': 'GetListOpts',
+  'allowWatchBookmarks,fieldSelector,labelSelector,resourceVersion,resourceVersionMatch,timeoutSeconds': 'WatchListOpts',
   'dryRun,fieldManager': 'PutOpts', // both CreateOpts and ReplaceOpts
-  'continue,dryRun,fieldSelector,gracePeriodSeconds,labelSelector,limit,orphanDependents,propagationPolicy,resourceVersion,timeoutSeconds': 'DeleteListOpts',
+  'continue,dryRun,fieldSelector,gracePeriodSeconds,labelSelector,limit,orphanDependents,propagationPolicy,resourceVersion,resourceVersionMatch,timeoutSeconds': 'DeleteListOpts',
   'dryRun,fieldManager,force': 'PatchOpts',
   'exact,export': 'GetOpts',
   'dryRun,gracePeriodSeconds,orphanDependents,propagationPolicy': 'DeleteOpts',
