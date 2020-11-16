@@ -1,4 +1,4 @@
-import * as MetaV1 from "./apis/meta@v1/structs.ts";
+import * as MetaV1 from "./builtin/meta@v1/structs.ts";
 import { JSONObject, WatchEvent } from "./common.ts";
 
 // export function transformWatchStream<T>(resp: ReadableStream<Uint8Array>, validator: (val: JSONObject) => T) {
