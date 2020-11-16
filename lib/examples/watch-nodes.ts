@@ -1,6 +1,6 @@
 import { autoDetectClient } from "../common.ts";
-import { CoreV1Api } from "../apis/core@v1/mod.ts";
-import { CoordinationV1Api } from "../apis/coordination.k8s.io@v1/mod.ts";
+// import { CoreV1Api } from "../builtin/core@v1/mod.ts";
+import { CoordinationV1Api } from "../builtin/coordination.k8s.io@v1/mod.ts";
 import { Reflector } from "../streaming.ts";
 
 const restClient = await autoDetectClient();

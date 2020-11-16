@@ -8,7 +8,7 @@ const surface = describeSurface(wholeSpec);
 
 for (const api of surface.allApis) {
   try {
-    await writeApiModule(surface, api);
+    await writeApiModule(surface, api, Deno.args[1] ?? 'builtin');
   } catch (err) {
     console.error(`Error writing`, api.apiGroupVersion);
     console.error(err);

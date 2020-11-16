@@ -1,6 +1,6 @@
 import { autoDetectClient } from "../common.ts";
-import { CoreV1Api } from "../apis/core@v1/mod.ts";
-import { BatchV1Api } from "../apis/batch@v1/mod.ts";
+import { CoreV1Api } from "../builtin/core@v1/mod.ts";
+import { BatchV1Api } from "../builtin/batch@v1/mod.ts";
 
 const restClient = await autoDetectClient();
 const batchApi = new BatchV1Api(restClient).namespace("dust-poc");

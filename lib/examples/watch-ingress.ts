@@ -1,5 +1,5 @@
 import { autoDetectClient } from "../common.ts";
-import { NetworkingV1beta1Api } from "../apis/networking.k8s.io@v1beta1/mod.ts";
+import { NetworkingV1beta1Api } from "../builtin/networking.k8s.io@v1beta1/mod.ts";
 import { Reflector } from "../streaming.ts";
 
 const restClient = await autoDetectClient();

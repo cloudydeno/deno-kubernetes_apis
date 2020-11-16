@@ -57,14 +57,6 @@ export function checkObj(input: JSONValue): JSONObject {
 //     } - had keys ${JSON.stringify(Array.from(hadKeys))}`);
 // }
 
-// export function serializeBlob(input: string | Uint8Array | null | undefined): JSONValue {
-//   if (!input) return input;
-//   if (typeof input === 'string') {
-//     input = new TextEncoder().encode(input);
-//   }
-//   return Base64.fromUint8Array(input);
-// }
-
 export function writeMap<T,U extends JSONValue>(input: Record<string,T> | null | undefined, valEncoder: (x: T) => U): JSONValue {
   if (input == null) return input;
   // const obj = checkObj(input);
@@ -74,24 +66,6 @@ export function writeMap<T,U extends JSONValue>(input: Record<string,T> | null |
   }
   return map;
 }
-
-// export function serializeMap<T,U extends JSONValue>(input: {[key: string]: T} | null | undefined, encoder: (x: T) => U): JSONValue {
-//   if (input == null) return input;
-//   const map: {[key: string]: U} = Object.create(null);
-//   for (const [key, val] of Object.entries(input)) {
-//     map[key] = encoder(val);
-//   }
-//   return map;
-// }
-
-// export function readMap<K extends string,V>(keyEncoder: (x: string) => K, valEncoder: (x: JSONValue) => V, input: JSONValue): Record<K,V> | null {
-//   if (input == null) return null;
-//   const map: Record<K,V> = Object.create(null);
-//   for (const [key, val] of Object.entries(input)) {
-//     map[keyEncoder(key)] = valEncoder(val);
-//   }
-//   return map;
-// }
 
 
 // Semi-questionable method of expressing an "open string union" in Typescript
@@ -191,7 +165,4 @@ export function toIntOrString(input: JSONValue): string | number {
   if (input == null) throw new Error(`Type a3sf`);
   if (typeof input === 'string' || typeof input === 'number') return input;
   throw new Error(`Type sdgssdf`);
-}
-export function fromIntOrString(val: string | number): JSONValue {
-  return val;
 }
