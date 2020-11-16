@@ -1,41 +1,11 @@
 // The API contract that all generated code expects
 
-export type HttpMethods =
-  | "get"
-  | "post"
-  | "delete"
-  | "put"
-  | "patch"
-  | "options"
-  | "head";
-
-export interface RequestOptions {
-  querystring?: URLSearchParams;
-  accept?: string;
-  path?: string;
-  body?: JSONValue;
-  bodyStream?: ReadableStream<Uint8Array>;
-  streaming?: true;
-  abortSignal?: AbortSignal;
-}
-
-export interface RestClient {
-  performRequest(method: HttpMethods, opts?: RequestOptions & {streaming: true}): Promise<ReadableStream<Uint8Array>>;
-  performRequest(method: HttpMethods, opts?: RequestOptions & {accept: 'application/json'}): Promise<JSONValue>;
-  performRequest(method: HttpMethods, opts?: RequestOptions): Promise<Uint8Array>;
-  namespace?: string;
-}
-
+import {JSONObject, JSONValue} from "https://deno.land/x/kubernetes_client@v0.1.0/mod.ts";
+export * from "https://deno.land/x/kubernetes_client@v0.1.0/mod.ts";
 
 // Helpers used to validate/transform structures from or for the wire
 
-export {transformWatchStream} from './streaming.ts';
-
-// Things that JSON can encode directly
-export type JSONPrimitive = string | number | boolean | null | undefined;
-export type JSONValue = JSONPrimitive | JSONObject | JSONArray;
-export type JSONObject = {[key: string]: JSONValue};
-export type JSONArray = JSONValue[];
+// export {transformWatchStream} from './streaming.ts';
 
 export function identity(input: JSONValue) {
   return input;

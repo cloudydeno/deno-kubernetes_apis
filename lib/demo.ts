@@ -1,33 +1,16 @@
-import { KubectlRawRestClient } from './clients/via-kubectl-raw.ts';
-import { RestClient } from "./common.ts";
+import { autoDetectClient, readAllItems } from './common.ts';
 import { PetWg69NetV1Api } from "./apis/pet.wg69.net@v1/mod.ts";
 import { AppsV1Api } from "./apis/apps@v1/mod.ts";
 import { CoreV1Api } from "./apis/core@v1/mod.ts";
-import { readAllPages } from "./streaming.ts";
 
-const restClient: RestClient = new KubectlRawRestClient();
-
-// const blkJson = await restClient.performRequest("get", {
-//   path: '/apis/pet.wg69.net/v1/blockdevices',
-//   accept: 'application/json',
-// });
-// const blkList = toBlockDeviceList(blkJson);
-// console.log(blkList.items[0].status);
-
-// const blkJson = await restClient.performRequest("get", {
-//   path: '/api/v1/pods',
-//   accept: 'application/json',
-//   querystring: new URLSearchParams([['limit', '1']])
-// });
-// const blkList = toPodList(blkJson);
-// console.log(blkList);
-
+const restClient = await autoDetectClient();
 const petApi = new PetWg69NetV1Api(restClient);
-const blks = await petApi.listBlockDevice();
+
+const blks = await petApi.getBlockDeviceList();
 console.log(blks);
 
 const appsApi = new AppsV1Api(restClient);
-for await (const deploy of readAllPages(t => appsApi.listDeploymentForAllNamespaces({
+for await (const deploy of readAllItems(t => appsApi.getDeploymentListForAllNamespaces({
   limit: 5,
   continue: t,
 }))) {
@@ -35,5 +18,5 @@ for await (const deploy of readAllPages(t => appsApi.listDeploymentForAllNamespa
 }
 
 const coreApi = new CoreV1Api(restClient);
-const nodes = await coreApi.readNode('pet-ausbox');
+const nodes = await coreApi.getNode('pet-ausbox');
 console.log(nodes.status);

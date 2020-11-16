@@ -37,8 +37,8 @@ export function generateModuleTypescript(surface: SurfaceMap, api: SurfaceApi): 
     chunks.push(`    return new ${api.friendlyName}NamespacedApi(this.#client, name);`);
     chunks.push(`  }`);
     chunks.push(`  myNamespace() {`);
-    chunks.push(`    if (!this.#client.namespace) throw new Error("No current namespace is set");`);
-    chunks.push(`    return new ${api.friendlyName}NamespacedApi(this.#client, this.#client.namespace);`);
+    chunks.push(`    if (!this.#client.defaultNamespace) throw new Error("No current namespace is set");`);
+    chunks.push(`    return new ${api.friendlyName}NamespacedApi(this.#client, this.#client.defaultNamespace);`);
     chunks.push(`  }\n`);
   }
 
@@ -135,11 +135,14 @@ export function generateModuleTypescript(surface: SurfaceMap, api: SurfaceApi): 
       }
     }
 
-    chunks.push(`    const resp = await this.#client.performRequest(${JSON.stringify(op.method)}, {`);
+    chunks.push(`    const resp = await this.#client.performRequest({`);
+    chunks.push(`      method: ${JSON.stringify(op.method.toUpperCase())},`);
     chunks.push(`      path: \`\${this.#root}${JSON.stringify(opPath).slice(1,-1).replace(/{/g, '${')}\`,`);
-    chunks.push(`      accept: ${JSON.stringify(accept)},`);
+    if (accept === 'application/json') {
+      chunks.push(`      expectJson: true,`);
+    }
     if (isWatch) {
-      chunks.push(`      streaming: true,`);
+      chunks.push(`      expectStream: true,`);
     }
     chunks.push(`      querystring: ${knownOptShape ? `operations.format${knownOptShape}(opts)` : 'query'},`);
     const bodyArg = args.find(x => x[0].in === 'body');
@@ -147,7 +150,7 @@ export function generateModuleTypescript(surface: SurfaceMap, api: SurfaceApi): 
       if (bodyArg[1].type === 'foreign') foreignApis.add(bodyArg[1].api);
       const bodyApi = bodyArg[1].type === 'foreign' ? bodyArg[1].api : api;
       const bodyName = bodyArg[1].type === 'foreign' ? bodyArg[1].name : bodyArg[1].reference;
-      chunks.push(`      body: ${bodyApi.friendlyName}.from${bodyName}(body),`);
+      chunks.push(`      bodyJson: ${bodyApi.friendlyName}.from${bodyName}(body),`);
     }
     chunks.push(`      abortSignal: opts.abortSignal,`);
     chunks.push(`    });`);
@@ -164,7 +167,7 @@ export function generateModuleTypescript(surface: SurfaceMap, api: SurfaceApi): 
 
       // QUIRK: seems like deletes return what was deleted, not a boring Status
       if (resp.schema.$ref === '#/definitions/io.k8s.apimachinery.pkg.apis.meta.v1.Status' && op.method === 'delete') {
-        shape = api.shapes.shapes.get(op.operationName.replace(/^delete/, '').replace(/Collection$/, 'List'))!;
+        shape = api.shapes.shapes.get(op.operationName.replace(/^delete/, ''))!;
       }
 
       if (shape.type === 'foreign') {
@@ -172,7 +175,8 @@ export function generateModuleTypescript(surface: SurfaceMap, api: SurfaceApi): 
         chunks.push(`    return ${shape.api.friendlyName}.to${shape.name}(resp);`);
       } else if (shape.reference) {
         if (isWatch) {
-          chunks.push(`    return c.transformWatchStream(resp, ${api.friendlyName}.to${shape.reference.slice(0, -4)});`);
+          chunks.push(`    return resp.pipeThrough(new c.WatchEventTransformer(${api.friendlyName}.to${shape.reference.slice(0, -4)}, MetaV1.toStatus));`);
+          // chunks.push(`    return c.transformWatchStream(resp, ${api.friendlyName}.to${shape.reference.slice(0, -4)});`);
         } else {
           chunks.push(`    return ${api.friendlyName}.to${shape.reference}(resp);`);
         }

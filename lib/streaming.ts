@@ -1,179 +1,12 @@
-import { JSONObject } from "./common.ts";
 import * as MetaV1 from "./apis/meta@v1/structs.ts";
+import { JSONObject, WatchEvent } from "./common.ts";
 
-export async function* readAllPages<T>(pageFunc: (token?: string) => Promise<{metadata: {continue?: string | null}, items: T[]}>) {
-  let pageToken: string | undefined;
-  do {
-    const page = await pageFunc(pageToken ?? undefined);
-    yield* page.items;
-    pageToken = page.metadata.continue ?? undefined;
-  } while (pageToken);
-}
-
-class TextLineReader {
-  decoder: TextDecoder;
-  buffers = new Array<Uint8Array>();
-  constructor(decoder: TextDecoder) {
-    this.decoder = decoder;
-  }
-  processChunk(chunk: Uint8Array, controller: TransformStreamDefaultController<string>) {
-    // If we reached the end of a line that spans chunks, join them all together
-    if (chunk.includes(10) && this.buffers.length > 0) {
-      const indexOfNl = chunk.indexOf(10);
-      const fullBuf = this.concatWaitingBuffersWith(chunk.subarray(0, indexOfNl));
-      controller.enqueue(this.decoder.decode(fullBuf));
-      chunk = chunk.subarray(indexOfNl + 1);
-    }
-
-    // process all remaining lines fully contained within this chunk
-    let indexOfNl = 0;
-    while ((indexOfNl = chunk.indexOf(10)) >= 0) {
-      controller.enqueue(this.decoder.decode(chunk.subarray(0, indexOfNl)));
-      chunk = chunk.subarray(indexOfNl + 1);
-    }
-
-    // keep any leftover for next time
-    if (chunk.length > 0) {
-      // make a copy because Deno.iter reuses its buffer
-      this.buffers.push(new Uint8Array(chunk));
-    }
-  }
-  concatWaitingBuffersWith(latest: Uint8Array): Uint8Array {
-    const fullLength = this.buffers.reduce((len, buf) => len+buf.byteLength, latest.byteLength);
-    // force preventative maintanence on growing line usecases
-    if (fullLength > 5*1024*1024) {
-      throw new Error(`Received a single streamed line longer than 5MiB, selfishly giving up`);
-    }
-
-    // build a concatted buffer
-    const fullBuf = new Uint8Array(fullLength);
-    let idx = 0;
-    for (const buf of this.buffers) {
-      fullBuf.set(buf, idx);
-      idx += buf.byteLength;
-    }
-    fullBuf.set(latest, idx);
-
-    // finish up
-    this.buffers.length = 0;
-    return fullBuf;
-  }
-}
-/** Reassembles newline-deliminited data from byte chunks into decoded text strings */
-export class ReadLineTransformer extends TransformStream<Uint8Array, string> {
-  constructor(encoding = 'utf-8') {
-    const reader = new TextLineReader(new TextDecoder(encoding));
-    super({ transform: reader.processChunk.bind(reader) });
-  }
-}
-
-function parseJsonLine(line: string, controller: TransformStreamDefaultController<JSONObject>) {
-  if (!line.startsWith('{')) {
-    throw new Error(`JSON line doesn't start with {: `+line.slice(0, 256));
-  }
-  controller.enqueue(JSON.parse(line));
-}
-/** Parses individual JSON objects from individual strings, 1:1 */
-export class JsonParsingTransformer extends TransformStream<string, JSONObject> {
-  constructor() {
-    super({ transform: parseJsonLine });
-  }
-}
-
-// https://github.com/kubernetes/apimachinery/blob/master/pkg/watch/watch.go
-
-class WatchEventReader<T> {
-  validator: (val: JSONObject) => T;
-  constructor(validator: (val: JSONObject) => T) {
-    this.validator = validator;
-  }
-  processObject(raw: JSONObject, controller: TransformStreamDefaultController<WatchEvent<T>>) {
-    const {type, object} = raw;
-    if (typeof type !== 'string') {
-      throw new Error(`BUG: watch record 'type' field was ${typeof type}`);
-    }
-    if (object == null) {
-      throw new Error(`BUG: watch record 'object' field was null`);
-    }
-    if (typeof object !== 'object') {
-      throw new Error(`BUG: watch record 'object' field was ${typeof object}`);
-    }
-    if (Array.isArray(object)) {
-      throw new Error(`BUG: watch record 'object' field was Array`);
-    }
-
-    switch (type) {
-      case 'ERROR':
-        try {
-          controller.enqueue({type, object: MetaV1.toStatus(object)});
-        } catch (err) {
-          console.error('TODO: watch error failed to read as Status:', object);
-          controller.enqueue({type, object: {
-            apiVersion: 'v1',
-            kind: 'Status',
-            status: "Unexpected",
-            reason: "ObjectError",
-            message: JSON.stringify(object),
-            code: 569,
-          }});
-        }
-        break;
-      case 'ADDED':
-      case 'MODIFIED':
-      case 'DELETED':
-        controller.enqueue({type, object: this.validator(object)});
-        break;
-      case 'BOOKMARK':
-        if (object.metadata && typeof object.metadata === 'object' && !Array.isArray(object.metadata)) {
-          if (typeof object.metadata.resourceVersion === 'string') {
-            controller.enqueue({type, object: {
-              metadata: { resourceVersion: object.metadata.resourceVersion },
-            }});
-            break;
-          }
-        }
-        throw new Error(`BUG: BOOKMARK event wasn't recognizable: ${JSON.stringify(object)}`);
-      default:
-        throw new Error(`BUG: watch record got unknown event type ${type}`);
-    }
-  }
-}
-/** Validates JSON objects belonging to a watch stream */
-export class WatchEventTransformer<T> extends TransformStream<JSONObject, WatchEvent<T>> {
-  constructor(validator: (val: JSONObject) => T) {
-    const reader = new WatchEventReader(validator);
-    super({ transform: reader.processObject.bind(reader) });
-  }
-}
-
-// export type WatchEventType =
-// | "ADDED"
-// | "MODIFIED"
-// | "DELETED"
-// | "BOOKMARK"
-// | "ERROR"
-// ;
-export type WatchEvent<T> = WatchEventObject<T> | WatchEventError | WatchEventBookmark;
-export type WatchEventObject<T> = {
-  'type': "ADDED" | "MODIFIED" | "DELETED";
-  'object': T;
-};
-export type WatchEventBookmark = {
-  'type': "BOOKMARK";
-  'object': { metadata: { resourceVersion: string }};
-};
-export type WatchEventError = {
-  'type': "ERROR";
-  'object': MetaV1.Status;
-};
-
-
-export function transformWatchStream<T>(resp: ReadableStream<Uint8Array>, validator: (val: JSONObject) => T) {
-  return resp
-    .pipeThrough(new ReadLineTransformer('utf-8'))
-    .pipeThrough(new JsonParsingTransformer())
-    .pipeThrough(new WatchEventTransformer(validator));
-}
+// export function transformWatchStream<T>(resp: ReadableStream<Uint8Array>, validator: (val: JSONObject) => T) {
+//   return resp
+//     .pipeThrough(new ReadLineTransformer('utf-8'))
+//     .pipeThrough(new JsonParsingTransformer())
+//     .pipeThrough(new WatchEventTransformer(validator));
+// }
 
 
 // some of this should be centralized...
@@ -205,20 +38,19 @@ export type WatchEventSynced = {
   'object': {metadata: {}};
 };
 
-type ReflectorEvent<T> = WatchEvent<T & KindIdsReq> | WatchEventSynced;
+type ReflectorEvent<T> = WatchEvent<T & KindIdsReq, MetaV1.Status> | WatchEventSynced;
 type NextEvent<T> = {evt: ReflectorEvent<T>, ref: VersionRef};
 
 export class Reflector<T extends KindIds> {
   #lister: (opts: ListOpts) => Promise<ListOf<T>>;
-  #watcher: (opts: WatchOpts) => Promise<ReadableStream<WatchEvent<T>>>;
-  constructor(lister: (opts: ListOpts) => Promise<ListOf<T>>, watcher: (opts: WatchOpts) => Promise<ReadableStream<WatchEvent<T>>>) {
+  #watcher: (opts: WatchOpts) => Promise<ReadableStream<WatchEvent<T,MetaV1.Status>>>;
+  constructor(lister: (opts: ListOpts) => Promise<ListOf<T>>, watcher: (opts: WatchOpts) => Promise<ReadableStream<WatchEvent<T,MetaV1.Status>>>) {
     this.#lister = lister;
     this.#watcher = watcher;
   }
 
   #resources = new Map<string, T & KindIdsReq>();
   #latestVersion?: string;
-  // #latestEvent?: ReflectorEvent<T>;
 
   getCached(namespace: string, name: string): (T & KindIdsReq) | undefined {
     return this.#resources.get(`${namespace||''}/${name}`);
@@ -228,17 +60,11 @@ export class Reflector<T extends KindIds> {
   }
 
   #cancelled = false;
-  // #cancel?: () => void;
 
-  // #eventHistory = new WeakMap<VersionRef, ReflectorEvent<T> & {next?: VersionRef}>(); // linked list i guess...
   #nextEvents = new WeakMap<VersionRef, NextEvent<T>>(); // linked list i guess...
   #latestRef: VersionRef = {metadata: {resourceVersion: null}};
 
   #waitingCbs = new Array<() => void>();
-
-  // startLiveFeed(): AsyncIterableIterator<ReflectorEvent<T>> {
-  //   const iter = new Async
-  // }
 
   stop() {
     if (this.#cancelled) throw new Error(`BUG: double-cancel`);

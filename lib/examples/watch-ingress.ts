@@ -1,4 +1,4 @@
-import { autoDetectClient } from '../clients/mod.ts';
+import { autoDetectClient } from "../common.ts";
 import { NetworkingV1beta1Api } from "../apis/networking.k8s.io@v1beta1/mod.ts";
 import { Reflector } from "../streaming.ts";
 
@@ -11,12 +11,11 @@ const reflector = new Reflector(
   opts => netApi.watchIngressListForAllNamespaces({ ...opts }));
 
 function printRouteTable() {
-
   console.log('Routing Table :)');
   for (const ingress of reflector.listCached()) {
     console.log(ingress.metadata.namespace, ingress.metadata.name);
   }
-
+  console.log();
 }
 const printTableSoon = debounce(printRouteTable, 2000);
 
