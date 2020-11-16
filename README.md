@@ -1,3 +1,5 @@
+![Deno CI](https://github.com/danopia/deno-kubernetes_apis/workflows/Deno%20CI/badge.svg?branch=main)
+
 ## Kubernetes compatability
 
 APIs are generated from Kubernetes OpenAPI specs, which are large JSON files.

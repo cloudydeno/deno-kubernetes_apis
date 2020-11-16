@@ -1,0 +1,31 @@
+name: Deno CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request: {}
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    name: Deno ${{ matrix.deno-version }}
+    strategy:
+      matrix:
+        deno-version: ["v1.4", "v1.5", "nightly"]
+
+    steps:
+    - name: Checkout source
+      uses: actions/checkout@v2
+
+    - name: Use Deno ${{ matrix.deno-version }}
+      uses: denolib/setup-deno@v2
+      with:
+        deno-version: ${{ matrix.deno-version }}
+
+    - name: Check generation/mod.ts
+      run: time deno cache generation/mod.ts
+    - name: Check lib/builtin/*/mod.ts
+      run: time deno cache lib/builtin/*/mod.ts
+    - name: Check lib/examples/watch-ingress.ts
+      run: time deno cache lib/examples/watch-ingress.ts
