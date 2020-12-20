@@ -1,13 +1,5 @@
 import * as MetaV1 from "./builtin/meta@v1/structs.ts";
-import { JSONObject, WatchEvent } from "./common.ts";
-
-// export function transformWatchStream<T>(resp: ReadableStream<Uint8Array>, validator: (val: JSONObject) => T) {
-//   return resp
-//     .pipeThrough(new ReadLineTransformer('utf-8'))
-//     .pipeThrough(new JsonParsingTransformer())
-//     .pipeThrough(new WatchEventTransformer(validator));
-// }
-
+import { WatchEvent, WatchEventError, WatchEventBookmark } from "./common.ts";
 
 // some of this should be centralized...
 type KindIds = { metadata?: {
@@ -37,8 +29,23 @@ export type WatchEventSynced = {
   'type': "DESYNCED";
   'object': {metadata: {}};
 };
+export type WatchEventObject<T> = {
+  'type': "ADDED" | "DELETED";
+  'object': T;
+};
+export type WatchEventModified<T> = {
+  'type': "MODIFIED";
+  'object': T;
+  'previous': T;
+};
 
-type ReflectorEvent<T> = WatchEvent<T & KindIdsReq, MetaV1.Status> | WatchEventSynced;
+
+type ReflectorEvent<T> =
+| WatchEventObject<T & KindIdsReq>
+| WatchEventModified<T & KindIdsReq>
+| WatchEventError<MetaV1.Status>
+| WatchEventBookmark
+| WatchEventSynced;
 type NextEvent<T> = {evt: ReflectorEvent<T>, ref: VersionRef};
 
 export class Reflector<T extends KindIds> {
@@ -127,7 +134,7 @@ export class Reflector<T extends KindIds> {
           missingItems.delete(key);
           if (known.metadata.resourceVersion !== item.metadata.resourceVersion) {
             this.#resources.set(key, item);
-            this._emit({type: "MODIFIED", object: item}, null);
+            this._emit({type: "MODIFIED", object: item, previous: known}, null);
           }
         } else {
           this.#resources.set(key, item);
@@ -173,13 +180,24 @@ loop: while (!this.#cancelled) {
 
           } else {
             if (!isKeyed(evt.object)) throw new Error(`BUG: got unkeyed item from watch ${evt.type}`);
-            const key = `${evt.object.metadata.namespace}/${evt.object.metadata.name}`;
+            const {namespace, name, resourceVersion} = evt.object.metadata;
+            const key = `${namespace}/${name}`;
             if (evt.type === 'DELETED') {
               this.#resources.delete(key);
+              this._emit({type: evt.type, object: evt.object}, resourceVersion);
+            } else if (evt.type === 'MODIFIED') {
+              const previous = this.#resources.get(key);
+              this.#resources.set(key, evt.object);
+              if (!previous) {
+                console.log(`WARN: Reflector got MODIFIED for ${key} but didn't have existing item`);
+                this._emit({type: 'ADDED', object: evt.object}, resourceVersion);
+              } else {
+                this._emit({type: evt.type, object: evt.object, previous}, resourceVersion);
+              }
             } else {
               this.#resources.set(key, evt.object);
+              this._emit({type: evt.type, object: evt.object}, resourceVersion);
             }
-            this._emit({type: evt.type, object: evt.object}, evt.object.metadata.resourceVersion);
           }
 
         }
@@ -227,7 +245,7 @@ loop: while (!this.#cancelled) {
 
       // wait for new events
       // console.log('refobs waiting from', ref);
-      await new Promise(ok => this.#waitingCbs.push(ok));
+      await new Promise<void>(ok => this.#waitingCbs.push(ok));
     }
   }
 
