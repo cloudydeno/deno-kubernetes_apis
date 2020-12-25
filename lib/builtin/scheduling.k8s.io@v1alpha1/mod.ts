@@ -95,13 +95,14 @@ export class SchedulingV1alpha1Api {
     return SchedulingV1alpha1.toPriorityClass(resp);
   }
 
-  async patchPriorityClass(name: string, body: MetaV1.Patch, opts: operations.PatchOpts = {}) {
+  async patchPriorityClass(name: string, type: c.PatchType, body: SchedulingV1alpha1.PriorityClass | c.JsonPatch, opts: operations.PatchOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}priorityclasses/${name}`,
       expectJson: true,
       querystring: operations.formatPatchOpts(opts),
-      bodyJson: MetaV1.fromPatch(body),
+      contentType: c.getPatchContentType(type),
+      bodyJson: Array.isArray(body) ? body : SchedulingV1alpha1.fromPriorityClass(body),
       abortSignal: opts.abortSignal,
     });
     return SchedulingV1alpha1.toPriorityClass(resp);

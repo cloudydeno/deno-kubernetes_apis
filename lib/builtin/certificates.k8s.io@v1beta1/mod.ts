@@ -95,13 +95,14 @@ export class CertificatesV1beta1Api {
     return CertificatesV1beta1.toCertificateSigningRequest(resp);
   }
 
-  async patchCertificateSigningRequest(name: string, body: MetaV1.Patch, opts: operations.PatchOpts = {}) {
+  async patchCertificateSigningRequest(name: string, type: c.PatchType, body: CertificatesV1beta1.CertificateSigningRequest | c.JsonPatch, opts: operations.PatchOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}certificatesigningrequests/${name}`,
       expectJson: true,
       querystring: operations.formatPatchOpts(opts),
-      bodyJson: MetaV1.fromPatch(body),
+      contentType: c.getPatchContentType(type),
+      bodyJson: Array.isArray(body) ? body : CertificatesV1beta1.fromCertificateSigningRequest(body),
       abortSignal: opts.abortSignal,
     });
     return CertificatesV1beta1.toCertificateSigningRequest(resp);
@@ -133,13 +134,14 @@ export class CertificatesV1beta1Api {
     return CertificatesV1beta1.toCertificateSigningRequest(resp);
   }
 
-  async patchCertificateSigningRequestApproval(name: string, body: MetaV1.Patch, opts: operations.PatchOpts = {}) {
+  async patchCertificateSigningRequestApproval(name: string, type: c.PatchType, body: CertificatesV1beta1.CertificateSigningRequest | c.JsonPatch, opts: operations.PatchOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}certificatesigningrequests/${name}/approval`,
       expectJson: true,
       querystring: operations.formatPatchOpts(opts),
-      bodyJson: MetaV1.fromPatch(body),
+      contentType: c.getPatchContentType(type),
+      bodyJson: Array.isArray(body) ? body : CertificatesV1beta1.fromCertificateSigningRequest(body),
       abortSignal: opts.abortSignal,
     });
     return CertificatesV1beta1.toCertificateSigningRequest(resp);
@@ -171,13 +173,14 @@ export class CertificatesV1beta1Api {
     return CertificatesV1beta1.toCertificateSigningRequest(resp);
   }
 
-  async patchCertificateSigningRequestStatus(name: string, body: MetaV1.Patch, opts: operations.PatchOpts = {}) {
+  async patchCertificateSigningRequestStatus(name: string, type: c.PatchType, body: CertificatesV1beta1.CertificateSigningRequest | c.JsonPatch, opts: operations.PatchOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}certificatesigningrequests/${name}/status`,
       expectJson: true,
       querystring: operations.formatPatchOpts(opts),
-      bodyJson: MetaV1.fromPatch(body),
+      contentType: c.getPatchContentType(type),
+      bodyJson: Array.isArray(body) ? body : CertificatesV1beta1.fromCertificateSigningRequest(body),
       abortSignal: opts.abortSignal,
     });
     return CertificatesV1beta1.toCertificateSigningRequest(resp);

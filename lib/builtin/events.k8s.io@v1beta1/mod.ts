@@ -136,13 +136,14 @@ export class EventsV1beta1NamespacedApi {
     return EventsV1beta1.toEvent(resp);
   }
 
-  async patchEvent(name: string, body: MetaV1.Patch, opts: operations.PatchOpts = {}) {
+  async patchEvent(name: string, type: c.PatchType, body: EventsV1beta1.Event | c.JsonPatch, opts: operations.PatchOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}events/${name}`,
       expectJson: true,
       querystring: operations.formatPatchOpts(opts),
-      bodyJson: MetaV1.fromPatch(body),
+      contentType: c.getPatchContentType(type),
+      bodyJson: Array.isArray(body) ? body : EventsV1beta1.fromEvent(body),
       abortSignal: opts.abortSignal,
     });
     return EventsV1beta1.toEvent(resp);

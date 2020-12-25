@@ -136,13 +136,14 @@ export class BatchV1NamespacedApi {
     return BatchV1.toJob(resp);
   }
 
-  async patchJob(name: string, body: MetaV1.Patch, opts: operations.PatchOpts = {}) {
+  async patchJob(name: string, type: c.PatchType, body: BatchV1.Job | c.JsonPatch, opts: operations.PatchOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}jobs/${name}`,
       expectJson: true,
       querystring: operations.formatPatchOpts(opts),
-      bodyJson: MetaV1.fromPatch(body),
+      contentType: c.getPatchContentType(type),
+      bodyJson: Array.isArray(body) ? body : BatchV1.fromJob(body),
       abortSignal: opts.abortSignal,
     });
     return BatchV1.toJob(resp);
@@ -174,13 +175,14 @@ export class BatchV1NamespacedApi {
     return BatchV1.toJob(resp);
   }
 
-  async patchJobStatus(name: string, body: MetaV1.Patch, opts: operations.PatchOpts = {}) {
+  async patchJobStatus(name: string, type: c.PatchType, body: BatchV1.Job | c.JsonPatch, opts: operations.PatchOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}jobs/${name}/status`,
       expectJson: true,
       querystring: operations.formatPatchOpts(opts),
-      bodyJson: MetaV1.fromPatch(body),
+      contentType: c.getPatchContentType(type),
+      bodyJson: Array.isArray(body) ? body : BatchV1.fromJob(body),
       abortSignal: opts.abortSignal,
     });
     return BatchV1.toJob(resp);

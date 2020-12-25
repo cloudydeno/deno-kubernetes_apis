@@ -95,13 +95,14 @@ export class StorageV1alpha1Api {
     return StorageV1alpha1.toVolumeAttachment(resp);
   }
 
-  async patchVolumeAttachment(name: string, body: MetaV1.Patch, opts: operations.PatchOpts = {}) {
+  async patchVolumeAttachment(name: string, type: c.PatchType, body: StorageV1alpha1.VolumeAttachment | c.JsonPatch, opts: operations.PatchOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}volumeattachments/${name}`,
       expectJson: true,
       querystring: operations.formatPatchOpts(opts),
-      bodyJson: MetaV1.fromPatch(body),
+      contentType: c.getPatchContentType(type),
+      bodyJson: Array.isArray(body) ? body : StorageV1alpha1.fromVolumeAttachment(body),
       abortSignal: opts.abortSignal,
     });
     return StorageV1alpha1.toVolumeAttachment(resp);

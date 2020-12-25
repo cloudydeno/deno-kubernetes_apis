@@ -211,13 +211,14 @@ export class CoreV1Api {
     return CoreV1.toNamespace(resp);
   }
 
-  async patchNamespace(name: string, body: MetaV1.Patch, opts: operations.PatchOpts = {}) {
+  async patchNamespace(name: string, type: c.PatchType, body: CoreV1.Namespace | c.JsonPatch, opts: operations.PatchOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}namespaces/${name}`,
       expectJson: true,
       querystring: operations.formatPatchOpts(opts),
-      bodyJson: MetaV1.fromPatch(body),
+      contentType: c.getPatchContentType(type),
+      bodyJson: Array.isArray(body) ? body : CoreV1.fromNamespace(body),
       abortSignal: opts.abortSignal,
     });
     return CoreV1.toNamespace(resp);
@@ -261,13 +262,14 @@ export class CoreV1Api {
     return CoreV1.toNamespace(resp);
   }
 
-  async patchNamespaceStatus(name: string, body: MetaV1.Patch, opts: operations.PatchOpts = {}) {
+  async patchNamespaceStatus(name: string, type: c.PatchType, body: CoreV1.Namespace | c.JsonPatch, opts: operations.PatchOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}namespaces/${name}/status`,
       expectJson: true,
       querystring: operations.formatPatchOpts(opts),
-      bodyJson: MetaV1.fromPatch(body),
+      contentType: c.getPatchContentType(type),
+      bodyJson: Array.isArray(body) ? body : CoreV1.fromNamespace(body),
       abortSignal: opts.abortSignal,
     });
     return CoreV1.toNamespace(resp);
@@ -355,13 +357,14 @@ export class CoreV1Api {
     return CoreV1.toNode(resp);
   }
 
-  async patchNode(name: string, body: MetaV1.Patch, opts: operations.PatchOpts = {}) {
+  async patchNode(name: string, type: c.PatchType, body: CoreV1.Node | c.JsonPatch, opts: operations.PatchOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}nodes/${name}`,
       expectJson: true,
       querystring: operations.formatPatchOpts(opts),
-      bodyJson: MetaV1.fromPatch(body),
+      contentType: c.getPatchContentType(type),
+      bodyJson: Array.isArray(body) ? body : CoreV1.fromNode(body),
       abortSignal: opts.abortSignal,
     });
     return CoreV1.toNode(resp);
@@ -498,13 +501,14 @@ export class CoreV1Api {
     return CoreV1.toNode(resp);
   }
 
-  async patchNodeStatus(name: string, body: MetaV1.Patch, opts: operations.PatchOpts = {}) {
+  async patchNodeStatus(name: string, type: c.PatchType, body: CoreV1.Node | c.JsonPatch, opts: operations.PatchOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}nodes/${name}/status`,
       expectJson: true,
       querystring: operations.formatPatchOpts(opts),
-      bodyJson: MetaV1.fromPatch(body),
+      contentType: c.getPatchContentType(type),
+      bodyJson: Array.isArray(body) ? body : CoreV1.fromNode(body),
       abortSignal: opts.abortSignal,
     });
     return CoreV1.toNode(resp);
@@ -615,13 +619,14 @@ export class CoreV1Api {
     return CoreV1.toPersistentVolume(resp);
   }
 
-  async patchPersistentVolume(name: string, body: MetaV1.Patch, opts: operations.PatchOpts = {}) {
+  async patchPersistentVolume(name: string, type: c.PatchType, body: CoreV1.PersistentVolume | c.JsonPatch, opts: operations.PatchOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}persistentvolumes/${name}`,
       expectJson: true,
       querystring: operations.formatPatchOpts(opts),
-      bodyJson: MetaV1.fromPatch(body),
+      contentType: c.getPatchContentType(type),
+      bodyJson: Array.isArray(body) ? body : CoreV1.fromPersistentVolume(body),
       abortSignal: opts.abortSignal,
     });
     return CoreV1.toPersistentVolume(resp);
@@ -653,13 +658,14 @@ export class CoreV1Api {
     return CoreV1.toPersistentVolume(resp);
   }
 
-  async patchPersistentVolumeStatus(name: string, body: MetaV1.Patch, opts: operations.PatchOpts = {}) {
+  async patchPersistentVolumeStatus(name: string, type: c.PatchType, body: CoreV1.PersistentVolume | c.JsonPatch, opts: operations.PatchOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}persistentvolumes/${name}/status`,
       expectJson: true,
       querystring: operations.formatPatchOpts(opts),
-      bodyJson: MetaV1.fromPatch(body),
+      contentType: c.getPatchContentType(type),
+      bodyJson: Array.isArray(body) ? body : CoreV1.fromPersistentVolume(body),
       abortSignal: opts.abortSignal,
     });
     return CoreV1.toPersistentVolume(resp);
@@ -930,13 +936,14 @@ export class CoreV1NamespacedApi {
     return CoreV1.toConfigMap(resp);
   }
 
-  async patchConfigMap(name: string, body: MetaV1.Patch, opts: operations.PatchOpts = {}) {
+  async patchConfigMap(name: string, type: c.PatchType, body: CoreV1.ConfigMap | c.JsonPatch, opts: operations.PatchOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}configmaps/${name}`,
       expectJson: true,
       querystring: operations.formatPatchOpts(opts),
-      bodyJson: MetaV1.fromPatch(body),
+      contentType: c.getPatchContentType(type),
+      bodyJson: Array.isArray(body) ? body : CoreV1.fromConfigMap(body),
       abortSignal: opts.abortSignal,
     });
     return CoreV1.toConfigMap(resp);
@@ -1024,13 +1031,14 @@ export class CoreV1NamespacedApi {
     return CoreV1.toEndpoints(resp);
   }
 
-  async patchEndpoints(name: string, body: MetaV1.Patch, opts: operations.PatchOpts = {}) {
+  async patchEndpoints(name: string, type: c.PatchType, body: CoreV1.Endpoints | c.JsonPatch, opts: operations.PatchOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}endpoints/${name}`,
       expectJson: true,
       querystring: operations.formatPatchOpts(opts),
-      bodyJson: MetaV1.fromPatch(body),
+      contentType: c.getPatchContentType(type),
+      bodyJson: Array.isArray(body) ? body : CoreV1.fromEndpoints(body),
       abortSignal: opts.abortSignal,
     });
     return CoreV1.toEndpoints(resp);
@@ -1118,13 +1126,14 @@ export class CoreV1NamespacedApi {
     return CoreV1.toEvent(resp);
   }
 
-  async patchEvent(name: string, body: MetaV1.Patch, opts: operations.PatchOpts = {}) {
+  async patchEvent(name: string, type: c.PatchType, body: CoreV1.Event | c.JsonPatch, opts: operations.PatchOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}events/${name}`,
       expectJson: true,
       querystring: operations.formatPatchOpts(opts),
-      bodyJson: MetaV1.fromPatch(body),
+      contentType: c.getPatchContentType(type),
+      bodyJson: Array.isArray(body) ? body : CoreV1.fromEvent(body),
       abortSignal: opts.abortSignal,
     });
     return CoreV1.toEvent(resp);
@@ -1212,13 +1221,14 @@ export class CoreV1NamespacedApi {
     return CoreV1.toLimitRange(resp);
   }
 
-  async patchLimitRange(name: string, body: MetaV1.Patch, opts: operations.PatchOpts = {}) {
+  async patchLimitRange(name: string, type: c.PatchType, body: CoreV1.LimitRange | c.JsonPatch, opts: operations.PatchOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}limitranges/${name}`,
       expectJson: true,
       querystring: operations.formatPatchOpts(opts),
-      bodyJson: MetaV1.fromPatch(body),
+      contentType: c.getPatchContentType(type),
+      bodyJson: Array.isArray(body) ? body : CoreV1.fromLimitRange(body),
       abortSignal: opts.abortSignal,
     });
     return CoreV1.toLimitRange(resp);
@@ -1306,13 +1316,14 @@ export class CoreV1NamespacedApi {
     return CoreV1.toPersistentVolumeClaim(resp);
   }
 
-  async patchPersistentVolumeClaim(name: string, body: MetaV1.Patch, opts: operations.PatchOpts = {}) {
+  async patchPersistentVolumeClaim(name: string, type: c.PatchType, body: CoreV1.PersistentVolumeClaim | c.JsonPatch, opts: operations.PatchOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}persistentvolumeclaims/${name}`,
       expectJson: true,
       querystring: operations.formatPatchOpts(opts),
-      bodyJson: MetaV1.fromPatch(body),
+      contentType: c.getPatchContentType(type),
+      bodyJson: Array.isArray(body) ? body : CoreV1.fromPersistentVolumeClaim(body),
       abortSignal: opts.abortSignal,
     });
     return CoreV1.toPersistentVolumeClaim(resp);
@@ -1344,13 +1355,14 @@ export class CoreV1NamespacedApi {
     return CoreV1.toPersistentVolumeClaim(resp);
   }
 
-  async patchPersistentVolumeClaimStatus(name: string, body: MetaV1.Patch, opts: operations.PatchOpts = {}) {
+  async patchPersistentVolumeClaimStatus(name: string, type: c.PatchType, body: CoreV1.PersistentVolumeClaim | c.JsonPatch, opts: operations.PatchOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}persistentvolumeclaims/${name}/status`,
       expectJson: true,
       querystring: operations.formatPatchOpts(opts),
-      bodyJson: MetaV1.fromPatch(body),
+      contentType: c.getPatchContentType(type),
+      bodyJson: Array.isArray(body) ? body : CoreV1.fromPersistentVolumeClaim(body),
       abortSignal: opts.abortSignal,
     });
     return CoreV1.toPersistentVolumeClaim(resp);
@@ -1438,13 +1450,14 @@ export class CoreV1NamespacedApi {
     return CoreV1.toPod(resp);
   }
 
-  async patchPod(name: string, body: MetaV1.Patch, opts: operations.PatchOpts = {}) {
+  async patchPod(name: string, type: c.PatchType, body: CoreV1.Pod | c.JsonPatch, opts: operations.PatchOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}pods/${name}`,
       expectJson: true,
       querystring: operations.formatPatchOpts(opts),
-      bodyJson: MetaV1.fromPatch(body),
+      contentType: c.getPatchContentType(type),
+      bodyJson: Array.isArray(body) ? body : CoreV1.fromPod(body),
       abortSignal: opts.abortSignal,
     });
     return CoreV1.toPod(resp);
@@ -1760,13 +1773,14 @@ export class CoreV1NamespacedApi {
     return CoreV1.toPod(resp);
   }
 
-  async patchPodStatus(name: string, body: MetaV1.Patch, opts: operations.PatchOpts = {}) {
+  async patchPodStatus(name: string, type: c.PatchType, body: CoreV1.Pod | c.JsonPatch, opts: operations.PatchOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}pods/${name}/status`,
       expectJson: true,
       querystring: operations.formatPatchOpts(opts),
-      bodyJson: MetaV1.fromPatch(body),
+      contentType: c.getPatchContentType(type),
+      bodyJson: Array.isArray(body) ? body : CoreV1.fromPod(body),
       abortSignal: opts.abortSignal,
     });
     return CoreV1.toPod(resp);
@@ -1854,13 +1868,14 @@ export class CoreV1NamespacedApi {
     return CoreV1.toPodTemplate(resp);
   }
 
-  async patchPodTemplate(name: string, body: MetaV1.Patch, opts: operations.PatchOpts = {}) {
+  async patchPodTemplate(name: string, type: c.PatchType, body: CoreV1.PodTemplate | c.JsonPatch, opts: operations.PatchOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}podtemplates/${name}`,
       expectJson: true,
       querystring: operations.formatPatchOpts(opts),
-      bodyJson: MetaV1.fromPatch(body),
+      contentType: c.getPatchContentType(type),
+      bodyJson: Array.isArray(body) ? body : CoreV1.fromPodTemplate(body),
       abortSignal: opts.abortSignal,
     });
     return CoreV1.toPodTemplate(resp);
@@ -1948,13 +1963,14 @@ export class CoreV1NamespacedApi {
     return CoreV1.toReplicationController(resp);
   }
 
-  async patchReplicationController(name: string, body: MetaV1.Patch, opts: operations.PatchOpts = {}) {
+  async patchReplicationController(name: string, type: c.PatchType, body: CoreV1.ReplicationController | c.JsonPatch, opts: operations.PatchOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}replicationcontrollers/${name}`,
       expectJson: true,
       querystring: operations.formatPatchOpts(opts),
-      bodyJson: MetaV1.fromPatch(body),
+      contentType: c.getPatchContentType(type),
+      bodyJson: Array.isArray(body) ? body : CoreV1.fromReplicationController(body),
       abortSignal: opts.abortSignal,
     });
     return CoreV1.toReplicationController(resp);
@@ -1986,13 +2002,14 @@ export class CoreV1NamespacedApi {
     return AutoscalingV1.toScale(resp);
   }
 
-  async patchReplicationControllerScale(name: string, body: MetaV1.Patch, opts: operations.PatchOpts = {}) {
+  async patchReplicationControllerScale(name: string, type: c.PatchType, body: AutoscalingV1.Scale | c.JsonPatch, opts: operations.PatchOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}replicationcontrollers/${name}/scale`,
       expectJson: true,
       querystring: operations.formatPatchOpts(opts),
-      bodyJson: MetaV1.fromPatch(body),
+      contentType: c.getPatchContentType(type),
+      bodyJson: Array.isArray(body) ? body : AutoscalingV1.fromScale(body),
       abortSignal: opts.abortSignal,
     });
     return AutoscalingV1.toScale(resp);
@@ -2024,13 +2041,14 @@ export class CoreV1NamespacedApi {
     return CoreV1.toReplicationController(resp);
   }
 
-  async patchReplicationControllerStatus(name: string, body: MetaV1.Patch, opts: operations.PatchOpts = {}) {
+  async patchReplicationControllerStatus(name: string, type: c.PatchType, body: CoreV1.ReplicationController | c.JsonPatch, opts: operations.PatchOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}replicationcontrollers/${name}/status`,
       expectJson: true,
       querystring: operations.formatPatchOpts(opts),
-      bodyJson: MetaV1.fromPatch(body),
+      contentType: c.getPatchContentType(type),
+      bodyJson: Array.isArray(body) ? body : CoreV1.fromReplicationController(body),
       abortSignal: opts.abortSignal,
     });
     return CoreV1.toReplicationController(resp);
@@ -2118,13 +2136,14 @@ export class CoreV1NamespacedApi {
     return CoreV1.toResourceQuota(resp);
   }
 
-  async patchResourceQuota(name: string, body: MetaV1.Patch, opts: operations.PatchOpts = {}) {
+  async patchResourceQuota(name: string, type: c.PatchType, body: CoreV1.ResourceQuota | c.JsonPatch, opts: operations.PatchOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}resourcequotas/${name}`,
       expectJson: true,
       querystring: operations.formatPatchOpts(opts),
-      bodyJson: MetaV1.fromPatch(body),
+      contentType: c.getPatchContentType(type),
+      bodyJson: Array.isArray(body) ? body : CoreV1.fromResourceQuota(body),
       abortSignal: opts.abortSignal,
     });
     return CoreV1.toResourceQuota(resp);
@@ -2156,13 +2175,14 @@ export class CoreV1NamespacedApi {
     return CoreV1.toResourceQuota(resp);
   }
 
-  async patchResourceQuotaStatus(name: string, body: MetaV1.Patch, opts: operations.PatchOpts = {}) {
+  async patchResourceQuotaStatus(name: string, type: c.PatchType, body: CoreV1.ResourceQuota | c.JsonPatch, opts: operations.PatchOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}resourcequotas/${name}/status`,
       expectJson: true,
       querystring: operations.formatPatchOpts(opts),
-      bodyJson: MetaV1.fromPatch(body),
+      contentType: c.getPatchContentType(type),
+      bodyJson: Array.isArray(body) ? body : CoreV1.fromResourceQuota(body),
       abortSignal: opts.abortSignal,
     });
     return CoreV1.toResourceQuota(resp);
@@ -2250,13 +2270,14 @@ export class CoreV1NamespacedApi {
     return CoreV1.toSecret(resp);
   }
 
-  async patchSecret(name: string, body: MetaV1.Patch, opts: operations.PatchOpts = {}) {
+  async patchSecret(name: string, type: c.PatchType, body: CoreV1.Secret | c.JsonPatch, opts: operations.PatchOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}secrets/${name}`,
       expectJson: true,
       querystring: operations.formatPatchOpts(opts),
-      bodyJson: MetaV1.fromPatch(body),
+      contentType: c.getPatchContentType(type),
+      bodyJson: Array.isArray(body) ? body : CoreV1.fromSecret(body),
       abortSignal: opts.abortSignal,
     });
     return CoreV1.toSecret(resp);
@@ -2344,13 +2365,14 @@ export class CoreV1NamespacedApi {
     return CoreV1.toServiceAccount(resp);
   }
 
-  async patchServiceAccount(name: string, body: MetaV1.Patch, opts: operations.PatchOpts = {}) {
+  async patchServiceAccount(name: string, type: c.PatchType, body: CoreV1.ServiceAccount | c.JsonPatch, opts: operations.PatchOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}serviceaccounts/${name}`,
       expectJson: true,
       querystring: operations.formatPatchOpts(opts),
-      bodyJson: MetaV1.fromPatch(body),
+      contentType: c.getPatchContentType(type),
+      bodyJson: Array.isArray(body) ? body : CoreV1.fromServiceAccount(body),
       abortSignal: opts.abortSignal,
     });
     return CoreV1.toServiceAccount(resp);
@@ -2438,13 +2460,14 @@ export class CoreV1NamespacedApi {
     return CoreV1.toService(resp);
   }
 
-  async patchService(name: string, body: MetaV1.Patch, opts: operations.PatchOpts = {}) {
+  async patchService(name: string, type: c.PatchType, body: CoreV1.Service | c.JsonPatch, opts: operations.PatchOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}services/${name}`,
       expectJson: true,
       querystring: operations.formatPatchOpts(opts),
-      bodyJson: MetaV1.fromPatch(body),
+      contentType: c.getPatchContentType(type),
+      bodyJson: Array.isArray(body) ? body : CoreV1.fromService(body),
       abortSignal: opts.abortSignal,
     });
     return CoreV1.toService(resp);
@@ -2581,13 +2604,14 @@ export class CoreV1NamespacedApi {
     return CoreV1.toService(resp);
   }
 
-  async patchServiceStatus(name: string, body: MetaV1.Patch, opts: operations.PatchOpts = {}) {
+  async patchServiceStatus(name: string, type: c.PatchType, body: CoreV1.Service | c.JsonPatch, opts: operations.PatchOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}services/${name}/status`,
       expectJson: true,
       querystring: operations.formatPatchOpts(opts),
-      bodyJson: MetaV1.fromPatch(body),
+      contentType: c.getPatchContentType(type),
+      bodyJson: Array.isArray(body) ? body : CoreV1.fromService(body),
       abortSignal: opts.abortSignal,
     });
     return CoreV1.toService(resp);

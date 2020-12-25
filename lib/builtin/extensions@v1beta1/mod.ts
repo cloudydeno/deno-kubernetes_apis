@@ -136,13 +136,14 @@ export class ExtensionsV1beta1NamespacedApi {
     return ExtensionsV1beta1.toIngress(resp);
   }
 
-  async patchIngress(name: string, body: MetaV1.Patch, opts: operations.PatchOpts = {}) {
+  async patchIngress(name: string, type: c.PatchType, body: ExtensionsV1beta1.Ingress | c.JsonPatch, opts: operations.PatchOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}ingresses/${name}`,
       expectJson: true,
       querystring: operations.formatPatchOpts(opts),
-      bodyJson: MetaV1.fromPatch(body),
+      contentType: c.getPatchContentType(type),
+      bodyJson: Array.isArray(body) ? body : ExtensionsV1beta1.fromIngress(body),
       abortSignal: opts.abortSignal,
     });
     return ExtensionsV1beta1.toIngress(resp);
@@ -174,13 +175,14 @@ export class ExtensionsV1beta1NamespacedApi {
     return ExtensionsV1beta1.toIngress(resp);
   }
 
-  async patchIngressStatus(name: string, body: MetaV1.Patch, opts: operations.PatchOpts = {}) {
+  async patchIngressStatus(name: string, type: c.PatchType, body: ExtensionsV1beta1.Ingress | c.JsonPatch, opts: operations.PatchOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}ingresses/${name}/status`,
       expectJson: true,
       querystring: operations.formatPatchOpts(opts),
-      bodyJson: MetaV1.fromPatch(body),
+      contentType: c.getPatchContentType(type),
+      bodyJson: Array.isArray(body) ? body : ExtensionsV1beta1.fromIngress(body),
       abortSignal: opts.abortSignal,
     });
     return ExtensionsV1beta1.toIngress(resp);

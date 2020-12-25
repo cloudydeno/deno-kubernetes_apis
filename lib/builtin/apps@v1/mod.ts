@@ -229,13 +229,14 @@ export class AppsV1NamespacedApi {
     return AppsV1.toControllerRevision(resp);
   }
 
-  async patchControllerRevision(name: string, body: MetaV1.Patch, opts: operations.PatchOpts = {}) {
+  async patchControllerRevision(name: string, type: c.PatchType, body: AppsV1.ControllerRevision | c.JsonPatch, opts: operations.PatchOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}controllerrevisions/${name}`,
       expectJson: true,
       querystring: operations.formatPatchOpts(opts),
-      bodyJson: MetaV1.fromPatch(body),
+      contentType: c.getPatchContentType(type),
+      bodyJson: Array.isArray(body) ? body : AppsV1.fromControllerRevision(body),
       abortSignal: opts.abortSignal,
     });
     return AppsV1.toControllerRevision(resp);
@@ -323,13 +324,14 @@ export class AppsV1NamespacedApi {
     return AppsV1.toDaemonSet(resp);
   }
 
-  async patchDaemonSet(name: string, body: MetaV1.Patch, opts: operations.PatchOpts = {}) {
+  async patchDaemonSet(name: string, type: c.PatchType, body: AppsV1.DaemonSet | c.JsonPatch, opts: operations.PatchOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}daemonsets/${name}`,
       expectJson: true,
       querystring: operations.formatPatchOpts(opts),
-      bodyJson: MetaV1.fromPatch(body),
+      contentType: c.getPatchContentType(type),
+      bodyJson: Array.isArray(body) ? body : AppsV1.fromDaemonSet(body),
       abortSignal: opts.abortSignal,
     });
     return AppsV1.toDaemonSet(resp);
@@ -361,13 +363,14 @@ export class AppsV1NamespacedApi {
     return AppsV1.toDaemonSet(resp);
   }
 
-  async patchDaemonSetStatus(name: string, body: MetaV1.Patch, opts: operations.PatchOpts = {}) {
+  async patchDaemonSetStatus(name: string, type: c.PatchType, body: AppsV1.DaemonSet | c.JsonPatch, opts: operations.PatchOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}daemonsets/${name}/status`,
       expectJson: true,
       querystring: operations.formatPatchOpts(opts),
-      bodyJson: MetaV1.fromPatch(body),
+      contentType: c.getPatchContentType(type),
+      bodyJson: Array.isArray(body) ? body : AppsV1.fromDaemonSet(body),
       abortSignal: opts.abortSignal,
     });
     return AppsV1.toDaemonSet(resp);
@@ -455,13 +458,14 @@ export class AppsV1NamespacedApi {
     return AppsV1.toDeployment(resp);
   }
 
-  async patchDeployment(name: string, body: MetaV1.Patch, opts: operations.PatchOpts = {}) {
+  async patchDeployment(name: string, type: c.PatchType, body: AppsV1.Deployment | c.JsonPatch, opts: operations.PatchOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}deployments/${name}`,
       expectJson: true,
       querystring: operations.formatPatchOpts(opts),
-      bodyJson: MetaV1.fromPatch(body),
+      contentType: c.getPatchContentType(type),
+      bodyJson: Array.isArray(body) ? body : AppsV1.fromDeployment(body),
       abortSignal: opts.abortSignal,
     });
     return AppsV1.toDeployment(resp);
@@ -493,13 +497,14 @@ export class AppsV1NamespacedApi {
     return AutoscalingV1.toScale(resp);
   }
 
-  async patchDeploymentScale(name: string, body: MetaV1.Patch, opts: operations.PatchOpts = {}) {
+  async patchDeploymentScale(name: string, type: c.PatchType, body: AutoscalingV1.Scale | c.JsonPatch, opts: operations.PatchOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}deployments/${name}/scale`,
       expectJson: true,
       querystring: operations.formatPatchOpts(opts),
-      bodyJson: MetaV1.fromPatch(body),
+      contentType: c.getPatchContentType(type),
+      bodyJson: Array.isArray(body) ? body : AutoscalingV1.fromScale(body),
       abortSignal: opts.abortSignal,
     });
     return AutoscalingV1.toScale(resp);
@@ -531,13 +536,14 @@ export class AppsV1NamespacedApi {
     return AppsV1.toDeployment(resp);
   }
 
-  async patchDeploymentStatus(name: string, body: MetaV1.Patch, opts: operations.PatchOpts = {}) {
+  async patchDeploymentStatus(name: string, type: c.PatchType, body: AppsV1.Deployment | c.JsonPatch, opts: operations.PatchOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}deployments/${name}/status`,
       expectJson: true,
       querystring: operations.formatPatchOpts(opts),
-      bodyJson: MetaV1.fromPatch(body),
+      contentType: c.getPatchContentType(type),
+      bodyJson: Array.isArray(body) ? body : AppsV1.fromDeployment(body),
       abortSignal: opts.abortSignal,
     });
     return AppsV1.toDeployment(resp);
@@ -625,13 +631,14 @@ export class AppsV1NamespacedApi {
     return AppsV1.toReplicaSet(resp);
   }
 
-  async patchReplicaSet(name: string, body: MetaV1.Patch, opts: operations.PatchOpts = {}) {
+  async patchReplicaSet(name: string, type: c.PatchType, body: AppsV1.ReplicaSet | c.JsonPatch, opts: operations.PatchOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}replicasets/${name}`,
       expectJson: true,
       querystring: operations.formatPatchOpts(opts),
-      bodyJson: MetaV1.fromPatch(body),
+      contentType: c.getPatchContentType(type),
+      bodyJson: Array.isArray(body) ? body : AppsV1.fromReplicaSet(body),
       abortSignal: opts.abortSignal,
     });
     return AppsV1.toReplicaSet(resp);
@@ -663,13 +670,14 @@ export class AppsV1NamespacedApi {
     return AutoscalingV1.toScale(resp);
   }
 
-  async patchReplicaSetScale(name: string, body: MetaV1.Patch, opts: operations.PatchOpts = {}) {
+  async patchReplicaSetScale(name: string, type: c.PatchType, body: AutoscalingV1.Scale | c.JsonPatch, opts: operations.PatchOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}replicasets/${name}/scale`,
       expectJson: true,
       querystring: operations.formatPatchOpts(opts),
-      bodyJson: MetaV1.fromPatch(body),
+      contentType: c.getPatchContentType(type),
+      bodyJson: Array.isArray(body) ? body : AutoscalingV1.fromScale(body),
       abortSignal: opts.abortSignal,
     });
     return AutoscalingV1.toScale(resp);
@@ -701,13 +709,14 @@ export class AppsV1NamespacedApi {
     return AppsV1.toReplicaSet(resp);
   }
 
-  async patchReplicaSetStatus(name: string, body: MetaV1.Patch, opts: operations.PatchOpts = {}) {
+  async patchReplicaSetStatus(name: string, type: c.PatchType, body: AppsV1.ReplicaSet | c.JsonPatch, opts: operations.PatchOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}replicasets/${name}/status`,
       expectJson: true,
       querystring: operations.formatPatchOpts(opts),
-      bodyJson: MetaV1.fromPatch(body),
+      contentType: c.getPatchContentType(type),
+      bodyJson: Array.isArray(body) ? body : AppsV1.fromReplicaSet(body),
       abortSignal: opts.abortSignal,
     });
     return AppsV1.toReplicaSet(resp);
@@ -795,13 +804,14 @@ export class AppsV1NamespacedApi {
     return AppsV1.toStatefulSet(resp);
   }
 
-  async patchStatefulSet(name: string, body: MetaV1.Patch, opts: operations.PatchOpts = {}) {
+  async patchStatefulSet(name: string, type: c.PatchType, body: AppsV1.StatefulSet | c.JsonPatch, opts: operations.PatchOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}statefulsets/${name}`,
       expectJson: true,
       querystring: operations.formatPatchOpts(opts),
-      bodyJson: MetaV1.fromPatch(body),
+      contentType: c.getPatchContentType(type),
+      bodyJson: Array.isArray(body) ? body : AppsV1.fromStatefulSet(body),
       abortSignal: opts.abortSignal,
     });
     return AppsV1.toStatefulSet(resp);
@@ -833,13 +843,14 @@ export class AppsV1NamespacedApi {
     return AutoscalingV1.toScale(resp);
   }
 
-  async patchStatefulSetScale(name: string, body: MetaV1.Patch, opts: operations.PatchOpts = {}) {
+  async patchStatefulSetScale(name: string, type: c.PatchType, body: AutoscalingV1.Scale | c.JsonPatch, opts: operations.PatchOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}statefulsets/${name}/scale`,
       expectJson: true,
       querystring: operations.formatPatchOpts(opts),
-      bodyJson: MetaV1.fromPatch(body),
+      contentType: c.getPatchContentType(type),
+      bodyJson: Array.isArray(body) ? body : AutoscalingV1.fromScale(body),
       abortSignal: opts.abortSignal,
     });
     return AutoscalingV1.toScale(resp);
@@ -871,13 +882,14 @@ export class AppsV1NamespacedApi {
     return AppsV1.toStatefulSet(resp);
   }
 
-  async patchStatefulSetStatus(name: string, body: MetaV1.Patch, opts: operations.PatchOpts = {}) {
+  async patchStatefulSetStatus(name: string, type: c.PatchType, body: AppsV1.StatefulSet | c.JsonPatch, opts: operations.PatchOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}statefulsets/${name}/status`,
       expectJson: true,
       querystring: operations.formatPatchOpts(opts),
-      bodyJson: MetaV1.fromPatch(body),
+      contentType: c.getPatchContentType(type),
+      bodyJson: Array.isArray(body) ? body : AppsV1.fromStatefulSet(body),
       abortSignal: opts.abortSignal,
     });
     return AppsV1.toStatefulSet(resp);

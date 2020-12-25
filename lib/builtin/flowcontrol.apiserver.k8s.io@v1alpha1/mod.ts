@@ -95,13 +95,14 @@ export class FlowcontrolApiserverV1alpha1Api {
     return FlowcontrolApiserverV1alpha1.toFlowSchema(resp);
   }
 
-  async patchFlowSchema(name: string, body: MetaV1.Patch, opts: operations.PatchOpts = {}) {
+  async patchFlowSchema(name: string, type: c.PatchType, body: FlowcontrolApiserverV1alpha1.FlowSchema | c.JsonPatch, opts: operations.PatchOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}flowschemas/${name}`,
       expectJson: true,
       querystring: operations.formatPatchOpts(opts),
-      bodyJson: MetaV1.fromPatch(body),
+      contentType: c.getPatchContentType(type),
+      bodyJson: Array.isArray(body) ? body : FlowcontrolApiserverV1alpha1.fromFlowSchema(body),
       abortSignal: opts.abortSignal,
     });
     return FlowcontrolApiserverV1alpha1.toFlowSchema(resp);
@@ -133,13 +134,14 @@ export class FlowcontrolApiserverV1alpha1Api {
     return FlowcontrolApiserverV1alpha1.toFlowSchema(resp);
   }
 
-  async patchFlowSchemaStatus(name: string, body: MetaV1.Patch, opts: operations.PatchOpts = {}) {
+  async patchFlowSchemaStatus(name: string, type: c.PatchType, body: FlowcontrolApiserverV1alpha1.FlowSchema | c.JsonPatch, opts: operations.PatchOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}flowschemas/${name}/status`,
       expectJson: true,
       querystring: operations.formatPatchOpts(opts),
-      bodyJson: MetaV1.fromPatch(body),
+      contentType: c.getPatchContentType(type),
+      bodyJson: Array.isArray(body) ? body : FlowcontrolApiserverV1alpha1.fromFlowSchema(body),
       abortSignal: opts.abortSignal,
     });
     return FlowcontrolApiserverV1alpha1.toFlowSchema(resp);
@@ -227,13 +229,14 @@ export class FlowcontrolApiserverV1alpha1Api {
     return FlowcontrolApiserverV1alpha1.toPriorityLevelConfiguration(resp);
   }
 
-  async patchPriorityLevelConfiguration(name: string, body: MetaV1.Patch, opts: operations.PatchOpts = {}) {
+  async patchPriorityLevelConfiguration(name: string, type: c.PatchType, body: FlowcontrolApiserverV1alpha1.PriorityLevelConfiguration | c.JsonPatch, opts: operations.PatchOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}prioritylevelconfigurations/${name}`,
       expectJson: true,
       querystring: operations.formatPatchOpts(opts),
-      bodyJson: MetaV1.fromPatch(body),
+      contentType: c.getPatchContentType(type),
+      bodyJson: Array.isArray(body) ? body : FlowcontrolApiserverV1alpha1.fromPriorityLevelConfiguration(body),
       abortSignal: opts.abortSignal,
     });
     return FlowcontrolApiserverV1alpha1.toPriorityLevelConfiguration(resp);
@@ -265,13 +268,14 @@ export class FlowcontrolApiserverV1alpha1Api {
     return FlowcontrolApiserverV1alpha1.toPriorityLevelConfiguration(resp);
   }
 
-  async patchPriorityLevelConfigurationStatus(name: string, body: MetaV1.Patch, opts: operations.PatchOpts = {}) {
+  async patchPriorityLevelConfigurationStatus(name: string, type: c.PatchType, body: FlowcontrolApiserverV1alpha1.PriorityLevelConfiguration | c.JsonPatch, opts: operations.PatchOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}prioritylevelconfigurations/${name}/status`,
       expectJson: true,
       querystring: operations.formatPatchOpts(opts),
-      bodyJson: MetaV1.fromPatch(body),
+      contentType: c.getPatchContentType(type),
+      bodyJson: Array.isArray(body) ? body : FlowcontrolApiserverV1alpha1.fromPriorityLevelConfiguration(body),
       abortSignal: opts.abortSignal,
     });
     return FlowcontrolApiserverV1alpha1.toPriorityLevelConfiguration(resp);

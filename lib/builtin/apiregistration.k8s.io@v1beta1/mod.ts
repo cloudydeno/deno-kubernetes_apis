@@ -95,13 +95,14 @@ export class ApiregistrationV1beta1Api {
     return ApiregistrationV1beta1.toAPIService(resp);
   }
 
-  async patchAPIService(name: string, body: MetaV1.Patch, opts: operations.PatchOpts = {}) {
+  async patchAPIService(name: string, type: c.PatchType, body: ApiregistrationV1beta1.APIService | c.JsonPatch, opts: operations.PatchOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}apiservices/${name}`,
       expectJson: true,
       querystring: operations.formatPatchOpts(opts),
-      bodyJson: MetaV1.fromPatch(body),
+      contentType: c.getPatchContentType(type),
+      bodyJson: Array.isArray(body) ? body : ApiregistrationV1beta1.fromAPIService(body),
       abortSignal: opts.abortSignal,
     });
     return ApiregistrationV1beta1.toAPIService(resp);
@@ -133,13 +134,14 @@ export class ApiregistrationV1beta1Api {
     return ApiregistrationV1beta1.toAPIService(resp);
   }
 
-  async patchAPIServiceStatus(name: string, body: MetaV1.Patch, opts: operations.PatchOpts = {}) {
+  async patchAPIServiceStatus(name: string, type: c.PatchType, body: ApiregistrationV1beta1.APIService | c.JsonPatch, opts: operations.PatchOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}apiservices/${name}/status`,
       expectJson: true,
       querystring: operations.formatPatchOpts(opts),
-      bodyJson: MetaV1.fromPatch(body),
+      contentType: c.getPatchContentType(type),
+      bodyJson: Array.isArray(body) ? body : ApiregistrationV1beta1.fromAPIService(body),
       abortSignal: opts.abortSignal,
     });
     return ApiregistrationV1beta1.toAPIService(resp);

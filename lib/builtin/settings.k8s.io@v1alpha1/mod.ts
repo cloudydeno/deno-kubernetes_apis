@@ -136,13 +136,14 @@ export class SettingsV1alpha1NamespacedApi {
     return SettingsV1alpha1.toPodPreset(resp);
   }
 
-  async patchPodPreset(name: string, body: MetaV1.Patch, opts: operations.PatchOpts = {}) {
+  async patchPodPreset(name: string, type: c.PatchType, body: SettingsV1alpha1.PodPreset | c.JsonPatch, opts: operations.PatchOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}podpresets/${name}`,
       expectJson: true,
       querystring: operations.formatPatchOpts(opts),
-      bodyJson: MetaV1.fromPatch(body),
+      contentType: c.getPatchContentType(type),
+      bodyJson: Array.isArray(body) ? body : SettingsV1alpha1.fromPodPreset(body),
       abortSignal: opts.abortSignal,
     });
     return SettingsV1alpha1.toPodPreset(resp);

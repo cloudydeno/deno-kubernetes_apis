@@ -136,13 +136,14 @@ export class BatchV1beta1NamespacedApi {
     return BatchV1beta1.toCronJob(resp);
   }
 
-  async patchCronJob(name: string, body: MetaV1.Patch, opts: operations.PatchOpts = {}) {
+  async patchCronJob(name: string, type: c.PatchType, body: BatchV1beta1.CronJob | c.JsonPatch, opts: operations.PatchOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}cronjobs/${name}`,
       expectJson: true,
       querystring: operations.formatPatchOpts(opts),
-      bodyJson: MetaV1.fromPatch(body),
+      contentType: c.getPatchContentType(type),
+      bodyJson: Array.isArray(body) ? body : BatchV1beta1.fromCronJob(body),
       abortSignal: opts.abortSignal,
     });
     return BatchV1beta1.toCronJob(resp);
@@ -174,13 +175,14 @@ export class BatchV1beta1NamespacedApi {
     return BatchV1beta1.toCronJob(resp);
   }
 
-  async patchCronJobStatus(name: string, body: MetaV1.Patch, opts: operations.PatchOpts = {}) {
+  async patchCronJobStatus(name: string, type: c.PatchType, body: BatchV1beta1.CronJob | c.JsonPatch, opts: operations.PatchOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}cronjobs/${name}/status`,
       expectJson: true,
       querystring: operations.formatPatchOpts(opts),
-      bodyJson: MetaV1.fromPatch(body),
+      contentType: c.getPatchContentType(type),
+      bodyJson: Array.isArray(body) ? body : BatchV1beta1.fromCronJob(body),
       abortSignal: opts.abortSignal,
     });
     return BatchV1beta1.toCronJob(resp);

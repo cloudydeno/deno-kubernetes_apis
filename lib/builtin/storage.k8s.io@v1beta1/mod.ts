@@ -95,13 +95,14 @@ export class StorageV1beta1Api {
     return StorageV1beta1.toCSIDriver(resp);
   }
 
-  async patchCSIDriver(name: string, body: MetaV1.Patch, opts: operations.PatchOpts = {}) {
+  async patchCSIDriver(name: string, type: c.PatchType, body: StorageV1beta1.CSIDriver | c.JsonPatch, opts: operations.PatchOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}csidrivers/${name}`,
       expectJson: true,
       querystring: operations.formatPatchOpts(opts),
-      bodyJson: MetaV1.fromPatch(body),
+      contentType: c.getPatchContentType(type),
+      bodyJson: Array.isArray(body) ? body : StorageV1beta1.fromCSIDriver(body),
       abortSignal: opts.abortSignal,
     });
     return StorageV1beta1.toCSIDriver(resp);
@@ -189,13 +190,14 @@ export class StorageV1beta1Api {
     return StorageV1beta1.toCSINode(resp);
   }
 
-  async patchCSINode(name: string, body: MetaV1.Patch, opts: operations.PatchOpts = {}) {
+  async patchCSINode(name: string, type: c.PatchType, body: StorageV1beta1.CSINode | c.JsonPatch, opts: operations.PatchOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}csinodes/${name}`,
       expectJson: true,
       querystring: operations.formatPatchOpts(opts),
-      bodyJson: MetaV1.fromPatch(body),
+      contentType: c.getPatchContentType(type),
+      bodyJson: Array.isArray(body) ? body : StorageV1beta1.fromCSINode(body),
       abortSignal: opts.abortSignal,
     });
     return StorageV1beta1.toCSINode(resp);
@@ -283,13 +285,14 @@ export class StorageV1beta1Api {
     return StorageV1beta1.toStorageClass(resp);
   }
 
-  async patchStorageClass(name: string, body: MetaV1.Patch, opts: operations.PatchOpts = {}) {
+  async patchStorageClass(name: string, type: c.PatchType, body: StorageV1beta1.StorageClass | c.JsonPatch, opts: operations.PatchOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}storageclasses/${name}`,
       expectJson: true,
       querystring: operations.formatPatchOpts(opts),
-      bodyJson: MetaV1.fromPatch(body),
+      contentType: c.getPatchContentType(type),
+      bodyJson: Array.isArray(body) ? body : StorageV1beta1.fromStorageClass(body),
       abortSignal: opts.abortSignal,
     });
     return StorageV1beta1.toStorageClass(resp);
@@ -377,13 +380,14 @@ export class StorageV1beta1Api {
     return StorageV1beta1.toVolumeAttachment(resp);
   }
 
-  async patchVolumeAttachment(name: string, body: MetaV1.Patch, opts: operations.PatchOpts = {}) {
+  async patchVolumeAttachment(name: string, type: c.PatchType, body: StorageV1beta1.VolumeAttachment | c.JsonPatch, opts: operations.PatchOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}volumeattachments/${name}`,
       expectJson: true,
       querystring: operations.formatPatchOpts(opts),
-      bodyJson: MetaV1.fromPatch(body),
+      contentType: c.getPatchContentType(type),
+      bodyJson: Array.isArray(body) ? body : StorageV1beta1.fromVolumeAttachment(body),
       abortSignal: opts.abortSignal,
     });
     return StorageV1beta1.toVolumeAttachment(resp);

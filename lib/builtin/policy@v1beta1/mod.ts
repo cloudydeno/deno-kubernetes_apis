@@ -126,13 +126,14 @@ export class PolicyV1beta1Api {
     return PolicyV1beta1.toPodSecurityPolicy(resp);
   }
 
-  async patchPodSecurityPolicy(name: string, body: MetaV1.Patch, opts: operations.PatchOpts = {}) {
+  async patchPodSecurityPolicy(name: string, type: c.PatchType, body: PolicyV1beta1.PodSecurityPolicy | c.JsonPatch, opts: operations.PatchOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}podsecuritypolicies/${name}`,
       expectJson: true,
       querystring: operations.formatPatchOpts(opts),
-      bodyJson: MetaV1.fromPatch(body),
+      contentType: c.getPatchContentType(type),
+      bodyJson: Array.isArray(body) ? body : PolicyV1beta1.fromPodSecurityPolicy(body),
       abortSignal: opts.abortSignal,
     });
     return PolicyV1beta1.toPodSecurityPolicy(resp);
@@ -230,13 +231,14 @@ export class PolicyV1beta1NamespacedApi {
     return PolicyV1beta1.toPodDisruptionBudget(resp);
   }
 
-  async patchPodDisruptionBudget(name: string, body: MetaV1.Patch, opts: operations.PatchOpts = {}) {
+  async patchPodDisruptionBudget(name: string, type: c.PatchType, body: PolicyV1beta1.PodDisruptionBudget | c.JsonPatch, opts: operations.PatchOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}poddisruptionbudgets/${name}`,
       expectJson: true,
       querystring: operations.formatPatchOpts(opts),
-      bodyJson: MetaV1.fromPatch(body),
+      contentType: c.getPatchContentType(type),
+      bodyJson: Array.isArray(body) ? body : PolicyV1beta1.fromPodDisruptionBudget(body),
       abortSignal: opts.abortSignal,
     });
     return PolicyV1beta1.toPodDisruptionBudget(resp);
@@ -268,13 +270,14 @@ export class PolicyV1beta1NamespacedApi {
     return PolicyV1beta1.toPodDisruptionBudget(resp);
   }
 
-  async patchPodDisruptionBudgetStatus(name: string, body: MetaV1.Patch, opts: operations.PatchOpts = {}) {
+  async patchPodDisruptionBudgetStatus(name: string, type: c.PatchType, body: PolicyV1beta1.PodDisruptionBudget | c.JsonPatch, opts: operations.PatchOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}poddisruptionbudgets/${name}/status`,
       expectJson: true,
       querystring: operations.formatPatchOpts(opts),
-      bodyJson: MetaV1.fromPatch(body),
+      contentType: c.getPatchContentType(type),
+      bodyJson: Array.isArray(body) ? body : PolicyV1beta1.fromPodDisruptionBudget(body),
       abortSignal: opts.abortSignal,
     });
     return PolicyV1beta1.toPodDisruptionBudget(resp);

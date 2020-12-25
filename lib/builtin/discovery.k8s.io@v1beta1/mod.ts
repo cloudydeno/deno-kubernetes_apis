@@ -136,13 +136,14 @@ export class DiscoveryV1beta1NamespacedApi {
     return DiscoveryV1beta1.toEndpointSlice(resp);
   }
 
-  async patchEndpointSlice(name: string, body: MetaV1.Patch, opts: operations.PatchOpts = {}) {
+  async patchEndpointSlice(name: string, type: c.PatchType, body: DiscoveryV1beta1.EndpointSlice | c.JsonPatch, opts: operations.PatchOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}endpointslices/${name}`,
       expectJson: true,
       querystring: operations.formatPatchOpts(opts),
-      bodyJson: MetaV1.fromPatch(body),
+      contentType: c.getPatchContentType(type),
+      bodyJson: Array.isArray(body) ? body : DiscoveryV1beta1.fromEndpointSlice(body),
       abortSignal: opts.abortSignal,
     });
     return DiscoveryV1beta1.toEndpointSlice(resp);

@@ -66,10 +66,6 @@ export function generateModuleTypescript(surface: SurfaceMap, api: SurfaceApi): 
     chunks.push(`}\n`);
   }
 
-  // chunks.push(`/*`);
-  // chunks.push(JSON.stringify(Array.from(api.kinds), null, 2));
-  // chunks.push(`*/`);
-
   for (const foreignApi of foreignApis) {
     chunks.splice(5, 0, `import * as ${foreignApi.friendlyName} from "../${foreignApi.moduleName}/structs.ts";`);
   }
@@ -78,6 +74,11 @@ export function generateModuleTypescript(surface: SurfaceMap, api: SurfaceApi): 
 
 
   function writeOperation(op: SurfaceOperation) {
+
+    const outShape = Object.values(op.responses)
+      .filter(resp => resp.schema?.$ref)
+      .map(resp => api.shapes.readSchema(resp!.schema!, null))[0];
+
     let opPath = op.subPath;
     const args = new Array<[OpenAPI2RequestParameter, ApiShape]>();
     const opts = new Array<[OpenAPI2RequestParameter, ApiShape]>();
@@ -91,16 +92,31 @@ export function generateModuleTypescript(surface: SurfaceMap, api: SurfaceApi): 
       if (param.in === 'path') {
         args.splice(0, 0, [param, shape]);
       } else if (param.in === 'body') {
-        args.push([param, shape]);
-      } else {
+
+        // for PATCH, We're going to be more specific than just MetaV1.Patch
+        if (shape.type === 'foreign' &&
+            shape.api.apiGroup === 'meta' &&
+            shape.name === 'Patch' &&
+            op.method === 'patch') {
+          args.push([param, outShape]);
+
+        } else {
+          args.push([param, shape]);
+        }
+      } else if (param.in === 'query') {
         opts.push([param, shape]);
-      }
+      } else throw new Error(`Unknown param.in ${param.in}`);
     }
 
     let accept = 'application/json';
     if (op.produces.includes('text/plain')) {
       accept = 'text/plain'; // container logs
     }
+
+    // TODO?: more specific signatures for PATCH
+    // // async patchNode(name: string, type: 'strategic-merge', body: c.StrategicPatch<CoreV1.NodeFields>, opts?: operations.PatchOpts): Promise<CoreV1.Node>;
+    // // async patchNode(name: string, type: 'json-merge' | 'apply-merge', body: c.DeepPartial<CoreV1.NodeFields>, opts?: operations.PatchOpts): Promise<CoreV1.Node>;
+    // // async patchNode(name: string, type: 'json-patch', body: c.JsonPatch, opts?: operations.PatchOpts): Promise<CoreV1.Node>;
 
     chunks.push(`  async ${op.operationName}(${writeSig(args, opts, '  ')}) {`);
     const isWatch = op.operationName.startsWith('watch');
@@ -150,7 +166,12 @@ export function generateModuleTypescript(surface: SurfaceMap, api: SurfaceApi): 
       if (bodyArg[1].type === 'foreign') foreignApis.add(bodyArg[1].api);
       const bodyApi = bodyArg[1].type === 'foreign' ? bodyArg[1].api : api;
       const bodyName = bodyArg[1].type === 'foreign' ? bodyArg[1].name : bodyArg[1].reference;
-      chunks.push(`      bodyJson: ${bodyApi.friendlyName}.from${bodyName}(body),`);
+      let bodyConversion = `${bodyApi.friendlyName}.from${bodyName}(body)`;
+      if (op.method === 'patch') {
+        chunks.push(`      contentType: c.getPatchContentType(type),`);
+        bodyConversion = `Array.isArray(body) ? body : ${bodyConversion}`;
+      }
+      chunks.push(`      bodyJson: ${bodyConversion},`);
     }
     chunks.push(`      abortSignal: opts.abortSignal,`);
     chunks.push(`    });`);
@@ -161,12 +182,15 @@ export function generateModuleTypescript(surface: SurfaceMap, api: SurfaceApi): 
       return;
     }
 
-    for (const [status, resp] of Object.entries(op.responses)) {
-      if (!resp.schema?.$ref) continue;
-      let shape = api.shapes.readSchema(resp.schema, null);
+    if (outShape) {
+      let shape = outShape;
 
       // QUIRK: seems like deletes return what was deleted, not a boring Status
-      if (resp.schema.$ref === '#/definitions/io.k8s.apimachinery.pkg.apis.meta.v1.Status' && op.method === 'delete') {
+      // TODO: actually depends on the API, some are Status, some are what's deleted
+      if (shape.type === 'foreign' &&
+          shape.api.apiGroup === 'meta' &&
+          shape.name === 'Status' &&
+          op.method === 'delete') {
         shape = api.shapes.shapes.get(op.operationName.replace(/^delete/, ''))!;
       }
 
@@ -180,10 +204,7 @@ export function generateModuleTypescript(surface: SurfaceMap, api: SurfaceApi): 
         } else {
           chunks.push(`    return ${api.friendlyName}.to${shape.reference}(resp);`);
         }
-      } else {
-        chunks.push(`    // TODO: ${status} ${resp.schema?.$ref} ${shape.type}`);
-      }
-      break;
+      } else throw new Error(`TODO: weird output shape on ${op.operationId}`);
     }
 
     chunks.push(`  }\n`);
@@ -219,6 +240,12 @@ export function generateModuleTypescript(surface: SurfaceMap, api: SurfaceApi): 
       const allOptKeys = opts.map(x => x[0].name).sort().join(',');
       const knownOptShape = knownOpts[allOptKeys];
       if (knownOptShape) {
+        if (knownOptShape === 'PatchOpts') {
+          // If this is a Patch endpoint, fix up types for proper patching
+          const bodySig = sigs.pop();
+          sigs.push('type: c.PatchType');
+          sigs.push(bodySig + ' | c.JsonPatch');
+        }
         sigs.push(`opts: operations.${knownOptShape}${allAreOpt ? ' = {}' : ''}`);
       } else {
         const lines = new Array<string>();

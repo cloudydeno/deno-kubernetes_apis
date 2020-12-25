@@ -95,13 +95,14 @@ export class AdmissionregistrationV1beta1Api {
     return AdmissionregistrationV1beta1.toMutatingWebhookConfiguration(resp);
   }
 
-  async patchMutatingWebhookConfiguration(name: string, body: MetaV1.Patch, opts: operations.PatchOpts = {}) {
+  async patchMutatingWebhookConfiguration(name: string, type: c.PatchType, body: AdmissionregistrationV1beta1.MutatingWebhookConfiguration | c.JsonPatch, opts: operations.PatchOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}mutatingwebhookconfigurations/${name}`,
       expectJson: true,
       querystring: operations.formatPatchOpts(opts),
-      bodyJson: MetaV1.fromPatch(body),
+      contentType: c.getPatchContentType(type),
+      bodyJson: Array.isArray(body) ? body : AdmissionregistrationV1beta1.fromMutatingWebhookConfiguration(body),
       abortSignal: opts.abortSignal,
     });
     return AdmissionregistrationV1beta1.toMutatingWebhookConfiguration(resp);
@@ -189,13 +190,14 @@ export class AdmissionregistrationV1beta1Api {
     return AdmissionregistrationV1beta1.toValidatingWebhookConfiguration(resp);
   }
 
-  async patchValidatingWebhookConfiguration(name: string, body: MetaV1.Patch, opts: operations.PatchOpts = {}) {
+  async patchValidatingWebhookConfiguration(name: string, type: c.PatchType, body: AdmissionregistrationV1beta1.ValidatingWebhookConfiguration | c.JsonPatch, opts: operations.PatchOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}validatingwebhookconfigurations/${name}`,
       expectJson: true,
       querystring: operations.formatPatchOpts(opts),
-      bodyJson: MetaV1.fromPatch(body),
+      contentType: c.getPatchContentType(type),
+      bodyJson: Array.isArray(body) ? body : AdmissionregistrationV1beta1.fromValidatingWebhookConfiguration(body),
       abortSignal: opts.abortSignal,
     });
     return AdmissionregistrationV1beta1.toValidatingWebhookConfiguration(resp);

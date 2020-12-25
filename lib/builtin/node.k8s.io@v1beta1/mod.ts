@@ -95,13 +95,14 @@ export class NodeV1beta1Api {
     return NodeV1beta1.toRuntimeClass(resp);
   }
 
-  async patchRuntimeClass(name: string, body: MetaV1.Patch, opts: operations.PatchOpts = {}) {
+  async patchRuntimeClass(name: string, type: c.PatchType, body: NodeV1beta1.RuntimeClass | c.JsonPatch, opts: operations.PatchOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}runtimeclasses/${name}`,
       expectJson: true,
       querystring: operations.formatPatchOpts(opts),
-      bodyJson: MetaV1.fromPatch(body),
+      contentType: c.getPatchContentType(type),
+      bodyJson: Array.isArray(body) ? body : NodeV1beta1.fromRuntimeClass(body),
       abortSignal: opts.abortSignal,
     });
     return NodeV1beta1.toRuntimeClass(resp);

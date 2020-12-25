@@ -106,13 +106,14 @@ export class RbacAuthorizationV1Api {
     return RbacAuthorizationV1.toClusterRoleBinding(resp);
   }
 
-  async patchClusterRoleBinding(name: string, body: MetaV1.Patch, opts: operations.PatchOpts = {}) {
+  async patchClusterRoleBinding(name: string, type: c.PatchType, body: RbacAuthorizationV1.ClusterRoleBinding | c.JsonPatch, opts: operations.PatchOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}clusterrolebindings/${name}`,
       expectJson: true,
       querystring: operations.formatPatchOpts(opts),
-      bodyJson: MetaV1.fromPatch(body),
+      contentType: c.getPatchContentType(type),
+      bodyJson: Array.isArray(body) ? body : RbacAuthorizationV1.fromClusterRoleBinding(body),
       abortSignal: opts.abortSignal,
     });
     return RbacAuthorizationV1.toClusterRoleBinding(resp);
@@ -203,13 +204,14 @@ export class RbacAuthorizationV1Api {
     return RbacAuthorizationV1.toClusterRole(resp);
   }
 
-  async patchClusterRole(name: string, body: MetaV1.Patch, opts: operations.PatchOpts = {}) {
+  async patchClusterRole(name: string, type: c.PatchType, body: RbacAuthorizationV1.ClusterRole | c.JsonPatch, opts: operations.PatchOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}clusterroles/${name}`,
       expectJson: true,
       querystring: operations.formatPatchOpts(opts),
-      bodyJson: MetaV1.fromPatch(body),
+      contentType: c.getPatchContentType(type),
+      bodyJson: Array.isArray(body) ? body : RbacAuthorizationV1.fromClusterRole(body),
       abortSignal: opts.abortSignal,
     });
     return RbacAuthorizationV1.toClusterRole(resp);
@@ -356,13 +358,14 @@ export class RbacAuthorizationV1NamespacedApi {
     return RbacAuthorizationV1.toRoleBinding(resp);
   }
 
-  async patchRoleBinding(name: string, body: MetaV1.Patch, opts: operations.PatchOpts = {}) {
+  async patchRoleBinding(name: string, type: c.PatchType, body: RbacAuthorizationV1.RoleBinding | c.JsonPatch, opts: operations.PatchOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}rolebindings/${name}`,
       expectJson: true,
       querystring: operations.formatPatchOpts(opts),
-      bodyJson: MetaV1.fromPatch(body),
+      contentType: c.getPatchContentType(type),
+      bodyJson: Array.isArray(body) ? body : RbacAuthorizationV1.fromRoleBinding(body),
       abortSignal: opts.abortSignal,
     });
     return RbacAuthorizationV1.toRoleBinding(resp);
@@ -453,13 +456,14 @@ export class RbacAuthorizationV1NamespacedApi {
     return RbacAuthorizationV1.toRole(resp);
   }
 
-  async patchRole(name: string, body: MetaV1.Patch, opts: operations.PatchOpts = {}) {
+  async patchRole(name: string, type: c.PatchType, body: RbacAuthorizationV1.Role | c.JsonPatch, opts: operations.PatchOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}roles/${name}`,
       expectJson: true,
       querystring: operations.formatPatchOpts(opts),
-      bodyJson: MetaV1.fromPatch(body),
+      contentType: c.getPatchContentType(type),
+      bodyJson: Array.isArray(body) ? body : RbacAuthorizationV1.fromRole(body),
       abortSignal: opts.abortSignal,
     });
     return RbacAuthorizationV1.toRole(resp);

@@ -103,13 +103,14 @@ export class NetworkingV1Api {
     return NetworkingV1.toIngressClass(resp);
   }
 
-  async patchIngressClass(name: string, body: MetaV1.Patch, opts: operations.PatchOpts = {}) {
+  async patchIngressClass(name: string, type: c.PatchType, body: NetworkingV1.IngressClass | c.JsonPatch, opts: operations.PatchOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}ingressclasses/${name}`,
       expectJson: true,
       querystring: operations.formatPatchOpts(opts),
-      bodyJson: MetaV1.fromPatch(body),
+      contentType: c.getPatchContentType(type),
+      bodyJson: Array.isArray(body) ? body : NetworkingV1.fromIngressClass(body),
       abortSignal: opts.abortSignal,
     });
     return NetworkingV1.toIngressClass(resp);
@@ -253,13 +254,14 @@ export class NetworkingV1NamespacedApi {
     return NetworkingV1.toIngress(resp);
   }
 
-  async patchIngress(name: string, body: MetaV1.Patch, opts: operations.PatchOpts = {}) {
+  async patchIngress(name: string, type: c.PatchType, body: NetworkingV1.Ingress | c.JsonPatch, opts: operations.PatchOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}ingresses/${name}`,
       expectJson: true,
       querystring: operations.formatPatchOpts(opts),
-      bodyJson: MetaV1.fromPatch(body),
+      contentType: c.getPatchContentType(type),
+      bodyJson: Array.isArray(body) ? body : NetworkingV1.fromIngress(body),
       abortSignal: opts.abortSignal,
     });
     return NetworkingV1.toIngress(resp);
@@ -291,13 +293,14 @@ export class NetworkingV1NamespacedApi {
     return NetworkingV1.toIngress(resp);
   }
 
-  async patchIngressStatus(name: string, body: MetaV1.Patch, opts: operations.PatchOpts = {}) {
+  async patchIngressStatus(name: string, type: c.PatchType, body: NetworkingV1.Ingress | c.JsonPatch, opts: operations.PatchOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}ingresses/${name}/status`,
       expectJson: true,
       querystring: operations.formatPatchOpts(opts),
-      bodyJson: MetaV1.fromPatch(body),
+      contentType: c.getPatchContentType(type),
+      bodyJson: Array.isArray(body) ? body : NetworkingV1.fromIngress(body),
       abortSignal: opts.abortSignal,
     });
     return NetworkingV1.toIngress(resp);
@@ -385,13 +388,14 @@ export class NetworkingV1NamespacedApi {
     return NetworkingV1.toNetworkPolicy(resp);
   }
 
-  async patchNetworkPolicy(name: string, body: MetaV1.Patch, opts: operations.PatchOpts = {}) {
+  async patchNetworkPolicy(name: string, type: c.PatchType, body: NetworkingV1.NetworkPolicy | c.JsonPatch, opts: operations.PatchOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}networkpolicies/${name}`,
       expectJson: true,
       querystring: operations.formatPatchOpts(opts),
-      bodyJson: MetaV1.fromPatch(body),
+      contentType: c.getPatchContentType(type),
+      bodyJson: Array.isArray(body) ? body : NetworkingV1.fromNetworkPolicy(body),
       abortSignal: opts.abortSignal,
     });
     return NetworkingV1.toNetworkPolicy(resp);

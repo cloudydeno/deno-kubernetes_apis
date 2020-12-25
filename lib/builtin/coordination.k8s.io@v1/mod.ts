@@ -136,13 +136,14 @@ export class CoordinationV1NamespacedApi {
     return CoordinationV1.toLease(resp);
   }
 
-  async patchLease(name: string, body: MetaV1.Patch, opts: operations.PatchOpts = {}) {
+  async patchLease(name: string, type: c.PatchType, body: CoordinationV1.Lease | c.JsonPatch, opts: operations.PatchOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}leases/${name}`,
       expectJson: true,
       querystring: operations.formatPatchOpts(opts),
-      bodyJson: MetaV1.fromPatch(body),
+      contentType: c.getPatchContentType(type),
+      bodyJson: Array.isArray(body) ? body : CoordinationV1.fromLease(body),
       abortSignal: opts.abortSignal,
     });
     return CoordinationV1.toLease(resp);
