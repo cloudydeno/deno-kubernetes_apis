@@ -370,109 +370,15 @@ export class CoreV1Api {
     return CoreV1.toNode(resp);
   }
 
-  async connectGetNodeProxy(name: string, opts: {
-    path?: string;
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
-    if (opts["path"] != null) query.append("path", opts["path"]);
-    const resp = await this.#client.performRequest({
-      method: "GET",
-      path: `${this.#root}nodes/${name}/proxy`,
-      expectJson: true,
-      querystring: query,
-      abortSignal: opts.abortSignal,
-    });
-  }
-
-  async connectPostNodeProxy(name: string, opts: {
-    path?: string;
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
-    if (opts["path"] != null) query.append("path", opts["path"]);
-    const resp = await this.#client.performRequest({
-      method: "POST",
-      path: `${this.#root}nodes/${name}/proxy`,
-      expectJson: true,
-      querystring: query,
-      abortSignal: opts.abortSignal,
-    });
-  }
-
-  async connectDeleteNodeProxy(name: string, opts: {
-    path?: string;
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
-    if (opts["path"] != null) query.append("path", opts["path"]);
-    const resp = await this.#client.performRequest({
-      method: "DELETE",
-      path: `${this.#root}nodes/${name}/proxy`,
-      expectJson: true,
-      querystring: query,
-      abortSignal: opts.abortSignal,
-    });
-  }
-
-  async connectPutNodeProxy(name: string, opts: {
-    path?: string;
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
-    if (opts["path"] != null) query.append("path", opts["path"]);
-    const resp = await this.#client.performRequest({
-      method: "PUT",
-      path: `${this.#root}nodes/${name}/proxy`,
-      expectJson: true,
-      querystring: query,
-      abortSignal: opts.abortSignal,
-    });
-  }
-
-  async connectPatchNodeProxy(name: string, opts: {
-    path?: string;
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
-    if (opts["path"] != null) query.append("path", opts["path"]);
-    const resp = await this.#client.performRequest({
-      method: "PATCH",
-      path: `${this.#root}nodes/${name}/proxy`,
-      expectJson: true,
-      querystring: query,
-      abortSignal: opts.abortSignal,
-    });
-  }
-
-  async connectOptionsNodeProxy(name: string, opts: {
-    path?: string;
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
-    if (opts["path"] != null) query.append("path", opts["path"]);
-    const resp = await this.#client.performRequest({
-      method: "OPTIONS",
-      path: `${this.#root}nodes/${name}/proxy`,
-      expectJson: true,
-      querystring: query,
-      abortSignal: opts.abortSignal,
-    });
-  }
-
-  async connectHeadNodeProxy(name: string, opts: {
-    path?: string;
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
-    if (opts["path"] != null) query.append("path", opts["path"]);
-    const resp = await this.#client.performRequest({
-      method: "HEAD",
-      path: `${this.#root}nodes/${name}/proxy`,
-      expectJson: true,
-      querystring: query,
-      abortSignal: opts.abortSignal,
-    });
+  proxyNodeRequest(nodeName: string, opts: c.ProxyOptions & {expectStream: true; expectJson: true}): Promise<ReadableStream<c.JSONValue>>;
+  proxyNodeRequest(nodeName: string, opts: c.ProxyOptions & {expectStream: true}): Promise<ReadableStream<Uint8Array>>;
+  proxyNodeRequest(nodeName: string, opts: c.ProxyOptions & {expectJson: true}): Promise<c.JSONValue>;
+  proxyNodeRequest(nodeName: string, opts: c.ProxyOptions): Promise<Uint8Array>;
+  async proxyNodeRequest(nodeName: string, opts: c.ProxyOptions): Promise<unknown> {
+    if (opts.path && !opts.path.startsWith('/')) throw new Error("Proxy path cannot be relative");
+    const name = (opts.port != null) ? `${nodeName}:${opts.port}` : nodeName;
+    const path = `${this.#root}nodes/${name}/proxy${opts.path || ''}`;
+    return this.#client.performRequest({ ...opts, path });
   }
 
   async getNodeStatus(name: string, opts: {
@@ -1642,109 +1548,15 @@ export class CoreV1NamespacedApi {
     });
   }
 
-  async connectGetPodProxy(name: string, opts: {
-    path?: string;
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
-    if (opts["path"] != null) query.append("path", opts["path"]);
-    const resp = await this.#client.performRequest({
-      method: "GET",
-      path: `${this.#root}pods/${name}/proxy`,
-      expectJson: true,
-      querystring: query,
-      abortSignal: opts.abortSignal,
-    });
-  }
-
-  async connectPostPodProxy(name: string, opts: {
-    path?: string;
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
-    if (opts["path"] != null) query.append("path", opts["path"]);
-    const resp = await this.#client.performRequest({
-      method: "POST",
-      path: `${this.#root}pods/${name}/proxy`,
-      expectJson: true,
-      querystring: query,
-      abortSignal: opts.abortSignal,
-    });
-  }
-
-  async connectDeletePodProxy(name: string, opts: {
-    path?: string;
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
-    if (opts["path"] != null) query.append("path", opts["path"]);
-    const resp = await this.#client.performRequest({
-      method: "DELETE",
-      path: `${this.#root}pods/${name}/proxy`,
-      expectJson: true,
-      querystring: query,
-      abortSignal: opts.abortSignal,
-    });
-  }
-
-  async connectPutPodProxy(name: string, opts: {
-    path?: string;
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
-    if (opts["path"] != null) query.append("path", opts["path"]);
-    const resp = await this.#client.performRequest({
-      method: "PUT",
-      path: `${this.#root}pods/${name}/proxy`,
-      expectJson: true,
-      querystring: query,
-      abortSignal: opts.abortSignal,
-    });
-  }
-
-  async connectPatchPodProxy(name: string, opts: {
-    path?: string;
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
-    if (opts["path"] != null) query.append("path", opts["path"]);
-    const resp = await this.#client.performRequest({
-      method: "PATCH",
-      path: `${this.#root}pods/${name}/proxy`,
-      expectJson: true,
-      querystring: query,
-      abortSignal: opts.abortSignal,
-    });
-  }
-
-  async connectOptionsPodProxy(name: string, opts: {
-    path?: string;
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
-    if (opts["path"] != null) query.append("path", opts["path"]);
-    const resp = await this.#client.performRequest({
-      method: "OPTIONS",
-      path: `${this.#root}pods/${name}/proxy`,
-      expectJson: true,
-      querystring: query,
-      abortSignal: opts.abortSignal,
-    });
-  }
-
-  async connectHeadPodProxy(name: string, opts: {
-    path?: string;
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
-    if (opts["path"] != null) query.append("path", opts["path"]);
-    const resp = await this.#client.performRequest({
-      method: "HEAD",
-      path: `${this.#root}pods/${name}/proxy`,
-      expectJson: true,
-      querystring: query,
-      abortSignal: opts.abortSignal,
-    });
+  proxyPodRequest(podName: string, opts: c.ProxyOptions & {expectStream: true; expectJson: true}): Promise<ReadableStream<c.JSONValue>>;
+  proxyPodRequest(podName: string, opts: c.ProxyOptions & {expectStream: true}): Promise<ReadableStream<Uint8Array>>;
+  proxyPodRequest(podName: string, opts: c.ProxyOptions & {expectJson: true}): Promise<c.JSONValue>;
+  proxyPodRequest(podName: string, opts: c.ProxyOptions): Promise<Uint8Array>;
+  async proxyPodRequest(podName: string, opts: c.ProxyOptions): Promise<unknown> {
+    if (opts.path && !opts.path.startsWith('/')) throw new Error("Proxy path cannot be relative");
+    const name = (opts.port != null) ? `${podName}:${opts.port}` : podName;
+    const path = `${this.#root}nodes/${name}/proxy${opts.path || ''}`;
+    return this.#client.performRequest({ ...opts, path });
   }
 
   async getPodStatus(name: string, opts: {
@@ -2473,109 +2285,15 @@ export class CoreV1NamespacedApi {
     return CoreV1.toService(resp);
   }
 
-  async connectGetServiceProxy(name: string, opts: {
-    path?: string;
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
-    if (opts["path"] != null) query.append("path", opts["path"]);
-    const resp = await this.#client.performRequest({
-      method: "GET",
-      path: `${this.#root}services/${name}/proxy`,
-      expectJson: true,
-      querystring: query,
-      abortSignal: opts.abortSignal,
-    });
-  }
-
-  async connectPostServiceProxy(name: string, opts: {
-    path?: string;
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
-    if (opts["path"] != null) query.append("path", opts["path"]);
-    const resp = await this.#client.performRequest({
-      method: "POST",
-      path: `${this.#root}services/${name}/proxy`,
-      expectJson: true,
-      querystring: query,
-      abortSignal: opts.abortSignal,
-    });
-  }
-
-  async connectDeleteServiceProxy(name: string, opts: {
-    path?: string;
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
-    if (opts["path"] != null) query.append("path", opts["path"]);
-    const resp = await this.#client.performRequest({
-      method: "DELETE",
-      path: `${this.#root}services/${name}/proxy`,
-      expectJson: true,
-      querystring: query,
-      abortSignal: opts.abortSignal,
-    });
-  }
-
-  async connectPutServiceProxy(name: string, opts: {
-    path?: string;
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
-    if (opts["path"] != null) query.append("path", opts["path"]);
-    const resp = await this.#client.performRequest({
-      method: "PUT",
-      path: `${this.#root}services/${name}/proxy`,
-      expectJson: true,
-      querystring: query,
-      abortSignal: opts.abortSignal,
-    });
-  }
-
-  async connectPatchServiceProxy(name: string, opts: {
-    path?: string;
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
-    if (opts["path"] != null) query.append("path", opts["path"]);
-    const resp = await this.#client.performRequest({
-      method: "PATCH",
-      path: `${this.#root}services/${name}/proxy`,
-      expectJson: true,
-      querystring: query,
-      abortSignal: opts.abortSignal,
-    });
-  }
-
-  async connectOptionsServiceProxy(name: string, opts: {
-    path?: string;
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
-    if (opts["path"] != null) query.append("path", opts["path"]);
-    const resp = await this.#client.performRequest({
-      method: "OPTIONS",
-      path: `${this.#root}services/${name}/proxy`,
-      expectJson: true,
-      querystring: query,
-      abortSignal: opts.abortSignal,
-    });
-  }
-
-  async connectHeadServiceProxy(name: string, opts: {
-    path?: string;
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
-    if (opts["path"] != null) query.append("path", opts["path"]);
-    const resp = await this.#client.performRequest({
-      method: "HEAD",
-      path: `${this.#root}services/${name}/proxy`,
-      expectJson: true,
-      querystring: query,
-      abortSignal: opts.abortSignal,
-    });
+  proxyServiceRequest(serviceName: string, opts: c.ProxyOptions & {expectStream: true; expectJson: true}): Promise<ReadableStream<c.JSONValue>>;
+  proxyServiceRequest(serviceName: string, opts: c.ProxyOptions & {expectStream: true}): Promise<ReadableStream<Uint8Array>>;
+  proxyServiceRequest(serviceName: string, opts: c.ProxyOptions & {expectJson: true}): Promise<c.JSONValue>;
+  proxyServiceRequest(serviceName: string, opts: c.ProxyOptions): Promise<Uint8Array>;
+  async proxyServiceRequest(serviceName: string, opts: c.ProxyOptions): Promise<unknown> {
+    if (opts.path && !opts.path.startsWith('/')) throw new Error("Proxy path cannot be relative");
+    const name = (opts.port != null) ? `${serviceName}:${opts.port}` : serviceName;
+    const path = `${this.#root}nodes/${name}/proxy${opts.path || ''}`;
+    return this.#client.performRequest({ ...opts, path });
   }
 
   async getServiceStatus(name: string, opts: {

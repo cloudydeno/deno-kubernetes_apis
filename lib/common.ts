@@ -1,6 +1,6 @@
 // The API contract that all generated code expects
 
-import {JSONObject, JSONValue} from "https://deno.land/x/kubernetes_client@v0.1.1/mod.ts";
+import {JSONObject, JSONValue, RequestOptions} from "https://deno.land/x/kubernetes_client@v0.1.1/mod.ts";
 export * from "https://deno.land/x/kubernetes_client@v0.1.1/mod.ts";
 
 // Helpers used to validate/transform structures from or for the wire
@@ -193,3 +193,6 @@ export type JsonPatchOp =
 | { op: 'move',    from: string, path: string     }
 | { op: 'copy',    from: string, path: string     }
 | { op: 'test',    path: string, value: JSONValue };
+
+// used for API Server's 'connect to' endpoints
+export type ProxyOptions = RequestOptions & { port?: string | number; };

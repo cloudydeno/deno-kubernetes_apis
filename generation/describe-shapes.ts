@@ -281,5 +281,5 @@ export interface ForeignShape extends ShapeMeta {
 
 export interface SpecialShape extends ShapeMeta {
   type: 'special';
-  name: "IntOrString" | "Quantity" | "Time" | "MicroTime" | "Duration";
+  name: "IntOrString" | "Quantity" | "Time" | "MicroTime" | "Duration" | "ProxyOptions";
 }

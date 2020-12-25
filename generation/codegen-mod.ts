@@ -108,6 +108,29 @@ export function generateModuleTypescript(surface: SurfaceMap, api: SurfaceApi): 
       } else throw new Error(`Unknown param.in ${param.in}`);
     }
 
+    // Entirely specialcase and collapse each method's proxy functions into one
+    if (op['x-kubernetes-action'] === 'connect' && op.operationName.endsWith('Proxy')) {
+      if (op.method !== 'get') return; // only emit the GET function, and make it generic
+      const middleName = op.operationName.slice('connectGet'.length, -'Proxy'.length);
+      const nameArgName = `${middleName[0].toLowerCase()}${middleName.slice(1)}Name`;
+      const funcName = `proxy${middleName}Request`;
+
+      args.push([{name: 'opts', in: 'path'}, {type: 'special', name: 'ProxyOptions'}]);
+      const baseSignature = `${funcName}(${writeSig(args, false, '  ')}`.replace('(name:', `(${nameArgName}:`);
+
+      chunks.push(`  ${baseSignature} & {expectStream: true; expectJson: true}): Promise<ReadableStream<c.JSONValue>>;`);
+      chunks.push(`  ${baseSignature} & {expectStream: true}): Promise<ReadableStream<Uint8Array>>;`);
+      chunks.push(`  ${baseSignature} & {expectJson: true}): Promise<c.JSONValue>;`);
+      chunks.push(`  ${baseSignature}): Promise<Uint8Array>;`);
+      chunks.push(`  async ${baseSignature}): Promise<unknown> {`);
+      chunks.push(`    if (opts.path && !opts.path.startsWith('/')) throw new Error("Proxy path cannot be relative");`);
+      chunks.push(`    const name = (opts.port != null) ? \`\${${nameArgName}}:\${opts.port}\` : ${nameArgName};`);
+      chunks.push(`    const path = \`\${this.#root}nodes/\${name}/proxy\${opts.path || ''}\`;`);
+      chunks.push(`    return this.#client.performRequest({ ...opts, path });`);
+      chunks.push(`  }\n`);
+      return;
+    }
+
     let accept = 'application/json';
     if (op.produces.includes('text/plain')) {
       accept = 'text/plain'; // container logs
@@ -230,12 +253,12 @@ export function generateModuleTypescript(surface: SurfaceMap, api: SurfaceApi): 
     throw new Error(`TODO ${shape.type}`);
   }
 
-  function writeSig(args: [OpenAPI2RequestParameter, ApiShape][], opts: [OpenAPI2RequestParameter, ApiShape][], indent=''): string {
+  function writeSig(args: [OpenAPI2RequestParameter, ApiShape][], opts: [OpenAPI2RequestParameter, ApiShape][] | false, indent=''): string {
     let sigs = new Array<string>();
     for (const arg of args) {
       sigs.push(`${arg[0].name}: ${writeType(arg[1])}`);
     }
-    // if (opts.length > 0) {
+    if (opts) {
       const allAreOpt = opts.every(x => !x[0].required);
       const allOptKeys = opts.map(x => x[0].name).sort().join(',');
       const knownOptShape = knownOpts[allOptKeys];
@@ -255,7 +278,7 @@ export function generateModuleTypescript(surface: SurfaceMap, api: SurfaceApi): 
         lines.push(`  abortSignal?: AbortSignal;`);
         sigs.push(`opts: {\n${lines.join('\n')}\n}${allAreOpt ? ' = {}' : ''}`);
       }
-    // }
+    }
     return sigs.join(', ').replace(/\n/g, '\n'+indent);
   }
 
