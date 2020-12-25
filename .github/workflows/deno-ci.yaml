@@ -28,5 +28,5 @@ jobs:
       run: time deno cache generation/mod.ts
     - name: Check lib/builtin/*/mod.ts
       run: time deno cache lib/builtin/*/mod.ts
-    - name: Check lib/examples/watch-ingress.ts
-      run: time deno cache lib/examples/watch-ingress.ts
+    - name: Check lib/examples/*.ts
+      run: time deno cache lib/examples/*.ts
