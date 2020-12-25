@@ -1,7 +1,7 @@
 // The API contract that all generated code expects
 
-import {JSONObject, JSONValue} from "https://deno.land/x/kubernetes_client@v0.1.0/mod.ts";
-export * from "https://deno.land/x/kubernetes_client@v0.1.0/mod.ts";
+import {JSONObject, JSONValue} from "https://deno.land/x/kubernetes_client@v0.1.1/mod.ts";
+export * from "https://deno.land/x/kubernetes_client@v0.1.1/mod.ts";
 
 // Helpers used to validate/transform structures from or for the wire
 
