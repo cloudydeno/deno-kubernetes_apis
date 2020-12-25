@@ -2,6 +2,7 @@
 
 import {JSONObject, JSONValue, RequestOptions} from "https://deno.land/x/kubernetes_client@v0.1.1/mod.ts";
 export * from "https://deno.land/x/kubernetes_client@v0.1.1/mod.ts";
+export {Reflector} from "https://deno.land/x/kubernetes_client@v0.1.1/reflector.ts";
 
 // Helpers used to validate/transform structures from or for the wire
 
@@ -184,6 +185,25 @@ export function getPatchContentType(type: PatchType) {
   }
   throw new Error(`Unknown Kubernetes patch type: ${JSON.stringify(type)}`);
 }
+
+// TODO: figure out how to do this properly
+// https://stackoverflow.com/questions/41980195/recursive-partialt-in-typescript
+// export type DeepPartial<T> = {
+//   [P in keyof T]?: T[P] extends Array<infer I>
+//     ? Array<DeepPartial<I>>
+//     : DeepPartial<T[P]>;
+// };
+// export type StrategicPatch<T> = {
+//   [P in keyof T]?: T[P] extends Array<infer I>
+//     ? Array<StrategicPatch<I> & StrategicDirectives>
+//     : (StrategicPatch<T[P]> & StrategicDirectives);
+// };
+// export interface StrategicDirectives {
+//   $patch?: "replace" | "delete";
+//   // $deleteFromPrimitiveList/<field>: T[]
+//   // $setElementOrder/<field>: (T | {<mergekey>: string})[]
+//   $retainKeys?: string[];
+// }
 
 export type JsonPatch = JsonPatchOp[];
 export type JsonPatchOp =
