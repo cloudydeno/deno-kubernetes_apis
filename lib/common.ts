@@ -166,3 +166,30 @@ export function toIntOrString(input: JSONValue): string | number {
   if (typeof input === 'string' || typeof input === 'number') return input;
   throw new Error(`Type sdgssdf`);
 }
+
+
+// Resource patching. Some patches are more sketchy than others...
+// strategic-merge adds extra 'directive' fields, but doesn't work on CRDs.
+// json-merge adds no extra fields, but always replaces any array you touch.
+// json-patch is a surgical tool that escapes types and, indeed, sanity.
+// apply-patch is an up-and-coming feature "Server-Side Apply" and not enabled by default yet.
+
+export type PatchType = 'strategic-merge' | 'json-merge' | 'json-patch' | 'apply-patch';
+export function getPatchContentType(type: PatchType) {
+  switch (type) {
+    case 'strategic-merge': return 'application/strategic-merge-patch+json';
+    case 'json-merge': return 'application/merge-patch+json';
+    case 'json-patch': return 'application/json-patch+json';
+    case 'apply-patch': return 'application/apply-patch+yaml'; // All JSON documents are valid YAML.
+  }
+  throw new Error(`Unknown Kubernetes patch type: ${JSON.stringify(type)}`);
+}
+
+export type JsonPatch = JsonPatchOp[];
+export type JsonPatchOp =
+| { op: 'add',     path: string, value: JSONValue }
+| { op: 'remove',  path: string                   }
+| { op: 'replace', path: string, value: JSONValue }
+| { op: 'move',    from: string, path: string     }
+| { op: 'copy',    from: string, path: string     }
+| { op: 'test',    path: string, value: JSONValue };
