@@ -27,29 +27,24 @@ export function fromAggregationRule(input: AggregationRule): c.JSONValue {
   }}
 
 /** ClusterRole is a cluster level, logical grouping of PolicyRules that can be referenced as a unit by a RoleBinding or ClusterRoleBinding. */
-export type ClusterRole = Kind<"ClusterRole"> & ClusterRoleFields;
-export interface ClusterRoleFields {
+export interface ClusterRole {
+  apiVersion?: "rbac.authorization.k8s.io/v1";
+  kind?: "ClusterRole";
   aggregationRule?: AggregationRule | null;
   metadata?: MetaV1.ObjectMeta | null;
   rules?: Array<PolicyRule> | null;
 }
-export function toClusterRoleFields(input: c.JSONValue): ClusterRoleFields {
+export function toClusterRole(input: c.JSONValue): ClusterRole & c.ApiKind {
   const obj = c.checkObj(input);
   return {
+    ...c.assertOrAddApiVersionAndKind(obj, "rbac.authorization.k8s.io/v1", "ClusterRole"),
     aggregationRule: c.readOpt(obj["aggregationRule"], toAggregationRule),
     metadata: c.readOpt(obj["metadata"], MetaV1.toObjectMeta),
     rules: c.readOpt(obj["rules"], x => c.readList(x, toPolicyRule)),
   }}
-export function toClusterRole(input: c.JSONValue): ClusterRole {
-  const {apiVersion, kind, ...fields} = c.checkObj(input);
-  if (apiVersion !== "rbac.authorization.k8s.io/v1") throw new Error("Type apiv mis 2");
-  if (kind !== "ClusterRole") throw new Error("Type kind mis 2");
-  return {
-    apiVersion, kind,
-    ...toClusterRoleFields(fields),
-  }}
 export function fromClusterRole(input: ClusterRole): c.JSONValue {
   return {
+    ...c.assertOrAddApiVersionAndKind(input, "rbac.authorization.k8s.io/v1", "ClusterRole"),
     ...input,
     aggregationRule: input.aggregationRule != null ? fromAggregationRule(input.aggregationRule) : undefined,
     metadata: input.metadata != null ? MetaV1.fromObjectMeta(input.metadata) : undefined,
@@ -79,29 +74,24 @@ export function fromPolicyRule(input: PolicyRule): c.JSONValue {
   }}
 
 /** ClusterRoleBinding references a ClusterRole, but not contain it.  It can reference a ClusterRole in the global namespace, and adds who information via Subject. */
-export type ClusterRoleBinding = Kind<"ClusterRoleBinding"> & ClusterRoleBindingFields;
-export interface ClusterRoleBindingFields {
+export interface ClusterRoleBinding {
+  apiVersion?: "rbac.authorization.k8s.io/v1";
+  kind?: "ClusterRoleBinding";
   metadata?: MetaV1.ObjectMeta | null;
   roleRef: RoleRef;
   subjects?: Array<Subject> | null;
 }
-export function toClusterRoleBindingFields(input: c.JSONValue): ClusterRoleBindingFields {
+export function toClusterRoleBinding(input: c.JSONValue): ClusterRoleBinding & c.ApiKind {
   const obj = c.checkObj(input);
   return {
+    ...c.assertOrAddApiVersionAndKind(obj, "rbac.authorization.k8s.io/v1", "ClusterRoleBinding"),
     metadata: c.readOpt(obj["metadata"], MetaV1.toObjectMeta),
     roleRef: toRoleRef(obj["roleRef"]),
     subjects: c.readOpt(obj["subjects"], x => c.readList(x, toSubject)),
   }}
-export function toClusterRoleBinding(input: c.JSONValue): ClusterRoleBinding {
-  const {apiVersion, kind, ...fields} = c.checkObj(input);
-  if (apiVersion !== "rbac.authorization.k8s.io/v1") throw new Error("Type apiv mis 2");
-  if (kind !== "ClusterRoleBinding") throw new Error("Type kind mis 2");
-  return {
-    apiVersion, kind,
-    ...toClusterRoleBindingFields(fields),
-  }}
 export function fromClusterRoleBinding(input: ClusterRoleBinding): c.JSONValue {
   return {
+    ...c.assertOrAddApiVersionAndKind(input, "rbac.authorization.k8s.io/v1", "ClusterRoleBinding"),
     ...input,
     metadata: input.metadata != null ? MetaV1.fromObjectMeta(input.metadata) : undefined,
     roleRef: input.roleRef != null ? fromRoleRef(input.roleRef) : undefined,
@@ -147,80 +137,72 @@ export function fromSubject(input: Subject): c.JSONValue {
   }}
 
 /** ClusterRoleBindingList is a collection of ClusterRoleBindings */
-export type ClusterRoleBindingList = Kind<"ClusterRoleBindingList"> & ListOf<ClusterRoleBindingFields>;
-export function toClusterRoleBindingList(input: c.JSONValue): ClusterRoleBindingList {
-  const {apiVersion, kind, metadata, items} = c.checkObj(input);
-  if (apiVersion !== "rbac.authorization.k8s.io/v1") throw new Error("Type apiv mis 2");
-  if (kind !== "ClusterRoleBindingList") throw new Error("Type kind mis 2");
+export interface ClusterRoleBindingList extends ListOf<ClusterRoleBinding> {
+  apiVersion?: "rbac.authorization.k8s.io/v1";
+  kind?: "ClusterRoleBindingList";
+};
+export function toClusterRoleBindingList(input: c.JSONValue): ClusterRoleBindingList & c.ApiKind {
+  const obj = c.checkObj(input);
   return {
-    apiVersion, kind,
-    metadata: MetaV1.toListMeta(metadata),
-    items: c.readList(items, toClusterRoleBindingFields),
+    ...c.assertOrAddApiVersionAndKind(obj, "rbac.authorization.k8s.io/v1", "ClusterRoleBindingList"),
+    metadata: MetaV1.toListMeta(obj.metadata),
+    items: c.readList(obj.items, toClusterRoleBinding),
   }}
 
 /** ClusterRoleList is a collection of ClusterRoles */
-export type ClusterRoleList = Kind<"ClusterRoleList"> & ListOf<ClusterRoleFields>;
-export function toClusterRoleList(input: c.JSONValue): ClusterRoleList {
-  const {apiVersion, kind, metadata, items} = c.checkObj(input);
-  if (apiVersion !== "rbac.authorization.k8s.io/v1") throw new Error("Type apiv mis 2");
-  if (kind !== "ClusterRoleList") throw new Error("Type kind mis 2");
+export interface ClusterRoleList extends ListOf<ClusterRole> {
+  apiVersion?: "rbac.authorization.k8s.io/v1";
+  kind?: "ClusterRoleList";
+};
+export function toClusterRoleList(input: c.JSONValue): ClusterRoleList & c.ApiKind {
+  const obj = c.checkObj(input);
   return {
-    apiVersion, kind,
-    metadata: MetaV1.toListMeta(metadata),
-    items: c.readList(items, toClusterRoleFields),
+    ...c.assertOrAddApiVersionAndKind(obj, "rbac.authorization.k8s.io/v1", "ClusterRoleList"),
+    metadata: MetaV1.toListMeta(obj.metadata),
+    items: c.readList(obj.items, toClusterRole),
   }}
 
 /** Role is a namespaced, logical grouping of PolicyRules that can be referenced as a unit by a RoleBinding. */
-export type Role = Kind<"Role"> & RoleFields;
-export interface RoleFields {
+export interface Role {
+  apiVersion?: "rbac.authorization.k8s.io/v1";
+  kind?: "Role";
   metadata?: MetaV1.ObjectMeta | null;
   rules?: Array<PolicyRule> | null;
 }
-export function toRoleFields(input: c.JSONValue): RoleFields {
+export function toRole(input: c.JSONValue): Role & c.ApiKind {
   const obj = c.checkObj(input);
   return {
+    ...c.assertOrAddApiVersionAndKind(obj, "rbac.authorization.k8s.io/v1", "Role"),
     metadata: c.readOpt(obj["metadata"], MetaV1.toObjectMeta),
     rules: c.readOpt(obj["rules"], x => c.readList(x, toPolicyRule)),
   }}
-export function toRole(input: c.JSONValue): Role {
-  const {apiVersion, kind, ...fields} = c.checkObj(input);
-  if (apiVersion !== "rbac.authorization.k8s.io/v1") throw new Error("Type apiv mis 2");
-  if (kind !== "Role") throw new Error("Type kind mis 2");
-  return {
-    apiVersion, kind,
-    ...toRoleFields(fields),
-  }}
 export function fromRole(input: Role): c.JSONValue {
   return {
+    ...c.assertOrAddApiVersionAndKind(input, "rbac.authorization.k8s.io/v1", "Role"),
     ...input,
     metadata: input.metadata != null ? MetaV1.fromObjectMeta(input.metadata) : undefined,
     rules: input.rules?.map(fromPolicyRule),
   }}
 
 /** RoleBinding references a role, but does not contain it.  It can reference a Role in the same namespace or a ClusterRole in the global namespace. It adds who information via Subjects and namespace information by which namespace it exists in.  RoleBindings in a given namespace only have effect in that namespace. */
-export type RoleBinding = Kind<"RoleBinding"> & RoleBindingFields;
-export interface RoleBindingFields {
+export interface RoleBinding {
+  apiVersion?: "rbac.authorization.k8s.io/v1";
+  kind?: "RoleBinding";
   metadata?: MetaV1.ObjectMeta | null;
   roleRef: RoleRef;
   subjects?: Array<Subject> | null;
 }
-export function toRoleBindingFields(input: c.JSONValue): RoleBindingFields {
+export function toRoleBinding(input: c.JSONValue): RoleBinding & c.ApiKind {
   const obj = c.checkObj(input);
   return {
+    ...c.assertOrAddApiVersionAndKind(obj, "rbac.authorization.k8s.io/v1", "RoleBinding"),
     metadata: c.readOpt(obj["metadata"], MetaV1.toObjectMeta),
     roleRef: toRoleRef(obj["roleRef"]),
     subjects: c.readOpt(obj["subjects"], x => c.readList(x, toSubject)),
   }}
-export function toRoleBinding(input: c.JSONValue): RoleBinding {
-  const {apiVersion, kind, ...fields} = c.checkObj(input);
-  if (apiVersion !== "rbac.authorization.k8s.io/v1") throw new Error("Type apiv mis 2");
-  if (kind !== "RoleBinding") throw new Error("Type kind mis 2");
-  return {
-    apiVersion, kind,
-    ...toRoleBindingFields(fields),
-  }}
 export function fromRoleBinding(input: RoleBinding): c.JSONValue {
   return {
+    ...c.assertOrAddApiVersionAndKind(input, "rbac.authorization.k8s.io/v1", "RoleBinding"),
     ...input,
     metadata: input.metadata != null ? MetaV1.fromObjectMeta(input.metadata) : undefined,
     roleRef: input.roleRef != null ? fromRoleRef(input.roleRef) : undefined,
@@ -228,25 +210,27 @@ export function fromRoleBinding(input: RoleBinding): c.JSONValue {
   }}
 
 /** RoleBindingList is a collection of RoleBindings */
-export type RoleBindingList = Kind<"RoleBindingList"> & ListOf<RoleBindingFields>;
-export function toRoleBindingList(input: c.JSONValue): RoleBindingList {
-  const {apiVersion, kind, metadata, items} = c.checkObj(input);
-  if (apiVersion !== "rbac.authorization.k8s.io/v1") throw new Error("Type apiv mis 2");
-  if (kind !== "RoleBindingList") throw new Error("Type kind mis 2");
+export interface RoleBindingList extends ListOf<RoleBinding> {
+  apiVersion?: "rbac.authorization.k8s.io/v1";
+  kind?: "RoleBindingList";
+};
+export function toRoleBindingList(input: c.JSONValue): RoleBindingList & c.ApiKind {
+  const obj = c.checkObj(input);
   return {
-    apiVersion, kind,
-    metadata: MetaV1.toListMeta(metadata),
-    items: c.readList(items, toRoleBindingFields),
+    ...c.assertOrAddApiVersionAndKind(obj, "rbac.authorization.k8s.io/v1", "RoleBindingList"),
+    metadata: MetaV1.toListMeta(obj.metadata),
+    items: c.readList(obj.items, toRoleBinding),
   }}
 
 /** RoleList is a collection of Roles */
-export type RoleList = Kind<"RoleList"> & ListOf<RoleFields>;
-export function toRoleList(input: c.JSONValue): RoleList {
-  const {apiVersion, kind, metadata, items} = c.checkObj(input);
-  if (apiVersion !== "rbac.authorization.k8s.io/v1") throw new Error("Type apiv mis 2");
-  if (kind !== "RoleList") throw new Error("Type kind mis 2");
+export interface RoleList extends ListOf<Role> {
+  apiVersion?: "rbac.authorization.k8s.io/v1";
+  kind?: "RoleList";
+};
+export function toRoleList(input: c.JSONValue): RoleList & c.ApiKind {
+  const obj = c.checkObj(input);
   return {
-    apiVersion, kind,
-    metadata: MetaV1.toListMeta(metadata),
-    items: c.readList(items, toRoleFields),
+    ...c.assertOrAddApiVersionAndKind(obj, "rbac.authorization.k8s.io/v1", "RoleList"),
+    metadata: MetaV1.toListMeta(obj.metadata),
+    items: c.readList(obj.items, toRole),
   }}

@@ -13,27 +13,22 @@ type ListOf<T> = {
 };
 
 /** PodPreset is a policy resource that defines additional runtime requirements for a Pod. */
-export type PodPreset = Kind<"PodPreset"> & PodPresetFields;
-export interface PodPresetFields {
+export interface PodPreset {
+  apiVersion?: "settings.k8s.io/v1alpha1";
+  kind?: "PodPreset";
   metadata?: MetaV1.ObjectMeta | null;
   spec?: PodPresetSpec | null;
 }
-export function toPodPresetFields(input: c.JSONValue): PodPresetFields {
+export function toPodPreset(input: c.JSONValue): PodPreset & c.ApiKind {
   const obj = c.checkObj(input);
   return {
+    ...c.assertOrAddApiVersionAndKind(obj, "settings.k8s.io/v1alpha1", "PodPreset"),
     metadata: c.readOpt(obj["metadata"], MetaV1.toObjectMeta),
     spec: c.readOpt(obj["spec"], toPodPresetSpec),
   }}
-export function toPodPreset(input: c.JSONValue): PodPreset {
-  const {apiVersion, kind, ...fields} = c.checkObj(input);
-  if (apiVersion !== "settings.k8s.io/v1alpha1") throw new Error("Type apiv mis 2");
-  if (kind !== "PodPreset") throw new Error("Type kind mis 2");
-  return {
-    apiVersion, kind,
-    ...toPodPresetFields(fields),
-  }}
 export function fromPodPreset(input: PodPreset): c.JSONValue {
   return {
+    ...c.assertOrAddApiVersionAndKind(input, "settings.k8s.io/v1alpha1", "PodPreset"),
     ...input,
     metadata: input.metadata != null ? MetaV1.fromObjectMeta(input.metadata) : undefined,
     spec: input.spec != null ? fromPodPresetSpec(input.spec) : undefined,
@@ -67,13 +62,14 @@ export function fromPodPresetSpec(input: PodPresetSpec): c.JSONValue {
   }}
 
 /** PodPresetList is a list of PodPreset objects. */
-export type PodPresetList = Kind<"PodPresetList"> & ListOf<PodPresetFields>;
-export function toPodPresetList(input: c.JSONValue): PodPresetList {
-  const {apiVersion, kind, metadata, items} = c.checkObj(input);
-  if (apiVersion !== "settings.k8s.io/v1alpha1") throw new Error("Type apiv mis 2");
-  if (kind !== "PodPresetList") throw new Error("Type kind mis 2");
+export interface PodPresetList extends ListOf<PodPreset> {
+  apiVersion?: "settings.k8s.io/v1alpha1";
+  kind?: "PodPresetList";
+};
+export function toPodPresetList(input: c.JSONValue): PodPresetList & c.ApiKind {
+  const obj = c.checkObj(input);
   return {
-    apiVersion, kind,
-    metadata: MetaV1.toListMeta(metadata),
-    items: c.readList(items, toPodPresetFields),
+    ...c.assertOrAddApiVersionAndKind(obj, "settings.k8s.io/v1alpha1", "PodPresetList"),
+    metadata: MetaV1.toListMeta(obj.metadata),
+    items: c.readList(obj.items, toPodPreset),
   }}

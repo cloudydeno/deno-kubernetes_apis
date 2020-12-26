@@ -12,45 +12,41 @@ type ListOf<T> = {
 };
 
 /** DEPRECATED - This group version of PriorityClass is deprecated by scheduling.k8s.io/v1/PriorityClass. PriorityClass defines mapping from a priority class name to the priority integer value. The value can be any valid integer. */
-export type PriorityClass = Kind<"PriorityClass"> & PriorityClassFields;
-export interface PriorityClassFields {
+export interface PriorityClass {
+  apiVersion?: "scheduling.k8s.io/v1alpha1";
+  kind?: "PriorityClass";
   description?: string | null;
   globalDefault?: boolean | null;
   metadata?: MetaV1.ObjectMeta | null;
   preemptionPolicy?: string | null;
   value: number;
 }
-export function toPriorityClassFields(input: c.JSONValue): PriorityClassFields {
+export function toPriorityClass(input: c.JSONValue): PriorityClass & c.ApiKind {
   const obj = c.checkObj(input);
   return {
+    ...c.assertOrAddApiVersionAndKind(obj, "scheduling.k8s.io/v1alpha1", "PriorityClass"),
     description: c.readOpt(obj["description"], c.checkStr),
     globalDefault: c.readOpt(obj["globalDefault"], c.checkBool),
     metadata: c.readOpt(obj["metadata"], MetaV1.toObjectMeta),
     preemptionPolicy: c.readOpt(obj["preemptionPolicy"], c.checkStr),
     value: c.checkNum(obj["value"]),
   }}
-export function toPriorityClass(input: c.JSONValue): PriorityClass {
-  const {apiVersion, kind, ...fields} = c.checkObj(input);
-  if (apiVersion !== "scheduling.k8s.io/v1alpha1") throw new Error("Type apiv mis 2");
-  if (kind !== "PriorityClass") throw new Error("Type kind mis 2");
-  return {
-    apiVersion, kind,
-    ...toPriorityClassFields(fields),
-  }}
 export function fromPriorityClass(input: PriorityClass): c.JSONValue {
   return {
+    ...c.assertOrAddApiVersionAndKind(input, "scheduling.k8s.io/v1alpha1", "PriorityClass"),
     ...input,
     metadata: input.metadata != null ? MetaV1.fromObjectMeta(input.metadata) : undefined,
   }}
 
 /** PriorityClassList is a collection of priority classes. */
-export type PriorityClassList = Kind<"PriorityClassList"> & ListOf<PriorityClassFields>;
-export function toPriorityClassList(input: c.JSONValue): PriorityClassList {
-  const {apiVersion, kind, metadata, items} = c.checkObj(input);
-  if (apiVersion !== "scheduling.k8s.io/v1alpha1") throw new Error("Type apiv mis 2");
-  if (kind !== "PriorityClassList") throw new Error("Type kind mis 2");
+export interface PriorityClassList extends ListOf<PriorityClass> {
+  apiVersion?: "scheduling.k8s.io/v1alpha1";
+  kind?: "PriorityClassList";
+};
+export function toPriorityClassList(input: c.JSONValue): PriorityClassList & c.ApiKind {
+  const obj = c.checkObj(input);
   return {
-    apiVersion, kind,
-    metadata: MetaV1.toListMeta(metadata),
-    items: c.readList(items, toPriorityClassFields),
+    ...c.assertOrAddApiVersionAndKind(obj, "scheduling.k8s.io/v1alpha1", "PriorityClassList"),
+    metadata: MetaV1.toListMeta(obj.metadata),
+    items: c.readList(obj.items, toPriorityClass),
   }}

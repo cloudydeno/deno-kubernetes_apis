@@ -13,8 +13,9 @@ type ListOf<T> = {
 };
 
 /** Event is a report of an event somewhere in the cluster. It generally denotes some state change in the system. */
-export type Event = Kind<"Event"> & EventFields;
-export interface EventFields {
+export interface Event {
+  apiVersion?: "events.k8s.io/v1beta1";
+  kind?: "Event";
   action?: string | null;
   deprecatedCount?: number | null;
   deprecatedFirstTimestamp?: c.Time | null;
@@ -31,9 +32,10 @@ export interface EventFields {
   series?: EventSeries | null;
   type?: string | null;
 }
-export function toEventFields(input: c.JSONValue): EventFields {
+export function toEvent(input: c.JSONValue): Event & c.ApiKind {
   const obj = c.checkObj(input);
   return {
+    ...c.assertOrAddApiVersionAndKind(obj, "events.k8s.io/v1beta1", "Event"),
     action: c.readOpt(obj["action"], c.checkStr),
     deprecatedCount: c.readOpt(obj["deprecatedCount"], c.checkNum),
     deprecatedFirstTimestamp: c.readOpt(obj["deprecatedFirstTimestamp"], c.toTime),
@@ -50,16 +52,9 @@ export function toEventFields(input: c.JSONValue): EventFields {
     series: c.readOpt(obj["series"], toEventSeries),
     type: c.readOpt(obj["type"], c.checkStr),
   }}
-export function toEvent(input: c.JSONValue): Event {
-  const {apiVersion, kind, ...fields} = c.checkObj(input);
-  if (apiVersion !== "events.k8s.io/v1beta1") throw new Error("Type apiv mis 2");
-  if (kind !== "Event") throw new Error("Type kind mis 2");
-  return {
-    apiVersion, kind,
-    ...toEventFields(fields),
-  }}
 export function fromEvent(input: Event): c.JSONValue {
   return {
+    ...c.assertOrAddApiVersionAndKind(input, "events.k8s.io/v1beta1", "Event"),
     ...input,
     deprecatedFirstTimestamp: input.deprecatedFirstTimestamp != null ? c.fromTime(input.deprecatedFirstTimestamp) : undefined,
     deprecatedLastTimestamp: input.deprecatedLastTimestamp != null ? c.fromTime(input.deprecatedLastTimestamp) : undefined,
@@ -89,13 +84,14 @@ export function fromEventSeries(input: EventSeries): c.JSONValue {
   }}
 
 /** EventList is a list of Event objects. */
-export type EventList = Kind<"EventList"> & ListOf<EventFields>;
-export function toEventList(input: c.JSONValue): EventList {
-  const {apiVersion, kind, metadata, items} = c.checkObj(input);
-  if (apiVersion !== "events.k8s.io/v1beta1") throw new Error("Type apiv mis 2");
-  if (kind !== "EventList") throw new Error("Type kind mis 2");
+export interface EventList extends ListOf<Event> {
+  apiVersion?: "events.k8s.io/v1beta1";
+  kind?: "EventList";
+};
+export function toEventList(input: c.JSONValue): EventList & c.ApiKind {
+  const obj = c.checkObj(input);
   return {
-    apiVersion, kind,
-    metadata: MetaV1.toListMeta(metadata),
-    items: c.readList(items, toEventFields),
+    ...c.assertOrAddApiVersionAndKind(obj, "events.k8s.io/v1beta1", "EventList"),
+    metadata: MetaV1.toListMeta(obj.metadata),
+    items: c.readList(obj.items, toEvent),
   }}

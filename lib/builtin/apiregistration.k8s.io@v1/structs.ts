@@ -12,29 +12,24 @@ type ListOf<T> = {
 };
 
 /** APIService represents a server for a particular GroupVersion. Name must be "version.group". */
-export type APIService = Kind<"APIService"> & APIServiceFields;
-export interface APIServiceFields {
+export interface APIService {
+  apiVersion?: "apiregistration.k8s.io/v1";
+  kind?: "APIService";
   metadata?: MetaV1.ObjectMeta | null;
   spec?: APIServiceSpec | null;
   status?: APIServiceStatus | null;
 }
-export function toAPIServiceFields(input: c.JSONValue): APIServiceFields {
+export function toAPIService(input: c.JSONValue): APIService & c.ApiKind {
   const obj = c.checkObj(input);
   return {
+    ...c.assertOrAddApiVersionAndKind(obj, "apiregistration.k8s.io/v1", "APIService"),
     metadata: c.readOpt(obj["metadata"], MetaV1.toObjectMeta),
     spec: c.readOpt(obj["spec"], toAPIServiceSpec),
     status: c.readOpt(obj["status"], toAPIServiceStatus),
   }}
-export function toAPIService(input: c.JSONValue): APIService {
-  const {apiVersion, kind, ...fields} = c.checkObj(input);
-  if (apiVersion !== "apiregistration.k8s.io/v1") throw new Error("Type apiv mis 2");
-  if (kind !== "APIService") throw new Error("Type kind mis 2");
-  return {
-    apiVersion, kind,
-    ...toAPIServiceFields(fields),
-  }}
 export function fromAPIService(input: APIService): c.JSONValue {
   return {
+    ...c.assertOrAddApiVersionAndKind(input, "apiregistration.k8s.io/v1", "APIService"),
     ...input,
     metadata: input.metadata != null ? MetaV1.fromObjectMeta(input.metadata) : undefined,
     spec: input.spec != null ? fromAPIServiceSpec(input.spec) : undefined,
@@ -125,13 +120,14 @@ export function fromAPIServiceCondition(input: APIServiceCondition): c.JSONValue
   }}
 
 /** APIServiceList is a list of APIService objects. */
-export type APIServiceList = Kind<"APIServiceList"> & ListOf<APIServiceFields>;
-export function toAPIServiceList(input: c.JSONValue): APIServiceList {
-  const {apiVersion, kind, metadata, items} = c.checkObj(input);
-  if (apiVersion !== "apiregistration.k8s.io/v1") throw new Error("Type apiv mis 2");
-  if (kind !== "APIServiceList") throw new Error("Type kind mis 2");
+export interface APIServiceList extends ListOf<APIService> {
+  apiVersion?: "apiregistration.k8s.io/v1";
+  kind?: "APIServiceList";
+};
+export function toAPIServiceList(input: c.JSONValue): APIServiceList & c.ApiKind {
+  const obj = c.checkObj(input);
   return {
-    apiVersion, kind,
-    metadata: MetaV1.toListMeta(metadata),
-    items: c.readList(items, toAPIServiceFields),
+    ...c.assertOrAddApiVersionAndKind(obj, "apiregistration.k8s.io/v1", "APIServiceList"),
+    metadata: MetaV1.toListMeta(obj.metadata),
+    items: c.readList(obj.items, toAPIService),
   }}

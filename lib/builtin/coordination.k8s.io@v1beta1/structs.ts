@@ -12,27 +12,22 @@ type ListOf<T> = {
 };
 
 /** Lease defines a lease concept. */
-export type Lease = Kind<"Lease"> & LeaseFields;
-export interface LeaseFields {
+export interface Lease {
+  apiVersion?: "coordination.k8s.io/v1beta1";
+  kind?: "Lease";
   metadata?: MetaV1.ObjectMeta | null;
   spec?: LeaseSpec | null;
 }
-export function toLeaseFields(input: c.JSONValue): LeaseFields {
+export function toLease(input: c.JSONValue): Lease & c.ApiKind {
   const obj = c.checkObj(input);
   return {
+    ...c.assertOrAddApiVersionAndKind(obj, "coordination.k8s.io/v1beta1", "Lease"),
     metadata: c.readOpt(obj["metadata"], MetaV1.toObjectMeta),
     spec: c.readOpt(obj["spec"], toLeaseSpec),
   }}
-export function toLease(input: c.JSONValue): Lease {
-  const {apiVersion, kind, ...fields} = c.checkObj(input);
-  if (apiVersion !== "coordination.k8s.io/v1beta1") throw new Error("Type apiv mis 2");
-  if (kind !== "Lease") throw new Error("Type kind mis 2");
-  return {
-    apiVersion, kind,
-    ...toLeaseFields(fields),
-  }}
 export function fromLease(input: Lease): c.JSONValue {
   return {
+    ...c.assertOrAddApiVersionAndKind(input, "coordination.k8s.io/v1beta1", "Lease"),
     ...input,
     metadata: input.metadata != null ? MetaV1.fromObjectMeta(input.metadata) : undefined,
     spec: input.spec != null ? fromLeaseSpec(input.spec) : undefined,
@@ -63,13 +58,14 @@ export function fromLeaseSpec(input: LeaseSpec): c.JSONValue {
   }}
 
 /** LeaseList is a list of Lease objects. */
-export type LeaseList = Kind<"LeaseList"> & ListOf<LeaseFields>;
-export function toLeaseList(input: c.JSONValue): LeaseList {
-  const {apiVersion, kind, metadata, items} = c.checkObj(input);
-  if (apiVersion !== "coordination.k8s.io/v1beta1") throw new Error("Type apiv mis 2");
-  if (kind !== "LeaseList") throw new Error("Type kind mis 2");
+export interface LeaseList extends ListOf<Lease> {
+  apiVersion?: "coordination.k8s.io/v1beta1";
+  kind?: "LeaseList";
+};
+export function toLeaseList(input: c.JSONValue): LeaseList & c.ApiKind {
+  const obj = c.checkObj(input);
   return {
-    apiVersion, kind,
-    metadata: MetaV1.toListMeta(metadata),
-    items: c.readList(items, toLeaseFields),
+    ...c.assertOrAddApiVersionAndKind(obj, "coordination.k8s.io/v1beta1", "LeaseList"),
+    metadata: MetaV1.toListMeta(obj.metadata),
+    items: c.readList(obj.items, toLease),
   }}

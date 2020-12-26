@@ -14,29 +14,24 @@ type ListOf<T> = {
 };
 
 /** CronJob represents the configuration of a single cron job. */
-export type CronJob = Kind<"CronJob"> & CronJobFields;
-export interface CronJobFields {
+export interface CronJob {
+  apiVersion?: "batch/v2alpha1";
+  kind?: "CronJob";
   metadata?: MetaV1.ObjectMeta | null;
   spec?: CronJobSpec | null;
   status?: CronJobStatus | null;
 }
-export function toCronJobFields(input: c.JSONValue): CronJobFields {
+export function toCronJob(input: c.JSONValue): CronJob & c.ApiKind {
   const obj = c.checkObj(input);
   return {
+    ...c.assertOrAddApiVersionAndKind(obj, "batch/v2alpha1", "CronJob"),
     metadata: c.readOpt(obj["metadata"], MetaV1.toObjectMeta),
     spec: c.readOpt(obj["spec"], toCronJobSpec),
     status: c.readOpt(obj["status"], toCronJobStatus),
   }}
-export function toCronJob(input: c.JSONValue): CronJob {
-  const {apiVersion, kind, ...fields} = c.checkObj(input);
-  if (apiVersion !== "batch/v2alpha1") throw new Error("Type apiv mis 2");
-  if (kind !== "CronJob") throw new Error("Type kind mis 2");
-  return {
-    apiVersion, kind,
-    ...toCronJobFields(fields),
-  }}
 export function fromCronJob(input: CronJob): c.JSONValue {
   return {
+    ...c.assertOrAddApiVersionAndKind(input, "batch/v2alpha1", "CronJob"),
     ...input,
     metadata: input.metadata != null ? MetaV1.fromObjectMeta(input.metadata) : undefined,
     spec: input.spec != null ? fromCronJobSpec(input.spec) : undefined,
@@ -107,13 +102,14 @@ export function fromCronJobStatus(input: CronJobStatus): c.JSONValue {
   }}
 
 /** CronJobList is a collection of cron jobs. */
-export type CronJobList = Kind<"CronJobList"> & ListOf<CronJobFields>;
-export function toCronJobList(input: c.JSONValue): CronJobList {
-  const {apiVersion, kind, metadata, items} = c.checkObj(input);
-  if (apiVersion !== "batch/v2alpha1") throw new Error("Type apiv mis 2");
-  if (kind !== "CronJobList") throw new Error("Type kind mis 2");
+export interface CronJobList extends ListOf<CronJob> {
+  apiVersion?: "batch/v2alpha1";
+  kind?: "CronJobList";
+};
+export function toCronJobList(input: c.JSONValue): CronJobList & c.ApiKind {
+  const obj = c.checkObj(input);
   return {
-    apiVersion, kind,
-    metadata: MetaV1.toListMeta(metadata),
-    items: c.readList(items, toCronJobFields),
+    ...c.assertOrAddApiVersionAndKind(obj, "batch/v2alpha1", "CronJobList"),
+    metadata: MetaV1.toListMeta(obj.metadata),
+    items: c.readList(obj.items, toCronJob),
   }}

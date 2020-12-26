@@ -13,69 +13,60 @@ type ListOf<T> = {
 };
 
 /** ControllerRevision implements an immutable snapshot of state data. Clients are responsible for serializing and deserializing the objects that contain their internal state. Once a ControllerRevision has been successfully created, it can not be updated. The API Server will fail validation of all requests that attempt to mutate the Data field. ControllerRevisions may, however, be deleted. Note that, due to its use by both the DaemonSet and StatefulSet controllers for update and rollback, this object is beta. However, it may be subject to name and representation changes in future releases, and clients should not depend on its stability. It is primarily for internal use by controllers. */
-export type ControllerRevision = Kind<"ControllerRevision"> & ControllerRevisionFields;
-export interface ControllerRevisionFields {
+export interface ControllerRevision {
+  apiVersion?: "apps/v1";
+  kind?: "ControllerRevision";
   data?: c.JSONValue | null;
   metadata?: MetaV1.ObjectMeta | null;
   revision: number;
 }
-export function toControllerRevisionFields(input: c.JSONValue): ControllerRevisionFields {
+export function toControllerRevision(input: c.JSONValue): ControllerRevision & c.ApiKind {
   const obj = c.checkObj(input);
   return {
+    ...c.assertOrAddApiVersionAndKind(obj, "apps/v1", "ControllerRevision"),
     data: c.readOpt(obj["data"], c.identity),
     metadata: c.readOpt(obj["metadata"], MetaV1.toObjectMeta),
     revision: c.checkNum(obj["revision"]),
   }}
-export function toControllerRevision(input: c.JSONValue): ControllerRevision {
-  const {apiVersion, kind, ...fields} = c.checkObj(input);
-  if (apiVersion !== "apps/v1") throw new Error("Type apiv mis 2");
-  if (kind !== "ControllerRevision") throw new Error("Type kind mis 2");
-  return {
-    apiVersion, kind,
-    ...toControllerRevisionFields(fields),
-  }}
 export function fromControllerRevision(input: ControllerRevision): c.JSONValue {
   return {
+    ...c.assertOrAddApiVersionAndKind(input, "apps/v1", "ControllerRevision"),
     ...input,
     metadata: input.metadata != null ? MetaV1.fromObjectMeta(input.metadata) : undefined,
   }}
 
 /** ControllerRevisionList is a resource containing a list of ControllerRevision objects. */
-export type ControllerRevisionList = Kind<"ControllerRevisionList"> & ListOf<ControllerRevisionFields>;
-export function toControllerRevisionList(input: c.JSONValue): ControllerRevisionList {
-  const {apiVersion, kind, metadata, items} = c.checkObj(input);
-  if (apiVersion !== "apps/v1") throw new Error("Type apiv mis 2");
-  if (kind !== "ControllerRevisionList") throw new Error("Type kind mis 2");
+export interface ControllerRevisionList extends ListOf<ControllerRevision> {
+  apiVersion?: "apps/v1";
+  kind?: "ControllerRevisionList";
+};
+export function toControllerRevisionList(input: c.JSONValue): ControllerRevisionList & c.ApiKind {
+  const obj = c.checkObj(input);
   return {
-    apiVersion, kind,
-    metadata: MetaV1.toListMeta(metadata),
-    items: c.readList(items, toControllerRevisionFields),
+    ...c.assertOrAddApiVersionAndKind(obj, "apps/v1", "ControllerRevisionList"),
+    metadata: MetaV1.toListMeta(obj.metadata),
+    items: c.readList(obj.items, toControllerRevision),
   }}
 
 /** DaemonSet represents the configuration of a daemon set. */
-export type DaemonSet = Kind<"DaemonSet"> & DaemonSetFields;
-export interface DaemonSetFields {
+export interface DaemonSet {
+  apiVersion?: "apps/v1";
+  kind?: "DaemonSet";
   metadata?: MetaV1.ObjectMeta | null;
   spec?: DaemonSetSpec | null;
   status?: DaemonSetStatus | null;
 }
-export function toDaemonSetFields(input: c.JSONValue): DaemonSetFields {
+export function toDaemonSet(input: c.JSONValue): DaemonSet & c.ApiKind {
   const obj = c.checkObj(input);
   return {
+    ...c.assertOrAddApiVersionAndKind(obj, "apps/v1", "DaemonSet"),
     metadata: c.readOpt(obj["metadata"], MetaV1.toObjectMeta),
     spec: c.readOpt(obj["spec"], toDaemonSetSpec),
     status: c.readOpt(obj["status"], toDaemonSetStatus),
   }}
-export function toDaemonSet(input: c.JSONValue): DaemonSet {
-  const {apiVersion, kind, ...fields} = c.checkObj(input);
-  if (apiVersion !== "apps/v1") throw new Error("Type apiv mis 2");
-  if (kind !== "DaemonSet") throw new Error("Type kind mis 2");
-  return {
-    apiVersion, kind,
-    ...toDaemonSetFields(fields),
-  }}
 export function fromDaemonSet(input: DaemonSet): c.JSONValue {
   return {
+    ...c.assertOrAddApiVersionAndKind(input, "apps/v1", "DaemonSet"),
     ...input,
     metadata: input.metadata != null ? MetaV1.fromObjectMeta(input.metadata) : undefined,
     spec: input.spec != null ? fromDaemonSetSpec(input.spec) : undefined,
@@ -195,41 +186,37 @@ export function fromDaemonSetCondition(input: DaemonSetCondition): c.JSONValue {
   }}
 
 /** DaemonSetList is a collection of daemon sets. */
-export type DaemonSetList = Kind<"DaemonSetList"> & ListOf<DaemonSetFields>;
-export function toDaemonSetList(input: c.JSONValue): DaemonSetList {
-  const {apiVersion, kind, metadata, items} = c.checkObj(input);
-  if (apiVersion !== "apps/v1") throw new Error("Type apiv mis 2");
-  if (kind !== "DaemonSetList") throw new Error("Type kind mis 2");
+export interface DaemonSetList extends ListOf<DaemonSet> {
+  apiVersion?: "apps/v1";
+  kind?: "DaemonSetList";
+};
+export function toDaemonSetList(input: c.JSONValue): DaemonSetList & c.ApiKind {
+  const obj = c.checkObj(input);
   return {
-    apiVersion, kind,
-    metadata: MetaV1.toListMeta(metadata),
-    items: c.readList(items, toDaemonSetFields),
+    ...c.assertOrAddApiVersionAndKind(obj, "apps/v1", "DaemonSetList"),
+    metadata: MetaV1.toListMeta(obj.metadata),
+    items: c.readList(obj.items, toDaemonSet),
   }}
 
 /** Deployment enables declarative updates for Pods and ReplicaSets. */
-export type Deployment = Kind<"Deployment"> & DeploymentFields;
-export interface DeploymentFields {
+export interface Deployment {
+  apiVersion?: "apps/v1";
+  kind?: "Deployment";
   metadata?: MetaV1.ObjectMeta | null;
   spec?: DeploymentSpec | null;
   status?: DeploymentStatus | null;
 }
-export function toDeploymentFields(input: c.JSONValue): DeploymentFields {
+export function toDeployment(input: c.JSONValue): Deployment & c.ApiKind {
   const obj = c.checkObj(input);
   return {
+    ...c.assertOrAddApiVersionAndKind(obj, "apps/v1", "Deployment"),
     metadata: c.readOpt(obj["metadata"], MetaV1.toObjectMeta),
     spec: c.readOpt(obj["spec"], toDeploymentSpec),
     status: c.readOpt(obj["status"], toDeploymentStatus),
   }}
-export function toDeployment(input: c.JSONValue): Deployment {
-  const {apiVersion, kind, ...fields} = c.checkObj(input);
-  if (apiVersion !== "apps/v1") throw new Error("Type apiv mis 2");
-  if (kind !== "Deployment") throw new Error("Type kind mis 2");
-  return {
-    apiVersion, kind,
-    ...toDeploymentFields(fields),
-  }}
 export function fromDeployment(input: Deployment): c.JSONValue {
   return {
+    ...c.assertOrAddApiVersionAndKind(input, "apps/v1", "Deployment"),
     ...input,
     metadata: input.metadata != null ? MetaV1.fromObjectMeta(input.metadata) : undefined,
     spec: input.spec != null ? fromDeploymentSpec(input.spec) : undefined,
@@ -356,41 +343,37 @@ export function fromDeploymentCondition(input: DeploymentCondition): c.JSONValue
   }}
 
 /** DeploymentList is a list of Deployments. */
-export type DeploymentList = Kind<"DeploymentList"> & ListOf<DeploymentFields>;
-export function toDeploymentList(input: c.JSONValue): DeploymentList {
-  const {apiVersion, kind, metadata, items} = c.checkObj(input);
-  if (apiVersion !== "apps/v1") throw new Error("Type apiv mis 2");
-  if (kind !== "DeploymentList") throw new Error("Type kind mis 2");
+export interface DeploymentList extends ListOf<Deployment> {
+  apiVersion?: "apps/v1";
+  kind?: "DeploymentList";
+};
+export function toDeploymentList(input: c.JSONValue): DeploymentList & c.ApiKind {
+  const obj = c.checkObj(input);
   return {
-    apiVersion, kind,
-    metadata: MetaV1.toListMeta(metadata),
-    items: c.readList(items, toDeploymentFields),
+    ...c.assertOrAddApiVersionAndKind(obj, "apps/v1", "DeploymentList"),
+    metadata: MetaV1.toListMeta(obj.metadata),
+    items: c.readList(obj.items, toDeployment),
   }}
 
 /** ReplicaSet ensures that a specified number of pod replicas are running at any given time. */
-export type ReplicaSet = Kind<"ReplicaSet"> & ReplicaSetFields;
-export interface ReplicaSetFields {
+export interface ReplicaSet {
+  apiVersion?: "apps/v1";
+  kind?: "ReplicaSet";
   metadata?: MetaV1.ObjectMeta | null;
   spec?: ReplicaSetSpec | null;
   status?: ReplicaSetStatus | null;
 }
-export function toReplicaSetFields(input: c.JSONValue): ReplicaSetFields {
+export function toReplicaSet(input: c.JSONValue): ReplicaSet & c.ApiKind {
   const obj = c.checkObj(input);
   return {
+    ...c.assertOrAddApiVersionAndKind(obj, "apps/v1", "ReplicaSet"),
     metadata: c.readOpt(obj["metadata"], MetaV1.toObjectMeta),
     spec: c.readOpt(obj["spec"], toReplicaSetSpec),
     status: c.readOpt(obj["status"], toReplicaSetStatus),
   }}
-export function toReplicaSet(input: c.JSONValue): ReplicaSet {
-  const {apiVersion, kind, ...fields} = c.checkObj(input);
-  if (apiVersion !== "apps/v1") throw new Error("Type apiv mis 2");
-  if (kind !== "ReplicaSet") throw new Error("Type kind mis 2");
-  return {
-    apiVersion, kind,
-    ...toReplicaSetFields(fields),
-  }}
 export function fromReplicaSet(input: ReplicaSet): c.JSONValue {
   return {
+    ...c.assertOrAddApiVersionAndKind(input, "apps/v1", "ReplicaSet"),
     ...input,
     metadata: input.metadata != null ? MetaV1.fromObjectMeta(input.metadata) : undefined,
     spec: input.spec != null ? fromReplicaSetSpec(input.spec) : undefined,
@@ -468,15 +451,16 @@ export function fromReplicaSetCondition(input: ReplicaSetCondition): c.JSONValue
   }}
 
 /** ReplicaSetList is a collection of ReplicaSets. */
-export type ReplicaSetList = Kind<"ReplicaSetList"> & ListOf<ReplicaSetFields>;
-export function toReplicaSetList(input: c.JSONValue): ReplicaSetList {
-  const {apiVersion, kind, metadata, items} = c.checkObj(input);
-  if (apiVersion !== "apps/v1") throw new Error("Type apiv mis 2");
-  if (kind !== "ReplicaSetList") throw new Error("Type kind mis 2");
+export interface ReplicaSetList extends ListOf<ReplicaSet> {
+  apiVersion?: "apps/v1";
+  kind?: "ReplicaSetList";
+};
+export function toReplicaSetList(input: c.JSONValue): ReplicaSetList & c.ApiKind {
+  const obj = c.checkObj(input);
   return {
-    apiVersion, kind,
-    metadata: MetaV1.toListMeta(metadata),
-    items: c.readList(items, toReplicaSetFields),
+    ...c.assertOrAddApiVersionAndKind(obj, "apps/v1", "ReplicaSetList"),
+    metadata: MetaV1.toListMeta(obj.metadata),
+    items: c.readList(obj.items, toReplicaSet),
   }}
 
 /** RollingUpdateStatefulSetStrategy is used to communicate parameter for RollingUpdateStatefulSetStrategyType. */
@@ -497,29 +481,24 @@ export function fromRollingUpdateStatefulSetStrategy(input: RollingUpdateStatefu
  - Network: A single stable DNS and hostname.
  - Storage: As many VolumeClaims as requested.
 The StatefulSet guarantees that a given network identity will always map to the same storage identity. */
-export type StatefulSet = Kind<"StatefulSet"> & StatefulSetFields;
-export interface StatefulSetFields {
+export interface StatefulSet {
+  apiVersion?: "apps/v1";
+  kind?: "StatefulSet";
   metadata?: MetaV1.ObjectMeta | null;
   spec?: StatefulSetSpec | null;
   status?: StatefulSetStatus | null;
 }
-export function toStatefulSetFields(input: c.JSONValue): StatefulSetFields {
+export function toStatefulSet(input: c.JSONValue): StatefulSet & c.ApiKind {
   const obj = c.checkObj(input);
   return {
+    ...c.assertOrAddApiVersionAndKind(obj, "apps/v1", "StatefulSet"),
     metadata: c.readOpt(obj["metadata"], MetaV1.toObjectMeta),
     spec: c.readOpt(obj["spec"], toStatefulSetSpec),
     status: c.readOpt(obj["status"], toStatefulSetStatus),
   }}
-export function toStatefulSet(input: c.JSONValue): StatefulSet {
-  const {apiVersion, kind, ...fields} = c.checkObj(input);
-  if (apiVersion !== "apps/v1") throw new Error("Type apiv mis 2");
-  if (kind !== "StatefulSet") throw new Error("Type kind mis 2");
-  return {
-    apiVersion, kind,
-    ...toStatefulSetFields(fields),
-  }}
 export function fromStatefulSet(input: StatefulSet): c.JSONValue {
   return {
+    ...c.assertOrAddApiVersionAndKind(input, "apps/v1", "StatefulSet"),
     ...input,
     metadata: input.metadata != null ? MetaV1.fromObjectMeta(input.metadata) : undefined,
     spec: input.spec != null ? fromStatefulSetSpec(input.spec) : undefined,
@@ -630,13 +609,14 @@ export function fromStatefulSetCondition(input: StatefulSetCondition): c.JSONVal
   }}
 
 /** StatefulSetList is a collection of StatefulSets. */
-export type StatefulSetList = Kind<"StatefulSetList"> & ListOf<StatefulSetFields>;
-export function toStatefulSetList(input: c.JSONValue): StatefulSetList {
-  const {apiVersion, kind, metadata, items} = c.checkObj(input);
-  if (apiVersion !== "apps/v1") throw new Error("Type apiv mis 2");
-  if (kind !== "StatefulSetList") throw new Error("Type kind mis 2");
+export interface StatefulSetList extends ListOf<StatefulSet> {
+  apiVersion?: "apps/v1";
+  kind?: "StatefulSetList";
+};
+export function toStatefulSetList(input: c.JSONValue): StatefulSetList & c.ApiKind {
+  const obj = c.checkObj(input);
   return {
-    apiVersion, kind,
-    metadata: MetaV1.toListMeta(metadata),
-    items: c.readList(items, toStatefulSetFields),
+    ...c.assertOrAddApiVersionAndKind(obj, "apps/v1", "StatefulSetList"),
+    metadata: MetaV1.toListMeta(obj.metadata),
+    items: c.readList(obj.items, toStatefulSet),
   }}

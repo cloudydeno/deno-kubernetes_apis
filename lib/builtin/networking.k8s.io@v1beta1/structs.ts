@@ -66,29 +66,24 @@ export function fromHTTPIngressRuleValue(input: HTTPIngressRuleValue): c.JSONVal
   }}
 
 /** Ingress is a collection of rules that allow inbound connections to reach the endpoints defined by a backend. An Ingress can be configured to give services externally-reachable urls, load balance traffic, terminate SSL, offer name based virtual hosting etc. */
-export type Ingress = Kind<"Ingress"> & IngressFields;
-export interface IngressFields {
+export interface Ingress {
+  apiVersion?: "networking.k8s.io/v1beta1";
+  kind?: "Ingress";
   metadata?: MetaV1.ObjectMeta | null;
   spec?: IngressSpec | null;
   status?: IngressStatus | null;
 }
-export function toIngressFields(input: c.JSONValue): IngressFields {
+export function toIngress(input: c.JSONValue): Ingress & c.ApiKind {
   const obj = c.checkObj(input);
   return {
+    ...c.assertOrAddApiVersionAndKind(obj, "networking.k8s.io/v1beta1", "Ingress"),
     metadata: c.readOpt(obj["metadata"], MetaV1.toObjectMeta),
     spec: c.readOpt(obj["spec"], toIngressSpec),
     status: c.readOpt(obj["status"], toIngressStatus),
   }}
-export function toIngress(input: c.JSONValue): Ingress {
-  const {apiVersion, kind, ...fields} = c.checkObj(input);
-  if (apiVersion !== "networking.k8s.io/v1beta1") throw new Error("Type apiv mis 2");
-  if (kind !== "Ingress") throw new Error("Type kind mis 2");
-  return {
-    apiVersion, kind,
-    ...toIngressFields(fields),
-  }}
 export function fromIngress(input: Ingress): c.JSONValue {
   return {
+    ...c.assertOrAddApiVersionAndKind(input, "networking.k8s.io/v1beta1", "Ingress"),
     ...input,
     metadata: input.metadata != null ? MetaV1.fromObjectMeta(input.metadata) : undefined,
     spec: input.spec != null ? fromIngressSpec(input.spec) : undefined,
@@ -167,27 +162,22 @@ export function fromIngressStatus(input: IngressStatus): c.JSONValue {
   }}
 
 /** IngressClass represents the class of the Ingress, referenced by the Ingress Spec. The `ingressclass.kubernetes.io/is-default-class` annotation can be used to indicate that an IngressClass should be considered default. When a single IngressClass resource has this annotation set to true, new Ingress resources without a class specified will be assigned this default class. */
-export type IngressClass = Kind<"IngressClass"> & IngressClassFields;
-export interface IngressClassFields {
+export interface IngressClass {
+  apiVersion?: "networking.k8s.io/v1beta1";
+  kind?: "IngressClass";
   metadata?: MetaV1.ObjectMeta | null;
   spec?: IngressClassSpec | null;
 }
-export function toIngressClassFields(input: c.JSONValue): IngressClassFields {
+export function toIngressClass(input: c.JSONValue): IngressClass & c.ApiKind {
   const obj = c.checkObj(input);
   return {
+    ...c.assertOrAddApiVersionAndKind(obj, "networking.k8s.io/v1beta1", "IngressClass"),
     metadata: c.readOpt(obj["metadata"], MetaV1.toObjectMeta),
     spec: c.readOpt(obj["spec"], toIngressClassSpec),
   }}
-export function toIngressClass(input: c.JSONValue): IngressClass {
-  const {apiVersion, kind, ...fields} = c.checkObj(input);
-  if (apiVersion !== "networking.k8s.io/v1beta1") throw new Error("Type apiv mis 2");
-  if (kind !== "IngressClass") throw new Error("Type kind mis 2");
-  return {
-    apiVersion, kind,
-    ...toIngressClassFields(fields),
-  }}
 export function fromIngressClass(input: IngressClass): c.JSONValue {
   return {
+    ...c.assertOrAddApiVersionAndKind(input, "networking.k8s.io/v1beta1", "IngressClass"),
     ...input,
     metadata: input.metadata != null ? MetaV1.fromObjectMeta(input.metadata) : undefined,
     spec: input.spec != null ? fromIngressClassSpec(input.spec) : undefined,
@@ -211,25 +201,27 @@ export function fromIngressClassSpec(input: IngressClassSpec): c.JSONValue {
   }}
 
 /** IngressClassList is a collection of IngressClasses. */
-export type IngressClassList = Kind<"IngressClassList"> & ListOf<IngressClassFields>;
-export function toIngressClassList(input: c.JSONValue): IngressClassList {
-  const {apiVersion, kind, metadata, items} = c.checkObj(input);
-  if (apiVersion !== "networking.k8s.io/v1beta1") throw new Error("Type apiv mis 2");
-  if (kind !== "IngressClassList") throw new Error("Type kind mis 2");
+export interface IngressClassList extends ListOf<IngressClass> {
+  apiVersion?: "networking.k8s.io/v1beta1";
+  kind?: "IngressClassList";
+};
+export function toIngressClassList(input: c.JSONValue): IngressClassList & c.ApiKind {
+  const obj = c.checkObj(input);
   return {
-    apiVersion, kind,
-    metadata: MetaV1.toListMeta(metadata),
-    items: c.readList(items, toIngressClassFields),
+    ...c.assertOrAddApiVersionAndKind(obj, "networking.k8s.io/v1beta1", "IngressClassList"),
+    metadata: MetaV1.toListMeta(obj.metadata),
+    items: c.readList(obj.items, toIngressClass),
   }}
 
 /** IngressList is a collection of Ingress. */
-export type IngressList = Kind<"IngressList"> & ListOf<IngressFields>;
-export function toIngressList(input: c.JSONValue): IngressList {
-  const {apiVersion, kind, metadata, items} = c.checkObj(input);
-  if (apiVersion !== "networking.k8s.io/v1beta1") throw new Error("Type apiv mis 2");
-  if (kind !== "IngressList") throw new Error("Type kind mis 2");
+export interface IngressList extends ListOf<Ingress> {
+  apiVersion?: "networking.k8s.io/v1beta1";
+  kind?: "IngressList";
+};
+export function toIngressList(input: c.JSONValue): IngressList & c.ApiKind {
+  const obj = c.checkObj(input);
   return {
-    apiVersion, kind,
-    metadata: MetaV1.toListMeta(metadata),
-    items: c.readList(items, toIngressFields),
+    ...c.assertOrAddApiVersionAndKind(obj, "networking.k8s.io/v1beta1", "IngressList"),
+    metadata: MetaV1.toListMeta(obj.metadata),
+    items: c.readList(obj.items, toIngress),
   }}

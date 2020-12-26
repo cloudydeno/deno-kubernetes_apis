@@ -12,29 +12,24 @@ type ListOf<T> = {
 };
 
 /** LocalSubjectAccessReview checks whether or not a user or group can perform an action in a given namespace. Having a namespace scoped resource makes it much easier to grant namespace scoped policy that includes permissions checking. */
-export type LocalSubjectAccessReview = Kind<"LocalSubjectAccessReview"> & LocalSubjectAccessReviewFields;
-export interface LocalSubjectAccessReviewFields {
+export interface LocalSubjectAccessReview {
+  apiVersion?: "authorization.k8s.io/v1";
+  kind?: "LocalSubjectAccessReview";
   metadata?: MetaV1.ObjectMeta | null;
   spec: SubjectAccessReviewSpec;
   status?: SubjectAccessReviewStatus | null;
 }
-export function toLocalSubjectAccessReviewFields(input: c.JSONValue): LocalSubjectAccessReviewFields {
+export function toLocalSubjectAccessReview(input: c.JSONValue): LocalSubjectAccessReview & c.ApiKind {
   const obj = c.checkObj(input);
   return {
+    ...c.assertOrAddApiVersionAndKind(obj, "authorization.k8s.io/v1", "LocalSubjectAccessReview"),
     metadata: c.readOpt(obj["metadata"], MetaV1.toObjectMeta),
     spec: toSubjectAccessReviewSpec(obj["spec"]),
     status: c.readOpt(obj["status"], toSubjectAccessReviewStatus),
   }}
-export function toLocalSubjectAccessReview(input: c.JSONValue): LocalSubjectAccessReview {
-  const {apiVersion, kind, ...fields} = c.checkObj(input);
-  if (apiVersion !== "authorization.k8s.io/v1") throw new Error("Type apiv mis 2");
-  if (kind !== "LocalSubjectAccessReview") throw new Error("Type kind mis 2");
-  return {
-    apiVersion, kind,
-    ...toLocalSubjectAccessReviewFields(fields),
-  }}
 export function fromLocalSubjectAccessReview(input: LocalSubjectAccessReview): c.JSONValue {
   return {
+    ...c.assertOrAddApiVersionAndKind(input, "authorization.k8s.io/v1", "LocalSubjectAccessReview"),
     ...input,
     metadata: input.metadata != null ? MetaV1.fromObjectMeta(input.metadata) : undefined,
     spec: input.spec != null ? fromSubjectAccessReviewSpec(input.spec) : undefined,
@@ -166,29 +161,24 @@ export function fromResourceRule(input: ResourceRule): c.JSONValue {
   }}
 
 /** SelfSubjectAccessReview checks whether or the current user can perform an action.  Not filling in a spec.namespace means "in all namespaces".  Self is a special case, because users should always be able to check whether they can perform an action */
-export type SelfSubjectAccessReview = Kind<"SelfSubjectAccessReview"> & SelfSubjectAccessReviewFields;
-export interface SelfSubjectAccessReviewFields {
+export interface SelfSubjectAccessReview {
+  apiVersion?: "authorization.k8s.io/v1";
+  kind?: "SelfSubjectAccessReview";
   metadata?: MetaV1.ObjectMeta | null;
   spec: SelfSubjectAccessReviewSpec;
   status?: SubjectAccessReviewStatus | null;
 }
-export function toSelfSubjectAccessReviewFields(input: c.JSONValue): SelfSubjectAccessReviewFields {
+export function toSelfSubjectAccessReview(input: c.JSONValue): SelfSubjectAccessReview & c.ApiKind {
   const obj = c.checkObj(input);
   return {
+    ...c.assertOrAddApiVersionAndKind(obj, "authorization.k8s.io/v1", "SelfSubjectAccessReview"),
     metadata: c.readOpt(obj["metadata"], MetaV1.toObjectMeta),
     spec: toSelfSubjectAccessReviewSpec(obj["spec"]),
     status: c.readOpt(obj["status"], toSubjectAccessReviewStatus),
   }}
-export function toSelfSubjectAccessReview(input: c.JSONValue): SelfSubjectAccessReview {
-  const {apiVersion, kind, ...fields} = c.checkObj(input);
-  if (apiVersion !== "authorization.k8s.io/v1") throw new Error("Type apiv mis 2");
-  if (kind !== "SelfSubjectAccessReview") throw new Error("Type kind mis 2");
-  return {
-    apiVersion, kind,
-    ...toSelfSubjectAccessReviewFields(fields),
-  }}
 export function fromSelfSubjectAccessReview(input: SelfSubjectAccessReview): c.JSONValue {
   return {
+    ...c.assertOrAddApiVersionAndKind(input, "authorization.k8s.io/v1", "SelfSubjectAccessReview"),
     ...input,
     metadata: input.metadata != null ? MetaV1.fromObjectMeta(input.metadata) : undefined,
     spec: input.spec != null ? fromSelfSubjectAccessReviewSpec(input.spec) : undefined,
@@ -214,29 +204,24 @@ export function fromSelfSubjectAccessReviewSpec(input: SelfSubjectAccessReviewSp
   }}
 
 /** SelfSubjectRulesReview enumerates the set of actions the current user can perform within a namespace. The returned list of actions may be incomplete depending on the server's authorization mode, and any errors experienced during the evaluation. SelfSubjectRulesReview should be used by UIs to show/hide actions, or to quickly let an end user reason about their permissions. It should NOT Be used by external systems to drive authorization decisions as this raises confused deputy, cache lifetime/revocation, and correctness concerns. SubjectAccessReview, and LocalAccessReview are the correct way to defer authorization decisions to the API server. */
-export type SelfSubjectRulesReview = Kind<"SelfSubjectRulesReview"> & SelfSubjectRulesReviewFields;
-export interface SelfSubjectRulesReviewFields {
+export interface SelfSubjectRulesReview {
+  apiVersion?: "authorization.k8s.io/v1";
+  kind?: "SelfSubjectRulesReview";
   metadata?: MetaV1.ObjectMeta | null;
   spec: SelfSubjectRulesReviewSpec;
   status?: SubjectRulesReviewStatus | null;
 }
-export function toSelfSubjectRulesReviewFields(input: c.JSONValue): SelfSubjectRulesReviewFields {
+export function toSelfSubjectRulesReview(input: c.JSONValue): SelfSubjectRulesReview & c.ApiKind {
   const obj = c.checkObj(input);
   return {
+    ...c.assertOrAddApiVersionAndKind(obj, "authorization.k8s.io/v1", "SelfSubjectRulesReview"),
     metadata: c.readOpt(obj["metadata"], MetaV1.toObjectMeta),
     spec: toSelfSubjectRulesReviewSpec(obj["spec"]),
     status: c.readOpt(obj["status"], toSubjectRulesReviewStatus),
   }}
-export function toSelfSubjectRulesReview(input: c.JSONValue): SelfSubjectRulesReview {
-  const {apiVersion, kind, ...fields} = c.checkObj(input);
-  if (apiVersion !== "authorization.k8s.io/v1") throw new Error("Type apiv mis 2");
-  if (kind !== "SelfSubjectRulesReview") throw new Error("Type kind mis 2");
-  return {
-    apiVersion, kind,
-    ...toSelfSubjectRulesReviewFields(fields),
-  }}
 export function fromSelfSubjectRulesReview(input: SelfSubjectRulesReview): c.JSONValue {
   return {
+    ...c.assertOrAddApiVersionAndKind(input, "authorization.k8s.io/v1", "SelfSubjectRulesReview"),
     ...input,
     metadata: input.metadata != null ? MetaV1.fromObjectMeta(input.metadata) : undefined,
     spec: input.spec != null ? fromSelfSubjectRulesReviewSpec(input.spec) : undefined,
@@ -279,29 +264,24 @@ export function fromSubjectRulesReviewStatus(input: SubjectRulesReviewStatus): c
   }}
 
 /** SubjectAccessReview checks whether or not a user or group can perform an action. */
-export type SubjectAccessReview = Kind<"SubjectAccessReview"> & SubjectAccessReviewFields;
-export interface SubjectAccessReviewFields {
+export interface SubjectAccessReview {
+  apiVersion?: "authorization.k8s.io/v1";
+  kind?: "SubjectAccessReview";
   metadata?: MetaV1.ObjectMeta | null;
   spec: SubjectAccessReviewSpec;
   status?: SubjectAccessReviewStatus | null;
 }
-export function toSubjectAccessReviewFields(input: c.JSONValue): SubjectAccessReviewFields {
+export function toSubjectAccessReview(input: c.JSONValue): SubjectAccessReview & c.ApiKind {
   const obj = c.checkObj(input);
   return {
+    ...c.assertOrAddApiVersionAndKind(obj, "authorization.k8s.io/v1", "SubjectAccessReview"),
     metadata: c.readOpt(obj["metadata"], MetaV1.toObjectMeta),
     spec: toSubjectAccessReviewSpec(obj["spec"]),
     status: c.readOpt(obj["status"], toSubjectAccessReviewStatus),
   }}
-export function toSubjectAccessReview(input: c.JSONValue): SubjectAccessReview {
-  const {apiVersion, kind, ...fields} = c.checkObj(input);
-  if (apiVersion !== "authorization.k8s.io/v1") throw new Error("Type apiv mis 2");
-  if (kind !== "SubjectAccessReview") throw new Error("Type kind mis 2");
-  return {
-    apiVersion, kind,
-    ...toSubjectAccessReviewFields(fields),
-  }}
 export function fromSubjectAccessReview(input: SubjectAccessReview): c.JSONValue {
   return {
+    ...c.assertOrAddApiVersionAndKind(input, "authorization.k8s.io/v1", "SubjectAccessReview"),
     ...input,
     metadata: input.metadata != null ? MetaV1.fromObjectMeta(input.metadata) : undefined,
     spec: input.spec != null ? fromSubjectAccessReviewSpec(input.spec) : undefined,

@@ -291,27 +291,22 @@ export function fromAzureFileVolumeSource(input: AzureFileVolumeSource): c.JSONV
   }}
 
 /** Binding ties one object to another; for example, a pod is bound to a node by a scheduler. Deprecated in 1.7, please use the bindings subresource of pods instead. */
-export type Binding = Kind<"Binding"> & BindingFields;
-export interface BindingFields {
+export interface Binding {
+  apiVersion?: "v1";
+  kind?: "Binding";
   metadata?: MetaV1.ObjectMeta | null;
   target: ObjectReference;
 }
-export function toBindingFields(input: c.JSONValue): BindingFields {
+export function toBinding(input: c.JSONValue): Binding & c.ApiKind {
   const obj = c.checkObj(input);
   return {
+    ...c.assertOrAddApiVersionAndKind(obj, "v1", "Binding"),
     metadata: c.readOpt(obj["metadata"], MetaV1.toObjectMeta),
     target: toObjectReference(obj["target"]),
   }}
-export function toBinding(input: c.JSONValue): Binding {
-  const {apiVersion, kind, ...fields} = c.checkObj(input);
-  if (apiVersion !== "v1") throw new Error("Type apiv mis 2");
-  if (kind !== "Binding") throw new Error("Type kind mis 2");
-  return {
-    apiVersion, kind,
-    ...toBindingFields(fields),
-  }}
 export function fromBinding(input: Binding): c.JSONValue {
   return {
+    ...c.assertOrAddApiVersionAndKind(input, "v1", "Binding"),
     ...input,
     metadata: input.metadata != null ? MetaV1.fromObjectMeta(input.metadata) : undefined,
     target: input.target != null ? fromObjectReference(input.target) : undefined,
@@ -573,70 +568,61 @@ export function fromComponentCondition(input: ComponentCondition): c.JSONValue {
   }}
 
 /** ComponentStatus (and ComponentStatusList) holds the cluster validation info. Deprecated: This API is deprecated in v1.19+ */
-export type ComponentStatus = Kind<"ComponentStatus"> & ComponentStatusFields;
-export interface ComponentStatusFields {
+export interface ComponentStatus {
+  apiVersion?: "v1";
+  kind?: "ComponentStatus";
   conditions?: Array<ComponentCondition> | null;
   metadata?: MetaV1.ObjectMeta | null;
 }
-export function toComponentStatusFields(input: c.JSONValue): ComponentStatusFields {
+export function toComponentStatus(input: c.JSONValue): ComponentStatus & c.ApiKind {
   const obj = c.checkObj(input);
   return {
+    ...c.assertOrAddApiVersionAndKind(obj, "v1", "ComponentStatus"),
     conditions: c.readOpt(obj["conditions"], x => c.readList(x, toComponentCondition)),
     metadata: c.readOpt(obj["metadata"], MetaV1.toObjectMeta),
   }}
-export function toComponentStatus(input: c.JSONValue): ComponentStatus {
-  const {apiVersion, kind, ...fields} = c.checkObj(input);
-  if (apiVersion !== "v1") throw new Error("Type apiv mis 2");
-  if (kind !== "ComponentStatus") throw new Error("Type kind mis 2");
-  return {
-    apiVersion, kind,
-    ...toComponentStatusFields(fields),
-  }}
 export function fromComponentStatus(input: ComponentStatus): c.JSONValue {
   return {
+    ...c.assertOrAddApiVersionAndKind(input, "v1", "ComponentStatus"),
     ...input,
     conditions: input.conditions?.map(fromComponentCondition),
     metadata: input.metadata != null ? MetaV1.fromObjectMeta(input.metadata) : undefined,
   }}
 
 /** Status of all the conditions for the component as a list of ComponentStatus objects. Deprecated: This API is deprecated in v1.19+ */
-export type ComponentStatusList = Kind<"ComponentStatusList"> & ListOf<ComponentStatusFields>;
-export function toComponentStatusList(input: c.JSONValue): ComponentStatusList {
-  const {apiVersion, kind, metadata, items} = c.checkObj(input);
-  if (apiVersion !== "v1") throw new Error("Type apiv mis 2");
-  if (kind !== "ComponentStatusList") throw new Error("Type kind mis 2");
+export interface ComponentStatusList extends ListOf<ComponentStatus> {
+  apiVersion?: "v1";
+  kind?: "ComponentStatusList";
+};
+export function toComponentStatusList(input: c.JSONValue): ComponentStatusList & c.ApiKind {
+  const obj = c.checkObj(input);
   return {
-    apiVersion, kind,
-    metadata: MetaV1.toListMeta(metadata),
-    items: c.readList(items, toComponentStatusFields),
+    ...c.assertOrAddApiVersionAndKind(obj, "v1", "ComponentStatusList"),
+    metadata: MetaV1.toListMeta(obj.metadata),
+    items: c.readList(obj.items, toComponentStatus),
   }}
 
 /** ConfigMap holds configuration data for pods to consume. */
-export type ConfigMap = Kind<"ConfigMap"> & ConfigMapFields;
-export interface ConfigMapFields {
+export interface ConfigMap {
+  apiVersion?: "v1";
+  kind?: "ConfigMap";
   binaryData?: Record<string,string> | null;
   data?: Record<string,string> | null;
   immutable?: boolean | null;
   metadata?: MetaV1.ObjectMeta | null;
 }
-export function toConfigMapFields(input: c.JSONValue): ConfigMapFields {
+export function toConfigMap(input: c.JSONValue): ConfigMap & c.ApiKind {
   const obj = c.checkObj(input);
   return {
+    ...c.assertOrAddApiVersionAndKind(obj, "v1", "ConfigMap"),
     binaryData: c.readOpt(obj["binaryData"], x => c.readMap(x, c.checkStr)),
     data: c.readOpt(obj["data"], x => c.readMap(x, c.checkStr)),
     immutable: c.readOpt(obj["immutable"], c.checkBool),
     metadata: c.readOpt(obj["metadata"], MetaV1.toObjectMeta),
   }}
-export function toConfigMap(input: c.JSONValue): ConfigMap {
-  const {apiVersion, kind, ...fields} = c.checkObj(input);
-  if (apiVersion !== "v1") throw new Error("Type apiv mis 2");
-  if (kind !== "ConfigMap") throw new Error("Type kind mis 2");
-  return {
-    apiVersion, kind,
-    ...toConfigMapFields(fields),
-  }}
 export function fromConfigMap(input: ConfigMap): c.JSONValue {
   return {
+    ...c.assertOrAddApiVersionAndKind(input, "v1", "ConfigMap"),
     ...input,
     metadata: input.metadata != null ? MetaV1.fromObjectMeta(input.metadata) : undefined,
   }}
@@ -678,15 +664,16 @@ export function fromConfigMapKeySelector(input: ConfigMapKeySelector): c.JSONVal
   }}
 
 /** ConfigMapList is a resource containing a list of ConfigMap objects. */
-export type ConfigMapList = Kind<"ConfigMapList"> & ListOf<ConfigMapFields>;
-export function toConfigMapList(input: c.JSONValue): ConfigMapList {
-  const {apiVersion, kind, metadata, items} = c.checkObj(input);
-  if (apiVersion !== "v1") throw new Error("Type apiv mis 2");
-  if (kind !== "ConfigMapList") throw new Error("Type kind mis 2");
+export interface ConfigMapList extends ListOf<ConfigMap> {
+  apiVersion?: "v1";
+  kind?: "ConfigMapList";
+};
+export function toConfigMapList(input: c.JSONValue): ConfigMapList & c.ApiKind {
+  const obj = c.checkObj(input);
   return {
-    apiVersion, kind,
-    metadata: MetaV1.toListMeta(metadata),
-    items: c.readList(items, toConfigMapFields),
+    ...c.assertOrAddApiVersionAndKind(obj, "v1", "ConfigMapList"),
+    metadata: MetaV1.toListMeta(obj.metadata),
+    items: c.readList(obj.items, toConfigMap),
   }}
 
 /** ConfigMapNodeConfigSource contains the information to reference a ConfigMap as a config source for the Node. */
@@ -1579,42 +1566,38 @@ export function fromEndpointSubset(input: EndpointSubset): c.JSONValue {
       Ports: [{"name": "a", "port": 93}, {"name": "b", "port": 76}]
     },
  ] */
-export type Endpoints = Kind<"Endpoints"> & EndpointsFields;
-export interface EndpointsFields {
+export interface Endpoints {
+  apiVersion?: "v1";
+  kind?: "Endpoints";
   metadata?: MetaV1.ObjectMeta | null;
   subsets?: Array<EndpointSubset> | null;
 }
-export function toEndpointsFields(input: c.JSONValue): EndpointsFields {
+export function toEndpoints(input: c.JSONValue): Endpoints & c.ApiKind {
   const obj = c.checkObj(input);
   return {
+    ...c.assertOrAddApiVersionAndKind(obj, "v1", "Endpoints"),
     metadata: c.readOpt(obj["metadata"], MetaV1.toObjectMeta),
     subsets: c.readOpt(obj["subsets"], x => c.readList(x, toEndpointSubset)),
   }}
-export function toEndpoints(input: c.JSONValue): Endpoints {
-  const {apiVersion, kind, ...fields} = c.checkObj(input);
-  if (apiVersion !== "v1") throw new Error("Type apiv mis 2");
-  if (kind !== "Endpoints") throw new Error("Type kind mis 2");
-  return {
-    apiVersion, kind,
-    ...toEndpointsFields(fields),
-  }}
 export function fromEndpoints(input: Endpoints): c.JSONValue {
   return {
+    ...c.assertOrAddApiVersionAndKind(input, "v1", "Endpoints"),
     ...input,
     metadata: input.metadata != null ? MetaV1.fromObjectMeta(input.metadata) : undefined,
     subsets: input.subsets?.map(fromEndpointSubset),
   }}
 
 /** EndpointsList is a list of endpoints. */
-export type EndpointsList = Kind<"EndpointsList"> & ListOf<EndpointsFields>;
-export function toEndpointsList(input: c.JSONValue): EndpointsList {
-  const {apiVersion, kind, metadata, items} = c.checkObj(input);
-  if (apiVersion !== "v1") throw new Error("Type apiv mis 2");
-  if (kind !== "EndpointsList") throw new Error("Type kind mis 2");
+export interface EndpointsList extends ListOf<Endpoints> {
+  apiVersion?: "v1";
+  kind?: "EndpointsList";
+};
+export function toEndpointsList(input: c.JSONValue): EndpointsList & c.ApiKind {
+  const obj = c.checkObj(input);
   return {
-    apiVersion, kind,
-    metadata: MetaV1.toListMeta(metadata),
-    items: c.readList(items, toEndpointsFields),
+    ...c.assertOrAddApiVersionAndKind(obj, "v1", "EndpointsList"),
+    metadata: MetaV1.toListMeta(obj.metadata),
+    items: c.readList(obj.items, toEndpoints),
   }}
 
 /** An EphemeralContainer is a container that may be added temporarily to an existing pod for user-initiated activities such as debugging. Ephemeral containers have no resource or scheduling guarantees, and they will not be restarted when they exit or when a pod is removed or restarted. If an ephemeral container causes a pod to exceed its resource allocation, the pod may be evicted. Ephemeral containers may not be added by directly updating the pod spec. They must be added via the pod's ephemeralcontainers subresource, and they will appear in the pod spec once added. This is an alpha feature enabled by the EphemeralContainers feature flag. */
@@ -1769,8 +1752,9 @@ export function fromTypedLocalObjectReference(input: TypedLocalObjectReference):
   }}
 
 /** Event is a report of an event somewhere in the cluster. */
-export type Event = Kind<"Event"> & EventFields;
-export interface EventFields {
+export interface Event {
+  apiVersion?: "v1";
+  kind?: "Event";
   action?: string | null;
   count?: number | null;
   eventTime?: c.MicroTime | null;
@@ -1787,9 +1771,10 @@ export interface EventFields {
   source?: EventSource | null;
   type?: string | null;
 }
-export function toEventFields(input: c.JSONValue): EventFields {
+export function toEvent(input: c.JSONValue): Event & c.ApiKind {
   const obj = c.checkObj(input);
   return {
+    ...c.assertOrAddApiVersionAndKind(obj, "v1", "Event"),
     action: c.readOpt(obj["action"], c.checkStr),
     count: c.readOpt(obj["count"], c.checkNum),
     eventTime: c.readOpt(obj["eventTime"], c.toMicroTime),
@@ -1806,16 +1791,9 @@ export function toEventFields(input: c.JSONValue): EventFields {
     source: c.readOpt(obj["source"], toEventSource),
     type: c.readOpt(obj["type"], c.checkStr),
   }}
-export function toEvent(input: c.JSONValue): Event {
-  const {apiVersion, kind, ...fields} = c.checkObj(input);
-  if (apiVersion !== "v1") throw new Error("Type apiv mis 2");
-  if (kind !== "Event") throw new Error("Type kind mis 2");
-  return {
-    apiVersion, kind,
-    ...toEventFields(fields),
-  }}
 export function fromEvent(input: Event): c.JSONValue {
   return {
+    ...c.assertOrAddApiVersionAndKind(input, "v1", "Event"),
     ...input,
     eventTime: input.eventTime != null ? c.fromMicroTime(input.eventTime) : undefined,
     firstTimestamp: input.firstTimestamp != null ? c.fromTime(input.firstTimestamp) : undefined,
@@ -1861,15 +1839,16 @@ export function fromEventSource(input: EventSource): c.JSONValue {
   }}
 
 /** EventList is a list of events. */
-export type EventList = Kind<"EventList"> & ListOf<EventFields>;
-export function toEventList(input: c.JSONValue): EventList {
-  const {apiVersion, kind, metadata, items} = c.checkObj(input);
-  if (apiVersion !== "v1") throw new Error("Type apiv mis 2");
-  if (kind !== "EventList") throw new Error("Type kind mis 2");
+export interface EventList extends ListOf<Event> {
+  apiVersion?: "v1";
+  kind?: "EventList";
+};
+export function toEventList(input: c.JSONValue): EventList & c.ApiKind {
+  const obj = c.checkObj(input);
   return {
-    apiVersion, kind,
-    metadata: MetaV1.toListMeta(metadata),
-    items: c.readList(items, toEventFields),
+    ...c.assertOrAddApiVersionAndKind(obj, "v1", "EventList"),
+    metadata: MetaV1.toListMeta(obj.metadata),
+    items: c.readList(obj.items, toEvent),
   }}
 
 /** Represents a Fibre Channel volume. Fibre Channel volumes can only be mounted as read/write once. Fibre Channel volumes support ownership management and SELinux relabeling. */
@@ -2139,27 +2118,22 @@ export function fromISCSIVolumeSource(input: ISCSIVolumeSource): c.JSONValue {
   }}
 
 /** LimitRange sets resource usage limits for each kind of resource in a Namespace. */
-export type LimitRange = Kind<"LimitRange"> & LimitRangeFields;
-export interface LimitRangeFields {
+export interface LimitRange {
+  apiVersion?: "v1";
+  kind?: "LimitRange";
   metadata?: MetaV1.ObjectMeta | null;
   spec?: LimitRangeSpec | null;
 }
-export function toLimitRangeFields(input: c.JSONValue): LimitRangeFields {
+export function toLimitRange(input: c.JSONValue): LimitRange & c.ApiKind {
   const obj = c.checkObj(input);
   return {
+    ...c.assertOrAddApiVersionAndKind(obj, "v1", "LimitRange"),
     metadata: c.readOpt(obj["metadata"], MetaV1.toObjectMeta),
     spec: c.readOpt(obj["spec"], toLimitRangeSpec),
   }}
-export function toLimitRange(input: c.JSONValue): LimitRange {
-  const {apiVersion, kind, ...fields} = c.checkObj(input);
-  if (apiVersion !== "v1") throw new Error("Type apiv mis 2");
-  if (kind !== "LimitRange") throw new Error("Type kind mis 2");
-  return {
-    apiVersion, kind,
-    ...toLimitRangeFields(fields),
-  }}
 export function fromLimitRange(input: LimitRange): c.JSONValue {
   return {
+    ...c.assertOrAddApiVersionAndKind(input, "v1", "LimitRange"),
     ...input,
     metadata: input.metadata != null ? MetaV1.fromObjectMeta(input.metadata) : undefined,
     spec: input.spec != null ? fromLimitRangeSpec(input.spec) : undefined,
@@ -2210,15 +2184,16 @@ export function fromLimitRangeItem(input: LimitRangeItem): c.JSONValue {
   }}
 
 /** LimitRangeList is a list of LimitRange items. */
-export type LimitRangeList = Kind<"LimitRangeList"> & ListOf<LimitRangeFields>;
-export function toLimitRangeList(input: c.JSONValue): LimitRangeList {
-  const {apiVersion, kind, metadata, items} = c.checkObj(input);
-  if (apiVersion !== "v1") throw new Error("Type apiv mis 2");
-  if (kind !== "LimitRangeList") throw new Error("Type kind mis 2");
+export interface LimitRangeList extends ListOf<LimitRange> {
+  apiVersion?: "v1";
+  kind?: "LimitRangeList";
+};
+export function toLimitRangeList(input: c.JSONValue): LimitRangeList & c.ApiKind {
+  const obj = c.checkObj(input);
   return {
-    apiVersion, kind,
-    metadata: MetaV1.toListMeta(metadata),
-    items: c.readList(items, toLimitRangeFields),
+    ...c.assertOrAddApiVersionAndKind(obj, "v1", "LimitRangeList"),
+    metadata: MetaV1.toListMeta(obj.metadata),
+    items: c.readList(obj.items, toLimitRange),
   }}
 
 /** LoadBalancerIngress represents the status of a load-balancer ingress point: traffic intended for the service should be sent to an ingress point. */
@@ -2287,29 +2262,24 @@ export function fromNFSVolumeSource(input: NFSVolumeSource): c.JSONValue {
   }}
 
 /** Namespace provides a scope for Names. Use of multiple namespaces is optional. */
-export type Namespace = Kind<"Namespace"> & NamespaceFields;
-export interface NamespaceFields {
+export interface Namespace {
+  apiVersion?: "v1";
+  kind?: "Namespace";
   metadata?: MetaV1.ObjectMeta | null;
   spec?: NamespaceSpec | null;
   status?: NamespaceStatus | null;
 }
-export function toNamespaceFields(input: c.JSONValue): NamespaceFields {
+export function toNamespace(input: c.JSONValue): Namespace & c.ApiKind {
   const obj = c.checkObj(input);
   return {
+    ...c.assertOrAddApiVersionAndKind(obj, "v1", "Namespace"),
     metadata: c.readOpt(obj["metadata"], MetaV1.toObjectMeta),
     spec: c.readOpt(obj["spec"], toNamespaceSpec),
     status: c.readOpt(obj["status"], toNamespaceStatus),
   }}
-export function toNamespace(input: c.JSONValue): Namespace {
-  const {apiVersion, kind, ...fields} = c.checkObj(input);
-  if (apiVersion !== "v1") throw new Error("Type apiv mis 2");
-  if (kind !== "Namespace") throw new Error("Type kind mis 2");
-  return {
-    apiVersion, kind,
-    ...toNamespaceFields(fields),
-  }}
 export function fromNamespace(input: Namespace): c.JSONValue {
   return {
+    ...c.assertOrAddApiVersionAndKind(input, "v1", "Namespace"),
     ...input,
     metadata: input.metadata != null ? MetaV1.fromObjectMeta(input.metadata) : undefined,
     spec: input.spec != null ? fromNamespaceSpec(input.spec) : undefined,
@@ -2371,41 +2341,37 @@ export function fromNamespaceCondition(input: NamespaceCondition): c.JSONValue {
   }}
 
 /** NamespaceList is a list of Namespaces. */
-export type NamespaceList = Kind<"NamespaceList"> & ListOf<NamespaceFields>;
-export function toNamespaceList(input: c.JSONValue): NamespaceList {
-  const {apiVersion, kind, metadata, items} = c.checkObj(input);
-  if (apiVersion !== "v1") throw new Error("Type apiv mis 2");
-  if (kind !== "NamespaceList") throw new Error("Type kind mis 2");
+export interface NamespaceList extends ListOf<Namespace> {
+  apiVersion?: "v1";
+  kind?: "NamespaceList";
+};
+export function toNamespaceList(input: c.JSONValue): NamespaceList & c.ApiKind {
+  const obj = c.checkObj(input);
   return {
-    apiVersion, kind,
-    metadata: MetaV1.toListMeta(metadata),
-    items: c.readList(items, toNamespaceFields),
+    ...c.assertOrAddApiVersionAndKind(obj, "v1", "NamespaceList"),
+    metadata: MetaV1.toListMeta(obj.metadata),
+    items: c.readList(obj.items, toNamespace),
   }}
 
 /** Node is a worker node in Kubernetes. Each node will have a unique identifier in the cache (i.e. in etcd). */
-export type Node = Kind<"Node"> & NodeFields;
-export interface NodeFields {
+export interface Node {
+  apiVersion?: "v1";
+  kind?: "Node";
   metadata?: MetaV1.ObjectMeta | null;
   spec?: NodeSpec | null;
   status?: NodeStatus | null;
 }
-export function toNodeFields(input: c.JSONValue): NodeFields {
+export function toNode(input: c.JSONValue): Node & c.ApiKind {
   const obj = c.checkObj(input);
   return {
+    ...c.assertOrAddApiVersionAndKind(obj, "v1", "Node"),
     metadata: c.readOpt(obj["metadata"], MetaV1.toObjectMeta),
     spec: c.readOpt(obj["spec"], toNodeSpec),
     status: c.readOpt(obj["status"], toNodeStatus),
   }}
-export function toNode(input: c.JSONValue): Node {
-  const {apiVersion, kind, ...fields} = c.checkObj(input);
-  if (apiVersion !== "v1") throw new Error("Type apiv mis 2");
-  if (kind !== "Node") throw new Error("Type kind mis 2");
-  return {
-    apiVersion, kind,
-    ...toNodeFields(fields),
-  }}
 export function fromNode(input: Node): c.JSONValue {
   return {
+    ...c.assertOrAddApiVersionAndKind(input, "v1", "Node"),
     ...input,
     metadata: input.metadata != null ? MetaV1.fromObjectMeta(input.metadata) : undefined,
     spec: input.spec != null ? fromNodeSpec(input.spec) : undefined,
@@ -2632,41 +2598,37 @@ export function fromNodeSystemInfo(input: NodeSystemInfo): c.JSONValue {
   }}
 
 /** NodeList is the whole list of all Nodes which have been registered with master. */
-export type NodeList = Kind<"NodeList"> & ListOf<NodeFields>;
-export function toNodeList(input: c.JSONValue): NodeList {
-  const {apiVersion, kind, metadata, items} = c.checkObj(input);
-  if (apiVersion !== "v1") throw new Error("Type apiv mis 2");
-  if (kind !== "NodeList") throw new Error("Type kind mis 2");
+export interface NodeList extends ListOf<Node> {
+  apiVersion?: "v1";
+  kind?: "NodeList";
+};
+export function toNodeList(input: c.JSONValue): NodeList & c.ApiKind {
+  const obj = c.checkObj(input);
   return {
-    apiVersion, kind,
-    metadata: MetaV1.toListMeta(metadata),
-    items: c.readList(items, toNodeFields),
+    ...c.assertOrAddApiVersionAndKind(obj, "v1", "NodeList"),
+    metadata: MetaV1.toListMeta(obj.metadata),
+    items: c.readList(obj.items, toNode),
   }}
 
 /** PersistentVolume (PV) is a storage resource provisioned by an administrator. It is analogous to a node. More info: https://kubernetes.io/docs/concepts/storage/persistent-volumes */
-export type PersistentVolume = Kind<"PersistentVolume"> & PersistentVolumeFields;
-export interface PersistentVolumeFields {
+export interface PersistentVolume {
+  apiVersion?: "v1";
+  kind?: "PersistentVolume";
   metadata?: MetaV1.ObjectMeta | null;
   spec?: PersistentVolumeSpec | null;
   status?: PersistentVolumeStatus | null;
 }
-export function toPersistentVolumeFields(input: c.JSONValue): PersistentVolumeFields {
+export function toPersistentVolume(input: c.JSONValue): PersistentVolume & c.ApiKind {
   const obj = c.checkObj(input);
   return {
+    ...c.assertOrAddApiVersionAndKind(obj, "v1", "PersistentVolume"),
     metadata: c.readOpt(obj["metadata"], MetaV1.toObjectMeta),
     spec: c.readOpt(obj["spec"], toPersistentVolumeSpec),
     status: c.readOpt(obj["status"], toPersistentVolumeStatus),
   }}
-export function toPersistentVolume(input: c.JSONValue): PersistentVolume {
-  const {apiVersion, kind, ...fields} = c.checkObj(input);
-  if (apiVersion !== "v1") throw new Error("Type apiv mis 2");
-  if (kind !== "PersistentVolume") throw new Error("Type kind mis 2");
-  return {
-    apiVersion, kind,
-    ...toPersistentVolumeFields(fields),
-  }}
 export function fromPersistentVolume(input: PersistentVolume): c.JSONValue {
   return {
+    ...c.assertOrAddApiVersionAndKind(input, "v1", "PersistentVolume"),
     ...input,
     metadata: input.metadata != null ? MetaV1.fromObjectMeta(input.metadata) : undefined,
     spec: input.spec != null ? fromPersistentVolumeSpec(input.spec) : undefined,
@@ -2967,29 +2929,24 @@ export function fromPersistentVolumeStatus(input: PersistentVolumeStatus): c.JSO
   }}
 
 /** PersistentVolumeClaim is a user's request for and claim to a persistent volume */
-export type PersistentVolumeClaim = Kind<"PersistentVolumeClaim"> & PersistentVolumeClaimFields;
-export interface PersistentVolumeClaimFields {
+export interface PersistentVolumeClaim {
+  apiVersion?: "v1";
+  kind?: "PersistentVolumeClaim";
   metadata?: MetaV1.ObjectMeta | null;
   spec?: PersistentVolumeClaimSpec | null;
   status?: PersistentVolumeClaimStatus | null;
 }
-export function toPersistentVolumeClaimFields(input: c.JSONValue): PersistentVolumeClaimFields {
+export function toPersistentVolumeClaim(input: c.JSONValue): PersistentVolumeClaim & c.ApiKind {
   const obj = c.checkObj(input);
   return {
+    ...c.assertOrAddApiVersionAndKind(obj, "v1", "PersistentVolumeClaim"),
     metadata: c.readOpt(obj["metadata"], MetaV1.toObjectMeta),
     spec: c.readOpt(obj["spec"], toPersistentVolumeClaimSpec),
     status: c.readOpt(obj["status"], toPersistentVolumeClaimStatus),
   }}
-export function toPersistentVolumeClaim(input: c.JSONValue): PersistentVolumeClaim {
-  const {apiVersion, kind, ...fields} = c.checkObj(input);
-  if (apiVersion !== "v1") throw new Error("Type apiv mis 2");
-  if (kind !== "PersistentVolumeClaim") throw new Error("Type kind mis 2");
-  return {
-    apiVersion, kind,
-    ...toPersistentVolumeClaimFields(fields),
-  }}
 export function fromPersistentVolumeClaim(input: PersistentVolumeClaim): c.JSONValue {
   return {
+    ...c.assertOrAddApiVersionAndKind(input, "v1", "PersistentVolumeClaim"),
     ...input,
     metadata: input.metadata != null ? MetaV1.fromObjectMeta(input.metadata) : undefined,
     spec: input.spec != null ? fromPersistentVolumeClaimSpec(input.spec) : undefined,
@@ -3045,15 +3002,16 @@ export function fromPersistentVolumeClaimCondition(input: PersistentVolumeClaimC
   }}
 
 /** PersistentVolumeClaimList is a list of PersistentVolumeClaim items. */
-export type PersistentVolumeClaimList = Kind<"PersistentVolumeClaimList"> & ListOf<PersistentVolumeClaimFields>;
-export function toPersistentVolumeClaimList(input: c.JSONValue): PersistentVolumeClaimList {
-  const {apiVersion, kind, metadata, items} = c.checkObj(input);
-  if (apiVersion !== "v1") throw new Error("Type apiv mis 2");
-  if (kind !== "PersistentVolumeClaimList") throw new Error("Type kind mis 2");
+export interface PersistentVolumeClaimList extends ListOf<PersistentVolumeClaim> {
+  apiVersion?: "v1";
+  kind?: "PersistentVolumeClaimList";
+};
+export function toPersistentVolumeClaimList(input: c.JSONValue): PersistentVolumeClaimList & c.ApiKind {
+  const obj = c.checkObj(input);
   return {
-    apiVersion, kind,
-    metadata: MetaV1.toListMeta(metadata),
-    items: c.readList(items, toPersistentVolumeClaimFields),
+    ...c.assertOrAddApiVersionAndKind(obj, "v1", "PersistentVolumeClaimList"),
+    metadata: MetaV1.toListMeta(obj.metadata),
+    items: c.readList(obj.items, toPersistentVolumeClaim),
   }}
 
 /** PersistentVolumeClaimVolumeSource references the user's PVC in the same namespace. This volume finds the bound PV and mounts that volume for the pod. A PersistentVolumeClaimVolumeSource is, essentially, a wrapper around another type of volume that is owned by someone else (the system). */
@@ -3073,41 +3031,37 @@ export function fromPersistentVolumeClaimVolumeSource(input: PersistentVolumeCla
   }}
 
 /** PersistentVolumeList is a list of PersistentVolume items. */
-export type PersistentVolumeList = Kind<"PersistentVolumeList"> & ListOf<PersistentVolumeFields>;
-export function toPersistentVolumeList(input: c.JSONValue): PersistentVolumeList {
-  const {apiVersion, kind, metadata, items} = c.checkObj(input);
-  if (apiVersion !== "v1") throw new Error("Type apiv mis 2");
-  if (kind !== "PersistentVolumeList") throw new Error("Type kind mis 2");
+export interface PersistentVolumeList extends ListOf<PersistentVolume> {
+  apiVersion?: "v1";
+  kind?: "PersistentVolumeList";
+};
+export function toPersistentVolumeList(input: c.JSONValue): PersistentVolumeList & c.ApiKind {
+  const obj = c.checkObj(input);
   return {
-    apiVersion, kind,
-    metadata: MetaV1.toListMeta(metadata),
-    items: c.readList(items, toPersistentVolumeFields),
+    ...c.assertOrAddApiVersionAndKind(obj, "v1", "PersistentVolumeList"),
+    metadata: MetaV1.toListMeta(obj.metadata),
+    items: c.readList(obj.items, toPersistentVolume),
   }}
 
 /** Pod is a collection of containers that can run on a host. This resource is created by clients and scheduled onto hosts. */
-export type Pod = Kind<"Pod"> & PodFields;
-export interface PodFields {
+export interface Pod {
+  apiVersion?: "v1";
+  kind?: "Pod";
   metadata?: MetaV1.ObjectMeta | null;
   spec?: PodSpec | null;
   status?: PodStatus | null;
 }
-export function toPodFields(input: c.JSONValue): PodFields {
+export function toPod(input: c.JSONValue): Pod & c.ApiKind {
   const obj = c.checkObj(input);
   return {
+    ...c.assertOrAddApiVersionAndKind(obj, "v1", "Pod"),
     metadata: c.readOpt(obj["metadata"], MetaV1.toObjectMeta),
     spec: c.readOpt(obj["spec"], toPodSpec),
     status: c.readOpt(obj["status"], toPodStatus),
   }}
-export function toPod(input: c.JSONValue): Pod {
-  const {apiVersion, kind, ...fields} = c.checkObj(input);
-  if (apiVersion !== "v1") throw new Error("Type apiv mis 2");
-  if (kind !== "Pod") throw new Error("Type kind mis 2");
-  return {
-    apiVersion, kind,
-    ...toPodFields(fields),
-  }}
 export function fromPod(input: Pod): c.JSONValue {
   return {
+    ...c.assertOrAddApiVersionAndKind(input, "v1", "Pod"),
     ...input,
     metadata: input.metadata != null ? MetaV1.fromObjectMeta(input.metadata) : undefined,
     spec: input.spec != null ? fromPodSpec(input.spec) : undefined,
@@ -3728,39 +3682,35 @@ export function fromPodIP(input: PodIP): c.JSONValue {
   }}
 
 /** PodList is a list of Pods. */
-export type PodList = Kind<"PodList"> & ListOf<PodFields>;
-export function toPodList(input: c.JSONValue): PodList {
-  const {apiVersion, kind, metadata, items} = c.checkObj(input);
-  if (apiVersion !== "v1") throw new Error("Type apiv mis 2");
-  if (kind !== "PodList") throw new Error("Type kind mis 2");
+export interface PodList extends ListOf<Pod> {
+  apiVersion?: "v1";
+  kind?: "PodList";
+};
+export function toPodList(input: c.JSONValue): PodList & c.ApiKind {
+  const obj = c.checkObj(input);
   return {
-    apiVersion, kind,
-    metadata: MetaV1.toListMeta(metadata),
-    items: c.readList(items, toPodFields),
+    ...c.assertOrAddApiVersionAndKind(obj, "v1", "PodList"),
+    metadata: MetaV1.toListMeta(obj.metadata),
+    items: c.readList(obj.items, toPod),
   }}
 
 /** PodTemplate describes a template for creating copies of a predefined pod. */
-export type PodTemplate = Kind<"PodTemplate"> & PodTemplateFields;
-export interface PodTemplateFields {
+export interface PodTemplate {
+  apiVersion?: "v1";
+  kind?: "PodTemplate";
   metadata?: MetaV1.ObjectMeta | null;
   template?: PodTemplateSpec | null;
 }
-export function toPodTemplateFields(input: c.JSONValue): PodTemplateFields {
+export function toPodTemplate(input: c.JSONValue): PodTemplate & c.ApiKind {
   const obj = c.checkObj(input);
   return {
+    ...c.assertOrAddApiVersionAndKind(obj, "v1", "PodTemplate"),
     metadata: c.readOpt(obj["metadata"], MetaV1.toObjectMeta),
     template: c.readOpt(obj["template"], toPodTemplateSpec),
   }}
-export function toPodTemplate(input: c.JSONValue): PodTemplate {
-  const {apiVersion, kind, ...fields} = c.checkObj(input);
-  if (apiVersion !== "v1") throw new Error("Type apiv mis 2");
-  if (kind !== "PodTemplate") throw new Error("Type kind mis 2");
-  return {
-    apiVersion, kind,
-    ...toPodTemplateFields(fields),
-  }}
 export function fromPodTemplate(input: PodTemplate): c.JSONValue {
   return {
+    ...c.assertOrAddApiVersionAndKind(input, "v1", "PodTemplate"),
     ...input,
     metadata: input.metadata != null ? MetaV1.fromObjectMeta(input.metadata) : undefined,
     template: input.template != null ? fromPodTemplateSpec(input.template) : undefined,
@@ -3785,41 +3735,37 @@ export function fromPodTemplateSpec(input: PodTemplateSpec): c.JSONValue {
   }}
 
 /** PodTemplateList is a list of PodTemplates. */
-export type PodTemplateList = Kind<"PodTemplateList"> & ListOf<PodTemplateFields>;
-export function toPodTemplateList(input: c.JSONValue): PodTemplateList {
-  const {apiVersion, kind, metadata, items} = c.checkObj(input);
-  if (apiVersion !== "v1") throw new Error("Type apiv mis 2");
-  if (kind !== "PodTemplateList") throw new Error("Type kind mis 2");
+export interface PodTemplateList extends ListOf<PodTemplate> {
+  apiVersion?: "v1";
+  kind?: "PodTemplateList";
+};
+export function toPodTemplateList(input: c.JSONValue): PodTemplateList & c.ApiKind {
+  const obj = c.checkObj(input);
   return {
-    apiVersion, kind,
-    metadata: MetaV1.toListMeta(metadata),
-    items: c.readList(items, toPodTemplateFields),
+    ...c.assertOrAddApiVersionAndKind(obj, "v1", "PodTemplateList"),
+    metadata: MetaV1.toListMeta(obj.metadata),
+    items: c.readList(obj.items, toPodTemplate),
   }}
 
 /** ReplicationController represents the configuration of a replication controller. */
-export type ReplicationController = Kind<"ReplicationController"> & ReplicationControllerFields;
-export interface ReplicationControllerFields {
+export interface ReplicationController {
+  apiVersion?: "v1";
+  kind?: "ReplicationController";
   metadata?: MetaV1.ObjectMeta | null;
   spec?: ReplicationControllerSpec | null;
   status?: ReplicationControllerStatus | null;
 }
-export function toReplicationControllerFields(input: c.JSONValue): ReplicationControllerFields {
+export function toReplicationController(input: c.JSONValue): ReplicationController & c.ApiKind {
   const obj = c.checkObj(input);
   return {
+    ...c.assertOrAddApiVersionAndKind(obj, "v1", "ReplicationController"),
     metadata: c.readOpt(obj["metadata"], MetaV1.toObjectMeta),
     spec: c.readOpt(obj["spec"], toReplicationControllerSpec),
     status: c.readOpt(obj["status"], toReplicationControllerStatus),
   }}
-export function toReplicationController(input: c.JSONValue): ReplicationController {
-  const {apiVersion, kind, ...fields} = c.checkObj(input);
-  if (apiVersion !== "v1") throw new Error("Type apiv mis 2");
-  if (kind !== "ReplicationController") throw new Error("Type kind mis 2");
-  return {
-    apiVersion, kind,
-    ...toReplicationControllerFields(fields),
-  }}
 export function fromReplicationController(input: ReplicationController): c.JSONValue {
   return {
+    ...c.assertOrAddApiVersionAndKind(input, "v1", "ReplicationController"),
     ...input,
     metadata: input.metadata != null ? MetaV1.fromObjectMeta(input.metadata) : undefined,
     spec: input.spec != null ? fromReplicationControllerSpec(input.spec) : undefined,
@@ -3896,41 +3842,37 @@ export function fromReplicationControllerCondition(input: ReplicationControllerC
   }}
 
 /** ReplicationControllerList is a collection of replication controllers. */
-export type ReplicationControllerList = Kind<"ReplicationControllerList"> & ListOf<ReplicationControllerFields>;
-export function toReplicationControllerList(input: c.JSONValue): ReplicationControllerList {
-  const {apiVersion, kind, metadata, items} = c.checkObj(input);
-  if (apiVersion !== "v1") throw new Error("Type apiv mis 2");
-  if (kind !== "ReplicationControllerList") throw new Error("Type kind mis 2");
+export interface ReplicationControllerList extends ListOf<ReplicationController> {
+  apiVersion?: "v1";
+  kind?: "ReplicationControllerList";
+};
+export function toReplicationControllerList(input: c.JSONValue): ReplicationControllerList & c.ApiKind {
+  const obj = c.checkObj(input);
   return {
-    apiVersion, kind,
-    metadata: MetaV1.toListMeta(metadata),
-    items: c.readList(items, toReplicationControllerFields),
+    ...c.assertOrAddApiVersionAndKind(obj, "v1", "ReplicationControllerList"),
+    metadata: MetaV1.toListMeta(obj.metadata),
+    items: c.readList(obj.items, toReplicationController),
   }}
 
 /** ResourceQuota sets aggregate quota restrictions enforced per namespace */
-export type ResourceQuota = Kind<"ResourceQuota"> & ResourceQuotaFields;
-export interface ResourceQuotaFields {
+export interface ResourceQuota {
+  apiVersion?: "v1";
+  kind?: "ResourceQuota";
   metadata?: MetaV1.ObjectMeta | null;
   spec?: ResourceQuotaSpec | null;
   status?: ResourceQuotaStatus | null;
 }
-export function toResourceQuotaFields(input: c.JSONValue): ResourceQuotaFields {
+export function toResourceQuota(input: c.JSONValue): ResourceQuota & c.ApiKind {
   const obj = c.checkObj(input);
   return {
+    ...c.assertOrAddApiVersionAndKind(obj, "v1", "ResourceQuota"),
     metadata: c.readOpt(obj["metadata"], MetaV1.toObjectMeta),
     spec: c.readOpt(obj["spec"], toResourceQuotaSpec),
     status: c.readOpt(obj["status"], toResourceQuotaStatus),
   }}
-export function toResourceQuota(input: c.JSONValue): ResourceQuota {
-  const {apiVersion, kind, ...fields} = c.checkObj(input);
-  if (apiVersion !== "v1") throw new Error("Type apiv mis 2");
-  if (kind !== "ResourceQuota") throw new Error("Type kind mis 2");
-  return {
-    apiVersion, kind,
-    ...toResourceQuotaFields(fields),
-  }}
 export function fromResourceQuota(input: ResourceQuota): c.JSONValue {
   return {
+    ...c.assertOrAddApiVersionAndKind(input, "v1", "ResourceQuota"),
     ...input,
     metadata: input.metadata != null ? MetaV1.fromObjectMeta(input.metadata) : undefined,
     spec: input.spec != null ? fromResourceQuotaSpec(input.spec) : undefined,
@@ -4009,85 +3951,77 @@ export function fromResourceQuotaStatus(input: ResourceQuotaStatus): c.JSONValue
   }}
 
 /** ResourceQuotaList is a list of ResourceQuota items. */
-export type ResourceQuotaList = Kind<"ResourceQuotaList"> & ListOf<ResourceQuotaFields>;
-export function toResourceQuotaList(input: c.JSONValue): ResourceQuotaList {
-  const {apiVersion, kind, metadata, items} = c.checkObj(input);
-  if (apiVersion !== "v1") throw new Error("Type apiv mis 2");
-  if (kind !== "ResourceQuotaList") throw new Error("Type kind mis 2");
+export interface ResourceQuotaList extends ListOf<ResourceQuota> {
+  apiVersion?: "v1";
+  kind?: "ResourceQuotaList";
+};
+export function toResourceQuotaList(input: c.JSONValue): ResourceQuotaList & c.ApiKind {
+  const obj = c.checkObj(input);
   return {
-    apiVersion, kind,
-    metadata: MetaV1.toListMeta(metadata),
-    items: c.readList(items, toResourceQuotaFields),
+    ...c.assertOrAddApiVersionAndKind(obj, "v1", "ResourceQuotaList"),
+    metadata: MetaV1.toListMeta(obj.metadata),
+    items: c.readList(obj.items, toResourceQuota),
   }}
 
 /** Secret holds secret data of a certain type. The total bytes of the values in the Data field must be less than MaxSecretSize bytes. */
-export type Secret = Kind<"Secret"> & SecretFields;
-export interface SecretFields {
+export interface Secret {
+  apiVersion?: "v1";
+  kind?: "Secret";
   data?: Record<string,string> | null;
   immutable?: boolean | null;
   metadata?: MetaV1.ObjectMeta | null;
   stringData?: Record<string,string> | null;
   type?: string | null;
 }
-export function toSecretFields(input: c.JSONValue): SecretFields {
+export function toSecret(input: c.JSONValue): Secret & c.ApiKind {
   const obj = c.checkObj(input);
   return {
+    ...c.assertOrAddApiVersionAndKind(obj, "v1", "Secret"),
     data: c.readOpt(obj["data"], x => c.readMap(x, c.checkStr)),
     immutable: c.readOpt(obj["immutable"], c.checkBool),
     metadata: c.readOpt(obj["metadata"], MetaV1.toObjectMeta),
     stringData: c.readOpt(obj["stringData"], x => c.readMap(x, c.checkStr)),
     type: c.readOpt(obj["type"], c.checkStr),
   }}
-export function toSecret(input: c.JSONValue): Secret {
-  const {apiVersion, kind, ...fields} = c.checkObj(input);
-  if (apiVersion !== "v1") throw new Error("Type apiv mis 2");
-  if (kind !== "Secret") throw new Error("Type kind mis 2");
-  return {
-    apiVersion, kind,
-    ...toSecretFields(fields),
-  }}
 export function fromSecret(input: Secret): c.JSONValue {
   return {
+    ...c.assertOrAddApiVersionAndKind(input, "v1", "Secret"),
     ...input,
     metadata: input.metadata != null ? MetaV1.fromObjectMeta(input.metadata) : undefined,
   }}
 
 /** SecretList is a list of Secret. */
-export type SecretList = Kind<"SecretList"> & ListOf<SecretFields>;
-export function toSecretList(input: c.JSONValue): SecretList {
-  const {apiVersion, kind, metadata, items} = c.checkObj(input);
-  if (apiVersion !== "v1") throw new Error("Type apiv mis 2");
-  if (kind !== "SecretList") throw new Error("Type kind mis 2");
+export interface SecretList extends ListOf<Secret> {
+  apiVersion?: "v1";
+  kind?: "SecretList";
+};
+export function toSecretList(input: c.JSONValue): SecretList & c.ApiKind {
+  const obj = c.checkObj(input);
   return {
-    apiVersion, kind,
-    metadata: MetaV1.toListMeta(metadata),
-    items: c.readList(items, toSecretFields),
+    ...c.assertOrAddApiVersionAndKind(obj, "v1", "SecretList"),
+    metadata: MetaV1.toListMeta(obj.metadata),
+    items: c.readList(obj.items, toSecret),
   }}
 
 /** Service is a named abstraction of software service (for example, mysql) consisting of local port (for example 3306) that the proxy listens on, and the selector that determines which pods will answer requests sent through the proxy. */
-export type Service = Kind<"Service"> & ServiceFields;
-export interface ServiceFields {
+export interface Service {
+  apiVersion?: "v1";
+  kind?: "Service";
   metadata?: MetaV1.ObjectMeta | null;
   spec?: ServiceSpec | null;
   status?: ServiceStatus | null;
 }
-export function toServiceFields(input: c.JSONValue): ServiceFields {
+export function toService(input: c.JSONValue): Service & c.ApiKind {
   const obj = c.checkObj(input);
   return {
+    ...c.assertOrAddApiVersionAndKind(obj, "v1", "Service"),
     metadata: c.readOpt(obj["metadata"], MetaV1.toObjectMeta),
     spec: c.readOpt(obj["spec"], toServiceSpec),
     status: c.readOpt(obj["status"], toServiceStatus),
   }}
-export function toService(input: c.JSONValue): Service {
-  const {apiVersion, kind, ...fields} = c.checkObj(input);
-  if (apiVersion !== "v1") throw new Error("Type apiv mis 2");
-  if (kind !== "Service") throw new Error("Type kind mis 2");
-  return {
-    apiVersion, kind,
-    ...toServiceFields(fields),
-  }}
 export function fromService(input: Service): c.JSONValue {
   return {
+    ...c.assertOrAddApiVersionAndKind(input, "v1", "Service"),
     ...input,
     metadata: input.metadata != null ? MetaV1.fromObjectMeta(input.metadata) : undefined,
     spec: input.spec != null ? fromServiceSpec(input.spec) : undefined,
@@ -4193,31 +4127,26 @@ export function fromServiceStatus(input: ServiceStatus): c.JSONValue {
   }}
 
 /** ServiceAccount binds together: * a name, understood by users, and perhaps by peripheral systems, for an identity * a principal that can be authenticated and authorized * a set of secrets */
-export type ServiceAccount = Kind<"ServiceAccount"> & ServiceAccountFields;
-export interface ServiceAccountFields {
+export interface ServiceAccount {
+  apiVersion?: "v1";
+  kind?: "ServiceAccount";
   automountServiceAccountToken?: boolean | null;
   imagePullSecrets?: Array<LocalObjectReference> | null;
   metadata?: MetaV1.ObjectMeta | null;
   secrets?: Array<ObjectReference> | null;
 }
-export function toServiceAccountFields(input: c.JSONValue): ServiceAccountFields {
+export function toServiceAccount(input: c.JSONValue): ServiceAccount & c.ApiKind {
   const obj = c.checkObj(input);
   return {
+    ...c.assertOrAddApiVersionAndKind(obj, "v1", "ServiceAccount"),
     automountServiceAccountToken: c.readOpt(obj["automountServiceAccountToken"], c.checkBool),
     imagePullSecrets: c.readOpt(obj["imagePullSecrets"], x => c.readList(x, toLocalObjectReference)),
     metadata: c.readOpt(obj["metadata"], MetaV1.toObjectMeta),
     secrets: c.readOpt(obj["secrets"], x => c.readList(x, toObjectReference)),
   }}
-export function toServiceAccount(input: c.JSONValue): ServiceAccount {
-  const {apiVersion, kind, ...fields} = c.checkObj(input);
-  if (apiVersion !== "v1") throw new Error("Type apiv mis 2");
-  if (kind !== "ServiceAccount") throw new Error("Type kind mis 2");
-  return {
-    apiVersion, kind,
-    ...toServiceAccountFields(fields),
-  }}
 export function fromServiceAccount(input: ServiceAccount): c.JSONValue {
   return {
+    ...c.assertOrAddApiVersionAndKind(input, "v1", "ServiceAccount"),
     ...input,
     imagePullSecrets: input.imagePullSecrets?.map(fromLocalObjectReference),
     metadata: input.metadata != null ? MetaV1.fromObjectMeta(input.metadata) : undefined,
@@ -4225,27 +4154,29 @@ export function fromServiceAccount(input: ServiceAccount): c.JSONValue {
   }}
 
 /** ServiceAccountList is a list of ServiceAccount objects */
-export type ServiceAccountList = Kind<"ServiceAccountList"> & ListOf<ServiceAccountFields>;
-export function toServiceAccountList(input: c.JSONValue): ServiceAccountList {
-  const {apiVersion, kind, metadata, items} = c.checkObj(input);
-  if (apiVersion !== "v1") throw new Error("Type apiv mis 2");
-  if (kind !== "ServiceAccountList") throw new Error("Type kind mis 2");
+export interface ServiceAccountList extends ListOf<ServiceAccount> {
+  apiVersion?: "v1";
+  kind?: "ServiceAccountList";
+};
+export function toServiceAccountList(input: c.JSONValue): ServiceAccountList & c.ApiKind {
+  const obj = c.checkObj(input);
   return {
-    apiVersion, kind,
-    metadata: MetaV1.toListMeta(metadata),
-    items: c.readList(items, toServiceAccountFields),
+    ...c.assertOrAddApiVersionAndKind(obj, "v1", "ServiceAccountList"),
+    metadata: MetaV1.toListMeta(obj.metadata),
+    items: c.readList(obj.items, toServiceAccount),
   }}
 
 /** ServiceList holds a list of services. */
-export type ServiceList = Kind<"ServiceList"> & ListOf<ServiceFields>;
-export function toServiceList(input: c.JSONValue): ServiceList {
-  const {apiVersion, kind, metadata, items} = c.checkObj(input);
-  if (apiVersion !== "v1") throw new Error("Type apiv mis 2");
-  if (kind !== "ServiceList") throw new Error("Type kind mis 2");
+export interface ServiceList extends ListOf<Service> {
+  apiVersion?: "v1";
+  kind?: "ServiceList";
+};
+export function toServiceList(input: c.JSONValue): ServiceList & c.ApiKind {
+  const obj = c.checkObj(input);
   return {
-    apiVersion, kind,
-    metadata: MetaV1.toListMeta(metadata),
-    items: c.readList(items, toServiceFields),
+    ...c.assertOrAddApiVersionAndKind(obj, "v1", "ServiceList"),
+    metadata: MetaV1.toListMeta(obj.metadata),
+    items: c.readList(obj.items, toService),
   }}
 
 /** A topology selector requirement is a selector that matches given label. This is an alpha feature and may change in the future. */

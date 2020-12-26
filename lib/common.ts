@@ -1,12 +1,44 @@
-// The API contract that all generated code expects
+// Import the API contract and several utilities from kubernetes_client
+// All the generated code uses this centralized API contract,
+//   while users are free to pass in a different compatible client to actually call
 
-import {JSONObject, JSONValue, RequestOptions} from "https://deno.land/x/kubernetes_client@v0.1.1/mod.ts";
-export * from "https://deno.land/x/kubernetes_client@v0.1.1/mod.ts";
-export {Reflector} from "https://deno.land/x/kubernetes_client@v0.1.1/reflector.ts";
+import {JSONObject, JSONValue, RequestOptions, Reflector} from "https://deno.land/x/kubernetes_client@v0.1.2/mod.ts";
+export * from "https://deno.land/x/kubernetes_client@v0.1.2/mod.ts";
 
 // Helpers used to validate/transform structures from or for the wire
+// And some other stuff :)
 
-// export {transformWatchStream} from './streaming.ts';
+export function assertOrAddApiVersionAndKind<
+  T extends string,
+  U extends string,
+>(input: JSONObject | {
+  apiVersion?: JSONValue;
+  kind?: JSONValue;
+}, expectedVersion: T, expectedKind: U, required = false) {
+  const output = { apiVersion: expectedVersion, kind: expectedKind };
+
+  // If nothing is given, we might return the expected data
+  if (!('apiVersion' in input && 'kind' in input)) {
+    // Decents on what the caller thinks of course:
+    if (!required) return output;
+
+    // Caller wanted the fields so build up an error.
+    const expected = JSON.stringify(`${output.apiVersion}/${output.kind}`);
+    throw new Error(`Kubernetes Resource Mistype: `+
+      `Expected ${expected}, but the given object didn't have any API metadata.`);
+
+  // Given and matching, all good!
+  } else if (input.apiVersion === expectedVersion && input.kind === expectedKind) {
+    return output;
+  }
+
+  // Otherwise we're going to build up an error
+  const given = JSON.stringify(`${input.apiVersion}/${input.kind}`);
+  const expected = JSON.stringify(`${output.apiVersion}/${output.kind}`);
+  throw new Error(`Kubernetes Resource Mistype: `+
+    `Expected ${expected}, but was given ${given}.`);
+}
+
 
 export function identity(input: JSONValue) {
   return input;

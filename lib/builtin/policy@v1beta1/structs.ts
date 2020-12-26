@@ -128,29 +128,24 @@ export function fromHostPortRange(input: HostPortRange): c.JSONValue {
   }}
 
 /** PodDisruptionBudget is an object to define the max disruption that can be caused to a collection of pods */
-export type PodDisruptionBudget = Kind<"PodDisruptionBudget"> & PodDisruptionBudgetFields;
-export interface PodDisruptionBudgetFields {
+export interface PodDisruptionBudget {
+  apiVersion?: "policy/v1beta1";
+  kind?: "PodDisruptionBudget";
   metadata?: MetaV1.ObjectMeta | null;
   spec?: PodDisruptionBudgetSpec | null;
   status?: PodDisruptionBudgetStatus | null;
 }
-export function toPodDisruptionBudgetFields(input: c.JSONValue): PodDisruptionBudgetFields {
+export function toPodDisruptionBudget(input: c.JSONValue): PodDisruptionBudget & c.ApiKind {
   const obj = c.checkObj(input);
   return {
+    ...c.assertOrAddApiVersionAndKind(obj, "policy/v1beta1", "PodDisruptionBudget"),
     metadata: c.readOpt(obj["metadata"], MetaV1.toObjectMeta),
     spec: c.readOpt(obj["spec"], toPodDisruptionBudgetSpec),
     status: c.readOpt(obj["status"], toPodDisruptionBudgetStatus),
   }}
-export function toPodDisruptionBudget(input: c.JSONValue): PodDisruptionBudget {
-  const {apiVersion, kind, ...fields} = c.checkObj(input);
-  if (apiVersion !== "policy/v1beta1") throw new Error("Type apiv mis 2");
-  if (kind !== "PodDisruptionBudget") throw new Error("Type kind mis 2");
-  return {
-    apiVersion, kind,
-    ...toPodDisruptionBudgetFields(fields),
-  }}
 export function fromPodDisruptionBudget(input: PodDisruptionBudget): c.JSONValue {
   return {
+    ...c.assertOrAddApiVersionAndKind(input, "policy/v1beta1", "PodDisruptionBudget"),
     ...input,
     metadata: input.metadata != null ? MetaV1.fromObjectMeta(input.metadata) : undefined,
     spec: input.spec != null ? fromPodDisruptionBudgetSpec(input.spec) : undefined,
@@ -202,39 +197,35 @@ export function fromPodDisruptionBudgetStatus(input: PodDisruptionBudgetStatus):
   }}
 
 /** PodDisruptionBudgetList is a collection of PodDisruptionBudgets. */
-export type PodDisruptionBudgetList = Kind<"PodDisruptionBudgetList"> & ListOf<PodDisruptionBudgetFields>;
-export function toPodDisruptionBudgetList(input: c.JSONValue): PodDisruptionBudgetList {
-  const {apiVersion, kind, metadata, items} = c.checkObj(input);
-  if (apiVersion !== "policy/v1beta1") throw new Error("Type apiv mis 2");
-  if (kind !== "PodDisruptionBudgetList") throw new Error("Type kind mis 2");
+export interface PodDisruptionBudgetList extends ListOf<PodDisruptionBudget> {
+  apiVersion?: "policy/v1beta1";
+  kind?: "PodDisruptionBudgetList";
+};
+export function toPodDisruptionBudgetList(input: c.JSONValue): PodDisruptionBudgetList & c.ApiKind {
+  const obj = c.checkObj(input);
   return {
-    apiVersion, kind,
-    metadata: MetaV1.toListMeta(metadata),
-    items: c.readList(items, toPodDisruptionBudgetFields),
+    ...c.assertOrAddApiVersionAndKind(obj, "policy/v1beta1", "PodDisruptionBudgetList"),
+    metadata: MetaV1.toListMeta(obj.metadata),
+    items: c.readList(obj.items, toPodDisruptionBudget),
   }}
 
 /** PodSecurityPolicy governs the ability to make requests that affect the Security Context that will be applied to a pod and container. */
-export type PodSecurityPolicy = Kind<"PodSecurityPolicy"> & PodSecurityPolicyFields;
-export interface PodSecurityPolicyFields {
+export interface PodSecurityPolicy {
+  apiVersion?: "policy/v1beta1";
+  kind?: "PodSecurityPolicy";
   metadata?: MetaV1.ObjectMeta | null;
   spec?: PodSecurityPolicySpec | null;
 }
-export function toPodSecurityPolicyFields(input: c.JSONValue): PodSecurityPolicyFields {
+export function toPodSecurityPolicy(input: c.JSONValue): PodSecurityPolicy & c.ApiKind {
   const obj = c.checkObj(input);
   return {
+    ...c.assertOrAddApiVersionAndKind(obj, "policy/v1beta1", "PodSecurityPolicy"),
     metadata: c.readOpt(obj["metadata"], MetaV1.toObjectMeta),
     spec: c.readOpt(obj["spec"], toPodSecurityPolicySpec),
   }}
-export function toPodSecurityPolicy(input: c.JSONValue): PodSecurityPolicy {
-  const {apiVersion, kind, ...fields} = c.checkObj(input);
-  if (apiVersion !== "policy/v1beta1") throw new Error("Type apiv mis 2");
-  if (kind !== "PodSecurityPolicy") throw new Error("Type kind mis 2");
-  return {
-    apiVersion, kind,
-    ...toPodSecurityPolicyFields(fields),
-  }}
 export function fromPodSecurityPolicy(input: PodSecurityPolicy): c.JSONValue {
   return {
+    ...c.assertOrAddApiVersionAndKind(input, "policy/v1beta1", "PodSecurityPolicy"),
     ...input,
     metadata: input.metadata != null ? MetaV1.fromObjectMeta(input.metadata) : undefined,
     spec: input.spec != null ? fromPodSecurityPolicySpec(input.spec) : undefined,
@@ -395,13 +386,14 @@ export function fromSupplementalGroupsStrategyOptions(input: SupplementalGroupsS
   }}
 
 /** PodSecurityPolicyList is a list of PodSecurityPolicy objects. */
-export type PodSecurityPolicyList = Kind<"PodSecurityPolicyList"> & ListOf<PodSecurityPolicyFields>;
-export function toPodSecurityPolicyList(input: c.JSONValue): PodSecurityPolicyList {
-  const {apiVersion, kind, metadata, items} = c.checkObj(input);
-  if (apiVersion !== "policy/v1beta1") throw new Error("Type apiv mis 2");
-  if (kind !== "PodSecurityPolicyList") throw new Error("Type kind mis 2");
+export interface PodSecurityPolicyList extends ListOf<PodSecurityPolicy> {
+  apiVersion?: "policy/v1beta1";
+  kind?: "PodSecurityPolicyList";
+};
+export function toPodSecurityPolicyList(input: c.JSONValue): PodSecurityPolicyList & c.ApiKind {
+  const obj = c.checkObj(input);
   return {
-    apiVersion, kind,
-    metadata: MetaV1.toListMeta(metadata),
-    items: c.readList(items, toPodSecurityPolicyFields),
+    ...c.assertOrAddApiVersionAndKind(obj, "policy/v1beta1", "PodSecurityPolicyList"),
+    metadata: MetaV1.toListMeta(obj.metadata),
+    items: c.readList(obj.items, toPodSecurityPolicy),
   }}

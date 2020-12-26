@@ -18,29 +18,24 @@ Kubelets use this API to obtain:
  2. serving certificates for TLS endpoints kube-apiserver can connect to securely (with the "kubernetes.io/kubelet-serving" signerName).
 
 This API can be used to request client certificates to authenticate to kube-apiserver (with the "kubernetes.io/kube-apiserver-client" signerName), or to obtain certificates from custom non-Kubernetes signers. */
-export type CertificateSigningRequest = Kind<"CertificateSigningRequest"> & CertificateSigningRequestFields;
-export interface CertificateSigningRequestFields {
+export interface CertificateSigningRequest {
+  apiVersion?: "certificates.k8s.io/v1";
+  kind?: "CertificateSigningRequest";
   metadata?: MetaV1.ObjectMeta | null;
   spec: CertificateSigningRequestSpec;
   status?: CertificateSigningRequestStatus | null;
 }
-export function toCertificateSigningRequestFields(input: c.JSONValue): CertificateSigningRequestFields {
+export function toCertificateSigningRequest(input: c.JSONValue): CertificateSigningRequest & c.ApiKind {
   const obj = c.checkObj(input);
   return {
+    ...c.assertOrAddApiVersionAndKind(obj, "certificates.k8s.io/v1", "CertificateSigningRequest"),
     metadata: c.readOpt(obj["metadata"], MetaV1.toObjectMeta),
     spec: toCertificateSigningRequestSpec(obj["spec"]),
     status: c.readOpt(obj["status"], toCertificateSigningRequestStatus),
   }}
-export function toCertificateSigningRequest(input: c.JSONValue): CertificateSigningRequest {
-  const {apiVersion, kind, ...fields} = c.checkObj(input);
-  if (apiVersion !== "certificates.k8s.io/v1") throw new Error("Type apiv mis 2");
-  if (kind !== "CertificateSigningRequest") throw new Error("Type kind mis 2");
-  return {
-    apiVersion, kind,
-    ...toCertificateSigningRequestFields(fields),
-  }}
 export function fromCertificateSigningRequest(input: CertificateSigningRequest): c.JSONValue {
   return {
+    ...c.assertOrAddApiVersionAndKind(input, "certificates.k8s.io/v1", "CertificateSigningRequest"),
     ...input,
     metadata: input.metadata != null ? MetaV1.fromObjectMeta(input.metadata) : undefined,
     spec: input.spec != null ? fromCertificateSigningRequestSpec(input.spec) : undefined,
@@ -117,13 +112,14 @@ export function fromCertificateSigningRequestCondition(input: CertificateSigning
   }}
 
 /** CertificateSigningRequestList is a collection of CertificateSigningRequest objects */
-export type CertificateSigningRequestList = Kind<"CertificateSigningRequestList"> & ListOf<CertificateSigningRequestFields>;
-export function toCertificateSigningRequestList(input: c.JSONValue): CertificateSigningRequestList {
-  const {apiVersion, kind, metadata, items} = c.checkObj(input);
-  if (apiVersion !== "certificates.k8s.io/v1") throw new Error("Type apiv mis 2");
-  if (kind !== "CertificateSigningRequestList") throw new Error("Type kind mis 2");
+export interface CertificateSigningRequestList extends ListOf<CertificateSigningRequest> {
+  apiVersion?: "certificates.k8s.io/v1";
+  kind?: "CertificateSigningRequestList";
+};
+export function toCertificateSigningRequestList(input: c.JSONValue): CertificateSigningRequestList & c.ApiKind {
+  const obj = c.checkObj(input);
   return {
-    apiVersion, kind,
-    metadata: MetaV1.toListMeta(metadata),
-    items: c.readList(items, toCertificateSigningRequestFields),
+    ...c.assertOrAddApiVersionAndKind(obj, "certificates.k8s.io/v1", "CertificateSigningRequestList"),
+    metadata: MetaV1.toListMeta(obj.metadata),
+    items: c.readList(obj.items, toCertificateSigningRequest),
   }}

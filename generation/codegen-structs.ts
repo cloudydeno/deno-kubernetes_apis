@@ -159,8 +159,10 @@ export function generateStructsTypescript(surface: SurfaceMap, apiS: SurfaceApi)
         const extraStructs = new Array<{name: string, struct: StructureShape}>();
 
         if (isKind) {
-          chunks.push(`export type ${name} = Kind<${JSON.stringify(shape.kind?.kind)}> & ${name}Fields;`);
-          chunks.push(`export interface ${name}Fields {`);
+          chunks.push(`export interface ${name} {`);
+          chunks.push(`  apiVersion?: ${JSON.stringify(apiS.apiGroupVersion)};`);
+          chunks.push(`  kind?: ${JSON.stringify(shape.kind?.kind)};`);
+
           for (const [field, inner] of shape.fields) {
             if (['apiVersion', 'kind'].includes(field)) continue;
             const isReq = shape.required.includes(field);
@@ -168,12 +170,13 @@ export function generateStructsTypescript(surface: SurfaceMap, apiS: SurfaceApi)
           }
           chunks.push(`}`);
 
-          chunks.push(`export function to${name}Fields(input: c.JSONValue): ${name}Fields {`);
+          chunks.push(`export function to${name}(input: c.JSONValue): ${name} & c.ApiKind {`);
           chunks.push(`  const obj = c.checkObj(input);`);
           chunks.push(`  return {`);
+          chunks.push(`    ...c.assertOrAddApiVersionAndKind(obj, ${JSON.stringify(apiS.apiGroupVersion)}, ${JSON.stringify(shape.kind?.kind)}),`);
           for (const [field, inner] of shape.fields) {
             if (['apiVersion', 'kind'].includes(field)) continue;
-            const stack = generateReadStack(inner, `${name}Fields_${field}`, extraStructs);
+            const stack = generateReadStack(inner, `${name}_${field}`, extraStructs);
             if (!shape.required.includes(field)) {
               stack.unshift('c.readOpt');
             }
@@ -181,41 +184,25 @@ export function generateStructsTypescript(surface: SurfaceMap, apiS: SurfaceApi)
           }
           chunks.push(`  }}`);
 
-          chunks.push(`export function to${name}(input: c.JSONValue): ${name} {`);
-          // chunks.push(`  const obj = c.checkObj(input);`);
-          chunks.push(`  const {apiVersion, kind, ...fields} = c.checkObj(input);`);
-          // chunks.push(`  if (typeof apiVersion !== 'string') throw new Error("Type apiv mis 1");`);
-          chunks.push(`  if (apiVersion !== ${JSON.stringify(apiS.apiGroupVersion)}) throw new Error("Type apiv mis 2");`);
-          // chunks.push(`  if (typeof kind !== 'string') throw new Error("Type kind mis 1");`);
-          chunks.push(`  if (kind !== ${JSON.stringify(shape.kind?.kind)}) throw new Error("Type kind mis 2");`);
-          chunks.push(`  return {`);
-          chunks.push(`    apiVersion, kind,`);
-          chunks.push(`    ...to${name}Fields(fields),`);
-          chunks.push(`  }}`);
-
-
           chunks.push(`export function from${name}(input: ${name}): c.JSONValue {`);
           chunks.push(`  return {`);
+          chunks.push(`    ...c.assertOrAddApiVersionAndKind(input, ${JSON.stringify(apiS.apiGroupVersion)}, ${JSON.stringify(shape.kind?.kind)}),`);
           chunks.push(...generateFromStruct(shape, 'input').map(x => `    ${x}`));
           chunks.push(`  }}`);
 
 
         } else if (isKindList) {
-          chunks.push(`export type ${name} = Kind<${JSON.stringify(shape.kind?.kind)}> & ListOf<${name.slice(0, -4)}Fields>;`);
-          // for (const [field, inner] of shape.fields) {
-          //   if (['apiVersion', 'kind', 'items', 'metadata'].includes(field)) continue;
-          //   chunks.push(`  ${field}${shape.required.includes(field) ? '' : '?'}: ${generateType(inner)};`);
-          // }
-          // chunks.push(`};`);
+          chunks.push(`export interface ${name} extends ListOf<${name.slice(0, -4)}> {`);
+          chunks.push(`  apiVersion?: ${JSON.stringify(apiS.apiGroupVersion)};`);
+          chunks.push(`  kind?: ${JSON.stringify(shape.kind?.kind)};`);
+          chunks.push(`};`);
 
-          chunks.push(`export function to${name}(input: c.JSONValue): ${name} {`);
-          chunks.push(`  const {apiVersion, kind, metadata, items} = c.checkObj(input);`);
-          chunks.push(`  if (apiVersion !== ${JSON.stringify(apiS.apiGroupVersion)}) throw new Error("Type apiv mis 2");`);
-          chunks.push(`  if (kind !== "${name}") throw new Error("Type kind mis 2");`);
+          chunks.push(`export function to${name}(input: c.JSONValue): ${name} & c.ApiKind {`);
+          chunks.push(`  const obj = c.checkObj(input);`);
           chunks.push(`  return {`);
-          chunks.push(`    apiVersion, kind,`);
-          chunks.push(`    metadata: MetaV1.toListMeta(metadata),`);
-          chunks.push(`    items: c.readList(items, to${name.slice(0, -4)}Fields),`);
+          chunks.push(`    ...c.assertOrAddApiVersionAndKind(obj, ${JSON.stringify(apiS.apiGroupVersion)}, ${JSON.stringify(shape.kind?.kind)}),`);
+          chunks.push(`    metadata: MetaV1.toListMeta(obj.metadata),`);
+          chunks.push(`    items: c.readList(obj.items, to${name.slice(0, -4)}),`);
           chunks.push(`  }}`);
 
 

@@ -111,42 +111,38 @@ export function fromRuleWithOperations(input: RuleWithOperations): c.JSONValue {
   }}
 
 /** MutatingWebhookConfiguration describes the configuration of and admission webhook that accept or reject and may change the object. Deprecated in v1.16, planned for removal in v1.19. Use admissionregistration.k8s.io/v1 MutatingWebhookConfiguration instead. */
-export type MutatingWebhookConfiguration = Kind<"MutatingWebhookConfiguration"> & MutatingWebhookConfigurationFields;
-export interface MutatingWebhookConfigurationFields {
+export interface MutatingWebhookConfiguration {
+  apiVersion?: "admissionregistration.k8s.io/v1beta1";
+  kind?: "MutatingWebhookConfiguration";
   metadata?: MetaV1.ObjectMeta | null;
   webhooks?: Array<MutatingWebhook> | null;
 }
-export function toMutatingWebhookConfigurationFields(input: c.JSONValue): MutatingWebhookConfigurationFields {
+export function toMutatingWebhookConfiguration(input: c.JSONValue): MutatingWebhookConfiguration & c.ApiKind {
   const obj = c.checkObj(input);
   return {
+    ...c.assertOrAddApiVersionAndKind(obj, "admissionregistration.k8s.io/v1beta1", "MutatingWebhookConfiguration"),
     metadata: c.readOpt(obj["metadata"], MetaV1.toObjectMeta),
     webhooks: c.readOpt(obj["webhooks"], x => c.readList(x, toMutatingWebhook)),
   }}
-export function toMutatingWebhookConfiguration(input: c.JSONValue): MutatingWebhookConfiguration {
-  const {apiVersion, kind, ...fields} = c.checkObj(input);
-  if (apiVersion !== "admissionregistration.k8s.io/v1beta1") throw new Error("Type apiv mis 2");
-  if (kind !== "MutatingWebhookConfiguration") throw new Error("Type kind mis 2");
-  return {
-    apiVersion, kind,
-    ...toMutatingWebhookConfigurationFields(fields),
-  }}
 export function fromMutatingWebhookConfiguration(input: MutatingWebhookConfiguration): c.JSONValue {
   return {
+    ...c.assertOrAddApiVersionAndKind(input, "admissionregistration.k8s.io/v1beta1", "MutatingWebhookConfiguration"),
     ...input,
     metadata: input.metadata != null ? MetaV1.fromObjectMeta(input.metadata) : undefined,
     webhooks: input.webhooks?.map(fromMutatingWebhook),
   }}
 
 /** MutatingWebhookConfigurationList is a list of MutatingWebhookConfiguration. */
-export type MutatingWebhookConfigurationList = Kind<"MutatingWebhookConfigurationList"> & ListOf<MutatingWebhookConfigurationFields>;
-export function toMutatingWebhookConfigurationList(input: c.JSONValue): MutatingWebhookConfigurationList {
-  const {apiVersion, kind, metadata, items} = c.checkObj(input);
-  if (apiVersion !== "admissionregistration.k8s.io/v1beta1") throw new Error("Type apiv mis 2");
-  if (kind !== "MutatingWebhookConfigurationList") throw new Error("Type kind mis 2");
+export interface MutatingWebhookConfigurationList extends ListOf<MutatingWebhookConfiguration> {
+  apiVersion?: "admissionregistration.k8s.io/v1beta1";
+  kind?: "MutatingWebhookConfigurationList";
+};
+export function toMutatingWebhookConfigurationList(input: c.JSONValue): MutatingWebhookConfigurationList & c.ApiKind {
+  const obj = c.checkObj(input);
   return {
-    apiVersion, kind,
-    metadata: MetaV1.toListMeta(metadata),
-    items: c.readList(items, toMutatingWebhookConfigurationFields),
+    ...c.assertOrAddApiVersionAndKind(obj, "admissionregistration.k8s.io/v1beta1", "MutatingWebhookConfigurationList"),
+    metadata: MetaV1.toListMeta(obj.metadata),
+    items: c.readList(obj.items, toMutatingWebhookConfiguration),
   }}
 
 /** ValidatingWebhook describes an admission webhook and the resources and operations it applies to. */
@@ -186,40 +182,36 @@ export function fromValidatingWebhook(input: ValidatingWebhook): c.JSONValue {
   }}
 
 /** ValidatingWebhookConfiguration describes the configuration of and admission webhook that accept or reject and object without changing it. Deprecated in v1.16, planned for removal in v1.19. Use admissionregistration.k8s.io/v1 ValidatingWebhookConfiguration instead. */
-export type ValidatingWebhookConfiguration = Kind<"ValidatingWebhookConfiguration"> & ValidatingWebhookConfigurationFields;
-export interface ValidatingWebhookConfigurationFields {
+export interface ValidatingWebhookConfiguration {
+  apiVersion?: "admissionregistration.k8s.io/v1beta1";
+  kind?: "ValidatingWebhookConfiguration";
   metadata?: MetaV1.ObjectMeta | null;
   webhooks?: Array<ValidatingWebhook> | null;
 }
-export function toValidatingWebhookConfigurationFields(input: c.JSONValue): ValidatingWebhookConfigurationFields {
+export function toValidatingWebhookConfiguration(input: c.JSONValue): ValidatingWebhookConfiguration & c.ApiKind {
   const obj = c.checkObj(input);
   return {
+    ...c.assertOrAddApiVersionAndKind(obj, "admissionregistration.k8s.io/v1beta1", "ValidatingWebhookConfiguration"),
     metadata: c.readOpt(obj["metadata"], MetaV1.toObjectMeta),
     webhooks: c.readOpt(obj["webhooks"], x => c.readList(x, toValidatingWebhook)),
   }}
-export function toValidatingWebhookConfiguration(input: c.JSONValue): ValidatingWebhookConfiguration {
-  const {apiVersion, kind, ...fields} = c.checkObj(input);
-  if (apiVersion !== "admissionregistration.k8s.io/v1beta1") throw new Error("Type apiv mis 2");
-  if (kind !== "ValidatingWebhookConfiguration") throw new Error("Type kind mis 2");
-  return {
-    apiVersion, kind,
-    ...toValidatingWebhookConfigurationFields(fields),
-  }}
 export function fromValidatingWebhookConfiguration(input: ValidatingWebhookConfiguration): c.JSONValue {
   return {
+    ...c.assertOrAddApiVersionAndKind(input, "admissionregistration.k8s.io/v1beta1", "ValidatingWebhookConfiguration"),
     ...input,
     metadata: input.metadata != null ? MetaV1.fromObjectMeta(input.metadata) : undefined,
     webhooks: input.webhooks?.map(fromValidatingWebhook),
   }}
 
 /** ValidatingWebhookConfigurationList is a list of ValidatingWebhookConfiguration. */
-export type ValidatingWebhookConfigurationList = Kind<"ValidatingWebhookConfigurationList"> & ListOf<ValidatingWebhookConfigurationFields>;
-export function toValidatingWebhookConfigurationList(input: c.JSONValue): ValidatingWebhookConfigurationList {
-  const {apiVersion, kind, metadata, items} = c.checkObj(input);
-  if (apiVersion !== "admissionregistration.k8s.io/v1beta1") throw new Error("Type apiv mis 2");
-  if (kind !== "ValidatingWebhookConfigurationList") throw new Error("Type kind mis 2");
+export interface ValidatingWebhookConfigurationList extends ListOf<ValidatingWebhookConfiguration> {
+  apiVersion?: "admissionregistration.k8s.io/v1beta1";
+  kind?: "ValidatingWebhookConfigurationList";
+};
+export function toValidatingWebhookConfigurationList(input: c.JSONValue): ValidatingWebhookConfigurationList & c.ApiKind {
+  const obj = c.checkObj(input);
   return {
-    apiVersion, kind,
-    metadata: MetaV1.toListMeta(metadata),
-    items: c.readList(items, toValidatingWebhookConfigurationFields),
+    ...c.assertOrAddApiVersionAndKind(obj, "admissionregistration.k8s.io/v1beta1", "ValidatingWebhookConfigurationList"),
+    metadata: MetaV1.toListMeta(obj.metadata),
+    items: c.readList(obj.items, toValidatingWebhookConfiguration),
   }}

@@ -28,27 +28,22 @@ export function fromOverhead(input: Overhead): c.JSONValue {
   }}
 
 /** RuntimeClass defines a class of container runtime supported in the cluster. The RuntimeClass is used to determine which container runtime is used to run all containers in a pod. RuntimeClasses are (currently) manually defined by a user or cluster provisioner, and referenced in the PodSpec. The Kubelet is responsible for resolving the RuntimeClassName reference before running the pod.  For more details, see https://git.k8s.io/enhancements/keps/sig-node/runtime-class.md */
-export type RuntimeClass = Kind<"RuntimeClass"> & RuntimeClassFields;
-export interface RuntimeClassFields {
+export interface RuntimeClass {
+  apiVersion?: "node.k8s.io/v1alpha1";
+  kind?: "RuntimeClass";
   metadata?: MetaV1.ObjectMeta | null;
   spec: RuntimeClassSpec;
 }
-export function toRuntimeClassFields(input: c.JSONValue): RuntimeClassFields {
+export function toRuntimeClass(input: c.JSONValue): RuntimeClass & c.ApiKind {
   const obj = c.checkObj(input);
   return {
+    ...c.assertOrAddApiVersionAndKind(obj, "node.k8s.io/v1alpha1", "RuntimeClass"),
     metadata: c.readOpt(obj["metadata"], MetaV1.toObjectMeta),
     spec: toRuntimeClassSpec(obj["spec"]),
   }}
-export function toRuntimeClass(input: c.JSONValue): RuntimeClass {
-  const {apiVersion, kind, ...fields} = c.checkObj(input);
-  if (apiVersion !== "node.k8s.io/v1alpha1") throw new Error("Type apiv mis 2");
-  if (kind !== "RuntimeClass") throw new Error("Type kind mis 2");
-  return {
-    apiVersion, kind,
-    ...toRuntimeClassFields(fields),
-  }}
 export function fromRuntimeClass(input: RuntimeClass): c.JSONValue {
   return {
+    ...c.assertOrAddApiVersionAndKind(input, "node.k8s.io/v1alpha1", "RuntimeClass"),
     ...input,
     metadata: input.metadata != null ? MetaV1.fromObjectMeta(input.metadata) : undefined,
     spec: input.spec != null ? fromRuntimeClassSpec(input.spec) : undefined,
@@ -92,13 +87,14 @@ export function fromScheduling(input: Scheduling): c.JSONValue {
   }}
 
 /** RuntimeClassList is a list of RuntimeClass objects. */
-export type RuntimeClassList = Kind<"RuntimeClassList"> & ListOf<RuntimeClassFields>;
-export function toRuntimeClassList(input: c.JSONValue): RuntimeClassList {
-  const {apiVersion, kind, metadata, items} = c.checkObj(input);
-  if (apiVersion !== "node.k8s.io/v1alpha1") throw new Error("Type apiv mis 2");
-  if (kind !== "RuntimeClassList") throw new Error("Type kind mis 2");
+export interface RuntimeClassList extends ListOf<RuntimeClass> {
+  apiVersion?: "node.k8s.io/v1alpha1";
+  kind?: "RuntimeClassList";
+};
+export function toRuntimeClassList(input: c.JSONValue): RuntimeClassList & c.ApiKind {
+  const obj = c.checkObj(input);
   return {
-    apiVersion, kind,
-    metadata: MetaV1.toListMeta(metadata),
-    items: c.readList(items, toRuntimeClassFields),
+    ...c.assertOrAddApiVersionAndKind(obj, "node.k8s.io/v1alpha1", "RuntimeClassList"),
+    metadata: MetaV1.toListMeta(obj.metadata),
+    items: c.readList(obj.items, toRuntimeClass),
   }}

@@ -13,29 +13,24 @@ type ListOf<T> = {
 };
 
 /** Job represents the configuration of a single job. */
-export type Job = Kind<"Job"> & JobFields;
-export interface JobFields {
+export interface Job {
+  apiVersion?: "batch/v1";
+  kind?: "Job";
   metadata?: MetaV1.ObjectMeta | null;
   spec?: JobSpec | null;
   status?: JobStatus | null;
 }
-export function toJobFields(input: c.JSONValue): JobFields {
+export function toJob(input: c.JSONValue): Job & c.ApiKind {
   const obj = c.checkObj(input);
   return {
+    ...c.assertOrAddApiVersionAndKind(obj, "batch/v1", "Job"),
     metadata: c.readOpt(obj["metadata"], MetaV1.toObjectMeta),
     spec: c.readOpt(obj["spec"], toJobSpec),
     status: c.readOpt(obj["status"], toJobStatus),
   }}
-export function toJob(input: c.JSONValue): Job {
-  const {apiVersion, kind, ...fields} = c.checkObj(input);
-  if (apiVersion !== "batch/v1") throw new Error("Type apiv mis 2");
-  if (kind !== "Job") throw new Error("Type kind mis 2");
-  return {
-    apiVersion, kind,
-    ...toJobFields(fields),
-  }}
 export function fromJob(input: Job): c.JSONValue {
   return {
+    ...c.assertOrAddApiVersionAndKind(input, "batch/v1", "Job"),
     ...input,
     metadata: input.metadata != null ? MetaV1.fromObjectMeta(input.metadata) : undefined,
     spec: input.spec != null ? fromJobSpec(input.spec) : undefined,
@@ -126,13 +121,14 @@ export function fromJobCondition(input: JobCondition): c.JSONValue {
   }}
 
 /** JobList is a collection of jobs. */
-export type JobList = Kind<"JobList"> & ListOf<JobFields>;
-export function toJobList(input: c.JSONValue): JobList {
-  const {apiVersion, kind, metadata, items} = c.checkObj(input);
-  if (apiVersion !== "batch/v1") throw new Error("Type apiv mis 2");
-  if (kind !== "JobList") throw new Error("Type kind mis 2");
+export interface JobList extends ListOf<Job> {
+  apiVersion?: "batch/v1";
+  kind?: "JobList";
+};
+export function toJobList(input: c.JSONValue): JobList & c.ApiKind {
+  const obj = c.checkObj(input);
   return {
-    apiVersion, kind,
-    metadata: MetaV1.toListMeta(metadata),
-    items: c.readList(items, toJobFields),
+    ...c.assertOrAddApiVersionAndKind(obj, "batch/v1", "JobList"),
+    metadata: MetaV1.toListMeta(obj.metadata),
+    items: c.readList(obj.items, toJob),
   }}

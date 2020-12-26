@@ -71,31 +71,26 @@ export function fromEndpointPort(input: EndpointPort): c.JSONValue {
   }}
 
 /** EndpointSlice represents a subset of the endpoints that implement a service. For a given service there may be multiple EndpointSlice objects, selected by labels, which must be joined to produce the full set of endpoints. */
-export type EndpointSlice = Kind<"EndpointSlice"> & EndpointSliceFields;
-export interface EndpointSliceFields {
+export interface EndpointSlice {
+  apiVersion?: "discovery.k8s.io/v1beta1";
+  kind?: "EndpointSlice";
   addressType: string;
   endpoints: Array<Endpoint>;
   metadata?: MetaV1.ObjectMeta | null;
   ports?: Array<EndpointPort> | null;
 }
-export function toEndpointSliceFields(input: c.JSONValue): EndpointSliceFields {
+export function toEndpointSlice(input: c.JSONValue): EndpointSlice & c.ApiKind {
   const obj = c.checkObj(input);
   return {
+    ...c.assertOrAddApiVersionAndKind(obj, "discovery.k8s.io/v1beta1", "EndpointSlice"),
     addressType: c.checkStr(obj["addressType"]),
     endpoints: c.readList(obj["endpoints"], toEndpoint),
     metadata: c.readOpt(obj["metadata"], MetaV1.toObjectMeta),
     ports: c.readOpt(obj["ports"], x => c.readList(x, toEndpointPort)),
   }}
-export function toEndpointSlice(input: c.JSONValue): EndpointSlice {
-  const {apiVersion, kind, ...fields} = c.checkObj(input);
-  if (apiVersion !== "discovery.k8s.io/v1beta1") throw new Error("Type apiv mis 2");
-  if (kind !== "EndpointSlice") throw new Error("Type kind mis 2");
-  return {
-    apiVersion, kind,
-    ...toEndpointSliceFields(fields),
-  }}
 export function fromEndpointSlice(input: EndpointSlice): c.JSONValue {
   return {
+    ...c.assertOrAddApiVersionAndKind(input, "discovery.k8s.io/v1beta1", "EndpointSlice"),
     ...input,
     endpoints: input.endpoints?.map(fromEndpoint),
     metadata: input.metadata != null ? MetaV1.fromObjectMeta(input.metadata) : undefined,
@@ -103,13 +98,14 @@ export function fromEndpointSlice(input: EndpointSlice): c.JSONValue {
   }}
 
 /** EndpointSliceList represents a list of endpoint slices */
-export type EndpointSliceList = Kind<"EndpointSliceList"> & ListOf<EndpointSliceFields>;
-export function toEndpointSliceList(input: c.JSONValue): EndpointSliceList {
-  const {apiVersion, kind, metadata, items} = c.checkObj(input);
-  if (apiVersion !== "discovery.k8s.io/v1beta1") throw new Error("Type apiv mis 2");
-  if (kind !== "EndpointSliceList") throw new Error("Type kind mis 2");
+export interface EndpointSliceList extends ListOf<EndpointSlice> {
+  apiVersion?: "discovery.k8s.io/v1beta1";
+  kind?: "EndpointSliceList";
+};
+export function toEndpointSliceList(input: c.JSONValue): EndpointSliceList & c.ApiKind {
+  const obj = c.checkObj(input);
   return {
-    apiVersion, kind,
-    metadata: MetaV1.toListMeta(metadata),
-    items: c.readList(items, toEndpointSliceFields),
+    ...c.assertOrAddApiVersionAndKind(obj, "discovery.k8s.io/v1beta1", "EndpointSliceList"),
+    metadata: MetaV1.toListMeta(obj.metadata),
+    items: c.readList(obj.items, toEndpointSlice),
   }}

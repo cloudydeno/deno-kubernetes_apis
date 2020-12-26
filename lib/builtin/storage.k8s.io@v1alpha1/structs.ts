@@ -15,29 +15,24 @@ type ListOf<T> = {
 /** VolumeAttachment captures the intent to attach or detach the specified volume to/from the specified node.
 
 VolumeAttachment objects are non-namespaced. */
-export type VolumeAttachment = Kind<"VolumeAttachment"> & VolumeAttachmentFields;
-export interface VolumeAttachmentFields {
+export interface VolumeAttachment {
+  apiVersion?: "storage.k8s.io/v1alpha1";
+  kind?: "VolumeAttachment";
   metadata?: MetaV1.ObjectMeta | null;
   spec: VolumeAttachmentSpec;
   status?: VolumeAttachmentStatus | null;
 }
-export function toVolumeAttachmentFields(input: c.JSONValue): VolumeAttachmentFields {
+export function toVolumeAttachment(input: c.JSONValue): VolumeAttachment & c.ApiKind {
   const obj = c.checkObj(input);
   return {
+    ...c.assertOrAddApiVersionAndKind(obj, "storage.k8s.io/v1alpha1", "VolumeAttachment"),
     metadata: c.readOpt(obj["metadata"], MetaV1.toObjectMeta),
     spec: toVolumeAttachmentSpec(obj["spec"]),
     status: c.readOpt(obj["status"], toVolumeAttachmentStatus),
   }}
-export function toVolumeAttachment(input: c.JSONValue): VolumeAttachment {
-  const {apiVersion, kind, ...fields} = c.checkObj(input);
-  if (apiVersion !== "storage.k8s.io/v1alpha1") throw new Error("Type apiv mis 2");
-  if (kind !== "VolumeAttachment") throw new Error("Type kind mis 2");
-  return {
-    apiVersion, kind,
-    ...toVolumeAttachmentFields(fields),
-  }}
 export function fromVolumeAttachment(input: VolumeAttachment): c.JSONValue {
   return {
+    ...c.assertOrAddApiVersionAndKind(input, "storage.k8s.io/v1alpha1", "VolumeAttachment"),
     ...input,
     metadata: input.metadata != null ? MetaV1.fromObjectMeta(input.metadata) : undefined,
     spec: input.spec != null ? fromVolumeAttachmentSpec(input.spec) : undefined,
@@ -120,13 +115,14 @@ export function fromVolumeError(input: VolumeError): c.JSONValue {
   }}
 
 /** VolumeAttachmentList is a collection of VolumeAttachment objects. */
-export type VolumeAttachmentList = Kind<"VolumeAttachmentList"> & ListOf<VolumeAttachmentFields>;
-export function toVolumeAttachmentList(input: c.JSONValue): VolumeAttachmentList {
-  const {apiVersion, kind, metadata, items} = c.checkObj(input);
-  if (apiVersion !== "storage.k8s.io/v1alpha1") throw new Error("Type apiv mis 2");
-  if (kind !== "VolumeAttachmentList") throw new Error("Type kind mis 2");
+export interface VolumeAttachmentList extends ListOf<VolumeAttachment> {
+  apiVersion?: "storage.k8s.io/v1alpha1";
+  kind?: "VolumeAttachmentList";
+};
+export function toVolumeAttachmentList(input: c.JSONValue): VolumeAttachmentList & c.ApiKind {
+  const obj = c.checkObj(input);
   return {
-    apiVersion, kind,
-    metadata: MetaV1.toListMeta(metadata),
-    items: c.readList(items, toVolumeAttachmentFields),
+    ...c.assertOrAddApiVersionAndKind(obj, "storage.k8s.io/v1alpha1", "VolumeAttachmentList"),
+    metadata: MetaV1.toListMeta(obj.metadata),
+    items: c.readList(obj.items, toVolumeAttachment),
   }}

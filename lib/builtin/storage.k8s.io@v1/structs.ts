@@ -13,27 +13,22 @@ type ListOf<T> = {
 };
 
 /** CSIDriver captures information about a Container Storage Interface (CSI) volume driver deployed on the cluster. Kubernetes attach detach controller uses this object to determine whether attach is required. Kubelet uses this object to determine whether pod information needs to be passed on mount. CSIDriver objects are non-namespaced. */
-export type CSIDriver = Kind<"CSIDriver"> & CSIDriverFields;
-export interface CSIDriverFields {
+export interface CSIDriver {
+  apiVersion?: "storage.k8s.io/v1";
+  kind?: "CSIDriver";
   metadata?: MetaV1.ObjectMeta | null;
   spec: CSIDriverSpec;
 }
-export function toCSIDriverFields(input: c.JSONValue): CSIDriverFields {
+export function toCSIDriver(input: c.JSONValue): CSIDriver & c.ApiKind {
   const obj = c.checkObj(input);
   return {
+    ...c.assertOrAddApiVersionAndKind(obj, "storage.k8s.io/v1", "CSIDriver"),
     metadata: c.readOpt(obj["metadata"], MetaV1.toObjectMeta),
     spec: toCSIDriverSpec(obj["spec"]),
   }}
-export function toCSIDriver(input: c.JSONValue): CSIDriver {
-  const {apiVersion, kind, ...fields} = c.checkObj(input);
-  if (apiVersion !== "storage.k8s.io/v1") throw new Error("Type apiv mis 2");
-  if (kind !== "CSIDriver") throw new Error("Type kind mis 2");
-  return {
-    apiVersion, kind,
-    ...toCSIDriverFields(fields),
-  }}
 export function fromCSIDriver(input: CSIDriver): c.JSONValue {
   return {
+    ...c.assertOrAddApiVersionAndKind(input, "storage.k8s.io/v1", "CSIDriver"),
     ...input,
     metadata: input.metadata != null ? MetaV1.fromObjectMeta(input.metadata) : undefined,
     spec: input.spec != null ? fromCSIDriverSpec(input.spec) : undefined,
@@ -62,39 +57,35 @@ export function fromCSIDriverSpec(input: CSIDriverSpec): c.JSONValue {
   }}
 
 /** CSIDriverList is a collection of CSIDriver objects. */
-export type CSIDriverList = Kind<"CSIDriverList"> & ListOf<CSIDriverFields>;
-export function toCSIDriverList(input: c.JSONValue): CSIDriverList {
-  const {apiVersion, kind, metadata, items} = c.checkObj(input);
-  if (apiVersion !== "storage.k8s.io/v1") throw new Error("Type apiv mis 2");
-  if (kind !== "CSIDriverList") throw new Error("Type kind mis 2");
+export interface CSIDriverList extends ListOf<CSIDriver> {
+  apiVersion?: "storage.k8s.io/v1";
+  kind?: "CSIDriverList";
+};
+export function toCSIDriverList(input: c.JSONValue): CSIDriverList & c.ApiKind {
+  const obj = c.checkObj(input);
   return {
-    apiVersion, kind,
-    metadata: MetaV1.toListMeta(metadata),
-    items: c.readList(items, toCSIDriverFields),
+    ...c.assertOrAddApiVersionAndKind(obj, "storage.k8s.io/v1", "CSIDriverList"),
+    metadata: MetaV1.toListMeta(obj.metadata),
+    items: c.readList(obj.items, toCSIDriver),
   }}
 
 /** CSINode holds information about all CSI drivers installed on a node. CSI drivers do not need to create the CSINode object directly. As long as they use the node-driver-registrar sidecar container, the kubelet will automatically populate the CSINode object for the CSI driver as part of kubelet plugin registration. CSINode has the same name as a node. If the object is missing, it means either there are no CSI Drivers available on the node, or the Kubelet version is low enough that it doesn't create this object. CSINode has an OwnerReference that points to the corresponding node object. */
-export type CSINode = Kind<"CSINode"> & CSINodeFields;
-export interface CSINodeFields {
+export interface CSINode {
+  apiVersion?: "storage.k8s.io/v1";
+  kind?: "CSINode";
   metadata?: MetaV1.ObjectMeta | null;
   spec: CSINodeSpec;
 }
-export function toCSINodeFields(input: c.JSONValue): CSINodeFields {
+export function toCSINode(input: c.JSONValue): CSINode & c.ApiKind {
   const obj = c.checkObj(input);
   return {
+    ...c.assertOrAddApiVersionAndKind(obj, "storage.k8s.io/v1", "CSINode"),
     metadata: c.readOpt(obj["metadata"], MetaV1.toObjectMeta),
     spec: toCSINodeSpec(obj["spec"]),
   }}
-export function toCSINode(input: c.JSONValue): CSINode {
-  const {apiVersion, kind, ...fields} = c.checkObj(input);
-  if (apiVersion !== "storage.k8s.io/v1") throw new Error("Type apiv mis 2");
-  if (kind !== "CSINode") throw new Error("Type kind mis 2");
-  return {
-    apiVersion, kind,
-    ...toCSINodeFields(fields),
-  }}
 export function fromCSINode(input: CSINode): c.JSONValue {
   return {
+    ...c.assertOrAddApiVersionAndKind(input, "storage.k8s.io/v1", "CSINode"),
     ...input,
     metadata: input.metadata != null ? MetaV1.fromObjectMeta(input.metadata) : undefined,
     spec: input.spec != null ? fromCSINodeSpec(input.spec) : undefined,
@@ -151,22 +142,24 @@ export function fromVolumeNodeResources(input: VolumeNodeResources): c.JSONValue
   }}
 
 /** CSINodeList is a collection of CSINode objects. */
-export type CSINodeList = Kind<"CSINodeList"> & ListOf<CSINodeFields>;
-export function toCSINodeList(input: c.JSONValue): CSINodeList {
-  const {apiVersion, kind, metadata, items} = c.checkObj(input);
-  if (apiVersion !== "storage.k8s.io/v1") throw new Error("Type apiv mis 2");
-  if (kind !== "CSINodeList") throw new Error("Type kind mis 2");
+export interface CSINodeList extends ListOf<CSINode> {
+  apiVersion?: "storage.k8s.io/v1";
+  kind?: "CSINodeList";
+};
+export function toCSINodeList(input: c.JSONValue): CSINodeList & c.ApiKind {
+  const obj = c.checkObj(input);
   return {
-    apiVersion, kind,
-    metadata: MetaV1.toListMeta(metadata),
-    items: c.readList(items, toCSINodeFields),
+    ...c.assertOrAddApiVersionAndKind(obj, "storage.k8s.io/v1", "CSINodeList"),
+    metadata: MetaV1.toListMeta(obj.metadata),
+    items: c.readList(obj.items, toCSINode),
   }}
 
 /** StorageClass describes the parameters for a class of storage for which PersistentVolumes can be dynamically provisioned.
 
 StorageClasses are non-namespaced; the name of the storage class according to etcd is in ObjectMeta.Name. */
-export type StorageClass = Kind<"StorageClass"> & StorageClassFields;
-export interface StorageClassFields {
+export interface StorageClass {
+  apiVersion?: "storage.k8s.io/v1";
+  kind?: "StorageClass";
   allowVolumeExpansion?: boolean | null;
   allowedTopologies?: Array<CoreV1.TopologySelectorTerm> | null;
   metadata?: MetaV1.ObjectMeta | null;
@@ -176,9 +169,10 @@ export interface StorageClassFields {
   reclaimPolicy?: string | null;
   volumeBindingMode?: string | null;
 }
-export function toStorageClassFields(input: c.JSONValue): StorageClassFields {
+export function toStorageClass(input: c.JSONValue): StorageClass & c.ApiKind {
   const obj = c.checkObj(input);
   return {
+    ...c.assertOrAddApiVersionAndKind(obj, "storage.k8s.io/v1", "StorageClass"),
     allowVolumeExpansion: c.readOpt(obj["allowVolumeExpansion"], c.checkBool),
     allowedTopologies: c.readOpt(obj["allowedTopologies"], x => c.readList(x, CoreV1.toTopologySelectorTerm)),
     metadata: c.readOpt(obj["metadata"], MetaV1.toObjectMeta),
@@ -188,59 +182,48 @@ export function toStorageClassFields(input: c.JSONValue): StorageClassFields {
     reclaimPolicy: c.readOpt(obj["reclaimPolicy"], c.checkStr),
     volumeBindingMode: c.readOpt(obj["volumeBindingMode"], c.checkStr),
   }}
-export function toStorageClass(input: c.JSONValue): StorageClass {
-  const {apiVersion, kind, ...fields} = c.checkObj(input);
-  if (apiVersion !== "storage.k8s.io/v1") throw new Error("Type apiv mis 2");
-  if (kind !== "StorageClass") throw new Error("Type kind mis 2");
-  return {
-    apiVersion, kind,
-    ...toStorageClassFields(fields),
-  }}
 export function fromStorageClass(input: StorageClass): c.JSONValue {
   return {
+    ...c.assertOrAddApiVersionAndKind(input, "storage.k8s.io/v1", "StorageClass"),
     ...input,
     allowedTopologies: input.allowedTopologies?.map(CoreV1.fromTopologySelectorTerm),
     metadata: input.metadata != null ? MetaV1.fromObjectMeta(input.metadata) : undefined,
   }}
 
 /** StorageClassList is a collection of storage classes. */
-export type StorageClassList = Kind<"StorageClassList"> & ListOf<StorageClassFields>;
-export function toStorageClassList(input: c.JSONValue): StorageClassList {
-  const {apiVersion, kind, metadata, items} = c.checkObj(input);
-  if (apiVersion !== "storage.k8s.io/v1") throw new Error("Type apiv mis 2");
-  if (kind !== "StorageClassList") throw new Error("Type kind mis 2");
+export interface StorageClassList extends ListOf<StorageClass> {
+  apiVersion?: "storage.k8s.io/v1";
+  kind?: "StorageClassList";
+};
+export function toStorageClassList(input: c.JSONValue): StorageClassList & c.ApiKind {
+  const obj = c.checkObj(input);
   return {
-    apiVersion, kind,
-    metadata: MetaV1.toListMeta(metadata),
-    items: c.readList(items, toStorageClassFields),
+    ...c.assertOrAddApiVersionAndKind(obj, "storage.k8s.io/v1", "StorageClassList"),
+    metadata: MetaV1.toListMeta(obj.metadata),
+    items: c.readList(obj.items, toStorageClass),
   }}
 
 /** VolumeAttachment captures the intent to attach or detach the specified volume to/from the specified node.
 
 VolumeAttachment objects are non-namespaced. */
-export type VolumeAttachment = Kind<"VolumeAttachment"> & VolumeAttachmentFields;
-export interface VolumeAttachmentFields {
+export interface VolumeAttachment {
+  apiVersion?: "storage.k8s.io/v1";
+  kind?: "VolumeAttachment";
   metadata?: MetaV1.ObjectMeta | null;
   spec: VolumeAttachmentSpec;
   status?: VolumeAttachmentStatus | null;
 }
-export function toVolumeAttachmentFields(input: c.JSONValue): VolumeAttachmentFields {
+export function toVolumeAttachment(input: c.JSONValue): VolumeAttachment & c.ApiKind {
   const obj = c.checkObj(input);
   return {
+    ...c.assertOrAddApiVersionAndKind(obj, "storage.k8s.io/v1", "VolumeAttachment"),
     metadata: c.readOpt(obj["metadata"], MetaV1.toObjectMeta),
     spec: toVolumeAttachmentSpec(obj["spec"]),
     status: c.readOpt(obj["status"], toVolumeAttachmentStatus),
   }}
-export function toVolumeAttachment(input: c.JSONValue): VolumeAttachment {
-  const {apiVersion, kind, ...fields} = c.checkObj(input);
-  if (apiVersion !== "storage.k8s.io/v1") throw new Error("Type apiv mis 2");
-  if (kind !== "VolumeAttachment") throw new Error("Type kind mis 2");
-  return {
-    apiVersion, kind,
-    ...toVolumeAttachmentFields(fields),
-  }}
 export function fromVolumeAttachment(input: VolumeAttachment): c.JSONValue {
   return {
+    ...c.assertOrAddApiVersionAndKind(input, "storage.k8s.io/v1", "VolumeAttachment"),
     ...input,
     metadata: input.metadata != null ? MetaV1.fromObjectMeta(input.metadata) : undefined,
     spec: input.spec != null ? fromVolumeAttachmentSpec(input.spec) : undefined,
@@ -323,13 +306,14 @@ export function fromVolumeError(input: VolumeError): c.JSONValue {
   }}
 
 /** VolumeAttachmentList is a collection of VolumeAttachment objects. */
-export type VolumeAttachmentList = Kind<"VolumeAttachmentList"> & ListOf<VolumeAttachmentFields>;
-export function toVolumeAttachmentList(input: c.JSONValue): VolumeAttachmentList {
-  const {apiVersion, kind, metadata, items} = c.checkObj(input);
-  if (apiVersion !== "storage.k8s.io/v1") throw new Error("Type apiv mis 2");
-  if (kind !== "VolumeAttachmentList") throw new Error("Type kind mis 2");
+export interface VolumeAttachmentList extends ListOf<VolumeAttachment> {
+  apiVersion?: "storage.k8s.io/v1";
+  kind?: "VolumeAttachmentList";
+};
+export function toVolumeAttachmentList(input: c.JSONValue): VolumeAttachmentList & c.ApiKind {
+  const obj = c.checkObj(input);
   return {
-    apiVersion, kind,
-    metadata: MetaV1.toListMeta(metadata),
-    items: c.readList(items, toVolumeAttachmentFields),
+    ...c.assertOrAddApiVersionAndKind(obj, "storage.k8s.io/v1", "VolumeAttachmentList"),
+    metadata: MetaV1.toListMeta(obj.metadata),
+    items: c.readList(obj.items, toVolumeAttachment),
   }}

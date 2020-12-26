@@ -66,29 +66,24 @@ export function fromHTTPIngressRuleValue(input: HTTPIngressRuleValue): c.JSONVal
   }}
 
 /** Ingress is a collection of rules that allow inbound connections to reach the endpoints defined by a backend. An Ingress can be configured to give services externally-reachable urls, load balance traffic, terminate SSL, offer name based virtual hosting etc. DEPRECATED - This group version of Ingress is deprecated by networking.k8s.io/v1beta1 Ingress. See the release notes for more information. */
-export type Ingress = Kind<"Ingress"> & IngressFields;
-export interface IngressFields {
+export interface Ingress {
+  apiVersion?: "extensions/v1beta1";
+  kind?: "Ingress";
   metadata?: MetaV1.ObjectMeta | null;
   spec?: IngressSpec | null;
   status?: IngressStatus | null;
 }
-export function toIngressFields(input: c.JSONValue): IngressFields {
+export function toIngress(input: c.JSONValue): Ingress & c.ApiKind {
   const obj = c.checkObj(input);
   return {
+    ...c.assertOrAddApiVersionAndKind(obj, "extensions/v1beta1", "Ingress"),
     metadata: c.readOpt(obj["metadata"], MetaV1.toObjectMeta),
     spec: c.readOpt(obj["spec"], toIngressSpec),
     status: c.readOpt(obj["status"], toIngressStatus),
   }}
-export function toIngress(input: c.JSONValue): Ingress {
-  const {apiVersion, kind, ...fields} = c.checkObj(input);
-  if (apiVersion !== "extensions/v1beta1") throw new Error("Type apiv mis 2");
-  if (kind !== "Ingress") throw new Error("Type kind mis 2");
-  return {
-    apiVersion, kind,
-    ...toIngressFields(fields),
-  }}
 export function fromIngress(input: Ingress): c.JSONValue {
   return {
+    ...c.assertOrAddApiVersionAndKind(input, "extensions/v1beta1", "Ingress"),
     ...input,
     metadata: input.metadata != null ? MetaV1.fromObjectMeta(input.metadata) : undefined,
     spec: input.spec != null ? fromIngressSpec(input.spec) : undefined,
@@ -167,13 +162,14 @@ export function fromIngressStatus(input: IngressStatus): c.JSONValue {
   }}
 
 /** IngressList is a collection of Ingress. */
-export type IngressList = Kind<"IngressList"> & ListOf<IngressFields>;
-export function toIngressList(input: c.JSONValue): IngressList {
-  const {apiVersion, kind, metadata, items} = c.checkObj(input);
-  if (apiVersion !== "extensions/v1beta1") throw new Error("Type apiv mis 2");
-  if (kind !== "IngressList") throw new Error("Type kind mis 2");
+export interface IngressList extends ListOf<Ingress> {
+  apiVersion?: "extensions/v1beta1";
+  kind?: "IngressList";
+};
+export function toIngressList(input: c.JSONValue): IngressList & c.ApiKind {
+  const obj = c.checkObj(input);
   return {
-    apiVersion, kind,
-    metadata: MetaV1.toListMeta(metadata),
-    items: c.readList(items, toIngressFields),
+    ...c.assertOrAddApiVersionAndKind(obj, "extensions/v1beta1", "IngressList"),
+    metadata: MetaV1.toListMeta(obj.metadata),
+    items: c.readList(obj.items, toIngress),
   }}

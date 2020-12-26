@@ -26,29 +26,24 @@ export function fromFlowDistinguisherMethod(input: FlowDistinguisherMethod): c.J
   }}
 
 /** FlowSchema defines the schema of a group of flows. Note that a flow is made up of a set of inbound API requests with similar attributes and is identified by a pair of strings: the name of the FlowSchema and a "flow distinguisher". */
-export type FlowSchema = Kind<"FlowSchema"> & FlowSchemaFields;
-export interface FlowSchemaFields {
+export interface FlowSchema {
+  apiVersion?: "flowcontrol.apiserver.k8s.io/v1alpha1";
+  kind?: "FlowSchema";
   metadata?: MetaV1.ObjectMeta | null;
   spec?: FlowSchemaSpec | null;
   status?: FlowSchemaStatus | null;
 }
-export function toFlowSchemaFields(input: c.JSONValue): FlowSchemaFields {
+export function toFlowSchema(input: c.JSONValue): FlowSchema & c.ApiKind {
   const obj = c.checkObj(input);
   return {
+    ...c.assertOrAddApiVersionAndKind(obj, "flowcontrol.apiserver.k8s.io/v1alpha1", "FlowSchema"),
     metadata: c.readOpt(obj["metadata"], MetaV1.toObjectMeta),
     spec: c.readOpt(obj["spec"], toFlowSchemaSpec),
     status: c.readOpt(obj["status"], toFlowSchemaStatus),
   }}
-export function toFlowSchema(input: c.JSONValue): FlowSchema {
-  const {apiVersion, kind, ...fields} = c.checkObj(input);
-  if (apiVersion !== "flowcontrol.apiserver.k8s.io/v1alpha1") throw new Error("Type apiv mis 2");
-  if (kind !== "FlowSchema") throw new Error("Type kind mis 2");
-  return {
-    apiVersion, kind,
-    ...toFlowSchemaFields(fields),
-  }}
 export function fromFlowSchema(input: FlowSchema): c.JSONValue {
   return {
+    ...c.assertOrAddApiVersionAndKind(input, "flowcontrol.apiserver.k8s.io/v1alpha1", "FlowSchema"),
     ...input,
     metadata: input.metadata != null ? MetaV1.fromObjectMeta(input.metadata) : undefined,
     spec: input.spec != null ? fromFlowSchemaSpec(input.spec) : undefined,
@@ -257,15 +252,16 @@ export function fromFlowSchemaCondition(input: FlowSchemaCondition): c.JSONValue
   }}
 
 /** FlowSchemaList is a list of FlowSchema objects. */
-export type FlowSchemaList = Kind<"FlowSchemaList"> & ListOf<FlowSchemaFields>;
-export function toFlowSchemaList(input: c.JSONValue): FlowSchemaList {
-  const {apiVersion, kind, metadata, items} = c.checkObj(input);
-  if (apiVersion !== "flowcontrol.apiserver.k8s.io/v1alpha1") throw new Error("Type apiv mis 2");
-  if (kind !== "FlowSchemaList") throw new Error("Type kind mis 2");
+export interface FlowSchemaList extends ListOf<FlowSchema> {
+  apiVersion?: "flowcontrol.apiserver.k8s.io/v1alpha1";
+  kind?: "FlowSchemaList";
+};
+export function toFlowSchemaList(input: c.JSONValue): FlowSchemaList & c.ApiKind {
+  const obj = c.checkObj(input);
   return {
-    apiVersion, kind,
-    metadata: MetaV1.toListMeta(metadata),
-    items: c.readList(items, toFlowSchemaFields),
+    ...c.assertOrAddApiVersionAndKind(obj, "flowcontrol.apiserver.k8s.io/v1alpha1", "FlowSchemaList"),
+    metadata: MetaV1.toListMeta(obj.metadata),
+    items: c.readList(obj.items, toFlowSchema),
   }}
 
 /** LimitResponse defines how to handle requests that can not be executed right now. */
@@ -323,29 +319,24 @@ export function fromLimitedPriorityLevelConfiguration(input: LimitedPriorityLeve
   }}
 
 /** PriorityLevelConfiguration represents the configuration of a priority level. */
-export type PriorityLevelConfiguration = Kind<"PriorityLevelConfiguration"> & PriorityLevelConfigurationFields;
-export interface PriorityLevelConfigurationFields {
+export interface PriorityLevelConfiguration {
+  apiVersion?: "flowcontrol.apiserver.k8s.io/v1alpha1";
+  kind?: "PriorityLevelConfiguration";
   metadata?: MetaV1.ObjectMeta | null;
   spec?: PriorityLevelConfigurationSpec | null;
   status?: PriorityLevelConfigurationStatus | null;
 }
-export function toPriorityLevelConfigurationFields(input: c.JSONValue): PriorityLevelConfigurationFields {
+export function toPriorityLevelConfiguration(input: c.JSONValue): PriorityLevelConfiguration & c.ApiKind {
   const obj = c.checkObj(input);
   return {
+    ...c.assertOrAddApiVersionAndKind(obj, "flowcontrol.apiserver.k8s.io/v1alpha1", "PriorityLevelConfiguration"),
     metadata: c.readOpt(obj["metadata"], MetaV1.toObjectMeta),
     spec: c.readOpt(obj["spec"], toPriorityLevelConfigurationSpec),
     status: c.readOpt(obj["status"], toPriorityLevelConfigurationStatus),
   }}
-export function toPriorityLevelConfiguration(input: c.JSONValue): PriorityLevelConfiguration {
-  const {apiVersion, kind, ...fields} = c.checkObj(input);
-  if (apiVersion !== "flowcontrol.apiserver.k8s.io/v1alpha1") throw new Error("Type apiv mis 2");
-  if (kind !== "PriorityLevelConfiguration") throw new Error("Type kind mis 2");
-  return {
-    apiVersion, kind,
-    ...toPriorityLevelConfigurationFields(fields),
-  }}
 export function fromPriorityLevelConfiguration(input: PriorityLevelConfiguration): c.JSONValue {
   return {
+    ...c.assertOrAddApiVersionAndKind(input, "flowcontrol.apiserver.k8s.io/v1alpha1", "PriorityLevelConfiguration"),
     ...input,
     metadata: input.metadata != null ? MetaV1.fromObjectMeta(input.metadata) : undefined,
     spec: input.spec != null ? fromPriorityLevelConfigurationSpec(input.spec) : undefined,
@@ -408,13 +399,14 @@ export function fromPriorityLevelConfigurationCondition(input: PriorityLevelConf
   }}
 
 /** PriorityLevelConfigurationList is a list of PriorityLevelConfiguration objects. */
-export type PriorityLevelConfigurationList = Kind<"PriorityLevelConfigurationList"> & ListOf<PriorityLevelConfigurationFields>;
-export function toPriorityLevelConfigurationList(input: c.JSONValue): PriorityLevelConfigurationList {
-  const {apiVersion, kind, metadata, items} = c.checkObj(input);
-  if (apiVersion !== "flowcontrol.apiserver.k8s.io/v1alpha1") throw new Error("Type apiv mis 2");
-  if (kind !== "PriorityLevelConfigurationList") throw new Error("Type kind mis 2");
+export interface PriorityLevelConfigurationList extends ListOf<PriorityLevelConfiguration> {
+  apiVersion?: "flowcontrol.apiserver.k8s.io/v1alpha1";
+  kind?: "PriorityLevelConfigurationList";
+};
+export function toPriorityLevelConfigurationList(input: c.JSONValue): PriorityLevelConfigurationList & c.ApiKind {
+  const obj = c.checkObj(input);
   return {
-    apiVersion, kind,
-    metadata: MetaV1.toListMeta(metadata),
-    items: c.readList(items, toPriorityLevelConfigurationFields),
+    ...c.assertOrAddApiVersionAndKind(obj, "flowcontrol.apiserver.k8s.io/v1alpha1", "PriorityLevelConfigurationList"),
+    metadata: MetaV1.toListMeta(obj.metadata),
+    items: c.readList(obj.items, toPriorityLevelConfiguration),
   }}

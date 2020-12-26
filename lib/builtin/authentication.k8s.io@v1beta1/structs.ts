@@ -12,29 +12,24 @@ type ListOf<T> = {
 };
 
 /** TokenReview attempts to authenticate a token to a known user. Note: TokenReview requests may be cached by the webhook token authenticator plugin in the kube-apiserver. */
-export type TokenReview = Kind<"TokenReview"> & TokenReviewFields;
-export interface TokenReviewFields {
+export interface TokenReview {
+  apiVersion?: "authentication.k8s.io/v1beta1";
+  kind?: "TokenReview";
   metadata?: MetaV1.ObjectMeta | null;
   spec: TokenReviewSpec;
   status?: TokenReviewStatus | null;
 }
-export function toTokenReviewFields(input: c.JSONValue): TokenReviewFields {
+export function toTokenReview(input: c.JSONValue): TokenReview & c.ApiKind {
   const obj = c.checkObj(input);
   return {
+    ...c.assertOrAddApiVersionAndKind(obj, "authentication.k8s.io/v1beta1", "TokenReview"),
     metadata: c.readOpt(obj["metadata"], MetaV1.toObjectMeta),
     spec: toTokenReviewSpec(obj["spec"]),
     status: c.readOpt(obj["status"], toTokenReviewStatus),
   }}
-export function toTokenReview(input: c.JSONValue): TokenReview {
-  const {apiVersion, kind, ...fields} = c.checkObj(input);
-  if (apiVersion !== "authentication.k8s.io/v1beta1") throw new Error("Type apiv mis 2");
-  if (kind !== "TokenReview") throw new Error("Type kind mis 2");
-  return {
-    apiVersion, kind,
-    ...toTokenReviewFields(fields),
-  }}
 export function fromTokenReview(input: TokenReview): c.JSONValue {
   return {
+    ...c.assertOrAddApiVersionAndKind(input, "authentication.k8s.io/v1beta1", "TokenReview"),
     ...input,
     metadata: input.metadata != null ? MetaV1.fromObjectMeta(input.metadata) : undefined,
     spec: input.spec != null ? fromTokenReviewSpec(input.spec) : undefined,

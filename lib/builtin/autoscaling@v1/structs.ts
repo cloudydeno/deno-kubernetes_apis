@@ -30,29 +30,24 @@ export function fromCrossVersionObjectReference(input: CrossVersionObjectReferen
   }}
 
 /** configuration of a horizontal pod autoscaler. */
-export type HorizontalPodAutoscaler = Kind<"HorizontalPodAutoscaler"> & HorizontalPodAutoscalerFields;
-export interface HorizontalPodAutoscalerFields {
+export interface HorizontalPodAutoscaler {
+  apiVersion?: "autoscaling/v1";
+  kind?: "HorizontalPodAutoscaler";
   metadata?: MetaV1.ObjectMeta | null;
   spec?: HorizontalPodAutoscalerSpec | null;
   status?: HorizontalPodAutoscalerStatus | null;
 }
-export function toHorizontalPodAutoscalerFields(input: c.JSONValue): HorizontalPodAutoscalerFields {
+export function toHorizontalPodAutoscaler(input: c.JSONValue): HorizontalPodAutoscaler & c.ApiKind {
   const obj = c.checkObj(input);
   return {
+    ...c.assertOrAddApiVersionAndKind(obj, "autoscaling/v1", "HorizontalPodAutoscaler"),
     metadata: c.readOpt(obj["metadata"], MetaV1.toObjectMeta),
     spec: c.readOpt(obj["spec"], toHorizontalPodAutoscalerSpec),
     status: c.readOpt(obj["status"], toHorizontalPodAutoscalerStatus),
   }}
-export function toHorizontalPodAutoscaler(input: c.JSONValue): HorizontalPodAutoscaler {
-  const {apiVersion, kind, ...fields} = c.checkObj(input);
-  if (apiVersion !== "autoscaling/v1") throw new Error("Type apiv mis 2");
-  if (kind !== "HorizontalPodAutoscaler") throw new Error("Type kind mis 2");
-  return {
-    apiVersion, kind,
-    ...toHorizontalPodAutoscalerFields(fields),
-  }}
 export function fromHorizontalPodAutoscaler(input: HorizontalPodAutoscaler): c.JSONValue {
   return {
+    ...c.assertOrAddApiVersionAndKind(input, "autoscaling/v1", "HorizontalPodAutoscaler"),
     ...input,
     metadata: input.metadata != null ? MetaV1.fromObjectMeta(input.metadata) : undefined,
     spec: input.spec != null ? fromHorizontalPodAutoscalerSpec(input.spec) : undefined,
@@ -104,15 +99,16 @@ export function fromHorizontalPodAutoscalerStatus(input: HorizontalPodAutoscaler
   }}
 
 /** list of horizontal pod autoscaler objects. */
-export type HorizontalPodAutoscalerList = Kind<"HorizontalPodAutoscalerList"> & ListOf<HorizontalPodAutoscalerFields>;
-export function toHorizontalPodAutoscalerList(input: c.JSONValue): HorizontalPodAutoscalerList {
-  const {apiVersion, kind, metadata, items} = c.checkObj(input);
-  if (apiVersion !== "autoscaling/v1") throw new Error("Type apiv mis 2");
-  if (kind !== "HorizontalPodAutoscalerList") throw new Error("Type kind mis 2");
+export interface HorizontalPodAutoscalerList extends ListOf<HorizontalPodAutoscaler> {
+  apiVersion?: "autoscaling/v1";
+  kind?: "HorizontalPodAutoscalerList";
+};
+export function toHorizontalPodAutoscalerList(input: c.JSONValue): HorizontalPodAutoscalerList & c.ApiKind {
+  const obj = c.checkObj(input);
   return {
-    apiVersion, kind,
-    metadata: MetaV1.toListMeta(metadata),
-    items: c.readList(items, toHorizontalPodAutoscalerFields),
+    ...c.assertOrAddApiVersionAndKind(obj, "autoscaling/v1", "HorizontalPodAutoscalerList"),
+    metadata: MetaV1.toListMeta(obj.metadata),
+    items: c.readList(obj.items, toHorizontalPodAutoscaler),
   }}
 
 /** Scale represents a scaling request for a resource. */
