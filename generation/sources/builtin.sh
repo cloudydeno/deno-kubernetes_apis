@@ -14,4 +14,6 @@ deno run \
   "generation/api-specs/builtin-$1.json" \
   "builtin"
 
+deno cache lib/builtin/*/structs.ts
+
 git status lib/builtin

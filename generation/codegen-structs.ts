@@ -112,10 +112,6 @@ export function generateStructsTypescript(surface: SurfaceMap, apiS: SurfaceApi)
   if (apiS.apiGroup !== 'meta') {
     foreignApis.add(surface.allApis.find(x => x.friendlyName === 'MetaV1')!);
     chunks.push(``);
-    chunks.push(`type Kind<T extends string> = {`);
-    chunks.push(`  apiVersion: "${apiS.apiGroupVersion}";`);
-    chunks.push(`  kind: T;`);
-    chunks.push(`};`);
     chunks.push(`type ListOf<T> = {`);
     chunks.push(`  metadata: MetaV1.ListMeta;`);
     chunks.push(`  items: Array<T>;`);

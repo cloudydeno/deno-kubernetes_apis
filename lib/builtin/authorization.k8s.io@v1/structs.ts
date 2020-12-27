@@ -2,10 +2,6 @@
 import * as c from "../../common.ts";
 
 import * as MetaV1 from "../meta@v1/structs.ts";
-type Kind<T extends string> = {
-  apiVersion: "authorization.k8s.io/v1";
-  kind: T;
-};
 type ListOf<T> = {
   metadata: MetaV1.ListMeta;
   items: Array<T>;

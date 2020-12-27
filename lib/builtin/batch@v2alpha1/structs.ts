@@ -4,10 +4,6 @@ import * as c from "../../common.ts";
 import * as CoreV1 from "../core@v1/structs.ts";
 import * as BatchV1 from "../batch@v1/structs.ts";
 import * as MetaV1 from "../meta@v1/structs.ts";
-type Kind<T extends string> = {
-  apiVersion: "batch/v2alpha1";
-  kind: T;
-};
 type ListOf<T> = {
   metadata: MetaV1.ListMeta;
   items: Array<T>;
