@@ -79,6 +79,7 @@ export class SurfaceMap {
     this.byPathPrefix.set(api.apiRoot, api);
     this.byDefPrefix.set(api.shapePrefix, api);
     this.allApis.push(api);
+    return api;
   }
 }
 

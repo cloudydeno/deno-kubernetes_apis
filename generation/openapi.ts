@@ -31,28 +31,28 @@ export type OpenAPI2Type =
 // export type OpenAPI2Reference = { $ref: string };
 
 export interface OpenAPI2SchemaObject {
-  $ref?: string;
+  $ref?: string | null;
 
-  additionalProperties?: OpenAPI2SchemaObject | boolean;
-  allOf?: OpenAPI2SchemaObject[];
-  description?: string;
-  enum?: string[];
-  format?: "byte" | "date-time" | "double" | "int32" | "int64" | "int-or-string";
-  items?: OpenAPI2SchemaObject;
-  oneOf?: (OpenAPI2SchemaObject)[];
-  properties?: { [index: string]: OpenAPI2SchemaObject };
-  required?: string[];
-  title?: string;
-  type?: OpenAPI2Type; // allow this to be optional to cover cases when this is missing
+  additionalProperties?: OpenAPI2SchemaObject | boolean | null;
+  allOf?: OpenAPI2SchemaObject[] | null;
+  description?: string | null;
+  enum?: string[] | null;
+  format?: "byte" | "date-time" | "double" | "int32" | "int64" | "int-or-string" | null;
+  items?: OpenAPI2SchemaObject | null;
+  oneOf?: (OpenAPI2SchemaObject)[] | null;
+  properties?: { [index: string]: OpenAPI2SchemaObject } | null;
+  required?: string[] | null;
+  title?: string | null;
+  type?: OpenAPI2Type | null; // allow this to be optional to cover cases when this is missing
   // [key: string]: any; // allow arbitrary x-something properties
 
   // Kubernetes CRD extensions
-  "x-kubernetes-embedded-resource"?: boolean;
-  "x-kubernetes-int-or-string"?: boolean;
-  "x-kubernetes-list-map-keys"?: string[];
-  "x-kubernetes-list-type"?: string;
-  "x-kubernetes-preserve-unknown-fields"?: true;
-  'x-kubernetes-group-version-kind'?: GroupVersionKind[];
+  "x-kubernetes-embedded-resource"?: boolean | null;
+  "x-kubernetes-int-or-string"?: boolean | null;
+  "x-kubernetes-list-map-keys"?: string[] | null;
+  "x-kubernetes-list-type"?: string | null;
+  "x-kubernetes-preserve-unknown-fields"?: true | null;
+  'x-kubernetes-group-version-kind'?: GroupVersionKind[] | null;
 }
 
 export type OpenAPI2Methods =

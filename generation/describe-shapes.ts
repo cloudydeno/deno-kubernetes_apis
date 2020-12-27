@@ -43,7 +43,7 @@ export class ShapeLibrary {
       const fields = new Map<string,ApiShape>();
       const shape: ApiShape = {
         type: 'structure',
-        description: schema.description,
+        description: schema.description ?? undefined,
         required: schema.required ?? [],
         fields,
       };
@@ -57,21 +57,21 @@ export class ShapeLibrary {
     } else if (schema.type === 'array' && schema.items) {
       return {
         type: 'list',
-        description: schema.description,
+        description: schema.description ?? undefined,
         inner: this.readSchema(schema.items, null),
       };
 
-    } else if (schema.type === 'object' && typeof schema.additionalProperties === 'object') {
+    } else if (schema.type === 'object' && typeof schema.additionalProperties === 'object' && schema.additionalProperties != null) {
       return {
         type: 'map',
-        description: schema.description,
+        description: schema.description ?? undefined,
         inner: this.readSchema(schema.additionalProperties, null),
       };
 
     } else if (schema.type === 'object') {
       return {
         type: 'structure',
-        description: schema.description,
+        description: schema.description ?? undefined,
         required: [],
         fields: new Map,
       };
@@ -81,14 +81,14 @@ export class ShapeLibrary {
         return {
           type: 'special',
           name: 'Time',
-          description: schema.description,
+          description: schema.description ?? undefined,
         };
       }
       if (schema.format === "int-or-string") {
         return {
           type: 'special',
           name: 'IntOrString',
-          description: schema.description,
+          description: schema.description ?? undefined,
         };
       }
 
@@ -100,9 +100,9 @@ export class ShapeLibrary {
 
       return {
         type: 'string',
-        format: schema.format,
-        enum: enumVals,
-        description: schema.description,
+        format: schema.format ?? undefined,
+        enum: enumVals ?? undefined,
+        description: schema.description ?? undefined,
       };
 
     } else if (schema.type === 'integer' || schema.type === 'number') {
@@ -110,55 +110,55 @@ export class ShapeLibrary {
       if (schema.format === "int-or-string") throw new Error(`EROR: numeric int-or-string`);
       return {
         type: 'number',
-        format: schema.format,
-        description: schema.description,
+        format: schema.format ?? undefined,
+        description: schema.description ?? undefined,
       };
 
     } else if (schema.type === 'boolean') {
       return {
         type: 'boolean',
-        description: schema.description,
+        description: schema.description ?? undefined,
       };
 
     } else if (schema['x-kubernetes-int-or-string']) {
       return {
         type: 'special',
         name: 'IntOrString',
-        description: schema.description,
+        description: schema.description ?? undefined,
       };
 
     } else if (schema['x-kubernetes-preserve-unknown-fields']) {
       return {
         type: 'any',
         reference: 'unknown',
-        description: schema.description,
+        description: schema.description ?? undefined,
       };
 
     } else if (localName === 'JSONSchemaPropsOrBool') {
       return {
         type: 'any',
-        description: schema.description,
+        description: schema.description ?? undefined,
         reference: 'JSONSchemaProps | boolean',
       };
 
     } else if (localName === 'JSONSchemaPropsOrStringArray') {
       return {
         type: 'any',
-        description: schema.description,
+        description: schema.description ?? undefined,
         reference: 'JSONSchemaProps | string[]',
       };
 
     } else if (localName === 'JSONSchemaPropsOrArray') {
       return {
         type: 'any',
-        description: schema.description,
+        description: schema.description ?? undefined,
         reference: 'JSONSchemaProps | JSONSchemaProps[]',
       };
 
     } else if (localName === 'JSON') {
       return {
         type: 'any',
-        description: schema.description,
+        description: schema.description ?? undefined,
         reference: 'JSON[] | Record<string, JSON> | number | string | boolean | null',
       };
 
