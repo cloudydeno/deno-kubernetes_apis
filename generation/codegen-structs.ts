@@ -25,11 +25,11 @@ export function generateFromStruct(topShape: ApiShape, inputRef: string): string
     switch (shape.type) {
       case 'structure': {
         if (shape.reference) {
-          chunks.push(`${name}: ${fieldRef} != null ? from${shape.reference}(${fieldRef}) : undefined,`);
+          chunks.push(`${maybeQuote(name)}: ${fieldRef} != null ? from${shape.reference}(${fieldRef}) : undefined,`);
         } else {
           const innerLines = generateFromStruct(shape, fieldRef);
           if (innerLines.length > 1) {
-            chunks.push(`${name}: ${fieldRef} != null ? {`);
+            chunks.push(`${maybeQuote(name)}: ${fieldRef} != null ? {`);
             pushAll(chunks, innerLines.map(x => `  ${x}`));
             chunks.push(`} : undefined,`);
           }
@@ -40,7 +40,7 @@ export function generateFromStruct(topShape: ApiShape, inputRef: string): string
       case 'special': {
         const readFunc = nameForeignWriteFunc(shape);
         if (readFunc) {
-          chunks.push(`${name}: ${fieldRef} != null ? ${readFunc}(${fieldRef}) : undefined,`);
+          chunks.push(`${maybeQuote(name)}: ${fieldRef} != null ? ${readFunc}(${fieldRef}) : undefined,`);
         }
         break;
       }
@@ -48,11 +48,11 @@ export function generateFromStruct(topShape: ApiShape, inputRef: string): string
         switch (shape.inner.type) {
           case 'structure': {
             if (shape.inner.reference) {
-              chunks.push(`${name}: ${fieldRef}?.map(from${shape.inner.reference}),`);
+              chunks.push(`${maybeQuote(name)}: ${fieldRef}?.map(from${shape.inner.reference}),`);
             } else {
               const innerLines = generateFromStruct(shape.inner, 'x');
               if (innerLines.length > 1) {
-                chunks.push(`${name}: ${fieldRef}?.map(x => ({`);
+                chunks.push(`${maybeQuote(name)}: ${fieldRef}?.map(x => ({`);
                 pushAll(chunks, innerLines.map(x => `  ${x}`));
                 chunks.push(`})),`);
               }
@@ -63,7 +63,7 @@ export function generateFromStruct(topShape: ApiShape, inputRef: string): string
           case 'special': {
             const readFunc = nameForeignWriteFunc(shape.inner);
             if (readFunc) {
-              chunks.push(`${name}: ${fieldRef}?.map(${readFunc}),`);
+              chunks.push(`${maybeQuote(name)}: ${fieldRef}?.map(${readFunc}),`);
             }
             break;
           }
@@ -72,11 +72,24 @@ export function generateFromStruct(topShape: ApiShape, inputRef: string): string
       }
       case 'map': {
         switch (shape.inner.type) {
+          case 'structure': {
+            if (shape.inner.reference) {
+              chunks.push(`${maybeQuote(name)}: c.writeMap(${fieldRef}, from${shape.inner.reference}),`);
+            } else {
+              const innerLines = generateFromStruct(shape.inner, 'x');
+              if (innerLines.length > 1) {
+                chunks.push(`${maybeQuote(name)}: c.writeMap(${fieldRef}, x => ({`);
+                pushAll(chunks, innerLines.map(x => `  ${x}`));
+                chunks.push(`})),`);
+              }
+            }
+            break;
+          }
           case 'foreign':
           case 'special': {
             const readFunc = nameForeignWriteFunc(shape.inner);
             if (readFunc) {
-              chunks.push(`${name}: c.writeMap(${fieldRef}, ${readFunc}),`);
+              chunks.push(`${maybeQuote(name)}: c.writeMap(${fieldRef}, ${readFunc}),`);
             }
             break;
           }
@@ -134,7 +147,7 @@ export function generateStructsTypescript(surface: SurfaceMap, apiS: SurfaceApi)
           for (const [field, inner] of shape.fields) {
             if (['apiVersion', 'kind'].includes(field)) continue;
             const isReq = shape.required.includes(field);
-            chunks.push(`  ${field}${isReq ? '' : '?'}: ${generateType(inner)}${isReq ? '' : ' | null'};`);
+            chunks.push(`  ${maybeQuote(field)}${isReq ? '' : '?'}: ${generateType(inner)}${isReq ? '' : ' | null'};`);
           }
           chunks.push(`}`);
 
@@ -148,7 +161,7 @@ export function generateStructsTypescript(surface: SurfaceMap, apiS: SurfaceApi)
             if (!shape.required.includes(field)) {
               stack.unshift('c.readOpt');
             }
-            chunks.push(`    ${field}: ${printReadStack(stack, `obj[${JSON.stringify(field)}]`)},`);
+            chunks.push(`    ${maybeQuote(field)}: ${printReadStack(stack, `obj[${JSON.stringify(field)}]`)},`);
           }
           chunks.push(`  }}`);
 
@@ -178,7 +191,7 @@ export function generateStructsTypescript(surface: SurfaceMap, apiS: SurfaceApi)
           chunks.push(`export interface ${name} {`);
           for (const [field, inner] of shape.fields) {
             const isReq = shape.required.includes(field);
-            chunks.push(`  ${field}${isReq ? '' : '?'}: ${generateType(inner)}${isReq ? '' : ' | null'};`);
+            chunks.push(`  ${maybeQuote(field)}${isReq ? '' : '?'}: ${generateType(inner)}${isReq ? '' : ' | null'};`);
           }
           chunks.push(`}`);
 
@@ -190,7 +203,7 @@ export function generateStructsTypescript(surface: SurfaceMap, apiS: SurfaceApi)
             if (!shape.required.includes(field)) {
               stack.unshift('c.readOpt');
             }
-            chunks.push(`    ${field}: ${printReadStack(stack, `obj[${JSON.stringify(field)}]`)},`);
+            chunks.push(`    ${maybeQuote(field)}: ${printReadStack(stack, `obj[${JSON.stringify(field)}]`)},`);
           }
           chunks.push(`  }}`);
 
@@ -212,7 +225,7 @@ export function generateStructsTypescript(surface: SurfaceMap, apiS: SurfaceApi)
             if (!extraStruct.struct.required.includes(field)) {
               stack.unshift('c.readOpt');
             }
-            chunks.push(`    ${field}: ${printReadStack(stack, `obj[${JSON.stringify(field)}]`)},`);
+            chunks.push(`    ${maybeQuote(field)}: ${printReadStack(stack, `obj[${JSON.stringify(field)}]`)},`);
           }
           chunks.push(`  }}`);
         }
@@ -223,8 +236,13 @@ export function generateStructsTypescript(surface: SurfaceMap, apiS: SurfaceApi)
         chunks.push(`export type ${name} = ${generateType(shape)};`);
         break;
 
+      case 'any':
+        chunks.push(`export type ${name} = c.JSONValue;`);
+        break;
+
       default:
-        throw new Error(`TODO: generate struct type ${shape.type}`)
+        chunks.push(`export type ${name} = unknown; // TODO!`);
+        // throw new Error(`TODO: generate struct type ${shape.type}`);
 
     }
     chunks.push(``);
@@ -285,6 +303,8 @@ export function generateStructsTypescript(surface: SurfaceMap, apiS: SurfaceApi)
       case 'any': {
         if (shape.reference === 'unknown') {
           return 'c.JSONValue';
+        } else if (shape.reference) {
+          return shape.reference;
         }
         break;
       }
@@ -334,17 +354,11 @@ export function generateStructsTypescript(surface: SurfaceMap, apiS: SurfaceApi)
         return ['c.checkBool'];
 
       case 'any': {
+        return ['c.identity'];
 
-        switch (shape.reference) {
-          case 'unknown':
-            return ['c.identity'];
-        }
-        break;
       }
-
-      case 'any':
     }
-    return [`unknown /* ${shape.type} ${shape.reference} */`];
+    return [`unknown /* ${shape!.type} ${shape!.reference} */`];
   }
 
 }
@@ -364,4 +378,9 @@ function printReadStack(stack: string[], rootExpr: string): string {
     inner = `${x} => ${mid}(${x}, ${inner})`;
   }
   return `${top}(${rootExpr}, ${inner})`;
+}
+
+function maybeQuote(field: string) {
+  if (field.includes('-')) return `'${field}'`;
+  return field;
 }
