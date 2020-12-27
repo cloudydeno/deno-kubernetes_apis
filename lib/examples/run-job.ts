@@ -7,8 +7,6 @@ const batchApi = new BatchV1Api(restClient).namespace("dust-poc");
 const coreApi = new CoreV1Api(restClient).namespace("dust-poc");
 
 const job = await batchApi.createJob({
-  apiVersion: "batch/v1",
-  kind: "Job",
   metadata: {
     generateName: 'deno-example-',
   },

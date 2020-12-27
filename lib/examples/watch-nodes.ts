@@ -1,15 +1,12 @@
 import { autoDetectClient, Reflector } from "../common.ts";
 // import { CoreV1Api } from "../builtin/core@v1/mod.ts";
-import { Status } from "../builtin/meta@v1/structs.ts";
-import { CoordinationV1Api, Lease } from "../builtin/coordination.k8s.io@v1/mod.ts";
+import { CoordinationV1Api } from "../builtin/coordination.k8s.io@v1/mod.ts";
 
 const restClient = await autoDetectClient();
 // const coreApi = new CoreV1Api(restClient);
 const coordApi = new CoordinationV1Api(restClient).namespace("kube-node-lease");
 
-// TODO: what's up with the explicit generic here? should not be necesary.
-const leaseWatcher = new Reflector<Lease, Status>(
-// const leaseWatcher = new Reflector(
+const leaseWatcher = new Reflector(
   opts => coordApi.getLeaseList(opts),
   opts => coordApi.watchLeaseList(opts));
 leaseWatcher.run();
