@@ -67,17 +67,11 @@ export function generateFromStruct(topShape: ApiShape, inputRef: string): string
             }
             break;
           }
-          default:
-            // chunks.push(`// TODO: ${name} list of ${shape.inner.type}`);
         }
         break;
       }
       case 'map': {
         switch (shape.inner.type) {
-          // case 'structure': {
-          //   chunks.push(`${name}: ${fieldRef}?.map(from${shape.inner.reference}),`);
-          //   break;
-          // }
           case 'foreign':
           case 'special': {
             const readFunc = nameForeignWriteFunc(shape.inner);
@@ -86,35 +80,12 @@ export function generateFromStruct(topShape: ApiShape, inputRef: string): string
             }
             break;
           }
-          case 'any': {
-            switch (shape.inner.reference) {
-              default:
-                // chunks.push(`// TODO: ${name} map of ${shape.inner.type} ${shape.inner.reference}`);
-            }
-            break;
-          }
-          default:
-            // chunks.push(`// TODO: ${name} map of ${shape.inner.type}`);
         }
         break;
       }
-      case 'any': {
-        switch (shape.reference) {
-          case 'unknown': {
-            // chunks.push(`${name}: ${fieldRef} as c.JSONValue,`);
-            break;
-          }
-          default:
-            // chunks.push(`// TODO: ${name} ${shape.type} ${shape.reference}`);
-        }
-        break;
-      }
-      default:
-        // chunks.push(`// TODO: ${name} ${shape.type}`);
     }
   }
 
-  // chunks.push('// TODO!');
   return chunks;
 }
 
@@ -126,7 +97,6 @@ export function generateStructsTypescript(surface: SurfaceMap, apiS: SurfaceApi)
   const foreignApis = new Set<SurfaceApi>();
 
   if (apiS.apiGroup !== 'meta') {
-    // chunks.push(`import * as MetaV1 from "../meta@v1/structs.ts";`);
     foreignApis.add(surface.allApis.find(x => x.friendlyName === 'MetaV1')!);
     chunks.push(``);
     chunks.push(`type Kind<T extends string> = {`);
@@ -141,7 +111,6 @@ export function generateStructsTypescript(surface: SurfaceMap, apiS: SurfaceApi)
   chunks.push('');
 
   for (const [name, shape] of apiS.shapes.shapes) {
-    // const name = id.split('.').slice(-1)[0];
     if (shape.description) {
       chunks.push(`/** ${shape.description} */`);
     }
@@ -154,7 +123,6 @@ export function generateStructsTypescript(surface: SurfaceMap, apiS: SurfaceApi)
         const isKindList = shape.kind
           && shape.kind.kind.endsWith('List')
           && apiS.kinds.has(shape.kind.kind.slice(0, -4));
-        // console.log(shape.kind?.kind, apiS.kinds.has(shape.kind?.kind ?? ''), apiS.kinds.has(shape.kind?.kind.slice(0, -4) ?? ''))
 
         const extraStructs = new Array<{name: string, struct: StructureShape}>();
 

@@ -21,9 +21,7 @@ export class ShapeLibrary {
   loadShapes(definitions: Map<string, OpenAPI2SchemaObject>) {
     this.availableNames = definitions;
     for (const [path, schema] of definitions.entries()) {
-      // if (this.localApi.includes('meta')) console.log(path, schema)
       if (schema.type === 'object') {
-        // console.log(path);
         this.readSchema({$ref: `#/definitions/${this.localApi}${path}`}, path)
       }
     }
@@ -32,13 +30,11 @@ export class ShapeLibrary {
   readSchema(schema: OpenAPI2SchemaObject, localName: string | null): ApiShape {
     if (schema.$ref) {
       const localDefPref = `#/definitions/${this.localApi}`;
-      // console.log(schema.$ref, schema.$ref.startsWith(localDefPref), this.shapes.get(schema.$ref.slice(localDefPref.length)));
       let shape = schema.$ref.startsWith(localDefPref)
         ? this.shapes.get(schema.$ref.slice(localDefPref.length))
         : undefined;
       if (!shape) {
         shape = this.resolveRef(schema);
-        // this.shapes.set(schema.$ref, shape);
       }
       return shape;
 
@@ -54,10 +50,8 @@ export class ShapeLibrary {
       if (localName) this.shapes.set(localName, shape);
 
       for (const [key, val] of Object.entries(schema.properties)) {
-        // console.log(key, JSON.stringify(val))
         fields.set(key, this.readSchema(val, null));
       }
-      // if (schema.description?.includes('lists and various')) throw new Error('todo')
       return shape;
 
     } else if (schema.type === 'array' && schema.items) {
@@ -75,7 +69,6 @@ export class ShapeLibrary {
       };
 
     } else if (schema.type === 'object') {
-      // console.log('WARN: found empty object');
       return {
         type: 'structure',
         description: schema.description,

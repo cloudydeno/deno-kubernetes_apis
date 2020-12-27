@@ -11,6 +11,7 @@ deno run \
   --allow-read="generation/api-specs" \
   --allow-write="lib/builtin" \
   generation/mod.ts \
-  "generation/api-specs/builtin-$1.json"
+  "generation/api-specs/builtin-$1.json" \
+  "builtin"
 
 git status lib/builtin

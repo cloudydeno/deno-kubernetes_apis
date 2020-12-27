@@ -283,5 +283,3 @@ export function generateModuleTypescript(surface: SurfaceMap, api: SurfaceApi): 
   }
 
 }
-
-// function describeType()
