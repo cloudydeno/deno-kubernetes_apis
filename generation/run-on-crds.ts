@@ -11,6 +11,8 @@ import {
   CustomResourceDefinition as CRDv1beta1,
   toCustomResourceDefinition as toCRDv1beta1,
   CustomResourceSubresources,
+  CustomResourceDefinitionNames,
+  CustomResourceDefinitionVersion,
 } from "../lib/builtin/apiextensions.k8s.io@v1beta1/structs.ts";
 
 import { ApiKind, JSONValue } from "https://deno.land/x/kubernetes_client@v0.1.2/mod.ts";
@@ -94,194 +96,42 @@ function recognizeGroupVersion(apiGroup: string, apiVersion: string) {
 }
 
 if (v1CRDs.length > 0) {
-  throw new Error(`TODO`);
+
+  for (const crd of v1CRDs) {
+    for (const version of crd.spec.versions ?? []) {
+
+      const schema = version.schema?.openAPIV3Schema;
+      if (!schema) throw new Error(
+        `TODO: No schema given for ${crd.spec.names.kind}`);
+
+      processCRD({
+        apiGroup: crd.spec.group,
+        apiVersion: version.name,
+        schema: schema as OpenAPI2SchemaObject,
+        names: crd.spec.names,
+        scope: crd.spec.scope,
+        subResources: {...version.subresources},
+      });
+    }
+  }
 
 } else if (v1beta1CRDs.length > 0) {
 
   for (const crd of v1beta1CRDs) {
     for (const version of crd.spec.versions ?? []) {
 
-      const [api, defs] = recognizeGroupVersion(crd.spec.group, version.name);
       const schema = version.schema?.openAPIV3Schema;
       if (!schema) throw new Error(
         `TODO: No schema given for ${crd.spec.names.kind}`);
 
-      // operations: Array<SurfaceOperation>,
-      // definitions: Map<string,OpenAPI2SchemaObject>,
-      // kinds: Map<string,SurfaceKind>,
-      // shapes: ShapeLibrary,
-
-      // seems like additionalProperties gives type problems
-      // api.definitions.set(crd.spec.names.kind, schema as OpenAPI2SchemaObject);
-      const schemaObj = schema as OpenAPI2SchemaObject;
-      schemaObj["x-kubernetes-group-version-kind"] = [{
-        group: api.apiGroup,
-        version: api.apiVersion,
-        kind: crd.spec.names.kind,
-      }];
-      schemaObj.properties!["metadata"] = {
-        "$ref": "#/definitions/io.k8s.apimachinery.pkg.apis.meta.v1.ObjectMeta"
-      };
-      defs.set(crd.spec.names.kind, schemaObj);
-
-      defs.set(crd.spec.names.kind+'List', {
-        "type": "object",
-        "required": [ "items" ],
-        "properties": {
-          "apiVersion": { "type": "string" },
-          "items": {
-            "items": {
-              "$ref": `#/definitions/${api.shapePrefix}${crd.spec.names.kind}`
-            },
-            "type": "array"
-          },
-          "kind": { "type": "string" },
-          "metadata": {
-            "$ref": "#/definitions/io.k8s.apimachinery.pkg.apis.meta.v1.ListMeta"
-          }
-        },
-        ["x-kubernetes-group-version-kind"]: [{
-          group: api.apiGroup,
-          version: api.apiVersion,
-          kind: crd.spec.names.kind,
-        }]
+      processCRD({
+        apiGroup: crd.spec.group,
+        apiVersion: version.name,
+        schema: schema as OpenAPI2SchemaObject,
+        names: crd.spec.names,
+        scope: crd.spec.scope,
+        subResources: {...version.subresources, ...crd.spec.subresources},
       });
-
-      api.kinds.set(crd.spec.names.kind, {
-        name: crd.spec.names.kind,
-        plural: crd.spec.names.plural,
-        singular: crd.spec.names.singular ?? crd.spec.names.kind,
-        listName: crd.spec.names.listKind ?? `${crd.spec.names.kind}List`,
-        isNamespaced: crd.spec.scope === 'Namespaced',
-      });
-
-      const opBoilerPlate = {
-        consumes: ['application/json'],
-        produces: ['application/json'],
-        schemes: ['https'],
-        operationId: 'faked',
-      }
-      function addOp(operationName: string, scope: OpScope, method: OpenAPI2Methods, opts: {
-        subPath?: string
-        reqKind?: string;
-        respKind?: string;
-        knownOpts?: string;
-        // params?: OpenAPI2RequestParameter[];
-      }) {
-        api.operations.push({
-          ...opBoilerPlate,
-          method: method,
-          operationName: operationName,
-          scope: scope,
-          subPath: (crd.spec.names.plural ?? '') + (opts.subPath ?? ''),
-          parameters: [
-            ...(opts.subPath?.startsWith('/{name}') ? [
-              { name: 'name', in: 'path', schema: { type: 'string' } } as const
-            ] : []),
-            ...(opts.reqKind ? [
-              { name: 'body', in: 'body', schema: { $ref: `#/definitions/${opts.reqKind}` }} as const
-            ] : []),
-            // ...(opts.params ?? []),
-            ...(opts.knownOpts ? opts.knownOpts
-              .split(',').map(x => ({name: x, in: 'query', type: 'string'} as const))
-            : []),
-          ],
-          responses: opts.respKind ? { '200': {
-            schema: { $ref: `#/definitions/${opts.respKind}` },
-          }} : {},
-        });
-      }
-
-      function addCrdOps(scope: OpScope) {
-        addOp(`get${crd.spec.names.kind}List`, scope, 'get', {
-          respKind: `${api.shapePrefix}${crd.spec.names.kind}List`,
-          knownOpts: knownOpts.GetListOpts,
-        });
-        addOp(`watch${crd.spec.names.kind}List`, scope, 'get', {
-          respKind: `${api.shapePrefix}${crd.spec.names.kind}List`,
-          knownOpts: knownOpts.WatchListOpts,
-        });
-        addOp(`create${crd.spec.names.kind}`, scope, 'post', {
-          reqKind: `${api.shapePrefix}${crd.spec.names.kind}`,
-          respKind: `${api.shapePrefix}${crd.spec.names.kind}`,
-          knownOpts: knownOpts.PutOpts,
-        });
-        addOp(`delete${crd.spec.names.kind}List`, scope, 'delete', {
-          reqKind: `io.k8s.apimachinery.pkg.apis.meta.v1.DeleteOptions`,
-          respKind: `${api.shapePrefix}${crd.spec.names.kind}List`, // TODO: check!
-          knownOpts: knownOpts.DeleteListOpts,
-        });
-
-        addOp(`get${crd.spec.names.kind}`, scope, 'get', {
-          respKind: `${api.shapePrefix}${crd.spec.names.kind}`,
-          knownOpts: knownOpts.GetOpts,
-          subPath: '/{name}',
-        });
-        addOp(`delete${crd.spec.names.kind}`, scope, 'delete', {
-          reqKind: `io.k8s.apimachinery.pkg.apis.meta.v1.DeleteOptions`,
-          respKind: `${api.shapePrefix}${crd.spec.names.kind}`, // TODO: check!
-          knownOpts: knownOpts.DeleteOpts,
-          subPath: '/{name}',
-        });
-        addOp(`replace${crd.spec.names.kind}`, scope, 'put', {
-          reqKind: `${api.shapePrefix}${crd.spec.names.kind}`,
-          respKind: `${api.shapePrefix}${crd.spec.names.kind}`,
-          knownOpts: knownOpts.PutOpts,
-          subPath: '/{name}',
-        });
-        addOp(`patch${crd.spec.names.kind}`, scope, 'patch', {
-          reqKind: `${api.shapePrefix}${crd.spec.names.kind}`,
-          respKind: `${api.shapePrefix}${crd.spec.names.kind}`,
-          knownOpts: knownOpts.PatchOpts,
-          subPath: '/{name}',
-        });
-
-        const subResources: CustomResourceSubresources = {...version.subresources, ...crd.spec.subresources};
-        if (subResources.status) {
-
-          addOp(`get${crd.spec.names.kind}Status`, scope, 'get', {
-            respKind: `${api.shapePrefix}${crd.spec.names.kind}`,
-            knownOpts: knownOpts.GetOpts,
-            subPath: '/{name}/status',
-          });
-          addOp(`replace${crd.spec.names.kind}Status`, scope, 'put', {
-            reqKind: `${api.shapePrefix}${crd.spec.names.kind}`,
-            respKind: `${api.shapePrefix}${crd.spec.names.kind}`,
-            knownOpts: knownOpts.PutOpts,
-            subPath: '/{name}/status',
-          });
-          addOp(`patch${crd.spec.names.kind}Status`, scope, 'patch', {
-            reqKind: `${api.shapePrefix}${crd.spec.names.kind}`,
-            respKind: `${api.shapePrefix}${crd.spec.names.kind}`,
-            knownOpts: knownOpts.PatchOpts,
-            subPath: '/{name}/status',
-          });
-
-        }
-        if (subResources.scale) {
-          throw new Error(`TODO: scale subresource on ${crd.spec.names.kind}`);
-        }
-      }
-
-      if (crd.spec.scope === 'Namespaced') {
-
-        addOp(`get${crd.spec.names.kind}ListForAllNamespaces`, 'AllNamespaces', 'get', {
-          respKind: `${api.shapePrefix}${crd.spec.names.kind}List`,
-          knownOpts: knownOpts.GetListOpts,
-        });
-        addOp(`watch${crd.spec.names.kind}ListForAllNamespaces`, 'AllNamespaces', 'get', {
-          respKind: `${api.shapePrefix}${crd.spec.names.kind}List`,
-          knownOpts: knownOpts.WatchListOpts,
-        });
-
-        addCrdOps('Namespaced');
-
-      } else {
-
-        addCrdOps('Cluster');
-
-      }
-
     }
   }
 
@@ -300,4 +150,191 @@ for (const api of apiMap.allApis) {
     console.error(`Error writing`, api.apiGroupVersion);
     console.error(err);
   }
+}
+
+function processCRD({apiGroup, apiVersion, schema, names, scope, subResources}: {
+  apiGroup: string,
+  apiVersion: string,
+  schema: OpenAPI2SchemaObject,
+  names: CustomResourceDefinitionNames,
+  scope: string,
+  subResources: CustomResourceSubresources,
+}) {
+
+  const [api, defs] = recognizeGroupVersion(apiGroup, apiVersion);
+
+  // operations: Array<SurfaceOperation>,
+  // definitions: Map<string,OpenAPI2SchemaObject>,
+  // kinds: Map<string,SurfaceKind>,
+  // shapes: ShapeLibrary,
+
+  // seems like additionalProperties gives type problems
+  // api.definitions.set(names.kind, schema as OpenAPI2SchemaObject);
+  schema["x-kubernetes-group-version-kind"] = [{
+    group: api.apiGroup,
+    version: api.apiVersion,
+    kind: names.kind,
+  }];
+  schema.properties!["metadata"] = {
+    "$ref": "#/definitions/io.k8s.apimachinery.pkg.apis.meta.v1.ObjectMeta"
+  };
+  defs.set(names.kind, schema);
+
+  defs.set(names.kind+'List', {
+    "type": "object",
+    "required": [ "items" ],
+    "properties": {
+      "apiVersion": { "type": "string" },
+      "items": {
+        "items": {
+          "$ref": `#/definitions/${api.shapePrefix}${names.kind}`
+        },
+        "type": "array"
+      },
+      "kind": { "type": "string" },
+      "metadata": {
+        "$ref": "#/definitions/io.k8s.apimachinery.pkg.apis.meta.v1.ListMeta"
+      }
+    },
+    ["x-kubernetes-group-version-kind"]: [{
+      group: api.apiGroup,
+      version: api.apiVersion,
+      kind: names.kind,
+    }]
+  });
+
+  api.kinds.set(names.kind, {
+    name: names.kind,
+    plural: names.plural,
+    singular: names.singular ?? names.kind,
+    listName: names.listKind ?? `${names.kind}List`,
+    isNamespaced: scope === 'Namespaced',
+  });
+
+  const opBoilerPlate = {
+    consumes: ['application/json'],
+    produces: ['application/json'],
+    schemes: ['https'],
+    operationId: 'faked',
+  }
+  function addOp(operationName: string, scope: OpScope, method: OpenAPI2Methods, opts: {
+    subPath?: string
+    reqKind?: string;
+    respKind?: string;
+    knownOpts?: string;
+    // params?: OpenAPI2RequestParameter[];
+  }) {
+    api.operations.push({
+      ...opBoilerPlate,
+      method: method,
+      operationName: operationName,
+      scope: scope,
+      subPath: (names.plural ?? '') + (opts.subPath ?? ''),
+      parameters: [
+        ...(opts.subPath?.startsWith('/{name}') ? [
+          { name: 'name', in: 'path', schema: { type: 'string' } } as const
+        ] : []),
+        ...(opts.reqKind ? [
+          { name: 'body', in: 'body', schema: { $ref: `#/definitions/${opts.reqKind}` }} as const
+        ] : []),
+        // ...(opts.params ?? []),
+        ...(opts.knownOpts ? opts.knownOpts
+          .split(',').map(x => ({name: x, in: 'query', type: 'string'} as const))
+        : []),
+      ],
+      responses: opts.respKind ? { '200': {
+        schema: { $ref: `#/definitions/${opts.respKind}` },
+      }} : {},
+    });
+  }
+
+  function addCrdOps(scope: OpScope) {
+    addOp(`get${names.kind}List`, scope, 'get', {
+      respKind: `${api.shapePrefix}${names.kind}List`,
+      knownOpts: knownOpts.GetListOpts,
+    });
+    addOp(`watch${names.kind}List`, scope, 'get', {
+      respKind: `${api.shapePrefix}${names.kind}List`,
+      knownOpts: knownOpts.WatchListOpts,
+    });
+    addOp(`create${names.kind}`, scope, 'post', {
+      reqKind: `${api.shapePrefix}${names.kind}`,
+      respKind: `${api.shapePrefix}${names.kind}`,
+      knownOpts: knownOpts.PutOpts,
+    });
+    addOp(`delete${names.kind}List`, scope, 'delete', {
+      reqKind: `io.k8s.apimachinery.pkg.apis.meta.v1.DeleteOptions`,
+      respKind: `${api.shapePrefix}${names.kind}List`, // TODO: check!
+      knownOpts: knownOpts.DeleteListOpts,
+    });
+
+    addOp(`get${names.kind}`, scope, 'get', {
+      respKind: `${api.shapePrefix}${names.kind}`,
+      knownOpts: knownOpts.GetOpts,
+      subPath: '/{name}',
+    });
+    addOp(`delete${names.kind}`, scope, 'delete', {
+      reqKind: `io.k8s.apimachinery.pkg.apis.meta.v1.DeleteOptions`,
+      respKind: `${api.shapePrefix}${names.kind}`, // TODO: check!
+      knownOpts: knownOpts.DeleteOpts,
+      subPath: '/{name}',
+    });
+    addOp(`replace${names.kind}`, scope, 'put', {
+      reqKind: `${api.shapePrefix}${names.kind}`,
+      respKind: `${api.shapePrefix}${names.kind}`,
+      knownOpts: knownOpts.PutOpts,
+      subPath: '/{name}',
+    });
+    addOp(`patch${names.kind}`, scope, 'patch', {
+      reqKind: `${api.shapePrefix}${names.kind}`,
+      respKind: `${api.shapePrefix}${names.kind}`,
+      knownOpts: knownOpts.PatchOpts,
+      subPath: '/{name}',
+    });
+
+    if (subResources.status) {
+
+      addOp(`get${names.kind}Status`, scope, 'get', {
+        respKind: `${api.shapePrefix}${names.kind}`,
+        knownOpts: knownOpts.GetOpts,
+        subPath: '/{name}/status',
+      });
+      addOp(`replace${names.kind}Status`, scope, 'put', {
+        reqKind: `${api.shapePrefix}${names.kind}`,
+        respKind: `${api.shapePrefix}${names.kind}`,
+        knownOpts: knownOpts.PutOpts,
+        subPath: '/{name}/status',
+      });
+      addOp(`patch${names.kind}Status`, scope, 'patch', {
+        reqKind: `${api.shapePrefix}${names.kind}`,
+        respKind: `${api.shapePrefix}${names.kind}`,
+        knownOpts: knownOpts.PatchOpts,
+        subPath: '/{name}/status',
+      });
+
+    }
+    if (subResources.scale) {
+      throw new Error(`TODO: scale subresource on ${names.kind}`);
+    }
+  }
+
+  if (scope === 'Namespaced') {
+
+    addOp(`get${names.kind}ListForAllNamespaces`, 'AllNamespaces', 'get', {
+      respKind: `${api.shapePrefix}${names.kind}List`,
+      knownOpts: knownOpts.GetListOpts,
+    });
+    addOp(`watch${names.kind}ListForAllNamespaces`, 'AllNamespaces', 'get', {
+      respKind: `${api.shapePrefix}${names.kind}List`,
+      knownOpts: knownOpts.WatchListOpts,
+    });
+
+    addCrdOps('Namespaced');
+
+  } else {
+
+    addCrdOps('Cluster');
+
+  }
+
 }
