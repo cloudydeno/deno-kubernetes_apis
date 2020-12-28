@@ -28,5 +28,7 @@ jobs:
       run: time deno cache generation/mod.ts
     - name: Check lib/builtin/*/mod.ts
       run: time deno cache lib/builtin/*/mod.ts
+    - name: Check lib/*/*/mod.ts
+      run: time deno cache lib/*/*/mod.ts
     - name: Check lib/examples/*.ts
       run: time deno cache lib/examples/*.ts
