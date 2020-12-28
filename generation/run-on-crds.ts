@@ -216,7 +216,7 @@ function processCRD({apiGroup, apiVersion, schema, names, scope, subResources}: 
     ["x-kubernetes-group-version-kind"]: [{
       group: api.apiGroup,
       version: api.apiVersion,
-      kind: names.kind,
+      kind: names.kind+'List',
     }]
   });
 

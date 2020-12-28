@@ -7,25 +7,16 @@ type ListOf<T> = {
   items: Array<T>;
 };
 
-export interface DNSEndpointList {
+export interface DNSEndpointList extends ListOf<DNSEndpoint> {
   apiVersion?: "externaldns.k8s.io/v1alpha1";
-  kind?: "DNSEndpoint";
-  items: Array<DNSEndpoint>;
-  metadata?: MetaV1.ListMeta | null;
-}
+  kind?: "DNSEndpointList";
+};
 export function toDNSEndpointList(input: c.JSONValue): DNSEndpointList & c.ApiKind {
   const obj = c.checkObj(input);
   return {
-    ...c.assertOrAddApiVersionAndKind(obj, "externaldns.k8s.io/v1alpha1", "DNSEndpoint"),
-    items: c.readList(obj["items"], toDNSEndpoint),
-    metadata: c.readOpt(obj["metadata"], MetaV1.toListMeta),
-  }}
-export function fromDNSEndpointList(input: DNSEndpointList): c.JSONValue {
-  return {
-    ...c.assertOrAddApiVersionAndKind(input, "externaldns.k8s.io/v1alpha1", "DNSEndpoint"),
-    ...input,
-    items: input.items?.map(fromDNSEndpoint),
-    metadata: input.metadata != null ? MetaV1.fromListMeta(input.metadata) : undefined,
+    ...c.assertOrAddApiVersionAndKind(obj, "externaldns.k8s.io/v1alpha1", "DNSEndpointList"),
+    metadata: MetaV1.toListMeta(obj.metadata),
+    items: c.readList(obj.items, toDNSEndpoint),
   }}
 
 export interface DNSEndpoint {

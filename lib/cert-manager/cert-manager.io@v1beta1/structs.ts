@@ -94,25 +94,16 @@ export function toCertificateRequest_status_conditions(input: c.JSONValue) {
     type: c.checkStr(obj["type"]),
   }}
 
-export interface CertificateRequestList {
+export interface CertificateRequestList extends ListOf<CertificateRequest> {
   apiVersion?: "cert-manager.io/v1beta1";
-  kind?: "CertificateRequest";
-  items: Array<CertificateRequest>;
-  metadata?: MetaV1.ListMeta | null;
-}
+  kind?: "CertificateRequestList";
+};
 export function toCertificateRequestList(input: c.JSONValue): CertificateRequestList & c.ApiKind {
   const obj = c.checkObj(input);
   return {
-    ...c.assertOrAddApiVersionAndKind(obj, "cert-manager.io/v1beta1", "CertificateRequest"),
-    items: c.readList(obj["items"], toCertificateRequest),
-    metadata: c.readOpt(obj["metadata"], MetaV1.toListMeta),
-  }}
-export function fromCertificateRequestList(input: CertificateRequestList): c.JSONValue {
-  return {
-    ...c.assertOrAddApiVersionAndKind(input, "cert-manager.io/v1beta1", "CertificateRequest"),
-    ...input,
-    items: input.items?.map(fromCertificateRequest),
-    metadata: input.metadata != null ? MetaV1.fromListMeta(input.metadata) : undefined,
+    ...c.assertOrAddApiVersionAndKind(obj, "cert-manager.io/v1beta1", "CertificateRequestList"),
+    metadata: MetaV1.toListMeta(obj.metadata),
+    items: c.readList(obj.items, toCertificateRequest),
   }}
 
 /** A Certificate resource should be created to ensure an up to date and signed x509 certificate is stored in the Kubernetes Secret resource named in `spec.secretName`. 
@@ -309,25 +300,16 @@ export function toCertificate_spec_keystores_pkcs12_passwordSecretRef(input: c.J
     name: c.checkStr(obj["name"]),
   }}
 
-export interface CertificateList {
+export interface CertificateList extends ListOf<Certificate> {
   apiVersion?: "cert-manager.io/v1beta1";
-  kind?: "Certificate";
-  items: Array<Certificate>;
-  metadata?: MetaV1.ListMeta | null;
-}
+  kind?: "CertificateList";
+};
 export function toCertificateList(input: c.JSONValue): CertificateList & c.ApiKind {
   const obj = c.checkObj(input);
   return {
-    ...c.assertOrAddApiVersionAndKind(obj, "cert-manager.io/v1beta1", "Certificate"),
-    items: c.readList(obj["items"], toCertificate),
-    metadata: c.readOpt(obj["metadata"], MetaV1.toListMeta),
-  }}
-export function fromCertificateList(input: CertificateList): c.JSONValue {
-  return {
-    ...c.assertOrAddApiVersionAndKind(input, "cert-manager.io/v1beta1", "Certificate"),
-    ...input,
-    items: input.items?.map(fromCertificate),
-    metadata: input.metadata != null ? MetaV1.fromListMeta(input.metadata) : undefined,
+    ...c.assertOrAddApiVersionAndKind(obj, "cert-manager.io/v1beta1", "CertificateList"),
+    metadata: MetaV1.toListMeta(obj.metadata),
+    items: c.readList(obj.items, toCertificate),
   }}
 
 /** A ClusterIssuer represents a certificate issuing authority which can be referenced as part of `issuerRef` fields. It is similar to an Issuer, however it is cluster-scoped and therefore can be referenced by resources that exist in *any* namespace, not just the same namespace as the referent. */
@@ -1197,25 +1179,16 @@ export function toClusterIssuer_spec_acme_solvers_http01_ingress_podTemplate_spe
     values: c.readOpt(obj["values"], x => c.readList(x, c.checkStr)),
   }}
 
-export interface ClusterIssuerList {
+export interface ClusterIssuerList extends ListOf<ClusterIssuer> {
   apiVersion?: "cert-manager.io/v1beta1";
-  kind?: "ClusterIssuer";
-  items: Array<ClusterIssuer>;
-  metadata?: MetaV1.ListMeta | null;
-}
+  kind?: "ClusterIssuerList";
+};
 export function toClusterIssuerList(input: c.JSONValue): ClusterIssuerList & c.ApiKind {
   const obj = c.checkObj(input);
   return {
-    ...c.assertOrAddApiVersionAndKind(obj, "cert-manager.io/v1beta1", "ClusterIssuer"),
-    items: c.readList(obj["items"], toClusterIssuer),
-    metadata: c.readOpt(obj["metadata"], MetaV1.toListMeta),
-  }}
-export function fromClusterIssuerList(input: ClusterIssuerList): c.JSONValue {
-  return {
-    ...c.assertOrAddApiVersionAndKind(input, "cert-manager.io/v1beta1", "ClusterIssuer"),
-    ...input,
-    items: input.items?.map(fromClusterIssuer),
-    metadata: input.metadata != null ? MetaV1.fromListMeta(input.metadata) : undefined,
+    ...c.assertOrAddApiVersionAndKind(obj, "cert-manager.io/v1beta1", "ClusterIssuerList"),
+    metadata: MetaV1.toListMeta(obj.metadata),
+    items: c.readList(obj.items, toClusterIssuer),
   }}
 
 /** An Issuer represents a certificate issuing authority which can be referenced as part of `issuerRef` fields. It is scoped to a single namespace and can therefore only be referenced by resources within the same namespace. */
@@ -2085,23 +2058,14 @@ export function toIssuer_spec_acme_solvers_http01_ingress_podTemplate_spec_affin
     values: c.readOpt(obj["values"], x => c.readList(x, c.checkStr)),
   }}
 
-export interface IssuerList {
+export interface IssuerList extends ListOf<Issuer> {
   apiVersion?: "cert-manager.io/v1beta1";
-  kind?: "Issuer";
-  items: Array<Issuer>;
-  metadata?: MetaV1.ListMeta | null;
-}
+  kind?: "IssuerList";
+};
 export function toIssuerList(input: c.JSONValue): IssuerList & c.ApiKind {
   const obj = c.checkObj(input);
   return {
-    ...c.assertOrAddApiVersionAndKind(obj, "cert-manager.io/v1beta1", "Issuer"),
-    items: c.readList(obj["items"], toIssuer),
-    metadata: c.readOpt(obj["metadata"], MetaV1.toListMeta),
-  }}
-export function fromIssuerList(input: IssuerList): c.JSONValue {
-  return {
-    ...c.assertOrAddApiVersionAndKind(input, "cert-manager.io/v1beta1", "Issuer"),
-    ...input,
-    items: input.items?.map(fromIssuer),
-    metadata: input.metadata != null ? MetaV1.fromListMeta(input.metadata) : undefined,
+    ...c.assertOrAddApiVersionAndKind(obj, "cert-manager.io/v1beta1", "IssuerList"),
+    metadata: MetaV1.toListMeta(obj.metadata),
+    items: c.readList(obj.items, toIssuer),
   }}

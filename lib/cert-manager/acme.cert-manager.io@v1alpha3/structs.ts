@@ -676,25 +676,16 @@ export function toChallenge_spec_solver_http01_ingress_podTemplate_spec_affinity
     values: c.readOpt(obj["values"], x => c.readList(x, c.checkStr)),
   }}
 
-export interface ChallengeList {
+export interface ChallengeList extends ListOf<Challenge> {
   apiVersion?: "acme.cert-manager.io/v1alpha3";
-  kind?: "Challenge";
-  items: Array<Challenge>;
-  metadata?: MetaV1.ListMeta | null;
-}
+  kind?: "ChallengeList";
+};
 export function toChallengeList(input: c.JSONValue): ChallengeList & c.ApiKind {
   const obj = c.checkObj(input);
   return {
-    ...c.assertOrAddApiVersionAndKind(obj, "acme.cert-manager.io/v1alpha3", "Challenge"),
-    items: c.readList(obj["items"], toChallenge),
-    metadata: c.readOpt(obj["metadata"], MetaV1.toListMeta),
-  }}
-export function fromChallengeList(input: ChallengeList): c.JSONValue {
-  return {
-    ...c.assertOrAddApiVersionAndKind(input, "acme.cert-manager.io/v1alpha3", "Challenge"),
-    ...input,
-    items: input.items?.map(fromChallenge),
-    metadata: input.metadata != null ? MetaV1.fromListMeta(input.metadata) : undefined,
+    ...c.assertOrAddApiVersionAndKind(obj, "acme.cert-manager.io/v1alpha3", "ChallengeList"),
+    metadata: MetaV1.toListMeta(obj.metadata),
+    items: c.readList(obj.items, toChallenge),
   }}
 
 /** Order is a type to represent an Order with an ACME server */
@@ -797,23 +788,14 @@ export function toOrder_status_authorizations_challenges(input: c.JSONValue) {
     url: c.checkStr(obj["url"]),
   }}
 
-export interface OrderList {
+export interface OrderList extends ListOf<Order> {
   apiVersion?: "acme.cert-manager.io/v1alpha3";
-  kind?: "Order";
-  items: Array<Order>;
-  metadata?: MetaV1.ListMeta | null;
-}
+  kind?: "OrderList";
+};
 export function toOrderList(input: c.JSONValue): OrderList & c.ApiKind {
   const obj = c.checkObj(input);
   return {
-    ...c.assertOrAddApiVersionAndKind(obj, "acme.cert-manager.io/v1alpha3", "Order"),
-    items: c.readList(obj["items"], toOrder),
-    metadata: c.readOpt(obj["metadata"], MetaV1.toListMeta),
-  }}
-export function fromOrderList(input: OrderList): c.JSONValue {
-  return {
-    ...c.assertOrAddApiVersionAndKind(input, "acme.cert-manager.io/v1alpha3", "Order"),
-    ...input,
-    items: input.items?.map(fromOrder),
-    metadata: input.metadata != null ? MetaV1.fromListMeta(input.metadata) : undefined,
+    ...c.assertOrAddApiVersionAndKind(obj, "acme.cert-manager.io/v1alpha3", "OrderList"),
+    metadata: MetaV1.toListMeta(obj.metadata),
+    items: c.readList(obj.items, toOrder),
   }}
