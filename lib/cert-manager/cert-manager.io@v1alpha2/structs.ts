@@ -2,62 +2,53 @@
 import * as c from "../../common.ts";
 
 import * as MetaV1 from "../../builtin/meta@v1/structs.ts";
-type Kind<T extends string> = {
-  apiVersion: "cert-manager.io/v1alpha2";
-  kind: T;
-};
 type ListOf<T> = {
   metadata: MetaV1.ListMeta;
   items: Array<T>;
 };
 
-/** A CertificateRequest is used to request a signed certificate from one of the configured issuers.
- All fields within the CertificateRequest's `spec` are immutable after creation. A CertificateRequest will either succeed or fail, as denoted by its `status.state` field.
+/** A CertificateRequest is used to request a signed certificate from one of the configured issuers. 
+ All fields within the CertificateRequest's `spec` are immutable after creation. A CertificateRequest will either succeed or fail, as denoted by its `status.state` field. 
  A CertificateRequest is a 'one-shot' resource, meaning it represents a single point in time request for a certificate and cannot be re-used. */
-export type CertificateRequest = Kind<"CertificateRequest"> & CertificateRequestFields;
-export interface CertificateRequestFields {
+export interface CertificateRequest {
+  apiVersion?: "cert-manager.io/v1alpha2";
+  kind?: "CertificateRequest";
+  metadata?: MetaV1.ObjectMeta | null;
   spec?: {
+    csr: string;
+    duration?: string | null;
+    isCA?: boolean | null;
     issuerRef: {
-      kind?: string | null;
       group?: string | null;
+      kind?: string | null;
       name: string;
     };
-    duration?: string | null;
-    csr: string;
     usages?: Array<"signing" | "digital signature" | "content commitment" | "key encipherment" | "key agreement" | "data encipherment" | "cert sign" | "crl sign" | "encipher only" | "decipher only" | "any" | "server auth" | "client auth" | "code signing" | "email protection" | "s/mime" | "ipsec end system" | "ipsec tunnel" | "ipsec user" | "timestamping" | "ocsp signing" | "microsoft sgc" | "netscape sgc" | c.UnexpectedEnumValue> | null;
-    isCA?: boolean | null;
   } | null;
-  metadata?: MetaV1.ObjectMeta | null;
   status?: {
+    ca?: string | null;
+    certificate?: string | null;
     conditions?: Array<{
       lastTransitionTime?: c.Time | null;
-      status: "True" | "False" | "Unknown" | c.UnexpectedEnumValue;
-      reason?: string | null;
-      type: string;
       message?: string | null;
+      reason?: string | null;
+      status: "True" | "False" | "Unknown" | c.UnexpectedEnumValue;
+      type: string;
     }> | null;
-    ca?: string | null;
     failureTime?: c.Time | null;
-    certificate?: string | null;
   } | null;
 }
-export function toCertificateRequestFields(input: c.JSONValue): CertificateRequestFields {
+export function toCertificateRequest(input: c.JSONValue): CertificateRequest & c.ApiKind {
   const obj = c.checkObj(input);
   return {
-    spec: c.readOpt(obj["spec"], toCertificateRequestFields_spec),
+    ...c.assertOrAddApiVersionAndKind(obj, "cert-manager.io/v1alpha2", "CertificateRequest"),
     metadata: c.readOpt(obj["metadata"], MetaV1.toObjectMeta),
-    status: c.readOpt(obj["status"], toCertificateRequestFields_status),
-  }}
-export function toCertificateRequest(input: c.JSONValue): CertificateRequest {
-  const {apiVersion, kind, ...fields} = c.checkObj(input);
-  if (apiVersion !== "cert-manager.io/v1alpha2") throw new Error("Type apiv mis 2");
-  if (kind !== "CertificateRequest") throw new Error("Type kind mis 2");
-  return {
-    apiVersion, kind,
-    ...toCertificateRequestFields(fields),
+    spec: c.readOpt(obj["spec"], toCertificateRequest_spec),
+    status: c.readOpt(obj["status"], toCertificateRequest_status),
   }}
 export function fromCertificateRequest(input: CertificateRequest): c.JSONValue {
   return {
+    ...c.assertOrAddApiVersionAndKind(input, "cert-manager.io/v1alpha2", "CertificateRequest"),
     ...input,
     metadata: input.metadata != null ? MetaV1.fromObjectMeta(input.metadata) : undefined,
     status: input.status != null ? {
@@ -69,1799 +60,89 @@ export function fromCertificateRequest(input: CertificateRequest): c.JSONValue {
       failureTime: input.status.failureTime != null ? c.fromTime(input.status.failureTime) : undefined,
     } : undefined,
   }}
-export function toCertificateRequestFields_spec(input: c.JSONValue) {
+export function toCertificateRequest_spec(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
-    issuerRef: toCertificateRequestFields_spec_issuerRef(obj["issuerRef"]),
-    duration: c.readOpt(obj["duration"], c.checkStr),
     csr: c.checkStr(obj["csr"]),
-    usages: c.readOpt(obj["usages"], x => c.readList(x, (x => c.readEnum<"signing" | "digital signature" | "content commitment" | "key encipherment" | "key agreement" | "data encipherment" | "cert sign" | "crl sign" | "encipher only" | "decipher only" | "any" | "server auth" | "client auth" | "code signing" | "email protection" | "s/mime" | "ipsec end system" | "ipsec tunnel" | "ipsec user" | "timestamping" | "ocsp signing" | "microsoft sgc" | "netscape sgc" | c.UnexpectedEnumValue>(x)))),
+    duration: c.readOpt(obj["duration"], c.checkStr),
     isCA: c.readOpt(obj["isCA"], c.checkBool),
+    issuerRef: toCertificateRequest_spec_issuerRef(obj["issuerRef"]),
+    usages: c.readOpt(obj["usages"], x => c.readList(x, (x => c.readEnum<"signing" | "digital signature" | "content commitment" | "key encipherment" | "key agreement" | "data encipherment" | "cert sign" | "crl sign" | "encipher only" | "decipher only" | "any" | "server auth" | "client auth" | "code signing" | "email protection" | "s/mime" | "ipsec end system" | "ipsec tunnel" | "ipsec user" | "timestamping" | "ocsp signing" | "microsoft sgc" | "netscape sgc" | c.UnexpectedEnumValue>(x)))),
   }}
-export function toCertificateRequestFields_status(input: c.JSONValue) {
+export function toCertificateRequest_status(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
-    conditions: c.readOpt(obj["conditions"], x => c.readList(x, toCertificateRequestFields_status_conditions)),
     ca: c.readOpt(obj["ca"], c.checkStr),
-    failureTime: c.readOpt(obj["failureTime"], c.toTime),
     certificate: c.readOpt(obj["certificate"], c.checkStr),
+    conditions: c.readOpt(obj["conditions"], x => c.readList(x, toCertificateRequest_status_conditions)),
+    failureTime: c.readOpt(obj["failureTime"], c.toTime),
   }}
-export function toCertificateRequestFields_spec_issuerRef(input: c.JSONValue) {
+export function toCertificateRequest_spec_issuerRef(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
-    kind: c.readOpt(obj["kind"], c.checkStr),
     group: c.readOpt(obj["group"], c.checkStr),
+    kind: c.readOpt(obj["kind"], c.checkStr),
     name: c.checkStr(obj["name"]),
   }}
-export function toCertificateRequestFields_status_conditions(input: c.JSONValue) {
+export function toCertificateRequest_status_conditions(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     lastTransitionTime: c.readOpt(obj["lastTransitionTime"], c.toTime),
-    status: (x => c.readEnum<"True" | "False" | "Unknown" | c.UnexpectedEnumValue>(x))(obj["status"]),
-    reason: c.readOpt(obj["reason"], c.checkStr),
-    type: c.checkStr(obj["type"]),
     message: c.readOpt(obj["message"], c.checkStr),
+    reason: c.readOpt(obj["reason"], c.checkStr),
+    status: (x => c.readEnum<"True" | "False" | "Unknown" | c.UnexpectedEnumValue>(x))(obj["status"]),
+    type: c.checkStr(obj["type"]),
   }}
 
-/** A ClusterIssuer represents a certificate issuing authority which can be referenced as part of `issuerRef` fields. It is similar to an Issuer, however it is cluster-scoped and therefore can be referenced by resources that exist in *any* namespace, not just the same namespace as the referent. */
-export type ClusterIssuer = Kind<"ClusterIssuer"> & ClusterIssuerFields;
-export interface ClusterIssuerFields {
-  metadata?: MetaV1.ObjectMeta | null;
-  status?: {
-    conditions?: Array<{
-      message?: string | null;
-      reason?: string | null;
-      type: string;
-      status: "True" | "False" | "Unknown" | c.UnexpectedEnumValue;
-      lastTransitionTime?: c.Time | null;
-    }> | null;
-    acme?: {
-      uri?: string | null;
-      lastRegisteredEmail?: string | null;
-    } | null;
-  } | null;
-  spec?: {
-    venafi?: {
-      cloud?: {
-        apiTokenSecretRef: {
-          key?: string | null;
-          name: string;
-        };
-        url?: string | null;
-      } | null;
-      tpp?: {
-        caBundle?: string | null;
-        url: string;
-        credentialsRef: {
-          name: string;
-        };
-      } | null;
-      zone: string;
-    } | null;
-    selfSigned?: {
-      crlDistributionPoints?: Array<string> | null;
-    } | null;
-    vault?: {
-      auth: {
-        tokenSecretRef?: {
-          key?: string | null;
-          name: string;
-        } | null;
-        appRole?: {
-          secretRef: {
-            name: string;
-            key?: string | null;
-          };
-          roleId: string;
-          path: string;
-        } | null;
-        kubernetes?: {
-          mountPath?: string | null;
-          secretRef: {
-            key?: string | null;
-            name: string;
-          };
-          role: string;
-        } | null;
-      };
-      caBundle?: string | null;
-      server: string;
-      path: string;
-    } | null;
-    ca?: {
-      crlDistributionPoints?: Array<string> | null;
-      secretName: string;
-    } | null;
-    acme?: {
-      privateKeySecretRef: {
-        name: string;
-        key?: string | null;
-      };
-      email?: string | null;
-      externalAccountBinding?: {
-        keyAlgorithm: "HS256" | "HS384" | "HS512" | c.UnexpectedEnumValue;
-        keyID: string;
-        keySecretRef: {
-          name: string;
-          key?: string | null;
-        };
-      } | null;
-      skipTLSVerify?: boolean | null;
-      server: string;
-      solvers?: Array<{
-        dns01?: {
-          acmedns?: {
-            host: string;
-            accountSecretRef: {
-              name: string;
-              key?: string | null;
-            };
-          } | null;
-          digitalocean?: {
-            tokenSecretRef: {
-              name: string;
-              key?: string | null;
-            };
-          } | null;
-          route53?: {
-            hostedZoneID?: string | null;
-            secretAccessKeySecretRef?: {
-              name: string;
-              key?: string | null;
-            } | null;
-            accessKeyID?: string | null;
-            role?: string | null;
-            region: string;
-          } | null;
-          rfc2136?: {
-            nameserver: string;
-            tsigKeyName?: string | null;
-            tsigAlgorithm?: string | null;
-            tsigSecretSecretRef?: {
-              key?: string | null;
-              name: string;
-            } | null;
-          } | null;
-          webhook?: {
-            groupName: string;
-            solverName: string;
-            config?: c.JSONValue | null;
-          } | null;
-          cnameStrategy?: "None" | "Follow" | c.UnexpectedEnumValue | null;
-          akamai?: {
-            serviceConsumerDomain: string;
-            clientSecretSecretRef: {
-              key?: string | null;
-              name: string;
-            };
-            accessTokenSecretRef: {
-              name: string;
-              key?: string | null;
-            };
-            clientTokenSecretRef: {
-              name: string;
-              key?: string | null;
-            };
-          } | null;
-          cloudflare?: {
-            apiKeySecretRef?: {
-              key?: string | null;
-              name: string;
-            } | null;
-            apiTokenSecretRef?: {
-              name: string;
-              key?: string | null;
-            } | null;
-            email?: string | null;
-          } | null;
-          clouddns?: {
-            hostedZoneName?: string | null;
-            serviceAccountSecretRef?: {
-              key?: string | null;
-              name: string;
-            } | null;
-            project: string;
-          } | null;
-          azuredns?: {
-            subscriptionID: string;
-            clientID?: string | null;
-            clientSecretSecretRef?: {
-              name: string;
-              key?: string | null;
-            } | null;
-            tenantID?: string | null;
-            hostedZoneName?: string | null;
-            resourceGroupName: string;
-            environment?: "AzurePublicCloud" | "AzureChinaCloud" | "AzureGermanCloud" | "AzureUSGovernmentCloud" | c.UnexpectedEnumValue | null;
-          } | null;
-        } | null;
-        http01?: {
-          ingress?: {
-            name?: string | null;
-            class?: string | null;
-            podTemplate?: {
-              metadata?: {
-                annotations?: Record<string,string> | null;
-                labels?: Record<string,string> | null;
-              } | null;
-              spec?: {
-                affinity?: {
-                  podAntiAffinity?: {
-                    requiredDuringSchedulingIgnoredDuringExecution?: Array<{
-                      labelSelector?: {
-                        matchExpressions?: Array<{
-                          operator: string;
-                          values?: Array<string> | null;
-                          key: string;
-                        }> | null;
-                        matchLabels?: Record<string,string> | null;
-                      } | null;
-                      namespaces?: Array<string> | null;
-                      topologyKey: string;
-                    }> | null;
-                    preferredDuringSchedulingIgnoredDuringExecution?: Array<{
-                      weight: number;
-                      podAffinityTerm: {
-                        topologyKey: string;
-                        namespaces?: Array<string> | null;
-                        labelSelector?: {
-                          matchLabels?: Record<string,string> | null;
-                          matchExpressions?: Array<{
-                            key: string;
-                            operator: string;
-                            values?: Array<string> | null;
-                          }> | null;
-                        } | null;
-                      };
-                    }> | null;
-                  } | null;
-                  podAffinity?: {
-                    requiredDuringSchedulingIgnoredDuringExecution?: Array<{
-                      topologyKey: string;
-                      namespaces?: Array<string> | null;
-                      labelSelector?: {
-                        matchLabels?: Record<string,string> | null;
-                        matchExpressions?: Array<{
-                          key: string;
-                          operator: string;
-                          values?: Array<string> | null;
-                        }> | null;
-                      } | null;
-                    }> | null;
-                    preferredDuringSchedulingIgnoredDuringExecution?: Array<{
-                      podAffinityTerm: {
-                        topologyKey: string;
-                        namespaces?: Array<string> | null;
-                        labelSelector?: {
-                          matchLabels?: Record<string,string> | null;
-                          matchExpressions?: Array<{
-                            key: string;
-                            operator: string;
-                            values?: Array<string> | null;
-                          }> | null;
-                        } | null;
-                      };
-                      weight: number;
-                    }> | null;
-                  } | null;
-                  nodeAffinity?: {
-                    preferredDuringSchedulingIgnoredDuringExecution?: Array<{
-                      preference: {
-                        matchFields?: Array<{
-                          key: string;
-                          values?: Array<string> | null;
-                          operator: string;
-                        }> | null;
-                        matchExpressions?: Array<{
-                          key: string;
-                          values?: Array<string> | null;
-                          operator: string;
-                        }> | null;
-                      };
-                      weight: number;
-                    }> | null;
-                    requiredDuringSchedulingIgnoredDuringExecution?: {
-                      nodeSelectorTerms: Array<{
-                        matchFields?: Array<{
-                          values?: Array<string> | null;
-                          operator: string;
-                          key: string;
-                        }> | null;
-                        matchExpressions?: Array<{
-                          operator: string;
-                          values?: Array<string> | null;
-                          key: string;
-                        }> | null;
-                      }>;
-                    } | null;
-                  } | null;
-                } | null;
-                tolerations?: Array<{
-                  operator?: string | null;
-                  tolerationSeconds?: number | null;
-                  value?: string | null;
-                  effect?: string | null;
-                  key?: string | null;
-                }> | null;
-                nodeSelector?: Record<string,string> | null;
-              } | null;
-            } | null;
-            serviceType?: string | null;
-            ingressTemplate?: {
-              metadata?: {
-                labels?: Record<string,string> | null;
-                annotations?: Record<string,string> | null;
-              } | null;
-            } | null;
-          } | null;
-        } | null;
-        selector?: {
-          matchLabels?: Record<string,string> | null;
-          dnsZones?: Array<string> | null;
-          dnsNames?: Array<string> | null;
-        } | null;
-      }> | null;
-    } | null;
-  } | null;
+export interface CertificateRequestList {
+  apiVersion?: "cert-manager.io/v1alpha2";
+  kind?: "CertificateRequest";
+  items: Array<CertificateRequest>;
+  metadata?: MetaV1.ListMeta | null;
 }
-export function toClusterIssuerFields(input: c.JSONValue): ClusterIssuerFields {
+export function toCertificateRequestList(input: c.JSONValue): CertificateRequestList & c.ApiKind {
   const obj = c.checkObj(input);
   return {
-    metadata: c.readOpt(obj["metadata"], MetaV1.toObjectMeta),
-    status: c.readOpt(obj["status"], toClusterIssuerFields_status),
-    spec: c.readOpt(obj["spec"], toClusterIssuerFields_spec),
+    ...c.assertOrAddApiVersionAndKind(obj, "cert-manager.io/v1alpha2", "CertificateRequest"),
+    items: c.readList(obj["items"], toCertificateRequest),
+    metadata: c.readOpt(obj["metadata"], MetaV1.toListMeta),
   }}
-export function toClusterIssuer(input: c.JSONValue): ClusterIssuer {
-  const {apiVersion, kind, ...fields} = c.checkObj(input);
-  if (apiVersion !== "cert-manager.io/v1alpha2") throw new Error("Type apiv mis 2");
-  if (kind !== "ClusterIssuer") throw new Error("Type kind mis 2");
+export function fromCertificateRequestList(input: CertificateRequestList): c.JSONValue {
   return {
-    apiVersion, kind,
-    ...toClusterIssuerFields(fields),
-  }}
-export function fromClusterIssuer(input: ClusterIssuer): c.JSONValue {
-  return {
+    ...c.assertOrAddApiVersionAndKind(input, "cert-manager.io/v1alpha2", "CertificateRequest"),
     ...input,
-    metadata: input.metadata != null ? MetaV1.fromObjectMeta(input.metadata) : undefined,
-    status: input.status != null ? {
-      ...input.status,
-      conditions: input.status.conditions?.map(x => ({
-        ...x,
-        lastTransitionTime: x.lastTransitionTime != null ? c.fromTime(x.lastTransitionTime) : undefined,
-      })),
-    } : undefined,
-  }}
-export function toClusterIssuerFields_status(input: c.JSONValue) {
-  const obj = c.checkObj(input);
-  return {
-    conditions: c.readOpt(obj["conditions"], x => c.readList(x, toClusterIssuerFields_status_conditions)),
-    acme: c.readOpt(obj["acme"], toClusterIssuerFields_status_acme),
-  }}
-export function toClusterIssuerFields_spec(input: c.JSONValue) {
-  const obj = c.checkObj(input);
-  return {
-    venafi: c.readOpt(obj["venafi"], toClusterIssuerFields_spec_venafi),
-    selfSigned: c.readOpt(obj["selfSigned"], toClusterIssuerFields_spec_selfSigned),
-    vault: c.readOpt(obj["vault"], toClusterIssuerFields_spec_vault),
-    ca: c.readOpt(obj["ca"], toClusterIssuerFields_spec_ca),
-    acme: c.readOpt(obj["acme"], toClusterIssuerFields_spec_acme),
-  }}
-export function toClusterIssuerFields_status_conditions(input: c.JSONValue) {
-  const obj = c.checkObj(input);
-  return {
-    message: c.readOpt(obj["message"], c.checkStr),
-    reason: c.readOpt(obj["reason"], c.checkStr),
-    type: c.checkStr(obj["type"]),
-    status: (x => c.readEnum<"True" | "False" | "Unknown" | c.UnexpectedEnumValue>(x))(obj["status"]),
-    lastTransitionTime: c.readOpt(obj["lastTransitionTime"], c.toTime),
-  }}
-export function toClusterIssuerFields_status_acme(input: c.JSONValue) {
-  const obj = c.checkObj(input);
-  return {
-    uri: c.readOpt(obj["uri"], c.checkStr),
-    lastRegisteredEmail: c.readOpt(obj["lastRegisteredEmail"], c.checkStr),
-  }}
-export function toClusterIssuerFields_spec_venafi(input: c.JSONValue) {
-  const obj = c.checkObj(input);
-  return {
-    cloud: c.readOpt(obj["cloud"], toClusterIssuerFields_spec_venafi_cloud),
-    tpp: c.readOpt(obj["tpp"], toClusterIssuerFields_spec_venafi_tpp),
-    zone: c.checkStr(obj["zone"]),
-  }}
-export function toClusterIssuerFields_spec_selfSigned(input: c.JSONValue) {
-  const obj = c.checkObj(input);
-  return {
-    crlDistributionPoints: c.readOpt(obj["crlDistributionPoints"], x => c.readList(x, c.checkStr)),
-  }}
-export function toClusterIssuerFields_spec_vault(input: c.JSONValue) {
-  const obj = c.checkObj(input);
-  return {
-    auth: toClusterIssuerFields_spec_vault_auth(obj["auth"]),
-    caBundle: c.readOpt(obj["caBundle"], c.checkStr),
-    server: c.checkStr(obj["server"]),
-    path: c.checkStr(obj["path"]),
-  }}
-export function toClusterIssuerFields_spec_ca(input: c.JSONValue) {
-  const obj = c.checkObj(input);
-  return {
-    crlDistributionPoints: c.readOpt(obj["crlDistributionPoints"], x => c.readList(x, c.checkStr)),
-    secretName: c.checkStr(obj["secretName"]),
-  }}
-export function toClusterIssuerFields_spec_acme(input: c.JSONValue) {
-  const obj = c.checkObj(input);
-  return {
-    privateKeySecretRef: toClusterIssuerFields_spec_acme_privateKeySecretRef(obj["privateKeySecretRef"]),
-    email: c.readOpt(obj["email"], c.checkStr),
-    externalAccountBinding: c.readOpt(obj["externalAccountBinding"], toClusterIssuerFields_spec_acme_externalAccountBinding),
-    skipTLSVerify: c.readOpt(obj["skipTLSVerify"], c.checkBool),
-    server: c.checkStr(obj["server"]),
-    solvers: c.readOpt(obj["solvers"], x => c.readList(x, toClusterIssuerFields_spec_acme_solvers)),
-  }}
-export function toClusterIssuerFields_spec_venafi_cloud(input: c.JSONValue) {
-  const obj = c.checkObj(input);
-  return {
-    apiTokenSecretRef: toClusterIssuerFields_spec_venafi_cloud_apiTokenSecretRef(obj["apiTokenSecretRef"]),
-    url: c.readOpt(obj["url"], c.checkStr),
-  }}
-export function toClusterIssuerFields_spec_venafi_tpp(input: c.JSONValue) {
-  const obj = c.checkObj(input);
-  return {
-    caBundle: c.readOpt(obj["caBundle"], c.checkStr),
-    url: c.checkStr(obj["url"]),
-    credentialsRef: toClusterIssuerFields_spec_venafi_tpp_credentialsRef(obj["credentialsRef"]),
-  }}
-export function toClusterIssuerFields_spec_vault_auth(input: c.JSONValue) {
-  const obj = c.checkObj(input);
-  return {
-    tokenSecretRef: c.readOpt(obj["tokenSecretRef"], toClusterIssuerFields_spec_vault_auth_tokenSecretRef),
-    appRole: c.readOpt(obj["appRole"], toClusterIssuerFields_spec_vault_auth_appRole),
-    kubernetes: c.readOpt(obj["kubernetes"], toClusterIssuerFields_spec_vault_auth_kubernetes),
-  }}
-export function toClusterIssuerFields_spec_acme_privateKeySecretRef(input: c.JSONValue) {
-  const obj = c.checkObj(input);
-  return {
-    name: c.checkStr(obj["name"]),
-    key: c.readOpt(obj["key"], c.checkStr),
-  }}
-export function toClusterIssuerFields_spec_acme_externalAccountBinding(input: c.JSONValue) {
-  const obj = c.checkObj(input);
-  return {
-    keyAlgorithm: (x => c.readEnum<"HS256" | "HS384" | "HS512" | c.UnexpectedEnumValue>(x))(obj["keyAlgorithm"]),
-    keyID: c.checkStr(obj["keyID"]),
-    keySecretRef: toClusterIssuerFields_spec_acme_externalAccountBinding_keySecretRef(obj["keySecretRef"]),
-  }}
-export function toClusterIssuerFields_spec_acme_solvers(input: c.JSONValue) {
-  const obj = c.checkObj(input);
-  return {
-    dns01: c.readOpt(obj["dns01"], toClusterIssuerFields_spec_acme_solvers_dns01),
-    http01: c.readOpt(obj["http01"], toClusterIssuerFields_spec_acme_solvers_http01),
-    selector: c.readOpt(obj["selector"], toClusterIssuerFields_spec_acme_solvers_selector),
-  }}
-export function toClusterIssuerFields_spec_venafi_cloud_apiTokenSecretRef(input: c.JSONValue) {
-  const obj = c.checkObj(input);
-  return {
-    key: c.readOpt(obj["key"], c.checkStr),
-    name: c.checkStr(obj["name"]),
-  }}
-export function toClusterIssuerFields_spec_venafi_tpp_credentialsRef(input: c.JSONValue) {
-  const obj = c.checkObj(input);
-  return {
-    name: c.checkStr(obj["name"]),
-  }}
-export function toClusterIssuerFields_spec_vault_auth_tokenSecretRef(input: c.JSONValue) {
-  const obj = c.checkObj(input);
-  return {
-    key: c.readOpt(obj["key"], c.checkStr),
-    name: c.checkStr(obj["name"]),
-  }}
-export function toClusterIssuerFields_spec_vault_auth_appRole(input: c.JSONValue) {
-  const obj = c.checkObj(input);
-  return {
-    secretRef: toClusterIssuerFields_spec_vault_auth_appRole_secretRef(obj["secretRef"]),
-    roleId: c.checkStr(obj["roleId"]),
-    path: c.checkStr(obj["path"]),
-  }}
-export function toClusterIssuerFields_spec_vault_auth_kubernetes(input: c.JSONValue) {
-  const obj = c.checkObj(input);
-  return {
-    mountPath: c.readOpt(obj["mountPath"], c.checkStr),
-    secretRef: toClusterIssuerFields_spec_vault_auth_kubernetes_secretRef(obj["secretRef"]),
-    role: c.checkStr(obj["role"]),
-  }}
-export function toClusterIssuerFields_spec_acme_externalAccountBinding_keySecretRef(input: c.JSONValue) {
-  const obj = c.checkObj(input);
-  return {
-    name: c.checkStr(obj["name"]),
-    key: c.readOpt(obj["key"], c.checkStr),
-  }}
-export function toClusterIssuerFields_spec_acme_solvers_dns01(input: c.JSONValue) {
-  const obj = c.checkObj(input);
-  return {
-    acmedns: c.readOpt(obj["acmedns"], toClusterIssuerFields_spec_acme_solvers_dns01_acmedns),
-    digitalocean: c.readOpt(obj["digitalocean"], toClusterIssuerFields_spec_acme_solvers_dns01_digitalocean),
-    route53: c.readOpt(obj["route53"], toClusterIssuerFields_spec_acme_solvers_dns01_route53),
-    rfc2136: c.readOpt(obj["rfc2136"], toClusterIssuerFields_spec_acme_solvers_dns01_rfc2136),
-    webhook: c.readOpt(obj["webhook"], toClusterIssuerFields_spec_acme_solvers_dns01_webhook),
-    cnameStrategy: c.readOpt(obj["cnameStrategy"], (x => c.readEnum<"None" | "Follow" | c.UnexpectedEnumValue>(x))),
-    akamai: c.readOpt(obj["akamai"], toClusterIssuerFields_spec_acme_solvers_dns01_akamai),
-    cloudflare: c.readOpt(obj["cloudflare"], toClusterIssuerFields_spec_acme_solvers_dns01_cloudflare),
-    clouddns: c.readOpt(obj["clouddns"], toClusterIssuerFields_spec_acme_solvers_dns01_clouddns),
-    azuredns: c.readOpt(obj["azuredns"], toClusterIssuerFields_spec_acme_solvers_dns01_azuredns),
-  }}
-export function toClusterIssuerFields_spec_acme_solvers_http01(input: c.JSONValue) {
-  const obj = c.checkObj(input);
-  return {
-    ingress: c.readOpt(obj["ingress"], toClusterIssuerFields_spec_acme_solvers_http01_ingress),
-  }}
-export function toClusterIssuerFields_spec_acme_solvers_selector(input: c.JSONValue) {
-  const obj = c.checkObj(input);
-  return {
-    matchLabels: c.readOpt(obj["matchLabels"], x => c.readMap(x, c.checkStr)),
-    dnsZones: c.readOpt(obj["dnsZones"], x => c.readList(x, c.checkStr)),
-    dnsNames: c.readOpt(obj["dnsNames"], x => c.readList(x, c.checkStr)),
-  }}
-export function toClusterIssuerFields_spec_vault_auth_appRole_secretRef(input: c.JSONValue) {
-  const obj = c.checkObj(input);
-  return {
-    name: c.checkStr(obj["name"]),
-    key: c.readOpt(obj["key"], c.checkStr),
-  }}
-export function toClusterIssuerFields_spec_vault_auth_kubernetes_secretRef(input: c.JSONValue) {
-  const obj = c.checkObj(input);
-  return {
-    key: c.readOpt(obj["key"], c.checkStr),
-    name: c.checkStr(obj["name"]),
-  }}
-export function toClusterIssuerFields_spec_acme_solvers_dns01_acmedns(input: c.JSONValue) {
-  const obj = c.checkObj(input);
-  return {
-    host: c.checkStr(obj["host"]),
-    accountSecretRef: toClusterIssuerFields_spec_acme_solvers_dns01_acmedns_accountSecretRef(obj["accountSecretRef"]),
-  }}
-export function toClusterIssuerFields_spec_acme_solvers_dns01_digitalocean(input: c.JSONValue) {
-  const obj = c.checkObj(input);
-  return {
-    tokenSecretRef: toClusterIssuerFields_spec_acme_solvers_dns01_digitalocean_tokenSecretRef(obj["tokenSecretRef"]),
-  }}
-export function toClusterIssuerFields_spec_acme_solvers_dns01_route53(input: c.JSONValue) {
-  const obj = c.checkObj(input);
-  return {
-    hostedZoneID: c.readOpt(obj["hostedZoneID"], c.checkStr),
-    secretAccessKeySecretRef: c.readOpt(obj["secretAccessKeySecretRef"], toClusterIssuerFields_spec_acme_solvers_dns01_route53_secretAccessKeySecretRef),
-    accessKeyID: c.readOpt(obj["accessKeyID"], c.checkStr),
-    role: c.readOpt(obj["role"], c.checkStr),
-    region: c.checkStr(obj["region"]),
-  }}
-export function toClusterIssuerFields_spec_acme_solvers_dns01_rfc2136(input: c.JSONValue) {
-  const obj = c.checkObj(input);
-  return {
-    nameserver: c.checkStr(obj["nameserver"]),
-    tsigKeyName: c.readOpt(obj["tsigKeyName"], c.checkStr),
-    tsigAlgorithm: c.readOpt(obj["tsigAlgorithm"], c.checkStr),
-    tsigSecretSecretRef: c.readOpt(obj["tsigSecretSecretRef"], toClusterIssuerFields_spec_acme_solvers_dns01_rfc2136_tsigSecretSecretRef),
-  }}
-export function toClusterIssuerFields_spec_acme_solvers_dns01_webhook(input: c.JSONValue) {
-  const obj = c.checkObj(input);
-  return {
-    groupName: c.checkStr(obj["groupName"]),
-    solverName: c.checkStr(obj["solverName"]),
-    config: c.readOpt(obj["config"], c.identity),
-  }}
-export function toClusterIssuerFields_spec_acme_solvers_dns01_akamai(input: c.JSONValue) {
-  const obj = c.checkObj(input);
-  return {
-    serviceConsumerDomain: c.checkStr(obj["serviceConsumerDomain"]),
-    clientSecretSecretRef: toClusterIssuerFields_spec_acme_solvers_dns01_akamai_clientSecretSecretRef(obj["clientSecretSecretRef"]),
-    accessTokenSecretRef: toClusterIssuerFields_spec_acme_solvers_dns01_akamai_accessTokenSecretRef(obj["accessTokenSecretRef"]),
-    clientTokenSecretRef: toClusterIssuerFields_spec_acme_solvers_dns01_akamai_clientTokenSecretRef(obj["clientTokenSecretRef"]),
-  }}
-export function toClusterIssuerFields_spec_acme_solvers_dns01_cloudflare(input: c.JSONValue) {
-  const obj = c.checkObj(input);
-  return {
-    apiKeySecretRef: c.readOpt(obj["apiKeySecretRef"], toClusterIssuerFields_spec_acme_solvers_dns01_cloudflare_apiKeySecretRef),
-    apiTokenSecretRef: c.readOpt(obj["apiTokenSecretRef"], toClusterIssuerFields_spec_acme_solvers_dns01_cloudflare_apiTokenSecretRef),
-    email: c.readOpt(obj["email"], c.checkStr),
-  }}
-export function toClusterIssuerFields_spec_acme_solvers_dns01_clouddns(input: c.JSONValue) {
-  const obj = c.checkObj(input);
-  return {
-    hostedZoneName: c.readOpt(obj["hostedZoneName"], c.checkStr),
-    serviceAccountSecretRef: c.readOpt(obj["serviceAccountSecretRef"], toClusterIssuerFields_spec_acme_solvers_dns01_clouddns_serviceAccountSecretRef),
-    project: c.checkStr(obj["project"]),
-  }}
-export function toClusterIssuerFields_spec_acme_solvers_dns01_azuredns(input: c.JSONValue) {
-  const obj = c.checkObj(input);
-  return {
-    subscriptionID: c.checkStr(obj["subscriptionID"]),
-    clientID: c.readOpt(obj["clientID"], c.checkStr),
-    clientSecretSecretRef: c.readOpt(obj["clientSecretSecretRef"], toClusterIssuerFields_spec_acme_solvers_dns01_azuredns_clientSecretSecretRef),
-    tenantID: c.readOpt(obj["tenantID"], c.checkStr),
-    hostedZoneName: c.readOpt(obj["hostedZoneName"], c.checkStr),
-    resourceGroupName: c.checkStr(obj["resourceGroupName"]),
-    environment: c.readOpt(obj["environment"], (x => c.readEnum<"AzurePublicCloud" | "AzureChinaCloud" | "AzureGermanCloud" | "AzureUSGovernmentCloud" | c.UnexpectedEnumValue>(x))),
-  }}
-export function toClusterIssuerFields_spec_acme_solvers_http01_ingress(input: c.JSONValue) {
-  const obj = c.checkObj(input);
-  return {
-    name: c.readOpt(obj["name"], c.checkStr),
-    class: c.readOpt(obj["class"], c.checkStr),
-    podTemplate: c.readOpt(obj["podTemplate"], toClusterIssuerFields_spec_acme_solvers_http01_ingress_podTemplate),
-    serviceType: c.readOpt(obj["serviceType"], c.checkStr),
-    ingressTemplate: c.readOpt(obj["ingressTemplate"], toClusterIssuerFields_spec_acme_solvers_http01_ingress_ingressTemplate),
-  }}
-export function toClusterIssuerFields_spec_acme_solvers_dns01_acmedns_accountSecretRef(input: c.JSONValue) {
-  const obj = c.checkObj(input);
-  return {
-    name: c.checkStr(obj["name"]),
-    key: c.readOpt(obj["key"], c.checkStr),
-  }}
-export function toClusterIssuerFields_spec_acme_solvers_dns01_digitalocean_tokenSecretRef(input: c.JSONValue) {
-  const obj = c.checkObj(input);
-  return {
-    name: c.checkStr(obj["name"]),
-    key: c.readOpt(obj["key"], c.checkStr),
-  }}
-export function toClusterIssuerFields_spec_acme_solvers_dns01_route53_secretAccessKeySecretRef(input: c.JSONValue) {
-  const obj = c.checkObj(input);
-  return {
-    name: c.checkStr(obj["name"]),
-    key: c.readOpt(obj["key"], c.checkStr),
-  }}
-export function toClusterIssuerFields_spec_acme_solvers_dns01_rfc2136_tsigSecretSecretRef(input: c.JSONValue) {
-  const obj = c.checkObj(input);
-  return {
-    key: c.readOpt(obj["key"], c.checkStr),
-    name: c.checkStr(obj["name"]),
-  }}
-export function toClusterIssuerFields_spec_acme_solvers_dns01_akamai_clientSecretSecretRef(input: c.JSONValue) {
-  const obj = c.checkObj(input);
-  return {
-    key: c.readOpt(obj["key"], c.checkStr),
-    name: c.checkStr(obj["name"]),
-  }}
-export function toClusterIssuerFields_spec_acme_solvers_dns01_akamai_accessTokenSecretRef(input: c.JSONValue) {
-  const obj = c.checkObj(input);
-  return {
-    name: c.checkStr(obj["name"]),
-    key: c.readOpt(obj["key"], c.checkStr),
-  }}
-export function toClusterIssuerFields_spec_acme_solvers_dns01_akamai_clientTokenSecretRef(input: c.JSONValue) {
-  const obj = c.checkObj(input);
-  return {
-    name: c.checkStr(obj["name"]),
-    key: c.readOpt(obj["key"], c.checkStr),
-  }}
-export function toClusterIssuerFields_spec_acme_solvers_dns01_cloudflare_apiKeySecretRef(input: c.JSONValue) {
-  const obj = c.checkObj(input);
-  return {
-    key: c.readOpt(obj["key"], c.checkStr),
-    name: c.checkStr(obj["name"]),
-  }}
-export function toClusterIssuerFields_spec_acme_solvers_dns01_cloudflare_apiTokenSecretRef(input: c.JSONValue) {
-  const obj = c.checkObj(input);
-  return {
-    name: c.checkStr(obj["name"]),
-    key: c.readOpt(obj["key"], c.checkStr),
-  }}
-export function toClusterIssuerFields_spec_acme_solvers_dns01_clouddns_serviceAccountSecretRef(input: c.JSONValue) {
-  const obj = c.checkObj(input);
-  return {
-    key: c.readOpt(obj["key"], c.checkStr),
-    name: c.checkStr(obj["name"]),
-  }}
-export function toClusterIssuerFields_spec_acme_solvers_dns01_azuredns_clientSecretSecretRef(input: c.JSONValue) {
-  const obj = c.checkObj(input);
-  return {
-    name: c.checkStr(obj["name"]),
-    key: c.readOpt(obj["key"], c.checkStr),
-  }}
-export function toClusterIssuerFields_spec_acme_solvers_http01_ingress_podTemplate(input: c.JSONValue) {
-  const obj = c.checkObj(input);
-  return {
-    metadata: c.readOpt(obj["metadata"], toClusterIssuerFields_spec_acme_solvers_http01_ingress_podTemplate_metadata),
-    spec: c.readOpt(obj["spec"], toClusterIssuerFields_spec_acme_solvers_http01_ingress_podTemplate_spec),
-  }}
-export function toClusterIssuerFields_spec_acme_solvers_http01_ingress_ingressTemplate(input: c.JSONValue) {
-  const obj = c.checkObj(input);
-  return {
-    metadata: c.readOpt(obj["metadata"], toClusterIssuerFields_spec_acme_solvers_http01_ingress_ingressTemplate_metadata),
-  }}
-export function toClusterIssuerFields_spec_acme_solvers_http01_ingress_podTemplate_metadata(input: c.JSONValue) {
-  const obj = c.checkObj(input);
-  return {
-    annotations: c.readOpt(obj["annotations"], x => c.readMap(x, c.checkStr)),
-    labels: c.readOpt(obj["labels"], x => c.readMap(x, c.checkStr)),
-  }}
-export function toClusterIssuerFields_spec_acme_solvers_http01_ingress_podTemplate_spec(input: c.JSONValue) {
-  const obj = c.checkObj(input);
-  return {
-    affinity: c.readOpt(obj["affinity"], toClusterIssuerFields_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity),
-    tolerations: c.readOpt(obj["tolerations"], x => c.readList(x, toClusterIssuerFields_spec_acme_solvers_http01_ingress_podTemplate_spec_tolerations)),
-    nodeSelector: c.readOpt(obj["nodeSelector"], x => c.readMap(x, c.checkStr)),
-  }}
-export function toClusterIssuerFields_spec_acme_solvers_http01_ingress_ingressTemplate_metadata(input: c.JSONValue) {
-  const obj = c.checkObj(input);
-  return {
-    labels: c.readOpt(obj["labels"], x => c.readMap(x, c.checkStr)),
-    annotations: c.readOpt(obj["annotations"], x => c.readMap(x, c.checkStr)),
-  }}
-export function toClusterIssuerFields_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity(input: c.JSONValue) {
-  const obj = c.checkObj(input);
-  return {
-    podAntiAffinity: c.readOpt(obj["podAntiAffinity"], toClusterIssuerFields_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity_podAntiAffinity),
-    podAffinity: c.readOpt(obj["podAffinity"], toClusterIssuerFields_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity_podAffinity),
-    nodeAffinity: c.readOpt(obj["nodeAffinity"], toClusterIssuerFields_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity_nodeAffinity),
-  }}
-export function toClusterIssuerFields_spec_acme_solvers_http01_ingress_podTemplate_spec_tolerations(input: c.JSONValue) {
-  const obj = c.checkObj(input);
-  return {
-    operator: c.readOpt(obj["operator"], c.checkStr),
-    tolerationSeconds: c.readOpt(obj["tolerationSeconds"], c.checkNum),
-    value: c.readOpt(obj["value"], c.checkStr),
-    effect: c.readOpt(obj["effect"], c.checkStr),
-    key: c.readOpt(obj["key"], c.checkStr),
-  }}
-export function toClusterIssuerFields_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity_podAntiAffinity(input: c.JSONValue) {
-  const obj = c.checkObj(input);
-  return {
-    requiredDuringSchedulingIgnoredDuringExecution: c.readOpt(obj["requiredDuringSchedulingIgnoredDuringExecution"], x => c.readList(x, toClusterIssuerFields_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity_podAntiAffinity_requiredDuringSchedulingIgnoredDuringExecution)),
-    preferredDuringSchedulingIgnoredDuringExecution: c.readOpt(obj["preferredDuringSchedulingIgnoredDuringExecution"], x => c.readList(x, toClusterIssuerFields_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity_podAntiAffinity_preferredDuringSchedulingIgnoredDuringExecution)),
-  }}
-export function toClusterIssuerFields_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity_podAffinity(input: c.JSONValue) {
-  const obj = c.checkObj(input);
-  return {
-    requiredDuringSchedulingIgnoredDuringExecution: c.readOpt(obj["requiredDuringSchedulingIgnoredDuringExecution"], x => c.readList(x, toClusterIssuerFields_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity_podAffinity_requiredDuringSchedulingIgnoredDuringExecution)),
-    preferredDuringSchedulingIgnoredDuringExecution: c.readOpt(obj["preferredDuringSchedulingIgnoredDuringExecution"], x => c.readList(x, toClusterIssuerFields_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity_podAffinity_preferredDuringSchedulingIgnoredDuringExecution)),
-  }}
-export function toClusterIssuerFields_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity_nodeAffinity(input: c.JSONValue) {
-  const obj = c.checkObj(input);
-  return {
-    preferredDuringSchedulingIgnoredDuringExecution: c.readOpt(obj["preferredDuringSchedulingIgnoredDuringExecution"], x => c.readList(x, toClusterIssuerFields_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity_nodeAffinity_preferredDuringSchedulingIgnoredDuringExecution)),
-    requiredDuringSchedulingIgnoredDuringExecution: c.readOpt(obj["requiredDuringSchedulingIgnoredDuringExecution"], toClusterIssuerFields_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity_nodeAffinity_requiredDuringSchedulingIgnoredDuringExecution),
-  }}
-export function toClusterIssuerFields_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity_podAntiAffinity_requiredDuringSchedulingIgnoredDuringExecution(input: c.JSONValue) {
-  const obj = c.checkObj(input);
-  return {
-    labelSelector: c.readOpt(obj["labelSelector"], toClusterIssuerFields_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity_podAntiAffinity_requiredDuringSchedulingIgnoredDuringExecution_labelSelector),
-    namespaces: c.readOpt(obj["namespaces"], x => c.readList(x, c.checkStr)),
-    topologyKey: c.checkStr(obj["topologyKey"]),
-  }}
-export function toClusterIssuerFields_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity_podAntiAffinity_preferredDuringSchedulingIgnoredDuringExecution(input: c.JSONValue) {
-  const obj = c.checkObj(input);
-  return {
-    weight: c.checkNum(obj["weight"]),
-    podAffinityTerm: toClusterIssuerFields_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity_podAntiAffinity_preferredDuringSchedulingIgnoredDuringExecution_podAffinityTerm(obj["podAffinityTerm"]),
-  }}
-export function toClusterIssuerFields_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity_podAffinity_requiredDuringSchedulingIgnoredDuringExecution(input: c.JSONValue) {
-  const obj = c.checkObj(input);
-  return {
-    topologyKey: c.checkStr(obj["topologyKey"]),
-    namespaces: c.readOpt(obj["namespaces"], x => c.readList(x, c.checkStr)),
-    labelSelector: c.readOpt(obj["labelSelector"], toClusterIssuerFields_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity_podAffinity_requiredDuringSchedulingIgnoredDuringExecution_labelSelector),
-  }}
-export function toClusterIssuerFields_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity_podAffinity_preferredDuringSchedulingIgnoredDuringExecution(input: c.JSONValue) {
-  const obj = c.checkObj(input);
-  return {
-    podAffinityTerm: toClusterIssuerFields_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity_podAffinity_preferredDuringSchedulingIgnoredDuringExecution_podAffinityTerm(obj["podAffinityTerm"]),
-    weight: c.checkNum(obj["weight"]),
-  }}
-export function toClusterIssuerFields_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity_nodeAffinity_preferredDuringSchedulingIgnoredDuringExecution(input: c.JSONValue) {
-  const obj = c.checkObj(input);
-  return {
-    preference: toClusterIssuerFields_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity_nodeAffinity_preferredDuringSchedulingIgnoredDuringExecution_preference(obj["preference"]),
-    weight: c.checkNum(obj["weight"]),
-  }}
-export function toClusterIssuerFields_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity_nodeAffinity_requiredDuringSchedulingIgnoredDuringExecution(input: c.JSONValue) {
-  const obj = c.checkObj(input);
-  return {
-    nodeSelectorTerms: c.readList(obj["nodeSelectorTerms"], toClusterIssuerFields_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity_nodeAffinity_requiredDuringSchedulingIgnoredDuringExecution_nodeSelectorTerms),
-  }}
-export function toClusterIssuerFields_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity_podAntiAffinity_requiredDuringSchedulingIgnoredDuringExecution_labelSelector(input: c.JSONValue) {
-  const obj = c.checkObj(input);
-  return {
-    matchExpressions: c.readOpt(obj["matchExpressions"], x => c.readList(x, toClusterIssuerFields_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity_podAntiAffinity_requiredDuringSchedulingIgnoredDuringExecution_labelSelector_matchExpressions)),
-    matchLabels: c.readOpt(obj["matchLabels"], x => c.readMap(x, c.checkStr)),
-  }}
-export function toClusterIssuerFields_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity_podAntiAffinity_preferredDuringSchedulingIgnoredDuringExecution_podAffinityTerm(input: c.JSONValue) {
-  const obj = c.checkObj(input);
-  return {
-    topologyKey: c.checkStr(obj["topologyKey"]),
-    namespaces: c.readOpt(obj["namespaces"], x => c.readList(x, c.checkStr)),
-    labelSelector: c.readOpt(obj["labelSelector"], toClusterIssuerFields_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity_podAntiAffinity_preferredDuringSchedulingIgnoredDuringExecution_podAffinityTerm_labelSelector),
-  }}
-export function toClusterIssuerFields_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity_podAffinity_requiredDuringSchedulingIgnoredDuringExecution_labelSelector(input: c.JSONValue) {
-  const obj = c.checkObj(input);
-  return {
-    matchLabels: c.readOpt(obj["matchLabels"], x => c.readMap(x, c.checkStr)),
-    matchExpressions: c.readOpt(obj["matchExpressions"], x => c.readList(x, toClusterIssuerFields_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity_podAffinity_requiredDuringSchedulingIgnoredDuringExecution_labelSelector_matchExpressions)),
-  }}
-export function toClusterIssuerFields_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity_podAffinity_preferredDuringSchedulingIgnoredDuringExecution_podAffinityTerm(input: c.JSONValue) {
-  const obj = c.checkObj(input);
-  return {
-    topologyKey: c.checkStr(obj["topologyKey"]),
-    namespaces: c.readOpt(obj["namespaces"], x => c.readList(x, c.checkStr)),
-    labelSelector: c.readOpt(obj["labelSelector"], toClusterIssuerFields_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity_podAffinity_preferredDuringSchedulingIgnoredDuringExecution_podAffinityTerm_labelSelector),
-  }}
-export function toClusterIssuerFields_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity_nodeAffinity_preferredDuringSchedulingIgnoredDuringExecution_preference(input: c.JSONValue) {
-  const obj = c.checkObj(input);
-  return {
-    matchFields: c.readOpt(obj["matchFields"], x => c.readList(x, toClusterIssuerFields_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity_nodeAffinity_preferredDuringSchedulingIgnoredDuringExecution_preference_matchFields)),
-    matchExpressions: c.readOpt(obj["matchExpressions"], x => c.readList(x, toClusterIssuerFields_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity_nodeAffinity_preferredDuringSchedulingIgnoredDuringExecution_preference_matchExpressions)),
-  }}
-export function toClusterIssuerFields_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity_nodeAffinity_requiredDuringSchedulingIgnoredDuringExecution_nodeSelectorTerms(input: c.JSONValue) {
-  const obj = c.checkObj(input);
-  return {
-    matchFields: c.readOpt(obj["matchFields"], x => c.readList(x, toClusterIssuerFields_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity_nodeAffinity_requiredDuringSchedulingIgnoredDuringExecution_nodeSelectorTerms_matchFields)),
-    matchExpressions: c.readOpt(obj["matchExpressions"], x => c.readList(x, toClusterIssuerFields_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity_nodeAffinity_requiredDuringSchedulingIgnoredDuringExecution_nodeSelectorTerms_matchExpressions)),
-  }}
-export function toClusterIssuerFields_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity_podAntiAffinity_requiredDuringSchedulingIgnoredDuringExecution_labelSelector_matchExpressions(input: c.JSONValue) {
-  const obj = c.checkObj(input);
-  return {
-    operator: c.checkStr(obj["operator"]),
-    values: c.readOpt(obj["values"], x => c.readList(x, c.checkStr)),
-    key: c.checkStr(obj["key"]),
-  }}
-export function toClusterIssuerFields_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity_podAntiAffinity_preferredDuringSchedulingIgnoredDuringExecution_podAffinityTerm_labelSelector(input: c.JSONValue) {
-  const obj = c.checkObj(input);
-  return {
-    matchLabels: c.readOpt(obj["matchLabels"], x => c.readMap(x, c.checkStr)),
-    matchExpressions: c.readOpt(obj["matchExpressions"], x => c.readList(x, toClusterIssuerFields_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity_podAntiAffinity_preferredDuringSchedulingIgnoredDuringExecution_podAffinityTerm_labelSelector_matchExpressions)),
-  }}
-export function toClusterIssuerFields_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity_podAffinity_requiredDuringSchedulingIgnoredDuringExecution_labelSelector_matchExpressions(input: c.JSONValue) {
-  const obj = c.checkObj(input);
-  return {
-    key: c.checkStr(obj["key"]),
-    operator: c.checkStr(obj["operator"]),
-    values: c.readOpt(obj["values"], x => c.readList(x, c.checkStr)),
-  }}
-export function toClusterIssuerFields_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity_podAffinity_preferredDuringSchedulingIgnoredDuringExecution_podAffinityTerm_labelSelector(input: c.JSONValue) {
-  const obj = c.checkObj(input);
-  return {
-    matchLabels: c.readOpt(obj["matchLabels"], x => c.readMap(x, c.checkStr)),
-    matchExpressions: c.readOpt(obj["matchExpressions"], x => c.readList(x, toClusterIssuerFields_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity_podAffinity_preferredDuringSchedulingIgnoredDuringExecution_podAffinityTerm_labelSelector_matchExpressions)),
-  }}
-export function toClusterIssuerFields_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity_nodeAffinity_preferredDuringSchedulingIgnoredDuringExecution_preference_matchFields(input: c.JSONValue) {
-  const obj = c.checkObj(input);
-  return {
-    key: c.checkStr(obj["key"]),
-    values: c.readOpt(obj["values"], x => c.readList(x, c.checkStr)),
-    operator: c.checkStr(obj["operator"]),
-  }}
-export function toClusterIssuerFields_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity_nodeAffinity_preferredDuringSchedulingIgnoredDuringExecution_preference_matchExpressions(input: c.JSONValue) {
-  const obj = c.checkObj(input);
-  return {
-    key: c.checkStr(obj["key"]),
-    values: c.readOpt(obj["values"], x => c.readList(x, c.checkStr)),
-    operator: c.checkStr(obj["operator"]),
-  }}
-export function toClusterIssuerFields_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity_nodeAffinity_requiredDuringSchedulingIgnoredDuringExecution_nodeSelectorTerms_matchFields(input: c.JSONValue) {
-  const obj = c.checkObj(input);
-  return {
-    values: c.readOpt(obj["values"], x => c.readList(x, c.checkStr)),
-    operator: c.checkStr(obj["operator"]),
-    key: c.checkStr(obj["key"]),
-  }}
-export function toClusterIssuerFields_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity_nodeAffinity_requiredDuringSchedulingIgnoredDuringExecution_nodeSelectorTerms_matchExpressions(input: c.JSONValue) {
-  const obj = c.checkObj(input);
-  return {
-    operator: c.checkStr(obj["operator"]),
-    values: c.readOpt(obj["values"], x => c.readList(x, c.checkStr)),
-    key: c.checkStr(obj["key"]),
-  }}
-export function toClusterIssuerFields_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity_podAntiAffinity_preferredDuringSchedulingIgnoredDuringExecution_podAffinityTerm_labelSelector_matchExpressions(input: c.JSONValue) {
-  const obj = c.checkObj(input);
-  return {
-    key: c.checkStr(obj["key"]),
-    operator: c.checkStr(obj["operator"]),
-    values: c.readOpt(obj["values"], x => c.readList(x, c.checkStr)),
-  }}
-export function toClusterIssuerFields_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity_podAffinity_preferredDuringSchedulingIgnoredDuringExecution_podAffinityTerm_labelSelector_matchExpressions(input: c.JSONValue) {
-  const obj = c.checkObj(input);
-  return {
-    key: c.checkStr(obj["key"]),
-    operator: c.checkStr(obj["operator"]),
-    values: c.readOpt(obj["values"], x => c.readList(x, c.checkStr)),
+    items: input.items?.map(fromCertificateRequest),
+    metadata: input.metadata != null ? MetaV1.fromListMeta(input.metadata) : undefined,
   }}
 
-/** An Issuer represents a certificate issuing authority which can be referenced as part of `issuerRef` fields. It is scoped to a single namespace and can therefore only be referenced by resources within the same namespace. */
-export type Issuer = Kind<"Issuer"> & IssuerFields;
-export interface IssuerFields {
-  metadata?: MetaV1.ObjectMeta | null;
-  status?: {
-    conditions?: Array<{
-      message?: string | null;
-      type: string;
-      reason?: string | null;
-      status: "True" | "False" | "Unknown" | c.UnexpectedEnumValue;
-      lastTransitionTime?: c.Time | null;
-    }> | null;
-    acme?: {
-      uri?: string | null;
-      lastRegisteredEmail?: string | null;
-    } | null;
-  } | null;
-  spec?: {
-    venafi?: {
-      cloud?: {
-        apiTokenSecretRef: {
-          key?: string | null;
-          name: string;
-        };
-        url?: string | null;
-      } | null;
-      tpp?: {
-        credentialsRef: {
-          name: string;
-        };
-        caBundle?: string | null;
-        url: string;
-      } | null;
-      zone: string;
-    } | null;
-    selfSigned?: {
-      crlDistributionPoints?: Array<string> | null;
-    } | null;
-    vault?: {
-      auth: {
-        tokenSecretRef?: {
-          key?: string | null;
-          name: string;
-        } | null;
-        kubernetes?: {
-          mountPath?: string | null;
-          role: string;
-          secretRef: {
-            name: string;
-            key?: string | null;
-          };
-        } | null;
-        appRole?: {
-          path: string;
-          secretRef: {
-            key?: string | null;
-            name: string;
-          };
-          roleId: string;
-        } | null;
-      };
-      caBundle?: string | null;
-      server: string;
-      path: string;
-    } | null;
-    ca?: {
-      crlDistributionPoints?: Array<string> | null;
-      secretName: string;
-    } | null;
-    acme?: {
-      skipTLSVerify?: boolean | null;
-      externalAccountBinding?: {
-        keyAlgorithm: "HS256" | "HS384" | "HS512" | c.UnexpectedEnumValue;
-        keyID: string;
-        keySecretRef: {
-          name: string;
-          key?: string | null;
-        };
-      } | null;
-      server: string;
-      privateKeySecretRef: {
-        name: string;
-        key?: string | null;
-      };
-      email?: string | null;
-      solvers?: Array<{
-        selector?: {
-          dnsNames?: Array<string> | null;
-          matchLabels?: Record<string,string> | null;
-          dnsZones?: Array<string> | null;
-        } | null;
-        dns01?: {
-          webhook?: {
-            config?: c.JSONValue | null;
-            groupName: string;
-            solverName: string;
-          } | null;
-          rfc2136?: {
-            nameserver: string;
-            tsigKeyName?: string | null;
-            tsigSecretSecretRef?: {
-              name: string;
-              key?: string | null;
-            } | null;
-            tsigAlgorithm?: string | null;
-          } | null;
-          route53?: {
-            hostedZoneID?: string | null;
-            secretAccessKeySecretRef?: {
-              name: string;
-              key?: string | null;
-            } | null;
-            accessKeyID?: string | null;
-            role?: string | null;
-            region: string;
-          } | null;
-          digitalocean?: {
-            tokenSecretRef: {
-              key?: string | null;
-              name: string;
-            };
-          } | null;
-          acmedns?: {
-            accountSecretRef: {
-              key?: string | null;
-              name: string;
-            };
-            host: string;
-          } | null;
-          clouddns?: {
-            project: string;
-            serviceAccountSecretRef?: {
-              name: string;
-              key?: string | null;
-            } | null;
-            hostedZoneName?: string | null;
-          } | null;
-          azuredns?: {
-            clientID?: string | null;
-            subscriptionID: string;
-            clientSecretSecretRef?: {
-              name: string;
-              key?: string | null;
-            } | null;
-            tenantID?: string | null;
-            resourceGroupName: string;
-            environment?: "AzurePublicCloud" | "AzureChinaCloud" | "AzureGermanCloud" | "AzureUSGovernmentCloud" | c.UnexpectedEnumValue | null;
-            hostedZoneName?: string | null;
-          } | null;
-          cloudflare?: {
-            apiTokenSecretRef?: {
-              name: string;
-              key?: string | null;
-            } | null;
-            apiKeySecretRef?: {
-              name: string;
-              key?: string | null;
-            } | null;
-            email?: string | null;
-          } | null;
-          akamai?: {
-            accessTokenSecretRef: {
-              key?: string | null;
-              name: string;
-            };
-            clientTokenSecretRef: {
-              name: string;
-              key?: string | null;
-            };
-            serviceConsumerDomain: string;
-            clientSecretSecretRef: {
-              name: string;
-              key?: string | null;
-            };
-          } | null;
-          cnameStrategy?: "None" | "Follow" | c.UnexpectedEnumValue | null;
-        } | null;
-        http01?: {
-          ingress?: {
-            class?: string | null;
-            name?: string | null;
-            serviceType?: string | null;
-            ingressTemplate?: {
-              metadata?: {
-                annotations?: Record<string,string> | null;
-                labels?: Record<string,string> | null;
-              } | null;
-            } | null;
-            podTemplate?: {
-              metadata?: {
-                labels?: Record<string,string> | null;
-                annotations?: Record<string,string> | null;
-              } | null;
-              spec?: {
-                tolerations?: Array<{
-                  operator?: string | null;
-                  value?: string | null;
-                  tolerationSeconds?: number | null;
-                  key?: string | null;
-                  effect?: string | null;
-                }> | null;
-                affinity?: {
-                  nodeAffinity?: {
-                    preferredDuringSchedulingIgnoredDuringExecution?: Array<{
-                      preference: {
-                        matchFields?: Array<{
-                          key: string;
-                          values?: Array<string> | null;
-                          operator: string;
-                        }> | null;
-                        matchExpressions?: Array<{
-                          key: string;
-                          operator: string;
-                          values?: Array<string> | null;
-                        }> | null;
-                      };
-                      weight: number;
-                    }> | null;
-                    requiredDuringSchedulingIgnoredDuringExecution?: {
-                      nodeSelectorTerms: Array<{
-                        matchFields?: Array<{
-                          values?: Array<string> | null;
-                          operator: string;
-                          key: string;
-                        }> | null;
-                        matchExpressions?: Array<{
-                          key: string;
-                          operator: string;
-                          values?: Array<string> | null;
-                        }> | null;
-                      }>;
-                    } | null;
-                  } | null;
-                  podAffinity?: {
-                    requiredDuringSchedulingIgnoredDuringExecution?: Array<{
-                      namespaces?: Array<string> | null;
-                      labelSelector?: {
-                        matchExpressions?: Array<{
-                          key: string;
-                          values?: Array<string> | null;
-                          operator: string;
-                        }> | null;
-                        matchLabels?: Record<string,string> | null;
-                      } | null;
-                      topologyKey: string;
-                    }> | null;
-                    preferredDuringSchedulingIgnoredDuringExecution?: Array<{
-                      weight: number;
-                      podAffinityTerm: {
-                        namespaces?: Array<string> | null;
-                        labelSelector?: {
-                          matchExpressions?: Array<{
-                            values?: Array<string> | null;
-                            operator: string;
-                            key: string;
-                          }> | null;
-                          matchLabels?: Record<string,string> | null;
-                        } | null;
-                        topologyKey: string;
-                      };
-                    }> | null;
-                  } | null;
-                  podAntiAffinity?: {
-                    requiredDuringSchedulingIgnoredDuringExecution?: Array<{
-                      topologyKey: string;
-                      labelSelector?: {
-                        matchExpressions?: Array<{
-                          key: string;
-                          values?: Array<string> | null;
-                          operator: string;
-                        }> | null;
-                        matchLabels?: Record<string,string> | null;
-                      } | null;
-                      namespaces?: Array<string> | null;
-                    }> | null;
-                    preferredDuringSchedulingIgnoredDuringExecution?: Array<{
-                      podAffinityTerm: {
-                        namespaces?: Array<string> | null;
-                        labelSelector?: {
-                          matchLabels?: Record<string,string> | null;
-                          matchExpressions?: Array<{
-                            values?: Array<string> | null;
-                            operator: string;
-                            key: string;
-                          }> | null;
-                        } | null;
-                        topologyKey: string;
-                      };
-                      weight: number;
-                    }> | null;
-                  } | null;
-                } | null;
-                nodeSelector?: Record<string,string> | null;
-              } | null;
-            } | null;
-          } | null;
-        } | null;
-      }> | null;
-    } | null;
-  } | null;
-}
-export function toIssuerFields(input: c.JSONValue): IssuerFields {
-  const obj = c.checkObj(input);
-  return {
-    metadata: c.readOpt(obj["metadata"], MetaV1.toObjectMeta),
-    status: c.readOpt(obj["status"], toIssuerFields_status),
-    spec: c.readOpt(obj["spec"], toIssuerFields_spec),
-  }}
-export function toIssuer(input: c.JSONValue): Issuer {
-  const {apiVersion, kind, ...fields} = c.checkObj(input);
-  if (apiVersion !== "cert-manager.io/v1alpha2") throw new Error("Type apiv mis 2");
-  if (kind !== "Issuer") throw new Error("Type kind mis 2");
-  return {
-    apiVersion, kind,
-    ...toIssuerFields(fields),
-  }}
-export function fromIssuer(input: Issuer): c.JSONValue {
-  return {
-    ...input,
-    metadata: input.metadata != null ? MetaV1.fromObjectMeta(input.metadata) : undefined,
-    status: input.status != null ? {
-      ...input.status,
-      conditions: input.status.conditions?.map(x => ({
-        ...x,
-        lastTransitionTime: x.lastTransitionTime != null ? c.fromTime(x.lastTransitionTime) : undefined,
-      })),
-    } : undefined,
-  }}
-export function toIssuerFields_status(input: c.JSONValue) {
-  const obj = c.checkObj(input);
-  return {
-    conditions: c.readOpt(obj["conditions"], x => c.readList(x, toIssuerFields_status_conditions)),
-    acme: c.readOpt(obj["acme"], toIssuerFields_status_acme),
-  }}
-export function toIssuerFields_spec(input: c.JSONValue) {
-  const obj = c.checkObj(input);
-  return {
-    venafi: c.readOpt(obj["venafi"], toIssuerFields_spec_venafi),
-    selfSigned: c.readOpt(obj["selfSigned"], toIssuerFields_spec_selfSigned),
-    vault: c.readOpt(obj["vault"], toIssuerFields_spec_vault),
-    ca: c.readOpt(obj["ca"], toIssuerFields_spec_ca),
-    acme: c.readOpt(obj["acme"], toIssuerFields_spec_acme),
-  }}
-export function toIssuerFields_status_conditions(input: c.JSONValue) {
-  const obj = c.checkObj(input);
-  return {
-    message: c.readOpt(obj["message"], c.checkStr),
-    type: c.checkStr(obj["type"]),
-    reason: c.readOpt(obj["reason"], c.checkStr),
-    status: (x => c.readEnum<"True" | "False" | "Unknown" | c.UnexpectedEnumValue>(x))(obj["status"]),
-    lastTransitionTime: c.readOpt(obj["lastTransitionTime"], c.toTime),
-  }}
-export function toIssuerFields_status_acme(input: c.JSONValue) {
-  const obj = c.checkObj(input);
-  return {
-    uri: c.readOpt(obj["uri"], c.checkStr),
-    lastRegisteredEmail: c.readOpt(obj["lastRegisteredEmail"], c.checkStr),
-  }}
-export function toIssuerFields_spec_venafi(input: c.JSONValue) {
-  const obj = c.checkObj(input);
-  return {
-    cloud: c.readOpt(obj["cloud"], toIssuerFields_spec_venafi_cloud),
-    tpp: c.readOpt(obj["tpp"], toIssuerFields_spec_venafi_tpp),
-    zone: c.checkStr(obj["zone"]),
-  }}
-export function toIssuerFields_spec_selfSigned(input: c.JSONValue) {
-  const obj = c.checkObj(input);
-  return {
-    crlDistributionPoints: c.readOpt(obj["crlDistributionPoints"], x => c.readList(x, c.checkStr)),
-  }}
-export function toIssuerFields_spec_vault(input: c.JSONValue) {
-  const obj = c.checkObj(input);
-  return {
-    auth: toIssuerFields_spec_vault_auth(obj["auth"]),
-    caBundle: c.readOpt(obj["caBundle"], c.checkStr),
-    server: c.checkStr(obj["server"]),
-    path: c.checkStr(obj["path"]),
-  }}
-export function toIssuerFields_spec_ca(input: c.JSONValue) {
-  const obj = c.checkObj(input);
-  return {
-    crlDistributionPoints: c.readOpt(obj["crlDistributionPoints"], x => c.readList(x, c.checkStr)),
-    secretName: c.checkStr(obj["secretName"]),
-  }}
-export function toIssuerFields_spec_acme(input: c.JSONValue) {
-  const obj = c.checkObj(input);
-  return {
-    skipTLSVerify: c.readOpt(obj["skipTLSVerify"], c.checkBool),
-    externalAccountBinding: c.readOpt(obj["externalAccountBinding"], toIssuerFields_spec_acme_externalAccountBinding),
-    server: c.checkStr(obj["server"]),
-    privateKeySecretRef: toIssuerFields_spec_acme_privateKeySecretRef(obj["privateKeySecretRef"]),
-    email: c.readOpt(obj["email"], c.checkStr),
-    solvers: c.readOpt(obj["solvers"], x => c.readList(x, toIssuerFields_spec_acme_solvers)),
-  }}
-export function toIssuerFields_spec_venafi_cloud(input: c.JSONValue) {
-  const obj = c.checkObj(input);
-  return {
-    apiTokenSecretRef: toIssuerFields_spec_venafi_cloud_apiTokenSecretRef(obj["apiTokenSecretRef"]),
-    url: c.readOpt(obj["url"], c.checkStr),
-  }}
-export function toIssuerFields_spec_venafi_tpp(input: c.JSONValue) {
-  const obj = c.checkObj(input);
-  return {
-    credentialsRef: toIssuerFields_spec_venafi_tpp_credentialsRef(obj["credentialsRef"]),
-    caBundle: c.readOpt(obj["caBundle"], c.checkStr),
-    url: c.checkStr(obj["url"]),
-  }}
-export function toIssuerFields_spec_vault_auth(input: c.JSONValue) {
-  const obj = c.checkObj(input);
-  return {
-    tokenSecretRef: c.readOpt(obj["tokenSecretRef"], toIssuerFields_spec_vault_auth_tokenSecretRef),
-    kubernetes: c.readOpt(obj["kubernetes"], toIssuerFields_spec_vault_auth_kubernetes),
-    appRole: c.readOpt(obj["appRole"], toIssuerFields_spec_vault_auth_appRole),
-  }}
-export function toIssuerFields_spec_acme_externalAccountBinding(input: c.JSONValue) {
-  const obj = c.checkObj(input);
-  return {
-    keyAlgorithm: (x => c.readEnum<"HS256" | "HS384" | "HS512" | c.UnexpectedEnumValue>(x))(obj["keyAlgorithm"]),
-    keyID: c.checkStr(obj["keyID"]),
-    keySecretRef: toIssuerFields_spec_acme_externalAccountBinding_keySecretRef(obj["keySecretRef"]),
-  }}
-export function toIssuerFields_spec_acme_privateKeySecretRef(input: c.JSONValue) {
-  const obj = c.checkObj(input);
-  return {
-    name: c.checkStr(obj["name"]),
-    key: c.readOpt(obj["key"], c.checkStr),
-  }}
-export function toIssuerFields_spec_acme_solvers(input: c.JSONValue) {
-  const obj = c.checkObj(input);
-  return {
-    selector: c.readOpt(obj["selector"], toIssuerFields_spec_acme_solvers_selector),
-    dns01: c.readOpt(obj["dns01"], toIssuerFields_spec_acme_solvers_dns01),
-    http01: c.readOpt(obj["http01"], toIssuerFields_spec_acme_solvers_http01),
-  }}
-export function toIssuerFields_spec_venafi_cloud_apiTokenSecretRef(input: c.JSONValue) {
-  const obj = c.checkObj(input);
-  return {
-    key: c.readOpt(obj["key"], c.checkStr),
-    name: c.checkStr(obj["name"]),
-  }}
-export function toIssuerFields_spec_venafi_tpp_credentialsRef(input: c.JSONValue) {
-  const obj = c.checkObj(input);
-  return {
-    name: c.checkStr(obj["name"]),
-  }}
-export function toIssuerFields_spec_vault_auth_tokenSecretRef(input: c.JSONValue) {
-  const obj = c.checkObj(input);
-  return {
-    key: c.readOpt(obj["key"], c.checkStr),
-    name: c.checkStr(obj["name"]),
-  }}
-export function toIssuerFields_spec_vault_auth_kubernetes(input: c.JSONValue) {
-  const obj = c.checkObj(input);
-  return {
-    mountPath: c.readOpt(obj["mountPath"], c.checkStr),
-    role: c.checkStr(obj["role"]),
-    secretRef: toIssuerFields_spec_vault_auth_kubernetes_secretRef(obj["secretRef"]),
-  }}
-export function toIssuerFields_spec_vault_auth_appRole(input: c.JSONValue) {
-  const obj = c.checkObj(input);
-  return {
-    path: c.checkStr(obj["path"]),
-    secretRef: toIssuerFields_spec_vault_auth_appRole_secretRef(obj["secretRef"]),
-    roleId: c.checkStr(obj["roleId"]),
-  }}
-export function toIssuerFields_spec_acme_externalAccountBinding_keySecretRef(input: c.JSONValue) {
-  const obj = c.checkObj(input);
-  return {
-    name: c.checkStr(obj["name"]),
-    key: c.readOpt(obj["key"], c.checkStr),
-  }}
-export function toIssuerFields_spec_acme_solvers_selector(input: c.JSONValue) {
-  const obj = c.checkObj(input);
-  return {
-    dnsNames: c.readOpt(obj["dnsNames"], x => c.readList(x, c.checkStr)),
-    matchLabels: c.readOpt(obj["matchLabels"], x => c.readMap(x, c.checkStr)),
-    dnsZones: c.readOpt(obj["dnsZones"], x => c.readList(x, c.checkStr)),
-  }}
-export function toIssuerFields_spec_acme_solvers_dns01(input: c.JSONValue) {
-  const obj = c.checkObj(input);
-  return {
-    webhook: c.readOpt(obj["webhook"], toIssuerFields_spec_acme_solvers_dns01_webhook),
-    rfc2136: c.readOpt(obj["rfc2136"], toIssuerFields_spec_acme_solvers_dns01_rfc2136),
-    route53: c.readOpt(obj["route53"], toIssuerFields_spec_acme_solvers_dns01_route53),
-    digitalocean: c.readOpt(obj["digitalocean"], toIssuerFields_spec_acme_solvers_dns01_digitalocean),
-    acmedns: c.readOpt(obj["acmedns"], toIssuerFields_spec_acme_solvers_dns01_acmedns),
-    clouddns: c.readOpt(obj["clouddns"], toIssuerFields_spec_acme_solvers_dns01_clouddns),
-    azuredns: c.readOpt(obj["azuredns"], toIssuerFields_spec_acme_solvers_dns01_azuredns),
-    cloudflare: c.readOpt(obj["cloudflare"], toIssuerFields_spec_acme_solvers_dns01_cloudflare),
-    akamai: c.readOpt(obj["akamai"], toIssuerFields_spec_acme_solvers_dns01_akamai),
-    cnameStrategy: c.readOpt(obj["cnameStrategy"], (x => c.readEnum<"None" | "Follow" | c.UnexpectedEnumValue>(x))),
-  }}
-export function toIssuerFields_spec_acme_solvers_http01(input: c.JSONValue) {
-  const obj = c.checkObj(input);
-  return {
-    ingress: c.readOpt(obj["ingress"], toIssuerFields_spec_acme_solvers_http01_ingress),
-  }}
-export function toIssuerFields_spec_vault_auth_kubernetes_secretRef(input: c.JSONValue) {
-  const obj = c.checkObj(input);
-  return {
-    name: c.checkStr(obj["name"]),
-    key: c.readOpt(obj["key"], c.checkStr),
-  }}
-export function toIssuerFields_spec_vault_auth_appRole_secretRef(input: c.JSONValue) {
-  const obj = c.checkObj(input);
-  return {
-    key: c.readOpt(obj["key"], c.checkStr),
-    name: c.checkStr(obj["name"]),
-  }}
-export function toIssuerFields_spec_acme_solvers_dns01_webhook(input: c.JSONValue) {
-  const obj = c.checkObj(input);
-  return {
-    config: c.readOpt(obj["config"], c.identity),
-    groupName: c.checkStr(obj["groupName"]),
-    solverName: c.checkStr(obj["solverName"]),
-  }}
-export function toIssuerFields_spec_acme_solvers_dns01_rfc2136(input: c.JSONValue) {
-  const obj = c.checkObj(input);
-  return {
-    nameserver: c.checkStr(obj["nameserver"]),
-    tsigKeyName: c.readOpt(obj["tsigKeyName"], c.checkStr),
-    tsigSecretSecretRef: c.readOpt(obj["tsigSecretSecretRef"], toIssuerFields_spec_acme_solvers_dns01_rfc2136_tsigSecretSecretRef),
-    tsigAlgorithm: c.readOpt(obj["tsigAlgorithm"], c.checkStr),
-  }}
-export function toIssuerFields_spec_acme_solvers_dns01_route53(input: c.JSONValue) {
-  const obj = c.checkObj(input);
-  return {
-    hostedZoneID: c.readOpt(obj["hostedZoneID"], c.checkStr),
-    secretAccessKeySecretRef: c.readOpt(obj["secretAccessKeySecretRef"], toIssuerFields_spec_acme_solvers_dns01_route53_secretAccessKeySecretRef),
-    accessKeyID: c.readOpt(obj["accessKeyID"], c.checkStr),
-    role: c.readOpt(obj["role"], c.checkStr),
-    region: c.checkStr(obj["region"]),
-  }}
-export function toIssuerFields_spec_acme_solvers_dns01_digitalocean(input: c.JSONValue) {
-  const obj = c.checkObj(input);
-  return {
-    tokenSecretRef: toIssuerFields_spec_acme_solvers_dns01_digitalocean_tokenSecretRef(obj["tokenSecretRef"]),
-  }}
-export function toIssuerFields_spec_acme_solvers_dns01_acmedns(input: c.JSONValue) {
-  const obj = c.checkObj(input);
-  return {
-    accountSecretRef: toIssuerFields_spec_acme_solvers_dns01_acmedns_accountSecretRef(obj["accountSecretRef"]),
-    host: c.checkStr(obj["host"]),
-  }}
-export function toIssuerFields_spec_acme_solvers_dns01_clouddns(input: c.JSONValue) {
-  const obj = c.checkObj(input);
-  return {
-    project: c.checkStr(obj["project"]),
-    serviceAccountSecretRef: c.readOpt(obj["serviceAccountSecretRef"], toIssuerFields_spec_acme_solvers_dns01_clouddns_serviceAccountSecretRef),
-    hostedZoneName: c.readOpt(obj["hostedZoneName"], c.checkStr),
-  }}
-export function toIssuerFields_spec_acme_solvers_dns01_azuredns(input: c.JSONValue) {
-  const obj = c.checkObj(input);
-  return {
-    clientID: c.readOpt(obj["clientID"], c.checkStr),
-    subscriptionID: c.checkStr(obj["subscriptionID"]),
-    clientSecretSecretRef: c.readOpt(obj["clientSecretSecretRef"], toIssuerFields_spec_acme_solvers_dns01_azuredns_clientSecretSecretRef),
-    tenantID: c.readOpt(obj["tenantID"], c.checkStr),
-    resourceGroupName: c.checkStr(obj["resourceGroupName"]),
-    environment: c.readOpt(obj["environment"], (x => c.readEnum<"AzurePublicCloud" | "AzureChinaCloud" | "AzureGermanCloud" | "AzureUSGovernmentCloud" | c.UnexpectedEnumValue>(x))),
-    hostedZoneName: c.readOpt(obj["hostedZoneName"], c.checkStr),
-  }}
-export function toIssuerFields_spec_acme_solvers_dns01_cloudflare(input: c.JSONValue) {
-  const obj = c.checkObj(input);
-  return {
-    apiTokenSecretRef: c.readOpt(obj["apiTokenSecretRef"], toIssuerFields_spec_acme_solvers_dns01_cloudflare_apiTokenSecretRef),
-    apiKeySecretRef: c.readOpt(obj["apiKeySecretRef"], toIssuerFields_spec_acme_solvers_dns01_cloudflare_apiKeySecretRef),
-    email: c.readOpt(obj["email"], c.checkStr),
-  }}
-export function toIssuerFields_spec_acme_solvers_dns01_akamai(input: c.JSONValue) {
-  const obj = c.checkObj(input);
-  return {
-    accessTokenSecretRef: toIssuerFields_spec_acme_solvers_dns01_akamai_accessTokenSecretRef(obj["accessTokenSecretRef"]),
-    clientTokenSecretRef: toIssuerFields_spec_acme_solvers_dns01_akamai_clientTokenSecretRef(obj["clientTokenSecretRef"]),
-    serviceConsumerDomain: c.checkStr(obj["serviceConsumerDomain"]),
-    clientSecretSecretRef: toIssuerFields_spec_acme_solvers_dns01_akamai_clientSecretSecretRef(obj["clientSecretSecretRef"]),
-  }}
-export function toIssuerFields_spec_acme_solvers_http01_ingress(input: c.JSONValue) {
-  const obj = c.checkObj(input);
-  return {
-    class: c.readOpt(obj["class"], c.checkStr),
-    name: c.readOpt(obj["name"], c.checkStr),
-    serviceType: c.readOpt(obj["serviceType"], c.checkStr),
-    ingressTemplate: c.readOpt(obj["ingressTemplate"], toIssuerFields_spec_acme_solvers_http01_ingress_ingressTemplate),
-    podTemplate: c.readOpt(obj["podTemplate"], toIssuerFields_spec_acme_solvers_http01_ingress_podTemplate),
-  }}
-export function toIssuerFields_spec_acme_solvers_dns01_rfc2136_tsigSecretSecretRef(input: c.JSONValue) {
-  const obj = c.checkObj(input);
-  return {
-    name: c.checkStr(obj["name"]),
-    key: c.readOpt(obj["key"], c.checkStr),
-  }}
-export function toIssuerFields_spec_acme_solvers_dns01_route53_secretAccessKeySecretRef(input: c.JSONValue) {
-  const obj = c.checkObj(input);
-  return {
-    name: c.checkStr(obj["name"]),
-    key: c.readOpt(obj["key"], c.checkStr),
-  }}
-export function toIssuerFields_spec_acme_solvers_dns01_digitalocean_tokenSecretRef(input: c.JSONValue) {
-  const obj = c.checkObj(input);
-  return {
-    key: c.readOpt(obj["key"], c.checkStr),
-    name: c.checkStr(obj["name"]),
-  }}
-export function toIssuerFields_spec_acme_solvers_dns01_acmedns_accountSecretRef(input: c.JSONValue) {
-  const obj = c.checkObj(input);
-  return {
-    key: c.readOpt(obj["key"], c.checkStr),
-    name: c.checkStr(obj["name"]),
-  }}
-export function toIssuerFields_spec_acme_solvers_dns01_clouddns_serviceAccountSecretRef(input: c.JSONValue) {
-  const obj = c.checkObj(input);
-  return {
-    name: c.checkStr(obj["name"]),
-    key: c.readOpt(obj["key"], c.checkStr),
-  }}
-export function toIssuerFields_spec_acme_solvers_dns01_azuredns_clientSecretSecretRef(input: c.JSONValue) {
-  const obj = c.checkObj(input);
-  return {
-    name: c.checkStr(obj["name"]),
-    key: c.readOpt(obj["key"], c.checkStr),
-  }}
-export function toIssuerFields_spec_acme_solvers_dns01_cloudflare_apiTokenSecretRef(input: c.JSONValue) {
-  const obj = c.checkObj(input);
-  return {
-    name: c.checkStr(obj["name"]),
-    key: c.readOpt(obj["key"], c.checkStr),
-  }}
-export function toIssuerFields_spec_acme_solvers_dns01_cloudflare_apiKeySecretRef(input: c.JSONValue) {
-  const obj = c.checkObj(input);
-  return {
-    name: c.checkStr(obj["name"]),
-    key: c.readOpt(obj["key"], c.checkStr),
-  }}
-export function toIssuerFields_spec_acme_solvers_dns01_akamai_accessTokenSecretRef(input: c.JSONValue) {
-  const obj = c.checkObj(input);
-  return {
-    key: c.readOpt(obj["key"], c.checkStr),
-    name: c.checkStr(obj["name"]),
-  }}
-export function toIssuerFields_spec_acme_solvers_dns01_akamai_clientTokenSecretRef(input: c.JSONValue) {
-  const obj = c.checkObj(input);
-  return {
-    name: c.checkStr(obj["name"]),
-    key: c.readOpt(obj["key"], c.checkStr),
-  }}
-export function toIssuerFields_spec_acme_solvers_dns01_akamai_clientSecretSecretRef(input: c.JSONValue) {
-  const obj = c.checkObj(input);
-  return {
-    name: c.checkStr(obj["name"]),
-    key: c.readOpt(obj["key"], c.checkStr),
-  }}
-export function toIssuerFields_spec_acme_solvers_http01_ingress_ingressTemplate(input: c.JSONValue) {
-  const obj = c.checkObj(input);
-  return {
-    metadata: c.readOpt(obj["metadata"], toIssuerFields_spec_acme_solvers_http01_ingress_ingressTemplate_metadata),
-  }}
-export function toIssuerFields_spec_acme_solvers_http01_ingress_podTemplate(input: c.JSONValue) {
-  const obj = c.checkObj(input);
-  return {
-    metadata: c.readOpt(obj["metadata"], toIssuerFields_spec_acme_solvers_http01_ingress_podTemplate_metadata),
-    spec: c.readOpt(obj["spec"], toIssuerFields_spec_acme_solvers_http01_ingress_podTemplate_spec),
-  }}
-export function toIssuerFields_spec_acme_solvers_http01_ingress_ingressTemplate_metadata(input: c.JSONValue) {
-  const obj = c.checkObj(input);
-  return {
-    annotations: c.readOpt(obj["annotations"], x => c.readMap(x, c.checkStr)),
-    labels: c.readOpt(obj["labels"], x => c.readMap(x, c.checkStr)),
-  }}
-export function toIssuerFields_spec_acme_solvers_http01_ingress_podTemplate_metadata(input: c.JSONValue) {
-  const obj = c.checkObj(input);
-  return {
-    labels: c.readOpt(obj["labels"], x => c.readMap(x, c.checkStr)),
-    annotations: c.readOpt(obj["annotations"], x => c.readMap(x, c.checkStr)),
-  }}
-export function toIssuerFields_spec_acme_solvers_http01_ingress_podTemplate_spec(input: c.JSONValue) {
-  const obj = c.checkObj(input);
-  return {
-    tolerations: c.readOpt(obj["tolerations"], x => c.readList(x, toIssuerFields_spec_acme_solvers_http01_ingress_podTemplate_spec_tolerations)),
-    affinity: c.readOpt(obj["affinity"], toIssuerFields_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity),
-    nodeSelector: c.readOpt(obj["nodeSelector"], x => c.readMap(x, c.checkStr)),
-  }}
-export function toIssuerFields_spec_acme_solvers_http01_ingress_podTemplate_spec_tolerations(input: c.JSONValue) {
-  const obj = c.checkObj(input);
-  return {
-    operator: c.readOpt(obj["operator"], c.checkStr),
-    value: c.readOpt(obj["value"], c.checkStr),
-    tolerationSeconds: c.readOpt(obj["tolerationSeconds"], c.checkNum),
-    key: c.readOpt(obj["key"], c.checkStr),
-    effect: c.readOpt(obj["effect"], c.checkStr),
-  }}
-export function toIssuerFields_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity(input: c.JSONValue) {
-  const obj = c.checkObj(input);
-  return {
-    nodeAffinity: c.readOpt(obj["nodeAffinity"], toIssuerFields_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity_nodeAffinity),
-    podAffinity: c.readOpt(obj["podAffinity"], toIssuerFields_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity_podAffinity),
-    podAntiAffinity: c.readOpt(obj["podAntiAffinity"], toIssuerFields_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity_podAntiAffinity),
-  }}
-export function toIssuerFields_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity_nodeAffinity(input: c.JSONValue) {
-  const obj = c.checkObj(input);
-  return {
-    preferredDuringSchedulingIgnoredDuringExecution: c.readOpt(obj["preferredDuringSchedulingIgnoredDuringExecution"], x => c.readList(x, toIssuerFields_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity_nodeAffinity_preferredDuringSchedulingIgnoredDuringExecution)),
-    requiredDuringSchedulingIgnoredDuringExecution: c.readOpt(obj["requiredDuringSchedulingIgnoredDuringExecution"], toIssuerFields_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity_nodeAffinity_requiredDuringSchedulingIgnoredDuringExecution),
-  }}
-export function toIssuerFields_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity_podAffinity(input: c.JSONValue) {
-  const obj = c.checkObj(input);
-  return {
-    requiredDuringSchedulingIgnoredDuringExecution: c.readOpt(obj["requiredDuringSchedulingIgnoredDuringExecution"], x => c.readList(x, toIssuerFields_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity_podAffinity_requiredDuringSchedulingIgnoredDuringExecution)),
-    preferredDuringSchedulingIgnoredDuringExecution: c.readOpt(obj["preferredDuringSchedulingIgnoredDuringExecution"], x => c.readList(x, toIssuerFields_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity_podAffinity_preferredDuringSchedulingIgnoredDuringExecution)),
-  }}
-export function toIssuerFields_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity_podAntiAffinity(input: c.JSONValue) {
-  const obj = c.checkObj(input);
-  return {
-    requiredDuringSchedulingIgnoredDuringExecution: c.readOpt(obj["requiredDuringSchedulingIgnoredDuringExecution"], x => c.readList(x, toIssuerFields_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity_podAntiAffinity_requiredDuringSchedulingIgnoredDuringExecution)),
-    preferredDuringSchedulingIgnoredDuringExecution: c.readOpt(obj["preferredDuringSchedulingIgnoredDuringExecution"], x => c.readList(x, toIssuerFields_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity_podAntiAffinity_preferredDuringSchedulingIgnoredDuringExecution)),
-  }}
-export function toIssuerFields_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity_nodeAffinity_preferredDuringSchedulingIgnoredDuringExecution(input: c.JSONValue) {
-  const obj = c.checkObj(input);
-  return {
-    preference: toIssuerFields_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity_nodeAffinity_preferredDuringSchedulingIgnoredDuringExecution_preference(obj["preference"]),
-    weight: c.checkNum(obj["weight"]),
-  }}
-export function toIssuerFields_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity_nodeAffinity_requiredDuringSchedulingIgnoredDuringExecution(input: c.JSONValue) {
-  const obj = c.checkObj(input);
-  return {
-    nodeSelectorTerms: c.readList(obj["nodeSelectorTerms"], toIssuerFields_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity_nodeAffinity_requiredDuringSchedulingIgnoredDuringExecution_nodeSelectorTerms),
-  }}
-export function toIssuerFields_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity_podAffinity_requiredDuringSchedulingIgnoredDuringExecution(input: c.JSONValue) {
-  const obj = c.checkObj(input);
-  return {
-    namespaces: c.readOpt(obj["namespaces"], x => c.readList(x, c.checkStr)),
-    labelSelector: c.readOpt(obj["labelSelector"], toIssuerFields_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity_podAffinity_requiredDuringSchedulingIgnoredDuringExecution_labelSelector),
-    topologyKey: c.checkStr(obj["topologyKey"]),
-  }}
-export function toIssuerFields_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity_podAffinity_preferredDuringSchedulingIgnoredDuringExecution(input: c.JSONValue) {
-  const obj = c.checkObj(input);
-  return {
-    weight: c.checkNum(obj["weight"]),
-    podAffinityTerm: toIssuerFields_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity_podAffinity_preferredDuringSchedulingIgnoredDuringExecution_podAffinityTerm(obj["podAffinityTerm"]),
-  }}
-export function toIssuerFields_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity_podAntiAffinity_requiredDuringSchedulingIgnoredDuringExecution(input: c.JSONValue) {
-  const obj = c.checkObj(input);
-  return {
-    topologyKey: c.checkStr(obj["topologyKey"]),
-    labelSelector: c.readOpt(obj["labelSelector"], toIssuerFields_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity_podAntiAffinity_requiredDuringSchedulingIgnoredDuringExecution_labelSelector),
-    namespaces: c.readOpt(obj["namespaces"], x => c.readList(x, c.checkStr)),
-  }}
-export function toIssuerFields_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity_podAntiAffinity_preferredDuringSchedulingIgnoredDuringExecution(input: c.JSONValue) {
-  const obj = c.checkObj(input);
-  return {
-    podAffinityTerm: toIssuerFields_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity_podAntiAffinity_preferredDuringSchedulingIgnoredDuringExecution_podAffinityTerm(obj["podAffinityTerm"]),
-    weight: c.checkNum(obj["weight"]),
-  }}
-export function toIssuerFields_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity_nodeAffinity_preferredDuringSchedulingIgnoredDuringExecution_preference(input: c.JSONValue) {
-  const obj = c.checkObj(input);
-  return {
-    matchFields: c.readOpt(obj["matchFields"], x => c.readList(x, toIssuerFields_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity_nodeAffinity_preferredDuringSchedulingIgnoredDuringExecution_preference_matchFields)),
-    matchExpressions: c.readOpt(obj["matchExpressions"], x => c.readList(x, toIssuerFields_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity_nodeAffinity_preferredDuringSchedulingIgnoredDuringExecution_preference_matchExpressions)),
-  }}
-export function toIssuerFields_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity_nodeAffinity_requiredDuringSchedulingIgnoredDuringExecution_nodeSelectorTerms(input: c.JSONValue) {
-  const obj = c.checkObj(input);
-  return {
-    matchFields: c.readOpt(obj["matchFields"], x => c.readList(x, toIssuerFields_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity_nodeAffinity_requiredDuringSchedulingIgnoredDuringExecution_nodeSelectorTerms_matchFields)),
-    matchExpressions: c.readOpt(obj["matchExpressions"], x => c.readList(x, toIssuerFields_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity_nodeAffinity_requiredDuringSchedulingIgnoredDuringExecution_nodeSelectorTerms_matchExpressions)),
-  }}
-export function toIssuerFields_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity_podAffinity_requiredDuringSchedulingIgnoredDuringExecution_labelSelector(input: c.JSONValue) {
-  const obj = c.checkObj(input);
-  return {
-    matchExpressions: c.readOpt(obj["matchExpressions"], x => c.readList(x, toIssuerFields_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity_podAffinity_requiredDuringSchedulingIgnoredDuringExecution_labelSelector_matchExpressions)),
-    matchLabels: c.readOpt(obj["matchLabels"], x => c.readMap(x, c.checkStr)),
-  }}
-export function toIssuerFields_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity_podAffinity_preferredDuringSchedulingIgnoredDuringExecution_podAffinityTerm(input: c.JSONValue) {
-  const obj = c.checkObj(input);
-  return {
-    namespaces: c.readOpt(obj["namespaces"], x => c.readList(x, c.checkStr)),
-    labelSelector: c.readOpt(obj["labelSelector"], toIssuerFields_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity_podAffinity_preferredDuringSchedulingIgnoredDuringExecution_podAffinityTerm_labelSelector),
-    topologyKey: c.checkStr(obj["topologyKey"]),
-  }}
-export function toIssuerFields_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity_podAntiAffinity_requiredDuringSchedulingIgnoredDuringExecution_labelSelector(input: c.JSONValue) {
-  const obj = c.checkObj(input);
-  return {
-    matchExpressions: c.readOpt(obj["matchExpressions"], x => c.readList(x, toIssuerFields_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity_podAntiAffinity_requiredDuringSchedulingIgnoredDuringExecution_labelSelector_matchExpressions)),
-    matchLabels: c.readOpt(obj["matchLabels"], x => c.readMap(x, c.checkStr)),
-  }}
-export function toIssuerFields_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity_podAntiAffinity_preferredDuringSchedulingIgnoredDuringExecution_podAffinityTerm(input: c.JSONValue) {
-  const obj = c.checkObj(input);
-  return {
-    namespaces: c.readOpt(obj["namespaces"], x => c.readList(x, c.checkStr)),
-    labelSelector: c.readOpt(obj["labelSelector"], toIssuerFields_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity_podAntiAffinity_preferredDuringSchedulingIgnoredDuringExecution_podAffinityTerm_labelSelector),
-    topologyKey: c.checkStr(obj["topologyKey"]),
-  }}
-export function toIssuerFields_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity_nodeAffinity_preferredDuringSchedulingIgnoredDuringExecution_preference_matchFields(input: c.JSONValue) {
-  const obj = c.checkObj(input);
-  return {
-    key: c.checkStr(obj["key"]),
-    values: c.readOpt(obj["values"], x => c.readList(x, c.checkStr)),
-    operator: c.checkStr(obj["operator"]),
-  }}
-export function toIssuerFields_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity_nodeAffinity_preferredDuringSchedulingIgnoredDuringExecution_preference_matchExpressions(input: c.JSONValue) {
-  const obj = c.checkObj(input);
-  return {
-    key: c.checkStr(obj["key"]),
-    operator: c.checkStr(obj["operator"]),
-    values: c.readOpt(obj["values"], x => c.readList(x, c.checkStr)),
-  }}
-export function toIssuerFields_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity_nodeAffinity_requiredDuringSchedulingIgnoredDuringExecution_nodeSelectorTerms_matchFields(input: c.JSONValue) {
-  const obj = c.checkObj(input);
-  return {
-    values: c.readOpt(obj["values"], x => c.readList(x, c.checkStr)),
-    operator: c.checkStr(obj["operator"]),
-    key: c.checkStr(obj["key"]),
-  }}
-export function toIssuerFields_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity_nodeAffinity_requiredDuringSchedulingIgnoredDuringExecution_nodeSelectorTerms_matchExpressions(input: c.JSONValue) {
-  const obj = c.checkObj(input);
-  return {
-    key: c.checkStr(obj["key"]),
-    operator: c.checkStr(obj["operator"]),
-    values: c.readOpt(obj["values"], x => c.readList(x, c.checkStr)),
-  }}
-export function toIssuerFields_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity_podAffinity_requiredDuringSchedulingIgnoredDuringExecution_labelSelector_matchExpressions(input: c.JSONValue) {
-  const obj = c.checkObj(input);
-  return {
-    key: c.checkStr(obj["key"]),
-    values: c.readOpt(obj["values"], x => c.readList(x, c.checkStr)),
-    operator: c.checkStr(obj["operator"]),
-  }}
-export function toIssuerFields_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity_podAffinity_preferredDuringSchedulingIgnoredDuringExecution_podAffinityTerm_labelSelector(input: c.JSONValue) {
-  const obj = c.checkObj(input);
-  return {
-    matchExpressions: c.readOpt(obj["matchExpressions"], x => c.readList(x, toIssuerFields_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity_podAffinity_preferredDuringSchedulingIgnoredDuringExecution_podAffinityTerm_labelSelector_matchExpressions)),
-    matchLabels: c.readOpt(obj["matchLabels"], x => c.readMap(x, c.checkStr)),
-  }}
-export function toIssuerFields_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity_podAntiAffinity_requiredDuringSchedulingIgnoredDuringExecution_labelSelector_matchExpressions(input: c.JSONValue) {
-  const obj = c.checkObj(input);
-  return {
-    key: c.checkStr(obj["key"]),
-    values: c.readOpt(obj["values"], x => c.readList(x, c.checkStr)),
-    operator: c.checkStr(obj["operator"]),
-  }}
-export function toIssuerFields_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity_podAntiAffinity_preferredDuringSchedulingIgnoredDuringExecution_podAffinityTerm_labelSelector(input: c.JSONValue) {
-  const obj = c.checkObj(input);
-  return {
-    matchLabels: c.readOpt(obj["matchLabels"], x => c.readMap(x, c.checkStr)),
-    matchExpressions: c.readOpt(obj["matchExpressions"], x => c.readList(x, toIssuerFields_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity_podAntiAffinity_preferredDuringSchedulingIgnoredDuringExecution_podAffinityTerm_labelSelector_matchExpressions)),
-  }}
-export function toIssuerFields_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity_podAffinity_preferredDuringSchedulingIgnoredDuringExecution_podAffinityTerm_labelSelector_matchExpressions(input: c.JSONValue) {
-  const obj = c.checkObj(input);
-  return {
-    values: c.readOpt(obj["values"], x => c.readList(x, c.checkStr)),
-    operator: c.checkStr(obj["operator"]),
-    key: c.checkStr(obj["key"]),
-  }}
-export function toIssuerFields_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity_podAntiAffinity_preferredDuringSchedulingIgnoredDuringExecution_podAffinityTerm_labelSelector_matchExpressions(input: c.JSONValue) {
-  const obj = c.checkObj(input);
-  return {
-    values: c.readOpt(obj["values"], x => c.readList(x, c.checkStr)),
-    operator: c.checkStr(obj["operator"]),
-    key: c.checkStr(obj["key"]),
-  }}
-
-/** A Certificate resource should be created to ensure an up to date and signed x509 certificate is stored in the Kubernetes Secret resource named in `spec.secretName`.
+/** A Certificate resource should be created to ensure an up to date and signed x509 certificate is stored in the Kubernetes Secret resource named in `spec.secretName`. 
  The stored certificate will be renewed before it expires (as configured by `spec.renewBefore`). */
-export type Certificate = Kind<"Certificate"> & CertificateFields;
-export interface CertificateFields {
+export interface Certificate {
+  apiVersion?: "cert-manager.io/v1alpha2";
+  kind?: "Certificate";
   metadata?: MetaV1.ObjectMeta | null;
-  status?: {
-    renewalTime?: c.Time | null;
-    lastFailureTime?: c.Time | null;
-    notBefore?: c.Time | null;
-    nextPrivateKeySecretName?: string | null;
-    conditions?: Array<{
-      message?: string | null;
-      reason?: string | null;
-      type: string;
-      status: "True" | "False" | "Unknown" | c.UnexpectedEnumValue;
-      lastTransitionTime?: c.Time | null;
-    }> | null;
-    notAfter?: c.Time | null;
-    revision?: number | null;
-  } | null;
   spec?: {
-    uriSANs?: Array<string> | null;
-    renewBefore?: string | null;
-    keyAlgorithm?: "rsa" | "ecdsa" | c.UnexpectedEnumValue | null;
-    usages?: Array<"signing" | "digital signature" | "content commitment" | "key encipherment" | "key agreement" | "data encipherment" | "cert sign" | "crl sign" | "encipher only" | "decipher only" | "any" | "server auth" | "client auth" | "code signing" | "email protection" | "s/mime" | "ipsec end system" | "ipsec tunnel" | "ipsec user" | "timestamping" | "ocsp signing" | "microsoft sgc" | "netscape sgc" | c.UnexpectedEnumValue> | null;
-    secretName: string;
-    isCA?: boolean | null;
-    keySize?: number | null;
-    organization?: Array<string> | null;
     commonName?: string | null;
-    ipAddresses?: Array<string> | null;
     dnsNames?: Array<string> | null;
+    duration?: string | null;
+    emailSANs?: Array<string> | null;
+    ipAddresses?: Array<string> | null;
+    isCA?: boolean | null;
+    issuerRef: {
+      group?: string | null;
+      kind?: string | null;
+      name: string;
+    };
+    keyAlgorithm?: "rsa" | "ecdsa" | c.UnexpectedEnumValue | null;
+    keyEncoding?: "pkcs1" | "pkcs8" | c.UnexpectedEnumValue | null;
+    keySize?: number | null;
     keystores?: {
       jks?: {
-        passwordSecretRef: {
-          name: string;
-          key?: string | null;
-        };
         create: boolean;
+        passwordSecretRef: {
+          key?: string | null;
+          name: string;
+        };
       } | null;
       pkcs12?: {
         create: boolean;
@@ -1871,199 +152,1930 @@ export interface CertificateFields {
         };
       } | null;
     } | null;
-    issuerRef: {
-      group?: string | null;
-      name: string;
-      kind?: string | null;
-    };
-    duration?: string | null;
-    emailSANs?: Array<string> | null;
+    organization?: Array<string> | null;
     privateKey?: {
       rotationPolicy?: string | null;
     } | null;
+    renewBefore?: string | null;
+    secretName: string;
     subject?: {
       countries?: Array<string> | null;
-      organizationalUnits?: Array<string> | null;
-      streetAddresses?: Array<string> | null;
-      serialNumber?: string | null;
       localities?: Array<string> | null;
-      provinces?: Array<string> | null;
+      organizationalUnits?: Array<string> | null;
       postalCodes?: Array<string> | null;
+      provinces?: Array<string> | null;
+      serialNumber?: string | null;
+      streetAddresses?: Array<string> | null;
     } | null;
-    keyEncoding?: "pkcs1" | "pkcs8" | c.UnexpectedEnumValue | null;
+    uriSANs?: Array<string> | null;
+    usages?: Array<"signing" | "digital signature" | "content commitment" | "key encipherment" | "key agreement" | "data encipherment" | "cert sign" | "crl sign" | "encipher only" | "decipher only" | "any" | "server auth" | "client auth" | "code signing" | "email protection" | "s/mime" | "ipsec end system" | "ipsec tunnel" | "ipsec user" | "timestamping" | "ocsp signing" | "microsoft sgc" | "netscape sgc" | c.UnexpectedEnumValue> | null;
+  } | null;
+  status?: {
+    conditions?: Array<{
+      lastTransitionTime?: c.Time | null;
+      message?: string | null;
+      reason?: string | null;
+      status: "True" | "False" | "Unknown" | c.UnexpectedEnumValue;
+      type: string;
+    }> | null;
+    lastFailureTime?: c.Time | null;
+    nextPrivateKeySecretName?: string | null;
+    notAfter?: c.Time | null;
+    notBefore?: c.Time | null;
+    renewalTime?: c.Time | null;
+    revision?: number | null;
   } | null;
 }
-export function toCertificateFields(input: c.JSONValue): CertificateFields {
+export function toCertificate(input: c.JSONValue): Certificate & c.ApiKind {
   const obj = c.checkObj(input);
   return {
+    ...c.assertOrAddApiVersionAndKind(obj, "cert-manager.io/v1alpha2", "Certificate"),
     metadata: c.readOpt(obj["metadata"], MetaV1.toObjectMeta),
-    status: c.readOpt(obj["status"], toCertificateFields_status),
-    spec: c.readOpt(obj["spec"], toCertificateFields_spec),
-  }}
-export function toCertificate(input: c.JSONValue): Certificate {
-  const {apiVersion, kind, ...fields} = c.checkObj(input);
-  if (apiVersion !== "cert-manager.io/v1alpha2") throw new Error("Type apiv mis 2");
-  if (kind !== "Certificate") throw new Error("Type kind mis 2");
-  return {
-    apiVersion, kind,
-    ...toCertificateFields(fields),
+    spec: c.readOpt(obj["spec"], toCertificate_spec),
+    status: c.readOpt(obj["status"], toCertificate_status),
   }}
 export function fromCertificate(input: Certificate): c.JSONValue {
   return {
+    ...c.assertOrAddApiVersionAndKind(input, "cert-manager.io/v1alpha2", "Certificate"),
     ...input,
     metadata: input.metadata != null ? MetaV1.fromObjectMeta(input.metadata) : undefined,
     status: input.status != null ? {
       ...input.status,
-      renewalTime: input.status.renewalTime != null ? c.fromTime(input.status.renewalTime) : undefined,
-      lastFailureTime: input.status.lastFailureTime != null ? c.fromTime(input.status.lastFailureTime) : undefined,
-      notBefore: input.status.notBefore != null ? c.fromTime(input.status.notBefore) : undefined,
       conditions: input.status.conditions?.map(x => ({
         ...x,
         lastTransitionTime: x.lastTransitionTime != null ? c.fromTime(x.lastTransitionTime) : undefined,
       })),
+      lastFailureTime: input.status.lastFailureTime != null ? c.fromTime(input.status.lastFailureTime) : undefined,
       notAfter: input.status.notAfter != null ? c.fromTime(input.status.notAfter) : undefined,
+      notBefore: input.status.notBefore != null ? c.fromTime(input.status.notBefore) : undefined,
+      renewalTime: input.status.renewalTime != null ? c.fromTime(input.status.renewalTime) : undefined,
     } : undefined,
   }}
-export function toCertificateFields_status(input: c.JSONValue) {
+export function toCertificate_spec(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
-    renewalTime: c.readOpt(obj["renewalTime"], c.toTime),
-    lastFailureTime: c.readOpt(obj["lastFailureTime"], c.toTime),
-    notBefore: c.readOpt(obj["notBefore"], c.toTime),
-    nextPrivateKeySecretName: c.readOpt(obj["nextPrivateKeySecretName"], c.checkStr),
-    conditions: c.readOpt(obj["conditions"], x => c.readList(x, toCertificateFields_status_conditions)),
-    notAfter: c.readOpt(obj["notAfter"], c.toTime),
-    revision: c.readOpt(obj["revision"], c.checkNum),
-  }}
-export function toCertificateFields_spec(input: c.JSONValue) {
-  const obj = c.checkObj(input);
-  return {
-    uriSANs: c.readOpt(obj["uriSANs"], x => c.readList(x, c.checkStr)),
-    renewBefore: c.readOpt(obj["renewBefore"], c.checkStr),
-    keyAlgorithm: c.readOpt(obj["keyAlgorithm"], (x => c.readEnum<"rsa" | "ecdsa" | c.UnexpectedEnumValue>(x))),
-    usages: c.readOpt(obj["usages"], x => c.readList(x, (x => c.readEnum<"signing" | "digital signature" | "content commitment" | "key encipherment" | "key agreement" | "data encipherment" | "cert sign" | "crl sign" | "encipher only" | "decipher only" | "any" | "server auth" | "client auth" | "code signing" | "email protection" | "s/mime" | "ipsec end system" | "ipsec tunnel" | "ipsec user" | "timestamping" | "ocsp signing" | "microsoft sgc" | "netscape sgc" | c.UnexpectedEnumValue>(x)))),
-    secretName: c.checkStr(obj["secretName"]),
-    isCA: c.readOpt(obj["isCA"], c.checkBool),
-    keySize: c.readOpt(obj["keySize"], c.checkNum),
-    organization: c.readOpt(obj["organization"], x => c.readList(x, c.checkStr)),
     commonName: c.readOpt(obj["commonName"], c.checkStr),
-    ipAddresses: c.readOpt(obj["ipAddresses"], x => c.readList(x, c.checkStr)),
     dnsNames: c.readOpt(obj["dnsNames"], x => c.readList(x, c.checkStr)),
-    keystores: c.readOpt(obj["keystores"], toCertificateFields_spec_keystores),
-    issuerRef: toCertificateFields_spec_issuerRef(obj["issuerRef"]),
     duration: c.readOpt(obj["duration"], c.checkStr),
     emailSANs: c.readOpt(obj["emailSANs"], x => c.readList(x, c.checkStr)),
-    privateKey: c.readOpt(obj["privateKey"], toCertificateFields_spec_privateKey),
-    subject: c.readOpt(obj["subject"], toCertificateFields_spec_subject),
+    ipAddresses: c.readOpt(obj["ipAddresses"], x => c.readList(x, c.checkStr)),
+    isCA: c.readOpt(obj["isCA"], c.checkBool),
+    issuerRef: toCertificate_spec_issuerRef(obj["issuerRef"]),
+    keyAlgorithm: c.readOpt(obj["keyAlgorithm"], (x => c.readEnum<"rsa" | "ecdsa" | c.UnexpectedEnumValue>(x))),
     keyEncoding: c.readOpt(obj["keyEncoding"], (x => c.readEnum<"pkcs1" | "pkcs8" | c.UnexpectedEnumValue>(x))),
+    keySize: c.readOpt(obj["keySize"], c.checkNum),
+    keystores: c.readOpt(obj["keystores"], toCertificate_spec_keystores),
+    organization: c.readOpt(obj["organization"], x => c.readList(x, c.checkStr)),
+    privateKey: c.readOpt(obj["privateKey"], toCertificate_spec_privateKey),
+    renewBefore: c.readOpt(obj["renewBefore"], c.checkStr),
+    secretName: c.checkStr(obj["secretName"]),
+    subject: c.readOpt(obj["subject"], toCertificate_spec_subject),
+    uriSANs: c.readOpt(obj["uriSANs"], x => c.readList(x, c.checkStr)),
+    usages: c.readOpt(obj["usages"], x => c.readList(x, (x => c.readEnum<"signing" | "digital signature" | "content commitment" | "key encipherment" | "key agreement" | "data encipherment" | "cert sign" | "crl sign" | "encipher only" | "decipher only" | "any" | "server auth" | "client auth" | "code signing" | "email protection" | "s/mime" | "ipsec end system" | "ipsec tunnel" | "ipsec user" | "timestamping" | "ocsp signing" | "microsoft sgc" | "netscape sgc" | c.UnexpectedEnumValue>(x)))),
   }}
-export function toCertificateFields_status_conditions(input: c.JSONValue) {
+export function toCertificate_status(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
-    message: c.readOpt(obj["message"], c.checkStr),
-    reason: c.readOpt(obj["reason"], c.checkStr),
-    type: c.checkStr(obj["type"]),
-    status: (x => c.readEnum<"True" | "False" | "Unknown" | c.UnexpectedEnumValue>(x))(obj["status"]),
-    lastTransitionTime: c.readOpt(obj["lastTransitionTime"], c.toTime),
+    conditions: c.readOpt(obj["conditions"], x => c.readList(x, toCertificate_status_conditions)),
+    lastFailureTime: c.readOpt(obj["lastFailureTime"], c.toTime),
+    nextPrivateKeySecretName: c.readOpt(obj["nextPrivateKeySecretName"], c.checkStr),
+    notAfter: c.readOpt(obj["notAfter"], c.toTime),
+    notBefore: c.readOpt(obj["notBefore"], c.toTime),
+    renewalTime: c.readOpt(obj["renewalTime"], c.toTime),
+    revision: c.readOpt(obj["revision"], c.checkNum),
   }}
-export function toCertificateFields_spec_keystores(input: c.JSONValue) {
-  const obj = c.checkObj(input);
-  return {
-    jks: c.readOpt(obj["jks"], toCertificateFields_spec_keystores_jks),
-    pkcs12: c.readOpt(obj["pkcs12"], toCertificateFields_spec_keystores_pkcs12),
-  }}
-export function toCertificateFields_spec_issuerRef(input: c.JSONValue) {
+export function toCertificate_spec_issuerRef(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     group: c.readOpt(obj["group"], c.checkStr),
-    name: c.checkStr(obj["name"]),
     kind: c.readOpt(obj["kind"], c.checkStr),
+    name: c.checkStr(obj["name"]),
   }}
-export function toCertificateFields_spec_privateKey(input: c.JSONValue) {
+export function toCertificate_spec_keystores(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    jks: c.readOpt(obj["jks"], toCertificate_spec_keystores_jks),
+    pkcs12: c.readOpt(obj["pkcs12"], toCertificate_spec_keystores_pkcs12),
+  }}
+export function toCertificate_spec_privateKey(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     rotationPolicy: c.readOpt(obj["rotationPolicy"], c.checkStr),
   }}
-export function toCertificateFields_spec_subject(input: c.JSONValue) {
+export function toCertificate_spec_subject(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     countries: c.readOpt(obj["countries"], x => c.readList(x, c.checkStr)),
-    organizationalUnits: c.readOpt(obj["organizationalUnits"], x => c.readList(x, c.checkStr)),
-    streetAddresses: c.readOpt(obj["streetAddresses"], x => c.readList(x, c.checkStr)),
-    serialNumber: c.readOpt(obj["serialNumber"], c.checkStr),
     localities: c.readOpt(obj["localities"], x => c.readList(x, c.checkStr)),
-    provinces: c.readOpt(obj["provinces"], x => c.readList(x, c.checkStr)),
+    organizationalUnits: c.readOpt(obj["organizationalUnits"], x => c.readList(x, c.checkStr)),
     postalCodes: c.readOpt(obj["postalCodes"], x => c.readList(x, c.checkStr)),
+    provinces: c.readOpt(obj["provinces"], x => c.readList(x, c.checkStr)),
+    serialNumber: c.readOpt(obj["serialNumber"], c.checkStr),
+    streetAddresses: c.readOpt(obj["streetAddresses"], x => c.readList(x, c.checkStr)),
   }}
-export function toCertificateFields_spec_keystores_jks(input: c.JSONValue) {
+export function toCertificate_status_conditions(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
-    passwordSecretRef: toCertificateFields_spec_keystores_jks_passwordSecretRef(obj["passwordSecretRef"]),
-    create: c.checkBool(obj["create"]),
+    lastTransitionTime: c.readOpt(obj["lastTransitionTime"], c.toTime),
+    message: c.readOpt(obj["message"], c.checkStr),
+    reason: c.readOpt(obj["reason"], c.checkStr),
+    status: (x => c.readEnum<"True" | "False" | "Unknown" | c.UnexpectedEnumValue>(x))(obj["status"]),
+    type: c.checkStr(obj["type"]),
   }}
-export function toCertificateFields_spec_keystores_pkcs12(input: c.JSONValue) {
+export function toCertificate_spec_keystores_jks(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     create: c.checkBool(obj["create"]),
-    passwordSecretRef: toCertificateFields_spec_keystores_pkcs12_passwordSecretRef(obj["passwordSecretRef"]),
+    passwordSecretRef: toCertificate_spec_keystores_jks_passwordSecretRef(obj["passwordSecretRef"]),
   }}
-export function toCertificateFields_spec_keystores_jks_passwordSecretRef(input: c.JSONValue) {
+export function toCertificate_spec_keystores_pkcs12(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    create: c.checkBool(obj["create"]),
+    passwordSecretRef: toCertificate_spec_keystores_pkcs12_passwordSecretRef(obj["passwordSecretRef"]),
+  }}
+export function toCertificate_spec_keystores_jks_passwordSecretRef(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    key: c.readOpt(obj["key"], c.checkStr),
+    name: c.checkStr(obj["name"]),
+  }}
+export function toCertificate_spec_keystores_pkcs12_passwordSecretRef(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    key: c.readOpt(obj["key"], c.checkStr),
+    name: c.checkStr(obj["name"]),
+  }}
+
+export interface CertificateList {
+  apiVersion?: "cert-manager.io/v1alpha2";
+  kind?: "Certificate";
+  items: Array<Certificate>;
+  metadata?: MetaV1.ListMeta | null;
+}
+export function toCertificateList(input: c.JSONValue): CertificateList & c.ApiKind {
+  const obj = c.checkObj(input);
+  return {
+    ...c.assertOrAddApiVersionAndKind(obj, "cert-manager.io/v1alpha2", "Certificate"),
+    items: c.readList(obj["items"], toCertificate),
+    metadata: c.readOpt(obj["metadata"], MetaV1.toListMeta),
+  }}
+export function fromCertificateList(input: CertificateList): c.JSONValue {
+  return {
+    ...c.assertOrAddApiVersionAndKind(input, "cert-manager.io/v1alpha2", "Certificate"),
+    ...input,
+    items: input.items?.map(fromCertificate),
+    metadata: input.metadata != null ? MetaV1.fromListMeta(input.metadata) : undefined,
+  }}
+
+/** A ClusterIssuer represents a certificate issuing authority which can be referenced as part of `issuerRef` fields. It is similar to an Issuer, however it is cluster-scoped and therefore can be referenced by resources that exist in *any* namespace, not just the same namespace as the referent. */
+export interface ClusterIssuer {
+  apiVersion?: "cert-manager.io/v1alpha2";
+  kind?: "ClusterIssuer";
+  metadata?: MetaV1.ObjectMeta | null;
+  spec?: {
+    acme?: {
+      email?: string | null;
+      externalAccountBinding?: {
+        keyAlgorithm: "HS256" | "HS384" | "HS512" | c.UnexpectedEnumValue;
+        keyID: string;
+        keySecretRef: {
+          key?: string | null;
+          name: string;
+        };
+      } | null;
+      privateKeySecretRef: {
+        key?: string | null;
+        name: string;
+      };
+      server: string;
+      skipTLSVerify?: boolean | null;
+      solvers?: Array<{
+        dns01?: {
+          acmedns?: {
+            accountSecretRef: {
+              key?: string | null;
+              name: string;
+            };
+            host: string;
+          } | null;
+          akamai?: {
+            accessTokenSecretRef: {
+              key?: string | null;
+              name: string;
+            };
+            clientSecretSecretRef: {
+              key?: string | null;
+              name: string;
+            };
+            clientTokenSecretRef: {
+              key?: string | null;
+              name: string;
+            };
+            serviceConsumerDomain: string;
+          } | null;
+          azuredns?: {
+            clientID?: string | null;
+            clientSecretSecretRef?: {
+              key?: string | null;
+              name: string;
+            } | null;
+            environment?: "AzurePublicCloud" | "AzureChinaCloud" | "AzureGermanCloud" | "AzureUSGovernmentCloud" | c.UnexpectedEnumValue | null;
+            hostedZoneName?: string | null;
+            resourceGroupName: string;
+            subscriptionID: string;
+            tenantID?: string | null;
+          } | null;
+          clouddns?: {
+            hostedZoneName?: string | null;
+            project: string;
+            serviceAccountSecretRef?: {
+              key?: string | null;
+              name: string;
+            } | null;
+          } | null;
+          cloudflare?: {
+            apiKeySecretRef?: {
+              key?: string | null;
+              name: string;
+            } | null;
+            apiTokenSecretRef?: {
+              key?: string | null;
+              name: string;
+            } | null;
+            email?: string | null;
+          } | null;
+          cnameStrategy?: "None" | "Follow" | c.UnexpectedEnumValue | null;
+          digitalocean?: {
+            tokenSecretRef: {
+              key?: string | null;
+              name: string;
+            };
+          } | null;
+          rfc2136?: {
+            nameserver: string;
+            tsigAlgorithm?: string | null;
+            tsigKeyName?: string | null;
+            tsigSecretSecretRef?: {
+              key?: string | null;
+              name: string;
+            } | null;
+          } | null;
+          route53?: {
+            accessKeyID?: string | null;
+            hostedZoneID?: string | null;
+            region: string;
+            role?: string | null;
+            secretAccessKeySecretRef?: {
+              key?: string | null;
+              name: string;
+            } | null;
+          } | null;
+          webhook?: {
+            config?: c.JSONValue | null;
+            groupName: string;
+            solverName: string;
+          } | null;
+        } | null;
+        http01?: {
+          ingress?: {
+            class?: string | null;
+            ingressTemplate?: {
+              metadata?: {
+                annotations?: Record<string,string> | null;
+                labels?: Record<string,string> | null;
+              } | null;
+            } | null;
+            name?: string | null;
+            podTemplate?: {
+              metadata?: {
+                annotations?: Record<string,string> | null;
+                labels?: Record<string,string> | null;
+              } | null;
+              spec?: {
+                affinity?: {
+                  nodeAffinity?: {
+                    preferredDuringSchedulingIgnoredDuringExecution?: Array<{
+                      preference: {
+                        matchExpressions?: Array<{
+                          key: string;
+                          operator: string;
+                          values?: Array<string> | null;
+                        }> | null;
+                        matchFields?: Array<{
+                          key: string;
+                          operator: string;
+                          values?: Array<string> | null;
+                        }> | null;
+                      };
+                      weight: number;
+                    }> | null;
+                    requiredDuringSchedulingIgnoredDuringExecution?: {
+                      nodeSelectorTerms: Array<{
+                        matchExpressions?: Array<{
+                          key: string;
+                          operator: string;
+                          values?: Array<string> | null;
+                        }> | null;
+                        matchFields?: Array<{
+                          key: string;
+                          operator: string;
+                          values?: Array<string> | null;
+                        }> | null;
+                      }>;
+                    } | null;
+                  } | null;
+                  podAffinity?: {
+                    preferredDuringSchedulingIgnoredDuringExecution?: Array<{
+                      podAffinityTerm: {
+                        labelSelector?: {
+                          matchExpressions?: Array<{
+                            key: string;
+                            operator: string;
+                            values?: Array<string> | null;
+                          }> | null;
+                          matchLabels?: Record<string,string> | null;
+                        } | null;
+                        namespaces?: Array<string> | null;
+                        topologyKey: string;
+                      };
+                      weight: number;
+                    }> | null;
+                    requiredDuringSchedulingIgnoredDuringExecution?: Array<{
+                      labelSelector?: {
+                        matchExpressions?: Array<{
+                          key: string;
+                          operator: string;
+                          values?: Array<string> | null;
+                        }> | null;
+                        matchLabels?: Record<string,string> | null;
+                      } | null;
+                      namespaces?: Array<string> | null;
+                      topologyKey: string;
+                    }> | null;
+                  } | null;
+                  podAntiAffinity?: {
+                    preferredDuringSchedulingIgnoredDuringExecution?: Array<{
+                      podAffinityTerm: {
+                        labelSelector?: {
+                          matchExpressions?: Array<{
+                            key: string;
+                            operator: string;
+                            values?: Array<string> | null;
+                          }> | null;
+                          matchLabels?: Record<string,string> | null;
+                        } | null;
+                        namespaces?: Array<string> | null;
+                        topologyKey: string;
+                      };
+                      weight: number;
+                    }> | null;
+                    requiredDuringSchedulingIgnoredDuringExecution?: Array<{
+                      labelSelector?: {
+                        matchExpressions?: Array<{
+                          key: string;
+                          operator: string;
+                          values?: Array<string> | null;
+                        }> | null;
+                        matchLabels?: Record<string,string> | null;
+                      } | null;
+                      namespaces?: Array<string> | null;
+                      topologyKey: string;
+                    }> | null;
+                  } | null;
+                } | null;
+                nodeSelector?: Record<string,string> | null;
+                tolerations?: Array<{
+                  effect?: string | null;
+                  key?: string | null;
+                  operator?: string | null;
+                  tolerationSeconds?: number | null;
+                  value?: string | null;
+                }> | null;
+              } | null;
+            } | null;
+            serviceType?: string | null;
+          } | null;
+        } | null;
+        selector?: {
+          dnsNames?: Array<string> | null;
+          dnsZones?: Array<string> | null;
+          matchLabels?: Record<string,string> | null;
+        } | null;
+      }> | null;
+    } | null;
+    ca?: {
+      crlDistributionPoints?: Array<string> | null;
+      secretName: string;
+    } | null;
+    selfSigned?: {
+      crlDistributionPoints?: Array<string> | null;
+    } | null;
+    vault?: {
+      auth: {
+        appRole?: {
+          path: string;
+          roleId: string;
+          secretRef: {
+            key?: string | null;
+            name: string;
+          };
+        } | null;
+        kubernetes?: {
+          mountPath?: string | null;
+          role: string;
+          secretRef: {
+            key?: string | null;
+            name: string;
+          };
+        } | null;
+        tokenSecretRef?: {
+          key?: string | null;
+          name: string;
+        } | null;
+      };
+      caBundle?: string | null;
+      path: string;
+      server: string;
+    } | null;
+    venafi?: {
+      cloud?: {
+        apiTokenSecretRef: {
+          key?: string | null;
+          name: string;
+        };
+        url?: string | null;
+      } | null;
+      tpp?: {
+        caBundle?: string | null;
+        credentialsRef: {
+          name: string;
+        };
+        url: string;
+      } | null;
+      zone: string;
+    } | null;
+  } | null;
+  status?: {
+    acme?: {
+      lastRegisteredEmail?: string | null;
+      uri?: string | null;
+    } | null;
+    conditions?: Array<{
+      lastTransitionTime?: c.Time | null;
+      message?: string | null;
+      reason?: string | null;
+      status: "True" | "False" | "Unknown" | c.UnexpectedEnumValue;
+      type: string;
+    }> | null;
+  } | null;
+}
+export function toClusterIssuer(input: c.JSONValue): ClusterIssuer & c.ApiKind {
+  const obj = c.checkObj(input);
+  return {
+    ...c.assertOrAddApiVersionAndKind(obj, "cert-manager.io/v1alpha2", "ClusterIssuer"),
+    metadata: c.readOpt(obj["metadata"], MetaV1.toObjectMeta),
+    spec: c.readOpt(obj["spec"], toClusterIssuer_spec),
+    status: c.readOpt(obj["status"], toClusterIssuer_status),
+  }}
+export function fromClusterIssuer(input: ClusterIssuer): c.JSONValue {
+  return {
+    ...c.assertOrAddApiVersionAndKind(input, "cert-manager.io/v1alpha2", "ClusterIssuer"),
+    ...input,
+    metadata: input.metadata != null ? MetaV1.fromObjectMeta(input.metadata) : undefined,
+    status: input.status != null ? {
+      ...input.status,
+      conditions: input.status.conditions?.map(x => ({
+        ...x,
+        lastTransitionTime: x.lastTransitionTime != null ? c.fromTime(x.lastTransitionTime) : undefined,
+      })),
+    } : undefined,
+  }}
+export function toClusterIssuer_spec(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    acme: c.readOpt(obj["acme"], toClusterIssuer_spec_acme),
+    ca: c.readOpt(obj["ca"], toClusterIssuer_spec_ca),
+    selfSigned: c.readOpt(obj["selfSigned"], toClusterIssuer_spec_selfSigned),
+    vault: c.readOpt(obj["vault"], toClusterIssuer_spec_vault),
+    venafi: c.readOpt(obj["venafi"], toClusterIssuer_spec_venafi),
+  }}
+export function toClusterIssuer_status(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    acme: c.readOpt(obj["acme"], toClusterIssuer_status_acme),
+    conditions: c.readOpt(obj["conditions"], x => c.readList(x, toClusterIssuer_status_conditions)),
+  }}
+export function toClusterIssuer_spec_acme(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    email: c.readOpt(obj["email"], c.checkStr),
+    externalAccountBinding: c.readOpt(obj["externalAccountBinding"], toClusterIssuer_spec_acme_externalAccountBinding),
+    privateKeySecretRef: toClusterIssuer_spec_acme_privateKeySecretRef(obj["privateKeySecretRef"]),
+    server: c.checkStr(obj["server"]),
+    skipTLSVerify: c.readOpt(obj["skipTLSVerify"], c.checkBool),
+    solvers: c.readOpt(obj["solvers"], x => c.readList(x, toClusterIssuer_spec_acme_solvers)),
+  }}
+export function toClusterIssuer_spec_ca(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    crlDistributionPoints: c.readOpt(obj["crlDistributionPoints"], x => c.readList(x, c.checkStr)),
+    secretName: c.checkStr(obj["secretName"]),
+  }}
+export function toClusterIssuer_spec_selfSigned(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    crlDistributionPoints: c.readOpt(obj["crlDistributionPoints"], x => c.readList(x, c.checkStr)),
+  }}
+export function toClusterIssuer_spec_vault(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    auth: toClusterIssuer_spec_vault_auth(obj["auth"]),
+    caBundle: c.readOpt(obj["caBundle"], c.checkStr),
+    path: c.checkStr(obj["path"]),
+    server: c.checkStr(obj["server"]),
+  }}
+export function toClusterIssuer_spec_venafi(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    cloud: c.readOpt(obj["cloud"], toClusterIssuer_spec_venafi_cloud),
+    tpp: c.readOpt(obj["tpp"], toClusterIssuer_spec_venafi_tpp),
+    zone: c.checkStr(obj["zone"]),
+  }}
+export function toClusterIssuer_status_acme(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    lastRegisteredEmail: c.readOpt(obj["lastRegisteredEmail"], c.checkStr),
+    uri: c.readOpt(obj["uri"], c.checkStr),
+  }}
+export function toClusterIssuer_status_conditions(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    lastTransitionTime: c.readOpt(obj["lastTransitionTime"], c.toTime),
+    message: c.readOpt(obj["message"], c.checkStr),
+    reason: c.readOpt(obj["reason"], c.checkStr),
+    status: (x => c.readEnum<"True" | "False" | "Unknown" | c.UnexpectedEnumValue>(x))(obj["status"]),
+    type: c.checkStr(obj["type"]),
+  }}
+export function toClusterIssuer_spec_acme_externalAccountBinding(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    keyAlgorithm: (x => c.readEnum<"HS256" | "HS384" | "HS512" | c.UnexpectedEnumValue>(x))(obj["keyAlgorithm"]),
+    keyID: c.checkStr(obj["keyID"]),
+    keySecretRef: toClusterIssuer_spec_acme_externalAccountBinding_keySecretRef(obj["keySecretRef"]),
+  }}
+export function toClusterIssuer_spec_acme_privateKeySecretRef(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    key: c.readOpt(obj["key"], c.checkStr),
+    name: c.checkStr(obj["name"]),
+  }}
+export function toClusterIssuer_spec_acme_solvers(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    dns01: c.readOpt(obj["dns01"], toClusterIssuer_spec_acme_solvers_dns01),
+    http01: c.readOpt(obj["http01"], toClusterIssuer_spec_acme_solvers_http01),
+    selector: c.readOpt(obj["selector"], toClusterIssuer_spec_acme_solvers_selector),
+  }}
+export function toClusterIssuer_spec_vault_auth(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    appRole: c.readOpt(obj["appRole"], toClusterIssuer_spec_vault_auth_appRole),
+    kubernetes: c.readOpt(obj["kubernetes"], toClusterIssuer_spec_vault_auth_kubernetes),
+    tokenSecretRef: c.readOpt(obj["tokenSecretRef"], toClusterIssuer_spec_vault_auth_tokenSecretRef),
+  }}
+export function toClusterIssuer_spec_venafi_cloud(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    apiTokenSecretRef: toClusterIssuer_spec_venafi_cloud_apiTokenSecretRef(obj["apiTokenSecretRef"]),
+    url: c.readOpt(obj["url"], c.checkStr),
+  }}
+export function toClusterIssuer_spec_venafi_tpp(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    caBundle: c.readOpt(obj["caBundle"], c.checkStr),
+    credentialsRef: toClusterIssuer_spec_venafi_tpp_credentialsRef(obj["credentialsRef"]),
+    url: c.checkStr(obj["url"]),
+  }}
+export function toClusterIssuer_spec_acme_externalAccountBinding_keySecretRef(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    key: c.readOpt(obj["key"], c.checkStr),
+    name: c.checkStr(obj["name"]),
+  }}
+export function toClusterIssuer_spec_acme_solvers_dns01(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    acmedns: c.readOpt(obj["acmedns"], toClusterIssuer_spec_acme_solvers_dns01_acmedns),
+    akamai: c.readOpt(obj["akamai"], toClusterIssuer_spec_acme_solvers_dns01_akamai),
+    azuredns: c.readOpt(obj["azuredns"], toClusterIssuer_spec_acme_solvers_dns01_azuredns),
+    clouddns: c.readOpt(obj["clouddns"], toClusterIssuer_spec_acme_solvers_dns01_clouddns),
+    cloudflare: c.readOpt(obj["cloudflare"], toClusterIssuer_spec_acme_solvers_dns01_cloudflare),
+    cnameStrategy: c.readOpt(obj["cnameStrategy"], (x => c.readEnum<"None" | "Follow" | c.UnexpectedEnumValue>(x))),
+    digitalocean: c.readOpt(obj["digitalocean"], toClusterIssuer_spec_acme_solvers_dns01_digitalocean),
+    rfc2136: c.readOpt(obj["rfc2136"], toClusterIssuer_spec_acme_solvers_dns01_rfc2136),
+    route53: c.readOpt(obj["route53"], toClusterIssuer_spec_acme_solvers_dns01_route53),
+    webhook: c.readOpt(obj["webhook"], toClusterIssuer_spec_acme_solvers_dns01_webhook),
+  }}
+export function toClusterIssuer_spec_acme_solvers_http01(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    ingress: c.readOpt(obj["ingress"], toClusterIssuer_spec_acme_solvers_http01_ingress),
+  }}
+export function toClusterIssuer_spec_acme_solvers_selector(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    dnsNames: c.readOpt(obj["dnsNames"], x => c.readList(x, c.checkStr)),
+    dnsZones: c.readOpt(obj["dnsZones"], x => c.readList(x, c.checkStr)),
+    matchLabels: c.readOpt(obj["matchLabels"], x => c.readMap(x, c.checkStr)),
+  }}
+export function toClusterIssuer_spec_vault_auth_appRole(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    path: c.checkStr(obj["path"]),
+    roleId: c.checkStr(obj["roleId"]),
+    secretRef: toClusterIssuer_spec_vault_auth_appRole_secretRef(obj["secretRef"]),
+  }}
+export function toClusterIssuer_spec_vault_auth_kubernetes(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    mountPath: c.readOpt(obj["mountPath"], c.checkStr),
+    role: c.checkStr(obj["role"]),
+    secretRef: toClusterIssuer_spec_vault_auth_kubernetes_secretRef(obj["secretRef"]),
+  }}
+export function toClusterIssuer_spec_vault_auth_tokenSecretRef(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    key: c.readOpt(obj["key"], c.checkStr),
+    name: c.checkStr(obj["name"]),
+  }}
+export function toClusterIssuer_spec_venafi_cloud_apiTokenSecretRef(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    key: c.readOpt(obj["key"], c.checkStr),
+    name: c.checkStr(obj["name"]),
+  }}
+export function toClusterIssuer_spec_venafi_tpp_credentialsRef(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     name: c.checkStr(obj["name"]),
-    key: c.readOpt(obj["key"], c.checkStr),
   }}
-export function toCertificateFields_spec_keystores_pkcs12_passwordSecretRef(input: c.JSONValue) {
+export function toClusterIssuer_spec_acme_solvers_dns01_acmedns(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    accountSecretRef: toClusterIssuer_spec_acme_solvers_dns01_acmedns_accountSecretRef(obj["accountSecretRef"]),
+    host: c.checkStr(obj["host"]),
+  }}
+export function toClusterIssuer_spec_acme_solvers_dns01_akamai(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    accessTokenSecretRef: toClusterIssuer_spec_acme_solvers_dns01_akamai_accessTokenSecretRef(obj["accessTokenSecretRef"]),
+    clientSecretSecretRef: toClusterIssuer_spec_acme_solvers_dns01_akamai_clientSecretSecretRef(obj["clientSecretSecretRef"]),
+    clientTokenSecretRef: toClusterIssuer_spec_acme_solvers_dns01_akamai_clientTokenSecretRef(obj["clientTokenSecretRef"]),
+    serviceConsumerDomain: c.checkStr(obj["serviceConsumerDomain"]),
+  }}
+export function toClusterIssuer_spec_acme_solvers_dns01_azuredns(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    clientID: c.readOpt(obj["clientID"], c.checkStr),
+    clientSecretSecretRef: c.readOpt(obj["clientSecretSecretRef"], toClusterIssuer_spec_acme_solvers_dns01_azuredns_clientSecretSecretRef),
+    environment: c.readOpt(obj["environment"], (x => c.readEnum<"AzurePublicCloud" | "AzureChinaCloud" | "AzureGermanCloud" | "AzureUSGovernmentCloud" | c.UnexpectedEnumValue>(x))),
+    hostedZoneName: c.readOpt(obj["hostedZoneName"], c.checkStr),
+    resourceGroupName: c.checkStr(obj["resourceGroupName"]),
+    subscriptionID: c.checkStr(obj["subscriptionID"]),
+    tenantID: c.readOpt(obj["tenantID"], c.checkStr),
+  }}
+export function toClusterIssuer_spec_acme_solvers_dns01_clouddns(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    hostedZoneName: c.readOpt(obj["hostedZoneName"], c.checkStr),
+    project: c.checkStr(obj["project"]),
+    serviceAccountSecretRef: c.readOpt(obj["serviceAccountSecretRef"], toClusterIssuer_spec_acme_solvers_dns01_clouddns_serviceAccountSecretRef),
+  }}
+export function toClusterIssuer_spec_acme_solvers_dns01_cloudflare(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    apiKeySecretRef: c.readOpt(obj["apiKeySecretRef"], toClusterIssuer_spec_acme_solvers_dns01_cloudflare_apiKeySecretRef),
+    apiTokenSecretRef: c.readOpt(obj["apiTokenSecretRef"], toClusterIssuer_spec_acme_solvers_dns01_cloudflare_apiTokenSecretRef),
+    email: c.readOpt(obj["email"], c.checkStr),
+  }}
+export function toClusterIssuer_spec_acme_solvers_dns01_digitalocean(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    tokenSecretRef: toClusterIssuer_spec_acme_solvers_dns01_digitalocean_tokenSecretRef(obj["tokenSecretRef"]),
+  }}
+export function toClusterIssuer_spec_acme_solvers_dns01_rfc2136(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    nameserver: c.checkStr(obj["nameserver"]),
+    tsigAlgorithm: c.readOpt(obj["tsigAlgorithm"], c.checkStr),
+    tsigKeyName: c.readOpt(obj["tsigKeyName"], c.checkStr),
+    tsigSecretSecretRef: c.readOpt(obj["tsigSecretSecretRef"], toClusterIssuer_spec_acme_solvers_dns01_rfc2136_tsigSecretSecretRef),
+  }}
+export function toClusterIssuer_spec_acme_solvers_dns01_route53(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    accessKeyID: c.readOpt(obj["accessKeyID"], c.checkStr),
+    hostedZoneID: c.readOpt(obj["hostedZoneID"], c.checkStr),
+    region: c.checkStr(obj["region"]),
+    role: c.readOpt(obj["role"], c.checkStr),
+    secretAccessKeySecretRef: c.readOpt(obj["secretAccessKeySecretRef"], toClusterIssuer_spec_acme_solvers_dns01_route53_secretAccessKeySecretRef),
+  }}
+export function toClusterIssuer_spec_acme_solvers_dns01_webhook(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    config: c.readOpt(obj["config"], c.identity),
+    groupName: c.checkStr(obj["groupName"]),
+    solverName: c.checkStr(obj["solverName"]),
+  }}
+export function toClusterIssuer_spec_acme_solvers_http01_ingress(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    class: c.readOpt(obj["class"], c.checkStr),
+    ingressTemplate: c.readOpt(obj["ingressTemplate"], toClusterIssuer_spec_acme_solvers_http01_ingress_ingressTemplate),
+    name: c.readOpt(obj["name"], c.checkStr),
+    podTemplate: c.readOpt(obj["podTemplate"], toClusterIssuer_spec_acme_solvers_http01_ingress_podTemplate),
+    serviceType: c.readOpt(obj["serviceType"], c.checkStr),
+  }}
+export function toClusterIssuer_spec_vault_auth_appRole_secretRef(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     key: c.readOpt(obj["key"], c.checkStr),
     name: c.checkStr(obj["name"]),
   }}
-
-/** CertificateList is a list of Certificate */
-export type CertificateList = Kind<"CertificateList"> & ListOf<CertificateFields>;
-export function toCertificateList(input: c.JSONValue): CertificateList {
-  const {apiVersion, kind, metadata, items} = c.checkObj(input);
-  if (apiVersion !== "cert-manager.io/v1alpha2") throw new Error("Type apiv mis 2");
-  if (kind !== "CertificateList") throw new Error("Type kind mis 2");
+export function toClusterIssuer_spec_vault_auth_kubernetes_secretRef(input: c.JSONValue) {
+  const obj = c.checkObj(input);
   return {
-    apiVersion, kind,
-    metadata: MetaV1.toListMeta(metadata),
-    items: c.readList(items, toCertificateFields),
+    key: c.readOpt(obj["key"], c.checkStr),
+    name: c.checkStr(obj["name"]),
+  }}
+export function toClusterIssuer_spec_acme_solvers_dns01_acmedns_accountSecretRef(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    key: c.readOpt(obj["key"], c.checkStr),
+    name: c.checkStr(obj["name"]),
+  }}
+export function toClusterIssuer_spec_acme_solvers_dns01_akamai_accessTokenSecretRef(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    key: c.readOpt(obj["key"], c.checkStr),
+    name: c.checkStr(obj["name"]),
+  }}
+export function toClusterIssuer_spec_acme_solvers_dns01_akamai_clientSecretSecretRef(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    key: c.readOpt(obj["key"], c.checkStr),
+    name: c.checkStr(obj["name"]),
+  }}
+export function toClusterIssuer_spec_acme_solvers_dns01_akamai_clientTokenSecretRef(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    key: c.readOpt(obj["key"], c.checkStr),
+    name: c.checkStr(obj["name"]),
+  }}
+export function toClusterIssuer_spec_acme_solvers_dns01_azuredns_clientSecretSecretRef(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    key: c.readOpt(obj["key"], c.checkStr),
+    name: c.checkStr(obj["name"]),
+  }}
+export function toClusterIssuer_spec_acme_solvers_dns01_clouddns_serviceAccountSecretRef(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    key: c.readOpt(obj["key"], c.checkStr),
+    name: c.checkStr(obj["name"]),
+  }}
+export function toClusterIssuer_spec_acme_solvers_dns01_cloudflare_apiKeySecretRef(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    key: c.readOpt(obj["key"], c.checkStr),
+    name: c.checkStr(obj["name"]),
+  }}
+export function toClusterIssuer_spec_acme_solvers_dns01_cloudflare_apiTokenSecretRef(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    key: c.readOpt(obj["key"], c.checkStr),
+    name: c.checkStr(obj["name"]),
+  }}
+export function toClusterIssuer_spec_acme_solvers_dns01_digitalocean_tokenSecretRef(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    key: c.readOpt(obj["key"], c.checkStr),
+    name: c.checkStr(obj["name"]),
+  }}
+export function toClusterIssuer_spec_acme_solvers_dns01_rfc2136_tsigSecretSecretRef(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    key: c.readOpt(obj["key"], c.checkStr),
+    name: c.checkStr(obj["name"]),
+  }}
+export function toClusterIssuer_spec_acme_solvers_dns01_route53_secretAccessKeySecretRef(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    key: c.readOpt(obj["key"], c.checkStr),
+    name: c.checkStr(obj["name"]),
+  }}
+export function toClusterIssuer_spec_acme_solvers_http01_ingress_ingressTemplate(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    metadata: c.readOpt(obj["metadata"], toClusterIssuer_spec_acme_solvers_http01_ingress_ingressTemplate_metadata),
+  }}
+export function toClusterIssuer_spec_acme_solvers_http01_ingress_podTemplate(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    metadata: c.readOpt(obj["metadata"], toClusterIssuer_spec_acme_solvers_http01_ingress_podTemplate_metadata),
+    spec: c.readOpt(obj["spec"], toClusterIssuer_spec_acme_solvers_http01_ingress_podTemplate_spec),
+  }}
+export function toClusterIssuer_spec_acme_solvers_http01_ingress_ingressTemplate_metadata(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    annotations: c.readOpt(obj["annotations"], x => c.readMap(x, c.checkStr)),
+    labels: c.readOpt(obj["labels"], x => c.readMap(x, c.checkStr)),
+  }}
+export function toClusterIssuer_spec_acme_solvers_http01_ingress_podTemplate_metadata(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    annotations: c.readOpt(obj["annotations"], x => c.readMap(x, c.checkStr)),
+    labels: c.readOpt(obj["labels"], x => c.readMap(x, c.checkStr)),
+  }}
+export function toClusterIssuer_spec_acme_solvers_http01_ingress_podTemplate_spec(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    affinity: c.readOpt(obj["affinity"], toClusterIssuer_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity),
+    nodeSelector: c.readOpt(obj["nodeSelector"], x => c.readMap(x, c.checkStr)),
+    tolerations: c.readOpt(obj["tolerations"], x => c.readList(x, toClusterIssuer_spec_acme_solvers_http01_ingress_podTemplate_spec_tolerations)),
+  }}
+export function toClusterIssuer_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    nodeAffinity: c.readOpt(obj["nodeAffinity"], toClusterIssuer_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity_nodeAffinity),
+    podAffinity: c.readOpt(obj["podAffinity"], toClusterIssuer_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity_podAffinity),
+    podAntiAffinity: c.readOpt(obj["podAntiAffinity"], toClusterIssuer_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity_podAntiAffinity),
+  }}
+export function toClusterIssuer_spec_acme_solvers_http01_ingress_podTemplate_spec_tolerations(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    effect: c.readOpt(obj["effect"], c.checkStr),
+    key: c.readOpt(obj["key"], c.checkStr),
+    operator: c.readOpt(obj["operator"], c.checkStr),
+    tolerationSeconds: c.readOpt(obj["tolerationSeconds"], c.checkNum),
+    value: c.readOpt(obj["value"], c.checkStr),
+  }}
+export function toClusterIssuer_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity_nodeAffinity(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    preferredDuringSchedulingIgnoredDuringExecution: c.readOpt(obj["preferredDuringSchedulingIgnoredDuringExecution"], x => c.readList(x, toClusterIssuer_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity_nodeAffinity_preferredDuringSchedulingIgnoredDuringExecution)),
+    requiredDuringSchedulingIgnoredDuringExecution: c.readOpt(obj["requiredDuringSchedulingIgnoredDuringExecution"], toClusterIssuer_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity_nodeAffinity_requiredDuringSchedulingIgnoredDuringExecution),
+  }}
+export function toClusterIssuer_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity_podAffinity(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    preferredDuringSchedulingIgnoredDuringExecution: c.readOpt(obj["preferredDuringSchedulingIgnoredDuringExecution"], x => c.readList(x, toClusterIssuer_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity_podAffinity_preferredDuringSchedulingIgnoredDuringExecution)),
+    requiredDuringSchedulingIgnoredDuringExecution: c.readOpt(obj["requiredDuringSchedulingIgnoredDuringExecution"], x => c.readList(x, toClusterIssuer_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity_podAffinity_requiredDuringSchedulingIgnoredDuringExecution)),
+  }}
+export function toClusterIssuer_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity_podAntiAffinity(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    preferredDuringSchedulingIgnoredDuringExecution: c.readOpt(obj["preferredDuringSchedulingIgnoredDuringExecution"], x => c.readList(x, toClusterIssuer_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity_podAntiAffinity_preferredDuringSchedulingIgnoredDuringExecution)),
+    requiredDuringSchedulingIgnoredDuringExecution: c.readOpt(obj["requiredDuringSchedulingIgnoredDuringExecution"], x => c.readList(x, toClusterIssuer_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity_podAntiAffinity_requiredDuringSchedulingIgnoredDuringExecution)),
+  }}
+export function toClusterIssuer_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity_nodeAffinity_preferredDuringSchedulingIgnoredDuringExecution(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    preference: toClusterIssuer_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity_nodeAffinity_preferredDuringSchedulingIgnoredDuringExecution_preference(obj["preference"]),
+    weight: c.checkNum(obj["weight"]),
+  }}
+export function toClusterIssuer_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity_nodeAffinity_requiredDuringSchedulingIgnoredDuringExecution(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    nodeSelectorTerms: c.readList(obj["nodeSelectorTerms"], toClusterIssuer_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity_nodeAffinity_requiredDuringSchedulingIgnoredDuringExecution_nodeSelectorTerms),
+  }}
+export function toClusterIssuer_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity_podAffinity_preferredDuringSchedulingIgnoredDuringExecution(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    podAffinityTerm: toClusterIssuer_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity_podAffinity_preferredDuringSchedulingIgnoredDuringExecution_podAffinityTerm(obj["podAffinityTerm"]),
+    weight: c.checkNum(obj["weight"]),
+  }}
+export function toClusterIssuer_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity_podAffinity_requiredDuringSchedulingIgnoredDuringExecution(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    labelSelector: c.readOpt(obj["labelSelector"], toClusterIssuer_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity_podAffinity_requiredDuringSchedulingIgnoredDuringExecution_labelSelector),
+    namespaces: c.readOpt(obj["namespaces"], x => c.readList(x, c.checkStr)),
+    topologyKey: c.checkStr(obj["topologyKey"]),
+  }}
+export function toClusterIssuer_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity_podAntiAffinity_preferredDuringSchedulingIgnoredDuringExecution(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    podAffinityTerm: toClusterIssuer_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity_podAntiAffinity_preferredDuringSchedulingIgnoredDuringExecution_podAffinityTerm(obj["podAffinityTerm"]),
+    weight: c.checkNum(obj["weight"]),
+  }}
+export function toClusterIssuer_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity_podAntiAffinity_requiredDuringSchedulingIgnoredDuringExecution(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    labelSelector: c.readOpt(obj["labelSelector"], toClusterIssuer_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity_podAntiAffinity_requiredDuringSchedulingIgnoredDuringExecution_labelSelector),
+    namespaces: c.readOpt(obj["namespaces"], x => c.readList(x, c.checkStr)),
+    topologyKey: c.checkStr(obj["topologyKey"]),
+  }}
+export function toClusterIssuer_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity_nodeAffinity_preferredDuringSchedulingIgnoredDuringExecution_preference(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    matchExpressions: c.readOpt(obj["matchExpressions"], x => c.readList(x, toClusterIssuer_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity_nodeAffinity_preferredDuringSchedulingIgnoredDuringExecution_preference_matchExpressions)),
+    matchFields: c.readOpt(obj["matchFields"], x => c.readList(x, toClusterIssuer_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity_nodeAffinity_preferredDuringSchedulingIgnoredDuringExecution_preference_matchFields)),
+  }}
+export function toClusterIssuer_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity_nodeAffinity_requiredDuringSchedulingIgnoredDuringExecution_nodeSelectorTerms(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    matchExpressions: c.readOpt(obj["matchExpressions"], x => c.readList(x, toClusterIssuer_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity_nodeAffinity_requiredDuringSchedulingIgnoredDuringExecution_nodeSelectorTerms_matchExpressions)),
+    matchFields: c.readOpt(obj["matchFields"], x => c.readList(x, toClusterIssuer_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity_nodeAffinity_requiredDuringSchedulingIgnoredDuringExecution_nodeSelectorTerms_matchFields)),
+  }}
+export function toClusterIssuer_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity_podAffinity_preferredDuringSchedulingIgnoredDuringExecution_podAffinityTerm(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    labelSelector: c.readOpt(obj["labelSelector"], toClusterIssuer_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity_podAffinity_preferredDuringSchedulingIgnoredDuringExecution_podAffinityTerm_labelSelector),
+    namespaces: c.readOpt(obj["namespaces"], x => c.readList(x, c.checkStr)),
+    topologyKey: c.checkStr(obj["topologyKey"]),
+  }}
+export function toClusterIssuer_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity_podAffinity_requiredDuringSchedulingIgnoredDuringExecution_labelSelector(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    matchExpressions: c.readOpt(obj["matchExpressions"], x => c.readList(x, toClusterIssuer_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity_podAffinity_requiredDuringSchedulingIgnoredDuringExecution_labelSelector_matchExpressions)),
+    matchLabels: c.readOpt(obj["matchLabels"], x => c.readMap(x, c.checkStr)),
+  }}
+export function toClusterIssuer_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity_podAntiAffinity_preferredDuringSchedulingIgnoredDuringExecution_podAffinityTerm(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    labelSelector: c.readOpt(obj["labelSelector"], toClusterIssuer_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity_podAntiAffinity_preferredDuringSchedulingIgnoredDuringExecution_podAffinityTerm_labelSelector),
+    namespaces: c.readOpt(obj["namespaces"], x => c.readList(x, c.checkStr)),
+    topologyKey: c.checkStr(obj["topologyKey"]),
+  }}
+export function toClusterIssuer_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity_podAntiAffinity_requiredDuringSchedulingIgnoredDuringExecution_labelSelector(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    matchExpressions: c.readOpt(obj["matchExpressions"], x => c.readList(x, toClusterIssuer_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity_podAntiAffinity_requiredDuringSchedulingIgnoredDuringExecution_labelSelector_matchExpressions)),
+    matchLabels: c.readOpt(obj["matchLabels"], x => c.readMap(x, c.checkStr)),
+  }}
+export function toClusterIssuer_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity_nodeAffinity_preferredDuringSchedulingIgnoredDuringExecution_preference_matchExpressions(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    key: c.checkStr(obj["key"]),
+    operator: c.checkStr(obj["operator"]),
+    values: c.readOpt(obj["values"], x => c.readList(x, c.checkStr)),
+  }}
+export function toClusterIssuer_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity_nodeAffinity_preferredDuringSchedulingIgnoredDuringExecution_preference_matchFields(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    key: c.checkStr(obj["key"]),
+    operator: c.checkStr(obj["operator"]),
+    values: c.readOpt(obj["values"], x => c.readList(x, c.checkStr)),
+  }}
+export function toClusterIssuer_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity_nodeAffinity_requiredDuringSchedulingIgnoredDuringExecution_nodeSelectorTerms_matchExpressions(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    key: c.checkStr(obj["key"]),
+    operator: c.checkStr(obj["operator"]),
+    values: c.readOpt(obj["values"], x => c.readList(x, c.checkStr)),
+  }}
+export function toClusterIssuer_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity_nodeAffinity_requiredDuringSchedulingIgnoredDuringExecution_nodeSelectorTerms_matchFields(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    key: c.checkStr(obj["key"]),
+    operator: c.checkStr(obj["operator"]),
+    values: c.readOpt(obj["values"], x => c.readList(x, c.checkStr)),
+  }}
+export function toClusterIssuer_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity_podAffinity_preferredDuringSchedulingIgnoredDuringExecution_podAffinityTerm_labelSelector(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    matchExpressions: c.readOpt(obj["matchExpressions"], x => c.readList(x, toClusterIssuer_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity_podAffinity_preferredDuringSchedulingIgnoredDuringExecution_podAffinityTerm_labelSelector_matchExpressions)),
+    matchLabels: c.readOpt(obj["matchLabels"], x => c.readMap(x, c.checkStr)),
+  }}
+export function toClusterIssuer_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity_podAffinity_requiredDuringSchedulingIgnoredDuringExecution_labelSelector_matchExpressions(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    key: c.checkStr(obj["key"]),
+    operator: c.checkStr(obj["operator"]),
+    values: c.readOpt(obj["values"], x => c.readList(x, c.checkStr)),
+  }}
+export function toClusterIssuer_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity_podAntiAffinity_preferredDuringSchedulingIgnoredDuringExecution_podAffinityTerm_labelSelector(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    matchExpressions: c.readOpt(obj["matchExpressions"], x => c.readList(x, toClusterIssuer_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity_podAntiAffinity_preferredDuringSchedulingIgnoredDuringExecution_podAffinityTerm_labelSelector_matchExpressions)),
+    matchLabels: c.readOpt(obj["matchLabels"], x => c.readMap(x, c.checkStr)),
+  }}
+export function toClusterIssuer_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity_podAntiAffinity_requiredDuringSchedulingIgnoredDuringExecution_labelSelector_matchExpressions(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    key: c.checkStr(obj["key"]),
+    operator: c.checkStr(obj["operator"]),
+    values: c.readOpt(obj["values"], x => c.readList(x, c.checkStr)),
+  }}
+export function toClusterIssuer_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity_podAffinity_preferredDuringSchedulingIgnoredDuringExecution_podAffinityTerm_labelSelector_matchExpressions(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    key: c.checkStr(obj["key"]),
+    operator: c.checkStr(obj["operator"]),
+    values: c.readOpt(obj["values"], x => c.readList(x, c.checkStr)),
+  }}
+export function toClusterIssuer_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity_podAntiAffinity_preferredDuringSchedulingIgnoredDuringExecution_podAffinityTerm_labelSelector_matchExpressions(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    key: c.checkStr(obj["key"]),
+    operator: c.checkStr(obj["operator"]),
+    values: c.readOpt(obj["values"], x => c.readList(x, c.checkStr)),
   }}
 
-/** CertificateRequestList is a list of CertificateRequest */
-export type CertificateRequestList = Kind<"CertificateRequestList"> & ListOf<CertificateRequestFields>;
-export function toCertificateRequestList(input: c.JSONValue): CertificateRequestList {
-  const {apiVersion, kind, metadata, items} = c.checkObj(input);
-  if (apiVersion !== "cert-manager.io/v1alpha2") throw new Error("Type apiv mis 2");
-  if (kind !== "CertificateRequestList") throw new Error("Type kind mis 2");
+export interface ClusterIssuerList {
+  apiVersion?: "cert-manager.io/v1alpha2";
+  kind?: "ClusterIssuer";
+  items: Array<ClusterIssuer>;
+  metadata?: MetaV1.ListMeta | null;
+}
+export function toClusterIssuerList(input: c.JSONValue): ClusterIssuerList & c.ApiKind {
+  const obj = c.checkObj(input);
   return {
-    apiVersion, kind,
-    metadata: MetaV1.toListMeta(metadata),
-    items: c.readList(items, toCertificateRequestFields),
+    ...c.assertOrAddApiVersionAndKind(obj, "cert-manager.io/v1alpha2", "ClusterIssuer"),
+    items: c.readList(obj["items"], toClusterIssuer),
+    metadata: c.readOpt(obj["metadata"], MetaV1.toListMeta),
+  }}
+export function fromClusterIssuerList(input: ClusterIssuerList): c.JSONValue {
+  return {
+    ...c.assertOrAddApiVersionAndKind(input, "cert-manager.io/v1alpha2", "ClusterIssuer"),
+    ...input,
+    items: input.items?.map(fromClusterIssuer),
+    metadata: input.metadata != null ? MetaV1.fromListMeta(input.metadata) : undefined,
   }}
 
-/** ClusterIssuerList is a list of ClusterIssuer */
-export type ClusterIssuerList = Kind<"ClusterIssuerList"> & ListOf<ClusterIssuerFields>;
-export function toClusterIssuerList(input: c.JSONValue): ClusterIssuerList {
-  const {apiVersion, kind, metadata, items} = c.checkObj(input);
-  if (apiVersion !== "cert-manager.io/v1alpha2") throw new Error("Type apiv mis 2");
-  if (kind !== "ClusterIssuerList") throw new Error("Type kind mis 2");
+/** An Issuer represents a certificate issuing authority which can be referenced as part of `issuerRef` fields. It is scoped to a single namespace and can therefore only be referenced by resources within the same namespace. */
+export interface Issuer {
+  apiVersion?: "cert-manager.io/v1alpha2";
+  kind?: "Issuer";
+  metadata?: MetaV1.ObjectMeta | null;
+  spec?: {
+    acme?: {
+      email?: string | null;
+      externalAccountBinding?: {
+        keyAlgorithm: "HS256" | "HS384" | "HS512" | c.UnexpectedEnumValue;
+        keyID: string;
+        keySecretRef: {
+          key?: string | null;
+          name: string;
+        };
+      } | null;
+      privateKeySecretRef: {
+        key?: string | null;
+        name: string;
+      };
+      server: string;
+      skipTLSVerify?: boolean | null;
+      solvers?: Array<{
+        dns01?: {
+          acmedns?: {
+            accountSecretRef: {
+              key?: string | null;
+              name: string;
+            };
+            host: string;
+          } | null;
+          akamai?: {
+            accessTokenSecretRef: {
+              key?: string | null;
+              name: string;
+            };
+            clientSecretSecretRef: {
+              key?: string | null;
+              name: string;
+            };
+            clientTokenSecretRef: {
+              key?: string | null;
+              name: string;
+            };
+            serviceConsumerDomain: string;
+          } | null;
+          azuredns?: {
+            clientID?: string | null;
+            clientSecretSecretRef?: {
+              key?: string | null;
+              name: string;
+            } | null;
+            environment?: "AzurePublicCloud" | "AzureChinaCloud" | "AzureGermanCloud" | "AzureUSGovernmentCloud" | c.UnexpectedEnumValue | null;
+            hostedZoneName?: string | null;
+            resourceGroupName: string;
+            subscriptionID: string;
+            tenantID?: string | null;
+          } | null;
+          clouddns?: {
+            hostedZoneName?: string | null;
+            project: string;
+            serviceAccountSecretRef?: {
+              key?: string | null;
+              name: string;
+            } | null;
+          } | null;
+          cloudflare?: {
+            apiKeySecretRef?: {
+              key?: string | null;
+              name: string;
+            } | null;
+            apiTokenSecretRef?: {
+              key?: string | null;
+              name: string;
+            } | null;
+            email?: string | null;
+          } | null;
+          cnameStrategy?: "None" | "Follow" | c.UnexpectedEnumValue | null;
+          digitalocean?: {
+            tokenSecretRef: {
+              key?: string | null;
+              name: string;
+            };
+          } | null;
+          rfc2136?: {
+            nameserver: string;
+            tsigAlgorithm?: string | null;
+            tsigKeyName?: string | null;
+            tsigSecretSecretRef?: {
+              key?: string | null;
+              name: string;
+            } | null;
+          } | null;
+          route53?: {
+            accessKeyID?: string | null;
+            hostedZoneID?: string | null;
+            region: string;
+            role?: string | null;
+            secretAccessKeySecretRef?: {
+              key?: string | null;
+              name: string;
+            } | null;
+          } | null;
+          webhook?: {
+            config?: c.JSONValue | null;
+            groupName: string;
+            solverName: string;
+          } | null;
+        } | null;
+        http01?: {
+          ingress?: {
+            class?: string | null;
+            ingressTemplate?: {
+              metadata?: {
+                annotations?: Record<string,string> | null;
+                labels?: Record<string,string> | null;
+              } | null;
+            } | null;
+            name?: string | null;
+            podTemplate?: {
+              metadata?: {
+                annotations?: Record<string,string> | null;
+                labels?: Record<string,string> | null;
+              } | null;
+              spec?: {
+                affinity?: {
+                  nodeAffinity?: {
+                    preferredDuringSchedulingIgnoredDuringExecution?: Array<{
+                      preference: {
+                        matchExpressions?: Array<{
+                          key: string;
+                          operator: string;
+                          values?: Array<string> | null;
+                        }> | null;
+                        matchFields?: Array<{
+                          key: string;
+                          operator: string;
+                          values?: Array<string> | null;
+                        }> | null;
+                      };
+                      weight: number;
+                    }> | null;
+                    requiredDuringSchedulingIgnoredDuringExecution?: {
+                      nodeSelectorTerms: Array<{
+                        matchExpressions?: Array<{
+                          key: string;
+                          operator: string;
+                          values?: Array<string> | null;
+                        }> | null;
+                        matchFields?: Array<{
+                          key: string;
+                          operator: string;
+                          values?: Array<string> | null;
+                        }> | null;
+                      }>;
+                    } | null;
+                  } | null;
+                  podAffinity?: {
+                    preferredDuringSchedulingIgnoredDuringExecution?: Array<{
+                      podAffinityTerm: {
+                        labelSelector?: {
+                          matchExpressions?: Array<{
+                            key: string;
+                            operator: string;
+                            values?: Array<string> | null;
+                          }> | null;
+                          matchLabels?: Record<string,string> | null;
+                        } | null;
+                        namespaces?: Array<string> | null;
+                        topologyKey: string;
+                      };
+                      weight: number;
+                    }> | null;
+                    requiredDuringSchedulingIgnoredDuringExecution?: Array<{
+                      labelSelector?: {
+                        matchExpressions?: Array<{
+                          key: string;
+                          operator: string;
+                          values?: Array<string> | null;
+                        }> | null;
+                        matchLabels?: Record<string,string> | null;
+                      } | null;
+                      namespaces?: Array<string> | null;
+                      topologyKey: string;
+                    }> | null;
+                  } | null;
+                  podAntiAffinity?: {
+                    preferredDuringSchedulingIgnoredDuringExecution?: Array<{
+                      podAffinityTerm: {
+                        labelSelector?: {
+                          matchExpressions?: Array<{
+                            key: string;
+                            operator: string;
+                            values?: Array<string> | null;
+                          }> | null;
+                          matchLabels?: Record<string,string> | null;
+                        } | null;
+                        namespaces?: Array<string> | null;
+                        topologyKey: string;
+                      };
+                      weight: number;
+                    }> | null;
+                    requiredDuringSchedulingIgnoredDuringExecution?: Array<{
+                      labelSelector?: {
+                        matchExpressions?: Array<{
+                          key: string;
+                          operator: string;
+                          values?: Array<string> | null;
+                        }> | null;
+                        matchLabels?: Record<string,string> | null;
+                      } | null;
+                      namespaces?: Array<string> | null;
+                      topologyKey: string;
+                    }> | null;
+                  } | null;
+                } | null;
+                nodeSelector?: Record<string,string> | null;
+                tolerations?: Array<{
+                  effect?: string | null;
+                  key?: string | null;
+                  operator?: string | null;
+                  tolerationSeconds?: number | null;
+                  value?: string | null;
+                }> | null;
+              } | null;
+            } | null;
+            serviceType?: string | null;
+          } | null;
+        } | null;
+        selector?: {
+          dnsNames?: Array<string> | null;
+          dnsZones?: Array<string> | null;
+          matchLabels?: Record<string,string> | null;
+        } | null;
+      }> | null;
+    } | null;
+    ca?: {
+      crlDistributionPoints?: Array<string> | null;
+      secretName: string;
+    } | null;
+    selfSigned?: {
+      crlDistributionPoints?: Array<string> | null;
+    } | null;
+    vault?: {
+      auth: {
+        appRole?: {
+          path: string;
+          roleId: string;
+          secretRef: {
+            key?: string | null;
+            name: string;
+          };
+        } | null;
+        kubernetes?: {
+          mountPath?: string | null;
+          role: string;
+          secretRef: {
+            key?: string | null;
+            name: string;
+          };
+        } | null;
+        tokenSecretRef?: {
+          key?: string | null;
+          name: string;
+        } | null;
+      };
+      caBundle?: string | null;
+      path: string;
+      server: string;
+    } | null;
+    venafi?: {
+      cloud?: {
+        apiTokenSecretRef: {
+          key?: string | null;
+          name: string;
+        };
+        url?: string | null;
+      } | null;
+      tpp?: {
+        caBundle?: string | null;
+        credentialsRef: {
+          name: string;
+        };
+        url: string;
+      } | null;
+      zone: string;
+    } | null;
+  } | null;
+  status?: {
+    acme?: {
+      lastRegisteredEmail?: string | null;
+      uri?: string | null;
+    } | null;
+    conditions?: Array<{
+      lastTransitionTime?: c.Time | null;
+      message?: string | null;
+      reason?: string | null;
+      status: "True" | "False" | "Unknown" | c.UnexpectedEnumValue;
+      type: string;
+    }> | null;
+  } | null;
+}
+export function toIssuer(input: c.JSONValue): Issuer & c.ApiKind {
+  const obj = c.checkObj(input);
   return {
-    apiVersion, kind,
-    metadata: MetaV1.toListMeta(metadata),
-    items: c.readList(items, toClusterIssuerFields),
+    ...c.assertOrAddApiVersionAndKind(obj, "cert-manager.io/v1alpha2", "Issuer"),
+    metadata: c.readOpt(obj["metadata"], MetaV1.toObjectMeta),
+    spec: c.readOpt(obj["spec"], toIssuer_spec),
+    status: c.readOpt(obj["status"], toIssuer_status),
+  }}
+export function fromIssuer(input: Issuer): c.JSONValue {
+  return {
+    ...c.assertOrAddApiVersionAndKind(input, "cert-manager.io/v1alpha2", "Issuer"),
+    ...input,
+    metadata: input.metadata != null ? MetaV1.fromObjectMeta(input.metadata) : undefined,
+    status: input.status != null ? {
+      ...input.status,
+      conditions: input.status.conditions?.map(x => ({
+        ...x,
+        lastTransitionTime: x.lastTransitionTime != null ? c.fromTime(x.lastTransitionTime) : undefined,
+      })),
+    } : undefined,
+  }}
+export function toIssuer_spec(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    acme: c.readOpt(obj["acme"], toIssuer_spec_acme),
+    ca: c.readOpt(obj["ca"], toIssuer_spec_ca),
+    selfSigned: c.readOpt(obj["selfSigned"], toIssuer_spec_selfSigned),
+    vault: c.readOpt(obj["vault"], toIssuer_spec_vault),
+    venafi: c.readOpt(obj["venafi"], toIssuer_spec_venafi),
+  }}
+export function toIssuer_status(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    acme: c.readOpt(obj["acme"], toIssuer_status_acme),
+    conditions: c.readOpt(obj["conditions"], x => c.readList(x, toIssuer_status_conditions)),
+  }}
+export function toIssuer_spec_acme(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    email: c.readOpt(obj["email"], c.checkStr),
+    externalAccountBinding: c.readOpt(obj["externalAccountBinding"], toIssuer_spec_acme_externalAccountBinding),
+    privateKeySecretRef: toIssuer_spec_acme_privateKeySecretRef(obj["privateKeySecretRef"]),
+    server: c.checkStr(obj["server"]),
+    skipTLSVerify: c.readOpt(obj["skipTLSVerify"], c.checkBool),
+    solvers: c.readOpt(obj["solvers"], x => c.readList(x, toIssuer_spec_acme_solvers)),
+  }}
+export function toIssuer_spec_ca(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    crlDistributionPoints: c.readOpt(obj["crlDistributionPoints"], x => c.readList(x, c.checkStr)),
+    secretName: c.checkStr(obj["secretName"]),
+  }}
+export function toIssuer_spec_selfSigned(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    crlDistributionPoints: c.readOpt(obj["crlDistributionPoints"], x => c.readList(x, c.checkStr)),
+  }}
+export function toIssuer_spec_vault(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    auth: toIssuer_spec_vault_auth(obj["auth"]),
+    caBundle: c.readOpt(obj["caBundle"], c.checkStr),
+    path: c.checkStr(obj["path"]),
+    server: c.checkStr(obj["server"]),
+  }}
+export function toIssuer_spec_venafi(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    cloud: c.readOpt(obj["cloud"], toIssuer_spec_venafi_cloud),
+    tpp: c.readOpt(obj["tpp"], toIssuer_spec_venafi_tpp),
+    zone: c.checkStr(obj["zone"]),
+  }}
+export function toIssuer_status_acme(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    lastRegisteredEmail: c.readOpt(obj["lastRegisteredEmail"], c.checkStr),
+    uri: c.readOpt(obj["uri"], c.checkStr),
+  }}
+export function toIssuer_status_conditions(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    lastTransitionTime: c.readOpt(obj["lastTransitionTime"], c.toTime),
+    message: c.readOpt(obj["message"], c.checkStr),
+    reason: c.readOpt(obj["reason"], c.checkStr),
+    status: (x => c.readEnum<"True" | "False" | "Unknown" | c.UnexpectedEnumValue>(x))(obj["status"]),
+    type: c.checkStr(obj["type"]),
+  }}
+export function toIssuer_spec_acme_externalAccountBinding(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    keyAlgorithm: (x => c.readEnum<"HS256" | "HS384" | "HS512" | c.UnexpectedEnumValue>(x))(obj["keyAlgorithm"]),
+    keyID: c.checkStr(obj["keyID"]),
+    keySecretRef: toIssuer_spec_acme_externalAccountBinding_keySecretRef(obj["keySecretRef"]),
+  }}
+export function toIssuer_spec_acme_privateKeySecretRef(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    key: c.readOpt(obj["key"], c.checkStr),
+    name: c.checkStr(obj["name"]),
+  }}
+export function toIssuer_spec_acme_solvers(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    dns01: c.readOpt(obj["dns01"], toIssuer_spec_acme_solvers_dns01),
+    http01: c.readOpt(obj["http01"], toIssuer_spec_acme_solvers_http01),
+    selector: c.readOpt(obj["selector"], toIssuer_spec_acme_solvers_selector),
+  }}
+export function toIssuer_spec_vault_auth(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    appRole: c.readOpt(obj["appRole"], toIssuer_spec_vault_auth_appRole),
+    kubernetes: c.readOpt(obj["kubernetes"], toIssuer_spec_vault_auth_kubernetes),
+    tokenSecretRef: c.readOpt(obj["tokenSecretRef"], toIssuer_spec_vault_auth_tokenSecretRef),
+  }}
+export function toIssuer_spec_venafi_cloud(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    apiTokenSecretRef: toIssuer_spec_venafi_cloud_apiTokenSecretRef(obj["apiTokenSecretRef"]),
+    url: c.readOpt(obj["url"], c.checkStr),
+  }}
+export function toIssuer_spec_venafi_tpp(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    caBundle: c.readOpt(obj["caBundle"], c.checkStr),
+    credentialsRef: toIssuer_spec_venafi_tpp_credentialsRef(obj["credentialsRef"]),
+    url: c.checkStr(obj["url"]),
+  }}
+export function toIssuer_spec_acme_externalAccountBinding_keySecretRef(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    key: c.readOpt(obj["key"], c.checkStr),
+    name: c.checkStr(obj["name"]),
+  }}
+export function toIssuer_spec_acme_solvers_dns01(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    acmedns: c.readOpt(obj["acmedns"], toIssuer_spec_acme_solvers_dns01_acmedns),
+    akamai: c.readOpt(obj["akamai"], toIssuer_spec_acme_solvers_dns01_akamai),
+    azuredns: c.readOpt(obj["azuredns"], toIssuer_spec_acme_solvers_dns01_azuredns),
+    clouddns: c.readOpt(obj["clouddns"], toIssuer_spec_acme_solvers_dns01_clouddns),
+    cloudflare: c.readOpt(obj["cloudflare"], toIssuer_spec_acme_solvers_dns01_cloudflare),
+    cnameStrategy: c.readOpt(obj["cnameStrategy"], (x => c.readEnum<"None" | "Follow" | c.UnexpectedEnumValue>(x))),
+    digitalocean: c.readOpt(obj["digitalocean"], toIssuer_spec_acme_solvers_dns01_digitalocean),
+    rfc2136: c.readOpt(obj["rfc2136"], toIssuer_spec_acme_solvers_dns01_rfc2136),
+    route53: c.readOpt(obj["route53"], toIssuer_spec_acme_solvers_dns01_route53),
+    webhook: c.readOpt(obj["webhook"], toIssuer_spec_acme_solvers_dns01_webhook),
+  }}
+export function toIssuer_spec_acme_solvers_http01(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    ingress: c.readOpt(obj["ingress"], toIssuer_spec_acme_solvers_http01_ingress),
+  }}
+export function toIssuer_spec_acme_solvers_selector(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    dnsNames: c.readOpt(obj["dnsNames"], x => c.readList(x, c.checkStr)),
+    dnsZones: c.readOpt(obj["dnsZones"], x => c.readList(x, c.checkStr)),
+    matchLabels: c.readOpt(obj["matchLabels"], x => c.readMap(x, c.checkStr)),
+  }}
+export function toIssuer_spec_vault_auth_appRole(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    path: c.checkStr(obj["path"]),
+    roleId: c.checkStr(obj["roleId"]),
+    secretRef: toIssuer_spec_vault_auth_appRole_secretRef(obj["secretRef"]),
+  }}
+export function toIssuer_spec_vault_auth_kubernetes(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    mountPath: c.readOpt(obj["mountPath"], c.checkStr),
+    role: c.checkStr(obj["role"]),
+    secretRef: toIssuer_spec_vault_auth_kubernetes_secretRef(obj["secretRef"]),
+  }}
+export function toIssuer_spec_vault_auth_tokenSecretRef(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    key: c.readOpt(obj["key"], c.checkStr),
+    name: c.checkStr(obj["name"]),
+  }}
+export function toIssuer_spec_venafi_cloud_apiTokenSecretRef(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    key: c.readOpt(obj["key"], c.checkStr),
+    name: c.checkStr(obj["name"]),
+  }}
+export function toIssuer_spec_venafi_tpp_credentialsRef(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    name: c.checkStr(obj["name"]),
+  }}
+export function toIssuer_spec_acme_solvers_dns01_acmedns(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    accountSecretRef: toIssuer_spec_acme_solvers_dns01_acmedns_accountSecretRef(obj["accountSecretRef"]),
+    host: c.checkStr(obj["host"]),
+  }}
+export function toIssuer_spec_acme_solvers_dns01_akamai(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    accessTokenSecretRef: toIssuer_spec_acme_solvers_dns01_akamai_accessTokenSecretRef(obj["accessTokenSecretRef"]),
+    clientSecretSecretRef: toIssuer_spec_acme_solvers_dns01_akamai_clientSecretSecretRef(obj["clientSecretSecretRef"]),
+    clientTokenSecretRef: toIssuer_spec_acme_solvers_dns01_akamai_clientTokenSecretRef(obj["clientTokenSecretRef"]),
+    serviceConsumerDomain: c.checkStr(obj["serviceConsumerDomain"]),
+  }}
+export function toIssuer_spec_acme_solvers_dns01_azuredns(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    clientID: c.readOpt(obj["clientID"], c.checkStr),
+    clientSecretSecretRef: c.readOpt(obj["clientSecretSecretRef"], toIssuer_spec_acme_solvers_dns01_azuredns_clientSecretSecretRef),
+    environment: c.readOpt(obj["environment"], (x => c.readEnum<"AzurePublicCloud" | "AzureChinaCloud" | "AzureGermanCloud" | "AzureUSGovernmentCloud" | c.UnexpectedEnumValue>(x))),
+    hostedZoneName: c.readOpt(obj["hostedZoneName"], c.checkStr),
+    resourceGroupName: c.checkStr(obj["resourceGroupName"]),
+    subscriptionID: c.checkStr(obj["subscriptionID"]),
+    tenantID: c.readOpt(obj["tenantID"], c.checkStr),
+  }}
+export function toIssuer_spec_acme_solvers_dns01_clouddns(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    hostedZoneName: c.readOpt(obj["hostedZoneName"], c.checkStr),
+    project: c.checkStr(obj["project"]),
+    serviceAccountSecretRef: c.readOpt(obj["serviceAccountSecretRef"], toIssuer_spec_acme_solvers_dns01_clouddns_serviceAccountSecretRef),
+  }}
+export function toIssuer_spec_acme_solvers_dns01_cloudflare(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    apiKeySecretRef: c.readOpt(obj["apiKeySecretRef"], toIssuer_spec_acme_solvers_dns01_cloudflare_apiKeySecretRef),
+    apiTokenSecretRef: c.readOpt(obj["apiTokenSecretRef"], toIssuer_spec_acme_solvers_dns01_cloudflare_apiTokenSecretRef),
+    email: c.readOpt(obj["email"], c.checkStr),
+  }}
+export function toIssuer_spec_acme_solvers_dns01_digitalocean(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    tokenSecretRef: toIssuer_spec_acme_solvers_dns01_digitalocean_tokenSecretRef(obj["tokenSecretRef"]),
+  }}
+export function toIssuer_spec_acme_solvers_dns01_rfc2136(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    nameserver: c.checkStr(obj["nameserver"]),
+    tsigAlgorithm: c.readOpt(obj["tsigAlgorithm"], c.checkStr),
+    tsigKeyName: c.readOpt(obj["tsigKeyName"], c.checkStr),
+    tsigSecretSecretRef: c.readOpt(obj["tsigSecretSecretRef"], toIssuer_spec_acme_solvers_dns01_rfc2136_tsigSecretSecretRef),
+  }}
+export function toIssuer_spec_acme_solvers_dns01_route53(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    accessKeyID: c.readOpt(obj["accessKeyID"], c.checkStr),
+    hostedZoneID: c.readOpt(obj["hostedZoneID"], c.checkStr),
+    region: c.checkStr(obj["region"]),
+    role: c.readOpt(obj["role"], c.checkStr),
+    secretAccessKeySecretRef: c.readOpt(obj["secretAccessKeySecretRef"], toIssuer_spec_acme_solvers_dns01_route53_secretAccessKeySecretRef),
+  }}
+export function toIssuer_spec_acme_solvers_dns01_webhook(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    config: c.readOpt(obj["config"], c.identity),
+    groupName: c.checkStr(obj["groupName"]),
+    solverName: c.checkStr(obj["solverName"]),
+  }}
+export function toIssuer_spec_acme_solvers_http01_ingress(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    class: c.readOpt(obj["class"], c.checkStr),
+    ingressTemplate: c.readOpt(obj["ingressTemplate"], toIssuer_spec_acme_solvers_http01_ingress_ingressTemplate),
+    name: c.readOpt(obj["name"], c.checkStr),
+    podTemplate: c.readOpt(obj["podTemplate"], toIssuer_spec_acme_solvers_http01_ingress_podTemplate),
+    serviceType: c.readOpt(obj["serviceType"], c.checkStr),
+  }}
+export function toIssuer_spec_vault_auth_appRole_secretRef(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    key: c.readOpt(obj["key"], c.checkStr),
+    name: c.checkStr(obj["name"]),
+  }}
+export function toIssuer_spec_vault_auth_kubernetes_secretRef(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    key: c.readOpt(obj["key"], c.checkStr),
+    name: c.checkStr(obj["name"]),
+  }}
+export function toIssuer_spec_acme_solvers_dns01_acmedns_accountSecretRef(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    key: c.readOpt(obj["key"], c.checkStr),
+    name: c.checkStr(obj["name"]),
+  }}
+export function toIssuer_spec_acme_solvers_dns01_akamai_accessTokenSecretRef(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    key: c.readOpt(obj["key"], c.checkStr),
+    name: c.checkStr(obj["name"]),
+  }}
+export function toIssuer_spec_acme_solvers_dns01_akamai_clientSecretSecretRef(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    key: c.readOpt(obj["key"], c.checkStr),
+    name: c.checkStr(obj["name"]),
+  }}
+export function toIssuer_spec_acme_solvers_dns01_akamai_clientTokenSecretRef(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    key: c.readOpt(obj["key"], c.checkStr),
+    name: c.checkStr(obj["name"]),
+  }}
+export function toIssuer_spec_acme_solvers_dns01_azuredns_clientSecretSecretRef(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    key: c.readOpt(obj["key"], c.checkStr),
+    name: c.checkStr(obj["name"]),
+  }}
+export function toIssuer_spec_acme_solvers_dns01_clouddns_serviceAccountSecretRef(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    key: c.readOpt(obj["key"], c.checkStr),
+    name: c.checkStr(obj["name"]),
+  }}
+export function toIssuer_spec_acme_solvers_dns01_cloudflare_apiKeySecretRef(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    key: c.readOpt(obj["key"], c.checkStr),
+    name: c.checkStr(obj["name"]),
+  }}
+export function toIssuer_spec_acme_solvers_dns01_cloudflare_apiTokenSecretRef(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    key: c.readOpt(obj["key"], c.checkStr),
+    name: c.checkStr(obj["name"]),
+  }}
+export function toIssuer_spec_acme_solvers_dns01_digitalocean_tokenSecretRef(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    key: c.readOpt(obj["key"], c.checkStr),
+    name: c.checkStr(obj["name"]),
+  }}
+export function toIssuer_spec_acme_solvers_dns01_rfc2136_tsigSecretSecretRef(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    key: c.readOpt(obj["key"], c.checkStr),
+    name: c.checkStr(obj["name"]),
+  }}
+export function toIssuer_spec_acme_solvers_dns01_route53_secretAccessKeySecretRef(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    key: c.readOpt(obj["key"], c.checkStr),
+    name: c.checkStr(obj["name"]),
+  }}
+export function toIssuer_spec_acme_solvers_http01_ingress_ingressTemplate(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    metadata: c.readOpt(obj["metadata"], toIssuer_spec_acme_solvers_http01_ingress_ingressTemplate_metadata),
+  }}
+export function toIssuer_spec_acme_solvers_http01_ingress_podTemplate(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    metadata: c.readOpt(obj["metadata"], toIssuer_spec_acme_solvers_http01_ingress_podTemplate_metadata),
+    spec: c.readOpt(obj["spec"], toIssuer_spec_acme_solvers_http01_ingress_podTemplate_spec),
+  }}
+export function toIssuer_spec_acme_solvers_http01_ingress_ingressTemplate_metadata(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    annotations: c.readOpt(obj["annotations"], x => c.readMap(x, c.checkStr)),
+    labels: c.readOpt(obj["labels"], x => c.readMap(x, c.checkStr)),
+  }}
+export function toIssuer_spec_acme_solvers_http01_ingress_podTemplate_metadata(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    annotations: c.readOpt(obj["annotations"], x => c.readMap(x, c.checkStr)),
+    labels: c.readOpt(obj["labels"], x => c.readMap(x, c.checkStr)),
+  }}
+export function toIssuer_spec_acme_solvers_http01_ingress_podTemplate_spec(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    affinity: c.readOpt(obj["affinity"], toIssuer_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity),
+    nodeSelector: c.readOpt(obj["nodeSelector"], x => c.readMap(x, c.checkStr)),
+    tolerations: c.readOpt(obj["tolerations"], x => c.readList(x, toIssuer_spec_acme_solvers_http01_ingress_podTemplate_spec_tolerations)),
+  }}
+export function toIssuer_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    nodeAffinity: c.readOpt(obj["nodeAffinity"], toIssuer_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity_nodeAffinity),
+    podAffinity: c.readOpt(obj["podAffinity"], toIssuer_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity_podAffinity),
+    podAntiAffinity: c.readOpt(obj["podAntiAffinity"], toIssuer_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity_podAntiAffinity),
+  }}
+export function toIssuer_spec_acme_solvers_http01_ingress_podTemplate_spec_tolerations(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    effect: c.readOpt(obj["effect"], c.checkStr),
+    key: c.readOpt(obj["key"], c.checkStr),
+    operator: c.readOpt(obj["operator"], c.checkStr),
+    tolerationSeconds: c.readOpt(obj["tolerationSeconds"], c.checkNum),
+    value: c.readOpt(obj["value"], c.checkStr),
+  }}
+export function toIssuer_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity_nodeAffinity(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    preferredDuringSchedulingIgnoredDuringExecution: c.readOpt(obj["preferredDuringSchedulingIgnoredDuringExecution"], x => c.readList(x, toIssuer_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity_nodeAffinity_preferredDuringSchedulingIgnoredDuringExecution)),
+    requiredDuringSchedulingIgnoredDuringExecution: c.readOpt(obj["requiredDuringSchedulingIgnoredDuringExecution"], toIssuer_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity_nodeAffinity_requiredDuringSchedulingIgnoredDuringExecution),
+  }}
+export function toIssuer_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity_podAffinity(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    preferredDuringSchedulingIgnoredDuringExecution: c.readOpt(obj["preferredDuringSchedulingIgnoredDuringExecution"], x => c.readList(x, toIssuer_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity_podAffinity_preferredDuringSchedulingIgnoredDuringExecution)),
+    requiredDuringSchedulingIgnoredDuringExecution: c.readOpt(obj["requiredDuringSchedulingIgnoredDuringExecution"], x => c.readList(x, toIssuer_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity_podAffinity_requiredDuringSchedulingIgnoredDuringExecution)),
+  }}
+export function toIssuer_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity_podAntiAffinity(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    preferredDuringSchedulingIgnoredDuringExecution: c.readOpt(obj["preferredDuringSchedulingIgnoredDuringExecution"], x => c.readList(x, toIssuer_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity_podAntiAffinity_preferredDuringSchedulingIgnoredDuringExecution)),
+    requiredDuringSchedulingIgnoredDuringExecution: c.readOpt(obj["requiredDuringSchedulingIgnoredDuringExecution"], x => c.readList(x, toIssuer_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity_podAntiAffinity_requiredDuringSchedulingIgnoredDuringExecution)),
+  }}
+export function toIssuer_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity_nodeAffinity_preferredDuringSchedulingIgnoredDuringExecution(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    preference: toIssuer_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity_nodeAffinity_preferredDuringSchedulingIgnoredDuringExecution_preference(obj["preference"]),
+    weight: c.checkNum(obj["weight"]),
+  }}
+export function toIssuer_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity_nodeAffinity_requiredDuringSchedulingIgnoredDuringExecution(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    nodeSelectorTerms: c.readList(obj["nodeSelectorTerms"], toIssuer_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity_nodeAffinity_requiredDuringSchedulingIgnoredDuringExecution_nodeSelectorTerms),
+  }}
+export function toIssuer_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity_podAffinity_preferredDuringSchedulingIgnoredDuringExecution(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    podAffinityTerm: toIssuer_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity_podAffinity_preferredDuringSchedulingIgnoredDuringExecution_podAffinityTerm(obj["podAffinityTerm"]),
+    weight: c.checkNum(obj["weight"]),
+  }}
+export function toIssuer_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity_podAffinity_requiredDuringSchedulingIgnoredDuringExecution(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    labelSelector: c.readOpt(obj["labelSelector"], toIssuer_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity_podAffinity_requiredDuringSchedulingIgnoredDuringExecution_labelSelector),
+    namespaces: c.readOpt(obj["namespaces"], x => c.readList(x, c.checkStr)),
+    topologyKey: c.checkStr(obj["topologyKey"]),
+  }}
+export function toIssuer_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity_podAntiAffinity_preferredDuringSchedulingIgnoredDuringExecution(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    podAffinityTerm: toIssuer_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity_podAntiAffinity_preferredDuringSchedulingIgnoredDuringExecution_podAffinityTerm(obj["podAffinityTerm"]),
+    weight: c.checkNum(obj["weight"]),
+  }}
+export function toIssuer_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity_podAntiAffinity_requiredDuringSchedulingIgnoredDuringExecution(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    labelSelector: c.readOpt(obj["labelSelector"], toIssuer_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity_podAntiAffinity_requiredDuringSchedulingIgnoredDuringExecution_labelSelector),
+    namespaces: c.readOpt(obj["namespaces"], x => c.readList(x, c.checkStr)),
+    topologyKey: c.checkStr(obj["topologyKey"]),
+  }}
+export function toIssuer_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity_nodeAffinity_preferredDuringSchedulingIgnoredDuringExecution_preference(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    matchExpressions: c.readOpt(obj["matchExpressions"], x => c.readList(x, toIssuer_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity_nodeAffinity_preferredDuringSchedulingIgnoredDuringExecution_preference_matchExpressions)),
+    matchFields: c.readOpt(obj["matchFields"], x => c.readList(x, toIssuer_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity_nodeAffinity_preferredDuringSchedulingIgnoredDuringExecution_preference_matchFields)),
+  }}
+export function toIssuer_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity_nodeAffinity_requiredDuringSchedulingIgnoredDuringExecution_nodeSelectorTerms(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    matchExpressions: c.readOpt(obj["matchExpressions"], x => c.readList(x, toIssuer_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity_nodeAffinity_requiredDuringSchedulingIgnoredDuringExecution_nodeSelectorTerms_matchExpressions)),
+    matchFields: c.readOpt(obj["matchFields"], x => c.readList(x, toIssuer_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity_nodeAffinity_requiredDuringSchedulingIgnoredDuringExecution_nodeSelectorTerms_matchFields)),
+  }}
+export function toIssuer_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity_podAffinity_preferredDuringSchedulingIgnoredDuringExecution_podAffinityTerm(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    labelSelector: c.readOpt(obj["labelSelector"], toIssuer_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity_podAffinity_preferredDuringSchedulingIgnoredDuringExecution_podAffinityTerm_labelSelector),
+    namespaces: c.readOpt(obj["namespaces"], x => c.readList(x, c.checkStr)),
+    topologyKey: c.checkStr(obj["topologyKey"]),
+  }}
+export function toIssuer_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity_podAffinity_requiredDuringSchedulingIgnoredDuringExecution_labelSelector(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    matchExpressions: c.readOpt(obj["matchExpressions"], x => c.readList(x, toIssuer_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity_podAffinity_requiredDuringSchedulingIgnoredDuringExecution_labelSelector_matchExpressions)),
+    matchLabels: c.readOpt(obj["matchLabels"], x => c.readMap(x, c.checkStr)),
+  }}
+export function toIssuer_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity_podAntiAffinity_preferredDuringSchedulingIgnoredDuringExecution_podAffinityTerm(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    labelSelector: c.readOpt(obj["labelSelector"], toIssuer_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity_podAntiAffinity_preferredDuringSchedulingIgnoredDuringExecution_podAffinityTerm_labelSelector),
+    namespaces: c.readOpt(obj["namespaces"], x => c.readList(x, c.checkStr)),
+    topologyKey: c.checkStr(obj["topologyKey"]),
+  }}
+export function toIssuer_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity_podAntiAffinity_requiredDuringSchedulingIgnoredDuringExecution_labelSelector(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    matchExpressions: c.readOpt(obj["matchExpressions"], x => c.readList(x, toIssuer_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity_podAntiAffinity_requiredDuringSchedulingIgnoredDuringExecution_labelSelector_matchExpressions)),
+    matchLabels: c.readOpt(obj["matchLabels"], x => c.readMap(x, c.checkStr)),
+  }}
+export function toIssuer_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity_nodeAffinity_preferredDuringSchedulingIgnoredDuringExecution_preference_matchExpressions(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    key: c.checkStr(obj["key"]),
+    operator: c.checkStr(obj["operator"]),
+    values: c.readOpt(obj["values"], x => c.readList(x, c.checkStr)),
+  }}
+export function toIssuer_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity_nodeAffinity_preferredDuringSchedulingIgnoredDuringExecution_preference_matchFields(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    key: c.checkStr(obj["key"]),
+    operator: c.checkStr(obj["operator"]),
+    values: c.readOpt(obj["values"], x => c.readList(x, c.checkStr)),
+  }}
+export function toIssuer_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity_nodeAffinity_requiredDuringSchedulingIgnoredDuringExecution_nodeSelectorTerms_matchExpressions(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    key: c.checkStr(obj["key"]),
+    operator: c.checkStr(obj["operator"]),
+    values: c.readOpt(obj["values"], x => c.readList(x, c.checkStr)),
+  }}
+export function toIssuer_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity_nodeAffinity_requiredDuringSchedulingIgnoredDuringExecution_nodeSelectorTerms_matchFields(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    key: c.checkStr(obj["key"]),
+    operator: c.checkStr(obj["operator"]),
+    values: c.readOpt(obj["values"], x => c.readList(x, c.checkStr)),
+  }}
+export function toIssuer_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity_podAffinity_preferredDuringSchedulingIgnoredDuringExecution_podAffinityTerm_labelSelector(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    matchExpressions: c.readOpt(obj["matchExpressions"], x => c.readList(x, toIssuer_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity_podAffinity_preferredDuringSchedulingIgnoredDuringExecution_podAffinityTerm_labelSelector_matchExpressions)),
+    matchLabels: c.readOpt(obj["matchLabels"], x => c.readMap(x, c.checkStr)),
+  }}
+export function toIssuer_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity_podAffinity_requiredDuringSchedulingIgnoredDuringExecution_labelSelector_matchExpressions(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    key: c.checkStr(obj["key"]),
+    operator: c.checkStr(obj["operator"]),
+    values: c.readOpt(obj["values"], x => c.readList(x, c.checkStr)),
+  }}
+export function toIssuer_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity_podAntiAffinity_preferredDuringSchedulingIgnoredDuringExecution_podAffinityTerm_labelSelector(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    matchExpressions: c.readOpt(obj["matchExpressions"], x => c.readList(x, toIssuer_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity_podAntiAffinity_preferredDuringSchedulingIgnoredDuringExecution_podAffinityTerm_labelSelector_matchExpressions)),
+    matchLabels: c.readOpt(obj["matchLabels"], x => c.readMap(x, c.checkStr)),
+  }}
+export function toIssuer_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity_podAntiAffinity_requiredDuringSchedulingIgnoredDuringExecution_labelSelector_matchExpressions(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    key: c.checkStr(obj["key"]),
+    operator: c.checkStr(obj["operator"]),
+    values: c.readOpt(obj["values"], x => c.readList(x, c.checkStr)),
+  }}
+export function toIssuer_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity_podAffinity_preferredDuringSchedulingIgnoredDuringExecution_podAffinityTerm_labelSelector_matchExpressions(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    key: c.checkStr(obj["key"]),
+    operator: c.checkStr(obj["operator"]),
+    values: c.readOpt(obj["values"], x => c.readList(x, c.checkStr)),
+  }}
+export function toIssuer_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity_podAntiAffinity_preferredDuringSchedulingIgnoredDuringExecution_podAffinityTerm_labelSelector_matchExpressions(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    key: c.checkStr(obj["key"]),
+    operator: c.checkStr(obj["operator"]),
+    values: c.readOpt(obj["values"], x => c.readList(x, c.checkStr)),
   }}
 
-/** IssuerList is a list of Issuer */
-export type IssuerList = Kind<"IssuerList"> & ListOf<IssuerFields>;
-export function toIssuerList(input: c.JSONValue): IssuerList {
-  const {apiVersion, kind, metadata, items} = c.checkObj(input);
-  if (apiVersion !== "cert-manager.io/v1alpha2") throw new Error("Type apiv mis 2");
-  if (kind !== "IssuerList") throw new Error("Type kind mis 2");
+export interface IssuerList {
+  apiVersion?: "cert-manager.io/v1alpha2";
+  kind?: "Issuer";
+  items: Array<Issuer>;
+  metadata?: MetaV1.ListMeta | null;
+}
+export function toIssuerList(input: c.JSONValue): IssuerList & c.ApiKind {
+  const obj = c.checkObj(input);
   return {
-    apiVersion, kind,
-    metadata: MetaV1.toListMeta(metadata),
-    items: c.readList(items, toIssuerFields),
+    ...c.assertOrAddApiVersionAndKind(obj, "cert-manager.io/v1alpha2", "Issuer"),
+    items: c.readList(obj["items"], toIssuer),
+    metadata: c.readOpt(obj["metadata"], MetaV1.toListMeta),
+  }}
+export function fromIssuerList(input: IssuerList): c.JSONValue {
+  return {
+    ...c.assertOrAddApiVersionAndKind(input, "cert-manager.io/v1alpha2", "Issuer"),
+    ...input,
+    items: input.items?.map(fromIssuer),
+    metadata: input.metadata != null ? MetaV1.fromListMeta(input.metadata) : undefined,
   }}

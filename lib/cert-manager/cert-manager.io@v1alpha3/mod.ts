@@ -21,6 +21,29 @@ export class CertManagerIoV1alpha3Api {
     return new CertManagerIoV1alpha3NamespacedApi(this.#client, this.#client.defaultNamespace);
   }
 
+  async getCertificateRequestListForAllNamespaces(opts: operations.GetListOpts = {}) {
+    const resp = await this.#client.performRequest({
+      method: "GET",
+      path: `${this.#root}certificaterequests`,
+      expectJson: true,
+      querystring: operations.formatGetListOpts(opts),
+      abortSignal: opts.abortSignal,
+    });
+    return CertManagerIoV1alpha3.toCertificateRequestList(resp);
+  }
+
+  async watchCertificateRequestListForAllNamespaces(opts: operations.WatchListOpts = {}) {
+    const resp = await this.#client.performRequest({
+      method: "GET",
+      path: `${this.#root}certificaterequests`,
+      expectJson: true,
+      expectStream: true,
+      querystring: operations.formatWatchListOpts(opts),
+      abortSignal: opts.abortSignal,
+    });
+    return resp.pipeThrough(new c.WatchEventTransformer(CertManagerIoV1alpha3.toCertificateRequest, MetaV1.toStatus));
+  }
+
   async getCertificateListForAllNamespaces(opts: operations.GetListOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "GET",
@@ -79,91 +102,24 @@ export class CertManagerIoV1alpha3Api {
     return CertManagerIoV1alpha3.toClusterIssuer(resp);
   }
 
-  async deleteClusterIssuerList(opts: operations.GetListOpts = {}) {
+  async deleteClusterIssuerList(body: MetaV1.DeleteOptions, opts: operations.DeleteListOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}clusterissuers`,
       expectJson: true,
-      querystring: operations.formatGetListOpts(opts),
+      querystring: operations.formatDeleteListOpts(opts),
+      bodyJson: MetaV1.fromDeleteOptions(body),
       abortSignal: opts.abortSignal,
     });
     return CertManagerIoV1alpha3.toClusterIssuerList(resp);
   }
 
-  async getCertificateRequestListForAllNamespaces(opts: operations.GetListOpts = {}) {
-    const resp = await this.#client.performRequest({
-      method: "GET",
-      path: `${this.#root}certificaterequests`,
-      expectJson: true,
-      querystring: operations.formatGetListOpts(opts),
-      abortSignal: opts.abortSignal,
-    });
-    return CertManagerIoV1alpha3.toCertificateRequestList(resp);
-  }
-
-  async watchCertificateRequestListForAllNamespaces(opts: operations.WatchListOpts = {}) {
-    const resp = await this.#client.performRequest({
-      method: "GET",
-      path: `${this.#root}certificaterequests`,
-      expectJson: true,
-      expectStream: true,
-      querystring: operations.formatWatchListOpts(opts),
-      abortSignal: opts.abortSignal,
-    });
-    return resp.pipeThrough(new c.WatchEventTransformer(CertManagerIoV1alpha3.toCertificateRequest, MetaV1.toStatus));
-  }
-
-  async getClusterIssuerStatus(name: string, opts: {
-    resourceVersion?: string;
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
-    if (opts["resourceVersion"] != null) query.append("resourceVersion", opts["resourceVersion"]);
-    const resp = await this.#client.performRequest({
-      method: "GET",
-      path: `${this.#root}clusterissuers/${name}/status`,
-      expectJson: true,
-      querystring: query,
-      abortSignal: opts.abortSignal,
-    });
-    return CertManagerIoV1alpha3.toClusterIssuer(resp);
-  }
-
-  async replaceClusterIssuerStatus(name: string, body: CertManagerIoV1alpha3.ClusterIssuer, opts: operations.PutOpts = {}) {
-    const resp = await this.#client.performRequest({
-      method: "PUT",
-      path: `${this.#root}clusterissuers/${name}/status`,
-      expectJson: true,
-      querystring: operations.formatPutOpts(opts),
-      bodyJson: CertManagerIoV1alpha3.fromClusterIssuer(body),
-      abortSignal: opts.abortSignal,
-    });
-    return CertManagerIoV1alpha3.toClusterIssuer(resp);
-  }
-
-  async patchClusterIssuerStatus(name: string, body: MetaV1.Patch, opts: operations.PutOpts = {}) {
-    const resp = await this.#client.performRequest({
-      method: "PATCH",
-      path: `${this.#root}clusterissuers/${name}/status`,
-      expectJson: true,
-      querystring: operations.formatPutOpts(opts),
-      bodyJson: MetaV1.fromPatch(body),
-      abortSignal: opts.abortSignal,
-    });
-    return CertManagerIoV1alpha3.toClusterIssuer(resp);
-  }
-
-  async getClusterIssuer(name: string, opts: {
-    resourceVersion?: string;
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
-    if (opts["resourceVersion"] != null) query.append("resourceVersion", opts["resourceVersion"]);
+  async getClusterIssuer(name: string, opts: operations.GetOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}clusterissuers/${name}`,
       expectJson: true,
-      querystring: query,
+      querystring: operations.formatGetOpts(opts),
       abortSignal: opts.abortSignal,
     });
     return CertManagerIoV1alpha3.toClusterIssuer(resp);
@@ -193,13 +149,50 @@ export class CertManagerIoV1alpha3Api {
     return CertManagerIoV1alpha3.toClusterIssuer(resp);
   }
 
-  async patchClusterIssuer(name: string, body: MetaV1.Patch, opts: operations.PutOpts = {}) {
+  async patchClusterIssuer(name: string, type: c.PatchType, body: CertManagerIoV1alpha3.ClusterIssuer | c.JsonPatch, opts: operations.PatchOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}clusterissuers/${name}`,
       expectJson: true,
+      querystring: operations.formatPatchOpts(opts),
+      contentType: c.getPatchContentType(type),
+      bodyJson: Array.isArray(body) ? body : CertManagerIoV1alpha3.fromClusterIssuer(body),
+      abortSignal: opts.abortSignal,
+    });
+    return CertManagerIoV1alpha3.toClusterIssuer(resp);
+  }
+
+  async getClusterIssuerStatus(name: string, opts: operations.GetOpts = {}) {
+    const resp = await this.#client.performRequest({
+      method: "GET",
+      path: `${this.#root}clusterissuers/${name}/status`,
+      expectJson: true,
+      querystring: operations.formatGetOpts(opts),
+      abortSignal: opts.abortSignal,
+    });
+    return CertManagerIoV1alpha3.toClusterIssuer(resp);
+  }
+
+  async replaceClusterIssuerStatus(name: string, body: CertManagerIoV1alpha3.ClusterIssuer, opts: operations.PutOpts = {}) {
+    const resp = await this.#client.performRequest({
+      method: "PUT",
+      path: `${this.#root}clusterissuers/${name}/status`,
+      expectJson: true,
       querystring: operations.formatPutOpts(opts),
-      bodyJson: MetaV1.fromPatch(body),
+      bodyJson: CertManagerIoV1alpha3.fromClusterIssuer(body),
+      abortSignal: opts.abortSignal,
+    });
+    return CertManagerIoV1alpha3.toClusterIssuer(resp);
+  }
+
+  async patchClusterIssuerStatus(name: string, type: c.PatchType, body: CertManagerIoV1alpha3.ClusterIssuer | c.JsonPatch, opts: operations.PatchOpts = {}) {
+    const resp = await this.#client.performRequest({
+      method: "PATCH",
+      path: `${this.#root}clusterissuers/${name}/status`,
+      expectJson: true,
+      querystring: operations.formatPatchOpts(opts),
+      contentType: c.getPatchContentType(type),
+      bodyJson: Array.isArray(body) ? body : CertManagerIoV1alpha3.fromClusterIssuer(body),
       abortSignal: opts.abortSignal,
     });
     return CertManagerIoV1alpha3.toClusterIssuer(resp);
@@ -238,108 +231,135 @@ export class CertManagerIoV1alpha3NamespacedApi {
     this.#root = `/apis/cert-manager.io/v1alpha3/namespaces/${namespace}/`;
   }
 
-  async getIssuer(name: string, opts: {
-    resourceVersion?: string;
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
-    if (opts["resourceVersion"] != null) query.append("resourceVersion", opts["resourceVersion"]);
+  async getCertificateRequestList(opts: operations.GetListOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "GET",
-      path: `${this.#root}issuers/${name}`,
+      path: `${this.#root}certificaterequests`,
       expectJson: true,
-      querystring: query,
+      querystring: operations.formatGetListOpts(opts),
       abortSignal: opts.abortSignal,
     });
-    return CertManagerIoV1alpha3.toIssuer(resp);
+    return CertManagerIoV1alpha3.toCertificateRequestList(resp);
   }
 
-  async deleteIssuer(name: string, body: MetaV1.DeleteOptions, opts: operations.DeleteOpts = {}) {
+  async watchCertificateRequestList(opts: operations.WatchListOpts = {}) {
+    const resp = await this.#client.performRequest({
+      method: "GET",
+      path: `${this.#root}certificaterequests`,
+      expectJson: true,
+      expectStream: true,
+      querystring: operations.formatWatchListOpts(opts),
+      abortSignal: opts.abortSignal,
+    });
+    return resp.pipeThrough(new c.WatchEventTransformer(CertManagerIoV1alpha3.toCertificateRequest, MetaV1.toStatus));
+  }
+
+  async createCertificateRequest(body: CertManagerIoV1alpha3.CertificateRequest, opts: operations.PutOpts = {}) {
+    const resp = await this.#client.performRequest({
+      method: "POST",
+      path: `${this.#root}certificaterequests`,
+      expectJson: true,
+      querystring: operations.formatPutOpts(opts),
+      bodyJson: CertManagerIoV1alpha3.fromCertificateRequest(body),
+      abortSignal: opts.abortSignal,
+    });
+    return CertManagerIoV1alpha3.toCertificateRequest(resp);
+  }
+
+  async deleteCertificateRequestList(body: MetaV1.DeleteOptions, opts: operations.DeleteListOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "DELETE",
-      path: `${this.#root}issuers/${name}`,
+      path: `${this.#root}certificaterequests`,
+      expectJson: true,
+      querystring: operations.formatDeleteListOpts(opts),
+      bodyJson: MetaV1.fromDeleteOptions(body),
+      abortSignal: opts.abortSignal,
+    });
+    return CertManagerIoV1alpha3.toCertificateRequestList(resp);
+  }
+
+  async getCertificateRequest(name: string, opts: operations.GetOpts = {}) {
+    const resp = await this.#client.performRequest({
+      method: "GET",
+      path: `${this.#root}certificaterequests/${name}`,
+      expectJson: true,
+      querystring: operations.formatGetOpts(opts),
+      abortSignal: opts.abortSignal,
+    });
+    return CertManagerIoV1alpha3.toCertificateRequest(resp);
+  }
+
+  async deleteCertificateRequest(name: string, body: MetaV1.DeleteOptions, opts: operations.DeleteOpts = {}) {
+    const resp = await this.#client.performRequest({
+      method: "DELETE",
+      path: `${this.#root}certificaterequests/${name}`,
       expectJson: true,
       querystring: operations.formatDeleteOpts(opts),
       bodyJson: MetaV1.fromDeleteOptions(body),
       abortSignal: opts.abortSignal,
     });
-    return CertManagerIoV1alpha3.toIssuer(resp);
+    return CertManagerIoV1alpha3.toCertificateRequest(resp);
   }
 
-  async replaceIssuer(name: string, body: CertManagerIoV1alpha3.Issuer, opts: operations.PutOpts = {}) {
+  async replaceCertificateRequest(name: string, body: CertManagerIoV1alpha3.CertificateRequest, opts: operations.PutOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PUT",
-      path: `${this.#root}issuers/${name}`,
+      path: `${this.#root}certificaterequests/${name}`,
       expectJson: true,
       querystring: operations.formatPutOpts(opts),
-      bodyJson: CertManagerIoV1alpha3.fromIssuer(body),
+      bodyJson: CertManagerIoV1alpha3.fromCertificateRequest(body),
       abortSignal: opts.abortSignal,
     });
-    return CertManagerIoV1alpha3.toIssuer(resp);
+    return CertManagerIoV1alpha3.toCertificateRequest(resp);
   }
 
-  async patchIssuer(name: string, body: MetaV1.Patch, opts: operations.PutOpts = {}) {
+  async patchCertificateRequest(name: string, type: c.PatchType, body: CertManagerIoV1alpha3.CertificateRequest | c.JsonPatch, opts: operations.PatchOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PATCH",
-      path: `${this.#root}issuers/${name}`,
+      path: `${this.#root}certificaterequests/${name}`,
       expectJson: true,
-      querystring: operations.formatPutOpts(opts),
-      bodyJson: MetaV1.fromPatch(body),
+      querystring: operations.formatPatchOpts(opts),
+      contentType: c.getPatchContentType(type),
+      bodyJson: Array.isArray(body) ? body : CertManagerIoV1alpha3.fromCertificateRequest(body),
       abortSignal: opts.abortSignal,
     });
-    return CertManagerIoV1alpha3.toIssuer(resp);
+    return CertManagerIoV1alpha3.toCertificateRequest(resp);
   }
 
-  async getCertificate(name: string, opts: {
-    resourceVersion?: string;
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
-    if (opts["resourceVersion"] != null) query.append("resourceVersion", opts["resourceVersion"]);
+  async getCertificateRequestStatus(name: string, opts: operations.GetOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "GET",
-      path: `${this.#root}certificates/${name}`,
+      path: `${this.#root}certificaterequests/${name}/status`,
       expectJson: true,
-      querystring: query,
+      querystring: operations.formatGetOpts(opts),
       abortSignal: opts.abortSignal,
     });
-    return CertManagerIoV1alpha3.toCertificate(resp);
+    return CertManagerIoV1alpha3.toCertificateRequest(resp);
   }
 
-  async deleteCertificate(name: string, body: MetaV1.DeleteOptions, opts: operations.DeleteOpts = {}) {
-    const resp = await this.#client.performRequest({
-      method: "DELETE",
-      path: `${this.#root}certificates/${name}`,
-      expectJson: true,
-      querystring: operations.formatDeleteOpts(opts),
-      bodyJson: MetaV1.fromDeleteOptions(body),
-      abortSignal: opts.abortSignal,
-    });
-    return CertManagerIoV1alpha3.toCertificate(resp);
-  }
-
-  async replaceCertificate(name: string, body: CertManagerIoV1alpha3.Certificate, opts: operations.PutOpts = {}) {
+  async replaceCertificateRequestStatus(name: string, body: CertManagerIoV1alpha3.CertificateRequest, opts: operations.PutOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PUT",
-      path: `${this.#root}certificates/${name}`,
+      path: `${this.#root}certificaterequests/${name}/status`,
       expectJson: true,
       querystring: operations.formatPutOpts(opts),
-      bodyJson: CertManagerIoV1alpha3.fromCertificate(body),
+      bodyJson: CertManagerIoV1alpha3.fromCertificateRequest(body),
       abortSignal: opts.abortSignal,
     });
-    return CertManagerIoV1alpha3.toCertificate(resp);
+    return CertManagerIoV1alpha3.toCertificateRequest(resp);
   }
 
-  async patchCertificate(name: string, body: MetaV1.Patch, opts: operations.PutOpts = {}) {
+  async patchCertificateRequestStatus(name: string, type: c.PatchType, body: CertManagerIoV1alpha3.CertificateRequest | c.JsonPatch, opts: operations.PatchOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PATCH",
-      path: `${this.#root}certificates/${name}`,
+      path: `${this.#root}certificaterequests/${name}/status`,
       expectJson: true,
-      querystring: operations.formatPutOpts(opts),
-      bodyJson: MetaV1.fromPatch(body),
+      querystring: operations.formatPatchOpts(opts),
+      contentType: c.getPatchContentType(type),
+      bodyJson: Array.isArray(body) ? body : CertManagerIoV1alpha3.fromCertificateRequest(body),
       abortSignal: opts.abortSignal,
     });
-    return CertManagerIoV1alpha3.toCertificate(resp);
+    return CertManagerIoV1alpha3.toCertificateRequest(resp);
   }
 
   async getCertificateList(opts: operations.GetListOpts = {}) {
@@ -377,153 +397,100 @@ export class CertManagerIoV1alpha3NamespacedApi {
     return CertManagerIoV1alpha3.toCertificate(resp);
   }
 
-  async deleteCertificateList(opts: operations.GetListOpts = {}) {
+  async deleteCertificateList(body: MetaV1.DeleteOptions, opts: operations.DeleteListOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}certificates`,
       expectJson: true,
-      querystring: operations.formatGetListOpts(opts),
+      querystring: operations.formatDeleteListOpts(opts),
+      bodyJson: MetaV1.fromDeleteOptions(body),
       abortSignal: opts.abortSignal,
     });
     return CertManagerIoV1alpha3.toCertificateList(resp);
   }
 
-  async getCertificateRequestList(opts: operations.GetListOpts = {}) {
+  async getCertificate(name: string, opts: operations.GetOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "GET",
-      path: `${this.#root}certificaterequests`,
+      path: `${this.#root}certificates/${name}`,
       expectJson: true,
-      querystring: operations.formatGetListOpts(opts),
+      querystring: operations.formatGetOpts(opts),
       abortSignal: opts.abortSignal,
     });
-    return CertManagerIoV1alpha3.toCertificateRequestList(resp);
+    return CertManagerIoV1alpha3.toCertificate(resp);
   }
 
-  async watchCertificateRequestList(opts: operations.WatchListOpts = {}) {
-    const resp = await this.#client.performRequest({
-      method: "GET",
-      path: `${this.#root}certificaterequests`,
-      expectJson: true,
-      expectStream: true,
-      querystring: operations.formatWatchListOpts(opts),
-      abortSignal: opts.abortSignal,
-    });
-    return resp.pipeThrough(new c.WatchEventTransformer(CertManagerIoV1alpha3.toCertificateRequest, MetaV1.toStatus));
-  }
-
-  async createCertificateRequest(body: CertManagerIoV1alpha3.CertificateRequest, opts: operations.PutOpts = {}) {
-    const resp = await this.#client.performRequest({
-      method: "POST",
-      path: `${this.#root}certificaterequests`,
-      expectJson: true,
-      querystring: operations.formatPutOpts(opts),
-      bodyJson: CertManagerIoV1alpha3.fromCertificateRequest(body),
-      abortSignal: opts.abortSignal,
-    });
-    return CertManagerIoV1alpha3.toCertificateRequest(resp);
-  }
-
-  async deleteCertificateRequestList(opts: operations.GetListOpts = {}) {
+  async deleteCertificate(name: string, body: MetaV1.DeleteOptions, opts: operations.DeleteOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "DELETE",
-      path: `${this.#root}certificaterequests`,
-      expectJson: true,
-      querystring: operations.formatGetListOpts(opts),
-      abortSignal: opts.abortSignal,
-    });
-    return CertManagerIoV1alpha3.toCertificateRequestList(resp);
-  }
-
-  async getCertificateRequestStatus(name: string, opts: {
-    resourceVersion?: string;
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
-    if (opts["resourceVersion"] != null) query.append("resourceVersion", opts["resourceVersion"]);
-    const resp = await this.#client.performRequest({
-      method: "GET",
-      path: `${this.#root}certificaterequests/${name}/status`,
-      expectJson: true,
-      querystring: query,
-      abortSignal: opts.abortSignal,
-    });
-    return CertManagerIoV1alpha3.toCertificateRequest(resp);
-  }
-
-  async replaceCertificateRequestStatus(name: string, body: CertManagerIoV1alpha3.CertificateRequest, opts: operations.PutOpts = {}) {
-    const resp = await this.#client.performRequest({
-      method: "PUT",
-      path: `${this.#root}certificaterequests/${name}/status`,
-      expectJson: true,
-      querystring: operations.formatPutOpts(opts),
-      bodyJson: CertManagerIoV1alpha3.fromCertificateRequest(body),
-      abortSignal: opts.abortSignal,
-    });
-    return CertManagerIoV1alpha3.toCertificateRequest(resp);
-  }
-
-  async patchCertificateRequestStatus(name: string, body: MetaV1.Patch, opts: operations.PutOpts = {}) {
-    const resp = await this.#client.performRequest({
-      method: "PATCH",
-      path: `${this.#root}certificaterequests/${name}/status`,
-      expectJson: true,
-      querystring: operations.formatPutOpts(opts),
-      bodyJson: MetaV1.fromPatch(body),
-      abortSignal: opts.abortSignal,
-    });
-    return CertManagerIoV1alpha3.toCertificateRequest(resp);
-  }
-
-  async getCertificateRequest(name: string, opts: {
-    resourceVersion?: string;
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
-    if (opts["resourceVersion"] != null) query.append("resourceVersion", opts["resourceVersion"]);
-    const resp = await this.#client.performRequest({
-      method: "GET",
-      path: `${this.#root}certificaterequests/${name}`,
-      expectJson: true,
-      querystring: query,
-      abortSignal: opts.abortSignal,
-    });
-    return CertManagerIoV1alpha3.toCertificateRequest(resp);
-  }
-
-  async deleteCertificateRequest(name: string, body: MetaV1.DeleteOptions, opts: operations.DeleteOpts = {}) {
-    const resp = await this.#client.performRequest({
-      method: "DELETE",
-      path: `${this.#root}certificaterequests/${name}`,
+      path: `${this.#root}certificates/${name}`,
       expectJson: true,
       querystring: operations.formatDeleteOpts(opts),
       bodyJson: MetaV1.fromDeleteOptions(body),
       abortSignal: opts.abortSignal,
     });
-    return CertManagerIoV1alpha3.toCertificateRequest(resp);
+    return CertManagerIoV1alpha3.toCertificate(resp);
   }
 
-  async replaceCertificateRequest(name: string, body: CertManagerIoV1alpha3.CertificateRequest, opts: operations.PutOpts = {}) {
+  async replaceCertificate(name: string, body: CertManagerIoV1alpha3.Certificate, opts: operations.PutOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PUT",
-      path: `${this.#root}certificaterequests/${name}`,
+      path: `${this.#root}certificates/${name}`,
       expectJson: true,
       querystring: operations.formatPutOpts(opts),
-      bodyJson: CertManagerIoV1alpha3.fromCertificateRequest(body),
+      bodyJson: CertManagerIoV1alpha3.fromCertificate(body),
       abortSignal: opts.abortSignal,
     });
-    return CertManagerIoV1alpha3.toCertificateRequest(resp);
+    return CertManagerIoV1alpha3.toCertificate(resp);
   }
 
-  async patchCertificateRequest(name: string, body: MetaV1.Patch, opts: operations.PutOpts = {}) {
+  async patchCertificate(name: string, type: c.PatchType, body: CertManagerIoV1alpha3.Certificate | c.JsonPatch, opts: operations.PatchOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PATCH",
-      path: `${this.#root}certificaterequests/${name}`,
+      path: `${this.#root}certificates/${name}`,
       expectJson: true,
-      querystring: operations.formatPutOpts(opts),
-      bodyJson: MetaV1.fromPatch(body),
+      querystring: operations.formatPatchOpts(opts),
+      contentType: c.getPatchContentType(type),
+      bodyJson: Array.isArray(body) ? body : CertManagerIoV1alpha3.fromCertificate(body),
       abortSignal: opts.abortSignal,
     });
-    return CertManagerIoV1alpha3.toCertificateRequest(resp);
+    return CertManagerIoV1alpha3.toCertificate(resp);
+  }
+
+  async getCertificateStatus(name: string, opts: operations.GetOpts = {}) {
+    const resp = await this.#client.performRequest({
+      method: "GET",
+      path: `${this.#root}certificates/${name}/status`,
+      expectJson: true,
+      querystring: operations.formatGetOpts(opts),
+      abortSignal: opts.abortSignal,
+    });
+    return CertManagerIoV1alpha3.toCertificate(resp);
+  }
+
+  async replaceCertificateStatus(name: string, body: CertManagerIoV1alpha3.Certificate, opts: operations.PutOpts = {}) {
+    const resp = await this.#client.performRequest({
+      method: "PUT",
+      path: `${this.#root}certificates/${name}/status`,
+      expectJson: true,
+      querystring: operations.formatPutOpts(opts),
+      bodyJson: CertManagerIoV1alpha3.fromCertificate(body),
+      abortSignal: opts.abortSignal,
+    });
+    return CertManagerIoV1alpha3.toCertificate(resp);
+  }
+
+  async patchCertificateStatus(name: string, type: c.PatchType, body: CertManagerIoV1alpha3.Certificate | c.JsonPatch, opts: operations.PatchOpts = {}) {
+    const resp = await this.#client.performRequest({
+      method: "PATCH",
+      path: `${this.#root}certificates/${name}/status`,
+      expectJson: true,
+      querystring: operations.formatPatchOpts(opts),
+      contentType: c.getPatchContentType(type),
+      bodyJson: Array.isArray(body) ? body : CertManagerIoV1alpha3.fromCertificate(body),
+      abortSignal: opts.abortSignal,
+    });
+    return CertManagerIoV1alpha3.toCertificate(resp);
   }
 
   async getIssuerList(opts: operations.GetListOpts = {}) {
@@ -561,28 +528,72 @@ export class CertManagerIoV1alpha3NamespacedApi {
     return CertManagerIoV1alpha3.toIssuer(resp);
   }
 
-  async deleteIssuerList(opts: operations.GetListOpts = {}) {
+  async deleteIssuerList(body: MetaV1.DeleteOptions, opts: operations.DeleteListOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}issuers`,
       expectJson: true,
-      querystring: operations.formatGetListOpts(opts),
+      querystring: operations.formatDeleteListOpts(opts),
+      bodyJson: MetaV1.fromDeleteOptions(body),
       abortSignal: opts.abortSignal,
     });
     return CertManagerIoV1alpha3.toIssuerList(resp);
   }
 
-  async getIssuerStatus(name: string, opts: {
-    resourceVersion?: string;
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
-    if (opts["resourceVersion"] != null) query.append("resourceVersion", opts["resourceVersion"]);
+  async getIssuer(name: string, opts: operations.GetOpts = {}) {
+    const resp = await this.#client.performRequest({
+      method: "GET",
+      path: `${this.#root}issuers/${name}`,
+      expectJson: true,
+      querystring: operations.formatGetOpts(opts),
+      abortSignal: opts.abortSignal,
+    });
+    return CertManagerIoV1alpha3.toIssuer(resp);
+  }
+
+  async deleteIssuer(name: string, body: MetaV1.DeleteOptions, opts: operations.DeleteOpts = {}) {
+    const resp = await this.#client.performRequest({
+      method: "DELETE",
+      path: `${this.#root}issuers/${name}`,
+      expectJson: true,
+      querystring: operations.formatDeleteOpts(opts),
+      bodyJson: MetaV1.fromDeleteOptions(body),
+      abortSignal: opts.abortSignal,
+    });
+    return CertManagerIoV1alpha3.toIssuer(resp);
+  }
+
+  async replaceIssuer(name: string, body: CertManagerIoV1alpha3.Issuer, opts: operations.PutOpts = {}) {
+    const resp = await this.#client.performRequest({
+      method: "PUT",
+      path: `${this.#root}issuers/${name}`,
+      expectJson: true,
+      querystring: operations.formatPutOpts(opts),
+      bodyJson: CertManagerIoV1alpha3.fromIssuer(body),
+      abortSignal: opts.abortSignal,
+    });
+    return CertManagerIoV1alpha3.toIssuer(resp);
+  }
+
+  async patchIssuer(name: string, type: c.PatchType, body: CertManagerIoV1alpha3.Issuer | c.JsonPatch, opts: operations.PatchOpts = {}) {
+    const resp = await this.#client.performRequest({
+      method: "PATCH",
+      path: `${this.#root}issuers/${name}`,
+      expectJson: true,
+      querystring: operations.formatPatchOpts(opts),
+      contentType: c.getPatchContentType(type),
+      bodyJson: Array.isArray(body) ? body : CertManagerIoV1alpha3.fromIssuer(body),
+      abortSignal: opts.abortSignal,
+    });
+    return CertManagerIoV1alpha3.toIssuer(resp);
+  }
+
+  async getIssuerStatus(name: string, opts: operations.GetOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}issuers/${name}/status`,
       expectJson: true,
-      querystring: query,
+      querystring: operations.formatGetOpts(opts),
       abortSignal: opts.abortSignal,
     });
     return CertManagerIoV1alpha3.toIssuer(resp);
@@ -600,56 +611,17 @@ export class CertManagerIoV1alpha3NamespacedApi {
     return CertManagerIoV1alpha3.toIssuer(resp);
   }
 
-  async patchIssuerStatus(name: string, body: MetaV1.Patch, opts: operations.PutOpts = {}) {
+  async patchIssuerStatus(name: string, type: c.PatchType, body: CertManagerIoV1alpha3.Issuer | c.JsonPatch, opts: operations.PatchOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}issuers/${name}/status`,
       expectJson: true,
-      querystring: operations.formatPutOpts(opts),
-      bodyJson: MetaV1.fromPatch(body),
+      querystring: operations.formatPatchOpts(opts),
+      contentType: c.getPatchContentType(type),
+      bodyJson: Array.isArray(body) ? body : CertManagerIoV1alpha3.fromIssuer(body),
       abortSignal: opts.abortSignal,
     });
     return CertManagerIoV1alpha3.toIssuer(resp);
-  }
-
-  async getCertificateStatus(name: string, opts: {
-    resourceVersion?: string;
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
-    if (opts["resourceVersion"] != null) query.append("resourceVersion", opts["resourceVersion"]);
-    const resp = await this.#client.performRequest({
-      method: "GET",
-      path: `${this.#root}certificates/${name}/status`,
-      expectJson: true,
-      querystring: query,
-      abortSignal: opts.abortSignal,
-    });
-    return CertManagerIoV1alpha3.toCertificate(resp);
-  }
-
-  async replaceCertificateStatus(name: string, body: CertManagerIoV1alpha3.Certificate, opts: operations.PutOpts = {}) {
-    const resp = await this.#client.performRequest({
-      method: "PUT",
-      path: `${this.#root}certificates/${name}/status`,
-      expectJson: true,
-      querystring: operations.formatPutOpts(opts),
-      bodyJson: CertManagerIoV1alpha3.fromCertificate(body),
-      abortSignal: opts.abortSignal,
-    });
-    return CertManagerIoV1alpha3.toCertificate(resp);
-  }
-
-  async patchCertificateStatus(name: string, body: MetaV1.Patch, opts: operations.PutOpts = {}) {
-    const resp = await this.#client.performRequest({
-      method: "PATCH",
-      path: `${this.#root}certificates/${name}/status`,
-      expectJson: true,
-      querystring: operations.formatPutOpts(opts),
-      bodyJson: MetaV1.fromPatch(body),
-      abortSignal: opts.abortSignal,
-    });
-    return CertManagerIoV1alpha3.toCertificate(resp);
   }
 
 }

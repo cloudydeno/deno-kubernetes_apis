@@ -2,95 +2,27 @@
 import * as c from "../../common.ts";
 
 import * as MetaV1 from "../../builtin/meta@v1/structs.ts";
-type Kind<T extends string> = {
-  apiVersion: "acme.cert-manager.io/v1alpha3";
-  kind: T;
-};
 type ListOf<T> = {
   metadata: MetaV1.ListMeta;
   items: Array<T>;
 };
 
 /** Challenge is a type to represent a Challenge request with an ACME server */
-export type Challenge = Kind<"Challenge"> & ChallengeFields;
-export interface ChallengeFields {
+export interface Challenge {
+  apiVersion?: "acme.cert-manager.io/v1alpha3";
+  kind?: "Challenge";
+  metadata: MetaV1.ObjectMeta;
   spec?: {
-    issuerRef: {
-      kind?: string | null;
-      name: string;
-      group?: string | null;
-    };
-    url: string;
-    type: "http-01" | "dns-01" | c.UnexpectedEnumValue;
-    wildcard?: boolean | null;
     authzURL: string;
     dnsName: string;
-    token: string;
+    issuerRef: {
+      group?: string | null;
+      kind?: string | null;
+      name: string;
+    };
+    key: string;
     solver: {
       dns01?: {
-        cnameStrategy?: "None" | "Follow" | c.UnexpectedEnumValue | null;
-        akamai?: {
-          clientSecretSecretRef: {
-            name: string;
-            key?: string | null;
-          };
-          serviceConsumerDomain: string;
-          clientTokenSecretRef: {
-            key?: string | null;
-            name: string;
-          };
-          accessTokenSecretRef: {
-            name: string;
-            key?: string | null;
-          };
-        } | null;
-        clouddns?: {
-          project: string;
-          hostedZoneName?: string | null;
-          serviceAccountSecretRef?: {
-            name: string;
-            key?: string | null;
-          } | null;
-        } | null;
-        azuredns?: {
-          clientID?: string | null;
-          subscriptionID: string;
-          tenantID?: string | null;
-          clientSecretSecretRef?: {
-            name: string;
-            key?: string | null;
-          } | null;
-          resourceGroupName: string;
-          environment?: "AzurePublicCloud" | "AzureChinaCloud" | "AzureGermanCloud" | "AzureUSGovernmentCloud" | c.UnexpectedEnumValue | null;
-          hostedZoneName?: string | null;
-        } | null;
-        cloudflare?: {
-          email?: string | null;
-          apiTokenSecretRef?: {
-            key?: string | null;
-            name: string;
-          } | null;
-          apiKeySecretRef?: {
-            name: string;
-            key?: string | null;
-          } | null;
-        } | null;
-        digitalocean?: {
-          tokenSecretRef: {
-            name: string;
-            key?: string | null;
-          };
-        } | null;
-        route53?: {
-          hostedZoneID?: string | null;
-          region: string;
-          accessKeyID?: string | null;
-          role?: string | null;
-          secretAccessKeySecretRef?: {
-            key?: string | null;
-            name: string;
-          } | null;
-        } | null;
         acmedns?: {
           accountSecretRef: {
             key?: string | null;
@@ -98,83 +30,142 @@ export interface ChallengeFields {
           };
           host: string;
         } | null;
-        rfc2136?: {
-          tsigAlgorithm?: string | null;
-          tsigSecretSecretRef?: {
-            name: string;
+        akamai?: {
+          accessTokenSecretRef: {
             key?: string | null;
+            name: string;
+          };
+          clientSecretSecretRef: {
+            key?: string | null;
+            name: string;
+          };
+          clientTokenSecretRef: {
+            key?: string | null;
+            name: string;
+          };
+          serviceConsumerDomain: string;
+        } | null;
+        azuredns?: {
+          clientID?: string | null;
+          clientSecretSecretRef?: {
+            key?: string | null;
+            name: string;
           } | null;
+          environment?: "AzurePublicCloud" | "AzureChinaCloud" | "AzureGermanCloud" | "AzureUSGovernmentCloud" | c.UnexpectedEnumValue | null;
+          hostedZoneName?: string | null;
+          resourceGroupName: string;
+          subscriptionID: string;
+          tenantID?: string | null;
+        } | null;
+        clouddns?: {
+          hostedZoneName?: string | null;
+          project: string;
+          serviceAccountSecretRef?: {
+            key?: string | null;
+            name: string;
+          } | null;
+        } | null;
+        cloudflare?: {
+          apiKeySecretRef?: {
+            key?: string | null;
+            name: string;
+          } | null;
+          apiTokenSecretRef?: {
+            key?: string | null;
+            name: string;
+          } | null;
+          email?: string | null;
+        } | null;
+        cnameStrategy?: "None" | "Follow" | c.UnexpectedEnumValue | null;
+        digitalocean?: {
+          tokenSecretRef: {
+            key?: string | null;
+            name: string;
+          };
+        } | null;
+        rfc2136?: {
           nameserver: string;
+          tsigAlgorithm?: string | null;
           tsigKeyName?: string | null;
+          tsigSecretSecretRef?: {
+            key?: string | null;
+            name: string;
+          } | null;
+        } | null;
+        route53?: {
+          accessKeyID?: string | null;
+          hostedZoneID?: string | null;
+          region: string;
+          role?: string | null;
+          secretAccessKeySecretRef?: {
+            key?: string | null;
+            name: string;
+          } | null;
         } | null;
         webhook?: {
           config?: c.JSONValue | null;
-          solverName: string;
           groupName: string;
+          solverName: string;
         } | null;
       } | null;
       http01?: {
         ingress?: {
-          name?: string | null;
           class?: string | null;
           ingressTemplate?: {
             metadata?: {
-              labels?: Record<string,string> | null;
               annotations?: Record<string,string> | null;
+              labels?: Record<string,string> | null;
             } | null;
           } | null;
-          serviceType?: string | null;
+          name?: string | null;
           podTemplate?: {
+            metadata?: {
+              annotations?: Record<string,string> | null;
+              labels?: Record<string,string> | null;
+            } | null;
             spec?: {
-              tolerations?: Array<{
-                tolerationSeconds?: number | null;
-                value?: string | null;
-                effect?: string | null;
-                key?: string | null;
-                operator?: string | null;
-              }> | null;
               affinity?: {
                 nodeAffinity?: {
+                  preferredDuringSchedulingIgnoredDuringExecution?: Array<{
+                    preference: {
+                      matchExpressions?: Array<{
+                        key: string;
+                        operator: string;
+                        values?: Array<string> | null;
+                      }> | null;
+                      matchFields?: Array<{
+                        key: string;
+                        operator: string;
+                        values?: Array<string> | null;
+                      }> | null;
+                    };
+                    weight: number;
+                  }> | null;
                   requiredDuringSchedulingIgnoredDuringExecution?: {
                     nodeSelectorTerms: Array<{
                       matchExpressions?: Array<{
+                        key: string;
                         operator: string;
                         values?: Array<string> | null;
-                        key: string;
                       }> | null;
                       matchFields?: Array<{
                         key: string;
-                        values?: Array<string> | null;
                         operator: string;
+                        values?: Array<string> | null;
                       }> | null;
                     }>;
                   } | null;
-                  preferredDuringSchedulingIgnoredDuringExecution?: Array<{
-                    weight: number;
-                    preference: {
-                      matchFields?: Array<{
-                        operator: string;
-                        values?: Array<string> | null;
-                        key: string;
-                      }> | null;
-                      matchExpressions?: Array<{
-                        operator: string;
-                        values?: Array<string> | null;
-                        key: string;
-                      }> | null;
-                    };
-                  }> | null;
                 } | null;
                 podAffinity?: {
                   preferredDuringSchedulingIgnoredDuringExecution?: Array<{
                     podAffinityTerm: {
                       labelSelector?: {
-                        matchLabels?: Record<string,string> | null;
                         matchExpressions?: Array<{
                           key: string;
-                          values?: Array<string> | null;
                           operator: string;
+                          values?: Array<string> | null;
                         }> | null;
+                        matchLabels?: Record<string,string> | null;
                       } | null;
                       namespaces?: Array<string> | null;
                       topologyKey: string;
@@ -185,8 +176,8 @@ export interface ChallengeFields {
                     labelSelector?: {
                       matchExpressions?: Array<{
                         key: string;
-                        values?: Array<string> | null;
                         operator: string;
+                        values?: Array<string> | null;
                       }> | null;
                       matchLabels?: Record<string,string> | null;
                     } | null;
@@ -198,12 +189,12 @@ export interface ChallengeFields {
                   preferredDuringSchedulingIgnoredDuringExecution?: Array<{
                     podAffinityTerm: {
                       labelSelector?: {
-                        matchLabels?: Record<string,string> | null;
                         matchExpressions?: Array<{
+                          key: string;
                           operator: string;
                           values?: Array<string> | null;
-                          key: string;
                         }> | null;
+                        matchLabels?: Record<string,string> | null;
                       } | null;
                       namespaces?: Array<string> | null;
                       topologyKey: string;
@@ -211,527 +202,543 @@ export interface ChallengeFields {
                     weight: number;
                   }> | null;
                   requiredDuringSchedulingIgnoredDuringExecution?: Array<{
-                    namespaces?: Array<string> | null;
                     labelSelector?: {
                       matchExpressions?: Array<{
-                        values?: Array<string> | null;
-                        operator: string;
                         key: string;
+                        operator: string;
+                        values?: Array<string> | null;
                       }> | null;
                       matchLabels?: Record<string,string> | null;
                     } | null;
+                    namespaces?: Array<string> | null;
                     topologyKey: string;
                   }> | null;
                 } | null;
               } | null;
               nodeSelector?: Record<string,string> | null;
-            } | null;
-            metadata?: {
-              annotations?: Record<string,string> | null;
-              labels?: Record<string,string> | null;
+              tolerations?: Array<{
+                effect?: string | null;
+                key?: string | null;
+                operator?: string | null;
+                tolerationSeconds?: number | null;
+                value?: string | null;
+              }> | null;
             } | null;
           } | null;
+          serviceType?: string | null;
         } | null;
       } | null;
       selector?: {
         dnsNames?: Array<string> | null;
-        matchLabels?: Record<string,string> | null;
         dnsZones?: Array<string> | null;
+        matchLabels?: Record<string,string> | null;
       } | null;
     };
-    key: string;
+    token: string;
+    type: "http-01" | "dns-01" | c.UnexpectedEnumValue;
+    url: string;
+    wildcard?: boolean | null;
   } | null;
   status?: {
     presented?: boolean | null;
     processing?: boolean | null;
-    state?: "valid" | "ready" | "pending" | "processing" | "invalid" | "expired" | "errored" | c.UnexpectedEnumValue | null;
     reason?: string | null;
+    state?: "valid" | "ready" | "pending" | "processing" | "invalid" | "expired" | "errored" | c.UnexpectedEnumValue | null;
   } | null;
-  metadata: MetaV1.ObjectMeta;
 }
-export function toChallengeFields(input: c.JSONValue): ChallengeFields {
+export function toChallenge(input: c.JSONValue): Challenge & c.ApiKind {
   const obj = c.checkObj(input);
   return {
-    spec: c.readOpt(obj["spec"], toChallengeFields_spec),
-    status: c.readOpt(obj["status"], toChallengeFields_status),
+    ...c.assertOrAddApiVersionAndKind(obj, "acme.cert-manager.io/v1alpha3", "Challenge"),
     metadata: MetaV1.toObjectMeta(obj["metadata"]),
-  }}
-export function toChallenge(input: c.JSONValue): Challenge {
-  const {apiVersion, kind, ...fields} = c.checkObj(input);
-  if (apiVersion !== "acme.cert-manager.io/v1alpha3") throw new Error("Type apiv mis 2");
-  if (kind !== "Challenge") throw new Error("Type kind mis 2");
-  return {
-    apiVersion, kind,
-    ...toChallengeFields(fields),
+    spec: c.readOpt(obj["spec"], toChallenge_spec),
+    status: c.readOpt(obj["status"], toChallenge_status),
   }}
 export function fromChallenge(input: Challenge): c.JSONValue {
   return {
+    ...c.assertOrAddApiVersionAndKind(input, "acme.cert-manager.io/v1alpha3", "Challenge"),
     ...input,
     metadata: input.metadata != null ? MetaV1.fromObjectMeta(input.metadata) : undefined,
   }}
-export function toChallengeFields_spec(input: c.JSONValue) {
+export function toChallenge_spec(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
-    issuerRef: toChallengeFields_spec_issuerRef(obj["issuerRef"]),
-    url: c.checkStr(obj["url"]),
-    type: (x => c.readEnum<"http-01" | "dns-01" | c.UnexpectedEnumValue>(x))(obj["type"]),
-    wildcard: c.readOpt(obj["wildcard"], c.checkBool),
     authzURL: c.checkStr(obj["authzURL"]),
     dnsName: c.checkStr(obj["dnsName"]),
-    token: c.checkStr(obj["token"]),
-    solver: toChallengeFields_spec_solver(obj["solver"]),
+    issuerRef: toChallenge_spec_issuerRef(obj["issuerRef"]),
     key: c.checkStr(obj["key"]),
+    solver: toChallenge_spec_solver(obj["solver"]),
+    token: c.checkStr(obj["token"]),
+    type: (x => c.readEnum<"http-01" | "dns-01" | c.UnexpectedEnumValue>(x))(obj["type"]),
+    url: c.checkStr(obj["url"]),
+    wildcard: c.readOpt(obj["wildcard"], c.checkBool),
   }}
-export function toChallengeFields_status(input: c.JSONValue) {
+export function toChallenge_status(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     presented: c.readOpt(obj["presented"], c.checkBool),
     processing: c.readOpt(obj["processing"], c.checkBool),
-    state: c.readOpt(obj["state"], (x => c.readEnum<"valid" | "ready" | "pending" | "processing" | "invalid" | "expired" | "errored" | c.UnexpectedEnumValue>(x))),
     reason: c.readOpt(obj["reason"], c.checkStr),
+    state: c.readOpt(obj["state"], (x => c.readEnum<"valid" | "ready" | "pending" | "processing" | "invalid" | "expired" | "errored" | c.UnexpectedEnumValue>(x))),
   }}
-export function toChallengeFields_spec_issuerRef(input: c.JSONValue) {
+export function toChallenge_spec_issuerRef(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
+    group: c.readOpt(obj["group"], c.checkStr),
     kind: c.readOpt(obj["kind"], c.checkStr),
     name: c.checkStr(obj["name"]),
-    group: c.readOpt(obj["group"], c.checkStr),
   }}
-export function toChallengeFields_spec_solver(input: c.JSONValue) {
+export function toChallenge_spec_solver(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
-    dns01: c.readOpt(obj["dns01"], toChallengeFields_spec_solver_dns01),
-    http01: c.readOpt(obj["http01"], toChallengeFields_spec_solver_http01),
-    selector: c.readOpt(obj["selector"], toChallengeFields_spec_solver_selector),
+    dns01: c.readOpt(obj["dns01"], toChallenge_spec_solver_dns01),
+    http01: c.readOpt(obj["http01"], toChallenge_spec_solver_http01),
+    selector: c.readOpt(obj["selector"], toChallenge_spec_solver_selector),
   }}
-export function toChallengeFields_spec_solver_dns01(input: c.JSONValue) {
+export function toChallenge_spec_solver_dns01(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
+    acmedns: c.readOpt(obj["acmedns"], toChallenge_spec_solver_dns01_acmedns),
+    akamai: c.readOpt(obj["akamai"], toChallenge_spec_solver_dns01_akamai),
+    azuredns: c.readOpt(obj["azuredns"], toChallenge_spec_solver_dns01_azuredns),
+    clouddns: c.readOpt(obj["clouddns"], toChallenge_spec_solver_dns01_clouddns),
+    cloudflare: c.readOpt(obj["cloudflare"], toChallenge_spec_solver_dns01_cloudflare),
     cnameStrategy: c.readOpt(obj["cnameStrategy"], (x => c.readEnum<"None" | "Follow" | c.UnexpectedEnumValue>(x))),
-    akamai: c.readOpt(obj["akamai"], toChallengeFields_spec_solver_dns01_akamai),
-    clouddns: c.readOpt(obj["clouddns"], toChallengeFields_spec_solver_dns01_clouddns),
-    azuredns: c.readOpt(obj["azuredns"], toChallengeFields_spec_solver_dns01_azuredns),
-    cloudflare: c.readOpt(obj["cloudflare"], toChallengeFields_spec_solver_dns01_cloudflare),
-    digitalocean: c.readOpt(obj["digitalocean"], toChallengeFields_spec_solver_dns01_digitalocean),
-    route53: c.readOpt(obj["route53"], toChallengeFields_spec_solver_dns01_route53),
-    acmedns: c.readOpt(obj["acmedns"], toChallengeFields_spec_solver_dns01_acmedns),
-    rfc2136: c.readOpt(obj["rfc2136"], toChallengeFields_spec_solver_dns01_rfc2136),
-    webhook: c.readOpt(obj["webhook"], toChallengeFields_spec_solver_dns01_webhook),
+    digitalocean: c.readOpt(obj["digitalocean"], toChallenge_spec_solver_dns01_digitalocean),
+    rfc2136: c.readOpt(obj["rfc2136"], toChallenge_spec_solver_dns01_rfc2136),
+    route53: c.readOpt(obj["route53"], toChallenge_spec_solver_dns01_route53),
+    webhook: c.readOpt(obj["webhook"], toChallenge_spec_solver_dns01_webhook),
   }}
-export function toChallengeFields_spec_solver_http01(input: c.JSONValue) {
+export function toChallenge_spec_solver_http01(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
-    ingress: c.readOpt(obj["ingress"], toChallengeFields_spec_solver_http01_ingress),
+    ingress: c.readOpt(obj["ingress"], toChallenge_spec_solver_http01_ingress),
   }}
-export function toChallengeFields_spec_solver_selector(input: c.JSONValue) {
+export function toChallenge_spec_solver_selector(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     dnsNames: c.readOpt(obj["dnsNames"], x => c.readList(x, c.checkStr)),
-    matchLabels: c.readOpt(obj["matchLabels"], x => c.readMap(x, c.checkStr)),
     dnsZones: c.readOpt(obj["dnsZones"], x => c.readList(x, c.checkStr)),
+    matchLabels: c.readOpt(obj["matchLabels"], x => c.readMap(x, c.checkStr)),
   }}
-export function toChallengeFields_spec_solver_dns01_akamai(input: c.JSONValue) {
+export function toChallenge_spec_solver_dns01_acmedns(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
-    clientSecretSecretRef: toChallengeFields_spec_solver_dns01_akamai_clientSecretSecretRef(obj["clientSecretSecretRef"]),
+    accountSecretRef: toChallenge_spec_solver_dns01_acmedns_accountSecretRef(obj["accountSecretRef"]),
+    host: c.checkStr(obj["host"]),
+  }}
+export function toChallenge_spec_solver_dns01_akamai(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    accessTokenSecretRef: toChallenge_spec_solver_dns01_akamai_accessTokenSecretRef(obj["accessTokenSecretRef"]),
+    clientSecretSecretRef: toChallenge_spec_solver_dns01_akamai_clientSecretSecretRef(obj["clientSecretSecretRef"]),
+    clientTokenSecretRef: toChallenge_spec_solver_dns01_akamai_clientTokenSecretRef(obj["clientTokenSecretRef"]),
     serviceConsumerDomain: c.checkStr(obj["serviceConsumerDomain"]),
-    clientTokenSecretRef: toChallengeFields_spec_solver_dns01_akamai_clientTokenSecretRef(obj["clientTokenSecretRef"]),
-    accessTokenSecretRef: toChallengeFields_spec_solver_dns01_akamai_accessTokenSecretRef(obj["accessTokenSecretRef"]),
   }}
-export function toChallengeFields_spec_solver_dns01_clouddns(input: c.JSONValue) {
-  const obj = c.checkObj(input);
-  return {
-    project: c.checkStr(obj["project"]),
-    hostedZoneName: c.readOpt(obj["hostedZoneName"], c.checkStr),
-    serviceAccountSecretRef: c.readOpt(obj["serviceAccountSecretRef"], toChallengeFields_spec_solver_dns01_clouddns_serviceAccountSecretRef),
-  }}
-export function toChallengeFields_spec_solver_dns01_azuredns(input: c.JSONValue) {
+export function toChallenge_spec_solver_dns01_azuredns(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     clientID: c.readOpt(obj["clientID"], c.checkStr),
-    subscriptionID: c.checkStr(obj["subscriptionID"]),
-    tenantID: c.readOpt(obj["tenantID"], c.checkStr),
-    clientSecretSecretRef: c.readOpt(obj["clientSecretSecretRef"], toChallengeFields_spec_solver_dns01_azuredns_clientSecretSecretRef),
-    resourceGroupName: c.checkStr(obj["resourceGroupName"]),
+    clientSecretSecretRef: c.readOpt(obj["clientSecretSecretRef"], toChallenge_spec_solver_dns01_azuredns_clientSecretSecretRef),
     environment: c.readOpt(obj["environment"], (x => c.readEnum<"AzurePublicCloud" | "AzureChinaCloud" | "AzureGermanCloud" | "AzureUSGovernmentCloud" | c.UnexpectedEnumValue>(x))),
     hostedZoneName: c.readOpt(obj["hostedZoneName"], c.checkStr),
+    resourceGroupName: c.checkStr(obj["resourceGroupName"]),
+    subscriptionID: c.checkStr(obj["subscriptionID"]),
+    tenantID: c.readOpt(obj["tenantID"], c.checkStr),
   }}
-export function toChallengeFields_spec_solver_dns01_cloudflare(input: c.JSONValue) {
+export function toChallenge_spec_solver_dns01_clouddns(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
+    hostedZoneName: c.readOpt(obj["hostedZoneName"], c.checkStr),
+    project: c.checkStr(obj["project"]),
+    serviceAccountSecretRef: c.readOpt(obj["serviceAccountSecretRef"], toChallenge_spec_solver_dns01_clouddns_serviceAccountSecretRef),
+  }}
+export function toChallenge_spec_solver_dns01_cloudflare(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    apiKeySecretRef: c.readOpt(obj["apiKeySecretRef"], toChallenge_spec_solver_dns01_cloudflare_apiKeySecretRef),
+    apiTokenSecretRef: c.readOpt(obj["apiTokenSecretRef"], toChallenge_spec_solver_dns01_cloudflare_apiTokenSecretRef),
     email: c.readOpt(obj["email"], c.checkStr),
-    apiTokenSecretRef: c.readOpt(obj["apiTokenSecretRef"], toChallengeFields_spec_solver_dns01_cloudflare_apiTokenSecretRef),
-    apiKeySecretRef: c.readOpt(obj["apiKeySecretRef"], toChallengeFields_spec_solver_dns01_cloudflare_apiKeySecretRef),
   }}
-export function toChallengeFields_spec_solver_dns01_digitalocean(input: c.JSONValue) {
+export function toChallenge_spec_solver_dns01_digitalocean(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
-    tokenSecretRef: toChallengeFields_spec_solver_dns01_digitalocean_tokenSecretRef(obj["tokenSecretRef"]),
+    tokenSecretRef: toChallenge_spec_solver_dns01_digitalocean_tokenSecretRef(obj["tokenSecretRef"]),
   }}
-export function toChallengeFields_spec_solver_dns01_route53(input: c.JSONValue) {
+export function toChallenge_spec_solver_dns01_rfc2136(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
+    nameserver: c.checkStr(obj["nameserver"]),
+    tsigAlgorithm: c.readOpt(obj["tsigAlgorithm"], c.checkStr),
+    tsigKeyName: c.readOpt(obj["tsigKeyName"], c.checkStr),
+    tsigSecretSecretRef: c.readOpt(obj["tsigSecretSecretRef"], toChallenge_spec_solver_dns01_rfc2136_tsigSecretSecretRef),
+  }}
+export function toChallenge_spec_solver_dns01_route53(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    accessKeyID: c.readOpt(obj["accessKeyID"], c.checkStr),
     hostedZoneID: c.readOpt(obj["hostedZoneID"], c.checkStr),
     region: c.checkStr(obj["region"]),
-    accessKeyID: c.readOpt(obj["accessKeyID"], c.checkStr),
     role: c.readOpt(obj["role"], c.checkStr),
-    secretAccessKeySecretRef: c.readOpt(obj["secretAccessKeySecretRef"], toChallengeFields_spec_solver_dns01_route53_secretAccessKeySecretRef),
+    secretAccessKeySecretRef: c.readOpt(obj["secretAccessKeySecretRef"], toChallenge_spec_solver_dns01_route53_secretAccessKeySecretRef),
   }}
-export function toChallengeFields_spec_solver_dns01_acmedns(input: c.JSONValue) {
-  const obj = c.checkObj(input);
-  return {
-    accountSecretRef: toChallengeFields_spec_solver_dns01_acmedns_accountSecretRef(obj["accountSecretRef"]),
-    host: c.checkStr(obj["host"]),
-  }}
-export function toChallengeFields_spec_solver_dns01_rfc2136(input: c.JSONValue) {
-  const obj = c.checkObj(input);
-  return {
-    tsigAlgorithm: c.readOpt(obj["tsigAlgorithm"], c.checkStr),
-    tsigSecretSecretRef: c.readOpt(obj["tsigSecretSecretRef"], toChallengeFields_spec_solver_dns01_rfc2136_tsigSecretSecretRef),
-    nameserver: c.checkStr(obj["nameserver"]),
-    tsigKeyName: c.readOpt(obj["tsigKeyName"], c.checkStr),
-  }}
-export function toChallengeFields_spec_solver_dns01_webhook(input: c.JSONValue) {
+export function toChallenge_spec_solver_dns01_webhook(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     config: c.readOpt(obj["config"], c.identity),
-    solverName: c.checkStr(obj["solverName"]),
     groupName: c.checkStr(obj["groupName"]),
+    solverName: c.checkStr(obj["solverName"]),
   }}
-export function toChallengeFields_spec_solver_http01_ingress(input: c.JSONValue) {
+export function toChallenge_spec_solver_http01_ingress(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
-    name: c.readOpt(obj["name"], c.checkStr),
     class: c.readOpt(obj["class"], c.checkStr),
-    ingressTemplate: c.readOpt(obj["ingressTemplate"], toChallengeFields_spec_solver_http01_ingress_ingressTemplate),
+    ingressTemplate: c.readOpt(obj["ingressTemplate"], toChallenge_spec_solver_http01_ingress_ingressTemplate),
+    name: c.readOpt(obj["name"], c.checkStr),
+    podTemplate: c.readOpt(obj["podTemplate"], toChallenge_spec_solver_http01_ingress_podTemplate),
     serviceType: c.readOpt(obj["serviceType"], c.checkStr),
-    podTemplate: c.readOpt(obj["podTemplate"], toChallengeFields_spec_solver_http01_ingress_podTemplate),
   }}
-export function toChallengeFields_spec_solver_dns01_akamai_clientSecretSecretRef(input: c.JSONValue) {
-  const obj = c.checkObj(input);
-  return {
-    name: c.checkStr(obj["name"]),
-    key: c.readOpt(obj["key"], c.checkStr),
-  }}
-export function toChallengeFields_spec_solver_dns01_akamai_clientTokenSecretRef(input: c.JSONValue) {
+export function toChallenge_spec_solver_dns01_acmedns_accountSecretRef(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     key: c.readOpt(obj["key"], c.checkStr),
     name: c.checkStr(obj["name"]),
   }}
-export function toChallengeFields_spec_solver_dns01_akamai_accessTokenSecretRef(input: c.JSONValue) {
-  const obj = c.checkObj(input);
-  return {
-    name: c.checkStr(obj["name"]),
-    key: c.readOpt(obj["key"], c.checkStr),
-  }}
-export function toChallengeFields_spec_solver_dns01_clouddns_serviceAccountSecretRef(input: c.JSONValue) {
-  const obj = c.checkObj(input);
-  return {
-    name: c.checkStr(obj["name"]),
-    key: c.readOpt(obj["key"], c.checkStr),
-  }}
-export function toChallengeFields_spec_solver_dns01_azuredns_clientSecretSecretRef(input: c.JSONValue) {
-  const obj = c.checkObj(input);
-  return {
-    name: c.checkStr(obj["name"]),
-    key: c.readOpt(obj["key"], c.checkStr),
-  }}
-export function toChallengeFields_spec_solver_dns01_cloudflare_apiTokenSecretRef(input: c.JSONValue) {
+export function toChallenge_spec_solver_dns01_akamai_accessTokenSecretRef(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     key: c.readOpt(obj["key"], c.checkStr),
     name: c.checkStr(obj["name"]),
   }}
-export function toChallengeFields_spec_solver_dns01_cloudflare_apiKeySecretRef(input: c.JSONValue) {
-  const obj = c.checkObj(input);
-  return {
-    name: c.checkStr(obj["name"]),
-    key: c.readOpt(obj["key"], c.checkStr),
-  }}
-export function toChallengeFields_spec_solver_dns01_digitalocean_tokenSecretRef(input: c.JSONValue) {
-  const obj = c.checkObj(input);
-  return {
-    name: c.checkStr(obj["name"]),
-    key: c.readOpt(obj["key"], c.checkStr),
-  }}
-export function toChallengeFields_spec_solver_dns01_route53_secretAccessKeySecretRef(input: c.JSONValue) {
+export function toChallenge_spec_solver_dns01_akamai_clientSecretSecretRef(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     key: c.readOpt(obj["key"], c.checkStr),
     name: c.checkStr(obj["name"]),
   }}
-export function toChallengeFields_spec_solver_dns01_acmedns_accountSecretRef(input: c.JSONValue) {
+export function toChallenge_spec_solver_dns01_akamai_clientTokenSecretRef(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     key: c.readOpt(obj["key"], c.checkStr),
     name: c.checkStr(obj["name"]),
   }}
-export function toChallengeFields_spec_solver_dns01_rfc2136_tsigSecretSecretRef(input: c.JSONValue) {
+export function toChallenge_spec_solver_dns01_azuredns_clientSecretSecretRef(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
-    name: c.checkStr(obj["name"]),
     key: c.readOpt(obj["key"], c.checkStr),
+    name: c.checkStr(obj["name"]),
   }}
-export function toChallengeFields_spec_solver_http01_ingress_ingressTemplate(input: c.JSONValue) {
+export function toChallenge_spec_solver_dns01_clouddns_serviceAccountSecretRef(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
-    metadata: c.readOpt(obj["metadata"], toChallengeFields_spec_solver_http01_ingress_ingressTemplate_metadata),
+    key: c.readOpt(obj["key"], c.checkStr),
+    name: c.checkStr(obj["name"]),
   }}
-export function toChallengeFields_spec_solver_http01_ingress_podTemplate(input: c.JSONValue) {
+export function toChallenge_spec_solver_dns01_cloudflare_apiKeySecretRef(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
-    spec: c.readOpt(obj["spec"], toChallengeFields_spec_solver_http01_ingress_podTemplate_spec),
-    metadata: c.readOpt(obj["metadata"], toChallengeFields_spec_solver_http01_ingress_podTemplate_metadata),
+    key: c.readOpt(obj["key"], c.checkStr),
+    name: c.checkStr(obj["name"]),
   }}
-export function toChallengeFields_spec_solver_http01_ingress_ingressTemplate_metadata(input: c.JSONValue) {
+export function toChallenge_spec_solver_dns01_cloudflare_apiTokenSecretRef(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
-    labels: c.readOpt(obj["labels"], x => c.readMap(x, c.checkStr)),
+    key: c.readOpt(obj["key"], c.checkStr),
+    name: c.checkStr(obj["name"]),
+  }}
+export function toChallenge_spec_solver_dns01_digitalocean_tokenSecretRef(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    key: c.readOpt(obj["key"], c.checkStr),
+    name: c.checkStr(obj["name"]),
+  }}
+export function toChallenge_spec_solver_dns01_rfc2136_tsigSecretSecretRef(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    key: c.readOpt(obj["key"], c.checkStr),
+    name: c.checkStr(obj["name"]),
+  }}
+export function toChallenge_spec_solver_dns01_route53_secretAccessKeySecretRef(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    key: c.readOpt(obj["key"], c.checkStr),
+    name: c.checkStr(obj["name"]),
+  }}
+export function toChallenge_spec_solver_http01_ingress_ingressTemplate(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    metadata: c.readOpt(obj["metadata"], toChallenge_spec_solver_http01_ingress_ingressTemplate_metadata),
+  }}
+export function toChallenge_spec_solver_http01_ingress_podTemplate(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    metadata: c.readOpt(obj["metadata"], toChallenge_spec_solver_http01_ingress_podTemplate_metadata),
+    spec: c.readOpt(obj["spec"], toChallenge_spec_solver_http01_ingress_podTemplate_spec),
+  }}
+export function toChallenge_spec_solver_http01_ingress_ingressTemplate_metadata(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
     annotations: c.readOpt(obj["annotations"], x => c.readMap(x, c.checkStr)),
+    labels: c.readOpt(obj["labels"], x => c.readMap(x, c.checkStr)),
   }}
-export function toChallengeFields_spec_solver_http01_ingress_podTemplate_spec(input: c.JSONValue) {
+export function toChallenge_spec_solver_http01_ingress_podTemplate_metadata(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
-    tolerations: c.readOpt(obj["tolerations"], x => c.readList(x, toChallengeFields_spec_solver_http01_ingress_podTemplate_spec_tolerations)),
-    affinity: c.readOpt(obj["affinity"], toChallengeFields_spec_solver_http01_ingress_podTemplate_spec_affinity),
+    annotations: c.readOpt(obj["annotations"], x => c.readMap(x, c.checkStr)),
+    labels: c.readOpt(obj["labels"], x => c.readMap(x, c.checkStr)),
+  }}
+export function toChallenge_spec_solver_http01_ingress_podTemplate_spec(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    affinity: c.readOpt(obj["affinity"], toChallenge_spec_solver_http01_ingress_podTemplate_spec_affinity),
     nodeSelector: c.readOpt(obj["nodeSelector"], x => c.readMap(x, c.checkStr)),
+    tolerations: c.readOpt(obj["tolerations"], x => c.readList(x, toChallenge_spec_solver_http01_ingress_podTemplate_spec_tolerations)),
   }}
-export function toChallengeFields_spec_solver_http01_ingress_podTemplate_metadata(input: c.JSONValue) {
+export function toChallenge_spec_solver_http01_ingress_podTemplate_spec_affinity(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
-    annotations: c.readOpt(obj["annotations"], x => c.readMap(x, c.checkStr)),
-    labels: c.readOpt(obj["labels"], x => c.readMap(x, c.checkStr)),
+    nodeAffinity: c.readOpt(obj["nodeAffinity"], toChallenge_spec_solver_http01_ingress_podTemplate_spec_affinity_nodeAffinity),
+    podAffinity: c.readOpt(obj["podAffinity"], toChallenge_spec_solver_http01_ingress_podTemplate_spec_affinity_podAffinity),
+    podAntiAffinity: c.readOpt(obj["podAntiAffinity"], toChallenge_spec_solver_http01_ingress_podTemplate_spec_affinity_podAntiAffinity),
   }}
-export function toChallengeFields_spec_solver_http01_ingress_podTemplate_spec_tolerations(input: c.JSONValue) {
+export function toChallenge_spec_solver_http01_ingress_podTemplate_spec_tolerations(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
-    tolerationSeconds: c.readOpt(obj["tolerationSeconds"], c.checkNum),
-    value: c.readOpt(obj["value"], c.checkStr),
     effect: c.readOpt(obj["effect"], c.checkStr),
     key: c.readOpt(obj["key"], c.checkStr),
     operator: c.readOpt(obj["operator"], c.checkStr),
+    tolerationSeconds: c.readOpt(obj["tolerationSeconds"], c.checkNum),
+    value: c.readOpt(obj["value"], c.checkStr),
   }}
-export function toChallengeFields_spec_solver_http01_ingress_podTemplate_spec_affinity(input: c.JSONValue) {
+export function toChallenge_spec_solver_http01_ingress_podTemplate_spec_affinity_nodeAffinity(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
-    nodeAffinity: c.readOpt(obj["nodeAffinity"], toChallengeFields_spec_solver_http01_ingress_podTemplate_spec_affinity_nodeAffinity),
-    podAffinity: c.readOpt(obj["podAffinity"], toChallengeFields_spec_solver_http01_ingress_podTemplate_spec_affinity_podAffinity),
-    podAntiAffinity: c.readOpt(obj["podAntiAffinity"], toChallengeFields_spec_solver_http01_ingress_podTemplate_spec_affinity_podAntiAffinity),
+    preferredDuringSchedulingIgnoredDuringExecution: c.readOpt(obj["preferredDuringSchedulingIgnoredDuringExecution"], x => c.readList(x, toChallenge_spec_solver_http01_ingress_podTemplate_spec_affinity_nodeAffinity_preferredDuringSchedulingIgnoredDuringExecution)),
+    requiredDuringSchedulingIgnoredDuringExecution: c.readOpt(obj["requiredDuringSchedulingIgnoredDuringExecution"], toChallenge_spec_solver_http01_ingress_podTemplate_spec_affinity_nodeAffinity_requiredDuringSchedulingIgnoredDuringExecution),
   }}
-export function toChallengeFields_spec_solver_http01_ingress_podTemplate_spec_affinity_nodeAffinity(input: c.JSONValue) {
+export function toChallenge_spec_solver_http01_ingress_podTemplate_spec_affinity_podAffinity(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
-    requiredDuringSchedulingIgnoredDuringExecution: c.readOpt(obj["requiredDuringSchedulingIgnoredDuringExecution"], toChallengeFields_spec_solver_http01_ingress_podTemplate_spec_affinity_nodeAffinity_requiredDuringSchedulingIgnoredDuringExecution),
-    preferredDuringSchedulingIgnoredDuringExecution: c.readOpt(obj["preferredDuringSchedulingIgnoredDuringExecution"], x => c.readList(x, toChallengeFields_spec_solver_http01_ingress_podTemplate_spec_affinity_nodeAffinity_preferredDuringSchedulingIgnoredDuringExecution)),
+    preferredDuringSchedulingIgnoredDuringExecution: c.readOpt(obj["preferredDuringSchedulingIgnoredDuringExecution"], x => c.readList(x, toChallenge_spec_solver_http01_ingress_podTemplate_spec_affinity_podAffinity_preferredDuringSchedulingIgnoredDuringExecution)),
+    requiredDuringSchedulingIgnoredDuringExecution: c.readOpt(obj["requiredDuringSchedulingIgnoredDuringExecution"], x => c.readList(x, toChallenge_spec_solver_http01_ingress_podTemplate_spec_affinity_podAffinity_requiredDuringSchedulingIgnoredDuringExecution)),
   }}
-export function toChallengeFields_spec_solver_http01_ingress_podTemplate_spec_affinity_podAffinity(input: c.JSONValue) {
+export function toChallenge_spec_solver_http01_ingress_podTemplate_spec_affinity_podAntiAffinity(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
-    preferredDuringSchedulingIgnoredDuringExecution: c.readOpt(obj["preferredDuringSchedulingIgnoredDuringExecution"], x => c.readList(x, toChallengeFields_spec_solver_http01_ingress_podTemplate_spec_affinity_podAffinity_preferredDuringSchedulingIgnoredDuringExecution)),
-    requiredDuringSchedulingIgnoredDuringExecution: c.readOpt(obj["requiredDuringSchedulingIgnoredDuringExecution"], x => c.readList(x, toChallengeFields_spec_solver_http01_ingress_podTemplate_spec_affinity_podAffinity_requiredDuringSchedulingIgnoredDuringExecution)),
+    preferredDuringSchedulingIgnoredDuringExecution: c.readOpt(obj["preferredDuringSchedulingIgnoredDuringExecution"], x => c.readList(x, toChallenge_spec_solver_http01_ingress_podTemplate_spec_affinity_podAntiAffinity_preferredDuringSchedulingIgnoredDuringExecution)),
+    requiredDuringSchedulingIgnoredDuringExecution: c.readOpt(obj["requiredDuringSchedulingIgnoredDuringExecution"], x => c.readList(x, toChallenge_spec_solver_http01_ingress_podTemplate_spec_affinity_podAntiAffinity_requiredDuringSchedulingIgnoredDuringExecution)),
   }}
-export function toChallengeFields_spec_solver_http01_ingress_podTemplate_spec_affinity_podAntiAffinity(input: c.JSONValue) {
+export function toChallenge_spec_solver_http01_ingress_podTemplate_spec_affinity_nodeAffinity_preferredDuringSchedulingIgnoredDuringExecution(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
-    preferredDuringSchedulingIgnoredDuringExecution: c.readOpt(obj["preferredDuringSchedulingIgnoredDuringExecution"], x => c.readList(x, toChallengeFields_spec_solver_http01_ingress_podTemplate_spec_affinity_podAntiAffinity_preferredDuringSchedulingIgnoredDuringExecution)),
-    requiredDuringSchedulingIgnoredDuringExecution: c.readOpt(obj["requiredDuringSchedulingIgnoredDuringExecution"], x => c.readList(x, toChallengeFields_spec_solver_http01_ingress_podTemplate_spec_affinity_podAntiAffinity_requiredDuringSchedulingIgnoredDuringExecution)),
-  }}
-export function toChallengeFields_spec_solver_http01_ingress_podTemplate_spec_affinity_nodeAffinity_requiredDuringSchedulingIgnoredDuringExecution(input: c.JSONValue) {
-  const obj = c.checkObj(input);
-  return {
-    nodeSelectorTerms: c.readList(obj["nodeSelectorTerms"], toChallengeFields_spec_solver_http01_ingress_podTemplate_spec_affinity_nodeAffinity_requiredDuringSchedulingIgnoredDuringExecution_nodeSelectorTerms),
-  }}
-export function toChallengeFields_spec_solver_http01_ingress_podTemplate_spec_affinity_nodeAffinity_preferredDuringSchedulingIgnoredDuringExecution(input: c.JSONValue) {
-  const obj = c.checkObj(input);
-  return {
-    weight: c.checkNum(obj["weight"]),
-    preference: toChallengeFields_spec_solver_http01_ingress_podTemplate_spec_affinity_nodeAffinity_preferredDuringSchedulingIgnoredDuringExecution_preference(obj["preference"]),
-  }}
-export function toChallengeFields_spec_solver_http01_ingress_podTemplate_spec_affinity_podAffinity_preferredDuringSchedulingIgnoredDuringExecution(input: c.JSONValue) {
-  const obj = c.checkObj(input);
-  return {
-    podAffinityTerm: toChallengeFields_spec_solver_http01_ingress_podTemplate_spec_affinity_podAffinity_preferredDuringSchedulingIgnoredDuringExecution_podAffinityTerm(obj["podAffinityTerm"]),
+    preference: toChallenge_spec_solver_http01_ingress_podTemplate_spec_affinity_nodeAffinity_preferredDuringSchedulingIgnoredDuringExecution_preference(obj["preference"]),
     weight: c.checkNum(obj["weight"]),
   }}
-export function toChallengeFields_spec_solver_http01_ingress_podTemplate_spec_affinity_podAffinity_requiredDuringSchedulingIgnoredDuringExecution(input: c.JSONValue) {
+export function toChallenge_spec_solver_http01_ingress_podTemplate_spec_affinity_nodeAffinity_requiredDuringSchedulingIgnoredDuringExecution(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
-    labelSelector: c.readOpt(obj["labelSelector"], toChallengeFields_spec_solver_http01_ingress_podTemplate_spec_affinity_podAffinity_requiredDuringSchedulingIgnoredDuringExecution_labelSelector),
-    namespaces: c.readOpt(obj["namespaces"], x => c.readList(x, c.checkStr)),
-    topologyKey: c.checkStr(obj["topologyKey"]),
+    nodeSelectorTerms: c.readList(obj["nodeSelectorTerms"], toChallenge_spec_solver_http01_ingress_podTemplate_spec_affinity_nodeAffinity_requiredDuringSchedulingIgnoredDuringExecution_nodeSelectorTerms),
   }}
-export function toChallengeFields_spec_solver_http01_ingress_podTemplate_spec_affinity_podAntiAffinity_preferredDuringSchedulingIgnoredDuringExecution(input: c.JSONValue) {
+export function toChallenge_spec_solver_http01_ingress_podTemplate_spec_affinity_podAffinity_preferredDuringSchedulingIgnoredDuringExecution(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
-    podAffinityTerm: toChallengeFields_spec_solver_http01_ingress_podTemplate_spec_affinity_podAntiAffinity_preferredDuringSchedulingIgnoredDuringExecution_podAffinityTerm(obj["podAffinityTerm"]),
+    podAffinityTerm: toChallenge_spec_solver_http01_ingress_podTemplate_spec_affinity_podAffinity_preferredDuringSchedulingIgnoredDuringExecution_podAffinityTerm(obj["podAffinityTerm"]),
     weight: c.checkNum(obj["weight"]),
   }}
-export function toChallengeFields_spec_solver_http01_ingress_podTemplate_spec_affinity_podAntiAffinity_requiredDuringSchedulingIgnoredDuringExecution(input: c.JSONValue) {
+export function toChallenge_spec_solver_http01_ingress_podTemplate_spec_affinity_podAffinity_requiredDuringSchedulingIgnoredDuringExecution(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
-    namespaces: c.readOpt(obj["namespaces"], x => c.readList(x, c.checkStr)),
-    labelSelector: c.readOpt(obj["labelSelector"], toChallengeFields_spec_solver_http01_ingress_podTemplate_spec_affinity_podAntiAffinity_requiredDuringSchedulingIgnoredDuringExecution_labelSelector),
-    topologyKey: c.checkStr(obj["topologyKey"]),
-  }}
-export function toChallengeFields_spec_solver_http01_ingress_podTemplate_spec_affinity_nodeAffinity_requiredDuringSchedulingIgnoredDuringExecution_nodeSelectorTerms(input: c.JSONValue) {
-  const obj = c.checkObj(input);
-  return {
-    matchExpressions: c.readOpt(obj["matchExpressions"], x => c.readList(x, toChallengeFields_spec_solver_http01_ingress_podTemplate_spec_affinity_nodeAffinity_requiredDuringSchedulingIgnoredDuringExecution_nodeSelectorTerms_matchExpressions)),
-    matchFields: c.readOpt(obj["matchFields"], x => c.readList(x, toChallengeFields_spec_solver_http01_ingress_podTemplate_spec_affinity_nodeAffinity_requiredDuringSchedulingIgnoredDuringExecution_nodeSelectorTerms_matchFields)),
-  }}
-export function toChallengeFields_spec_solver_http01_ingress_podTemplate_spec_affinity_nodeAffinity_preferredDuringSchedulingIgnoredDuringExecution_preference(input: c.JSONValue) {
-  const obj = c.checkObj(input);
-  return {
-    matchFields: c.readOpt(obj["matchFields"], x => c.readList(x, toChallengeFields_spec_solver_http01_ingress_podTemplate_spec_affinity_nodeAffinity_preferredDuringSchedulingIgnoredDuringExecution_preference_matchFields)),
-    matchExpressions: c.readOpt(obj["matchExpressions"], x => c.readList(x, toChallengeFields_spec_solver_http01_ingress_podTemplate_spec_affinity_nodeAffinity_preferredDuringSchedulingIgnoredDuringExecution_preference_matchExpressions)),
-  }}
-export function toChallengeFields_spec_solver_http01_ingress_podTemplate_spec_affinity_podAffinity_preferredDuringSchedulingIgnoredDuringExecution_podAffinityTerm(input: c.JSONValue) {
-  const obj = c.checkObj(input);
-  return {
-    labelSelector: c.readOpt(obj["labelSelector"], toChallengeFields_spec_solver_http01_ingress_podTemplate_spec_affinity_podAffinity_preferredDuringSchedulingIgnoredDuringExecution_podAffinityTerm_labelSelector),
+    labelSelector: c.readOpt(obj["labelSelector"], toChallenge_spec_solver_http01_ingress_podTemplate_spec_affinity_podAffinity_requiredDuringSchedulingIgnoredDuringExecution_labelSelector),
     namespaces: c.readOpt(obj["namespaces"], x => c.readList(x, c.checkStr)),
     topologyKey: c.checkStr(obj["topologyKey"]),
   }}
-export function toChallengeFields_spec_solver_http01_ingress_podTemplate_spec_affinity_podAffinity_requiredDuringSchedulingIgnoredDuringExecution_labelSelector(input: c.JSONValue) {
+export function toChallenge_spec_solver_http01_ingress_podTemplate_spec_affinity_podAntiAffinity_preferredDuringSchedulingIgnoredDuringExecution(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
-    matchExpressions: c.readOpt(obj["matchExpressions"], x => c.readList(x, toChallengeFields_spec_solver_http01_ingress_podTemplate_spec_affinity_podAffinity_requiredDuringSchedulingIgnoredDuringExecution_labelSelector_matchExpressions)),
-    matchLabels: c.readOpt(obj["matchLabels"], x => c.readMap(x, c.checkStr)),
+    podAffinityTerm: toChallenge_spec_solver_http01_ingress_podTemplate_spec_affinity_podAntiAffinity_preferredDuringSchedulingIgnoredDuringExecution_podAffinityTerm(obj["podAffinityTerm"]),
+    weight: c.checkNum(obj["weight"]),
   }}
-export function toChallengeFields_spec_solver_http01_ingress_podTemplate_spec_affinity_podAntiAffinity_preferredDuringSchedulingIgnoredDuringExecution_podAffinityTerm(input: c.JSONValue) {
+export function toChallenge_spec_solver_http01_ingress_podTemplate_spec_affinity_podAntiAffinity_requiredDuringSchedulingIgnoredDuringExecution(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
-    labelSelector: c.readOpt(obj["labelSelector"], toChallengeFields_spec_solver_http01_ingress_podTemplate_spec_affinity_podAntiAffinity_preferredDuringSchedulingIgnoredDuringExecution_podAffinityTerm_labelSelector),
+    labelSelector: c.readOpt(obj["labelSelector"], toChallenge_spec_solver_http01_ingress_podTemplate_spec_affinity_podAntiAffinity_requiredDuringSchedulingIgnoredDuringExecution_labelSelector),
     namespaces: c.readOpt(obj["namespaces"], x => c.readList(x, c.checkStr)),
     topologyKey: c.checkStr(obj["topologyKey"]),
   }}
-export function toChallengeFields_spec_solver_http01_ingress_podTemplate_spec_affinity_podAntiAffinity_requiredDuringSchedulingIgnoredDuringExecution_labelSelector(input: c.JSONValue) {
+export function toChallenge_spec_solver_http01_ingress_podTemplate_spec_affinity_nodeAffinity_preferredDuringSchedulingIgnoredDuringExecution_preference(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
-    matchExpressions: c.readOpt(obj["matchExpressions"], x => c.readList(x, toChallengeFields_spec_solver_http01_ingress_podTemplate_spec_affinity_podAntiAffinity_requiredDuringSchedulingIgnoredDuringExecution_labelSelector_matchExpressions)),
+    matchExpressions: c.readOpt(obj["matchExpressions"], x => c.readList(x, toChallenge_spec_solver_http01_ingress_podTemplate_spec_affinity_nodeAffinity_preferredDuringSchedulingIgnoredDuringExecution_preference_matchExpressions)),
+    matchFields: c.readOpt(obj["matchFields"], x => c.readList(x, toChallenge_spec_solver_http01_ingress_podTemplate_spec_affinity_nodeAffinity_preferredDuringSchedulingIgnoredDuringExecution_preference_matchFields)),
+  }}
+export function toChallenge_spec_solver_http01_ingress_podTemplate_spec_affinity_nodeAffinity_requiredDuringSchedulingIgnoredDuringExecution_nodeSelectorTerms(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    matchExpressions: c.readOpt(obj["matchExpressions"], x => c.readList(x, toChallenge_spec_solver_http01_ingress_podTemplate_spec_affinity_nodeAffinity_requiredDuringSchedulingIgnoredDuringExecution_nodeSelectorTerms_matchExpressions)),
+    matchFields: c.readOpt(obj["matchFields"], x => c.readList(x, toChallenge_spec_solver_http01_ingress_podTemplate_spec_affinity_nodeAffinity_requiredDuringSchedulingIgnoredDuringExecution_nodeSelectorTerms_matchFields)),
+  }}
+export function toChallenge_spec_solver_http01_ingress_podTemplate_spec_affinity_podAffinity_preferredDuringSchedulingIgnoredDuringExecution_podAffinityTerm(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    labelSelector: c.readOpt(obj["labelSelector"], toChallenge_spec_solver_http01_ingress_podTemplate_spec_affinity_podAffinity_preferredDuringSchedulingIgnoredDuringExecution_podAffinityTerm_labelSelector),
+    namespaces: c.readOpt(obj["namespaces"], x => c.readList(x, c.checkStr)),
+    topologyKey: c.checkStr(obj["topologyKey"]),
+  }}
+export function toChallenge_spec_solver_http01_ingress_podTemplate_spec_affinity_podAffinity_requiredDuringSchedulingIgnoredDuringExecution_labelSelector(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    matchExpressions: c.readOpt(obj["matchExpressions"], x => c.readList(x, toChallenge_spec_solver_http01_ingress_podTemplate_spec_affinity_podAffinity_requiredDuringSchedulingIgnoredDuringExecution_labelSelector_matchExpressions)),
     matchLabels: c.readOpt(obj["matchLabels"], x => c.readMap(x, c.checkStr)),
   }}
-export function toChallengeFields_spec_solver_http01_ingress_podTemplate_spec_affinity_nodeAffinity_requiredDuringSchedulingIgnoredDuringExecution_nodeSelectorTerms_matchExpressions(input: c.JSONValue) {
+export function toChallenge_spec_solver_http01_ingress_podTemplate_spec_affinity_podAntiAffinity_preferredDuringSchedulingIgnoredDuringExecution_podAffinityTerm(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
-    operator: c.checkStr(obj["operator"]),
-    values: c.readOpt(obj["values"], x => c.readList(x, c.checkStr)),
-    key: c.checkStr(obj["key"]),
+    labelSelector: c.readOpt(obj["labelSelector"], toChallenge_spec_solver_http01_ingress_podTemplate_spec_affinity_podAntiAffinity_preferredDuringSchedulingIgnoredDuringExecution_podAffinityTerm_labelSelector),
+    namespaces: c.readOpt(obj["namespaces"], x => c.readList(x, c.checkStr)),
+    topologyKey: c.checkStr(obj["topologyKey"]),
   }}
-export function toChallengeFields_spec_solver_http01_ingress_podTemplate_spec_affinity_nodeAffinity_requiredDuringSchedulingIgnoredDuringExecution_nodeSelectorTerms_matchFields(input: c.JSONValue) {
+export function toChallenge_spec_solver_http01_ingress_podTemplate_spec_affinity_podAntiAffinity_requiredDuringSchedulingIgnoredDuringExecution_labelSelector(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
-    key: c.checkStr(obj["key"]),
-    values: c.readOpt(obj["values"], x => c.readList(x, c.checkStr)),
-    operator: c.checkStr(obj["operator"]),
-  }}
-export function toChallengeFields_spec_solver_http01_ingress_podTemplate_spec_affinity_nodeAffinity_preferredDuringSchedulingIgnoredDuringExecution_preference_matchFields(input: c.JSONValue) {
-  const obj = c.checkObj(input);
-  return {
-    operator: c.checkStr(obj["operator"]),
-    values: c.readOpt(obj["values"], x => c.readList(x, c.checkStr)),
-    key: c.checkStr(obj["key"]),
-  }}
-export function toChallengeFields_spec_solver_http01_ingress_podTemplate_spec_affinity_nodeAffinity_preferredDuringSchedulingIgnoredDuringExecution_preference_matchExpressions(input: c.JSONValue) {
-  const obj = c.checkObj(input);
-  return {
-    operator: c.checkStr(obj["operator"]),
-    values: c.readOpt(obj["values"], x => c.readList(x, c.checkStr)),
-    key: c.checkStr(obj["key"]),
-  }}
-export function toChallengeFields_spec_solver_http01_ingress_podTemplate_spec_affinity_podAffinity_preferredDuringSchedulingIgnoredDuringExecution_podAffinityTerm_labelSelector(input: c.JSONValue) {
-  const obj = c.checkObj(input);
-  return {
+    matchExpressions: c.readOpt(obj["matchExpressions"], x => c.readList(x, toChallenge_spec_solver_http01_ingress_podTemplate_spec_affinity_podAntiAffinity_requiredDuringSchedulingIgnoredDuringExecution_labelSelector_matchExpressions)),
     matchLabels: c.readOpt(obj["matchLabels"], x => c.readMap(x, c.checkStr)),
-    matchExpressions: c.readOpt(obj["matchExpressions"], x => c.readList(x, toChallengeFields_spec_solver_http01_ingress_podTemplate_spec_affinity_podAffinity_preferredDuringSchedulingIgnoredDuringExecution_podAffinityTerm_labelSelector_matchExpressions)),
   }}
-export function toChallengeFields_spec_solver_http01_ingress_podTemplate_spec_affinity_podAffinity_requiredDuringSchedulingIgnoredDuringExecution_labelSelector_matchExpressions(input: c.JSONValue) {
+export function toChallenge_spec_solver_http01_ingress_podTemplate_spec_affinity_nodeAffinity_preferredDuringSchedulingIgnoredDuringExecution_preference_matchExpressions(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     key: c.checkStr(obj["key"]),
-    values: c.readOpt(obj["values"], x => c.readList(x, c.checkStr)),
     operator: c.checkStr(obj["operator"]),
+    values: c.readOpt(obj["values"], x => c.readList(x, c.checkStr)),
   }}
-export function toChallengeFields_spec_solver_http01_ingress_podTemplate_spec_affinity_podAntiAffinity_preferredDuringSchedulingIgnoredDuringExecution_podAffinityTerm_labelSelector(input: c.JSONValue) {
+export function toChallenge_spec_solver_http01_ingress_podTemplate_spec_affinity_nodeAffinity_preferredDuringSchedulingIgnoredDuringExecution_preference_matchFields(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
+    key: c.checkStr(obj["key"]),
+    operator: c.checkStr(obj["operator"]),
+    values: c.readOpt(obj["values"], x => c.readList(x, c.checkStr)),
+  }}
+export function toChallenge_spec_solver_http01_ingress_podTemplate_spec_affinity_nodeAffinity_requiredDuringSchedulingIgnoredDuringExecution_nodeSelectorTerms_matchExpressions(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    key: c.checkStr(obj["key"]),
+    operator: c.checkStr(obj["operator"]),
+    values: c.readOpt(obj["values"], x => c.readList(x, c.checkStr)),
+  }}
+export function toChallenge_spec_solver_http01_ingress_podTemplate_spec_affinity_nodeAffinity_requiredDuringSchedulingIgnoredDuringExecution_nodeSelectorTerms_matchFields(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    key: c.checkStr(obj["key"]),
+    operator: c.checkStr(obj["operator"]),
+    values: c.readOpt(obj["values"], x => c.readList(x, c.checkStr)),
+  }}
+export function toChallenge_spec_solver_http01_ingress_podTemplate_spec_affinity_podAffinity_preferredDuringSchedulingIgnoredDuringExecution_podAffinityTerm_labelSelector(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    matchExpressions: c.readOpt(obj["matchExpressions"], x => c.readList(x, toChallenge_spec_solver_http01_ingress_podTemplate_spec_affinity_podAffinity_preferredDuringSchedulingIgnoredDuringExecution_podAffinityTerm_labelSelector_matchExpressions)),
     matchLabels: c.readOpt(obj["matchLabels"], x => c.readMap(x, c.checkStr)),
-    matchExpressions: c.readOpt(obj["matchExpressions"], x => c.readList(x, toChallengeFields_spec_solver_http01_ingress_podTemplate_spec_affinity_podAntiAffinity_preferredDuringSchedulingIgnoredDuringExecution_podAffinityTerm_labelSelector_matchExpressions)),
   }}
-export function toChallengeFields_spec_solver_http01_ingress_podTemplate_spec_affinity_podAntiAffinity_requiredDuringSchedulingIgnoredDuringExecution_labelSelector_matchExpressions(input: c.JSONValue) {
-  const obj = c.checkObj(input);
-  return {
-    values: c.readOpt(obj["values"], x => c.readList(x, c.checkStr)),
-    operator: c.checkStr(obj["operator"]),
-    key: c.checkStr(obj["key"]),
-  }}
-export function toChallengeFields_spec_solver_http01_ingress_podTemplate_spec_affinity_podAffinity_preferredDuringSchedulingIgnoredDuringExecution_podAffinityTerm_labelSelector_matchExpressions(input: c.JSONValue) {
+export function toChallenge_spec_solver_http01_ingress_podTemplate_spec_affinity_podAffinity_requiredDuringSchedulingIgnoredDuringExecution_labelSelector_matchExpressions(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     key: c.checkStr(obj["key"]),
-    values: c.readOpt(obj["values"], x => c.readList(x, c.checkStr)),
     operator: c.checkStr(obj["operator"]),
+    values: c.readOpt(obj["values"], x => c.readList(x, c.checkStr)),
   }}
-export function toChallengeFields_spec_solver_http01_ingress_podTemplate_spec_affinity_podAntiAffinity_preferredDuringSchedulingIgnoredDuringExecution_podAffinityTerm_labelSelector_matchExpressions(input: c.JSONValue) {
+export function toChallenge_spec_solver_http01_ingress_podTemplate_spec_affinity_podAntiAffinity_preferredDuringSchedulingIgnoredDuringExecution_podAffinityTerm_labelSelector(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
+    matchExpressions: c.readOpt(obj["matchExpressions"], x => c.readList(x, toChallenge_spec_solver_http01_ingress_podTemplate_spec_affinity_podAntiAffinity_preferredDuringSchedulingIgnoredDuringExecution_podAffinityTerm_labelSelector_matchExpressions)),
+    matchLabels: c.readOpt(obj["matchLabels"], x => c.readMap(x, c.checkStr)),
+  }}
+export function toChallenge_spec_solver_http01_ingress_podTemplate_spec_affinity_podAntiAffinity_requiredDuringSchedulingIgnoredDuringExecution_labelSelector_matchExpressions(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    key: c.checkStr(obj["key"]),
     operator: c.checkStr(obj["operator"]),
     values: c.readOpt(obj["values"], x => c.readList(x, c.checkStr)),
+  }}
+export function toChallenge_spec_solver_http01_ingress_podTemplate_spec_affinity_podAffinity_preferredDuringSchedulingIgnoredDuringExecution_podAffinityTerm_labelSelector_matchExpressions(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
     key: c.checkStr(obj["key"]),
+    operator: c.checkStr(obj["operator"]),
+    values: c.readOpt(obj["values"], x => c.readList(x, c.checkStr)),
+  }}
+export function toChallenge_spec_solver_http01_ingress_podTemplate_spec_affinity_podAntiAffinity_preferredDuringSchedulingIgnoredDuringExecution_podAffinityTerm_labelSelector_matchExpressions(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    key: c.checkStr(obj["key"]),
+    operator: c.checkStr(obj["operator"]),
+    values: c.readOpt(obj["values"], x => c.readList(x, c.checkStr)),
+  }}
+
+export interface ChallengeList {
+  apiVersion?: "acme.cert-manager.io/v1alpha3";
+  kind?: "Challenge";
+  items: Array<Challenge>;
+  metadata?: MetaV1.ListMeta | null;
+}
+export function toChallengeList(input: c.JSONValue): ChallengeList & c.ApiKind {
+  const obj = c.checkObj(input);
+  return {
+    ...c.assertOrAddApiVersionAndKind(obj, "acme.cert-manager.io/v1alpha3", "Challenge"),
+    items: c.readList(obj["items"], toChallenge),
+    metadata: c.readOpt(obj["metadata"], MetaV1.toListMeta),
+  }}
+export function fromChallengeList(input: ChallengeList): c.JSONValue {
+  return {
+    ...c.assertOrAddApiVersionAndKind(input, "acme.cert-manager.io/v1alpha3", "Challenge"),
+    ...input,
+    items: input.items?.map(fromChallenge),
+    metadata: input.metadata != null ? MetaV1.fromListMeta(input.metadata) : undefined,
   }}
 
 /** Order is a type to represent an Order with an ACME server */
-export type Order = Kind<"Order"> & OrderFields;
-export interface OrderFields {
+export interface Order {
+  apiVersion?: "acme.cert-manager.io/v1alpha3";
+  kind?: "Order";
+  metadata: MetaV1.ObjectMeta;
   spec?: {
-    csr: string;
     commonName?: string | null;
+    csr: string;
+    dnsNames: Array<string>;
     issuerRef: {
-      name: string;
       group?: string | null;
       kind?: string | null;
+      name: string;
     };
-    dnsNames: Array<string>;
   } | null;
-  metadata: MetaV1.ObjectMeta;
   status?: {
-    reason?: string | null;
-    state?: "valid" | "ready" | "pending" | "processing" | "invalid" | "expired" | "errored" | c.UnexpectedEnumValue | null;
     authorizations?: Array<{
-      wildcard?: boolean | null;
-      identifier?: string | null;
       challenges?: Array<{
         token: string;
-        url: string;
         type: string;
+        url: string;
       }> | null;
-      url: string;
+      identifier?: string | null;
       initialState?: "valid" | "ready" | "pending" | "processing" | "invalid" | "expired" | "errored" | c.UnexpectedEnumValue | null;
+      url: string;
+      wildcard?: boolean | null;
     }> | null;
-    url?: string | null;
-    failureTime?: c.Time | null;
     certificate?: string | null;
+    failureTime?: c.Time | null;
     finalizeURL?: string | null;
+    reason?: string | null;
+    state?: "valid" | "ready" | "pending" | "processing" | "invalid" | "expired" | "errored" | c.UnexpectedEnumValue | null;
+    url?: string | null;
   } | null;
 }
-export function toOrderFields(input: c.JSONValue): OrderFields {
+export function toOrder(input: c.JSONValue): Order & c.ApiKind {
   const obj = c.checkObj(input);
   return {
-    spec: c.readOpt(obj["spec"], toOrderFields_spec),
+    ...c.assertOrAddApiVersionAndKind(obj, "acme.cert-manager.io/v1alpha3", "Order"),
     metadata: MetaV1.toObjectMeta(obj["metadata"]),
-    status: c.readOpt(obj["status"], toOrderFields_status),
-  }}
-export function toOrder(input: c.JSONValue): Order {
-  const {apiVersion, kind, ...fields} = c.checkObj(input);
-  if (apiVersion !== "acme.cert-manager.io/v1alpha3") throw new Error("Type apiv mis 2");
-  if (kind !== "Order") throw new Error("Type kind mis 2");
-  return {
-    apiVersion, kind,
-    ...toOrderFields(fields),
+    spec: c.readOpt(obj["spec"], toOrder_spec),
+    status: c.readOpt(obj["status"], toOrder_status),
   }}
 export function fromOrder(input: Order): c.JSONValue {
   return {
+    ...c.assertOrAddApiVersionAndKind(input, "acme.cert-manager.io/v1alpha3", "Order"),
     ...input,
     metadata: input.metadata != null ? MetaV1.fromObjectMeta(input.metadata) : undefined,
     status: input.status != null ? {
@@ -739,69 +746,66 @@ export function fromOrder(input: Order): c.JSONValue {
       failureTime: input.status.failureTime != null ? c.fromTime(input.status.failureTime) : undefined,
     } : undefined,
   }}
-export function toOrderFields_spec(input: c.JSONValue) {
+export function toOrder_spec(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
-    csr: c.checkStr(obj["csr"]),
     commonName: c.readOpt(obj["commonName"], c.checkStr),
-    issuerRef: toOrderFields_spec_issuerRef(obj["issuerRef"]),
+    csr: c.checkStr(obj["csr"]),
     dnsNames: c.readList(obj["dnsNames"], c.checkStr),
+    issuerRef: toOrder_spec_issuerRef(obj["issuerRef"]),
   }}
-export function toOrderFields_status(input: c.JSONValue) {
+export function toOrder_status(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
+    authorizations: c.readOpt(obj["authorizations"], x => c.readList(x, toOrder_status_authorizations)),
+    certificate: c.readOpt(obj["certificate"], c.checkStr),
+    failureTime: c.readOpt(obj["failureTime"], c.toTime),
+    finalizeURL: c.readOpt(obj["finalizeURL"], c.checkStr),
     reason: c.readOpt(obj["reason"], c.checkStr),
     state: c.readOpt(obj["state"], (x => c.readEnum<"valid" | "ready" | "pending" | "processing" | "invalid" | "expired" | "errored" | c.UnexpectedEnumValue>(x))),
-    authorizations: c.readOpt(obj["authorizations"], x => c.readList(x, toOrderFields_status_authorizations)),
     url: c.readOpt(obj["url"], c.checkStr),
-    failureTime: c.readOpt(obj["failureTime"], c.toTime),
-    certificate: c.readOpt(obj["certificate"], c.checkStr),
-    finalizeURL: c.readOpt(obj["finalizeURL"], c.checkStr),
   }}
-export function toOrderFields_spec_issuerRef(input: c.JSONValue) {
+export function toOrder_spec_issuerRef(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
-    name: c.checkStr(obj["name"]),
     group: c.readOpt(obj["group"], c.checkStr),
     kind: c.readOpt(obj["kind"], c.checkStr),
+    name: c.checkStr(obj["name"]),
   }}
-export function toOrderFields_status_authorizations(input: c.JSONValue) {
+export function toOrder_status_authorizations(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
-    wildcard: c.readOpt(obj["wildcard"], c.checkBool),
+    challenges: c.readOpt(obj["challenges"], x => c.readList(x, toOrder_status_authorizations_challenges)),
     identifier: c.readOpt(obj["identifier"], c.checkStr),
-    challenges: c.readOpt(obj["challenges"], x => c.readList(x, toOrderFields_status_authorizations_challenges)),
-    url: c.checkStr(obj["url"]),
     initialState: c.readOpt(obj["initialState"], (x => c.readEnum<"valid" | "ready" | "pending" | "processing" | "invalid" | "expired" | "errored" | c.UnexpectedEnumValue>(x))),
+    url: c.checkStr(obj["url"]),
+    wildcard: c.readOpt(obj["wildcard"], c.checkBool),
   }}
-export function toOrderFields_status_authorizations_challenges(input: c.JSONValue) {
+export function toOrder_status_authorizations_challenges(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     token: c.checkStr(obj["token"]),
-    url: c.checkStr(obj["url"]),
     type: c.checkStr(obj["type"]),
+    url: c.checkStr(obj["url"]),
   }}
 
-/** OrderList is a list of Order */
-export type OrderList = Kind<"OrderList"> & ListOf<OrderFields>;
-export function toOrderList(input: c.JSONValue): OrderList {
-  const {apiVersion, kind, metadata, items} = c.checkObj(input);
-  if (apiVersion !== "acme.cert-manager.io/v1alpha3") throw new Error("Type apiv mis 2");
-  if (kind !== "OrderList") throw new Error("Type kind mis 2");
+export interface OrderList {
+  apiVersion?: "acme.cert-manager.io/v1alpha3";
+  kind?: "Order";
+  items: Array<Order>;
+  metadata?: MetaV1.ListMeta | null;
+}
+export function toOrderList(input: c.JSONValue): OrderList & c.ApiKind {
+  const obj = c.checkObj(input);
   return {
-    apiVersion, kind,
-    metadata: MetaV1.toListMeta(metadata),
-    items: c.readList(items, toOrderFields),
+    ...c.assertOrAddApiVersionAndKind(obj, "acme.cert-manager.io/v1alpha3", "Order"),
+    items: c.readList(obj["items"], toOrder),
+    metadata: c.readOpt(obj["metadata"], MetaV1.toListMeta),
   }}
-
-/** ChallengeList is a list of Challenge */
-export type ChallengeList = Kind<"ChallengeList"> & ListOf<ChallengeFields>;
-export function toChallengeList(input: c.JSONValue): ChallengeList {
-  const {apiVersion, kind, metadata, items} = c.checkObj(input);
-  if (apiVersion !== "acme.cert-manager.io/v1alpha3") throw new Error("Type apiv mis 2");
-  if (kind !== "ChallengeList") throw new Error("Type kind mis 2");
+export function fromOrderList(input: OrderList): c.JSONValue {
   return {
-    apiVersion, kind,
-    metadata: MetaV1.toListMeta(metadata),
-    items: c.readList(items, toChallengeFields),
+    ...c.assertOrAddApiVersionAndKind(input, "acme.cert-manager.io/v1alpha3", "Order"),
+    ...input,
+    items: input.items?.map(fromOrder),
+    metadata: input.metadata != null ? MetaV1.fromListMeta(input.metadata) : undefined,
   }}

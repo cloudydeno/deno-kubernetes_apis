@@ -21,29 +21,6 @@ export class AcmeCertManagerIoV1alpha3Api {
     return new AcmeCertManagerIoV1alpha3NamespacedApi(this.#client, this.#client.defaultNamespace);
   }
 
-  async getOrderListForAllNamespaces(opts: operations.GetListOpts = {}) {
-    const resp = await this.#client.performRequest({
-      method: "GET",
-      path: `${this.#root}orders`,
-      expectJson: true,
-      querystring: operations.formatGetListOpts(opts),
-      abortSignal: opts.abortSignal,
-    });
-    return AcmeCertManagerIoV1alpha3.toOrderList(resp);
-  }
-
-  async watchOrderListForAllNamespaces(opts: operations.WatchListOpts = {}) {
-    const resp = await this.#client.performRequest({
-      method: "GET",
-      path: `${this.#root}orders`,
-      expectJson: true,
-      expectStream: true,
-      querystring: operations.formatWatchListOpts(opts),
-      abortSignal: opts.abortSignal,
-    });
-    return resp.pipeThrough(new c.WatchEventTransformer(AcmeCertManagerIoV1alpha3.toOrder, MetaV1.toStatus));
-  }
-
   async getChallengeListForAllNamespaces(opts: operations.GetListOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "GET",
@@ -67,6 +44,29 @@ export class AcmeCertManagerIoV1alpha3Api {
     return resp.pipeThrough(new c.WatchEventTransformer(AcmeCertManagerIoV1alpha3.toChallenge, MetaV1.toStatus));
   }
 
+  async getOrderListForAllNamespaces(opts: operations.GetListOpts = {}) {
+    const resp = await this.#client.performRequest({
+      method: "GET",
+      path: `${this.#root}orders`,
+      expectJson: true,
+      querystring: operations.formatGetListOpts(opts),
+      abortSignal: opts.abortSignal,
+    });
+    return AcmeCertManagerIoV1alpha3.toOrderList(resp);
+  }
+
+  async watchOrderListForAllNamespaces(opts: operations.WatchListOpts = {}) {
+    const resp = await this.#client.performRequest({
+      method: "GET",
+      path: `${this.#root}orders`,
+      expectJson: true,
+      expectStream: true,
+      querystring: operations.formatWatchListOpts(opts),
+      abortSignal: opts.abortSignal,
+    });
+    return resp.pipeThrough(new c.WatchEventTransformer(AcmeCertManagerIoV1alpha3.toOrder, MetaV1.toStatus));
+  }
+
 }
 
 export class AcmeCertManagerIoV1alpha3NamespacedApi {
@@ -77,17 +77,107 @@ export class AcmeCertManagerIoV1alpha3NamespacedApi {
     this.#root = `/apis/acme.cert-manager.io/v1alpha3/namespaces/${namespace}/`;
   }
 
-  async getChallengeStatus(name: string, opts: {
-    resourceVersion?: string;
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
-    if (opts["resourceVersion"] != null) query.append("resourceVersion", opts["resourceVersion"]);
+  async getChallengeList(opts: operations.GetListOpts = {}) {
+    const resp = await this.#client.performRequest({
+      method: "GET",
+      path: `${this.#root}challenges`,
+      expectJson: true,
+      querystring: operations.formatGetListOpts(opts),
+      abortSignal: opts.abortSignal,
+    });
+    return AcmeCertManagerIoV1alpha3.toChallengeList(resp);
+  }
+
+  async watchChallengeList(opts: operations.WatchListOpts = {}) {
+    const resp = await this.#client.performRequest({
+      method: "GET",
+      path: `${this.#root}challenges`,
+      expectJson: true,
+      expectStream: true,
+      querystring: operations.formatWatchListOpts(opts),
+      abortSignal: opts.abortSignal,
+    });
+    return resp.pipeThrough(new c.WatchEventTransformer(AcmeCertManagerIoV1alpha3.toChallenge, MetaV1.toStatus));
+  }
+
+  async createChallenge(body: AcmeCertManagerIoV1alpha3.Challenge, opts: operations.PutOpts = {}) {
+    const resp = await this.#client.performRequest({
+      method: "POST",
+      path: `${this.#root}challenges`,
+      expectJson: true,
+      querystring: operations.formatPutOpts(opts),
+      bodyJson: AcmeCertManagerIoV1alpha3.fromChallenge(body),
+      abortSignal: opts.abortSignal,
+    });
+    return AcmeCertManagerIoV1alpha3.toChallenge(resp);
+  }
+
+  async deleteChallengeList(body: MetaV1.DeleteOptions, opts: operations.DeleteListOpts = {}) {
+    const resp = await this.#client.performRequest({
+      method: "DELETE",
+      path: `${this.#root}challenges`,
+      expectJson: true,
+      querystring: operations.formatDeleteListOpts(opts),
+      bodyJson: MetaV1.fromDeleteOptions(body),
+      abortSignal: opts.abortSignal,
+    });
+    return AcmeCertManagerIoV1alpha3.toChallengeList(resp);
+  }
+
+  async getChallenge(name: string, opts: operations.GetOpts = {}) {
+    const resp = await this.#client.performRequest({
+      method: "GET",
+      path: `${this.#root}challenges/${name}`,
+      expectJson: true,
+      querystring: operations.formatGetOpts(opts),
+      abortSignal: opts.abortSignal,
+    });
+    return AcmeCertManagerIoV1alpha3.toChallenge(resp);
+  }
+
+  async deleteChallenge(name: string, body: MetaV1.DeleteOptions, opts: operations.DeleteOpts = {}) {
+    const resp = await this.#client.performRequest({
+      method: "DELETE",
+      path: `${this.#root}challenges/${name}`,
+      expectJson: true,
+      querystring: operations.formatDeleteOpts(opts),
+      bodyJson: MetaV1.fromDeleteOptions(body),
+      abortSignal: opts.abortSignal,
+    });
+    return AcmeCertManagerIoV1alpha3.toChallenge(resp);
+  }
+
+  async replaceChallenge(name: string, body: AcmeCertManagerIoV1alpha3.Challenge, opts: operations.PutOpts = {}) {
+    const resp = await this.#client.performRequest({
+      method: "PUT",
+      path: `${this.#root}challenges/${name}`,
+      expectJson: true,
+      querystring: operations.formatPutOpts(opts),
+      bodyJson: AcmeCertManagerIoV1alpha3.fromChallenge(body),
+      abortSignal: opts.abortSignal,
+    });
+    return AcmeCertManagerIoV1alpha3.toChallenge(resp);
+  }
+
+  async patchChallenge(name: string, type: c.PatchType, body: AcmeCertManagerIoV1alpha3.Challenge | c.JsonPatch, opts: operations.PatchOpts = {}) {
+    const resp = await this.#client.performRequest({
+      method: "PATCH",
+      path: `${this.#root}challenges/${name}`,
+      expectJson: true,
+      querystring: operations.formatPatchOpts(opts),
+      contentType: c.getPatchContentType(type),
+      bodyJson: Array.isArray(body) ? body : AcmeCertManagerIoV1alpha3.fromChallenge(body),
+      abortSignal: opts.abortSignal,
+    });
+    return AcmeCertManagerIoV1alpha3.toChallenge(resp);
+  }
+
+  async getChallengeStatus(name: string, opts: operations.GetOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}challenges/${name}/status`,
       expectJson: true,
-      querystring: query,
+      querystring: operations.formatGetOpts(opts),
       abortSignal: opts.abortSignal,
     });
     return AcmeCertManagerIoV1alpha3.toChallenge(resp);
@@ -105,13 +195,14 @@ export class AcmeCertManagerIoV1alpha3NamespacedApi {
     return AcmeCertManagerIoV1alpha3.toChallenge(resp);
   }
 
-  async patchChallengeStatus(name: string, body: MetaV1.Patch, opts: operations.PutOpts = {}) {
+  async patchChallengeStatus(name: string, type: c.PatchType, body: AcmeCertManagerIoV1alpha3.Challenge | c.JsonPatch, opts: operations.PatchOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}challenges/${name}/status`,
       expectJson: true,
-      querystring: operations.formatPutOpts(opts),
-      bodyJson: MetaV1.fromPatch(body),
+      querystring: operations.formatPatchOpts(opts),
+      contentType: c.getPatchContentType(type),
+      bodyJson: Array.isArray(body) ? body : AcmeCertManagerIoV1alpha3.fromChallenge(body),
       abortSignal: opts.abortSignal,
     });
     return AcmeCertManagerIoV1alpha3.toChallenge(resp);
@@ -152,120 +243,24 @@ export class AcmeCertManagerIoV1alpha3NamespacedApi {
     return AcmeCertManagerIoV1alpha3.toOrder(resp);
   }
 
-  async deleteOrderList(opts: operations.GetListOpts = {}) {
+  async deleteOrderList(body: MetaV1.DeleteOptions, opts: operations.DeleteListOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}orders`,
       expectJson: true,
-      querystring: operations.formatGetListOpts(opts),
+      querystring: operations.formatDeleteListOpts(opts),
+      bodyJson: MetaV1.fromDeleteOptions(body),
       abortSignal: opts.abortSignal,
     });
     return AcmeCertManagerIoV1alpha3.toOrderList(resp);
   }
 
-  async getOrderStatus(name: string, opts: {
-    resourceVersion?: string;
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
-    if (opts["resourceVersion"] != null) query.append("resourceVersion", opts["resourceVersion"]);
-    const resp = await this.#client.performRequest({
-      method: "GET",
-      path: `${this.#root}orders/${name}/status`,
-      expectJson: true,
-      querystring: query,
-      abortSignal: opts.abortSignal,
-    });
-    return AcmeCertManagerIoV1alpha3.toOrder(resp);
-  }
-
-  async replaceOrderStatus(name: string, body: AcmeCertManagerIoV1alpha3.Order, opts: operations.PutOpts = {}) {
-    const resp = await this.#client.performRequest({
-      method: "PUT",
-      path: `${this.#root}orders/${name}/status`,
-      expectJson: true,
-      querystring: operations.formatPutOpts(opts),
-      bodyJson: AcmeCertManagerIoV1alpha3.fromOrder(body),
-      abortSignal: opts.abortSignal,
-    });
-    return AcmeCertManagerIoV1alpha3.toOrder(resp);
-  }
-
-  async patchOrderStatus(name: string, body: MetaV1.Patch, opts: operations.PutOpts = {}) {
-    const resp = await this.#client.performRequest({
-      method: "PATCH",
-      path: `${this.#root}orders/${name}/status`,
-      expectJson: true,
-      querystring: operations.formatPutOpts(opts),
-      bodyJson: MetaV1.fromPatch(body),
-      abortSignal: opts.abortSignal,
-    });
-    return AcmeCertManagerIoV1alpha3.toOrder(resp);
-  }
-
-  async getChallenge(name: string, opts: {
-    resourceVersion?: string;
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
-    if (opts["resourceVersion"] != null) query.append("resourceVersion", opts["resourceVersion"]);
-    const resp = await this.#client.performRequest({
-      method: "GET",
-      path: `${this.#root}challenges/${name}`,
-      expectJson: true,
-      querystring: query,
-      abortSignal: opts.abortSignal,
-    });
-    return AcmeCertManagerIoV1alpha3.toChallenge(resp);
-  }
-
-  async deleteChallenge(name: string, body: MetaV1.DeleteOptions, opts: operations.DeleteOpts = {}) {
-    const resp = await this.#client.performRequest({
-      method: "DELETE",
-      path: `${this.#root}challenges/${name}`,
-      expectJson: true,
-      querystring: operations.formatDeleteOpts(opts),
-      bodyJson: MetaV1.fromDeleteOptions(body),
-      abortSignal: opts.abortSignal,
-    });
-    return AcmeCertManagerIoV1alpha3.toChallenge(resp);
-  }
-
-  async replaceChallenge(name: string, body: AcmeCertManagerIoV1alpha3.Challenge, opts: operations.PutOpts = {}) {
-    const resp = await this.#client.performRequest({
-      method: "PUT",
-      path: `${this.#root}challenges/${name}`,
-      expectJson: true,
-      querystring: operations.formatPutOpts(opts),
-      bodyJson: AcmeCertManagerIoV1alpha3.fromChallenge(body),
-      abortSignal: opts.abortSignal,
-    });
-    return AcmeCertManagerIoV1alpha3.toChallenge(resp);
-  }
-
-  async patchChallenge(name: string, body: MetaV1.Patch, opts: operations.PutOpts = {}) {
-    const resp = await this.#client.performRequest({
-      method: "PATCH",
-      path: `${this.#root}challenges/${name}`,
-      expectJson: true,
-      querystring: operations.formatPutOpts(opts),
-      bodyJson: MetaV1.fromPatch(body),
-      abortSignal: opts.abortSignal,
-    });
-    return AcmeCertManagerIoV1alpha3.toChallenge(resp);
-  }
-
-  async getOrder(name: string, opts: {
-    resourceVersion?: string;
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
-    if (opts["resourceVersion"] != null) query.append("resourceVersion", opts["resourceVersion"]);
+  async getOrder(name: string, opts: operations.GetOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}orders/${name}`,
       expectJson: true,
-      querystring: query,
+      querystring: operations.formatGetOpts(opts),
       abortSignal: opts.abortSignal,
     });
     return AcmeCertManagerIoV1alpha3.toOrder(resp);
@@ -295,62 +290,53 @@ export class AcmeCertManagerIoV1alpha3NamespacedApi {
     return AcmeCertManagerIoV1alpha3.toOrder(resp);
   }
 
-  async patchOrder(name: string, body: MetaV1.Patch, opts: operations.PutOpts = {}) {
+  async patchOrder(name: string, type: c.PatchType, body: AcmeCertManagerIoV1alpha3.Order | c.JsonPatch, opts: operations.PatchOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}orders/${name}`,
       expectJson: true,
-      querystring: operations.formatPutOpts(opts),
-      bodyJson: MetaV1.fromPatch(body),
+      querystring: operations.formatPatchOpts(opts),
+      contentType: c.getPatchContentType(type),
+      bodyJson: Array.isArray(body) ? body : AcmeCertManagerIoV1alpha3.fromOrder(body),
       abortSignal: opts.abortSignal,
     });
     return AcmeCertManagerIoV1alpha3.toOrder(resp);
   }
 
-  async getChallengeList(opts: operations.GetListOpts = {}) {
+  async getOrderStatus(name: string, opts: operations.GetOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "GET",
-      path: `${this.#root}challenges`,
+      path: `${this.#root}orders/${name}/status`,
       expectJson: true,
-      querystring: operations.formatGetListOpts(opts),
+      querystring: operations.formatGetOpts(opts),
       abortSignal: opts.abortSignal,
     });
-    return AcmeCertManagerIoV1alpha3.toChallengeList(resp);
+    return AcmeCertManagerIoV1alpha3.toOrder(resp);
   }
 
-  async watchChallengeList(opts: operations.WatchListOpts = {}) {
+  async replaceOrderStatus(name: string, body: AcmeCertManagerIoV1alpha3.Order, opts: operations.PutOpts = {}) {
     const resp = await this.#client.performRequest({
-      method: "GET",
-      path: `${this.#root}challenges`,
-      expectJson: true,
-      expectStream: true,
-      querystring: operations.formatWatchListOpts(opts),
-      abortSignal: opts.abortSignal,
-    });
-    return resp.pipeThrough(new c.WatchEventTransformer(AcmeCertManagerIoV1alpha3.toChallenge, MetaV1.toStatus));
-  }
-
-  async createChallenge(body: AcmeCertManagerIoV1alpha3.Challenge, opts: operations.PutOpts = {}) {
-    const resp = await this.#client.performRequest({
-      method: "POST",
-      path: `${this.#root}challenges`,
+      method: "PUT",
+      path: `${this.#root}orders/${name}/status`,
       expectJson: true,
       querystring: operations.formatPutOpts(opts),
-      bodyJson: AcmeCertManagerIoV1alpha3.fromChallenge(body),
+      bodyJson: AcmeCertManagerIoV1alpha3.fromOrder(body),
       abortSignal: opts.abortSignal,
     });
-    return AcmeCertManagerIoV1alpha3.toChallenge(resp);
+    return AcmeCertManagerIoV1alpha3.toOrder(resp);
   }
 
-  async deleteChallengeList(opts: operations.GetListOpts = {}) {
+  async patchOrderStatus(name: string, type: c.PatchType, body: AcmeCertManagerIoV1alpha3.Order | c.JsonPatch, opts: operations.PatchOpts = {}) {
     const resp = await this.#client.performRequest({
-      method: "DELETE",
-      path: `${this.#root}challenges`,
+      method: "PATCH",
+      path: `${this.#root}orders/${name}/status`,
       expectJson: true,
-      querystring: operations.formatGetListOpts(opts),
+      querystring: operations.formatPatchOpts(opts),
+      contentType: c.getPatchContentType(type),
+      bodyJson: Array.isArray(body) ? body : AcmeCertManagerIoV1alpha3.fromOrder(body),
       abortSignal: opts.abortSignal,
     });
-    return AcmeCertManagerIoV1alpha3.toChallengeList(resp);
+    return AcmeCertManagerIoV1alpha3.toOrder(resp);
   }
 
 }
