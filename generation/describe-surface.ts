@@ -105,7 +105,7 @@ export type SurfaceOperation = OpenAPI2PathMethod & {
   scope: OpScope;
   operationName: string;
 }
-type OpScope = 'Cluster' | 'AllNamespaces' | 'Namespaced';
+export type OpScope = 'Cluster' | 'AllNamespaces' | 'Namespaced';
 
 export interface SurfaceKind {
   name: string;

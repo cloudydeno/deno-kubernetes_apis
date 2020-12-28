@@ -1,6 +1,6 @@
-import type { OpenAPI2, OpenAPI2SchemaObject } from './openapi.ts';
+import type { OpenAPI2SchemaObject, OpenAPI2Methods, OpenAPI2RequestParameter } from './openapi.ts';
 import { writeApiModule } from "./codegen.ts";
-import { SurfaceMap, SurfaceApi } from "./describe-surface.ts";
+import { SurfaceMap, SurfaceApi, OpScope } from "./describe-surface.ts";
 import { ShapeLibrary } from "./describe-shapes.ts";
 
 import {
@@ -10,11 +10,22 @@ import {
 import {
   CustomResourceDefinition as CRDv1beta1,
   toCustomResourceDefinition as toCRDv1beta1,
+  CustomResourceSubresources,
 } from "../lib/builtin/apiextensions.k8s.io@v1beta1/structs.ts";
 
 import { ApiKind, JSONValue } from "https://deno.land/x/kubernetes_client@v0.1.2/mod.ts";
 
 import * as YAML from "https://deno.land/std@0.82.0/encoding/yaml.ts";
+
+const knownOpts = {
+  GetListOpts: 'continue,fieldSelector,labelSelector,limit,resourceVersion,resourceVersionMatch,timeoutSeconds',
+  WatchListOpts: 'allowWatchBookmarks,fieldSelector,labelSelector,resourceVersion,resourceVersionMatch,timeoutSeconds',
+  PutOpts: 'dryRun,fieldManager', // both CreateOpts and ReplaceOpts
+  DeleteListOpts: 'continue,dryRun,fieldSelector,gracePeriodSeconds,labelSelector,limit,orphanDependents,propagationPolicy,resourceVersion,resourceVersionMatch,timeoutSeconds',
+  PatchOpts: 'dryRun,fieldManager,force',
+  GetOpts: 'exact,export',
+  DeleteOpts: 'dryRun,gracePeriodSeconds,orphanDependents,propagationPolicy',
+};
 
 const v1CRDs = new Array<CRDv1>();
 const v1beta1CRDs = new Array<CRDv1beta1>();
@@ -89,7 +100,6 @@ if (v1CRDs.length > 0) {
 
   for (const crd of v1beta1CRDs) {
     for (const version of crd.spec.versions ?? []) {
-      if (version.subresources) throw new Error(`TODO: subresources`);
 
       const [api, defs] = recognizeGroupVersion(crd.spec.group, version.name);
       const schema = version.schema?.openAPIV3Schema;
@@ -145,45 +155,131 @@ if (v1CRDs.length > 0) {
         isNamespaced: crd.spec.scope === 'Namespaced',
       });
 
+      const opBoilerPlate = {
+        consumes: ['application/json'],
+        produces: ['application/json'],
+        schemes: ['https'],
+        operationId: 'faked',
+      }
+      function addOp(operationName: string, scope: OpScope, method: OpenAPI2Methods, opts: {
+        subPath?: string
+        reqKind?: string;
+        respKind?: string;
+        knownOpts?: string;
+        // params?: OpenAPI2RequestParameter[];
+      }) {
+        api.operations.push({
+          ...opBoilerPlate,
+          method: method,
+          operationName: operationName,
+          scope: scope,
+          subPath: (crd.spec.names.plural ?? '') + (opts.subPath ?? ''),
+          parameters: [
+            ...(opts.subPath?.startsWith('/{name}') ? [
+              { name: 'name', in: 'path', schema: { type: 'string' } } as const
+            ] : []),
+            ...(opts.reqKind ? [
+              { name: 'body', in: 'body', schema: { $ref: `#/definitions/${opts.reqKind}` }} as const
+            ] : []),
+            // ...(opts.params ?? []),
+            ...(opts.knownOpts ? opts.knownOpts
+              .split(',').map(x => ({name: x, in: 'query', type: 'string'} as const))
+            : []),
+          ],
+          responses: opts.respKind ? { '200': {
+            schema: { $ref: `#/definitions/${opts.respKind}` },
+          }} : {},
+        });
+      }
 
-// const knownOpts: Record<string,string|undefined> = {
-//   'continue,fieldSelector,labelSelector,limit,resourceVersion,resourceVersionMatch,timeoutSeconds': 'GetListOpts',
-//   'allowWatchBookmarks,fieldSelector,labelSelector,resourceVersion,resourceVersionMatch,timeoutSeconds': 'WatchListOpts',
-//   'dryRun,fieldManager': 'PutOpts', // both CreateOpts and ReplaceOpts
-//   'continue,dryRun,fieldSelector,gracePeriodSeconds,labelSelector,limit,orphanDependents,propagationPolicy,resourceVersion,resourceVersionMatch,timeoutSeconds': 'DeleteListOpts',
-//   'dryRun,fieldManager,force': 'PatchOpts',
-//   'exact,export': 'GetOpts',
-//   'dryRun,gracePeriodSeconds,orphanDependents,propagationPolicy': 'DeleteOpts',
-// };
+      function addCrdOps(scope: OpScope) {
+        addOp(`get${crd.spec.names.kind}List`, scope, 'get', {
+          respKind: `${api.shapePrefix}${crd.spec.names.kind}List`,
+          knownOpts: knownOpts.GetListOpts,
+        });
+        addOp(`watch${crd.spec.names.kind}List`, scope, 'get', {
+          respKind: `${api.shapePrefix}${crd.spec.names.kind}List`,
+          knownOpts: knownOpts.WatchListOpts,
+        });
+        addOp(`create${crd.spec.names.kind}`, scope, 'post', {
+          reqKind: `${api.shapePrefix}${crd.spec.names.kind}`,
+          respKind: `${api.shapePrefix}${crd.spec.names.kind}`,
+          knownOpts: knownOpts.PutOpts,
+        });
+        addOp(`delete${crd.spec.names.kind}List`, scope, 'delete', {
+          reqKind: `io.k8s.apimachinery.pkg.apis.meta.v1.DeleteOptions`,
+          respKind: `${api.shapePrefix}${crd.spec.names.kind}List`, // TODO: check!
+          knownOpts: knownOpts.DeleteListOpts,
+        });
 
+        addOp(`get${crd.spec.names.kind}`, scope, 'get', {
+          respKind: `${api.shapePrefix}${crd.spec.names.kind}`,
+          knownOpts: knownOpts.GetOpts,
+          subPath: '/{name}',
+        });
+        addOp(`delete${crd.spec.names.kind}`, scope, 'delete', {
+          reqKind: `io.k8s.apimachinery.pkg.apis.meta.v1.DeleteOptions`,
+          respKind: `${api.shapePrefix}${crd.spec.names.kind}`, // TODO: check!
+          knownOpts: knownOpts.DeleteOpts,
+          subPath: '/{name}',
+        });
+        addOp(`replace${crd.spec.names.kind}`, scope, 'put', {
+          reqKind: `${api.shapePrefix}${crd.spec.names.kind}`,
+          respKind: `${api.shapePrefix}${crd.spec.names.kind}`,
+          knownOpts: knownOpts.PutOpts,
+          subPath: '/{name}',
+        });
+        addOp(`patch${crd.spec.names.kind}`, scope, 'patch', {
+          reqKind: `${api.shapePrefix}${crd.spec.names.kind}`,
+          respKind: `${api.shapePrefix}${crd.spec.names.kind}`,
+          knownOpts: knownOpts.PatchOpts,
+          subPath: '/{name}',
+        });
+
+        const subResources: CustomResourceSubresources = {...version.subresources, ...crd.spec.subresources};
+        if (subResources.status) {
+
+          addOp(`get${crd.spec.names.kind}Status`, scope, 'get', {
+            respKind: `${api.shapePrefix}${crd.spec.names.kind}`,
+            knownOpts: knownOpts.GetOpts,
+            subPath: '/{name}/status',
+          });
+          addOp(`replace${crd.spec.names.kind}Status`, scope, 'put', {
+            reqKind: `${api.shapePrefix}${crd.spec.names.kind}`,
+            respKind: `${api.shapePrefix}${crd.spec.names.kind}`,
+            knownOpts: knownOpts.PutOpts,
+            subPath: '/{name}/status',
+          });
+          addOp(`patch${crd.spec.names.kind}Status`, scope, 'patch', {
+            reqKind: `${api.shapePrefix}${crd.spec.names.kind}`,
+            respKind: `${api.shapePrefix}${crd.spec.names.kind}`,
+            knownOpts: knownOpts.PatchOpts,
+            subPath: '/{name}/status',
+          });
+
+        }
+        if (subResources.scale) {
+          throw new Error(`TODO: scale subresource on ${crd.spec.names.kind}`);
+        }
+      }
 
       if (crd.spec.scope === 'Namespaced') {
 
-        api.operations.push({
-          consumes: ['application/json'],
-          produces: ['application/json'],
-          schemes: ['https'],
-          operationId: 'none',
-          responses: {},
-          parameters: 'continue,fieldSelector,labelSelector,limit,resourceVersion,resourceVersionMatch,timeoutSeconds'.split(',').map(x => ({name: x, in: 'query', type: 'string'})),
-          subPath: crd.spec.names.plural ?? '',
-          method: 'get',
-          operationName: `get${crd.spec.names.kind}ListForAllNamespaces`,
-          scope: 'AllNamespaces',
+        addOp(`get${crd.spec.names.kind}ListForAllNamespaces`, 'AllNamespaces', 'get', {
+          respKind: `${api.shapePrefix}${crd.spec.names.kind}List`,
+          knownOpts: knownOpts.GetListOpts,
+        });
+        addOp(`watch${crd.spec.names.kind}ListForAllNamespaces`, 'AllNamespaces', 'get', {
+          respKind: `${api.shapePrefix}${crd.spec.names.kind}List`,
+          knownOpts: knownOpts.WatchListOpts,
         });
 
-        api.operations.push({
-          consumes: ['application/json'],
-          produces: ['application/json'],
-          schemes: ['https'],
-          operationId: 'none',
-          responses: {},
-          parameters: 'continue,fieldSelector,labelSelector,limit,resourceVersion,resourceVersionMatch,timeoutSeconds'.split(',').map(x => ({name: x, in: 'query', type: 'string'})),
-          subPath: crd.spec.names.plural ?? '',
-          method: 'get',
-          operationName: `get${crd.spec.names.kind}List`,
-          scope: 'Namespaced',
-        });
+        addCrdOps('Namespaced');
+
+      } else {
+
+        addCrdOps('Cluster');
+
       }
 
     }
@@ -196,10 +292,6 @@ if (v1CRDs.length > 0) {
 for (const [api, defs] of apis.values()) {
   api.shapes.loadShapes(defs);
 }
-
-// const data = await Deno.readTextFile(Deno.args[0] ?? 'openapi.json');
-// const wholeSpec: OpenAPI2 = JSON.parse(data);
-// const surface = describeSurface(wholeSpec);
 
 for (const api of apiMap.allApis) {
   try {
