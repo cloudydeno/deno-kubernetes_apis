@@ -132,6 +132,23 @@ if (v1CRDs.length > 0) {
         scope: crd.spec.scope,
         subResources: {...version.subresources, ...crd.spec.subresources},
       });
+
+    }
+    if (crd.spec.version) {
+
+      const schema = crd.spec.validation?.openAPIV3Schema;
+      if (!schema) throw new Error(
+        `TODO: No schema given for ${crd.spec.names.kind}`);
+
+      processCRD({
+        apiGroup: crd.spec.group,
+        apiVersion: crd.spec.version,
+        schema: schema as OpenAPI2SchemaObject,
+        names: crd.spec.names,
+        scope: crd.spec.scope,
+        subResources: {...crd.spec.subresources},
+      });
+
     }
   }
 
