@@ -16,13 +16,17 @@ export class SurfaceMap {
 
       apiGroup: 'meta',
       apiVersion: 'v1',
-      apiGroupVersion: 'meta/v1',
+      apiGroupVersion: 'v1',
       friendlyName: 'MetaV1',
       moduleName: `meta@v1`,
 
       operations: new Array,
       definitions: new Map,
-      kinds: new Map,
+      kinds: new Map([
+        ['APIResource', { name: 'APIResource', singular: 'APIResource', plural: 'APIResources', listName: 'APIResourceList', isNamespaced: false }],
+        ['APIGroup', { name: 'APIGroup', singular: 'APIGroup', plural: 'APIGroups', listName: 'APIGroupList', isNamespaced: false }],
+        ['Status', { name: 'Status', singular: 'Status', plural: 'Statuss', listName: 'StatusList', isNamespaced: false }],
+      ]),
       shapes: new ShapeLibrary('io.k8s.apimachinery.pkg.apis.meta.v1.', this.byDefPrefix),
     });
   }

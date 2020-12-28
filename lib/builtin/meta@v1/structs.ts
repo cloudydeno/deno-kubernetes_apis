@@ -3,18 +3,17 @@ import * as c from "../../common.ts";
 
 /** APIGroup contains the name, the supported versions, and the preferred version of a group. */
 export interface APIGroup {
-  apiVersion?: string | null;
-  kind?: string | null;
+  apiVersion?: "v1";
+  kind?: "APIGroup";
   name: string;
   preferredVersion?: GroupVersionForDiscovery | null;
   serverAddressByClientCIDRs?: Array<ServerAddressByClientCIDR> | null;
   versions: Array<GroupVersionForDiscovery>;
 }
-export function toAPIGroup(input: c.JSONValue): APIGroup {
+export function toAPIGroup(input: c.JSONValue): APIGroup & c.ApiKind {
   const obj = c.checkObj(input);
   return {
-    apiVersion: c.readOpt(obj["apiVersion"], c.checkStr),
-    kind: c.readOpt(obj["kind"], c.checkStr),
+    ...c.assertOrAddApiVersionAndKind(obj, "v1", "APIGroup"),
     name: c.checkStr(obj["name"]),
     preferredVersion: c.readOpt(obj["preferredVersion"], toGroupVersionForDiscovery),
     serverAddressByClientCIDRs: c.readOpt(obj["serverAddressByClientCIDRs"], x => c.readList(x, toServerAddressByClientCIDR)),
@@ -22,6 +21,7 @@ export function toAPIGroup(input: c.JSONValue): APIGroup {
   }}
 export function fromAPIGroup(input: APIGroup): c.JSONValue {
   return {
+    ...c.assertOrAddApiVersionAndKind(input, "v1", "APIGroup"),
     ...input,
     preferredVersion: input.preferredVersion != null ? fromGroupVersionForDiscovery(input.preferredVersion) : undefined,
     serverAddressByClientCIDRs: input.serverAddressByClientCIDRs?.map(fromServerAddressByClientCIDR),
@@ -62,16 +62,15 @@ export function fromServerAddressByClientCIDR(input: ServerAddressByClientCIDR):
 
 /** APIGroupList is a list of APIGroup, to allow clients to discover the API at /apis. */
 export interface APIGroupList {
-  apiVersion?: string | null;
+  apiVersion?: "v1";
+  kind?: "APIGroupList";
   groups: Array<APIGroup>;
-  kind?: string | null;
-}
-export function toAPIGroupList(input: c.JSONValue): APIGroupList {
+};
+export function toAPIGroupList(input: c.JSONValue): APIGroupList & c.ApiKind {
   const obj = c.checkObj(input);
   return {
-    apiVersion: c.readOpt(obj["apiVersion"], c.checkStr),
+    ...c.assertOrAddApiVersionAndKind(obj, "v1", "APIGroupList"),
     groups: c.readList(obj["groups"], toAPIGroup),
-    kind: c.readOpt(obj["kind"], c.checkStr),
   }}
 export function fromAPIGroupList(input: APIGroupList): c.JSONValue {
   return {
@@ -113,17 +112,16 @@ export function fromAPIResource(input: APIResource): c.JSONValue {
 
 /** APIResourceList is a list of APIResource, it is used to expose the name of the resources supported in a specific group and version, and if the resource is namespaced. */
 export interface APIResourceList {
-  apiVersion?: string | null;
+  apiVersion?: "v1";
+  kind?: "APIResourceList";
   groupVersion: string;
-  kind?: string | null;
   resources: Array<APIResource>;
-}
-export function toAPIResourceList(input: c.JSONValue): APIResourceList {
+};
+export function toAPIResourceList(input: c.JSONValue): APIResourceList & c.ApiKind {
   const obj = c.checkObj(input);
   return {
-    apiVersion: c.readOpt(obj["apiVersion"], c.checkStr),
+    ...c.assertOrAddApiVersionAndKind(obj, "v1", "APIResourceList"),
     groupVersion: c.checkStr(obj["groupVersion"]),
-    kind: c.readOpt(obj["kind"], c.checkStr),
     resources: c.readList(obj["resources"], toAPIResource),
   }}
 export function fromAPIResourceList(input: APIResourceList): c.JSONValue {
@@ -404,22 +402,21 @@ export function fromPatch(input: Patch): c.JSONValue {
 
 /** Status is a return value for calls that don't return other objects. */
 export interface Status {
-  apiVersion?: string | null;
+  apiVersion?: "v1";
+  kind?: "Status";
   code?: number | null;
   details?: StatusDetails | null;
-  kind?: string | null;
   message?: string | null;
   metadata?: ListMeta | null;
   reason?: string | null;
   status?: string | null;
 }
-export function toStatus(input: c.JSONValue): Status {
+export function toStatus(input: c.JSONValue): Status & c.ApiKind {
   const obj = c.checkObj(input);
   return {
-    apiVersion: c.readOpt(obj["apiVersion"], c.checkStr),
+    ...c.assertOrAddApiVersionAndKind(obj, "v1", "Status"),
     code: c.readOpt(obj["code"], c.checkNum),
     details: c.readOpt(obj["details"], toStatusDetails),
-    kind: c.readOpt(obj["kind"], c.checkStr),
     message: c.readOpt(obj["message"], c.checkStr),
     metadata: c.readOpt(obj["metadata"], toListMeta),
     reason: c.readOpt(obj["reason"], c.checkStr),
@@ -427,6 +424,7 @@ export function toStatus(input: c.JSONValue): Status {
   }}
 export function fromStatus(input: Status): c.JSONValue {
   return {
+    ...c.assertOrAddApiVersionAndKind(input, "v1", "Status"),
     ...input,
     details: input.details != null ? fromStatusDetails(input.details) : undefined,
     metadata: input.metadata != null ? fromListMeta(input.metadata) : undefined,
