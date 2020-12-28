@@ -7,6 +7,48 @@ type ListOf<T> = {
   items: Array<T>;
 };
 
+/** ContainerResourceMetricSource indicates how to scale on a resource metric known to Kubernetes, as specified in requests and limits, describing each pod in the current scale target (e.g. CPU or memory).  The values will be averaged together before being compared to the target.  Such metrics are built in to Kubernetes, and have special scaling options on top of those available to normal per-pod metrics using the "pods" source.  Only one "target" type should be set. */
+export interface ContainerResourceMetricSource {
+  container: string;
+  name: string;
+  targetAverageUtilization?: number | null;
+  targetAverageValue?: c.Quantity | null;
+}
+export function toContainerResourceMetricSource(input: c.JSONValue): ContainerResourceMetricSource {
+  const obj = c.checkObj(input);
+  return {
+    container: c.checkStr(obj["container"]),
+    name: c.checkStr(obj["name"]),
+    targetAverageUtilization: c.readOpt(obj["targetAverageUtilization"], c.checkNum),
+    targetAverageValue: c.readOpt(obj["targetAverageValue"], c.toQuantity),
+  }}
+export function fromContainerResourceMetricSource(input: ContainerResourceMetricSource): c.JSONValue {
+  return {
+    ...input,
+    targetAverageValue: input.targetAverageValue != null ? c.fromQuantity(input.targetAverageValue) : undefined,
+  }}
+
+/** ContainerResourceMetricStatus indicates the current value of a resource metric known to Kubernetes, as specified in requests and limits, describing a single container in each pod in the current scale target (e.g. CPU or memory).  Such metrics are built in to Kubernetes, and have special scaling options on top of those available to normal per-pod metrics using the "pods" source. */
+export interface ContainerResourceMetricStatus {
+  container: string;
+  currentAverageUtilization?: number | null;
+  currentAverageValue: c.Quantity;
+  name: string;
+}
+export function toContainerResourceMetricStatus(input: c.JSONValue): ContainerResourceMetricStatus {
+  const obj = c.checkObj(input);
+  return {
+    container: c.checkStr(obj["container"]),
+    currentAverageUtilization: c.readOpt(obj["currentAverageUtilization"], c.checkNum),
+    currentAverageValue: c.toQuantity(obj["currentAverageValue"]),
+    name: c.checkStr(obj["name"]),
+  }}
+export function fromContainerResourceMetricStatus(input: ContainerResourceMetricStatus): c.JSONValue {
+  return {
+    ...input,
+    currentAverageValue: input.currentAverageValue != null ? c.fromQuantity(input.currentAverageValue) : undefined,
+  }}
+
 /** CrossVersionObjectReference contains enough information to let you identify the referred resource. */
 export interface CrossVersionObjectReference {
   apiVersion?: string | null;
@@ -120,6 +162,7 @@ export function fromHorizontalPodAutoscalerSpec(input: HorizontalPodAutoscalerSp
 
 /** MetricSpec specifies how to scale based on a single metric (only `type` and one other matching field should be set at once). */
 export interface MetricSpec {
+  containerResource?: ContainerResourceMetricSource | null;
   external?: ExternalMetricSource | null;
   object?: ObjectMetricSource | null;
   pods?: PodsMetricSource | null;
@@ -129,6 +172,7 @@ export interface MetricSpec {
 export function toMetricSpec(input: c.JSONValue): MetricSpec {
   const obj = c.checkObj(input);
   return {
+    containerResource: c.readOpt(obj["containerResource"], toContainerResourceMetricSource),
     external: c.readOpt(obj["external"], toExternalMetricSource),
     object: c.readOpt(obj["object"], toObjectMetricSource),
     pods: c.readOpt(obj["pods"], toPodsMetricSource),
@@ -138,6 +182,7 @@ export function toMetricSpec(input: c.JSONValue): MetricSpec {
 export function fromMetricSpec(input: MetricSpec): c.JSONValue {
   return {
     ...input,
+    containerResource: input.containerResource != null ? fromContainerResourceMetricSource(input.containerResource) : undefined,
     external: input.external != null ? fromExternalMetricSource(input.external) : undefined,
     object: input.object != null ? fromObjectMetricSource(input.object) : undefined,
     pods: input.pods != null ? fromPodsMetricSource(input.pods) : undefined,
@@ -261,6 +306,7 @@ export function fromHorizontalPodAutoscalerCondition(input: HorizontalPodAutosca
 
 /** MetricStatus describes the last-read state of a single metric. */
 export interface MetricStatus {
+  containerResource?: ContainerResourceMetricStatus | null;
   external?: ExternalMetricStatus | null;
   object?: ObjectMetricStatus | null;
   pods?: PodsMetricStatus | null;
@@ -270,6 +316,7 @@ export interface MetricStatus {
 export function toMetricStatus(input: c.JSONValue): MetricStatus {
   const obj = c.checkObj(input);
   return {
+    containerResource: c.readOpt(obj["containerResource"], toContainerResourceMetricStatus),
     external: c.readOpt(obj["external"], toExternalMetricStatus),
     object: c.readOpt(obj["object"], toObjectMetricStatus),
     pods: c.readOpt(obj["pods"], toPodsMetricStatus),
@@ -279,6 +326,7 @@ export function toMetricStatus(input: c.JSONValue): MetricStatus {
 export function fromMetricStatus(input: MetricStatus): c.JSONValue {
   return {
     ...input,
+    containerResource: input.containerResource != null ? fromContainerResourceMetricStatus(input.containerResource) : undefined,
     external: input.external != null ? fromExternalMetricStatus(input.external) : undefined,
     object: input.object != null ? fromObjectMetricStatus(input.object) : undefined,
     pods: input.pods != null ? fromPodsMetricStatus(input.pods) : undefined,

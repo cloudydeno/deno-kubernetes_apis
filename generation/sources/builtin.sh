@@ -7,6 +7,9 @@ then wget \
   -O "generation/api-specs/builtin-$1.json"
 fi
 
+rm -r lib/builtin/* \
+|| true
+
 deno run \
   --allow-read="generation/api-specs" \
   --allow-write="lib/builtin" \

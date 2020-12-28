@@ -13,6 +13,7 @@ export interface Endpoint {
   addresses: Array<string>;
   conditions?: EndpointConditions | null;
   hostname?: string | null;
+  nodeName?: string | null;
   targetRef?: CoreV1.ObjectReference | null;
   topology?: Record<string,string> | null;
 }
@@ -22,6 +23,7 @@ export function toEndpoint(input: c.JSONValue): Endpoint {
     addresses: c.readList(obj["addresses"], c.checkStr),
     conditions: c.readOpt(obj["conditions"], toEndpointConditions),
     hostname: c.readOpt(obj["hostname"], c.checkStr),
+    nodeName: c.readOpt(obj["nodeName"], c.checkStr),
     targetRef: c.readOpt(obj["targetRef"], CoreV1.toObjectReference),
     topology: c.readOpt(obj["topology"], x => c.readMap(x, c.checkStr)),
   }}
@@ -35,11 +37,15 @@ export function fromEndpoint(input: Endpoint): c.JSONValue {
 /** EndpointConditions represents the current condition of an endpoint. */
 export interface EndpointConditions {
   ready?: boolean | null;
+  serving?: boolean | null;
+  terminating?: boolean | null;
 }
 export function toEndpointConditions(input: c.JSONValue): EndpointConditions {
   const obj = c.checkObj(input);
   return {
     ready: c.readOpt(obj["ready"], c.checkBool),
+    serving: c.readOpt(obj["serving"], c.checkBool),
+    terminating: c.readOpt(obj["terminating"], c.checkBool),
   }}
 export function fromEndpointConditions(input: EndpointConditions): c.JSONValue {
   return {

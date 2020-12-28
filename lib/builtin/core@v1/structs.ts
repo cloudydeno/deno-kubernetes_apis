@@ -1747,7 +1747,7 @@ export function fromTypedLocalObjectReference(input: TypedLocalObjectReference):
     ...input,
   }}
 
-/** Event is a report of an event somewhere in the cluster. */
+/** Event is a report of an event somewhere in the cluster.  Events have a limited retention time and triggers and messages may evolve with time.  Event consumers should not rely on the timing of an event with a given Reason reflecting a consistent underlying trigger, or the continued existence of events with that Reason.  Events should be treated as informative, best-effort, supplemental data. */
 export interface Event {
   apiVersion?: "v1";
   kind?: "Event";
@@ -2196,14 +2196,34 @@ export function toLimitRangeList(input: c.JSONValue): LimitRangeList & c.ApiKind
 export interface LoadBalancerIngress {
   hostname?: string | null;
   ip?: string | null;
+  ports?: Array<PortStatus> | null;
 }
 export function toLoadBalancerIngress(input: c.JSONValue): LoadBalancerIngress {
   const obj = c.checkObj(input);
   return {
     hostname: c.readOpt(obj["hostname"], c.checkStr),
     ip: c.readOpt(obj["ip"], c.checkStr),
+    ports: c.readOpt(obj["ports"], x => c.readList(x, toPortStatus)),
   }}
 export function fromLoadBalancerIngress(input: LoadBalancerIngress): c.JSONValue {
+  return {
+    ...input,
+    ports: input.ports?.map(fromPortStatus),
+  }}
+
+export interface PortStatus {
+  error?: string | null;
+  port: number;
+  protocol: string;
+}
+export function toPortStatus(input: c.JSONValue): PortStatus {
+  const obj = c.checkObj(input);
+  return {
+    error: c.readOpt(obj["error"], c.checkStr),
+    port: c.checkNum(obj["port"]),
+    protocol: c.checkStr(obj["protocol"]),
+  }}
+export function fromPortStatus(input: PortStatus): c.JSONValue {
   return {
     ...input,
   }}
@@ -3407,13 +3427,13 @@ export function fromVolume(input: Volume): c.JSONValue {
 /** Represents a projected volume source */
 export interface ProjectedVolumeSource {
   defaultMode?: number | null;
-  sources: Array<VolumeProjection>;
+  sources?: Array<VolumeProjection> | null;
 }
 export function toProjectedVolumeSource(input: c.JSONValue): ProjectedVolumeSource {
   const obj = c.checkObj(input);
   return {
     defaultMode: c.readOpt(obj["defaultMode"], c.checkNum),
-    sources: c.readList(obj["sources"], toVolumeProjection),
+    sources: c.readOpt(obj["sources"], x => c.readList(x, toVolumeProjection)),
   }}
 export function fromProjectedVolumeSource(input: ProjectedVolumeSource): c.JSONValue {
   return {
@@ -4026,12 +4046,15 @@ export function fromService(input: Service): c.JSONValue {
 
 /** ServiceSpec describes the attributes that a user creates on a service. */
 export interface ServiceSpec {
+  allocateLoadBalancerNodePorts?: boolean | null;
   clusterIP?: string | null;
+  clusterIPs?: Array<string> | null;
   externalIPs?: Array<string> | null;
   externalName?: string | null;
   externalTrafficPolicy?: string | null;
   healthCheckNodePort?: number | null;
-  ipFamily?: string | null;
+  ipFamilies?: Array<string> | null;
+  ipFamilyPolicy?: string | null;
   loadBalancerIP?: string | null;
   loadBalancerSourceRanges?: Array<string> | null;
   ports?: Array<ServicePort> | null;
@@ -4045,12 +4068,15 @@ export interface ServiceSpec {
 export function toServiceSpec(input: c.JSONValue): ServiceSpec {
   const obj = c.checkObj(input);
   return {
+    allocateLoadBalancerNodePorts: c.readOpt(obj["allocateLoadBalancerNodePorts"], c.checkBool),
     clusterIP: c.readOpt(obj["clusterIP"], c.checkStr),
+    clusterIPs: c.readOpt(obj["clusterIPs"], x => c.readList(x, c.checkStr)),
     externalIPs: c.readOpt(obj["externalIPs"], x => c.readList(x, c.checkStr)),
     externalName: c.readOpt(obj["externalName"], c.checkStr),
     externalTrafficPolicy: c.readOpt(obj["externalTrafficPolicy"], c.checkStr),
     healthCheckNodePort: c.readOpt(obj["healthCheckNodePort"], c.checkNum),
-    ipFamily: c.readOpt(obj["ipFamily"], c.checkStr),
+    ipFamilies: c.readOpt(obj["ipFamilies"], x => c.readList(x, c.checkStr)),
+    ipFamilyPolicy: c.readOpt(obj["ipFamilyPolicy"], c.checkStr),
     loadBalancerIP: c.readOpt(obj["loadBalancerIP"], c.checkStr),
     loadBalancerSourceRanges: c.readOpt(obj["loadBalancerSourceRanges"], x => c.readList(x, c.checkStr)),
     ports: c.readOpt(obj["ports"], x => c.readList(x, toServicePort)),
@@ -4109,16 +4135,19 @@ export function fromSessionAffinityConfig(input: SessionAffinityConfig): c.JSONV
 
 /** ServiceStatus represents the current status of a service. */
 export interface ServiceStatus {
+  conditions?: Array<MetaV1.Condition> | null;
   loadBalancer?: LoadBalancerStatus | null;
 }
 export function toServiceStatus(input: c.JSONValue): ServiceStatus {
   const obj = c.checkObj(input);
   return {
+    conditions: c.readOpt(obj["conditions"], x => c.readList(x, MetaV1.toCondition)),
     loadBalancer: c.readOpt(obj["loadBalancer"], toLoadBalancerStatus),
   }}
 export function fromServiceStatus(input: ServiceStatus): c.JSONValue {
   return {
     ...input,
+    conditions: input.conditions?.map(MetaV1.fromCondition),
     loadBalancer: input.loadBalancer != null ? fromLoadBalancerStatus(input.loadBalancer) : undefined,
   }}
 

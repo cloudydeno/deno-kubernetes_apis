@@ -8,8 +8,6 @@ Generated, typed interfaces to make every possible Kubernetes API request and wo
 
 Actual request transports implemented in `/x/kubernetes_client`.
 
-S
-
 ## Usage
 
 Here's a basic request, listing all Pods in the `default` namespace.
@@ -41,8 +39,9 @@ see `/x/kubernetes_client` for more information.
 
 ## TODO
 
-* [ ] PATCH requests
+* [x] PATCH requests
 * [ ] Solidify Quantity, Duration, etc
+* [ ] Reconcile deletion response kinds
 * [ ] Story for generating API clients directly from CRD specifications
 * [ ] Story for generating the whole API surface of a specific cluster
-* [ ] Add filtering to Reflector implementation (e.g. by annotation)
+* [x] Move Reflector implementation upstream to /x/kubernetes_client

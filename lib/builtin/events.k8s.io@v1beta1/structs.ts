@@ -8,7 +8,7 @@ type ListOf<T> = {
   items: Array<T>;
 };
 
-/** Event is a report of an event somewhere in the cluster. It generally denotes some state change in the system. */
+/** Event is a report of an event somewhere in the cluster. It generally denotes some state change in the system. Events have a limited retention time and triggers and messages may evolve with time.  Event consumers should not rely on the timing of an event with a given Reason reflecting a consistent underlying trigger, or the continued existence of events with that Reason.  Events should be treated as informative, best-effort, supplemental data. */
 export interface Event {
   apiVersion?: "events.k8s.io/v1beta1";
   kind?: "Event";
@@ -18,7 +18,7 @@ export interface Event {
   deprecatedLastTimestamp?: c.Time | null;
   deprecatedSource?: CoreV1.EventSource | null;
   eventTime: c.MicroTime;
-  metadata?: MetaV1.ObjectMeta | null;
+  metadata: MetaV1.ObjectMeta;
   note?: string | null;
   reason?: string | null;
   regarding?: CoreV1.ObjectReference | null;
@@ -38,7 +38,7 @@ export function toEvent(input: c.JSONValue): Event & c.ApiKind {
     deprecatedLastTimestamp: c.readOpt(obj["deprecatedLastTimestamp"], c.toTime),
     deprecatedSource: c.readOpt(obj["deprecatedSource"], CoreV1.toEventSource),
     eventTime: c.toMicroTime(obj["eventTime"]),
-    metadata: c.readOpt(obj["metadata"], MetaV1.toObjectMeta),
+    metadata: MetaV1.toObjectMeta(obj["metadata"]),
     note: c.readOpt(obj["note"], c.checkStr),
     reason: c.readOpt(obj["reason"], c.checkStr),
     regarding: c.readOpt(obj["regarding"], CoreV1.toObjectReference),

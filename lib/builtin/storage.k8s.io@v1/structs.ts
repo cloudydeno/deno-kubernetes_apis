@@ -35,7 +35,9 @@ export interface CSIDriverSpec {
   attachRequired?: boolean | null;
   fsGroupPolicy?: string | null;
   podInfoOnMount?: boolean | null;
+  requiresRepublish?: boolean | null;
   storageCapacity?: boolean | null;
+  tokenRequests?: Array<TokenRequest> | null;
   volumeLifecycleModes?: Array<string> | null;
 }
 export function toCSIDriverSpec(input: c.JSONValue): CSIDriverSpec {
@@ -44,10 +46,29 @@ export function toCSIDriverSpec(input: c.JSONValue): CSIDriverSpec {
     attachRequired: c.readOpt(obj["attachRequired"], c.checkBool),
     fsGroupPolicy: c.readOpt(obj["fsGroupPolicy"], c.checkStr),
     podInfoOnMount: c.readOpt(obj["podInfoOnMount"], c.checkBool),
+    requiresRepublish: c.readOpt(obj["requiresRepublish"], c.checkBool),
     storageCapacity: c.readOpt(obj["storageCapacity"], c.checkBool),
+    tokenRequests: c.readOpt(obj["tokenRequests"], x => c.readList(x, toTokenRequest)),
     volumeLifecycleModes: c.readOpt(obj["volumeLifecycleModes"], x => c.readList(x, c.checkStr)),
   }}
 export function fromCSIDriverSpec(input: CSIDriverSpec): c.JSONValue {
+  return {
+    ...input,
+    tokenRequests: input.tokenRequests?.map(fromTokenRequest),
+  }}
+
+/** TokenRequest contains parameters of a service account token. */
+export interface TokenRequest {
+  audience: string;
+  expirationSeconds?: number | null;
+}
+export function toTokenRequest(input: c.JSONValue): TokenRequest {
+  const obj = c.checkObj(input);
+  return {
+    audience: c.checkStr(obj["audience"]),
+    expirationSeconds: c.readOpt(obj["expirationSeconds"], c.checkNum),
+  }}
+export function fromTokenRequest(input: TokenRequest): c.JSONValue {
   return {
     ...input,
   }}

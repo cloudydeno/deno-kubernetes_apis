@@ -153,6 +153,31 @@ export function fromAPIVersions(input: APIVersions): c.JSONValue {
     serverAddressByClientCIDRs: input.serverAddressByClientCIDRs?.map(fromServerAddressByClientCIDR),
   }}
 
+/** Condition contains details for one aspect of the current state of this API Resource. */
+export interface Condition {
+  lastTransitionTime: c.Time;
+  message: string;
+  observedGeneration?: number | null;
+  reason: string;
+  status: string;
+  type: string;
+}
+export function toCondition(input: c.JSONValue): Condition {
+  const obj = c.checkObj(input);
+  return {
+    lastTransitionTime: c.toTime(obj["lastTransitionTime"]),
+    message: c.checkStr(obj["message"]),
+    observedGeneration: c.readOpt(obj["observedGeneration"], c.checkNum),
+    reason: c.checkStr(obj["reason"]),
+    status: c.checkStr(obj["status"]),
+    type: c.checkStr(obj["type"]),
+  }}
+export function fromCondition(input: Condition): c.JSONValue {
+  return {
+    ...input,
+    lastTransitionTime: input.lastTransitionTime != null ? c.fromTime(input.lastTransitionTime) : undefined,
+  }}
+
 /** DeleteOptions may be provided when deleting an API object. */
 export interface DeleteOptions {
   apiVersion?: string | null;
