@@ -8,6 +8,8 @@ export * from "https://deno.land/x/kubernetes_client@v0.1.2/mod.ts";
 // Helpers used to validate/transform structures from or for the wire
 // And some other stuff :)
 
+const libBug = `This is likely a library bug. Feel free to file an issue with a stack trace.`;
+
 export function assertOrAddApiVersionAndKind<
   T extends string,
   U extends string,
@@ -25,7 +27,7 @@ export function assertOrAddApiVersionAndKind<
     // Caller wanted the fields so build up an error.
     const expected = JSON.stringify(`${output.apiVersion}/${output.kind}`);
     throw new Error(`Kubernetes Resource Mistype: `+
-      `Expected ${expected}, but the given object didn't have any API metadata.`);
+      `Expected ${expected}, but the given object didn't have any API metadata. ${libBug}`);
 
   // Given and matching, all good!
   } else if (input.apiVersion === expectedVersion && input.kind === expectedKind) {
@@ -36,7 +38,7 @@ export function assertOrAddApiVersionAndKind<
   const given = JSON.stringify(`${input.apiVersion}/${input.kind}`);
   const expected = JSON.stringify(`${output.apiVersion}/${output.kind}`);
   throw new Error(`Kubernetes Resource Mistype: `+
-    `Expected ${expected}, but was given ${given}.`);
+    `Expected ${expected}, but was given ${given}. ${libBug}`);
 }
 
 
@@ -49,23 +51,23 @@ export function readOpt<T>(input: JSONValue, mapper: (raw: JSONValue) => T): T |
   return mapper(input);
 }
 export function checkStr(input: JSONValue): string {
-  if (input == null) throw new Error(`Type a3sf`);
-  if (typeof input !== 'string') throw new Error(`Type asdfsgs`);
+  if (input == null) throw new Error(`Expected a value here, but got null. ${libBug}`);
+  if (typeof input !== 'string') throw new Error(`Expected a string here, but got a ${typeof input}. ${libBug}`);
   return input;
 }
 export function checkNum(input: JSONValue): number {
-  if (input == null) throw new Error(`Type a3sf`);
-  if (typeof input !== 'number') throw new Error(`Type asdfsgs`);
+  if (input == null) throw new Error(`Expected a value here, but got null. ${libBug}`);
+  if (typeof input !== 'number') throw new Error(`Expected a number here, but got a ${typeof input}. ${libBug}`);
   return input;
 }
 export function checkBool(input: JSONValue): boolean {
-  if (input == null) throw new Error(`Type a3sf`);
-  if (typeof input !== 'boolean') throw new Error(`Type asdfsgs`);
+  if (input == null) throw new Error(`Expected a value here, but got null. ${libBug}`);
+  if (typeof input !== 'boolean') throw new Error(`Expected a boolean here, but got a ${typeof input}. ${libBug}`);
   return input;
 }
 export function readList<V>(input: JSONValue, encoder: (x: JSONValue) => V): Array<V> {
-  if (input == null) throw new Error(`Type zxvdef`);
-  if (!Array.isArray(input)) throw new Error(`Type werwer`);
+  if (input == null) throw new Error(`Expected a value here, but got null. ${libBug}`);
+  if (!Array.isArray(input)) throw new Error(`Expected an array here, but got a ${typeof input}. ${libBug}`);
   return input.map(encoder);
 }
 export function readMap<V>(input: JSONValue, valEncoder: (x: JSONValue) => V): Record<string,V> {
@@ -78,9 +80,9 @@ export function readMap<V>(input: JSONValue, valEncoder: (x: JSONValue) => V): R
 }
 
 export function checkObj(input: JSONValue): JSONObject {
-  if (input == null) throw new Error("Type structInitA");
-  if (typeof input !== 'object') throw new Error("Type structInitB");
-  if (Array.isArray(input)) throw new Error("Type structInitC");
+  if (input == null) throw new Error(`Expected a value here, but got null. ${libBug}`);
+  if (typeof input !== 'object') throw new Error(`Expected an object here, but got a ${typeof input}. ${libBug}`);
+  if (Array.isArray(input)) throw new Error(`Didn't expect an array here, but got one anyway. ${libBug}`);
   return input;
 }
 
@@ -104,8 +106,9 @@ export function writeMap<T,U extends JSONValue>(input: Record<string,T> | null |
 // Semi-questionable method of expressing an "open string union" in Typescript
 export type UnexpectedEnumValue = string & {unexpected: never};
 export function readEnum<T extends string>(raw: unknown): T {
-  if (typeof raw === "string") return raw as T;
-  throw new Error(`Required enum value wasn't given`);
+  if (raw == null) throw new Error(`Expected a string here, but got null. ${libBug}`);
+  if (typeof raw !== "string") throw new Error(`Expected a string here, but got a ${typeof raw}. ${libBug}`);
+  return raw as T;
 }
 
 
@@ -137,11 +140,11 @@ export function fromQuantity(val: Quantity): JSONValue {
 
 export type Time = Date;
 export function toTime(input: JSONValue): Time {
-  if (input == null) throw new Error(`Type a3sf`);
-  if (typeof input !== 'string') throw new Error(`Type asdfsgs`);
-  if (!input.includes('T')) throw new Error(`Type dateasdf`);
+  if (input == null) throw new Error(`Expected a value here, but got null. ${libBug}`);
+  if (typeof input !== 'string') throw new Error(`Expected a string here, but got a ${typeof input}. ${libBug}`);
+  if (!input.includes('T')) throw new Error(`Expected a time string here, but I didn't see a "T" in ${JSON.stringify(input)}. ${libBug}`);
   const d = new Date(input);
-  if (isNaN(d.valueOf())) throw new Error(`Type date nan`);
+  if (isNaN(d.valueOf())) throw new Error(`Time string ${JSON.stringify(input)} failed to parse. ${libBug}`);
   return d;
 }
 export function fromTime(input: Time | number | null | undefined): JSONValue {
@@ -166,9 +169,9 @@ export class MicroTime {
 export function toMicroTime(raw: JSONValue): MicroTime {
   const str = checkStr(raw);
   const microsMatch = str.match(/\.(\d+)Z$/);
-  if (!microsMatch) throw new Error("TODO: toMicroTime for "+str);
+  if (!microsMatch) throw new Error(`TODO: toMicroTime for ${str}. ${libBug}`);
   const date = new Date(str.slice(0, microsMatch.index)+'Z');
-  if (isNaN(date.valueOf())) throw new Error("BUG: toMicroTime NaN for "+str);
+  if (isNaN(date.valueOf())) throw new Error(`BUG: toMicroTime NaN for ${str}. ${libBug}`);
   const micros = parseInt(microsMatch[1]);
   return new MicroTime(date, micros);
 }
@@ -180,24 +183,24 @@ export function fromMicroTime(val: MicroTime): JSONValue {
 
 export class Duration {
   constructor() {
-    throw new Error("TODO: Duration");
+    throw new Error(`TODO: Duration. ${libBug}`);
   }
 }
 export function toDuration(raw: JSONValue): Duration {
   const str = checkStr(raw);
-  throw new Error("TODO: toDuration for "+str);
+  throw new Error(`TODO: toDuration for ${JSON.stringify(str)}. ${libBug}`);
 }
 export function fromDuration(val: Duration): JSONValue {
   // const str = c.checkStr(raw);
-  throw new Error("TODO: fromDuration for "+JSON.stringify(val));
+  throw new Error(`TODO: fromDuration for ${JSON.stringify(val)}. ${libBug}`);
 }
 
 
 export type IntOrString = number | string;
 export function toIntOrString(input: JSONValue): string | number {
-  if (input == null) throw new Error(`Type a3sf`);
+  if (input == null) throw new Error(`Expected a value here, but got null. ${libBug}`);
   if (typeof input === 'string' || typeof input === 'number') return input;
-  throw new Error(`Type sdgssdf`);
+  throw new Error(`Expected a string or number here, but got a ${typeof input}. ${libBug}`);
 }
 
 
