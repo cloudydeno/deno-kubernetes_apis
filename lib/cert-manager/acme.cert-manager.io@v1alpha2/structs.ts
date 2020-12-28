@@ -216,6 +216,8 @@ export interface Challenge {
                 } | null;
               } | null;
               nodeSelector?: Record<string,string> | null;
+              priorityClassName?: string | null;
+              serviceAccountName?: string | null;
               tolerations?: Array<{
                 effect?: string | null;
                 key?: string | null;
@@ -492,6 +494,8 @@ export function toChallenge_spec_solver_http01_ingress_podTemplate_spec(input: c
   return {
     affinity: c.readOpt(obj["affinity"], toChallenge_spec_solver_http01_ingress_podTemplate_spec_affinity),
     nodeSelector: c.readOpt(obj["nodeSelector"], x => c.readMap(x, c.checkStr)),
+    priorityClassName: c.readOpt(obj["priorityClassName"], c.checkStr),
+    serviceAccountName: c.readOpt(obj["serviceAccountName"], c.checkStr),
     tolerations: c.readOpt(obj["tolerations"], x => c.readList(x, toChallenge_spec_solver_http01_ingress_podTemplate_spec_tolerations)),
   }}
 export function toChallenge_spec_solver_http01_ingress_podTemplate_spec_affinity(input: c.JSONValue) {
@@ -701,7 +705,9 @@ export interface Order {
   spec?: {
     commonName?: string | null;
     csr: string;
-    dnsNames: Array<string>;
+    dnsNames?: Array<string> | null;
+    duration?: string | null;
+    ipAddresses?: Array<string> | null;
     issuerRef: {
       group?: string | null;
       kind?: string | null;
@@ -751,7 +757,9 @@ export function toOrder_spec(input: c.JSONValue) {
   return {
     commonName: c.readOpt(obj["commonName"], c.checkStr),
     csr: c.checkStr(obj["csr"]),
-    dnsNames: c.readList(obj["dnsNames"], c.checkStr),
+    dnsNames: c.readOpt(obj["dnsNames"], x => c.readList(x, c.checkStr)),
+    duration: c.readOpt(obj["duration"], c.checkStr),
+    ipAddresses: c.readOpt(obj["ipAddresses"], x => c.readList(x, c.checkStr)),
     issuerRef: toOrder_spec_issuerRef(obj["issuerRef"]),
   }}
 export function toOrder_status(input: c.JSONValue) {

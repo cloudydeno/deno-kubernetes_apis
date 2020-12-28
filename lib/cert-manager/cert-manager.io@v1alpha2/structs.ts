@@ -126,6 +126,7 @@ export interface Certificate {
     dnsNames?: Array<string> | null;
     duration?: string | null;
     emailSANs?: Array<string> | null;
+    encodeUsagesInRequest?: boolean | null;
     ipAddresses?: Array<string> | null;
     isCA?: boolean | null;
     issuerRef: {
@@ -218,6 +219,7 @@ export function toCertificate_spec(input: c.JSONValue) {
     dnsNames: c.readOpt(obj["dnsNames"], x => c.readList(x, c.checkStr)),
     duration: c.readOpt(obj["duration"], c.checkStr),
     emailSANs: c.readOpt(obj["emailSANs"], x => c.readList(x, c.checkStr)),
+    encodeUsagesInRequest: c.readOpt(obj["encodeUsagesInRequest"], c.checkBool),
     ipAddresses: c.readOpt(obj["ipAddresses"], x => c.readList(x, c.checkStr)),
     isCA: c.readOpt(obj["isCA"], c.checkBool),
     issuerRef: toCertificate_spec_issuerRef(obj["issuerRef"]),
@@ -335,7 +337,9 @@ export interface ClusterIssuer {
   metadata?: MetaV1.ObjectMeta | null;
   spec?: {
     acme?: {
+      disableAccountKeyGeneration?: boolean | null;
       email?: string | null;
+      enableDurationFeature?: boolean | null;
       externalAccountBinding?: {
         keyAlgorithm: "HS256" | "HS384" | "HS512" | c.UnexpectedEnumValue;
         keyID: string;
@@ -344,6 +348,7 @@ export interface ClusterIssuer {
           name: string;
         };
       } | null;
+      preferredChain?: string | null;
       privateKeySecretRef: {
         key?: string | null;
         name: string;
@@ -545,6 +550,8 @@ export interface ClusterIssuer {
                   } | null;
                 } | null;
                 nodeSelector?: Record<string,string> | null;
+                priorityClassName?: string | null;
+                serviceAccountName?: string | null;
                 tolerations?: Array<{
                   effect?: string | null;
                   key?: string | null;
@@ -595,6 +602,7 @@ export interface ClusterIssuer {
         } | null;
       };
       caBundle?: string | null;
+      namespace?: string | null;
       path: string;
       server: string;
     } | null;
@@ -669,8 +677,11 @@ export function toClusterIssuer_status(input: c.JSONValue) {
 export function toClusterIssuer_spec_acme(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
+    disableAccountKeyGeneration: c.readOpt(obj["disableAccountKeyGeneration"], c.checkBool),
     email: c.readOpt(obj["email"], c.checkStr),
+    enableDurationFeature: c.readOpt(obj["enableDurationFeature"], c.checkBool),
     externalAccountBinding: c.readOpt(obj["externalAccountBinding"], toClusterIssuer_spec_acme_externalAccountBinding),
+    preferredChain: c.readOpt(obj["preferredChain"], c.checkStr),
     privateKeySecretRef: toClusterIssuer_spec_acme_privateKeySecretRef(obj["privateKeySecretRef"]),
     server: c.checkStr(obj["server"]),
     skipTLSVerify: c.readOpt(obj["skipTLSVerify"], c.checkBool),
@@ -692,6 +703,7 @@ export function toClusterIssuer_spec_vault(input: c.JSONValue) {
   return {
     auth: toClusterIssuer_spec_vault_auth(obj["auth"]),
     caBundle: c.readOpt(obj["caBundle"], c.checkStr),
+    namespace: c.readOpt(obj["namespace"], c.checkStr),
     path: c.checkStr(obj["path"]),
     server: c.checkStr(obj["server"]),
   }}
@@ -1003,6 +1015,8 @@ export function toClusterIssuer_spec_acme_solvers_http01_ingress_podTemplate_spe
   return {
     affinity: c.readOpt(obj["affinity"], toClusterIssuer_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity),
     nodeSelector: c.readOpt(obj["nodeSelector"], x => c.readMap(x, c.checkStr)),
+    priorityClassName: c.readOpt(obj["priorityClassName"], c.checkStr),
+    serviceAccountName: c.readOpt(obj["serviceAccountName"], c.checkStr),
     tolerations: c.readOpt(obj["tolerations"], x => c.readList(x, toClusterIssuer_spec_acme_solvers_http01_ingress_podTemplate_spec_tolerations)),
   }}
 export function toClusterIssuer_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity(input: c.JSONValue) {
@@ -1211,7 +1225,9 @@ export interface Issuer {
   metadata?: MetaV1.ObjectMeta | null;
   spec?: {
     acme?: {
+      disableAccountKeyGeneration?: boolean | null;
       email?: string | null;
+      enableDurationFeature?: boolean | null;
       externalAccountBinding?: {
         keyAlgorithm: "HS256" | "HS384" | "HS512" | c.UnexpectedEnumValue;
         keyID: string;
@@ -1220,6 +1236,7 @@ export interface Issuer {
           name: string;
         };
       } | null;
+      preferredChain?: string | null;
       privateKeySecretRef: {
         key?: string | null;
         name: string;
@@ -1421,6 +1438,8 @@ export interface Issuer {
                   } | null;
                 } | null;
                 nodeSelector?: Record<string,string> | null;
+                priorityClassName?: string | null;
+                serviceAccountName?: string | null;
                 tolerations?: Array<{
                   effect?: string | null;
                   key?: string | null;
@@ -1471,6 +1490,7 @@ export interface Issuer {
         } | null;
       };
       caBundle?: string | null;
+      namespace?: string | null;
       path: string;
       server: string;
     } | null;
@@ -1545,8 +1565,11 @@ export function toIssuer_status(input: c.JSONValue) {
 export function toIssuer_spec_acme(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
+    disableAccountKeyGeneration: c.readOpt(obj["disableAccountKeyGeneration"], c.checkBool),
     email: c.readOpt(obj["email"], c.checkStr),
+    enableDurationFeature: c.readOpt(obj["enableDurationFeature"], c.checkBool),
     externalAccountBinding: c.readOpt(obj["externalAccountBinding"], toIssuer_spec_acme_externalAccountBinding),
+    preferredChain: c.readOpt(obj["preferredChain"], c.checkStr),
     privateKeySecretRef: toIssuer_spec_acme_privateKeySecretRef(obj["privateKeySecretRef"]),
     server: c.checkStr(obj["server"]),
     skipTLSVerify: c.readOpt(obj["skipTLSVerify"], c.checkBool),
@@ -1568,6 +1591,7 @@ export function toIssuer_spec_vault(input: c.JSONValue) {
   return {
     auth: toIssuer_spec_vault_auth(obj["auth"]),
     caBundle: c.readOpt(obj["caBundle"], c.checkStr),
+    namespace: c.readOpt(obj["namespace"], c.checkStr),
     path: c.checkStr(obj["path"]),
     server: c.checkStr(obj["server"]),
   }}
@@ -1879,6 +1903,8 @@ export function toIssuer_spec_acme_solvers_http01_ingress_podTemplate_spec(input
   return {
     affinity: c.readOpt(obj["affinity"], toIssuer_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity),
     nodeSelector: c.readOpt(obj["nodeSelector"], x => c.readMap(x, c.checkStr)),
+    priorityClassName: c.readOpt(obj["priorityClassName"], c.checkStr),
+    serviceAccountName: c.readOpt(obj["serviceAccountName"], c.checkStr),
     tolerations: c.readOpt(obj["tolerations"], x => c.readList(x, toIssuer_spec_acme_solvers_http01_ingress_podTemplate_spec_tolerations)),
   }}
 export function toIssuer_spec_acme_solvers_http01_ingress_podTemplate_spec_affinity(input: c.JSONValue) {
