@@ -89,13 +89,12 @@ export class DiscoveryV1beta1NamespacedApi {
     return DiscoveryV1beta1.toEndpointSlice(resp);
   }
 
-  async deleteEndpointSliceList(body: MetaV1.DeleteOptions, opts: operations.DeleteListOpts = {}) {
+  async deleteEndpointSliceList(opts: operations.DeleteListOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}endpointslices`,
       expectJson: true,
       querystring: operations.formatDeleteListOpts(opts),
-      bodyJson: MetaV1.fromDeleteOptions(body),
       abortSignal: opts.abortSignal,
     });
     return DiscoveryV1beta1.toEndpointSliceList(resp);
@@ -112,13 +111,12 @@ export class DiscoveryV1beta1NamespacedApi {
     return DiscoveryV1beta1.toEndpointSlice(resp);
   }
 
-  async deleteEndpointSlice(name: string, body: MetaV1.DeleteOptions, opts: operations.DeleteOpts = {}) {
+  async deleteEndpointSlice(name: string, opts: operations.DeleteOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}endpointslices/${name}`,
       expectJson: true,
       querystring: operations.formatDeleteOpts(opts),
-      bodyJson: MetaV1.fromDeleteOptions(body),
       abortSignal: opts.abortSignal,
     });
     return MetaV1.toStatus(resp);

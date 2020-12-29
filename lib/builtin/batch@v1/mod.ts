@@ -89,13 +89,12 @@ export class BatchV1NamespacedApi {
     return BatchV1.toJob(resp);
   }
 
-  async deleteJobList(body: MetaV1.DeleteOptions, opts: operations.DeleteListOpts = {}) {
+  async deleteJobList(opts: operations.DeleteListOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}jobs`,
       expectJson: true,
       querystring: operations.formatDeleteListOpts(opts),
-      bodyJson: MetaV1.fromDeleteOptions(body),
       abortSignal: opts.abortSignal,
     });
     return BatchV1.toJobList(resp);
@@ -112,13 +111,12 @@ export class BatchV1NamespacedApi {
     return BatchV1.toJob(resp);
   }
 
-  async deleteJob(name: string, body: MetaV1.DeleteOptions, opts: operations.DeleteOpts = {}) {
+  async deleteJob(name: string, opts: operations.DeleteOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}jobs/${name}`,
       expectJson: true,
       querystring: operations.formatDeleteOpts(opts),
-      bodyJson: MetaV1.fromDeleteOptions(body),
       abortSignal: opts.abortSignal,
     });
     return BatchV1.toJob(resp);

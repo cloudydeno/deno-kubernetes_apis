@@ -48,13 +48,12 @@ export class ApiextensionsV1beta1Api {
     return ApiextensionsV1beta1.toCustomResourceDefinition(resp);
   }
 
-  async deleteCustomResourceDefinitionList(body: MetaV1.DeleteOptions, opts: operations.DeleteListOpts = {}) {
+  async deleteCustomResourceDefinitionList(opts: operations.DeleteListOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}customresourcedefinitions`,
       expectJson: true,
       querystring: operations.formatDeleteListOpts(opts),
-      bodyJson: MetaV1.fromDeleteOptions(body),
       abortSignal: opts.abortSignal,
     });
     return ApiextensionsV1beta1.toCustomResourceDefinitionList(resp);
@@ -71,13 +70,12 @@ export class ApiextensionsV1beta1Api {
     return ApiextensionsV1beta1.toCustomResourceDefinition(resp);
   }
 
-  async deleteCustomResourceDefinition(name: string, body: MetaV1.DeleteOptions, opts: operations.DeleteOpts = {}) {
+  async deleteCustomResourceDefinition(name: string, opts: operations.DeleteOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}customresourcedefinitions/${name}`,
       expectJson: true,
       querystring: operations.formatDeleteOpts(opts),
-      bodyJson: MetaV1.fromDeleteOptions(body),
       abortSignal: opts.abortSignal,
     });
     return MetaV1.toStatus(resp);

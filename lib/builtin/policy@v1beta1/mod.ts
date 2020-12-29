@@ -79,13 +79,12 @@ export class PolicyV1beta1Api {
     return PolicyV1beta1.toPodSecurityPolicy(resp);
   }
 
-  async deletePodSecurityPolicyList(body: MetaV1.DeleteOptions, opts: operations.DeleteListOpts = {}) {
+  async deletePodSecurityPolicyList(opts: operations.DeleteListOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}podsecuritypolicies`,
       expectJson: true,
       querystring: operations.formatDeleteListOpts(opts),
-      bodyJson: MetaV1.fromDeleteOptions(body),
       abortSignal: opts.abortSignal,
     });
     return PolicyV1beta1.toPodSecurityPolicyList(resp);
@@ -102,13 +101,12 @@ export class PolicyV1beta1Api {
     return PolicyV1beta1.toPodSecurityPolicy(resp);
   }
 
-  async deletePodSecurityPolicy(name: string, body: MetaV1.DeleteOptions, opts: operations.DeleteOpts = {}) {
+  async deletePodSecurityPolicy(name: string, opts: operations.DeleteOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}podsecuritypolicies/${name}`,
       expectJson: true,
       querystring: operations.formatDeleteOpts(opts),
-      bodyJson: MetaV1.fromDeleteOptions(body),
       abortSignal: opts.abortSignal,
     });
     return PolicyV1beta1.toPodSecurityPolicy(resp);
@@ -184,13 +182,12 @@ export class PolicyV1beta1NamespacedApi {
     return PolicyV1beta1.toPodDisruptionBudget(resp);
   }
 
-  async deletePodDisruptionBudgetList(body: MetaV1.DeleteOptions, opts: operations.DeleteListOpts = {}) {
+  async deletePodDisruptionBudgetList(opts: operations.DeleteListOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}poddisruptionbudgets`,
       expectJson: true,
       querystring: operations.formatDeleteListOpts(opts),
-      bodyJson: MetaV1.fromDeleteOptions(body),
       abortSignal: opts.abortSignal,
     });
     return PolicyV1beta1.toPodDisruptionBudgetList(resp);
@@ -207,13 +204,12 @@ export class PolicyV1beta1NamespacedApi {
     return PolicyV1beta1.toPodDisruptionBudget(resp);
   }
 
-  async deletePodDisruptionBudget(name: string, body: MetaV1.DeleteOptions, opts: operations.DeleteOpts = {}) {
+  async deletePodDisruptionBudget(name: string, opts: operations.DeleteOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}poddisruptionbudgets/${name}`,
       expectJson: true,
       querystring: operations.formatDeleteOpts(opts),
-      bodyJson: MetaV1.fromDeleteOptions(body),
       abortSignal: opts.abortSignal,
     });
     return MetaV1.toStatus(resp);

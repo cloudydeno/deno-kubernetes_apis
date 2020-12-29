@@ -26,7 +26,9 @@ export function generateModuleTypescript(surface: SurfaceMap, api: SurfaceApi): 
   chunks.push(`import * as operations from "../../operations.ts";`);
   chunks.push(`import * as ${api.friendlyName} from "./structs.ts";`);
   chunks.push('');
+
   const foreignApis = new Set<SurfaceApi>();
+  foreignApis.add(surface.allApis.find(x => x.friendlyName === 'MetaV1')!);
 
   const hasNamespaced = Array.from(api.kinds.values()).some(x => x.isNamespaced);
 
@@ -104,6 +106,9 @@ export function generateModuleTypescript(surface: SurfaceMap, api: SurfaceApi): 
             shape.name === 'Patch' &&
             op.method === 'patch') {
           args.push([param, outShape]);
+
+        } else if (op.method === 'delete') {
+          // for DELETE, the body isn't useful; the options will handle everything
 
         } else {
           args.push([param, shape]);

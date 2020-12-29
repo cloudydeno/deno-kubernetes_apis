@@ -48,13 +48,12 @@ export class CertificatesV1Api {
     return CertificatesV1.toCertificateSigningRequest(resp);
   }
 
-  async deleteCertificateSigningRequestList(body: MetaV1.DeleteOptions, opts: operations.DeleteListOpts = {}) {
+  async deleteCertificateSigningRequestList(opts: operations.DeleteListOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}certificatesigningrequests`,
       expectJson: true,
       querystring: operations.formatDeleteListOpts(opts),
-      bodyJson: MetaV1.fromDeleteOptions(body),
       abortSignal: opts.abortSignal,
     });
     return CertificatesV1.toCertificateSigningRequestList(resp);
@@ -71,13 +70,12 @@ export class CertificatesV1Api {
     return CertificatesV1.toCertificateSigningRequest(resp);
   }
 
-  async deleteCertificateSigningRequest(name: string, body: MetaV1.DeleteOptions, opts: operations.DeleteOpts = {}) {
+  async deleteCertificateSigningRequest(name: string, opts: operations.DeleteOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}certificatesigningrequests/${name}`,
       expectJson: true,
       querystring: operations.formatDeleteOpts(opts),
-      bodyJson: MetaV1.fromDeleteOptions(body),
       abortSignal: opts.abortSignal,
     });
     return MetaV1.toStatus(resp);

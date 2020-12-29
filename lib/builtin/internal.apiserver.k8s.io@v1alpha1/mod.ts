@@ -48,13 +48,12 @@ export class InternalApiserverV1alpha1Api {
     return InternalApiserverV1alpha1.toStorageVersion(resp);
   }
 
-  async deleteStorageVersionList(body: MetaV1.DeleteOptions, opts: operations.DeleteListOpts = {}) {
+  async deleteStorageVersionList(opts: operations.DeleteListOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}storageversions`,
       expectJson: true,
       querystring: operations.formatDeleteListOpts(opts),
-      bodyJson: MetaV1.fromDeleteOptions(body),
       abortSignal: opts.abortSignal,
     });
     return InternalApiserverV1alpha1.toStorageVersionList(resp);
@@ -71,13 +70,12 @@ export class InternalApiserverV1alpha1Api {
     return InternalApiserverV1alpha1.toStorageVersion(resp);
   }
 
-  async deleteStorageVersion(name: string, body: MetaV1.DeleteOptions, opts: operations.DeleteOpts = {}) {
+  async deleteStorageVersion(name: string, opts: operations.DeleteOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}storageversions/${name}`,
       expectJson: true,
       querystring: operations.formatDeleteOpts(opts),
-      bodyJson: MetaV1.fromDeleteOptions(body),
       abortSignal: opts.abortSignal,
     });
     return MetaV1.toStatus(resp);

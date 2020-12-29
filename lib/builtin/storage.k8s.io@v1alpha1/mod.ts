@@ -48,13 +48,12 @@ export class StorageV1alpha1Api {
     return StorageV1alpha1.toVolumeAttachment(resp);
   }
 
-  async deleteVolumeAttachmentList(body: MetaV1.DeleteOptions, opts: operations.DeleteListOpts = {}) {
+  async deleteVolumeAttachmentList(opts: operations.DeleteListOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}volumeattachments`,
       expectJson: true,
       querystring: operations.formatDeleteListOpts(opts),
-      bodyJson: MetaV1.fromDeleteOptions(body),
       abortSignal: opts.abortSignal,
     });
     return StorageV1alpha1.toVolumeAttachmentList(resp);
@@ -71,13 +70,12 @@ export class StorageV1alpha1Api {
     return StorageV1alpha1.toVolumeAttachment(resp);
   }
 
-  async deleteVolumeAttachment(name: string, body: MetaV1.DeleteOptions, opts: operations.DeleteOpts = {}) {
+  async deleteVolumeAttachment(name: string, opts: operations.DeleteOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}volumeattachments/${name}`,
       expectJson: true,
       querystring: operations.formatDeleteOpts(opts),
-      bodyJson: MetaV1.fromDeleteOptions(body),
       abortSignal: opts.abortSignal,
     });
     return StorageV1alpha1.toVolumeAttachment(resp);

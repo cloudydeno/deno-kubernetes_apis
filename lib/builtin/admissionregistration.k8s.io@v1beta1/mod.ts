@@ -48,13 +48,12 @@ export class AdmissionregistrationV1beta1Api {
     return AdmissionregistrationV1beta1.toMutatingWebhookConfiguration(resp);
   }
 
-  async deleteMutatingWebhookConfigurationList(body: MetaV1.DeleteOptions, opts: operations.DeleteListOpts = {}) {
+  async deleteMutatingWebhookConfigurationList(opts: operations.DeleteListOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}mutatingwebhookconfigurations`,
       expectJson: true,
       querystring: operations.formatDeleteListOpts(opts),
-      bodyJson: MetaV1.fromDeleteOptions(body),
       abortSignal: opts.abortSignal,
     });
     return AdmissionregistrationV1beta1.toMutatingWebhookConfigurationList(resp);
@@ -71,13 +70,12 @@ export class AdmissionregistrationV1beta1Api {
     return AdmissionregistrationV1beta1.toMutatingWebhookConfiguration(resp);
   }
 
-  async deleteMutatingWebhookConfiguration(name: string, body: MetaV1.DeleteOptions, opts: operations.DeleteOpts = {}) {
+  async deleteMutatingWebhookConfiguration(name: string, opts: operations.DeleteOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}mutatingwebhookconfigurations/${name}`,
       expectJson: true,
       querystring: operations.formatDeleteOpts(opts),
-      bodyJson: MetaV1.fromDeleteOptions(body),
       abortSignal: opts.abortSignal,
     });
     return MetaV1.toStatus(resp);
@@ -143,13 +141,12 @@ export class AdmissionregistrationV1beta1Api {
     return AdmissionregistrationV1beta1.toValidatingWebhookConfiguration(resp);
   }
 
-  async deleteValidatingWebhookConfigurationList(body: MetaV1.DeleteOptions, opts: operations.DeleteListOpts = {}) {
+  async deleteValidatingWebhookConfigurationList(opts: operations.DeleteListOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}validatingwebhookconfigurations`,
       expectJson: true,
       querystring: operations.formatDeleteListOpts(opts),
-      bodyJson: MetaV1.fromDeleteOptions(body),
       abortSignal: opts.abortSignal,
     });
     return AdmissionregistrationV1beta1.toValidatingWebhookConfigurationList(resp);
@@ -166,13 +163,12 @@ export class AdmissionregistrationV1beta1Api {
     return AdmissionregistrationV1beta1.toValidatingWebhookConfiguration(resp);
   }
 
-  async deleteValidatingWebhookConfiguration(name: string, body: MetaV1.DeleteOptions, opts: operations.DeleteOpts = {}) {
+  async deleteValidatingWebhookConfiguration(name: string, opts: operations.DeleteOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}validatingwebhookconfigurations/${name}`,
       expectJson: true,
       querystring: operations.formatDeleteOpts(opts),
-      bodyJson: MetaV1.fromDeleteOptions(body),
       abortSignal: opts.abortSignal,
     });
     return MetaV1.toStatus(resp);

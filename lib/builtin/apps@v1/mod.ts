@@ -182,13 +182,12 @@ export class AppsV1NamespacedApi {
     return AppsV1.toControllerRevision(resp);
   }
 
-  async deleteControllerRevisionList(body: MetaV1.DeleteOptions, opts: operations.DeleteListOpts = {}) {
+  async deleteControllerRevisionList(opts: operations.DeleteListOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}controllerrevisions`,
       expectJson: true,
       querystring: operations.formatDeleteListOpts(opts),
-      bodyJson: MetaV1.fromDeleteOptions(body),
       abortSignal: opts.abortSignal,
     });
     return AppsV1.toControllerRevisionList(resp);
@@ -205,13 +204,12 @@ export class AppsV1NamespacedApi {
     return AppsV1.toControllerRevision(resp);
   }
 
-  async deleteControllerRevision(name: string, body: MetaV1.DeleteOptions, opts: operations.DeleteOpts = {}) {
+  async deleteControllerRevision(name: string, opts: operations.DeleteOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}controllerrevisions/${name}`,
       expectJson: true,
       querystring: operations.formatDeleteOpts(opts),
-      bodyJson: MetaV1.fromDeleteOptions(body),
       abortSignal: opts.abortSignal,
     });
     return MetaV1.toStatus(resp);
@@ -277,13 +275,12 @@ export class AppsV1NamespacedApi {
     return AppsV1.toDaemonSet(resp);
   }
 
-  async deleteDaemonSetList(body: MetaV1.DeleteOptions, opts: operations.DeleteListOpts = {}) {
+  async deleteDaemonSetList(opts: operations.DeleteListOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}daemonsets`,
       expectJson: true,
       querystring: operations.formatDeleteListOpts(opts),
-      bodyJson: MetaV1.fromDeleteOptions(body),
       abortSignal: opts.abortSignal,
     });
     return AppsV1.toDaemonSetList(resp);
@@ -300,13 +297,12 @@ export class AppsV1NamespacedApi {
     return AppsV1.toDaemonSet(resp);
   }
 
-  async deleteDaemonSet(name: string, body: MetaV1.DeleteOptions, opts: operations.DeleteOpts = {}) {
+  async deleteDaemonSet(name: string, opts: operations.DeleteOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}daemonsets/${name}`,
       expectJson: true,
       querystring: operations.formatDeleteOpts(opts),
-      bodyJson: MetaV1.fromDeleteOptions(body),
       abortSignal: opts.abortSignal,
     });
     return MetaV1.toStatus(resp);
@@ -411,13 +407,12 @@ export class AppsV1NamespacedApi {
     return AppsV1.toDeployment(resp);
   }
 
-  async deleteDeploymentList(body: MetaV1.DeleteOptions, opts: operations.DeleteListOpts = {}) {
+  async deleteDeploymentList(opts: operations.DeleteListOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}deployments`,
       expectJson: true,
       querystring: operations.formatDeleteListOpts(opts),
-      bodyJson: MetaV1.fromDeleteOptions(body),
       abortSignal: opts.abortSignal,
     });
     return AppsV1.toDeploymentList(resp);
@@ -434,13 +429,12 @@ export class AppsV1NamespacedApi {
     return AppsV1.toDeployment(resp);
   }
 
-  async deleteDeployment(name: string, body: MetaV1.DeleteOptions, opts: operations.DeleteOpts = {}) {
+  async deleteDeployment(name: string, opts: operations.DeleteOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}deployments/${name}`,
       expectJson: true,
       querystring: operations.formatDeleteOpts(opts),
-      bodyJson: MetaV1.fromDeleteOptions(body),
       abortSignal: opts.abortSignal,
     });
     return MetaV1.toStatus(resp);
@@ -584,13 +578,12 @@ export class AppsV1NamespacedApi {
     return AppsV1.toReplicaSet(resp);
   }
 
-  async deleteReplicaSetList(body: MetaV1.DeleteOptions, opts: operations.DeleteListOpts = {}) {
+  async deleteReplicaSetList(opts: operations.DeleteListOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}replicasets`,
       expectJson: true,
       querystring: operations.formatDeleteListOpts(opts),
-      bodyJson: MetaV1.fromDeleteOptions(body),
       abortSignal: opts.abortSignal,
     });
     return AppsV1.toReplicaSetList(resp);
@@ -607,13 +600,12 @@ export class AppsV1NamespacedApi {
     return AppsV1.toReplicaSet(resp);
   }
 
-  async deleteReplicaSet(name: string, body: MetaV1.DeleteOptions, opts: operations.DeleteOpts = {}) {
+  async deleteReplicaSet(name: string, opts: operations.DeleteOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}replicasets/${name}`,
       expectJson: true,
       querystring: operations.formatDeleteOpts(opts),
-      bodyJson: MetaV1.fromDeleteOptions(body),
       abortSignal: opts.abortSignal,
     });
     return MetaV1.toStatus(resp);
@@ -757,13 +749,12 @@ export class AppsV1NamespacedApi {
     return AppsV1.toStatefulSet(resp);
   }
 
-  async deleteStatefulSetList(body: MetaV1.DeleteOptions, opts: operations.DeleteListOpts = {}) {
+  async deleteStatefulSetList(opts: operations.DeleteListOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}statefulsets`,
       expectJson: true,
       querystring: operations.formatDeleteListOpts(opts),
-      bodyJson: MetaV1.fromDeleteOptions(body),
       abortSignal: opts.abortSignal,
     });
     return AppsV1.toStatefulSetList(resp);
@@ -780,13 +771,12 @@ export class AppsV1NamespacedApi {
     return AppsV1.toStatefulSet(resp);
   }
 
-  async deleteStatefulSet(name: string, body: MetaV1.DeleteOptions, opts: operations.DeleteOpts = {}) {
+  async deleteStatefulSet(name: string, opts: operations.DeleteOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}statefulsets/${name}`,
       expectJson: true,
       querystring: operations.formatDeleteOpts(opts),
-      bodyJson: MetaV1.fromDeleteOptions(body),
       abortSignal: opts.abortSignal,
     });
     return MetaV1.toStatus(resp);

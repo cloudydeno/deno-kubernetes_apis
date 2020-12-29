@@ -89,13 +89,12 @@ export class AutoscalingV2beta1NamespacedApi {
     return AutoscalingV2beta1.toHorizontalPodAutoscaler(resp);
   }
 
-  async deleteHorizontalPodAutoscalerList(body: MetaV1.DeleteOptions, opts: operations.DeleteListOpts = {}) {
+  async deleteHorizontalPodAutoscalerList(opts: operations.DeleteListOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}horizontalpodautoscalers`,
       expectJson: true,
       querystring: operations.formatDeleteListOpts(opts),
-      bodyJson: MetaV1.fromDeleteOptions(body),
       abortSignal: opts.abortSignal,
     });
     return AutoscalingV2beta1.toHorizontalPodAutoscalerList(resp);
@@ -112,13 +111,12 @@ export class AutoscalingV2beta1NamespacedApi {
     return AutoscalingV2beta1.toHorizontalPodAutoscaler(resp);
   }
 
-  async deleteHorizontalPodAutoscaler(name: string, body: MetaV1.DeleteOptions, opts: operations.DeleteOpts = {}) {
+  async deleteHorizontalPodAutoscaler(name: string, opts: operations.DeleteOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}horizontalpodautoscalers/${name}`,
       expectJson: true,
       querystring: operations.formatDeleteOpts(opts),
-      bodyJson: MetaV1.fromDeleteOptions(body),
       abortSignal: opts.abortSignal,
     });
     return MetaV1.toStatus(resp);

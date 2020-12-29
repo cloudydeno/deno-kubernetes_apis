@@ -56,13 +56,12 @@ export class RbacAuthorizationV1alpha1Api {
     return RbacAuthorizationV1alpha1.toClusterRoleBinding(resp);
   }
 
-  async deleteClusterRoleBindingList(body: MetaV1.DeleteOptions, opts: operations.DeleteListOpts = {}) {
+  async deleteClusterRoleBindingList(opts: operations.DeleteListOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}clusterrolebindings`,
       expectJson: true,
       querystring: operations.formatDeleteListOpts(opts),
-      bodyJson: MetaV1.fromDeleteOptions(body),
       abortSignal: opts.abortSignal,
     });
     return RbacAuthorizationV1alpha1.toClusterRoleBindingList(resp);
@@ -82,13 +81,12 @@ export class RbacAuthorizationV1alpha1Api {
     return RbacAuthorizationV1alpha1.toClusterRoleBinding(resp);
   }
 
-  async deleteClusterRoleBinding(name: string, body: MetaV1.DeleteOptions, opts: operations.DeleteOpts = {}) {
+  async deleteClusterRoleBinding(name: string, opts: operations.DeleteOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}clusterrolebindings/${name}`,
       expectJson: true,
       querystring: operations.formatDeleteOpts(opts),
-      bodyJson: MetaV1.fromDeleteOptions(body),
       abortSignal: opts.abortSignal,
     });
     return MetaV1.toStatus(resp);
@@ -154,13 +152,12 @@ export class RbacAuthorizationV1alpha1Api {
     return RbacAuthorizationV1alpha1.toClusterRole(resp);
   }
 
-  async deleteClusterRoleList(body: MetaV1.DeleteOptions, opts: operations.DeleteListOpts = {}) {
+  async deleteClusterRoleList(opts: operations.DeleteListOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}clusterroles`,
       expectJson: true,
       querystring: operations.formatDeleteListOpts(opts),
-      bodyJson: MetaV1.fromDeleteOptions(body),
       abortSignal: opts.abortSignal,
     });
     return RbacAuthorizationV1alpha1.toClusterRoleList(resp);
@@ -180,13 +177,12 @@ export class RbacAuthorizationV1alpha1Api {
     return RbacAuthorizationV1alpha1.toClusterRole(resp);
   }
 
-  async deleteClusterRole(name: string, body: MetaV1.DeleteOptions, opts: operations.DeleteOpts = {}) {
+  async deleteClusterRole(name: string, opts: operations.DeleteOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}clusterroles/${name}`,
       expectJson: true,
       querystring: operations.formatDeleteOpts(opts),
-      bodyJson: MetaV1.fromDeleteOptions(body),
       abortSignal: opts.abortSignal,
     });
     return MetaV1.toStatus(resp);
@@ -308,13 +304,12 @@ export class RbacAuthorizationV1alpha1NamespacedApi {
     return RbacAuthorizationV1alpha1.toRoleBinding(resp);
   }
 
-  async deleteRoleBindingList(body: MetaV1.DeleteOptions, opts: operations.DeleteListOpts = {}) {
+  async deleteRoleBindingList(opts: operations.DeleteListOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}rolebindings`,
       expectJson: true,
       querystring: operations.formatDeleteListOpts(opts),
-      bodyJson: MetaV1.fromDeleteOptions(body),
       abortSignal: opts.abortSignal,
     });
     return RbacAuthorizationV1alpha1.toRoleBindingList(resp);
@@ -334,13 +329,12 @@ export class RbacAuthorizationV1alpha1NamespacedApi {
     return RbacAuthorizationV1alpha1.toRoleBinding(resp);
   }
 
-  async deleteRoleBinding(name: string, body: MetaV1.DeleteOptions, opts: operations.DeleteOpts = {}) {
+  async deleteRoleBinding(name: string, opts: operations.DeleteOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}rolebindings/${name}`,
       expectJson: true,
       querystring: operations.formatDeleteOpts(opts),
-      bodyJson: MetaV1.fromDeleteOptions(body),
       abortSignal: opts.abortSignal,
     });
     return MetaV1.toStatus(resp);
@@ -406,13 +400,12 @@ export class RbacAuthorizationV1alpha1NamespacedApi {
     return RbacAuthorizationV1alpha1.toRole(resp);
   }
 
-  async deleteRoleList(body: MetaV1.DeleteOptions, opts: operations.DeleteListOpts = {}) {
+  async deleteRoleList(opts: operations.DeleteListOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}roles`,
       expectJson: true,
       querystring: operations.formatDeleteListOpts(opts),
-      bodyJson: MetaV1.fromDeleteOptions(body),
       abortSignal: opts.abortSignal,
     });
     return RbacAuthorizationV1alpha1.toRoleList(resp);
@@ -432,13 +425,12 @@ export class RbacAuthorizationV1alpha1NamespacedApi {
     return RbacAuthorizationV1alpha1.toRole(resp);
   }
 
-  async deleteRole(name: string, body: MetaV1.DeleteOptions, opts: operations.DeleteOpts = {}) {
+  async deleteRole(name: string, opts: operations.DeleteOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}roles/${name}`,
       expectJson: true,
       querystring: operations.formatDeleteOpts(opts),
-      bodyJson: MetaV1.fromDeleteOptions(body),
       abortSignal: opts.abortSignal,
     });
     return MetaV1.toStatus(resp);

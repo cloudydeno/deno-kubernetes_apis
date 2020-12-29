@@ -48,13 +48,12 @@ export class SchedulingV1Api {
     return SchedulingV1.toPriorityClass(resp);
   }
 
-  async deletePriorityClassList(body: MetaV1.DeleteOptions, opts: operations.DeleteListOpts = {}) {
+  async deletePriorityClassList(opts: operations.DeleteListOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}priorityclasses`,
       expectJson: true,
       querystring: operations.formatDeleteListOpts(opts),
-      bodyJson: MetaV1.fromDeleteOptions(body),
       abortSignal: opts.abortSignal,
     });
     return SchedulingV1.toPriorityClassList(resp);
@@ -71,13 +70,12 @@ export class SchedulingV1Api {
     return SchedulingV1.toPriorityClass(resp);
   }
 
-  async deletePriorityClass(name: string, body: MetaV1.DeleteOptions, opts: operations.DeleteOpts = {}) {
+  async deletePriorityClass(name: string, opts: operations.DeleteOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}priorityclasses/${name}`,
       expectJson: true,
       querystring: operations.formatDeleteOpts(opts),
-      bodyJson: MetaV1.fromDeleteOptions(body),
       abortSignal: opts.abortSignal,
     });
     return MetaV1.toStatus(resp);

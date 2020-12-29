@@ -102,13 +102,12 @@ export class CertManagerIoV1alpha3Api {
     return CertManagerIoV1alpha3.toClusterIssuer(resp);
   }
 
-  async deleteClusterIssuerList(body: MetaV1.DeleteOptions, opts: operations.DeleteListOpts = {}) {
+  async deleteClusterIssuerList(opts: operations.DeleteListOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}clusterissuers`,
       expectJson: true,
       querystring: operations.formatDeleteListOpts(opts),
-      bodyJson: MetaV1.fromDeleteOptions(body),
       abortSignal: opts.abortSignal,
     });
     return CertManagerIoV1alpha3.toClusterIssuerList(resp);
@@ -125,13 +124,12 @@ export class CertManagerIoV1alpha3Api {
     return CertManagerIoV1alpha3.toClusterIssuer(resp);
   }
 
-  async deleteClusterIssuer(name: string, body: MetaV1.DeleteOptions, opts: operations.DeleteOpts = {}) {
+  async deleteClusterIssuer(name: string, opts: operations.DeleteOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}clusterissuers/${name}`,
       expectJson: true,
       querystring: operations.formatDeleteOpts(opts),
-      bodyJson: MetaV1.fromDeleteOptions(body),
       abortSignal: opts.abortSignal,
     });
     return MetaV1.toStatus(resp);
@@ -266,13 +264,12 @@ export class CertManagerIoV1alpha3NamespacedApi {
     return CertManagerIoV1alpha3.toCertificateRequest(resp);
   }
 
-  async deleteCertificateRequestList(body: MetaV1.DeleteOptions, opts: operations.DeleteListOpts = {}) {
+  async deleteCertificateRequestList(opts: operations.DeleteListOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}certificaterequests`,
       expectJson: true,
       querystring: operations.formatDeleteListOpts(opts),
-      bodyJson: MetaV1.fromDeleteOptions(body),
       abortSignal: opts.abortSignal,
     });
     return CertManagerIoV1alpha3.toCertificateRequestList(resp);
@@ -289,13 +286,12 @@ export class CertManagerIoV1alpha3NamespacedApi {
     return CertManagerIoV1alpha3.toCertificateRequest(resp);
   }
 
-  async deleteCertificateRequest(name: string, body: MetaV1.DeleteOptions, opts: operations.DeleteOpts = {}) {
+  async deleteCertificateRequest(name: string, opts: operations.DeleteOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}certificaterequests/${name}`,
       expectJson: true,
       querystring: operations.formatDeleteOpts(opts),
-      bodyJson: MetaV1.fromDeleteOptions(body),
       abortSignal: opts.abortSignal,
     });
     return MetaV1.toStatus(resp);
@@ -397,13 +393,12 @@ export class CertManagerIoV1alpha3NamespacedApi {
     return CertManagerIoV1alpha3.toCertificate(resp);
   }
 
-  async deleteCertificateList(body: MetaV1.DeleteOptions, opts: operations.DeleteListOpts = {}) {
+  async deleteCertificateList(opts: operations.DeleteListOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}certificates`,
       expectJson: true,
       querystring: operations.formatDeleteListOpts(opts),
-      bodyJson: MetaV1.fromDeleteOptions(body),
       abortSignal: opts.abortSignal,
     });
     return CertManagerIoV1alpha3.toCertificateList(resp);
@@ -420,13 +415,12 @@ export class CertManagerIoV1alpha3NamespacedApi {
     return CertManagerIoV1alpha3.toCertificate(resp);
   }
 
-  async deleteCertificate(name: string, body: MetaV1.DeleteOptions, opts: operations.DeleteOpts = {}) {
+  async deleteCertificate(name: string, opts: operations.DeleteOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}certificates/${name}`,
       expectJson: true,
       querystring: operations.formatDeleteOpts(opts),
-      bodyJson: MetaV1.fromDeleteOptions(body),
       abortSignal: opts.abortSignal,
     });
     return MetaV1.toStatus(resp);
@@ -528,13 +522,12 @@ export class CertManagerIoV1alpha3NamespacedApi {
     return CertManagerIoV1alpha3.toIssuer(resp);
   }
 
-  async deleteIssuerList(body: MetaV1.DeleteOptions, opts: operations.DeleteListOpts = {}) {
+  async deleteIssuerList(opts: operations.DeleteListOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}issuers`,
       expectJson: true,
       querystring: operations.formatDeleteListOpts(opts),
-      bodyJson: MetaV1.fromDeleteOptions(body),
       abortSignal: opts.abortSignal,
     });
     return CertManagerIoV1alpha3.toIssuerList(resp);
@@ -551,13 +544,12 @@ export class CertManagerIoV1alpha3NamespacedApi {
     return CertManagerIoV1alpha3.toIssuer(resp);
   }
 
-  async deleteIssuer(name: string, body: MetaV1.DeleteOptions, opts: operations.DeleteOpts = {}) {
+  async deleteIssuer(name: string, opts: operations.DeleteOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}issuers/${name}`,
       expectJson: true,
       querystring: operations.formatDeleteOpts(opts),
-      bodyJson: MetaV1.fromDeleteOptions(body),
       abortSignal: opts.abortSignal,
     });
     return MetaV1.toStatus(resp);

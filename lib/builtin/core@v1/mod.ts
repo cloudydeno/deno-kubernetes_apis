@@ -187,13 +187,12 @@ export class CoreV1Api {
     return CoreV1.toNamespace(resp);
   }
 
-  async deleteNamespace(name: string, body: MetaV1.DeleteOptions, opts: operations.DeleteOpts = {}) {
+  async deleteNamespace(name: string, opts: operations.DeleteOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}namespaces/${name}`,
       expectJson: true,
       querystring: operations.formatDeleteOpts(opts),
-      bodyJson: MetaV1.fromDeleteOptions(body),
       abortSignal: opts.abortSignal,
     });
     return MetaV1.toStatus(resp);
@@ -310,13 +309,12 @@ export class CoreV1Api {
     return CoreV1.toNode(resp);
   }
 
-  async deleteNodeList(body: MetaV1.DeleteOptions, opts: operations.DeleteListOpts = {}) {
+  async deleteNodeList(opts: operations.DeleteListOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}nodes`,
       expectJson: true,
       querystring: operations.formatDeleteListOpts(opts),
-      bodyJson: MetaV1.fromDeleteOptions(body),
       abortSignal: opts.abortSignal,
     });
     return CoreV1.toNodeList(resp);
@@ -333,13 +331,12 @@ export class CoreV1Api {
     return CoreV1.toNode(resp);
   }
 
-  async deleteNode(name: string, body: MetaV1.DeleteOptions, opts: operations.DeleteOpts = {}) {
+  async deleteNode(name: string, opts: operations.DeleteOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}nodes/${name}`,
       expectJson: true,
       querystring: operations.formatDeleteOpts(opts),
-      bodyJson: MetaV1.fromDeleteOptions(body),
       abortSignal: opts.abortSignal,
     });
     return MetaV1.toStatus(resp);
@@ -478,13 +475,12 @@ export class CoreV1Api {
     return CoreV1.toPersistentVolume(resp);
   }
 
-  async deletePersistentVolumeList(body: MetaV1.DeleteOptions, opts: operations.DeleteListOpts = {}) {
+  async deletePersistentVolumeList(opts: operations.DeleteListOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}persistentvolumes`,
       expectJson: true,
       querystring: operations.formatDeleteListOpts(opts),
-      bodyJson: MetaV1.fromDeleteOptions(body),
       abortSignal: opts.abortSignal,
     });
     return CoreV1.toPersistentVolumeList(resp);
@@ -501,13 +497,12 @@ export class CoreV1Api {
     return CoreV1.toPersistentVolume(resp);
   }
 
-  async deletePersistentVolume(name: string, body: MetaV1.DeleteOptions, opts: operations.DeleteOpts = {}) {
+  async deletePersistentVolume(name: string, opts: operations.DeleteOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}persistentvolumes/${name}`,
       expectJson: true,
       querystring: operations.formatDeleteOpts(opts),
-      bodyJson: MetaV1.fromDeleteOptions(body),
       abortSignal: opts.abortSignal,
     });
     return CoreV1.toPersistentVolume(resp);
@@ -795,13 +790,12 @@ export class CoreV1NamespacedApi {
     return CoreV1.toConfigMap(resp);
   }
 
-  async deleteConfigMapList(body: MetaV1.DeleteOptions, opts: operations.DeleteListOpts = {}) {
+  async deleteConfigMapList(opts: operations.DeleteListOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}configmaps`,
       expectJson: true,
       querystring: operations.formatDeleteListOpts(opts),
-      bodyJson: MetaV1.fromDeleteOptions(body),
       abortSignal: opts.abortSignal,
     });
     return CoreV1.toConfigMapList(resp);
@@ -818,13 +812,12 @@ export class CoreV1NamespacedApi {
     return CoreV1.toConfigMap(resp);
   }
 
-  async deleteConfigMap(name: string, body: MetaV1.DeleteOptions, opts: operations.DeleteOpts = {}) {
+  async deleteConfigMap(name: string, opts: operations.DeleteOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}configmaps/${name}`,
       expectJson: true,
       querystring: operations.formatDeleteOpts(opts),
-      bodyJson: MetaV1.fromDeleteOptions(body),
       abortSignal: opts.abortSignal,
     });
     return MetaV1.toStatus(resp);
@@ -890,13 +883,12 @@ export class CoreV1NamespacedApi {
     return CoreV1.toEndpoints(resp);
   }
 
-  async deleteEndpointsList(body: MetaV1.DeleteOptions, opts: operations.DeleteListOpts = {}) {
+  async deleteEndpointsList(opts: operations.DeleteListOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}endpoints`,
       expectJson: true,
       querystring: operations.formatDeleteListOpts(opts),
-      bodyJson: MetaV1.fromDeleteOptions(body),
       abortSignal: opts.abortSignal,
     });
     return CoreV1.toEndpointsList(resp);
@@ -913,13 +905,12 @@ export class CoreV1NamespacedApi {
     return CoreV1.toEndpoints(resp);
   }
 
-  async deleteEndpoints(name: string, body: MetaV1.DeleteOptions, opts: operations.DeleteOpts = {}) {
+  async deleteEndpoints(name: string, opts: operations.DeleteOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}endpoints/${name}`,
       expectJson: true,
       querystring: operations.formatDeleteOpts(opts),
-      bodyJson: MetaV1.fromDeleteOptions(body),
       abortSignal: opts.abortSignal,
     });
     return MetaV1.toStatus(resp);
@@ -985,13 +976,12 @@ export class CoreV1NamespacedApi {
     return CoreV1.toEvent(resp);
   }
 
-  async deleteEventList(body: MetaV1.DeleteOptions, opts: operations.DeleteListOpts = {}) {
+  async deleteEventList(opts: operations.DeleteListOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}events`,
       expectJson: true,
       querystring: operations.formatDeleteListOpts(opts),
-      bodyJson: MetaV1.fromDeleteOptions(body),
       abortSignal: opts.abortSignal,
     });
     return CoreV1.toEventList(resp);
@@ -1008,13 +998,12 @@ export class CoreV1NamespacedApi {
     return CoreV1.toEvent(resp);
   }
 
-  async deleteEvent(name: string, body: MetaV1.DeleteOptions, opts: operations.DeleteOpts = {}) {
+  async deleteEvent(name: string, opts: operations.DeleteOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}events/${name}`,
       expectJson: true,
       querystring: operations.formatDeleteOpts(opts),
-      bodyJson: MetaV1.fromDeleteOptions(body),
       abortSignal: opts.abortSignal,
     });
     return MetaV1.toStatus(resp);
@@ -1080,13 +1069,12 @@ export class CoreV1NamespacedApi {
     return CoreV1.toLimitRange(resp);
   }
 
-  async deleteLimitRangeList(body: MetaV1.DeleteOptions, opts: operations.DeleteListOpts = {}) {
+  async deleteLimitRangeList(opts: operations.DeleteListOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}limitranges`,
       expectJson: true,
       querystring: operations.formatDeleteListOpts(opts),
-      bodyJson: MetaV1.fromDeleteOptions(body),
       abortSignal: opts.abortSignal,
     });
     return CoreV1.toLimitRangeList(resp);
@@ -1103,13 +1091,12 @@ export class CoreV1NamespacedApi {
     return CoreV1.toLimitRange(resp);
   }
 
-  async deleteLimitRange(name: string, body: MetaV1.DeleteOptions, opts: operations.DeleteOpts = {}) {
+  async deleteLimitRange(name: string, opts: operations.DeleteOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}limitranges/${name}`,
       expectJson: true,
       querystring: operations.formatDeleteOpts(opts),
-      bodyJson: MetaV1.fromDeleteOptions(body),
       abortSignal: opts.abortSignal,
     });
     return MetaV1.toStatus(resp);
@@ -1175,13 +1162,12 @@ export class CoreV1NamespacedApi {
     return CoreV1.toPersistentVolumeClaim(resp);
   }
 
-  async deletePersistentVolumeClaimList(body: MetaV1.DeleteOptions, opts: operations.DeleteListOpts = {}) {
+  async deletePersistentVolumeClaimList(opts: operations.DeleteListOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}persistentvolumeclaims`,
       expectJson: true,
       querystring: operations.formatDeleteListOpts(opts),
-      bodyJson: MetaV1.fromDeleteOptions(body),
       abortSignal: opts.abortSignal,
     });
     return CoreV1.toPersistentVolumeClaimList(resp);
@@ -1198,13 +1184,12 @@ export class CoreV1NamespacedApi {
     return CoreV1.toPersistentVolumeClaim(resp);
   }
 
-  async deletePersistentVolumeClaim(name: string, body: MetaV1.DeleteOptions, opts: operations.DeleteOpts = {}) {
+  async deletePersistentVolumeClaim(name: string, opts: operations.DeleteOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}persistentvolumeclaims/${name}`,
       expectJson: true,
       querystring: operations.formatDeleteOpts(opts),
-      bodyJson: MetaV1.fromDeleteOptions(body),
       abortSignal: opts.abortSignal,
     });
     return CoreV1.toPersistentVolumeClaim(resp);
@@ -1309,13 +1294,12 @@ export class CoreV1NamespacedApi {
     return CoreV1.toPod(resp);
   }
 
-  async deletePodList(body: MetaV1.DeleteOptions, opts: operations.DeleteListOpts = {}) {
+  async deletePodList(opts: operations.DeleteListOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}pods`,
       expectJson: true,
       querystring: operations.formatDeleteListOpts(opts),
-      bodyJson: MetaV1.fromDeleteOptions(body),
       abortSignal: opts.abortSignal,
     });
     return CoreV1.toPodList(resp);
@@ -1332,13 +1316,12 @@ export class CoreV1NamespacedApi {
     return CoreV1.toPod(resp);
   }
 
-  async deletePod(name: string, body: MetaV1.DeleteOptions, opts: operations.DeleteOpts = {}) {
+  async deletePod(name: string, opts: operations.DeleteOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}pods/${name}`,
       expectJson: true,
       querystring: operations.formatDeleteOpts(opts),
-      bodyJson: MetaV1.fromDeleteOptions(body),
       abortSignal: opts.abortSignal,
     });
     return CoreV1.toPod(resp);
@@ -1633,13 +1616,12 @@ export class CoreV1NamespacedApi {
     return CoreV1.toPodTemplate(resp);
   }
 
-  async deletePodTemplateList(body: MetaV1.DeleteOptions, opts: operations.DeleteListOpts = {}) {
+  async deletePodTemplateList(opts: operations.DeleteListOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}podtemplates`,
       expectJson: true,
       querystring: operations.formatDeleteListOpts(opts),
-      bodyJson: MetaV1.fromDeleteOptions(body),
       abortSignal: opts.abortSignal,
     });
     return CoreV1.toPodTemplateList(resp);
@@ -1656,13 +1638,12 @@ export class CoreV1NamespacedApi {
     return CoreV1.toPodTemplate(resp);
   }
 
-  async deletePodTemplate(name: string, body: MetaV1.DeleteOptions, opts: operations.DeleteOpts = {}) {
+  async deletePodTemplate(name: string, opts: operations.DeleteOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}podtemplates/${name}`,
       expectJson: true,
       querystring: operations.formatDeleteOpts(opts),
-      bodyJson: MetaV1.fromDeleteOptions(body),
       abortSignal: opts.abortSignal,
     });
     return CoreV1.toPodTemplate(resp);
@@ -1728,13 +1709,12 @@ export class CoreV1NamespacedApi {
     return CoreV1.toReplicationController(resp);
   }
 
-  async deleteReplicationControllerList(body: MetaV1.DeleteOptions, opts: operations.DeleteListOpts = {}) {
+  async deleteReplicationControllerList(opts: operations.DeleteListOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}replicationcontrollers`,
       expectJson: true,
       querystring: operations.formatDeleteListOpts(opts),
-      bodyJson: MetaV1.fromDeleteOptions(body),
       abortSignal: opts.abortSignal,
     });
     return CoreV1.toReplicationControllerList(resp);
@@ -1751,13 +1731,12 @@ export class CoreV1NamespacedApi {
     return CoreV1.toReplicationController(resp);
   }
 
-  async deleteReplicationController(name: string, body: MetaV1.DeleteOptions, opts: operations.DeleteOpts = {}) {
+  async deleteReplicationController(name: string, opts: operations.DeleteOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}replicationcontrollers/${name}`,
       expectJson: true,
       querystring: operations.formatDeleteOpts(opts),
-      bodyJson: MetaV1.fromDeleteOptions(body),
       abortSignal: opts.abortSignal,
     });
     return MetaV1.toStatus(resp);
@@ -1901,13 +1880,12 @@ export class CoreV1NamespacedApi {
     return CoreV1.toResourceQuota(resp);
   }
 
-  async deleteResourceQuotaList(body: MetaV1.DeleteOptions, opts: operations.DeleteListOpts = {}) {
+  async deleteResourceQuotaList(opts: operations.DeleteListOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}resourcequotas`,
       expectJson: true,
       querystring: operations.formatDeleteListOpts(opts),
-      bodyJson: MetaV1.fromDeleteOptions(body),
       abortSignal: opts.abortSignal,
     });
     return CoreV1.toResourceQuotaList(resp);
@@ -1924,13 +1902,12 @@ export class CoreV1NamespacedApi {
     return CoreV1.toResourceQuota(resp);
   }
 
-  async deleteResourceQuota(name: string, body: MetaV1.DeleteOptions, opts: operations.DeleteOpts = {}) {
+  async deleteResourceQuota(name: string, opts: operations.DeleteOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}resourcequotas/${name}`,
       expectJson: true,
       querystring: operations.formatDeleteOpts(opts),
-      bodyJson: MetaV1.fromDeleteOptions(body),
       abortSignal: opts.abortSignal,
     });
     return CoreV1.toResourceQuota(resp);
@@ -2035,13 +2012,12 @@ export class CoreV1NamespacedApi {
     return CoreV1.toSecret(resp);
   }
 
-  async deleteSecretList(body: MetaV1.DeleteOptions, opts: operations.DeleteListOpts = {}) {
+  async deleteSecretList(opts: operations.DeleteListOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}secrets`,
       expectJson: true,
       querystring: operations.formatDeleteListOpts(opts),
-      bodyJson: MetaV1.fromDeleteOptions(body),
       abortSignal: opts.abortSignal,
     });
     return CoreV1.toSecretList(resp);
@@ -2058,13 +2034,12 @@ export class CoreV1NamespacedApi {
     return CoreV1.toSecret(resp);
   }
 
-  async deleteSecret(name: string, body: MetaV1.DeleteOptions, opts: operations.DeleteOpts = {}) {
+  async deleteSecret(name: string, opts: operations.DeleteOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}secrets/${name}`,
       expectJson: true,
       querystring: operations.formatDeleteOpts(opts),
-      bodyJson: MetaV1.fromDeleteOptions(body),
       abortSignal: opts.abortSignal,
     });
     return MetaV1.toStatus(resp);
@@ -2130,13 +2105,12 @@ export class CoreV1NamespacedApi {
     return CoreV1.toServiceAccount(resp);
   }
 
-  async deleteServiceAccountList(body: MetaV1.DeleteOptions, opts: operations.DeleteListOpts = {}) {
+  async deleteServiceAccountList(opts: operations.DeleteListOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}serviceaccounts`,
       expectJson: true,
       querystring: operations.formatDeleteListOpts(opts),
-      bodyJson: MetaV1.fromDeleteOptions(body),
       abortSignal: opts.abortSignal,
     });
     return CoreV1.toServiceAccountList(resp);
@@ -2153,13 +2127,12 @@ export class CoreV1NamespacedApi {
     return CoreV1.toServiceAccount(resp);
   }
 
-  async deleteServiceAccount(name: string, body: MetaV1.DeleteOptions, opts: operations.DeleteOpts = {}) {
+  async deleteServiceAccount(name: string, opts: operations.DeleteOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}serviceaccounts/${name}`,
       expectJson: true,
       querystring: operations.formatDeleteOpts(opts),
-      bodyJson: MetaV1.fromDeleteOptions(body),
       abortSignal: opts.abortSignal,
     });
     return CoreV1.toServiceAccount(resp);
@@ -2248,13 +2221,12 @@ export class CoreV1NamespacedApi {
     return CoreV1.toService(resp);
   }
 
-  async deleteService(name: string, body: MetaV1.DeleteOptions, opts: operations.DeleteOpts = {}) {
+  async deleteService(name: string, opts: operations.DeleteOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}services/${name}`,
       expectJson: true,
       querystring: operations.formatDeleteOpts(opts),
-      bodyJson: MetaV1.fromDeleteOptions(body),
       abortSignal: opts.abortSignal,
     });
     return MetaV1.toStatus(resp);

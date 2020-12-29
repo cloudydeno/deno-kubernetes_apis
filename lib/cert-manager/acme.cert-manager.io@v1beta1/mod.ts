@@ -112,13 +112,12 @@ export class AcmeCertManagerIoV1beta1NamespacedApi {
     return AcmeCertManagerIoV1beta1.toChallenge(resp);
   }
 
-  async deleteChallengeList(body: MetaV1.DeleteOptions, opts: operations.DeleteListOpts = {}) {
+  async deleteChallengeList(opts: operations.DeleteListOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}challenges`,
       expectJson: true,
       querystring: operations.formatDeleteListOpts(opts),
-      bodyJson: MetaV1.fromDeleteOptions(body),
       abortSignal: opts.abortSignal,
     });
     return AcmeCertManagerIoV1beta1.toChallengeList(resp);
@@ -135,13 +134,12 @@ export class AcmeCertManagerIoV1beta1NamespacedApi {
     return AcmeCertManagerIoV1beta1.toChallenge(resp);
   }
 
-  async deleteChallenge(name: string, body: MetaV1.DeleteOptions, opts: operations.DeleteOpts = {}) {
+  async deleteChallenge(name: string, opts: operations.DeleteOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}challenges/${name}`,
       expectJson: true,
       querystring: operations.formatDeleteOpts(opts),
-      bodyJson: MetaV1.fromDeleteOptions(body),
       abortSignal: opts.abortSignal,
     });
     return MetaV1.toStatus(resp);
@@ -243,13 +241,12 @@ export class AcmeCertManagerIoV1beta1NamespacedApi {
     return AcmeCertManagerIoV1beta1.toOrder(resp);
   }
 
-  async deleteOrderList(body: MetaV1.DeleteOptions, opts: operations.DeleteListOpts = {}) {
+  async deleteOrderList(opts: operations.DeleteListOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}orders`,
       expectJson: true,
       querystring: operations.formatDeleteListOpts(opts),
-      bodyJson: MetaV1.fromDeleteOptions(body),
       abortSignal: opts.abortSignal,
     });
     return AcmeCertManagerIoV1beta1.toOrderList(resp);
@@ -266,13 +263,12 @@ export class AcmeCertManagerIoV1beta1NamespacedApi {
     return AcmeCertManagerIoV1beta1.toOrder(resp);
   }
 
-  async deleteOrder(name: string, body: MetaV1.DeleteOptions, opts: operations.DeleteOpts = {}) {
+  async deleteOrder(name: string, opts: operations.DeleteOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}orders/${name}`,
       expectJson: true,
       querystring: operations.formatDeleteOpts(opts),
-      bodyJson: MetaV1.fromDeleteOptions(body),
       abortSignal: opts.abortSignal,
     });
     return MetaV1.toStatus(resp);

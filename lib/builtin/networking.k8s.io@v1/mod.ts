@@ -56,13 +56,12 @@ export class NetworkingV1Api {
     return NetworkingV1.toIngressClass(resp);
   }
 
-  async deleteIngressClassList(body: MetaV1.DeleteOptions, opts: operations.DeleteListOpts = {}) {
+  async deleteIngressClassList(opts: operations.DeleteListOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}ingressclasses`,
       expectJson: true,
       querystring: operations.formatDeleteListOpts(opts),
-      bodyJson: MetaV1.fromDeleteOptions(body),
       abortSignal: opts.abortSignal,
     });
     return NetworkingV1.toIngressClassList(resp);
@@ -79,13 +78,12 @@ export class NetworkingV1Api {
     return NetworkingV1.toIngressClass(resp);
   }
 
-  async deleteIngressClass(name: string, body: MetaV1.DeleteOptions, opts: operations.DeleteOpts = {}) {
+  async deleteIngressClass(name: string, opts: operations.DeleteOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}ingressclasses/${name}`,
       expectJson: true,
       querystring: operations.formatDeleteOpts(opts),
-      bodyJson: MetaV1.fromDeleteOptions(body),
       abortSignal: opts.abortSignal,
     });
     return MetaV1.toStatus(resp);
@@ -207,13 +205,12 @@ export class NetworkingV1NamespacedApi {
     return NetworkingV1.toIngress(resp);
   }
 
-  async deleteIngressList(body: MetaV1.DeleteOptions, opts: operations.DeleteListOpts = {}) {
+  async deleteIngressList(opts: operations.DeleteListOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}ingresses`,
       expectJson: true,
       querystring: operations.formatDeleteListOpts(opts),
-      bodyJson: MetaV1.fromDeleteOptions(body),
       abortSignal: opts.abortSignal,
     });
     return NetworkingV1.toIngressList(resp);
@@ -230,13 +227,12 @@ export class NetworkingV1NamespacedApi {
     return NetworkingV1.toIngress(resp);
   }
 
-  async deleteIngress(name: string, body: MetaV1.DeleteOptions, opts: operations.DeleteOpts = {}) {
+  async deleteIngress(name: string, opts: operations.DeleteOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}ingresses/${name}`,
       expectJson: true,
       querystring: operations.formatDeleteOpts(opts),
-      bodyJson: MetaV1.fromDeleteOptions(body),
       abortSignal: opts.abortSignal,
     });
     return MetaV1.toStatus(resp);
@@ -341,13 +337,12 @@ export class NetworkingV1NamespacedApi {
     return NetworkingV1.toNetworkPolicy(resp);
   }
 
-  async deleteNetworkPolicyList(body: MetaV1.DeleteOptions, opts: operations.DeleteListOpts = {}) {
+  async deleteNetworkPolicyList(opts: operations.DeleteListOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}networkpolicies`,
       expectJson: true,
       querystring: operations.formatDeleteListOpts(opts),
-      bodyJson: MetaV1.fromDeleteOptions(body),
       abortSignal: opts.abortSignal,
     });
     return NetworkingV1.toNetworkPolicyList(resp);
@@ -364,13 +359,12 @@ export class NetworkingV1NamespacedApi {
     return NetworkingV1.toNetworkPolicy(resp);
   }
 
-  async deleteNetworkPolicy(name: string, body: MetaV1.DeleteOptions, opts: operations.DeleteOpts = {}) {
+  async deleteNetworkPolicy(name: string, opts: operations.DeleteOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}networkpolicies/${name}`,
       expectJson: true,
       querystring: operations.formatDeleteOpts(opts),
-      bodyJson: MetaV1.fromDeleteOptions(body),
       abortSignal: opts.abortSignal,
     });
     return MetaV1.toStatus(resp);

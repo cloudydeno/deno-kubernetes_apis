@@ -89,13 +89,12 @@ export class CoordinationV1NamespacedApi {
     return CoordinationV1.toLease(resp);
   }
 
-  async deleteLeaseList(body: MetaV1.DeleteOptions, opts: operations.DeleteListOpts = {}) {
+  async deleteLeaseList(opts: operations.DeleteListOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}leases`,
       expectJson: true,
       querystring: operations.formatDeleteListOpts(opts),
-      bodyJson: MetaV1.fromDeleteOptions(body),
       abortSignal: opts.abortSignal,
     });
     return CoordinationV1.toLeaseList(resp);
@@ -112,13 +111,12 @@ export class CoordinationV1NamespacedApi {
     return CoordinationV1.toLease(resp);
   }
 
-  async deleteLease(name: string, body: MetaV1.DeleteOptions, opts: operations.DeleteOpts = {}) {
+  async deleteLease(name: string, opts: operations.DeleteOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}leases/${name}`,
       expectJson: true,
       querystring: operations.formatDeleteOpts(opts),
-      bodyJson: MetaV1.fromDeleteOptions(body),
       abortSignal: opts.abortSignal,
     });
     return MetaV1.toStatus(resp);

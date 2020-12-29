@@ -89,13 +89,12 @@ export class ExternaldnsV1alpha1NamespacedApi {
     return ExternaldnsV1alpha1.toDNSEndpoint(resp);
   }
 
-  async deleteDNSEndpointList(body: MetaV1.DeleteOptions, opts: operations.DeleteListOpts = {}) {
+  async deleteDNSEndpointList(opts: operations.DeleteListOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}dnsendpoints`,
       expectJson: true,
       querystring: operations.formatDeleteListOpts(opts),
-      bodyJson: MetaV1.fromDeleteOptions(body),
       abortSignal: opts.abortSignal,
     });
     return ExternaldnsV1alpha1.toDNSEndpointList(resp);
@@ -112,13 +111,12 @@ export class ExternaldnsV1alpha1NamespacedApi {
     return ExternaldnsV1alpha1.toDNSEndpoint(resp);
   }
 
-  async deleteDNSEndpoint(name: string, body: MetaV1.DeleteOptions, opts: operations.DeleteOpts = {}) {
+  async deleteDNSEndpoint(name: string, opts: operations.DeleteOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}dnsendpoints/${name}`,
       expectJson: true,
       querystring: operations.formatDeleteOpts(opts),
-      bodyJson: MetaV1.fromDeleteOptions(body),
       abortSignal: opts.abortSignal,
     });
     return MetaV1.toStatus(resp);

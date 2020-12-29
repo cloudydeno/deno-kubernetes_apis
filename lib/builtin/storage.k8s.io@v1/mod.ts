@@ -48,13 +48,12 @@ export class StorageV1Api {
     return StorageV1.toCSIDriver(resp);
   }
 
-  async deleteCSIDriverList(body: MetaV1.DeleteOptions, opts: operations.DeleteListOpts = {}) {
+  async deleteCSIDriverList(opts: operations.DeleteListOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}csidrivers`,
       expectJson: true,
       querystring: operations.formatDeleteListOpts(opts),
-      bodyJson: MetaV1.fromDeleteOptions(body),
       abortSignal: opts.abortSignal,
     });
     return StorageV1.toCSIDriverList(resp);
@@ -71,13 +70,12 @@ export class StorageV1Api {
     return StorageV1.toCSIDriver(resp);
   }
 
-  async deleteCSIDriver(name: string, body: MetaV1.DeleteOptions, opts: operations.DeleteOpts = {}) {
+  async deleteCSIDriver(name: string, opts: operations.DeleteOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}csidrivers/${name}`,
       expectJson: true,
       querystring: operations.formatDeleteOpts(opts),
-      bodyJson: MetaV1.fromDeleteOptions(body),
       abortSignal: opts.abortSignal,
     });
     return StorageV1.toCSIDriver(resp);
@@ -143,13 +141,12 @@ export class StorageV1Api {
     return StorageV1.toCSINode(resp);
   }
 
-  async deleteCSINodeList(body: MetaV1.DeleteOptions, opts: operations.DeleteListOpts = {}) {
+  async deleteCSINodeList(opts: operations.DeleteListOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}csinodes`,
       expectJson: true,
       querystring: operations.formatDeleteListOpts(opts),
-      bodyJson: MetaV1.fromDeleteOptions(body),
       abortSignal: opts.abortSignal,
     });
     return StorageV1.toCSINodeList(resp);
@@ -166,13 +163,12 @@ export class StorageV1Api {
     return StorageV1.toCSINode(resp);
   }
 
-  async deleteCSINode(name: string, body: MetaV1.DeleteOptions, opts: operations.DeleteOpts = {}) {
+  async deleteCSINode(name: string, opts: operations.DeleteOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}csinodes/${name}`,
       expectJson: true,
       querystring: operations.formatDeleteOpts(opts),
-      bodyJson: MetaV1.fromDeleteOptions(body),
       abortSignal: opts.abortSignal,
     });
     return StorageV1.toCSINode(resp);
@@ -238,13 +234,12 @@ export class StorageV1Api {
     return StorageV1.toStorageClass(resp);
   }
 
-  async deleteStorageClassList(body: MetaV1.DeleteOptions, opts: operations.DeleteListOpts = {}) {
+  async deleteStorageClassList(opts: operations.DeleteListOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}storageclasses`,
       expectJson: true,
       querystring: operations.formatDeleteListOpts(opts),
-      bodyJson: MetaV1.fromDeleteOptions(body),
       abortSignal: opts.abortSignal,
     });
     return StorageV1.toStorageClassList(resp);
@@ -261,13 +256,12 @@ export class StorageV1Api {
     return StorageV1.toStorageClass(resp);
   }
 
-  async deleteStorageClass(name: string, body: MetaV1.DeleteOptions, opts: operations.DeleteOpts = {}) {
+  async deleteStorageClass(name: string, opts: operations.DeleteOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}storageclasses/${name}`,
       expectJson: true,
       querystring: operations.formatDeleteOpts(opts),
-      bodyJson: MetaV1.fromDeleteOptions(body),
       abortSignal: opts.abortSignal,
     });
     return StorageV1.toStorageClass(resp);
@@ -333,13 +327,12 @@ export class StorageV1Api {
     return StorageV1.toVolumeAttachment(resp);
   }
 
-  async deleteVolumeAttachmentList(body: MetaV1.DeleteOptions, opts: operations.DeleteListOpts = {}) {
+  async deleteVolumeAttachmentList(opts: operations.DeleteListOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}volumeattachments`,
       expectJson: true,
       querystring: operations.formatDeleteListOpts(opts),
-      bodyJson: MetaV1.fromDeleteOptions(body),
       abortSignal: opts.abortSignal,
     });
     return StorageV1.toVolumeAttachmentList(resp);
@@ -356,13 +349,12 @@ export class StorageV1Api {
     return StorageV1.toVolumeAttachment(resp);
   }
 
-  async deleteVolumeAttachment(name: string, body: MetaV1.DeleteOptions, opts: operations.DeleteOpts = {}) {
+  async deleteVolumeAttachment(name: string, opts: operations.DeleteOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}volumeattachments/${name}`,
       expectJson: true,
       querystring: operations.formatDeleteOpts(opts),
-      bodyJson: MetaV1.fromDeleteOptions(body),
       abortSignal: opts.abortSignal,
     });
     return StorageV1.toVolumeAttachment(resp);

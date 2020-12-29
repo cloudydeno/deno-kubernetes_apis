@@ -89,13 +89,12 @@ export class EventsV1NamespacedApi {
     return EventsV1.toEvent(resp);
   }
 
-  async deleteEventList(body: MetaV1.DeleteOptions, opts: operations.DeleteListOpts = {}) {
+  async deleteEventList(opts: operations.DeleteListOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}events`,
       expectJson: true,
       querystring: operations.formatDeleteListOpts(opts),
-      bodyJson: MetaV1.fromDeleteOptions(body),
       abortSignal: opts.abortSignal,
     });
     return EventsV1.toEventList(resp);
@@ -112,13 +111,12 @@ export class EventsV1NamespacedApi {
     return EventsV1.toEvent(resp);
   }
 
-  async deleteEvent(name: string, body: MetaV1.DeleteOptions, opts: operations.DeleteOpts = {}) {
+  async deleteEvent(name: string, opts: operations.DeleteOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}events/${name}`,
       expectJson: true,
       querystring: operations.formatDeleteOpts(opts),
-      bodyJson: MetaV1.fromDeleteOptions(body),
       abortSignal: opts.abortSignal,
     });
     return MetaV1.toStatus(resp);

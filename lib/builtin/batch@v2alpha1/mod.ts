@@ -89,13 +89,12 @@ export class BatchV2alpha1NamespacedApi {
     return BatchV2alpha1.toCronJob(resp);
   }
 
-  async deleteCronJobList(body: MetaV1.DeleteOptions, opts: operations.DeleteListOpts = {}) {
+  async deleteCronJobList(opts: operations.DeleteListOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}cronjobs`,
       expectJson: true,
       querystring: operations.formatDeleteListOpts(opts),
-      bodyJson: MetaV1.fromDeleteOptions(body),
       abortSignal: opts.abortSignal,
     });
     return BatchV2alpha1.toCronJobList(resp);
@@ -112,13 +111,12 @@ export class BatchV2alpha1NamespacedApi {
     return BatchV2alpha1.toCronJob(resp);
   }
 
-  async deleteCronJob(name: string, body: MetaV1.DeleteOptions, opts: operations.DeleteOpts = {}) {
+  async deleteCronJob(name: string, opts: operations.DeleteOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}cronjobs/${name}`,
       expectJson: true,
       querystring: operations.formatDeleteOpts(opts),
-      bodyJson: MetaV1.fromDeleteOptions(body),
       abortSignal: opts.abortSignal,
     });
     return MetaV1.toStatus(resp);

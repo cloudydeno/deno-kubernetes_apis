@@ -48,13 +48,12 @@ export class NodeV1Api {
     return NodeV1.toRuntimeClass(resp);
   }
 
-  async deleteRuntimeClassList(body: MetaV1.DeleteOptions, opts: operations.DeleteListOpts = {}) {
+  async deleteRuntimeClassList(opts: operations.DeleteListOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}runtimeclasses`,
       expectJson: true,
       querystring: operations.formatDeleteListOpts(opts),
-      bodyJson: MetaV1.fromDeleteOptions(body),
       abortSignal: opts.abortSignal,
     });
     return NodeV1.toRuntimeClassList(resp);
@@ -71,13 +70,12 @@ export class NodeV1Api {
     return NodeV1.toRuntimeClass(resp);
   }
 
-  async deleteRuntimeClass(name: string, body: MetaV1.DeleteOptions, opts: operations.DeleteOpts = {}) {
+  async deleteRuntimeClass(name: string, opts: operations.DeleteOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}runtimeclasses/${name}`,
       expectJson: true,
       querystring: operations.formatDeleteOpts(opts),
-      bodyJson: MetaV1.fromDeleteOptions(body),
       abortSignal: opts.abortSignal,
     });
     return MetaV1.toStatus(resp);

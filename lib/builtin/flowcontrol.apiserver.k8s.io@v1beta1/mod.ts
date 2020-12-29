@@ -48,13 +48,12 @@ export class FlowcontrolApiserverV1beta1Api {
     return FlowcontrolApiserverV1beta1.toFlowSchema(resp);
   }
 
-  async deleteFlowSchemaList(body: MetaV1.DeleteOptions, opts: operations.DeleteListOpts = {}) {
+  async deleteFlowSchemaList(opts: operations.DeleteListOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}flowschemas`,
       expectJson: true,
       querystring: operations.formatDeleteListOpts(opts),
-      bodyJson: MetaV1.fromDeleteOptions(body),
       abortSignal: opts.abortSignal,
     });
     return FlowcontrolApiserverV1beta1.toFlowSchemaList(resp);
@@ -71,13 +70,12 @@ export class FlowcontrolApiserverV1beta1Api {
     return FlowcontrolApiserverV1beta1.toFlowSchema(resp);
   }
 
-  async deleteFlowSchema(name: string, body: MetaV1.DeleteOptions, opts: operations.DeleteOpts = {}) {
+  async deleteFlowSchema(name: string, opts: operations.DeleteOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}flowschemas/${name}`,
       expectJson: true,
       querystring: operations.formatDeleteOpts(opts),
-      bodyJson: MetaV1.fromDeleteOptions(body),
       abortSignal: opts.abortSignal,
     });
     return MetaV1.toStatus(resp);
@@ -182,13 +180,12 @@ export class FlowcontrolApiserverV1beta1Api {
     return FlowcontrolApiserverV1beta1.toPriorityLevelConfiguration(resp);
   }
 
-  async deletePriorityLevelConfigurationList(body: MetaV1.DeleteOptions, opts: operations.DeleteListOpts = {}) {
+  async deletePriorityLevelConfigurationList(opts: operations.DeleteListOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}prioritylevelconfigurations`,
       expectJson: true,
       querystring: operations.formatDeleteListOpts(opts),
-      bodyJson: MetaV1.fromDeleteOptions(body),
       abortSignal: opts.abortSignal,
     });
     return FlowcontrolApiserverV1beta1.toPriorityLevelConfigurationList(resp);
@@ -205,13 +202,12 @@ export class FlowcontrolApiserverV1beta1Api {
     return FlowcontrolApiserverV1beta1.toPriorityLevelConfiguration(resp);
   }
 
-  async deletePriorityLevelConfiguration(name: string, body: MetaV1.DeleteOptions, opts: operations.DeleteOpts = {}) {
+  async deletePriorityLevelConfiguration(name: string, opts: operations.DeleteOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}prioritylevelconfigurations/${name}`,
       expectJson: true,
       querystring: operations.formatDeleteOpts(opts),
-      bodyJson: MetaV1.fromDeleteOptions(body),
       abortSignal: opts.abortSignal,
     });
     return MetaV1.toStatus(resp);
