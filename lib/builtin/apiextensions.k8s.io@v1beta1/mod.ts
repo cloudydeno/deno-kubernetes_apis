@@ -80,7 +80,7 @@ export class ApiextensionsV1beta1Api {
       bodyJson: MetaV1.fromDeleteOptions(body),
       abortSignal: opts.abortSignal,
     });
-    return ApiextensionsV1beta1.toCustomResourceDefinition(resp);
+    return MetaV1.toStatus(resp);
   }
 
   async replaceCustomResourceDefinition(name: string, body: ApiextensionsV1beta1.CustomResourceDefinition, opts: operations.PutOpts = {}) {

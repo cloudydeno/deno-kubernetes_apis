@@ -80,7 +80,7 @@ export class InternalApiserverV1alpha1Api {
       bodyJson: MetaV1.fromDeleteOptions(body),
       abortSignal: opts.abortSignal,
     });
-    return InternalApiserverV1alpha1.toStorageVersion(resp);
+    return MetaV1.toStatus(resp);
   }
 
   async replaceStorageVersion(name: string, body: InternalApiserverV1alpha1.StorageVersion, opts: operations.PutOpts = {}) {

@@ -80,7 +80,7 @@ export class CertificatesV1beta1Api {
       bodyJson: MetaV1.fromDeleteOptions(body),
       abortSignal: opts.abortSignal,
     });
-    return CertificatesV1beta1.toCertificateSigningRequest(resp);
+    return MetaV1.toStatus(resp);
   }
 
   async replaceCertificateSigningRequest(name: string, body: CertificatesV1beta1.CertificateSigningRequest, opts: operations.PutOpts = {}) {

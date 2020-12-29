@@ -121,7 +121,7 @@ export class DiscoveryV1beta1NamespacedApi {
       bodyJson: MetaV1.fromDeleteOptions(body),
       abortSignal: opts.abortSignal,
     });
-    return DiscoveryV1beta1.toEndpointSlice(resp);
+    return MetaV1.toStatus(resp);
   }
 
   async replaceEndpointSlice(name: string, body: DiscoveryV1beta1.EndpointSlice, opts: operations.PutOpts = {}) {

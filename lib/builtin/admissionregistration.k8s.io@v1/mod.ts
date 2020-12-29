@@ -80,7 +80,7 @@ export class AdmissionregistrationV1Api {
       bodyJson: MetaV1.fromDeleteOptions(body),
       abortSignal: opts.abortSignal,
     });
-    return AdmissionregistrationV1.toMutatingWebhookConfiguration(resp);
+    return MetaV1.toStatus(resp);
   }
 
   async replaceMutatingWebhookConfiguration(name: string, body: AdmissionregistrationV1.MutatingWebhookConfiguration, opts: operations.PutOpts = {}) {
@@ -175,7 +175,7 @@ export class AdmissionregistrationV1Api {
       bodyJson: MetaV1.fromDeleteOptions(body),
       abortSignal: opts.abortSignal,
     });
-    return AdmissionregistrationV1.toValidatingWebhookConfiguration(resp);
+    return MetaV1.toStatus(resp);
   }
 
   async replaceValidatingWebhookConfiguration(name: string, body: AdmissionregistrationV1.ValidatingWebhookConfiguration, opts: operations.PutOpts = {}) {

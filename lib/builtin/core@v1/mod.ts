@@ -196,7 +196,7 @@ export class CoreV1Api {
       bodyJson: MetaV1.fromDeleteOptions(body),
       abortSignal: opts.abortSignal,
     });
-    return CoreV1.toNamespace(resp);
+    return MetaV1.toStatus(resp);
   }
 
   async replaceNamespace(name: string, body: CoreV1.Namespace, opts: operations.PutOpts = {}) {
@@ -342,7 +342,7 @@ export class CoreV1Api {
       bodyJson: MetaV1.fromDeleteOptions(body),
       abortSignal: opts.abortSignal,
     });
-    return CoreV1.toNode(resp);
+    return MetaV1.toStatus(resp);
   }
 
   async replaceNode(name: string, body: CoreV1.Node, opts: operations.PutOpts = {}) {
@@ -827,7 +827,7 @@ export class CoreV1NamespacedApi {
       bodyJson: MetaV1.fromDeleteOptions(body),
       abortSignal: opts.abortSignal,
     });
-    return CoreV1.toConfigMap(resp);
+    return MetaV1.toStatus(resp);
   }
 
   async replaceConfigMap(name: string, body: CoreV1.ConfigMap, opts: operations.PutOpts = {}) {
@@ -922,7 +922,7 @@ export class CoreV1NamespacedApi {
       bodyJson: MetaV1.fromDeleteOptions(body),
       abortSignal: opts.abortSignal,
     });
-    return CoreV1.toEndpoints(resp);
+    return MetaV1.toStatus(resp);
   }
 
   async replaceEndpoints(name: string, body: CoreV1.Endpoints, opts: operations.PutOpts = {}) {
@@ -1017,7 +1017,7 @@ export class CoreV1NamespacedApi {
       bodyJson: MetaV1.fromDeleteOptions(body),
       abortSignal: opts.abortSignal,
     });
-    return CoreV1.toEvent(resp);
+    return MetaV1.toStatus(resp);
   }
 
   async replaceEvent(name: string, body: CoreV1.Event, opts: operations.PutOpts = {}) {
@@ -1112,7 +1112,7 @@ export class CoreV1NamespacedApi {
       bodyJson: MetaV1.fromDeleteOptions(body),
       abortSignal: opts.abortSignal,
     });
-    return CoreV1.toLimitRange(resp);
+    return MetaV1.toStatus(resp);
   }
 
   async replaceLimitRange(name: string, body: CoreV1.LimitRange, opts: operations.PutOpts = {}) {
@@ -1760,7 +1760,7 @@ export class CoreV1NamespacedApi {
       bodyJson: MetaV1.fromDeleteOptions(body),
       abortSignal: opts.abortSignal,
     });
-    return CoreV1.toReplicationController(resp);
+    return MetaV1.toStatus(resp);
   }
 
   async replaceReplicationController(name: string, body: CoreV1.ReplicationController, opts: operations.PutOpts = {}) {
@@ -2067,7 +2067,7 @@ export class CoreV1NamespacedApi {
       bodyJson: MetaV1.fromDeleteOptions(body),
       abortSignal: opts.abortSignal,
     });
-    return CoreV1.toSecret(resp);
+    return MetaV1.toStatus(resp);
   }
 
   async replaceSecret(name: string, body: CoreV1.Secret, opts: operations.PutOpts = {}) {
@@ -2257,7 +2257,7 @@ export class CoreV1NamespacedApi {
       bodyJson: MetaV1.fromDeleteOptions(body),
       abortSignal: opts.abortSignal,
     });
-    return CoreV1.toService(resp);
+    return MetaV1.toStatus(resp);
   }
 
   async replaceService(name: string, body: CoreV1.Service, opts: operations.PutOpts = {}) {

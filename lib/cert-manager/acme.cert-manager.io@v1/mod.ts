@@ -144,7 +144,7 @@ export class AcmeCertManagerIoV1NamespacedApi {
       bodyJson: MetaV1.fromDeleteOptions(body),
       abortSignal: opts.abortSignal,
     });
-    return AcmeCertManagerIoV1.toChallenge(resp);
+    return MetaV1.toStatus(resp);
   }
 
   async replaceChallenge(name: string, body: AcmeCertManagerIoV1.Challenge, opts: operations.PutOpts = {}) {
@@ -275,7 +275,7 @@ export class AcmeCertManagerIoV1NamespacedApi {
       bodyJson: MetaV1.fromDeleteOptions(body),
       abortSignal: opts.abortSignal,
     });
-    return AcmeCertManagerIoV1.toOrder(resp);
+    return MetaV1.toStatus(resp);
   }
 
   async replaceOrder(name: string, body: AcmeCertManagerIoV1.Order, opts: operations.PutOpts = {}) {

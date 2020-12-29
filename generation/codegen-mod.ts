@@ -12,6 +12,11 @@ const knownOpts: Record<string,string|undefined> = {
   'dryRun,gracePeriodSeconds,orphanDependents,propagationPolicy': 'DeleteOpts',
 };
 
+// Known remaining instances of https://github.com/kubernetes/kubernetes/issues/59501
+const returnOnDeleteOps = new Set([
+  'batch/deleteJob',
+]);
+
 export function generateModuleTypescript(surface: SurfaceMap, api: SurfaceApi): string {
   const chunks = new Array<string>();
   chunks.push(`export * from "./structs.ts";`);
@@ -208,12 +213,18 @@ export function generateModuleTypescript(surface: SurfaceMap, api: SurfaceApi): 
     if (outShape) {
       let shape = outShape;
 
-      // QUIRK: seems like deletes return what was deleted, not a boring Status
-      // TODO: actually depends on the API, some are Status, some are what's deleted
+      // QUIRK: sometimes deletes return what was deleted, not a boring Status
+      // actually depends on the API, some are Status, some are what's deleted
+      // https://github.com/kubernetes/kubernetes/issues/59501
+      // for the most part, lists return the things and by-names do not
       if (shape.type === 'foreign' &&
           shape.api.apiGroup === 'meta' &&
           shape.name === 'Status' &&
-          op.method === 'delete') {
+          op.method === 'delete' &&
+          (
+            !op.subPath.includes('{name}') ||
+            returnOnDeleteOps.has(`${api.apiGroup}/${op.operationName}`)
+          )) {
         shape = api.shapes.shapes.get(op.operationName.replace(/^delete/, ''))!;
       }
 

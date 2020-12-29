@@ -121,7 +121,7 @@ export class EventsV1NamespacedApi {
       bodyJson: MetaV1.fromDeleteOptions(body),
       abortSignal: opts.abortSignal,
     });
-    return EventsV1.toEvent(resp);
+    return MetaV1.toStatus(resp);
   }
 
   async replaceEvent(name: string, body: EventsV1.Event, opts: operations.PutOpts = {}) {

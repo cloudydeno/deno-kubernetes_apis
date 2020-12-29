@@ -80,7 +80,7 @@ export class SchedulingV1beta1Api {
       bodyJson: MetaV1.fromDeleteOptions(body),
       abortSignal: opts.abortSignal,
     });
-    return SchedulingV1beta1.toPriorityClass(resp);
+    return MetaV1.toStatus(resp);
   }
 
   async replacePriorityClass(name: string, body: SchedulingV1beta1.PriorityClass, opts: operations.PutOpts = {}) {

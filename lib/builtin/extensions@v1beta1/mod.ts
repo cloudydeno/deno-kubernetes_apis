@@ -121,7 +121,7 @@ export class ExtensionsV1beta1NamespacedApi {
       bodyJson: MetaV1.fromDeleteOptions(body),
       abortSignal: opts.abortSignal,
     });
-    return ExtensionsV1beta1.toIngress(resp);
+    return MetaV1.toStatus(resp);
   }
 
   async replaceIngress(name: string, body: ExtensionsV1beta1.Ingress, opts: operations.PutOpts = {}) {

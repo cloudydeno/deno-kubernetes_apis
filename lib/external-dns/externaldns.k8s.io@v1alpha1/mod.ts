@@ -121,7 +121,7 @@ export class ExternaldnsV1alpha1NamespacedApi {
       bodyJson: MetaV1.fromDeleteOptions(body),
       abortSignal: opts.abortSignal,
     });
-    return ExternaldnsV1alpha1.toDNSEndpoint(resp);
+    return MetaV1.toStatus(resp);
   }
 
   async replaceDNSEndpoint(name: string, body: ExternaldnsV1alpha1.DNSEndpoint, opts: operations.PutOpts = {}) {

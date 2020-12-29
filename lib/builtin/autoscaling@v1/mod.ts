@@ -121,7 +121,7 @@ export class AutoscalingV1NamespacedApi {
       bodyJson: MetaV1.fromDeleteOptions(body),
       abortSignal: opts.abortSignal,
     });
-    return AutoscalingV1.toHorizontalPodAutoscaler(resp);
+    return MetaV1.toStatus(resp);
   }
 
   async replaceHorizontalPodAutoscaler(name: string, body: AutoscalingV1.HorizontalPodAutoscaler, opts: operations.PutOpts = {}) {

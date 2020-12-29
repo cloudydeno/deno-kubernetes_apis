@@ -121,7 +121,7 @@ export class CoordinationV1NamespacedApi {
       bodyJson: MetaV1.fromDeleteOptions(body),
       abortSignal: opts.abortSignal,
     });
-    return CoordinationV1.toLease(resp);
+    return MetaV1.toStatus(resp);
   }
 
   async replaceLease(name: string, body: CoordinationV1.Lease, opts: operations.PutOpts = {}) {

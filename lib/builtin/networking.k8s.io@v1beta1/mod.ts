@@ -88,7 +88,7 @@ export class NetworkingV1beta1Api {
       bodyJson: MetaV1.fromDeleteOptions(body),
       abortSignal: opts.abortSignal,
     });
-    return NetworkingV1beta1.toIngressClass(resp);
+    return MetaV1.toStatus(resp);
   }
 
   async replaceIngressClass(name: string, body: NetworkingV1beta1.IngressClass, opts: operations.PutOpts = {}) {
@@ -216,7 +216,7 @@ export class NetworkingV1beta1NamespacedApi {
       bodyJson: MetaV1.fromDeleteOptions(body),
       abortSignal: opts.abortSignal,
     });
-    return NetworkingV1beta1.toIngress(resp);
+    return MetaV1.toStatus(resp);
   }
 
   async replaceIngress(name: string, body: NetworkingV1beta1.Ingress, opts: operations.PutOpts = {}) {

@@ -80,7 +80,7 @@ export class ApiregistrationV1beta1Api {
       bodyJson: MetaV1.fromDeleteOptions(body),
       abortSignal: opts.abortSignal,
     });
-    return ApiregistrationV1beta1.toAPIService(resp);
+    return MetaV1.toStatus(resp);
   }
 
   async replaceAPIService(name: string, body: ApiregistrationV1beta1.APIService, opts: operations.PutOpts = {}) {

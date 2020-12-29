@@ -216,7 +216,7 @@ export class PolicyV1beta1NamespacedApi {
       bodyJson: MetaV1.fromDeleteOptions(body),
       abortSignal: opts.abortSignal,
     });
-    return PolicyV1beta1.toPodDisruptionBudget(resp);
+    return MetaV1.toStatus(resp);
   }
 
   async replacePodDisruptionBudget(name: string, body: PolicyV1beta1.PodDisruptionBudget, opts: operations.PutOpts = {}) {

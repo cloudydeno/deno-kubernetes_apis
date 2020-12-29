@@ -121,7 +121,7 @@ export class BatchV2alpha1NamespacedApi {
       bodyJson: MetaV1.fromDeleteOptions(body),
       abortSignal: opts.abortSignal,
     });
-    return BatchV2alpha1.toCronJob(resp);
+    return MetaV1.toStatus(resp);
   }
 
   async replaceCronJob(name: string, body: BatchV2alpha1.CronJob, opts: operations.PutOpts = {}) {

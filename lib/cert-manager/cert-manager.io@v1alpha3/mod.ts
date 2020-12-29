@@ -134,7 +134,7 @@ export class CertManagerIoV1alpha3Api {
       bodyJson: MetaV1.fromDeleteOptions(body),
       abortSignal: opts.abortSignal,
     });
-    return CertManagerIoV1alpha3.toClusterIssuer(resp);
+    return MetaV1.toStatus(resp);
   }
 
   async replaceClusterIssuer(name: string, body: CertManagerIoV1alpha3.ClusterIssuer, opts: operations.PutOpts = {}) {
@@ -298,7 +298,7 @@ export class CertManagerIoV1alpha3NamespacedApi {
       bodyJson: MetaV1.fromDeleteOptions(body),
       abortSignal: opts.abortSignal,
     });
-    return CertManagerIoV1alpha3.toCertificateRequest(resp);
+    return MetaV1.toStatus(resp);
   }
 
   async replaceCertificateRequest(name: string, body: CertManagerIoV1alpha3.CertificateRequest, opts: operations.PutOpts = {}) {
@@ -429,7 +429,7 @@ export class CertManagerIoV1alpha3NamespacedApi {
       bodyJson: MetaV1.fromDeleteOptions(body),
       abortSignal: opts.abortSignal,
     });
-    return CertManagerIoV1alpha3.toCertificate(resp);
+    return MetaV1.toStatus(resp);
   }
 
   async replaceCertificate(name: string, body: CertManagerIoV1alpha3.Certificate, opts: operations.PutOpts = {}) {
@@ -560,7 +560,7 @@ export class CertManagerIoV1alpha3NamespacedApi {
       bodyJson: MetaV1.fromDeleteOptions(body),
       abortSignal: opts.abortSignal,
     });
-    return CertManagerIoV1alpha3.toIssuer(resp);
+    return MetaV1.toStatus(resp);
   }
 
   async replaceIssuer(name: string, body: CertManagerIoV1alpha3.Issuer, opts: operations.PutOpts = {}) {

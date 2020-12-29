@@ -80,7 +80,7 @@ export class NodeV1alpha1Api {
       bodyJson: MetaV1.fromDeleteOptions(body),
       abortSignal: opts.abortSignal,
     });
-    return NodeV1alpha1.toRuntimeClass(resp);
+    return MetaV1.toStatus(resp);
   }
 
   async replaceRuntimeClass(name: string, body: NodeV1alpha1.RuntimeClass, opts: operations.PutOpts = {}) {

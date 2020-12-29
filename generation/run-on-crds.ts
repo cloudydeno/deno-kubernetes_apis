@@ -292,7 +292,7 @@ function processCRD({apiGroup, apiVersion, schema, names, scope, subResources}: 
     });
     addOp(`delete${names.kind}`, scope, 'delete', {
       reqKind: `io.k8s.apimachinery.pkg.apis.meta.v1.DeleteOptions`,
-      respKind: `${api.shapePrefix}${names.kind}`, // TODO: check!
+      respKind: `io.k8s.apimachinery.pkg.apis.meta.v1.Status`,
       knownOpts: knownOpts.DeleteOpts,
       subPath: '/{name}',
     });
