@@ -2,7 +2,11 @@
 // All the generated code uses this centralized API contract,
 //   while users are free to pass in a different compatible client to actually call
 
-import {JSONObject, JSONValue, RequestOptions, Reflector} from "https://deno.land/x/kubernetes_client@v0.1.2/mod.ts";
+import { toStatus } from './builtin/meta@v1/structs.ts';
+import {
+  JSONObject, JSONValue,
+  RequestOptions,
+} from "https://deno.land/x/kubernetes_client@v0.1.2/mod.ts";
 export * from "https://deno.land/x/kubernetes_client@v0.1.2/mod.ts";
 
 // Helpers used to validate/transform structures from or for the wire
@@ -32,6 +36,15 @@ export function assertOrAddApiVersionAndKind<
   // Given and matching, all good!
   } else if (input.apiVersion === expectedVersion && input.kind === expectedKind) {
     return output;
+  }
+
+  // If something goes wrong (access denied, not found) we get a Status
+  if (input.apiVersion === 'v1' && input.kind === 'Status') {
+    const status = toStatus(input);
+    const expected = JSON.stringify(`${output.apiVersion}/${output.kind}`);
+    const err: any = new Error(`Kubernetes says: ${status.message}`);
+    err.status = status;
+    throw err;
   }
 
   // Otherwise we're going to build up an error
