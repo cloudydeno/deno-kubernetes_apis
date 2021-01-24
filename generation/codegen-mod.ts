@@ -135,7 +135,7 @@ export function generateModuleTypescript(surface: SurfaceMap, api: SurfaceApi): 
       chunks.push(`  async ${baseSignature}): Promise<unknown> {`);
       chunks.push(`    if (opts.path && !opts.path.startsWith('/')) throw new Error("Proxy path cannot be relative");`);
       chunks.push(`    const name = (opts.port != null) ? \`\${${nameArgName}}:\${opts.port}\` : ${nameArgName};`);
-      chunks.push(`    const path = \`\${this.#root}nodes/\${name}/proxy\${opts.path || ''}\`;`);
+      chunks.push(`    const path = \`\${this.#root}${JSON.stringify(opPath).slice(1,-1).replace(/{/g, '${')}\${opts.path || ''}\`;`);
       chunks.push(`    return this.#client.performRequest({ ...opts, path });`);
       chunks.push(`  }\n`);
       return;

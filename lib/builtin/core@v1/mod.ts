@@ -1538,7 +1538,7 @@ export class CoreV1NamespacedApi {
   async proxyPodRequest(podName: string, opts: c.ProxyOptions): Promise<unknown> {
     if (opts.path && !opts.path.startsWith('/')) throw new Error("Proxy path cannot be relative");
     const name = (opts.port != null) ? `${podName}:${opts.port}` : podName;
-    const path = `${this.#root}nodes/${name}/proxy${opts.path || ''}`;
+    const path = `${this.#root}pods/${name}/proxy${opts.path || ''}`;
     return this.#client.performRequest({ ...opts, path });
   }
 
@@ -2264,7 +2264,7 @@ export class CoreV1NamespacedApi {
   async proxyServiceRequest(serviceName: string, opts: c.ProxyOptions): Promise<unknown> {
     if (opts.path && !opts.path.startsWith('/')) throw new Error("Proxy path cannot be relative");
     const name = (opts.port != null) ? `${serviceName}:${opts.port}` : serviceName;
-    const path = `${this.#root}nodes/${name}/proxy${opts.path || ''}`;
+    const path = `${this.#root}services/${name}/proxy${opts.path || ''}`;
     return this.#client.performRequest({ ...opts, path });
   }
 
