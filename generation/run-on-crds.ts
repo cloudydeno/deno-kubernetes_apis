@@ -15,7 +15,7 @@ import {
   CustomResourceDefinitionVersion,
 } from "../lib/builtin/apiextensions.k8s.io@v1beta1/structs.ts";
 
-import { ApiKind, JSONValue } from "https://deno.land/x/kubernetes_client@v0.1.2/mod.ts";
+import { ApiKind, JSONValue } from "https://deno.land/x/kubernetes_client@v0.2.0/mod.ts";
 
 import * as YAML from "https://deno.land/std@0.82.0/encoding/yaml.ts";
 

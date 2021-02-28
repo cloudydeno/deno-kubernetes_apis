@@ -6,8 +6,10 @@ import { toStatus } from './builtin/meta@v1/structs.ts';
 import {
   JSONObject, JSONValue,
   RequestOptions,
-} from "https://deno.land/x/kubernetes_client@v0.1.2/mod.ts";
-export * from "https://deno.land/x/kubernetes_client@v0.1.2/mod.ts";
+} from "https://deno.land/x/kubernetes_client@v0.2.0/lib/contract.ts";
+
+export * from "https://deno.land/x/kubernetes_client@v0.2.0/lib/contract.ts";
+export * from "https://deno.land/x/kubernetes_client@v0.2.0/lib/stream-transformers.ts";
 
 // Helpers used to validate/transform structures from or for the wire
 // And some other stuff :)
@@ -41,7 +43,6 @@ export function assertOrAddApiVersionAndKind<
   // If something goes wrong (access denied, not found) we get a Status
   if (input.apiVersion === 'v1' && input.kind === 'Status') {
     const status = toStatus(input);
-    const expected = JSON.stringify(`${output.apiVersion}/${output.kind}`);
     const err: any = new Error(`Kubernetes says: ${status.message}`);
     err.status = status;
     throw err;

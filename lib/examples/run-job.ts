@@ -1,4 +1,4 @@
-import { autoDetectClient } from "../common.ts";
+import { autoDetectClient } from "../client.ts";
 import { CoreV1Api } from "../builtin/core@v1/mod.ts";
 import { BatchV1Api } from "../builtin/batch@v1/mod.ts";
 
