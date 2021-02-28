@@ -17,7 +17,7 @@ import {
 
 import { ApiKind, JSONValue } from "https://deno.land/x/kubernetes_client@v0.2.0/mod.ts";
 
-import * as YAML from "https://deno.land/std@0.82.0/encoding/yaml.ts";
+import * as YAML from "https://deno.land/std@0.88.0/encoding/yaml.ts";
 
 const knownOpts = {
   GetListOpts: 'continue,fieldSelector,labelSelector,limit,resourceVersion,resourceVersionMatch,timeoutSeconds',
