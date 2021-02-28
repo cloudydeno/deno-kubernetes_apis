@@ -61,6 +61,22 @@ const apiMap = new SurfaceMap({
 });
 apiMap.allApis[0].moduleName = '../builtin/meta@v1';
 
+apiMap.registerApi({
+  apiRoot: '/api/v1/',
+  shapePrefix: 'io.k8s.api.core.v1.',
+
+  apiGroup: 'core',
+  apiVersion: 'v1',
+  apiGroupVersion: 'v1',
+  friendlyName: 'CoreV1',
+  moduleName: `../builtin/core@v1`,
+
+  operations: new Array,
+  definitions: new Map,
+  kinds: new Map(),
+  shapes: new ShapeLibrary('io.k8s.api.core.v1.', apiMap.byDefPrefix),
+});
+
 type DefMap = Map<string, OpenAPI2SchemaObject>;
 const apis = new Map<string, [SurfaceApi, DefMap]>();
 function recognizeGroupVersion(apiGroup: string, apiVersion: string) {
@@ -161,6 +177,7 @@ for (const [api, defs] of apis.values()) {
 }
 
 for (const api of apiMap.allApis) {
+  if (api.moduleName.startsWith('../')) continue;
   try {
     await writeApiModule(apiMap, api, Deno.args[1]);
   } catch (err) {
@@ -184,6 +201,8 @@ function processCRD({apiGroup, apiVersion, schema, names, scope, subResources}: 
   // definitions: Map<string,OpenAPI2SchemaObject>,
   // kinds: Map<string,SurfaceKind>,
   // shapes: ShapeLibrary,
+
+  fixupSchema(schema, api.shapePrefix, defs, [names.kind]);
 
   // seems like additionalProperties gives type problems
   // api.definitions.set(names.kind, schema as OpenAPI2SchemaObject);
@@ -352,6 +371,81 @@ function processCRD({apiGroup, apiVersion, schema, names, scope, subResources}: 
 
     addCrdOps('Cluster');
 
+  }
+
+}
+
+
+function fixupSchema(schema: OpenAPI2SchemaObject, shapePrefix: string, defMap: DefMap, path: string[] = []) {
+
+  // cert-manager
+  const mainPrefix = shapePrefix.replace(/^acme\./, '');
+
+  if (schema.properties) {
+    // if (path.slice(-1)[0] === 'dns01')
+    //   console.log(schema.type, path);
+
+    for (const [key, val] of Object.entries(schema.properties)) {
+      const newPath = [...path, key];
+
+      if (newPath.slice(-3).join('.') === 'podTemplate.spec.affinity') {
+        schema.properties[key] = {
+          $ref: "#/definitions/io.k8s.api.core.v1.Affinity",
+        };
+        continue;
+      }
+
+      if (newPath.slice(-1)[0] === 'secretRef' || newPath.slice(-1)[0].endsWith('SecretRef')) {
+        schema.properties[key] = {
+          $ref: `#/definitions/${mainPrefix}SecretRef`,
+        };
+        if (!defMap.has('SecretRef') && shapePrefix === mainPrefix) {
+          defMap.set('SecretRef', { ...val,
+            description: "A reference to a specific 'key' within a Secret resource. In some instances, `key` is a required field.",
+          });
+        } else continue;
+      }
+
+      if (newPath.join('.') === 'Issuer.spec' || newPath.join('.') === 'ClusterIssuer.spec') {
+        schema.properties[key] = {
+          $ref: `#/definitions/${mainPrefix}IssuerSpec`,
+        };
+        if (!defMap.has('IssuerSpec')) defMap.set('IssuerSpec', { ...val,
+          description: "Desired state of the Issuer or ClusterIssuer resource.",
+        });
+      }
+
+      if (newPath.join('.') === 'Issuer.status' || newPath.join('.') === 'ClusterIssuer.status') {
+        schema.properties[key] = {
+          $ref: `#/definitions/${mainPrefix}IssuerStatus`,
+        };
+        if (!defMap.has('IssuerStatus')) defMap.set('IssuerStatus', { ...val,
+          description: "Status of the Issuer or ClusterIssuer. This is set and managed automatically.",
+        });
+      }
+
+      if (newPath.join('.') === 'Challenge.spec.solver') {
+        schema.properties[key] = {
+          $ref: `#/definitions/${mainPrefix}SolverSpec`,
+        };
+        continue;
+      }
+
+      fixupSchema(val, shapePrefix, defMap, newPath);
+    }
+
+  } else if (schema.items) {
+
+    fixupSchema(schema.items, shapePrefix, defMap, [...path, '*']);
+
+    if (path.join('.').endsWith('Issuer.spec.acme.solvers')) {
+      if (!defMap.has('SolverSpec') && shapePrefix === mainPrefix) {
+        defMap.set('SolverSpec', schema.items);
+      }
+      schema.items = {
+        $ref: `#/definitions/${shapePrefix}SolverSpec`,
+      };
+    }
   }
 
 }

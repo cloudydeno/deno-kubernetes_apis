@@ -3,8 +3,8 @@
 gitapi="https://api.github.com"
 upstream="kubernetes-sigs/external-dns"
 crdpath="docs/contributing/crd-source"
-specdir="generation/api-specs/external-dns-$1"
 projectname="external-dns"
+specdir="generation/api-specs/$projectname-$1"
 
 if [ ! -d "$specdir" ]
 then {

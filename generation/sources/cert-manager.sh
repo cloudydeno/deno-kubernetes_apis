@@ -3,7 +3,8 @@
 gitapi="https://api.github.com"
 upstream="jetstack/cert-manager"
 crdpath="deploy/crds"
-specdir="generation/api-specs/cert-manager-$1"
+projectname="cert-manager"
+specdir="generation/api-specs/$projectname-$1"
 
 if [ ! -d "$specdir" ]
 then {
@@ -14,14 +15,16 @@ then {
 } | sh -eux
 fi
 
-rm -r lib/cert-manager/* \
+mkdir -p "lib/$projectname"
+rm -r "lib/$projectname"/* \
 || true
 
 deno run \
   --allow-read="generation/api-specs" \
-  --allow-write="lib/cert-manager" \
+  --allow-write="lib/$projectname" \
   generation/run-on-crds.ts \
   "$specdir" \
-  "cert-manager"
+  "$projectname"
 
-git status lib/cert-manager
+deno cache "lib/$projectname"/*/mod.ts
+git status "lib/$projectname"

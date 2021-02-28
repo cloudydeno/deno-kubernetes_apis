@@ -146,10 +146,21 @@ export function generateModuleTypescript(surface: SurfaceMap, api: SurfaceApi): 
       accept = 'text/plain'; // container logs
     }
 
-    // TODO?: more specific signatures for PATCH
-    // // async patchNode(name: string, type: 'strategic-merge', body: c.StrategicPatch<CoreV1.NodeFields>, opts?: operations.PatchOpts): Promise<CoreV1.Node>;
-    // // async patchNode(name: string, type: 'json-merge' | 'apply-merge', body: c.DeepPartial<CoreV1.NodeFields>, opts?: operations.PatchOpts): Promise<CoreV1.Node>;
-    // // async patchNode(name: string, type: 'json-patch', body: c.JsonPatch, opts?: operations.PatchOpts): Promise<CoreV1.Node>;
+    // TODO: combine 'replace' and 'patch' into 'update'
+    // async updateOrderStatus(name: string, type: c.PatchType | 'replace', body: AcmeCertManagerIoV1.Order | c.JsonPatch, opts: operations.PatchOpts = {}) {
+    //   if (Array.isArray(body) && type !== 'json-patch') throw new Error(
+    //     `JSON-Patch bodies must be used with the "json-patch" update type`);
+    //   const resp = await this.#client.performRequest({
+    //     method: type === 'replace' ? "PUT" : "PATCH",
+    //     path: `${this.#root}orders/${name}/status`,
+    //     expectJson: true,
+    //     querystring: operations.formatPatchOpts(opts),
+    //     contentType: type === 'replace' ? undefined : c.getPatchContentType(type),
+    //     bodyJson: Array.isArray(body) ? body : AcmeCertManagerIoV1.fromOrder(body),
+    //     abortSignal: opts.abortSignal,
+    //   });
+    //   return AcmeCertManagerIoV1.toOrder(resp);
+    // }
 
     chunks.push(`  async ${op.operationName}(${writeSig(args, opts, '  ')}) {`);
     const isWatch = op.operationName.startsWith('watch');
