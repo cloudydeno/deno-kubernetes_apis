@@ -32,6 +32,15 @@ see `/x/kubernetes_client` for more information.
 
 ## Changelog
 
+* `v0.3.0`:
+  * Updating `/x/kubernetes_client` API contract to `v0.2.0`.
+    * Breaking change!
+    * If you import `autoDetectClient` and other client APIs from this `common.ts`,
+      those now come from `client.ts` instead
+      (or just import `/x/kubernetes_client` yourself).
+    * This upstream release vastly improves cluster client detection logic.
+  * Now handles v1.Status error payloads when processing any response body.
+  * Added shebang and execute bit to every script in `examples/`.
 * `v0.2.0` on `2020-12-29`:
   * Includes 'builtin' APIs generated from K8s `v1.20`.
   * Patching and deletion is more stable; mistype error messages are vastly improved.
