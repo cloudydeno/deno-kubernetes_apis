@@ -1,3 +1,5 @@
+#!/usr/bin/env -S deno run --allow-net --allow-read --allow-env --allow-run
+
 import { autoDetectClient, readAllItems } from '../client.ts';
 import { ApiextensionsV1beta1Api } from "../builtin/apiextensions.k8s.io@v1beta1/mod.ts";
 

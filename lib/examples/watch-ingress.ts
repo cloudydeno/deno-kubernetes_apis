@@ -1,3 +1,5 @@
+#!/usr/bin/env -S deno run --allow-net --allow-read --allow-env --allow-run
+
 import { autoDetectClient, Reflector } from "../client.ts";
 import { NetworkingV1beta1Api } from "../builtin/networking.k8s.io@v1beta1/mod.ts";
 

@@ -1,3 +1,5 @@
+#!/usr/bin/env -S deno run --allow-net --allow-read --allow-env --allow-run
+
 /*
  * Pulls the latest metrics from every node and prints some high-level metrics.
  * This uses a 'proxy...Request' function which tunnels an HTTP request
