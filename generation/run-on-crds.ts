@@ -1,4 +1,5 @@
-import type { OpenAPI2SchemaObject, OpenAPI2Methods, OpenAPI2RequestParameter } from './openapi.ts';
+import { YAML, ApiKind, JSONValue } from "./deps.ts";
+import type { OpenAPI2SchemaObject, OpenAPI2Methods } from './openapi.ts';
 import { writeApiModule } from "./codegen.ts";
 import { SurfaceMap, SurfaceApi, OpScope } from "./describe-surface.ts";
 import { ShapeLibrary } from "./describe-shapes.ts";
@@ -12,12 +13,7 @@ import {
   toCustomResourceDefinition as toCRDv1beta1,
   CustomResourceSubresources,
   CustomResourceDefinitionNames,
-  CustomResourceDefinitionVersion,
 } from "../lib/builtin/apiextensions.k8s.io@v1beta1/structs.ts";
-
-import { ApiKind, JSONValue } from "https://deno.land/x/kubernetes_client@v0.2.0/mod.ts";
-
-import * as YAML from "https://deno.land/std@0.88.0/encoding/yaml.ts";
 
 const knownOpts = {
   GetListOpts: 'continue,fieldSelector,labelSelector,limit,resourceVersion,resourceVersionMatch,timeoutSeconds',
@@ -35,6 +31,7 @@ const v1beta1CRDs = new Array<CRDv1beta1>();
 for await (const dirEntry of Deno.readDir(Deno.args[0])) {
   if (!dirEntry.isFile) continue;
   if (!dirEntry.name.endsWith('.yaml')) continue;
+  if (dirEntry.name.endsWith('.example.yaml')) continue;
 
   const raw = await Deno.readFile(Deno.args[0]+'/'+dirEntry.name);
   const doc = YAML.parse(new TextDecoder('utf-8').decode(raw));

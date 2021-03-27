@@ -42,4 +42,4 @@ will be generated as one unit and stored in S3 or similar, and the paths are mor
 In any case, the actual API client that works with authentication/transport
 will be served authoratatively from a normal deno repo:
 
-* `https://deno.land/x/kubernetes_client@0.2.1/mod.ts`
+* https://deno.land/x/kubernetes_client@v0.2.1/mod.ts
