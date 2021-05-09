@@ -1,3 +1,7 @@
+export interface NoOpts {
+  abortSignal?: AbortSignal;
+};
+
 export interface GetListOpts {
   continue?: string;
   fieldSelector?: string;
@@ -96,6 +100,7 @@ export function formatPatchOpts(opts: PatchOpts): URLSearchParams {
   return query;
 }
 
+// exact/export were fully gone in Kubernetes v1.21, so this struct isn't used anymore
 export interface GetOpts {
   exact?: boolean;
   export?: boolean;

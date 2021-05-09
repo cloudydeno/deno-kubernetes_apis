@@ -59,12 +59,11 @@ export class StorageV1alpha1Api {
     return StorageV1alpha1.toVolumeAttachmentList(resp);
   }
 
-  async getVolumeAttachment(name: string, opts: operations.GetOpts = {}) {
+  async getVolumeAttachment(name: string, opts: operations.NoOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}volumeattachments/${name}`,
       expectJson: true,
-      querystring: operations.formatGetOpts(opts),
       abortSignal: opts.abortSignal,
     });
     return StorageV1alpha1.toVolumeAttachment(resp);

@@ -35,15 +35,11 @@ export class CoreV1Api {
     return CoreV1.toComponentStatusList(resp);
   }
 
-  async getComponentStatus(name: string, opts: {
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
+  async getComponentStatus(name: string, opts: operations.NoOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}componentstatuses/${name}`,
       expectJson: true,
-      querystring: query,
       abortSignal: opts.abortSignal,
     });
     return CoreV1.toComponentStatus(resp);
@@ -176,12 +172,11 @@ export class CoreV1Api {
     return CoreV1.toNamespace(resp);
   }
 
-  async getNamespace(name: string, opts: operations.GetOpts = {}) {
+  async getNamespace(name: string, opts: operations.NoOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}namespaces/${name}`,
       expectJson: true,
-      querystring: operations.formatGetOpts(opts),
       abortSignal: opts.abortSignal,
     });
     return CoreV1.toNamespace(resp);
@@ -235,15 +230,11 @@ export class CoreV1Api {
     return CoreV1.toNamespace(resp);
   }
 
-  async getNamespaceStatus(name: string, opts: {
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
+  async getNamespaceStatus(name: string, opts: operations.NoOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}namespaces/${name}/status`,
       expectJson: true,
-      querystring: query,
       abortSignal: opts.abortSignal,
     });
     return CoreV1.toNamespace(resp);
@@ -320,12 +311,11 @@ export class CoreV1Api {
     return CoreV1.toNodeList(resp);
   }
 
-  async getNode(name: string, opts: operations.GetOpts = {}) {
+  async getNode(name: string, opts: operations.NoOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}nodes/${name}`,
       expectJson: true,
-      querystring: operations.formatGetOpts(opts),
       abortSignal: opts.abortSignal,
     });
     return CoreV1.toNode(resp);
@@ -378,15 +368,11 @@ export class CoreV1Api {
     return this.#client.performRequest({ ...opts, path });
   }
 
-  async getNodeStatus(name: string, opts: {
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
+  async getNodeStatus(name: string, opts: operations.NoOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}nodes/${name}/status`,
       expectJson: true,
-      querystring: query,
       abortSignal: opts.abortSignal,
     });
     return CoreV1.toNode(resp);
@@ -486,12 +472,11 @@ export class CoreV1Api {
     return CoreV1.toPersistentVolumeList(resp);
   }
 
-  async getPersistentVolume(name: string, opts: operations.GetOpts = {}) {
+  async getPersistentVolume(name: string, opts: operations.NoOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}persistentvolumes/${name}`,
       expectJson: true,
-      querystring: operations.formatGetOpts(opts),
       abortSignal: opts.abortSignal,
     });
     return CoreV1.toPersistentVolume(resp);
@@ -533,15 +518,11 @@ export class CoreV1Api {
     return CoreV1.toPersistentVolume(resp);
   }
 
-  async getPersistentVolumeStatus(name: string, opts: {
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
+  async getPersistentVolumeStatus(name: string, opts: operations.NoOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}persistentvolumes/${name}/status`,
       expectJson: true,
-      querystring: query,
       abortSignal: opts.abortSignal,
     });
     return CoreV1.toPersistentVolume(resp);
@@ -801,12 +782,11 @@ export class CoreV1NamespacedApi {
     return CoreV1.toConfigMapList(resp);
   }
 
-  async getConfigMap(name: string, opts: operations.GetOpts = {}) {
+  async getConfigMap(name: string, opts: operations.NoOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}configmaps/${name}`,
       expectJson: true,
-      querystring: operations.formatGetOpts(opts),
       abortSignal: opts.abortSignal,
     });
     return CoreV1.toConfigMap(resp);
@@ -894,12 +874,11 @@ export class CoreV1NamespacedApi {
     return CoreV1.toEndpointsList(resp);
   }
 
-  async getEndpoints(name: string, opts: operations.GetOpts = {}) {
+  async getEndpoints(name: string, opts: operations.NoOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}endpoints/${name}`,
       expectJson: true,
-      querystring: operations.formatGetOpts(opts),
       abortSignal: opts.abortSignal,
     });
     return CoreV1.toEndpoints(resp);
@@ -987,12 +966,11 @@ export class CoreV1NamespacedApi {
     return CoreV1.toEventList(resp);
   }
 
-  async getEvent(name: string, opts: operations.GetOpts = {}) {
+  async getEvent(name: string, opts: operations.NoOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}events/${name}`,
       expectJson: true,
-      querystring: operations.formatGetOpts(opts),
       abortSignal: opts.abortSignal,
     });
     return CoreV1.toEvent(resp);
@@ -1080,12 +1058,11 @@ export class CoreV1NamespacedApi {
     return CoreV1.toLimitRangeList(resp);
   }
 
-  async getLimitRange(name: string, opts: operations.GetOpts = {}) {
+  async getLimitRange(name: string, opts: operations.NoOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}limitranges/${name}`,
       expectJson: true,
-      querystring: operations.formatGetOpts(opts),
       abortSignal: opts.abortSignal,
     });
     return CoreV1.toLimitRange(resp);
@@ -1173,12 +1150,11 @@ export class CoreV1NamespacedApi {
     return CoreV1.toPersistentVolumeClaimList(resp);
   }
 
-  async getPersistentVolumeClaim(name: string, opts: operations.GetOpts = {}) {
+  async getPersistentVolumeClaim(name: string, opts: operations.NoOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}persistentvolumeclaims/${name}`,
       expectJson: true,
-      querystring: operations.formatGetOpts(opts),
       abortSignal: opts.abortSignal,
     });
     return CoreV1.toPersistentVolumeClaim(resp);
@@ -1220,15 +1196,11 @@ export class CoreV1NamespacedApi {
     return CoreV1.toPersistentVolumeClaim(resp);
   }
 
-  async getPersistentVolumeClaimStatus(name: string, opts: {
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
+  async getPersistentVolumeClaimStatus(name: string, opts: operations.NoOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}persistentvolumeclaims/${name}/status`,
       expectJson: true,
-      querystring: query,
       abortSignal: opts.abortSignal,
     });
     return CoreV1.toPersistentVolumeClaim(resp);
@@ -1305,12 +1277,11 @@ export class CoreV1NamespacedApi {
     return CoreV1.toPodList(resp);
   }
 
-  async getPod(name: string, opts: operations.GetOpts = {}) {
+  async getPod(name: string, opts: operations.NoOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}pods/${name}`,
       expectJson: true,
-      querystring: operations.formatGetOpts(opts),
       abortSignal: opts.abortSignal,
     });
     return CoreV1.toPod(resp);
@@ -1542,15 +1513,11 @@ export class CoreV1NamespacedApi {
     return this.#client.performRequest({ ...opts, path });
   }
 
-  async getPodStatus(name: string, opts: {
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
+  async getPodStatus(name: string, opts: operations.NoOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}pods/${name}/status`,
       expectJson: true,
-      querystring: query,
       abortSignal: opts.abortSignal,
     });
     return CoreV1.toPod(resp);
@@ -1627,12 +1594,11 @@ export class CoreV1NamespacedApi {
     return CoreV1.toPodTemplateList(resp);
   }
 
-  async getPodTemplate(name: string, opts: operations.GetOpts = {}) {
+  async getPodTemplate(name: string, opts: operations.NoOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}podtemplates/${name}`,
       expectJson: true,
-      querystring: operations.formatGetOpts(opts),
       abortSignal: opts.abortSignal,
     });
     return CoreV1.toPodTemplate(resp);
@@ -1720,12 +1686,11 @@ export class CoreV1NamespacedApi {
     return CoreV1.toReplicationControllerList(resp);
   }
 
-  async getReplicationController(name: string, opts: operations.GetOpts = {}) {
+  async getReplicationController(name: string, opts: operations.NoOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}replicationcontrollers/${name}`,
       expectJson: true,
-      querystring: operations.formatGetOpts(opts),
       abortSignal: opts.abortSignal,
     });
     return CoreV1.toReplicationController(resp);
@@ -1767,15 +1732,11 @@ export class CoreV1NamespacedApi {
     return CoreV1.toReplicationController(resp);
   }
 
-  async getReplicationControllerScale(name: string, opts: {
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
+  async getReplicationControllerScale(name: string, opts: operations.NoOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}replicationcontrollers/${name}/scale`,
       expectJson: true,
-      querystring: query,
       abortSignal: opts.abortSignal,
     });
     return AutoscalingV1.toScale(resp);
@@ -1806,15 +1767,11 @@ export class CoreV1NamespacedApi {
     return AutoscalingV1.toScale(resp);
   }
 
-  async getReplicationControllerStatus(name: string, opts: {
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
+  async getReplicationControllerStatus(name: string, opts: operations.NoOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}replicationcontrollers/${name}/status`,
       expectJson: true,
-      querystring: query,
       abortSignal: opts.abortSignal,
     });
     return CoreV1.toReplicationController(resp);
@@ -1891,12 +1848,11 @@ export class CoreV1NamespacedApi {
     return CoreV1.toResourceQuotaList(resp);
   }
 
-  async getResourceQuota(name: string, opts: operations.GetOpts = {}) {
+  async getResourceQuota(name: string, opts: operations.NoOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}resourcequotas/${name}`,
       expectJson: true,
-      querystring: operations.formatGetOpts(opts),
       abortSignal: opts.abortSignal,
     });
     return CoreV1.toResourceQuota(resp);
@@ -1938,15 +1894,11 @@ export class CoreV1NamespacedApi {
     return CoreV1.toResourceQuota(resp);
   }
 
-  async getResourceQuotaStatus(name: string, opts: {
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
+  async getResourceQuotaStatus(name: string, opts: operations.NoOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}resourcequotas/${name}/status`,
       expectJson: true,
-      querystring: query,
       abortSignal: opts.abortSignal,
     });
     return CoreV1.toResourceQuota(resp);
@@ -2023,12 +1975,11 @@ export class CoreV1NamespacedApi {
     return CoreV1.toSecretList(resp);
   }
 
-  async getSecret(name: string, opts: operations.GetOpts = {}) {
+  async getSecret(name: string, opts: operations.NoOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}secrets/${name}`,
       expectJson: true,
-      querystring: operations.formatGetOpts(opts),
       abortSignal: opts.abortSignal,
     });
     return CoreV1.toSecret(resp);
@@ -2116,12 +2067,11 @@ export class CoreV1NamespacedApi {
     return CoreV1.toServiceAccountList(resp);
   }
 
-  async getServiceAccount(name: string, opts: operations.GetOpts = {}) {
+  async getServiceAccount(name: string, opts: operations.NoOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}serviceaccounts/${name}`,
       expectJson: true,
-      querystring: operations.formatGetOpts(opts),
       abortSignal: opts.abortSignal,
     });
     return CoreV1.toServiceAccount(resp);
@@ -2210,12 +2160,11 @@ export class CoreV1NamespacedApi {
     return CoreV1.toService(resp);
   }
 
-  async getService(name: string, opts: operations.GetOpts = {}) {
+  async getService(name: string, opts: operations.NoOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}services/${name}`,
       expectJson: true,
-      querystring: operations.formatGetOpts(opts),
       abortSignal: opts.abortSignal,
     });
     return CoreV1.toService(resp);
@@ -2268,15 +2217,11 @@ export class CoreV1NamespacedApi {
     return this.#client.performRequest({ ...opts, path });
   }
 
-  async getServiceStatus(name: string, opts: {
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
+  async getServiceStatus(name: string, opts: operations.NoOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}services/${name}/status`,
       expectJson: true,
-      querystring: query,
       abortSignal: opts.abortSignal,
     });
     return CoreV1.toService(resp);

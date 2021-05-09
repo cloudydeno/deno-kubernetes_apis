@@ -59,12 +59,11 @@ export class ApiregistrationV1beta1Api {
     return ApiregistrationV1beta1.toAPIServiceList(resp);
   }
 
-  async getAPIService(name: string, opts: operations.GetOpts = {}) {
+  async getAPIService(name: string, opts: operations.NoOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}apiservices/${name}`,
       expectJson: true,
-      querystring: operations.formatGetOpts(opts),
       abortSignal: opts.abortSignal,
     });
     return ApiregistrationV1beta1.toAPIService(resp);
@@ -106,15 +105,11 @@ export class ApiregistrationV1beta1Api {
     return ApiregistrationV1beta1.toAPIService(resp);
   }
 
-  async getAPIServiceStatus(name: string, opts: {
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
+  async getAPIServiceStatus(name: string, opts: operations.NoOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}apiservices/${name}/status`,
       expectJson: true,
-      querystring: query,
       abortSignal: opts.abortSignal,
     });
     return ApiregistrationV1beta1.toAPIService(resp);

@@ -59,12 +59,11 @@ export class FlowcontrolApiserverV1beta1Api {
     return FlowcontrolApiserverV1beta1.toFlowSchemaList(resp);
   }
 
-  async getFlowSchema(name: string, opts: operations.GetOpts = {}) {
+  async getFlowSchema(name: string, opts: operations.NoOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}flowschemas/${name}`,
       expectJson: true,
-      querystring: operations.formatGetOpts(opts),
       abortSignal: opts.abortSignal,
     });
     return FlowcontrolApiserverV1beta1.toFlowSchema(resp);
@@ -106,15 +105,11 @@ export class FlowcontrolApiserverV1beta1Api {
     return FlowcontrolApiserverV1beta1.toFlowSchema(resp);
   }
 
-  async getFlowSchemaStatus(name: string, opts: {
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
+  async getFlowSchemaStatus(name: string, opts: operations.NoOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}flowschemas/${name}/status`,
       expectJson: true,
-      querystring: query,
       abortSignal: opts.abortSignal,
     });
     return FlowcontrolApiserverV1beta1.toFlowSchema(resp);
@@ -191,12 +186,11 @@ export class FlowcontrolApiserverV1beta1Api {
     return FlowcontrolApiserverV1beta1.toPriorityLevelConfigurationList(resp);
   }
 
-  async getPriorityLevelConfiguration(name: string, opts: operations.GetOpts = {}) {
+  async getPriorityLevelConfiguration(name: string, opts: operations.NoOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}prioritylevelconfigurations/${name}`,
       expectJson: true,
-      querystring: operations.formatGetOpts(opts),
       abortSignal: opts.abortSignal,
     });
     return FlowcontrolApiserverV1beta1.toPriorityLevelConfiguration(resp);
@@ -238,15 +232,11 @@ export class FlowcontrolApiserverV1beta1Api {
     return FlowcontrolApiserverV1beta1.toPriorityLevelConfiguration(resp);
   }
 
-  async getPriorityLevelConfigurationStatus(name: string, opts: {
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
+  async getPriorityLevelConfigurationStatus(name: string, opts: operations.NoOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}prioritylevelconfigurations/${name}/status`,
       expectJson: true,
-      querystring: query,
       abortSignal: opts.abortSignal,
     });
     return FlowcontrolApiserverV1beta1.toPriorityLevelConfiguration(resp);

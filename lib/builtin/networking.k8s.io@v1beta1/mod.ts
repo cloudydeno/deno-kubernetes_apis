@@ -67,12 +67,11 @@ export class NetworkingV1beta1Api {
     return NetworkingV1beta1.toIngressClassList(resp);
   }
 
-  async getIngressClass(name: string, opts: operations.GetOpts = {}) {
+  async getIngressClass(name: string, opts: operations.NoOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}ingressclasses/${name}`,
       expectJson: true,
-      querystring: operations.formatGetOpts(opts),
       abortSignal: opts.abortSignal,
     });
     return NetworkingV1beta1.toIngressClass(resp);
@@ -193,12 +192,11 @@ export class NetworkingV1beta1NamespacedApi {
     return NetworkingV1beta1.toIngressList(resp);
   }
 
-  async getIngress(name: string, opts: operations.GetOpts = {}) {
+  async getIngress(name: string, opts: operations.NoOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}ingresses/${name}`,
       expectJson: true,
-      querystring: operations.formatGetOpts(opts),
       abortSignal: opts.abortSignal,
     });
     return NetworkingV1beta1.toIngress(resp);
@@ -240,15 +238,11 @@ export class NetworkingV1beta1NamespacedApi {
     return NetworkingV1beta1.toIngress(resp);
   }
 
-  async getIngressStatus(name: string, opts: {
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
+  async getIngressStatus(name: string, opts: operations.NoOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}ingresses/${name}/status`,
       expectJson: true,
-      querystring: query,
       abortSignal: opts.abortSignal,
     });
     return NetworkingV1beta1.toIngress(resp);

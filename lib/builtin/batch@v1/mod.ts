@@ -100,12 +100,11 @@ export class BatchV1NamespacedApi {
     return BatchV1.toJobList(resp);
   }
 
-  async getJob(name: string, opts: operations.GetOpts = {}) {
+  async getJob(name: string, opts: operations.NoOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}jobs/${name}`,
       expectJson: true,
-      querystring: operations.formatGetOpts(opts),
       abortSignal: opts.abortSignal,
     });
     return BatchV1.toJob(resp);
@@ -147,15 +146,11 @@ export class BatchV1NamespacedApi {
     return BatchV1.toJob(resp);
   }
 
-  async getJobStatus(name: string, opts: {
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
+  async getJobStatus(name: string, opts: operations.NoOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}jobs/${name}/status`,
       expectJson: true,
-      querystring: query,
       abortSignal: opts.abortSignal,
     });
     return BatchV1.toJob(resp);

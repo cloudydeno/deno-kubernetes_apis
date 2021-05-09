@@ -59,12 +59,11 @@ export class CertificatesV1Api {
     return CertificatesV1.toCertificateSigningRequestList(resp);
   }
 
-  async getCertificateSigningRequest(name: string, opts: operations.GetOpts = {}) {
+  async getCertificateSigningRequest(name: string, opts: operations.NoOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}certificatesigningrequests/${name}`,
       expectJson: true,
-      querystring: operations.formatGetOpts(opts),
       abortSignal: opts.abortSignal,
     });
     return CertificatesV1.toCertificateSigningRequest(resp);
@@ -106,15 +105,11 @@ export class CertificatesV1Api {
     return CertificatesV1.toCertificateSigningRequest(resp);
   }
 
-  async getCertificateSigningRequestApproval(name: string, opts: {
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
+  async getCertificateSigningRequestApproval(name: string, opts: operations.NoOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}certificatesigningrequests/${name}/approval`,
       expectJson: true,
-      querystring: query,
       abortSignal: opts.abortSignal,
     });
     return CertificatesV1.toCertificateSigningRequest(resp);
@@ -145,15 +140,11 @@ export class CertificatesV1Api {
     return CertificatesV1.toCertificateSigningRequest(resp);
   }
 
-  async getCertificateSigningRequestStatus(name: string, opts: {
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
+  async getCertificateSigningRequestStatus(name: string, opts: operations.NoOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}certificatesigningrequests/${name}/status`,
       expectJson: true,
-      querystring: query,
       abortSignal: opts.abortSignal,
     });
     return CertificatesV1.toCertificateSigningRequest(resp);

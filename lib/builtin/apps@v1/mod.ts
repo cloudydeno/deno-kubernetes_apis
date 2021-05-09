@@ -193,12 +193,11 @@ export class AppsV1NamespacedApi {
     return AppsV1.toControllerRevisionList(resp);
   }
 
-  async getControllerRevision(name: string, opts: operations.GetOpts = {}) {
+  async getControllerRevision(name: string, opts: operations.NoOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}controllerrevisions/${name}`,
       expectJson: true,
-      querystring: operations.formatGetOpts(opts),
       abortSignal: opts.abortSignal,
     });
     return AppsV1.toControllerRevision(resp);
@@ -286,12 +285,11 @@ export class AppsV1NamespacedApi {
     return AppsV1.toDaemonSetList(resp);
   }
 
-  async getDaemonSet(name: string, opts: operations.GetOpts = {}) {
+  async getDaemonSet(name: string, opts: operations.NoOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}daemonsets/${name}`,
       expectJson: true,
-      querystring: operations.formatGetOpts(opts),
       abortSignal: opts.abortSignal,
     });
     return AppsV1.toDaemonSet(resp);
@@ -333,15 +331,11 @@ export class AppsV1NamespacedApi {
     return AppsV1.toDaemonSet(resp);
   }
 
-  async getDaemonSetStatus(name: string, opts: {
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
+  async getDaemonSetStatus(name: string, opts: operations.NoOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}daemonsets/${name}/status`,
       expectJson: true,
-      querystring: query,
       abortSignal: opts.abortSignal,
     });
     return AppsV1.toDaemonSet(resp);
@@ -418,12 +412,11 @@ export class AppsV1NamespacedApi {
     return AppsV1.toDeploymentList(resp);
   }
 
-  async getDeployment(name: string, opts: operations.GetOpts = {}) {
+  async getDeployment(name: string, opts: operations.NoOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}deployments/${name}`,
       expectJson: true,
-      querystring: operations.formatGetOpts(opts),
       abortSignal: opts.abortSignal,
     });
     return AppsV1.toDeployment(resp);
@@ -465,15 +458,11 @@ export class AppsV1NamespacedApi {
     return AppsV1.toDeployment(resp);
   }
 
-  async getDeploymentScale(name: string, opts: {
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
+  async getDeploymentScale(name: string, opts: operations.NoOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}deployments/${name}/scale`,
       expectJson: true,
-      querystring: query,
       abortSignal: opts.abortSignal,
     });
     return AutoscalingV1.toScale(resp);
@@ -504,15 +493,11 @@ export class AppsV1NamespacedApi {
     return AutoscalingV1.toScale(resp);
   }
 
-  async getDeploymentStatus(name: string, opts: {
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
+  async getDeploymentStatus(name: string, opts: operations.NoOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}deployments/${name}/status`,
       expectJson: true,
-      querystring: query,
       abortSignal: opts.abortSignal,
     });
     return AppsV1.toDeployment(resp);
@@ -589,12 +574,11 @@ export class AppsV1NamespacedApi {
     return AppsV1.toReplicaSetList(resp);
   }
 
-  async getReplicaSet(name: string, opts: operations.GetOpts = {}) {
+  async getReplicaSet(name: string, opts: operations.NoOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}replicasets/${name}`,
       expectJson: true,
-      querystring: operations.formatGetOpts(opts),
       abortSignal: opts.abortSignal,
     });
     return AppsV1.toReplicaSet(resp);
@@ -636,15 +620,11 @@ export class AppsV1NamespacedApi {
     return AppsV1.toReplicaSet(resp);
   }
 
-  async getReplicaSetScale(name: string, opts: {
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
+  async getReplicaSetScale(name: string, opts: operations.NoOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}replicasets/${name}/scale`,
       expectJson: true,
-      querystring: query,
       abortSignal: opts.abortSignal,
     });
     return AutoscalingV1.toScale(resp);
@@ -675,15 +655,11 @@ export class AppsV1NamespacedApi {
     return AutoscalingV1.toScale(resp);
   }
 
-  async getReplicaSetStatus(name: string, opts: {
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
+  async getReplicaSetStatus(name: string, opts: operations.NoOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}replicasets/${name}/status`,
       expectJson: true,
-      querystring: query,
       abortSignal: opts.abortSignal,
     });
     return AppsV1.toReplicaSet(resp);
@@ -760,12 +736,11 @@ export class AppsV1NamespacedApi {
     return AppsV1.toStatefulSetList(resp);
   }
 
-  async getStatefulSet(name: string, opts: operations.GetOpts = {}) {
+  async getStatefulSet(name: string, opts: operations.NoOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}statefulsets/${name}`,
       expectJson: true,
-      querystring: operations.formatGetOpts(opts),
       abortSignal: opts.abortSignal,
     });
     return AppsV1.toStatefulSet(resp);
@@ -807,15 +782,11 @@ export class AppsV1NamespacedApi {
     return AppsV1.toStatefulSet(resp);
   }
 
-  async getStatefulSetScale(name: string, opts: {
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
+  async getStatefulSetScale(name: string, opts: operations.NoOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}statefulsets/${name}/scale`,
       expectJson: true,
-      querystring: query,
       abortSignal: opts.abortSignal,
     });
     return AutoscalingV1.toScale(resp);
@@ -846,15 +817,11 @@ export class AppsV1NamespacedApi {
     return AutoscalingV1.toScale(resp);
   }
 
-  async getStatefulSetStatus(name: string, opts: {
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
+  async getStatefulSetStatus(name: string, opts: operations.NoOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}statefulsets/${name}/status`,
       expectJson: true,
-      querystring: query,
       abortSignal: opts.abortSignal,
     });
     return AppsV1.toStatefulSet(resp);

@@ -100,12 +100,11 @@ export class DiscoveryV1beta1NamespacedApi {
     return DiscoveryV1beta1.toEndpointSliceList(resp);
   }
 
-  async getEndpointSlice(name: string, opts: operations.GetOpts = {}) {
+  async getEndpointSlice(name: string, opts: operations.NoOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}endpointslices/${name}`,
       expectJson: true,
-      querystring: operations.formatGetOpts(opts),
       abortSignal: opts.abortSignal,
     });
     return DiscoveryV1beta1.toEndpointSlice(resp);

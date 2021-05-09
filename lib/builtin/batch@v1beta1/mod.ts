@@ -100,12 +100,11 @@ export class BatchV1beta1NamespacedApi {
     return BatchV1beta1.toCronJobList(resp);
   }
 
-  async getCronJob(name: string, opts: operations.GetOpts = {}) {
+  async getCronJob(name: string, opts: operations.NoOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}cronjobs/${name}`,
       expectJson: true,
-      querystring: operations.formatGetOpts(opts),
       abortSignal: opts.abortSignal,
     });
     return BatchV1beta1.toCronJob(resp);
@@ -147,15 +146,11 @@ export class BatchV1beta1NamespacedApi {
     return BatchV1beta1.toCronJob(resp);
   }
 
-  async getCronJobStatus(name: string, opts: {
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
+  async getCronJobStatus(name: string, opts: operations.NoOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}cronjobs/${name}/status`,
       expectJson: true,
-      querystring: query,
       abortSignal: opts.abortSignal,
     });
     return BatchV1beta1.toCronJob(resp);

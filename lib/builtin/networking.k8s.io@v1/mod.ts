@@ -67,12 +67,11 @@ export class NetworkingV1Api {
     return NetworkingV1.toIngressClassList(resp);
   }
 
-  async getIngressClass(name: string, opts: operations.GetOpts = {}) {
+  async getIngressClass(name: string, opts: operations.NoOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}ingressclasses/${name}`,
       expectJson: true,
-      querystring: operations.formatGetOpts(opts),
       abortSignal: opts.abortSignal,
     });
     return NetworkingV1.toIngressClass(resp);
@@ -216,12 +215,11 @@ export class NetworkingV1NamespacedApi {
     return NetworkingV1.toIngressList(resp);
   }
 
-  async getIngress(name: string, opts: operations.GetOpts = {}) {
+  async getIngress(name: string, opts: operations.NoOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}ingresses/${name}`,
       expectJson: true,
-      querystring: operations.formatGetOpts(opts),
       abortSignal: opts.abortSignal,
     });
     return NetworkingV1.toIngress(resp);
@@ -263,15 +261,11 @@ export class NetworkingV1NamespacedApi {
     return NetworkingV1.toIngress(resp);
   }
 
-  async getIngressStatus(name: string, opts: {
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
+  async getIngressStatus(name: string, opts: operations.NoOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}ingresses/${name}/status`,
       expectJson: true,
-      querystring: query,
       abortSignal: opts.abortSignal,
     });
     return NetworkingV1.toIngress(resp);
@@ -348,12 +342,11 @@ export class NetworkingV1NamespacedApi {
     return NetworkingV1.toNetworkPolicyList(resp);
   }
 
-  async getNetworkPolicy(name: string, opts: operations.GetOpts = {}) {
+  async getNetworkPolicy(name: string, opts: operations.NoOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}networkpolicies/${name}`,
       expectJson: true,
-      querystring: operations.formatGetOpts(opts),
       abortSignal: opts.abortSignal,
     });
     return NetworkingV1.toNetworkPolicy(resp);

@@ -59,12 +59,11 @@ export class InternalApiserverV1alpha1Api {
     return InternalApiserverV1alpha1.toStorageVersionList(resp);
   }
 
-  async getStorageVersion(name: string, opts: operations.GetOpts = {}) {
+  async getStorageVersion(name: string, opts: operations.NoOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}storageversions/${name}`,
       expectJson: true,
-      querystring: operations.formatGetOpts(opts),
       abortSignal: opts.abortSignal,
     });
     return InternalApiserverV1alpha1.toStorageVersion(resp);
@@ -106,15 +105,11 @@ export class InternalApiserverV1alpha1Api {
     return InternalApiserverV1alpha1.toStorageVersion(resp);
   }
 
-  async getStorageVersionStatus(name: string, opts: {
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
+  async getStorageVersionStatus(name: string, opts: operations.NoOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}storageversions/${name}/status`,
       expectJson: true,
-      querystring: query,
       abortSignal: opts.abortSignal,
     });
     return InternalApiserverV1alpha1.toStorageVersion(resp);

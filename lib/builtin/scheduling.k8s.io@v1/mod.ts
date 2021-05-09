@@ -59,12 +59,11 @@ export class SchedulingV1Api {
     return SchedulingV1.toPriorityClassList(resp);
   }
 
-  async getPriorityClass(name: string, opts: operations.GetOpts = {}) {
+  async getPriorityClass(name: string, opts: operations.NoOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}priorityclasses/${name}`,
       expectJson: true,
-      querystring: operations.formatGetOpts(opts),
       abortSignal: opts.abortSignal,
     });
     return SchedulingV1.toPriorityClass(resp);

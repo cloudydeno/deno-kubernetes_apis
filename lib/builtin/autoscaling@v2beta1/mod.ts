@@ -100,12 +100,11 @@ export class AutoscalingV2beta1NamespacedApi {
     return AutoscalingV2beta1.toHorizontalPodAutoscalerList(resp);
   }
 
-  async getHorizontalPodAutoscaler(name: string, opts: operations.GetOpts = {}) {
+  async getHorizontalPodAutoscaler(name: string, opts: operations.NoOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}horizontalpodautoscalers/${name}`,
       expectJson: true,
-      querystring: operations.formatGetOpts(opts),
       abortSignal: opts.abortSignal,
     });
     return AutoscalingV2beta1.toHorizontalPodAutoscaler(resp);
@@ -147,15 +146,11 @@ export class AutoscalingV2beta1NamespacedApi {
     return AutoscalingV2beta1.toHorizontalPodAutoscaler(resp);
   }
 
-  async getHorizontalPodAutoscalerStatus(name: string, opts: {
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
+  async getHorizontalPodAutoscalerStatus(name: string, opts: operations.NoOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}horizontalpodautoscalers/${name}/status`,
       expectJson: true,
-      querystring: query,
       abortSignal: opts.abortSignal,
     });
     return AutoscalingV2beta1.toHorizontalPodAutoscaler(resp);

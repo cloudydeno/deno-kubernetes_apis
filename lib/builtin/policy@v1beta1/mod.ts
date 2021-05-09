@@ -90,12 +90,11 @@ export class PolicyV1beta1Api {
     return PolicyV1beta1.toPodSecurityPolicyList(resp);
   }
 
-  async getPodSecurityPolicy(name: string, opts: operations.GetOpts = {}) {
+  async getPodSecurityPolicy(name: string, opts: operations.NoOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}podsecuritypolicies/${name}`,
       expectJson: true,
-      querystring: operations.formatGetOpts(opts),
       abortSignal: opts.abortSignal,
     });
     return PolicyV1beta1.toPodSecurityPolicy(resp);
@@ -193,12 +192,11 @@ export class PolicyV1beta1NamespacedApi {
     return PolicyV1beta1.toPodDisruptionBudgetList(resp);
   }
 
-  async getPodDisruptionBudget(name: string, opts: operations.GetOpts = {}) {
+  async getPodDisruptionBudget(name: string, opts: operations.NoOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}poddisruptionbudgets/${name}`,
       expectJson: true,
-      querystring: operations.formatGetOpts(opts),
       abortSignal: opts.abortSignal,
     });
     return PolicyV1beta1.toPodDisruptionBudget(resp);
@@ -240,15 +238,11 @@ export class PolicyV1beta1NamespacedApi {
     return PolicyV1beta1.toPodDisruptionBudget(resp);
   }
 
-  async getPodDisruptionBudgetStatus(name: string, opts: {
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
+  async getPodDisruptionBudgetStatus(name: string, opts: operations.NoOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}poddisruptionbudgets/${name}/status`,
       expectJson: true,
-      querystring: query,
       abortSignal: opts.abortSignal,
     });
     return PolicyV1beta1.toPodDisruptionBudget(resp);

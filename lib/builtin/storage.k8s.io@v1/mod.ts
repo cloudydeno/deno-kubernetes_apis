@@ -59,12 +59,11 @@ export class StorageV1Api {
     return StorageV1.toCSIDriverList(resp);
   }
 
-  async getCSIDriver(name: string, opts: operations.GetOpts = {}) {
+  async getCSIDriver(name: string, opts: operations.NoOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}csidrivers/${name}`,
       expectJson: true,
-      querystring: operations.formatGetOpts(opts),
       abortSignal: opts.abortSignal,
     });
     return StorageV1.toCSIDriver(resp);
@@ -152,12 +151,11 @@ export class StorageV1Api {
     return StorageV1.toCSINodeList(resp);
   }
 
-  async getCSINode(name: string, opts: operations.GetOpts = {}) {
+  async getCSINode(name: string, opts: operations.NoOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}csinodes/${name}`,
       expectJson: true,
-      querystring: operations.formatGetOpts(opts),
       abortSignal: opts.abortSignal,
     });
     return StorageV1.toCSINode(resp);
@@ -245,12 +243,11 @@ export class StorageV1Api {
     return StorageV1.toStorageClassList(resp);
   }
 
-  async getStorageClass(name: string, opts: operations.GetOpts = {}) {
+  async getStorageClass(name: string, opts: operations.NoOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}storageclasses/${name}`,
       expectJson: true,
-      querystring: operations.formatGetOpts(opts),
       abortSignal: opts.abortSignal,
     });
     return StorageV1.toStorageClass(resp);
@@ -338,12 +335,11 @@ export class StorageV1Api {
     return StorageV1.toVolumeAttachmentList(resp);
   }
 
-  async getVolumeAttachment(name: string, opts: operations.GetOpts = {}) {
+  async getVolumeAttachment(name: string, opts: operations.NoOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}volumeattachments/${name}`,
       expectJson: true,
-      querystring: operations.formatGetOpts(opts),
       abortSignal: opts.abortSignal,
     });
     return StorageV1.toVolumeAttachment(resp);
@@ -385,15 +381,11 @@ export class StorageV1Api {
     return StorageV1.toVolumeAttachment(resp);
   }
 
-  async getVolumeAttachmentStatus(name: string, opts: {
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
+  async getVolumeAttachmentStatus(name: string, opts: operations.NoOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}volumeattachments/${name}/status`,
       expectJson: true,
-      querystring: query,
       abortSignal: opts.abortSignal,
     });
     return StorageV1.toVolumeAttachment(resp);

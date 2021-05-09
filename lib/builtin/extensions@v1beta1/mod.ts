@@ -100,12 +100,11 @@ export class ExtensionsV1beta1NamespacedApi {
     return ExtensionsV1beta1.toIngressList(resp);
   }
 
-  async getIngress(name: string, opts: operations.GetOpts = {}) {
+  async getIngress(name: string, opts: operations.NoOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}ingresses/${name}`,
       expectJson: true,
-      querystring: operations.formatGetOpts(opts),
       abortSignal: opts.abortSignal,
     });
     return ExtensionsV1beta1.toIngress(resp);
@@ -147,15 +146,11 @@ export class ExtensionsV1beta1NamespacedApi {
     return ExtensionsV1beta1.toIngress(resp);
   }
 
-  async getIngressStatus(name: string, opts: {
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
+  async getIngressStatus(name: string, opts: operations.NoOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}ingresses/${name}/status`,
       expectJson: true,
-      querystring: query,
       abortSignal: opts.abortSignal,
     });
     return ExtensionsV1beta1.toIngress(resp);

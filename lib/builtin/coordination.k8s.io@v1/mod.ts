@@ -100,12 +100,11 @@ export class CoordinationV1NamespacedApi {
     return CoordinationV1.toLeaseList(resp);
   }
 
-  async getLease(name: string, opts: operations.GetOpts = {}) {
+  async getLease(name: string, opts: operations.NoOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}leases/${name}`,
       expectJson: true,
-      querystring: operations.formatGetOpts(opts),
       abortSignal: opts.abortSignal,
     });
     return CoordinationV1.toLease(resp);

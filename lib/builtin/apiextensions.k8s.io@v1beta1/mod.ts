@@ -59,12 +59,11 @@ export class ApiextensionsV1beta1Api {
     return ApiextensionsV1beta1.toCustomResourceDefinitionList(resp);
   }
 
-  async getCustomResourceDefinition(name: string, opts: operations.GetOpts = {}) {
+  async getCustomResourceDefinition(name: string, opts: operations.NoOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}customresourcedefinitions/${name}`,
       expectJson: true,
-      querystring: operations.formatGetOpts(opts),
       abortSignal: opts.abortSignal,
     });
     return ApiextensionsV1beta1.toCustomResourceDefinition(resp);
@@ -106,15 +105,11 @@ export class ApiextensionsV1beta1Api {
     return ApiextensionsV1beta1.toCustomResourceDefinition(resp);
   }
 
-  async getCustomResourceDefinitionStatus(name: string, opts: {
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
+  async getCustomResourceDefinitionStatus(name: string, opts: operations.NoOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}customresourcedefinitions/${name}/status`,
       expectJson: true,
-      querystring: query,
       abortSignal: opts.abortSignal,
     });
     return ApiextensionsV1beta1.toCustomResourceDefinition(resp);

@@ -67,15 +67,11 @@ export class RbacAuthorizationV1alpha1Api {
     return RbacAuthorizationV1alpha1.toClusterRoleBindingList(resp);
   }
 
-  async getClusterRoleBinding(name: string, opts: {
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
+  async getClusterRoleBinding(name: string, opts: operations.NoOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}clusterrolebindings/${name}`,
       expectJson: true,
-      querystring: query,
       abortSignal: opts.abortSignal,
     });
     return RbacAuthorizationV1alpha1.toClusterRoleBinding(resp);
@@ -163,15 +159,11 @@ export class RbacAuthorizationV1alpha1Api {
     return RbacAuthorizationV1alpha1.toClusterRoleList(resp);
   }
 
-  async getClusterRole(name: string, opts: {
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
+  async getClusterRole(name: string, opts: operations.NoOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}clusterroles/${name}`,
       expectJson: true,
-      querystring: query,
       abortSignal: opts.abortSignal,
     });
     return RbacAuthorizationV1alpha1.toClusterRole(resp);
@@ -315,15 +307,11 @@ export class RbacAuthorizationV1alpha1NamespacedApi {
     return RbacAuthorizationV1alpha1.toRoleBindingList(resp);
   }
 
-  async getRoleBinding(name: string, opts: {
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
+  async getRoleBinding(name: string, opts: operations.NoOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}rolebindings/${name}`,
       expectJson: true,
-      querystring: query,
       abortSignal: opts.abortSignal,
     });
     return RbacAuthorizationV1alpha1.toRoleBinding(resp);
@@ -411,15 +399,11 @@ export class RbacAuthorizationV1alpha1NamespacedApi {
     return RbacAuthorizationV1alpha1.toRoleList(resp);
   }
 
-  async getRole(name: string, opts: {
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
+  async getRole(name: string, opts: operations.NoOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}roles/${name}`,
       expectJson: true,
-      querystring: query,
       abortSignal: opts.abortSignal,
     });
     return RbacAuthorizationV1alpha1.toRole(resp);

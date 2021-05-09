@@ -100,12 +100,11 @@ export class EventsV1NamespacedApi {
     return EventsV1.toEventList(resp);
   }
 
-  async getEvent(name: string, opts: operations.GetOpts = {}) {
+  async getEvent(name: string, opts: operations.NoOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}events/${name}`,
       expectJson: true,
-      querystring: operations.formatGetOpts(opts),
       abortSignal: opts.abortSignal,
     });
     return EventsV1.toEvent(resp);

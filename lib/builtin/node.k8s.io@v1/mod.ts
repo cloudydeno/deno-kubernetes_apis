@@ -59,12 +59,11 @@ export class NodeV1Api {
     return NodeV1.toRuntimeClassList(resp);
   }
 
-  async getRuntimeClass(name: string, opts: operations.GetOpts = {}) {
+  async getRuntimeClass(name: string, opts: operations.NoOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}runtimeclasses/${name}`,
       expectJson: true,
-      querystring: operations.formatGetOpts(opts),
       abortSignal: opts.abortSignal,
     });
     return NodeV1.toRuntimeClass(resp);

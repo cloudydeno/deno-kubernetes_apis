@@ -3,6 +3,7 @@ import { OpenAPI2RequestParameter } from "./openapi.ts";
 import { ApiShape } from "./describe-shapes.ts";
 
 const knownOpts: Record<string,string|undefined> = {
+  '': 'NoOpts',
   'continue,fieldSelector,labelSelector,limit,resourceVersion,resourceVersionMatch,timeoutSeconds': 'GetListOpts',
   'allowWatchBookmarks,fieldSelector,labelSelector,resourceVersion,resourceVersionMatch,timeoutSeconds': 'WatchListOpts',
   'dryRun,fieldManager': 'PutOpts', // both CreateOpts and ReplaceOpts
@@ -204,7 +205,9 @@ export function generateModuleTypescript(surface: SurfaceMap, api: SurfaceApi): 
     if (isWatch) {
       chunks.push(`      expectStream: true,`);
     }
-    chunks.push(`      querystring: ${knownOptShape ? `operations.format${knownOptShape}(opts)` : 'query'},`);
+    if (knownOptShape !== 'NoOpts') {
+      chunks.push(`      querystring: ${knownOptShape ? `operations.format${knownOptShape}(opts)` : 'query'},`);
+    }
     const bodyArg = args.find(x => x[0].in === 'body');
     if (bodyArg) {
       if (bodyArg[1].type === 'foreign') foreignApis.add(bodyArg[1].api);

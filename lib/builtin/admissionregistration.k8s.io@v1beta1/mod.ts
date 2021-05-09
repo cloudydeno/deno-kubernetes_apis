@@ -59,12 +59,11 @@ export class AdmissionregistrationV1beta1Api {
     return AdmissionregistrationV1beta1.toMutatingWebhookConfigurationList(resp);
   }
 
-  async getMutatingWebhookConfiguration(name: string, opts: operations.GetOpts = {}) {
+  async getMutatingWebhookConfiguration(name: string, opts: operations.NoOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}mutatingwebhookconfigurations/${name}`,
       expectJson: true,
-      querystring: operations.formatGetOpts(opts),
       abortSignal: opts.abortSignal,
     });
     return AdmissionregistrationV1beta1.toMutatingWebhookConfiguration(resp);
@@ -152,12 +151,11 @@ export class AdmissionregistrationV1beta1Api {
     return AdmissionregistrationV1beta1.toValidatingWebhookConfigurationList(resp);
   }
 
-  async getValidatingWebhookConfiguration(name: string, opts: operations.GetOpts = {}) {
+  async getValidatingWebhookConfiguration(name: string, opts: operations.NoOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}validatingwebhookconfigurations/${name}`,
       expectJson: true,
-      querystring: operations.formatGetOpts(opts),
       abortSignal: opts.abortSignal,
     });
     return AdmissionregistrationV1beta1.toValidatingWebhookConfiguration(resp);
