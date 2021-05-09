@@ -7,18 +7,6 @@ type ListOf<T> = {
   items: Array<T>;
 };
 
-export interface DNSEndpointList extends ListOf<DNSEndpoint> {
-  apiVersion?: "externaldns.k8s.io/v1alpha1";
-  kind?: "DNSEndpointList";
-};
-export function toDNSEndpointList(input: c.JSONValue): DNSEndpointList & c.ApiKind {
-  const obj = c.checkObj(input);
-  return {
-    ...c.assertOrAddApiVersionAndKind(obj, "externaldns.k8s.io/v1alpha1", "DNSEndpointList"),
-    metadata: MetaV1.toListMeta(obj.metadata),
-    items: c.readList(obj.items, toDNSEndpoint),
-  }}
-
 export interface DNSEndpoint {
   apiVersion?: "externaldns.k8s.io/v1alpha1";
   kind?: "DNSEndpoint";
@@ -26,14 +14,14 @@ export interface DNSEndpoint {
   spec?: {
     endpoints?: Array<{
       dnsName?: string | null;
-      labels?: {
-      } | null;
+      labels?: Record<string,string> | null;
       providerSpecific?: Array<{
         name?: string | null;
         value?: string | null;
       }> | null;
       recordTTL?: number | null;
       recordType?: string | null;
+      setIdentifier?: string | null;
       targets?: Array<string> | null;
     }> | null;
   } | null;
@@ -69,19 +57,28 @@ export function toDNSEndpoint_spec_endpoints(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     dnsName: c.readOpt(obj["dnsName"], c.checkStr),
-    labels: c.readOpt(obj["labels"], toDNSEndpoint_spec_endpoints_labels),
+    labels: c.readOpt(obj["labels"], x => c.readMap(x, c.checkStr)),
     providerSpecific: c.readOpt(obj["providerSpecific"], x => c.readList(x, toDNSEndpoint_spec_endpoints_providerSpecific)),
     recordTTL: c.readOpt(obj["recordTTL"], c.checkNum),
     recordType: c.readOpt(obj["recordType"], c.checkStr),
+    setIdentifier: c.readOpt(obj["setIdentifier"], c.checkStr),
     targets: c.readOpt(obj["targets"], x => c.readList(x, c.checkStr)),
-  }}
-export function toDNSEndpoint_spec_endpoints_labels(input: c.JSONValue) {
-  const obj = c.checkObj(input);
-  return {
   }}
 export function toDNSEndpoint_spec_endpoints_providerSpecific(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     name: c.readOpt(obj["name"], c.checkStr),
     value: c.readOpt(obj["value"], c.checkStr),
+  }}
+
+export interface DNSEndpointList extends ListOf<DNSEndpoint> {
+  apiVersion?: "externaldns.k8s.io/v1alpha1";
+  kind?: "DNSEndpointList";
+};
+export function toDNSEndpointList(input: c.JSONValue): DNSEndpointList & c.ApiKind {
+  const obj = c.checkObj(input);
+  return {
+    ...c.assertOrAddApiVersionAndKind(obj, "externaldns.k8s.io/v1alpha1", "DNSEndpointList"),
+    metadata: MetaV1.toListMeta(obj.metadata),
+    items: c.readList(obj.items, toDNSEndpoint),
   }}
