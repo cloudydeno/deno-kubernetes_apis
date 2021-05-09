@@ -169,6 +169,7 @@ export function fromPodDisruptionBudgetSpec(input: PodDisruptionBudgetSpec): c.J
 
 /** PodDisruptionBudgetStatus represents information about the status of a PodDisruptionBudget. Status may trail the actual state of a system. */
 export interface PodDisruptionBudgetStatus {
+  conditions?: Array<MetaV1.Condition> | null;
   currentHealthy: number;
   desiredHealthy: number;
   disruptedPods?: Record<string,c.Time> | null;
@@ -179,6 +180,7 @@ export interface PodDisruptionBudgetStatus {
 export function toPodDisruptionBudgetStatus(input: c.JSONValue): PodDisruptionBudgetStatus {
   const obj = c.checkObj(input);
   return {
+    conditions: c.readOpt(obj["conditions"], x => c.readList(x, MetaV1.toCondition)),
     currentHealthy: c.checkNum(obj["currentHealthy"]),
     desiredHealthy: c.checkNum(obj["desiredHealthy"]),
     disruptedPods: c.readOpt(obj["disruptedPods"], x => c.readMap(x, c.toTime)),
@@ -189,6 +191,7 @@ export function toPodDisruptionBudgetStatus(input: c.JSONValue): PodDisruptionBu
 export function fromPodDisruptionBudgetStatus(input: PodDisruptionBudgetStatus): c.JSONValue {
   return {
     ...input,
+    conditions: input.conditions?.map(MetaV1.fromCondition),
     disruptedPods: c.writeMap(input.disruptedPods, c.fromTime),
   }}
 
@@ -205,7 +208,7 @@ export function toPodDisruptionBudgetList(input: c.JSONValue): PodDisruptionBudg
     items: c.readList(obj.items, toPodDisruptionBudget),
   }}
 
-/** PodSecurityPolicy governs the ability to make requests that affect the Security Context that will be applied to a pod and container. */
+/** PodSecurityPolicy governs the ability to make requests that affect the Security Context that will be applied to a pod and container. Deprecated in 1.21. */
 export interface PodSecurityPolicy {
   apiVersion?: "policy/v1beta1";
   kind?: "PodSecurityPolicy";

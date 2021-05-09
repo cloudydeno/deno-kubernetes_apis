@@ -21,6 +21,29 @@ export class BatchV1Api {
     return new BatchV1NamespacedApi(this.#client, this.#client.defaultNamespace);
   }
 
+  async getCronJobListForAllNamespaces(opts: operations.GetListOpts = {}) {
+    const resp = await this.#client.performRequest({
+      method: "GET",
+      path: `${this.#root}cronjobs`,
+      expectJson: true,
+      querystring: operations.formatGetListOpts(opts),
+      abortSignal: opts.abortSignal,
+    });
+    return BatchV1.toCronJobList(resp);
+  }
+
+  async watchCronJobListForAllNamespaces(opts: operations.WatchListOpts = {}) {
+    const resp = await this.#client.performRequest({
+      method: "GET",
+      path: `${this.#root}cronjobs`,
+      expectJson: true,
+      expectStream: true,
+      querystring: operations.formatWatchListOpts(opts),
+      abortSignal: opts.abortSignal,
+    });
+    return resp.pipeThrough(new c.WatchEventTransformer(BatchV1.toCronJob, MetaV1.toStatus));
+  }
+
   async getJobListForAllNamespaces(opts: operations.GetListOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "GET",
@@ -52,6 +75,133 @@ export class BatchV1NamespacedApi {
   constructor(client: c.RestClient, namespace: string) {
     this.#client = client;
     this.#root = `/apis/batch/v1/namespaces/${namespace}/`;
+  }
+
+  async getCronJobList(opts: operations.GetListOpts = {}) {
+    const resp = await this.#client.performRequest({
+      method: "GET",
+      path: `${this.#root}cronjobs`,
+      expectJson: true,
+      querystring: operations.formatGetListOpts(opts),
+      abortSignal: opts.abortSignal,
+    });
+    return BatchV1.toCronJobList(resp);
+  }
+
+  async watchCronJobList(opts: operations.WatchListOpts = {}) {
+    const resp = await this.#client.performRequest({
+      method: "GET",
+      path: `${this.#root}cronjobs`,
+      expectJson: true,
+      expectStream: true,
+      querystring: operations.formatWatchListOpts(opts),
+      abortSignal: opts.abortSignal,
+    });
+    return resp.pipeThrough(new c.WatchEventTransformer(BatchV1.toCronJob, MetaV1.toStatus));
+  }
+
+  async createCronJob(body: BatchV1.CronJob, opts: operations.PutOpts = {}) {
+    const resp = await this.#client.performRequest({
+      method: "POST",
+      path: `${this.#root}cronjobs`,
+      expectJson: true,
+      querystring: operations.formatPutOpts(opts),
+      bodyJson: BatchV1.fromCronJob(body),
+      abortSignal: opts.abortSignal,
+    });
+    return BatchV1.toCronJob(resp);
+  }
+
+  async deleteCronJobList(opts: operations.DeleteListOpts = {}) {
+    const resp = await this.#client.performRequest({
+      method: "DELETE",
+      path: `${this.#root}cronjobs`,
+      expectJson: true,
+      querystring: operations.formatDeleteListOpts(opts),
+      abortSignal: opts.abortSignal,
+    });
+    return BatchV1.toCronJobList(resp);
+  }
+
+  async getCronJob(name: string, opts: operations.NoOpts = {}) {
+    const resp = await this.#client.performRequest({
+      method: "GET",
+      path: `${this.#root}cronjobs/${name}`,
+      expectJson: true,
+      abortSignal: opts.abortSignal,
+    });
+    return BatchV1.toCronJob(resp);
+  }
+
+  async deleteCronJob(name: string, opts: operations.DeleteOpts = {}) {
+    const resp = await this.#client.performRequest({
+      method: "DELETE",
+      path: `${this.#root}cronjobs/${name}`,
+      expectJson: true,
+      querystring: operations.formatDeleteOpts(opts),
+      abortSignal: opts.abortSignal,
+    });
+    return MetaV1.toStatus(resp);
+  }
+
+  async replaceCronJob(name: string, body: BatchV1.CronJob, opts: operations.PutOpts = {}) {
+    const resp = await this.#client.performRequest({
+      method: "PUT",
+      path: `${this.#root}cronjobs/${name}`,
+      expectJson: true,
+      querystring: operations.formatPutOpts(opts),
+      bodyJson: BatchV1.fromCronJob(body),
+      abortSignal: opts.abortSignal,
+    });
+    return BatchV1.toCronJob(resp);
+  }
+
+  async patchCronJob(name: string, type: c.PatchType, body: BatchV1.CronJob | c.JsonPatch, opts: operations.PatchOpts = {}) {
+    const resp = await this.#client.performRequest({
+      method: "PATCH",
+      path: `${this.#root}cronjobs/${name}`,
+      expectJson: true,
+      querystring: operations.formatPatchOpts(opts),
+      contentType: c.getPatchContentType(type),
+      bodyJson: Array.isArray(body) ? body : BatchV1.fromCronJob(body),
+      abortSignal: opts.abortSignal,
+    });
+    return BatchV1.toCronJob(resp);
+  }
+
+  async getCronJobStatus(name: string, opts: operations.NoOpts = {}) {
+    const resp = await this.#client.performRequest({
+      method: "GET",
+      path: `${this.#root}cronjobs/${name}/status`,
+      expectJson: true,
+      abortSignal: opts.abortSignal,
+    });
+    return BatchV1.toCronJob(resp);
+  }
+
+  async replaceCronJobStatus(name: string, body: BatchV1.CronJob, opts: operations.PutOpts = {}) {
+    const resp = await this.#client.performRequest({
+      method: "PUT",
+      path: `${this.#root}cronjobs/${name}/status`,
+      expectJson: true,
+      querystring: operations.formatPutOpts(opts),
+      bodyJson: BatchV1.fromCronJob(body),
+      abortSignal: opts.abortSignal,
+    });
+    return BatchV1.toCronJob(resp);
+  }
+
+  async patchCronJobStatus(name: string, type: c.PatchType, body: BatchV1.CronJob | c.JsonPatch, opts: operations.PatchOpts = {}) {
+    const resp = await this.#client.performRequest({
+      method: "PATCH",
+      path: `${this.#root}cronjobs/${name}/status`,
+      expectJson: true,
+      querystring: operations.formatPatchOpts(opts),
+      contentType: c.getPatchContentType(type),
+      bodyJson: Array.isArray(body) ? body : BatchV1.fromCronJob(body),
+      abortSignal: opts.abortSignal,
+    });
+    return BatchV1.toCronJob(resp);
   }
 
   async getJobList(opts: operations.GetListOpts = {}) {

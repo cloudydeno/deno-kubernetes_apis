@@ -83,18 +83,21 @@ export function fromJobTemplateSpec(input: JobTemplateSpec): c.JSONValue {
 export interface CronJobStatus {
   active?: Array<CoreV1.ObjectReference> | null;
   lastScheduleTime?: c.Time | null;
+  lastSuccessfulTime?: c.Time | null;
 }
 export function toCronJobStatus(input: c.JSONValue): CronJobStatus {
   const obj = c.checkObj(input);
   return {
     active: c.readOpt(obj["active"], x => c.readList(x, CoreV1.toObjectReference)),
     lastScheduleTime: c.readOpt(obj["lastScheduleTime"], c.toTime),
+    lastSuccessfulTime: c.readOpt(obj["lastSuccessfulTime"], c.toTime),
   }}
 export function fromCronJobStatus(input: CronJobStatus): c.JSONValue {
   return {
     ...input,
     active: input.active?.map(CoreV1.fromObjectReference),
     lastScheduleTime: input.lastScheduleTime != null ? c.fromTime(input.lastScheduleTime) : undefined,
+    lastSuccessfulTime: input.lastSuccessfulTime != null ? c.fromTime(input.lastSuccessfulTime) : undefined,
   }}
 
 /** CronJobList is a collection of cron jobs. */

@@ -13,6 +13,37 @@ export class StorageV1alpha1Api {
     this.#client = client;
   }
 
+  namespace(name: string) {
+    return new StorageV1alpha1NamespacedApi(this.#client, name);
+  }
+  myNamespace() {
+    if (!this.#client.defaultNamespace) throw new Error("No current namespace is set");
+    return new StorageV1alpha1NamespacedApi(this.#client, this.#client.defaultNamespace);
+  }
+
+  async getCSIStorageCapacityListForAllNamespaces(opts: operations.GetListOpts = {}) {
+    const resp = await this.#client.performRequest({
+      method: "GET",
+      path: `${this.#root}csistoragecapacities`,
+      expectJson: true,
+      querystring: operations.formatGetListOpts(opts),
+      abortSignal: opts.abortSignal,
+    });
+    return StorageV1alpha1.toCSIStorageCapacityList(resp);
+  }
+
+  async watchCSIStorageCapacityListForAllNamespaces(opts: operations.WatchListOpts = {}) {
+    const resp = await this.#client.performRequest({
+      method: "GET",
+      path: `${this.#root}csistoragecapacities`,
+      expectJson: true,
+      expectStream: true,
+      querystring: operations.formatWatchListOpts(opts),
+      abortSignal: opts.abortSignal,
+    });
+    return resp.pipeThrough(new c.WatchEventTransformer(StorageV1alpha1.toCSIStorageCapacity, MetaV1.toStatus));
+  }
+
   async getVolumeAttachmentList(opts: operations.GetListOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "GET",
@@ -103,6 +134,108 @@ export class StorageV1alpha1Api {
       abortSignal: opts.abortSignal,
     });
     return StorageV1alpha1.toVolumeAttachment(resp);
+  }
+
+}
+
+export class StorageV1alpha1NamespacedApi {
+  #client: c.RestClient
+  #root: string
+  constructor(client: c.RestClient, namespace: string) {
+    this.#client = client;
+    this.#root = `/apis/storage.k8s.io/v1alpha1/namespaces/${namespace}/`;
+  }
+
+  async getCSIStorageCapacityList(opts: operations.GetListOpts = {}) {
+    const resp = await this.#client.performRequest({
+      method: "GET",
+      path: `${this.#root}csistoragecapacities`,
+      expectJson: true,
+      querystring: operations.formatGetListOpts(opts),
+      abortSignal: opts.abortSignal,
+    });
+    return StorageV1alpha1.toCSIStorageCapacityList(resp);
+  }
+
+  async watchCSIStorageCapacityList(opts: operations.WatchListOpts = {}) {
+    const resp = await this.#client.performRequest({
+      method: "GET",
+      path: `${this.#root}csistoragecapacities`,
+      expectJson: true,
+      expectStream: true,
+      querystring: operations.formatWatchListOpts(opts),
+      abortSignal: opts.abortSignal,
+    });
+    return resp.pipeThrough(new c.WatchEventTransformer(StorageV1alpha1.toCSIStorageCapacity, MetaV1.toStatus));
+  }
+
+  async createCSIStorageCapacity(body: StorageV1alpha1.CSIStorageCapacity, opts: operations.PutOpts = {}) {
+    const resp = await this.#client.performRequest({
+      method: "POST",
+      path: `${this.#root}csistoragecapacities`,
+      expectJson: true,
+      querystring: operations.formatPutOpts(opts),
+      bodyJson: StorageV1alpha1.fromCSIStorageCapacity(body),
+      abortSignal: opts.abortSignal,
+    });
+    return StorageV1alpha1.toCSIStorageCapacity(resp);
+  }
+
+  async deleteCSIStorageCapacityList(opts: operations.DeleteListOpts = {}) {
+    const resp = await this.#client.performRequest({
+      method: "DELETE",
+      path: `${this.#root}csistoragecapacities`,
+      expectJson: true,
+      querystring: operations.formatDeleteListOpts(opts),
+      abortSignal: opts.abortSignal,
+    });
+    return StorageV1alpha1.toCSIStorageCapacityList(resp);
+  }
+
+  async getCSIStorageCapacity(name: string, opts: operations.NoOpts = {}) {
+    const resp = await this.#client.performRequest({
+      method: "GET",
+      path: `${this.#root}csistoragecapacities/${name}`,
+      expectJson: true,
+      abortSignal: opts.abortSignal,
+    });
+    return StorageV1alpha1.toCSIStorageCapacity(resp);
+  }
+
+  async deleteCSIStorageCapacity(name: string, opts: operations.DeleteOpts = {}) {
+    const resp = await this.#client.performRequest({
+      method: "DELETE",
+      path: `${this.#root}csistoragecapacities/${name}`,
+      expectJson: true,
+      querystring: operations.formatDeleteOpts(opts),
+      abortSignal: opts.abortSignal,
+    });
+    return MetaV1.toStatus(resp);
+  }
+
+  async replaceCSIStorageCapacity(name: string, body: StorageV1alpha1.CSIStorageCapacity, opts: operations.PutOpts = {}) {
+    const resp = await this.#client.performRequest({
+      method: "PUT",
+      path: `${this.#root}csistoragecapacities/${name}`,
+      expectJson: true,
+      querystring: operations.formatPutOpts(opts),
+      bodyJson: StorageV1alpha1.fromCSIStorageCapacity(body),
+      abortSignal: opts.abortSignal,
+    });
+    return StorageV1alpha1.toCSIStorageCapacity(resp);
+  }
+
+  async patchCSIStorageCapacity(name: string, type: c.PatchType, body: StorageV1alpha1.CSIStorageCapacity | c.JsonPatch, opts: operations.PatchOpts = {}) {
+    const resp = await this.#client.performRequest({
+      method: "PATCH",
+      path: `${this.#root}csistoragecapacities/${name}`,
+      expectJson: true,
+      querystring: operations.formatPatchOpts(opts),
+      contentType: c.getPatchContentType(type),
+      bodyJson: Array.isArray(body) ? body : StorageV1alpha1.fromCSIStorageCapacity(body),
+      abortSignal: opts.abortSignal,
+    });
+    return StorageV1alpha1.toCSIStorageCapacity(resp);
   }
 
 }

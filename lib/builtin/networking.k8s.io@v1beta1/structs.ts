@@ -182,18 +182,40 @@ export function fromIngressClass(input: IngressClass): c.JSONValue {
 /** IngressClassSpec provides information about the class of an Ingress. */
 export interface IngressClassSpec {
   controller?: string | null;
-  parameters?: CoreV1.TypedLocalObjectReference | null;
+  parameters?: IngressClassParametersReference | null;
 }
 export function toIngressClassSpec(input: c.JSONValue): IngressClassSpec {
   const obj = c.checkObj(input);
   return {
     controller: c.readOpt(obj["controller"], c.checkStr),
-    parameters: c.readOpt(obj["parameters"], CoreV1.toTypedLocalObjectReference),
+    parameters: c.readOpt(obj["parameters"], toIngressClassParametersReference),
   }}
 export function fromIngressClassSpec(input: IngressClassSpec): c.JSONValue {
   return {
     ...input,
-    parameters: input.parameters != null ? CoreV1.fromTypedLocalObjectReference(input.parameters) : undefined,
+    parameters: input.parameters != null ? fromIngressClassParametersReference(input.parameters) : undefined,
+  }}
+
+/** IngressClassParametersReference identifies an API object. This can be used to specify a cluster or namespace-scoped resource. */
+export interface IngressClassParametersReference {
+  apiGroup?: string | null;
+  kind: string;
+  name: string;
+  namespace?: string | null;
+  scope?: string | null;
+}
+export function toIngressClassParametersReference(input: c.JSONValue): IngressClassParametersReference {
+  const obj = c.checkObj(input);
+  return {
+    apiGroup: c.readOpt(obj["apiGroup"], c.checkStr),
+    kind: c.checkStr(obj["kind"]),
+    name: c.checkStr(obj["name"]),
+    namespace: c.readOpt(obj["namespace"], c.checkStr),
+    scope: c.readOpt(obj["scope"], c.checkStr),
+  }}
+export function fromIngressClassParametersReference(input: IngressClassParametersReference): c.JSONValue {
+  return {
+    ...input,
   }}
 
 /** IngressClassList is a collection of IngressClasses. */

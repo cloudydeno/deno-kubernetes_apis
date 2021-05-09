@@ -18,7 +18,7 @@ export interface Event {
   deprecatedLastTimestamp?: c.Time | null;
   deprecatedSource?: CoreV1.EventSource | null;
   eventTime: c.MicroTime;
-  metadata: MetaV1.ObjectMeta;
+  metadata?: MetaV1.ObjectMeta | null;
   note?: string | null;
   reason?: string | null;
   regarding?: CoreV1.ObjectReference | null;
@@ -38,7 +38,7 @@ export function toEvent(input: c.JSONValue): Event & c.ApiKind {
     deprecatedLastTimestamp: c.readOpt(obj["deprecatedLastTimestamp"], c.toTime),
     deprecatedSource: c.readOpt(obj["deprecatedSource"], CoreV1.toEventSource),
     eventTime: c.toMicroTime(obj["eventTime"]),
-    metadata: MetaV1.toObjectMeta(obj["metadata"]),
+    metadata: c.readOpt(obj["metadata"], MetaV1.toObjectMeta),
     note: c.readOpt(obj["note"], c.checkStr),
     reason: c.readOpt(obj["reason"], c.checkStr),
     regarding: c.readOpt(obj["regarding"], CoreV1.toObjectReference),

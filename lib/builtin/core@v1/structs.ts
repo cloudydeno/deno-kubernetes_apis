@@ -174,6 +174,7 @@ export function fromWeightedPodAffinityTerm(input: WeightedPodAffinityTerm): c.J
 /** Defines a set of pods (namely those matching the labelSelector relative to the given namespace(s)) that this pod should be co-located (affinity) or not co-located (anti-affinity) with, where co-located is defined as running on a node whose value of the label with key <topologyKey> matches that of any node on which a pod of the set of pods is running */
 export interface PodAffinityTerm {
   labelSelector?: MetaV1.LabelSelector | null;
+  namespaceSelector?: MetaV1.LabelSelector | null;
   namespaces?: Array<string> | null;
   topologyKey: string;
 }
@@ -181,6 +182,7 @@ export function toPodAffinityTerm(input: c.JSONValue): PodAffinityTerm {
   const obj = c.checkObj(input);
   return {
     labelSelector: c.readOpt(obj["labelSelector"], MetaV1.toLabelSelector),
+    namespaceSelector: c.readOpt(obj["namespaceSelector"], MetaV1.toLabelSelector),
     namespaces: c.readOpt(obj["namespaces"], x => c.readList(x, c.checkStr)),
     topologyKey: c.checkStr(obj["topologyKey"]),
   }}
@@ -188,6 +190,7 @@ export function fromPodAffinityTerm(input: PodAffinityTerm): c.JSONValue {
   return {
     ...input,
     labelSelector: input.labelSelector != null ? MetaV1.fromLabelSelector(input.labelSelector) : undefined,
+    namespaceSelector: input.namespaceSelector != null ? MetaV1.fromLabelSelector(input.namespaceSelector) : undefined,
   }}
 
 /** Pod anti affinity is a group of inter pod anti affinity scheduling rules. */
@@ -1074,6 +1077,7 @@ export interface Probe {
   periodSeconds?: number | null;
   successThreshold?: number | null;
   tcpSocket?: TCPSocketAction | null;
+  terminationGracePeriodSeconds?: number | null;
   timeoutSeconds?: number | null;
 }
 export function toProbe(input: c.JSONValue): Probe {
@@ -1086,6 +1090,7 @@ export function toProbe(input: c.JSONValue): Probe {
     periodSeconds: c.readOpt(obj["periodSeconds"], c.checkNum),
     successThreshold: c.readOpt(obj["successThreshold"], c.checkNum),
     tcpSocket: c.readOpt(obj["tcpSocket"], toTCPSocketAction),
+    terminationGracePeriodSeconds: c.readOpt(obj["terminationGracePeriodSeconds"], c.checkNum),
     timeoutSeconds: c.readOpt(obj["timeoutSeconds"], c.checkNum),
   }}
 export function fromProbe(input: Probe): c.JSONValue {
@@ -1665,15 +1670,35 @@ export function fromEphemeralContainer(input: EphemeralContainer): c.JSONValue {
     volumeMounts: input.volumeMounts?.map(fromVolumeMount),
   }}
 
+/** A list of ephemeral containers used with the Pod ephemeralcontainers subresource. */
+export interface EphemeralContainers {
+  apiVersion?: "v1";
+  kind?: "EphemeralContainers";
+  ephemeralContainers: Array<EphemeralContainer>;
+  metadata?: MetaV1.ObjectMeta | null;
+}
+export function toEphemeralContainers(input: c.JSONValue): EphemeralContainers & c.ApiKind {
+  const obj = c.checkObj(input);
+  return {
+    ...c.assertOrAddApiVersionAndKind(obj, "v1", "EphemeralContainers"),
+    ephemeralContainers: c.readList(obj["ephemeralContainers"], toEphemeralContainer),
+    metadata: c.readOpt(obj["metadata"], MetaV1.toObjectMeta),
+  }}
+export function fromEphemeralContainers(input: EphemeralContainers): c.JSONValue {
+  return {
+    ...c.assertOrAddApiVersionAndKind(input, "v1", "EphemeralContainers"),
+    ...input,
+    ephemeralContainers: input.ephemeralContainers?.map(fromEphemeralContainer),
+    metadata: input.metadata != null ? MetaV1.fromObjectMeta(input.metadata) : undefined,
+  }}
+
 /** Represents an ephemeral volume that is handled by a normal storage driver. */
 export interface EphemeralVolumeSource {
-  readOnly?: boolean | null;
   volumeClaimTemplate?: PersistentVolumeClaimTemplate | null;
 }
 export function toEphemeralVolumeSource(input: c.JSONValue): EphemeralVolumeSource {
   const obj = c.checkObj(input);
   return {
-    readOnly: c.readOpt(obj["readOnly"], c.checkBool),
     volumeClaimTemplate: c.readOpt(obj["volumeClaimTemplate"], toPersistentVolumeClaimTemplate),
   }}
 export function fromEphemeralVolumeSource(input: EphemeralVolumeSource): c.JSONValue {
@@ -4053,8 +4078,10 @@ export interface ServiceSpec {
   externalName?: string | null;
   externalTrafficPolicy?: string | null;
   healthCheckNodePort?: number | null;
+  internalTrafficPolicy?: string | null;
   ipFamilies?: Array<string> | null;
   ipFamilyPolicy?: string | null;
+  loadBalancerClass?: string | null;
   loadBalancerIP?: string | null;
   loadBalancerSourceRanges?: Array<string> | null;
   ports?: Array<ServicePort> | null;
@@ -4075,8 +4102,10 @@ export function toServiceSpec(input: c.JSONValue): ServiceSpec {
     externalName: c.readOpt(obj["externalName"], c.checkStr),
     externalTrafficPolicy: c.readOpt(obj["externalTrafficPolicy"], c.checkStr),
     healthCheckNodePort: c.readOpt(obj["healthCheckNodePort"], c.checkNum),
+    internalTrafficPolicy: c.readOpt(obj["internalTrafficPolicy"], c.checkStr),
     ipFamilies: c.readOpt(obj["ipFamilies"], x => c.readList(x, c.checkStr)),
     ipFamilyPolicy: c.readOpt(obj["ipFamilyPolicy"], c.checkStr),
+    loadBalancerClass: c.readOpt(obj["loadBalancerClass"], c.checkStr),
     loadBalancerIP: c.readOpt(obj["loadBalancerIP"], c.checkStr),
     loadBalancerSourceRanges: c.readOpt(obj["loadBalancerSourceRanges"], x => c.readList(x, c.checkStr)),
     ports: c.readOpt(obj["ports"], x => c.readList(x, toServicePort)),

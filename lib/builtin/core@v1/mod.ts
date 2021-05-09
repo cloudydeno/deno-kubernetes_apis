@@ -1381,6 +1381,41 @@ export class CoreV1NamespacedApi {
     return CoreV1.toBinding(resp);
   }
 
+  async readPodEphemeralcontainers(name: string, opts: operations.NoOpts = {}) {
+    const resp = await this.#client.performRequest({
+      method: "GET",
+      path: `${this.#root}pods/${name}/ephemeralcontainers`,
+      expectJson: true,
+      abortSignal: opts.abortSignal,
+    });
+    return CoreV1.toEphemeralContainers(resp);
+  }
+
+  async replacePodEphemeralcontainers(name: string, body: CoreV1.EphemeralContainers, opts: operations.PutOpts = {}) {
+    const resp = await this.#client.performRequest({
+      method: "PUT",
+      path: `${this.#root}pods/${name}/ephemeralcontainers`,
+      expectJson: true,
+      querystring: operations.formatPutOpts(opts),
+      bodyJson: CoreV1.fromEphemeralContainers(body),
+      abortSignal: opts.abortSignal,
+    });
+    return CoreV1.toEphemeralContainers(resp);
+  }
+
+  async patchPodEphemeralcontainers(name: string, type: c.PatchType, body: CoreV1.EphemeralContainers | c.JsonPatch, opts: operations.PatchOpts = {}) {
+    const resp = await this.#client.performRequest({
+      method: "PATCH",
+      path: `${this.#root}pods/${name}/ephemeralcontainers`,
+      expectJson: true,
+      querystring: operations.formatPatchOpts(opts),
+      contentType: c.getPatchContentType(type),
+      bodyJson: Array.isArray(body) ? body : CoreV1.fromEphemeralContainers(body),
+      abortSignal: opts.abortSignal,
+    });
+    return CoreV1.toEphemeralContainers(resp);
+  }
+
   async createPodEviction(name: string, body: PolicyV1beta1.Eviction, opts: operations.PutOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "POST",

@@ -113,11 +113,13 @@ export function fromDaemonSetUpdateStrategy(input: DaemonSetUpdateStrategy): c.J
 
 /** Spec to control the desired behavior of daemon set rolling update. */
 export interface RollingUpdateDaemonSet {
+  maxSurge?: c.IntOrString | null;
   maxUnavailable?: c.IntOrString | null;
 }
 export function toRollingUpdateDaemonSet(input: c.JSONValue): RollingUpdateDaemonSet {
   const obj = c.checkObj(input);
   return {
+    maxSurge: c.readOpt(obj["maxSurge"], c.toIntOrString),
     maxUnavailable: c.readOpt(obj["maxUnavailable"], c.toIntOrString),
   }}
 export function fromRollingUpdateDaemonSet(input: RollingUpdateDaemonSet): c.JSONValue {
