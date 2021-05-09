@@ -10,7 +10,7 @@ type ListOf<T> = {
 
 /** A CertificateRequest is used to request a signed certificate from one of the configured issuers. 
  All fields within the CertificateRequest's `spec` are immutable after creation. A CertificateRequest will either succeed or fail, as denoted by its `status.state` field. 
- A CertificateRequest is a 'one-shot' resource, meaning it represents a single point in time request for a certificate and cannot be re-used. */
+ A CertificateRequest is a one-shot resource, meaning it represents a single point in time request for a certificate and cannot be re-used. */
 export interface CertificateRequest {
   apiVersion?: "cert-manager.io/v1alpha2";
   kind?: "CertificateRequest";
@@ -18,13 +18,17 @@ export interface CertificateRequest {
   spec?: {
     csr: string;
     duration?: string | null;
+    extra?: Record<string,Array<string>> | null;
+    groups?: Array<string> | null;
     isCA?: boolean | null;
     issuerRef: {
       group?: string | null;
       kind?: string | null;
       name: string;
     };
+    uid?: string | null;
     usages?: Array<"signing" | "digital signature" | "content commitment" | "key encipherment" | "key agreement" | "data encipherment" | "cert sign" | "crl sign" | "encipher only" | "decipher only" | "any" | "server auth" | "client auth" | "code signing" | "email protection" | "s/mime" | "ipsec end system" | "ipsec tunnel" | "ipsec user" | "timestamping" | "ocsp signing" | "microsoft sgc" | "netscape sgc" | c.UnexpectedEnumValue> | null;
+    username?: string | null;
   } | null;
   status?: {
     ca?: string | null;
@@ -66,9 +70,13 @@ export function toCertificateRequest_spec(input: c.JSONValue) {
   return {
     csr: c.checkStr(obj["csr"]),
     duration: c.readOpt(obj["duration"], c.checkStr),
+    extra: c.readOpt(obj["extra"], y => c.readMap(y, x => c.readList(x, c.checkStr))),
+    groups: c.readOpt(obj["groups"], x => c.readList(x, c.checkStr)),
     isCA: c.readOpt(obj["isCA"], c.checkBool),
     issuerRef: toCertificateRequest_spec_issuerRef(obj["issuerRef"]),
+    uid: c.readOpt(obj["uid"], c.checkStr),
     usages: c.readOpt(obj["usages"], x => c.readList(x, (x => c.readEnum<"signing" | "digital signature" | "content commitment" | "key encipherment" | "key agreement" | "data encipherment" | "cert sign" | "crl sign" | "encipher only" | "decipher only" | "any" | "server auth" | "client auth" | "code signing" | "email protection" | "s/mime" | "ipsec end system" | "ipsec tunnel" | "ipsec user" | "timestamping" | "ocsp signing" | "microsoft sgc" | "netscape sgc" | c.UnexpectedEnumValue>(x)))),
+    username: c.readOpt(obj["username"], c.checkStr),
   }}
 export function toCertificateRequest_status(input: c.JSONValue) {
   const obj = c.checkObj(input);
@@ -160,6 +168,7 @@ export interface Certificate {
       rotationPolicy?: string | null;
     } | null;
     renewBefore?: string | null;
+    revisionHistoryLimit?: number | null;
     secretName: string;
     subject?: {
       countries?: Array<string> | null;
@@ -177,6 +186,7 @@ export interface Certificate {
     conditions?: Array<{
       lastTransitionTime?: c.Time | null;
       message?: string | null;
+      observedGeneration?: number | null;
       reason?: string | null;
       status: "True" | "False" | "Unknown" | c.UnexpectedEnumValue;
       type: string;
@@ -246,6 +256,7 @@ export function toCertificate_spec(input: c.JSONValue) {
     organization: c.readOpt(obj["organization"], x => c.readList(x, c.checkStr)),
     privateKey: c.readOpt(obj["privateKey"], toCertificate_spec_privateKey),
     renewBefore: c.readOpt(obj["renewBefore"], c.checkStr),
+    revisionHistoryLimit: c.readOpt(obj["revisionHistoryLimit"], c.checkNum),
     secretName: c.checkStr(obj["secretName"]),
     subject: c.readOpt(obj["subject"], toCertificate_spec_subject),
     uriSANs: c.readOpt(obj["uriSANs"], x => c.readList(x, c.checkStr)),
@@ -296,6 +307,7 @@ export function toCertificate_status_conditions(input: c.JSONValue) {
   return {
     lastTransitionTime: c.readOpt(obj["lastTransitionTime"], c.toTime),
     message: c.readOpt(obj["message"], c.checkStr),
+    observedGeneration: c.readOpt(obj["observedGeneration"], c.checkNum),
     reason: c.readOpt(obj["reason"], c.checkStr),
     status: (x => c.readEnum<"True" | "False" | "Unknown" | c.UnexpectedEnumValue>(x))(obj["status"]),
     type: c.checkStr(obj["type"]),
@@ -344,6 +356,7 @@ export interface IssuerSpec {
   } | null;
   ca?: {
     crlDistributionPoints?: Array<string> | null;
+    ocspServers?: Array<string> | null;
     secretName: string;
   } | null;
   selfSigned?: {
@@ -444,6 +457,7 @@ export function toIssuerSpec_ca(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     crlDistributionPoints: c.readOpt(obj["crlDistributionPoints"], x => c.readList(x, c.checkStr)),
+    ocspServers: c.readOpt(obj["ocspServers"], x => c.readList(x, c.checkStr)),
     secretName: c.checkStr(obj["secretName"]),
   }}
 export function toIssuerSpec_selfSigned(input: c.JSONValue) {
@@ -823,6 +837,7 @@ export interface IssuerStatus {
   conditions?: Array<{
     lastTransitionTime?: c.Time | null;
     message?: string | null;
+    observedGeneration?: number | null;
     reason?: string | null;
     status: "True" | "False" | "Unknown" | c.UnexpectedEnumValue;
     type: string;
@@ -853,6 +868,7 @@ export function toIssuerStatus_conditions(input: c.JSONValue) {
   return {
     lastTransitionTime: c.readOpt(obj["lastTransitionTime"], c.toTime),
     message: c.readOpt(obj["message"], c.checkStr),
+    observedGeneration: c.readOpt(obj["observedGeneration"], c.checkNum),
     reason: c.readOpt(obj["reason"], c.checkStr),
     status: (x => c.readEnum<"True" | "False" | "Unknown" | c.UnexpectedEnumValue>(x))(obj["status"]),
     type: c.checkStr(obj["type"]),
