@@ -30,7 +30,17 @@ When running locally (with `kubectl` set up), you probably just to add `--allow-
 For a container being deployed onto a cluster, there's more flags to provide instead;
 see `/x/kubernetes_client` for more information.
 
+NOTE: Although the APIs all accept an `AbortSignal`,
+Deno's `fetch()` function does not yet support `AbortSignal` and
+cancelling API calls is thus not well-supported at this time.
+
 ## Changelog
+
+* `v0.3.1` on `2021-05-09`:
+  * Updating `/x/kubernetes_client` API contract to `v0.2.4`.
+  * Includes 'builtin' APIs generated from K8s `v1.21.0`.
+    * `get` functions no longer accept `export` or `exact`.
+  * `cert-manager` and `external-dns` CRDs have been updated from the latest releases.
 
 * `v0.3.0` on `2021-02-28`:
   * Updating `/x/kubernetes_client` API contract to `v0.2.0`.
@@ -42,6 +52,7 @@ see `/x/kubernetes_client` for more information.
   * Now handles v1.Status error payloads when processing any response body.
   * Added shebang and execute bit to every script in `examples/`.
   * Optimized redundencies out of cert-manager structures (half the file size now)
+
 * `v0.2.0` on `2020-12-29`:
   * Includes 'builtin' APIs generated from K8s `v1.20`.
   * Patching and deletion is more stable; mistype error messages are vastly improved.
@@ -63,6 +74,6 @@ see `/x/kubernetes_client` for more information.
 * [x] PATCH requests
 * [ ] Solidify Quantity, Duration, etc
 * [x] Reconcile deletion response kinds (might still be fallout)
-* [ ] Story for generating API clients directly from CRD specifications
+* [x] Story for generating API clients directly from CRD specifications
 * [ ] Story for generating the whole API surface of a specific cluster
 * [x] Move Reflector implementation upstream to `/x/kubernetes_client`
