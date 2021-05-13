@@ -100,12 +100,11 @@ export class ExternaldnsV1alpha1NamespacedApi {
     return ExternaldnsV1alpha1.toDNSEndpointList(resp);
   }
 
-  async getDNSEndpoint(name: string, opts: operations.GetOpts = {}) {
+  async getDNSEndpoint(name: string, opts: operations.NoOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}dnsendpoints/${name}`,
       expectJson: true,
-      querystring: operations.formatGetOpts(opts),
       abortSignal: opts.abortSignal,
     });
     return ExternaldnsV1alpha1.toDNSEndpoint(resp);
@@ -147,12 +146,11 @@ export class ExternaldnsV1alpha1NamespacedApi {
     return ExternaldnsV1alpha1.toDNSEndpoint(resp);
   }
 
-  async getDNSEndpointStatus(name: string, opts: operations.GetOpts = {}) {
+  async getDNSEndpointStatus(name: string, opts: operations.NoOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}dnsendpoints/${name}/status`,
       expectJson: true,
-      querystring: operations.formatGetOpts(opts),
       abortSignal: opts.abortSignal,
     });
     return ExternaldnsV1alpha1.toDNSEndpoint(resp);

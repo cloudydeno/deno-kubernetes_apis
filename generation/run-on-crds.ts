@@ -21,7 +21,7 @@ const knownOpts = {
   PutOpts: 'dryRun,fieldManager', // both CreateOpts and ReplaceOpts
   DeleteListOpts: 'continue,dryRun,fieldSelector,gracePeriodSeconds,labelSelector,limit,orphanDependents,propagationPolicy,resourceVersion,resourceVersionMatch,timeoutSeconds',
   PatchOpts: 'dryRun,fieldManager,force',
-  GetOpts: 'exact,export',
+  GetOpts: '',
   DeleteOpts: 'dryRun,gracePeriodSeconds,orphanDependents,propagationPolicy',
 };
 

@@ -123,12 +123,11 @@ export class AcmeCertManagerIoV1beta1NamespacedApi {
     return AcmeCertManagerIoV1beta1.toChallengeList(resp);
   }
 
-  async getChallenge(name: string, opts: operations.GetOpts = {}) {
+  async getChallenge(name: string, opts: operations.NoOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}challenges/${name}`,
       expectJson: true,
-      querystring: operations.formatGetOpts(opts),
       abortSignal: opts.abortSignal,
     });
     return AcmeCertManagerIoV1beta1.toChallenge(resp);
@@ -170,12 +169,11 @@ export class AcmeCertManagerIoV1beta1NamespacedApi {
     return AcmeCertManagerIoV1beta1.toChallenge(resp);
   }
 
-  async getChallengeStatus(name: string, opts: operations.GetOpts = {}) {
+  async getChallengeStatus(name: string, opts: operations.NoOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}challenges/${name}/status`,
       expectJson: true,
-      querystring: operations.formatGetOpts(opts),
       abortSignal: opts.abortSignal,
     });
     return AcmeCertManagerIoV1beta1.toChallenge(resp);
@@ -252,12 +250,11 @@ export class AcmeCertManagerIoV1beta1NamespacedApi {
     return AcmeCertManagerIoV1beta1.toOrderList(resp);
   }
 
-  async getOrder(name: string, opts: operations.GetOpts = {}) {
+  async getOrder(name: string, opts: operations.NoOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}orders/${name}`,
       expectJson: true,
-      querystring: operations.formatGetOpts(opts),
       abortSignal: opts.abortSignal,
     });
     return AcmeCertManagerIoV1beta1.toOrder(resp);
@@ -299,12 +296,11 @@ export class AcmeCertManagerIoV1beta1NamespacedApi {
     return AcmeCertManagerIoV1beta1.toOrder(resp);
   }
 
-  async getOrderStatus(name: string, opts: operations.GetOpts = {}) {
+  async getOrderStatus(name: string, opts: operations.NoOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}orders/${name}/status`,
       expectJson: true,
-      querystring: operations.formatGetOpts(opts),
       abortSignal: opts.abortSignal,
     });
     return AcmeCertManagerIoV1beta1.toOrder(resp);

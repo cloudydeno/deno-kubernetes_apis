@@ -113,12 +113,11 @@ export class CertManagerIoV1alpha2Api {
     return CertManagerIoV1alpha2.toClusterIssuerList(resp);
   }
 
-  async getClusterIssuer(name: string, opts: operations.GetOpts = {}) {
+  async getClusterIssuer(name: string, opts: operations.NoOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}clusterissuers/${name}`,
       expectJson: true,
-      querystring: operations.formatGetOpts(opts),
       abortSignal: opts.abortSignal,
     });
     return CertManagerIoV1alpha2.toClusterIssuer(resp);
@@ -160,12 +159,11 @@ export class CertManagerIoV1alpha2Api {
     return CertManagerIoV1alpha2.toClusterIssuer(resp);
   }
 
-  async getClusterIssuerStatus(name: string, opts: operations.GetOpts = {}) {
+  async getClusterIssuerStatus(name: string, opts: operations.NoOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}clusterissuers/${name}/status`,
       expectJson: true,
-      querystring: operations.formatGetOpts(opts),
       abortSignal: opts.abortSignal,
     });
     return CertManagerIoV1alpha2.toClusterIssuer(resp);
@@ -275,12 +273,11 @@ export class CertManagerIoV1alpha2NamespacedApi {
     return CertManagerIoV1alpha2.toCertificateRequestList(resp);
   }
 
-  async getCertificateRequest(name: string, opts: operations.GetOpts = {}) {
+  async getCertificateRequest(name: string, opts: operations.NoOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}certificaterequests/${name}`,
       expectJson: true,
-      querystring: operations.formatGetOpts(opts),
       abortSignal: opts.abortSignal,
     });
     return CertManagerIoV1alpha2.toCertificateRequest(resp);
@@ -322,12 +319,11 @@ export class CertManagerIoV1alpha2NamespacedApi {
     return CertManagerIoV1alpha2.toCertificateRequest(resp);
   }
 
-  async getCertificateRequestStatus(name: string, opts: operations.GetOpts = {}) {
+  async getCertificateRequestStatus(name: string, opts: operations.NoOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}certificaterequests/${name}/status`,
       expectJson: true,
-      querystring: operations.formatGetOpts(opts),
       abortSignal: opts.abortSignal,
     });
     return CertManagerIoV1alpha2.toCertificateRequest(resp);
@@ -404,12 +400,11 @@ export class CertManagerIoV1alpha2NamespacedApi {
     return CertManagerIoV1alpha2.toCertificateList(resp);
   }
 
-  async getCertificate(name: string, opts: operations.GetOpts = {}) {
+  async getCertificate(name: string, opts: operations.NoOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}certificates/${name}`,
       expectJson: true,
-      querystring: operations.formatGetOpts(opts),
       abortSignal: opts.abortSignal,
     });
     return CertManagerIoV1alpha2.toCertificate(resp);
@@ -451,12 +446,11 @@ export class CertManagerIoV1alpha2NamespacedApi {
     return CertManagerIoV1alpha2.toCertificate(resp);
   }
 
-  async getCertificateStatus(name: string, opts: operations.GetOpts = {}) {
+  async getCertificateStatus(name: string, opts: operations.NoOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}certificates/${name}/status`,
       expectJson: true,
-      querystring: operations.formatGetOpts(opts),
       abortSignal: opts.abortSignal,
     });
     return CertManagerIoV1alpha2.toCertificate(resp);
@@ -533,12 +527,11 @@ export class CertManagerIoV1alpha2NamespacedApi {
     return CertManagerIoV1alpha2.toIssuerList(resp);
   }
 
-  async getIssuer(name: string, opts: operations.GetOpts = {}) {
+  async getIssuer(name: string, opts: operations.NoOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}issuers/${name}`,
       expectJson: true,
-      querystring: operations.formatGetOpts(opts),
       abortSignal: opts.abortSignal,
     });
     return CertManagerIoV1alpha2.toIssuer(resp);
@@ -580,12 +573,11 @@ export class CertManagerIoV1alpha2NamespacedApi {
     return CertManagerIoV1alpha2.toIssuer(resp);
   }
 
-  async getIssuerStatus(name: string, opts: operations.GetOpts = {}) {
+  async getIssuerStatus(name: string, opts: operations.NoOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}issuers/${name}/status`,
       expectJson: true,
-      querystring: operations.formatGetOpts(opts),
       abortSignal: opts.abortSignal,
     });
     return CertManagerIoV1alpha2.toIssuer(resp);
