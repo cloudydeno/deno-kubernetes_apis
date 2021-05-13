@@ -56,7 +56,7 @@ const apiMap = new SurfaceMap({
   definitions: {},
   swagger: 'faked'
 });
-apiMap.allApis[0].moduleName = '../builtin/meta@v1';
+apiMap.allApis[0].moduleName = `../builtin/meta@v1`;
 
 apiMap.registerApi({
   apiRoot: '/api/v1/',
@@ -193,7 +193,7 @@ for (const [api, defs] of apis.values()) {
 for (const api of apiMap.allApis) {
   if (api.moduleName.startsWith('../')) continue;
   try {
-    await writeApiModule(apiMap, api, Deno.args[1]);
+    await writeApiModule(apiMap, api, Deno.args[1], Deno.args[2]);
   } catch (err) {
     console.error(`Error writing`, api.apiGroupVersion);
     console.error(err);
