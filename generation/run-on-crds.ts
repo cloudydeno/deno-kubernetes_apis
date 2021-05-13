@@ -74,6 +74,23 @@ apiMap.registerApi({
   shapes: new ShapeLibrary('io.k8s.api.core.v1.', apiMap.byDefPrefix),
 });
 
+// used for /scale subresources
+apiMap.registerApi({
+  apiRoot: '/apis/autoscaling/v1',
+  shapePrefix: 'io.k8s.api.autoscaling.v1.',
+
+  apiGroup: 'autoscaling',
+  apiVersion: 'v1',
+  apiGroupVersion: 'autoscaling/v1',
+  friendlyName: 'AutoscalingV1',
+  moduleName: `../builtin/autoscaling@v1`,
+
+  operations: new Array,
+  definitions: new Map,
+  kinds: new Map(),
+  shapes: new ShapeLibrary('io.k8s.api.autoscaling.v1.', apiMap.byDefPrefix),
+});
+
 type DefMap = Map<string, OpenAPI2SchemaObject>;
 const apis = new Map<string, [SurfaceApi, DefMap]>();
 function recognizeGroupVersion(apiGroup: string, apiVersion: string) {
@@ -347,7 +364,25 @@ function processCRD({apiGroup, apiVersion, schema, names, scope, subResources}: 
 
     }
     if (subResources.scale) {
-      throw new Error(`TODO: scale subresource on ${names.kind}`);
+
+      addOp(`get${names.kind}Scale`, scope, 'get', {
+        respKind: `io.k8s.api.autoscaling.v1.Scale`,
+        knownOpts: knownOpts.GetOpts,
+        subPath: '/{name}/scale',
+      });
+      addOp(`replace${names.kind}Scale`, scope, 'put', {
+        reqKind: `io.k8s.api.autoscaling.v1.Scale`,
+        respKind: `io.k8s.api.autoscaling.v1.Scale`,
+        knownOpts: knownOpts.PutOpts,
+        subPath: '/{name}/scale',
+      });
+      addOp(`patch${names.kind}Scale`, scope, 'patch', {
+        reqKind: `io.k8s.api.autoscaling.v1.Scale`,
+        respKind: `io.k8s.api.autoscaling.v1.Scale`,
+        knownOpts: knownOpts.PatchOpts,
+        subPath: '/{name}/scale',
+      });
+
     }
   }
 
