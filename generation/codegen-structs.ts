@@ -384,7 +384,7 @@ export function generateStructsTypescript(surface: SurfaceMap, apiS: SurfaceApi)
 
       }
     }
-    return [`unknown /* ${shape!.type} ${shape!.reference} */`];
+    return [`unknown /* BUG: found unknown shape.type */`];
   }
 
 }
