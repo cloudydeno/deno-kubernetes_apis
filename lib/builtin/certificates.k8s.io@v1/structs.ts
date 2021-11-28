@@ -40,6 +40,7 @@ export function fromCertificateSigningRequest(input: CertificateSigningRequest):
 
 /** CertificateSigningRequestSpec contains the certificate request. */
 export interface CertificateSigningRequestSpec {
+  expirationSeconds?: number | null;
   extra?: Record<string,Array<string>> | null;
   groups?: Array<string> | null;
   request: string;
@@ -51,6 +52,7 @@ export interface CertificateSigningRequestSpec {
 export function toCertificateSigningRequestSpec(input: c.JSONValue): CertificateSigningRequestSpec {
   const obj = c.checkObj(input);
   return {
+    expirationSeconds: c.readOpt(obj["expirationSeconds"], c.checkNum),
     extra: c.readOpt(obj["extra"], y => c.readMap(y, x => c.readList(x, c.checkStr))),
     groups: c.readOpt(obj["groups"], x => c.readList(x, c.checkStr)),
     request: c.checkStr(obj["request"]),

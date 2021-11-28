@@ -161,7 +161,7 @@ export interface Certificate {
       } | null;
     } | null;
     privateKey?: {
-      algorithm?: "RSA" | "ECDSA" | c.UnexpectedEnumValue | null;
+      algorithm?: "RSA" | "ECDSA" | "Ed25519" | c.UnexpectedEnumValue | null;
       encoding?: "PKCS1" | "PKCS8" | c.UnexpectedEnumValue | null;
       rotationPolicy?: string | null;
       size?: number | null;
@@ -169,6 +169,10 @@ export interface Certificate {
     renewBefore?: string | null;
     revisionHistoryLimit?: number | null;
     secretName: string;
+    secretTemplate?: {
+      annotations?: Record<string,string> | null;
+      labels?: Record<string,string> | null;
+    } | null;
     subject?: {
       countries?: Array<string> | null;
       localities?: Array<string> | null;
@@ -254,6 +258,7 @@ export function toCertificate_spec(input: c.JSONValue) {
     renewBefore: c.readOpt(obj["renewBefore"], c.checkStr),
     revisionHistoryLimit: c.readOpt(obj["revisionHistoryLimit"], c.checkNum),
     secretName: c.checkStr(obj["secretName"]),
+    secretTemplate: c.readOpt(obj["secretTemplate"], toCertificate_spec_secretTemplate),
     subject: c.readOpt(obj["subject"], toCertificate_spec_subject),
     uris: c.readOpt(obj["uris"], x => c.readList(x, c.checkStr)),
     usages: c.readOpt(obj["usages"], x => c.readList(x, (x => c.readEnum<"signing" | "digital signature" | "content commitment" | "key encipherment" | "key agreement" | "data encipherment" | "cert sign" | "crl sign" | "encipher only" | "decipher only" | "any" | "server auth" | "client auth" | "code signing" | "email protection" | "s/mime" | "ipsec end system" | "ipsec tunnel" | "ipsec user" | "timestamping" | "ocsp signing" | "microsoft sgc" | "netscape sgc" | c.UnexpectedEnumValue>(x)))),
@@ -285,10 +290,16 @@ export function toCertificate_spec_keystores(input: c.JSONValue) {
 export function toCertificate_spec_privateKey(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
-    algorithm: c.readOpt(obj["algorithm"], (x => c.readEnum<"RSA" | "ECDSA" | c.UnexpectedEnumValue>(x))),
+    algorithm: c.readOpt(obj["algorithm"], (x => c.readEnum<"RSA" | "ECDSA" | "Ed25519" | c.UnexpectedEnumValue>(x))),
     encoding: c.readOpt(obj["encoding"], (x => c.readEnum<"PKCS1" | "PKCS8" | c.UnexpectedEnumValue>(x))),
     rotationPolicy: c.readOpt(obj["rotationPolicy"], c.checkStr),
     size: c.readOpt(obj["size"], c.checkNum),
+  }}
+export function toCertificate_spec_secretTemplate(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    annotations: c.readOpt(obj["annotations"], x => c.readMap(x, c.checkStr)),
+    labels: c.readOpt(obj["labels"], x => c.readMap(x, c.checkStr)),
   }}
 export function toCertificate_spec_subject(input: c.JSONValue) {
   const obj = c.checkObj(input);
@@ -344,7 +355,7 @@ export interface IssuerSpec {
     email?: string | null;
     enableDurationFeature?: boolean | null;
     externalAccountBinding?: {
-      keyAlgorithm: "HS256" | "HS384" | "HS512" | c.UnexpectedEnumValue;
+      keyAlgorithm?: "HS256" | "HS384" | "HS512" | c.UnexpectedEnumValue | null;
       keyID: string;
       keySecretRef: SecretRef;
     } | null;
@@ -484,7 +495,7 @@ export function toIssuerSpec_venafi(input: c.JSONValue) {
 export function toIssuerSpec_acme_externalAccountBinding(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
-    keyAlgorithm: (x => c.readEnum<"HS256" | "HS384" | "HS512" | c.UnexpectedEnumValue>(x))(obj["keyAlgorithm"]),
+    keyAlgorithm: c.readOpt(obj["keyAlgorithm"], (x => c.readEnum<"HS256" | "HS384" | "HS512" | c.UnexpectedEnumValue>(x))),
     keyID: c.checkStr(obj["keyID"]),
     keySecretRef: toSecretRef(obj["keySecretRef"]),
   }}
@@ -528,7 +539,7 @@ export function toIssuerSpec_venafi_tpp_credentialsRef(input: c.JSONValue) {
     name: c.checkStr(obj["name"]),
   }}
 
-/** Configures an issuer to solve challenges using the specified options. Only one of HTTP01 or DNS01 may be provided. */
+/** An ACMEChallengeSolver describes how to solve ACME challenges for the issuer it is part of. A selector may be provided to use different solving strategies for different DNS names. Only one of HTTP01 or DNS01 must be provided. */
 export interface SolverSpec {
   dns01?: {
     acmeDNS?: {
@@ -546,6 +557,10 @@ export interface SolverSpec {
       clientSecretSecretRef?: SecretRef | null;
       environment?: "AzurePublicCloud" | "AzureChinaCloud" | "AzureGermanCloud" | "AzureUSGovernmentCloud" | c.UnexpectedEnumValue | null;
       hostedZoneName?: string | null;
+      managedIdentity?: {
+        clientID?: string | null;
+        resourceID?: string | null;
+      } | null;
       resourceGroupName: string;
       subscriptionID: string;
       tenantID?: string | null;
@@ -584,6 +599,10 @@ export interface SolverSpec {
     } | null;
   } | null;
   http01?: {
+    gatewayHTTPRoute?: {
+      labels?: Record<string,string> | null;
+      serviceType?: string | null;
+    } | null;
     ingress?: {
       class?: string | null;
       ingressTemplate?: {
@@ -700,6 +719,7 @@ export function toSolverSpec_dns01(input: c.JSONValue) {
 export function toSolverSpec_http01(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
+    gatewayHTTPRoute: c.readOpt(obj["gatewayHTTPRoute"], toSolverSpec_http01_gatewayHTTPRoute),
     ingress: c.readOpt(obj["ingress"], toSolverSpec_http01_ingress),
   }}
 export function toSolverSpec_selector(input: c.JSONValue) {
@@ -730,6 +750,7 @@ export function toSolverSpec_dns01_azureDNS(input: c.JSONValue) {
     clientSecretSecretRef: c.readOpt(obj["clientSecretSecretRef"], toSecretRef),
     environment: c.readOpt(obj["environment"], (x => c.readEnum<"AzurePublicCloud" | "AzureChinaCloud" | "AzureGermanCloud" | "AzureUSGovernmentCloud" | c.UnexpectedEnumValue>(x))),
     hostedZoneName: c.readOpt(obj["hostedZoneName"], c.checkStr),
+    managedIdentity: c.readOpt(obj["managedIdentity"], toSolverSpec_dns01_azureDNS_managedIdentity),
     resourceGroupName: c.checkStr(obj["resourceGroupName"]),
     subscriptionID: c.checkStr(obj["subscriptionID"]),
     tenantID: c.readOpt(obj["tenantID"], c.checkStr),
@@ -777,6 +798,12 @@ export function toSolverSpec_dns01_webhook(input: c.JSONValue) {
     groupName: c.checkStr(obj["groupName"]),
     solverName: c.checkStr(obj["solverName"]),
   }}
+export function toSolverSpec_http01_gatewayHTTPRoute(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    labels: c.readOpt(obj["labels"], x => c.readMap(x, c.checkStr)),
+    serviceType: c.readOpt(obj["serviceType"], c.checkStr),
+  }}
 export function toSolverSpec_http01_ingress(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
@@ -785,6 +812,12 @@ export function toSolverSpec_http01_ingress(input: c.JSONValue) {
     name: c.readOpt(obj["name"], c.checkStr),
     podTemplate: c.readOpt(obj["podTemplate"], toSolverSpec_http01_ingress_podTemplate),
     serviceType: c.readOpt(obj["serviceType"], c.checkStr),
+  }}
+export function toSolverSpec_dns01_azureDNS_managedIdentity(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    clientID: c.readOpt(obj["clientID"], c.checkStr),
+    resourceID: c.readOpt(obj["resourceID"], c.checkStr),
   }}
 export function toSolverSpec_http01_ingress_ingressTemplate(input: c.JSONValue) {
   const obj = c.checkObj(input);

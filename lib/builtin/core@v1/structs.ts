@@ -675,7 +675,7 @@ export function toConfigMapList(input: c.JSONValue): ConfigMapList & c.ApiKind {
     items: c.readList(obj.items, toConfigMap),
   }}
 
-/** ConfigMapNodeConfigSource contains the information to reference a ConfigMap as a config source for the Node. */
+/** ConfigMapNodeConfigSource contains the information to reference a ConfigMap as a config source for the Node. This API is deprecated since 1.22: https://git.k8s.io/enhancements/keps/sig-node/281-dynamic-kubelet-configuration */
 export interface ConfigMapNodeConfigSource {
   kubeletConfigKey: string;
   name: string;
@@ -1219,6 +1219,7 @@ export function fromSeccompProfile(input: SeccompProfile): c.JSONValue {
 export interface WindowsSecurityContextOptions {
   gmsaCredentialSpec?: string | null;
   gmsaCredentialSpecName?: string | null;
+  hostProcess?: boolean | null;
   runAsUserName?: string | null;
 }
 export function toWindowsSecurityContextOptions(input: c.JSONValue): WindowsSecurityContextOptions {
@@ -1226,6 +1227,7 @@ export function toWindowsSecurityContextOptions(input: c.JSONValue): WindowsSecu
   return {
     gmsaCredentialSpec: c.readOpt(obj["gmsaCredentialSpec"], c.checkStr),
     gmsaCredentialSpecName: c.readOpt(obj["gmsaCredentialSpecName"], c.checkStr),
+    hostProcess: c.readOpt(obj["hostProcess"], c.checkBool),
     runAsUserName: c.readOpt(obj["runAsUserName"], c.checkStr),
   }}
 export function fromWindowsSecurityContextOptions(input: WindowsSecurityContextOptions): c.JSONValue {
@@ -1275,13 +1277,13 @@ export function fromVolumeMount(input: VolumeMount): c.JSONValue {
 
 /** Describe a container image */
 export interface ContainerImage {
-  names: Array<string>;
+  names?: Array<string> | null;
   sizeBytes?: number | null;
 }
 export function toContainerImage(input: c.JSONValue): ContainerImage {
   const obj = c.checkObj(input);
   return {
-    names: c.readList(obj["names"], c.checkStr),
+    names: c.readOpt(obj["names"], x => c.readList(x, c.checkStr)),
     sizeBytes: c.readOpt(obj["sizeBytes"], c.checkNum),
   }}
 export function fromContainerImage(input: ContainerImage): c.JSONValue {
@@ -1670,28 +1672,6 @@ export function fromEphemeralContainer(input: EphemeralContainer): c.JSONValue {
     volumeMounts: input.volumeMounts?.map(fromVolumeMount),
   }}
 
-/** A list of ephemeral containers used with the Pod ephemeralcontainers subresource. */
-export interface EphemeralContainers {
-  apiVersion?: "v1";
-  kind?: "EphemeralContainers";
-  ephemeralContainers: Array<EphemeralContainer>;
-  metadata?: MetaV1.ObjectMeta | null;
-}
-export function toEphemeralContainers(input: c.JSONValue): EphemeralContainers & c.ApiKind {
-  const obj = c.checkObj(input);
-  return {
-    ...c.assertOrAddApiVersionAndKind(obj, "v1", "EphemeralContainers"),
-    ephemeralContainers: c.readList(obj["ephemeralContainers"], toEphemeralContainer),
-    metadata: c.readOpt(obj["metadata"], MetaV1.toObjectMeta),
-  }}
-export function fromEphemeralContainers(input: EphemeralContainers): c.JSONValue {
-  return {
-    ...c.assertOrAddApiVersionAndKind(input, "v1", "EphemeralContainers"),
-    ...input,
-    ephemeralContainers: input.ephemeralContainers?.map(fromEphemeralContainer),
-    metadata: input.metadata != null ? MetaV1.fromObjectMeta(input.metadata) : undefined,
-  }}
-
 /** Represents an ephemeral volume that is handled by a normal storage driver. */
 export interface EphemeralVolumeSource {
   volumeClaimTemplate?: PersistentVolumeClaimTemplate | null;
@@ -1729,6 +1709,7 @@ export function fromPersistentVolumeClaimTemplate(input: PersistentVolumeClaimTe
 export interface PersistentVolumeClaimSpec {
   accessModes?: Array<string> | null;
   dataSource?: TypedLocalObjectReference | null;
+  dataSourceRef?: TypedLocalObjectReference | null;
   resources?: ResourceRequirements | null;
   selector?: MetaV1.LabelSelector | null;
   storageClassName?: string | null;
@@ -1740,6 +1721,7 @@ export function toPersistentVolumeClaimSpec(input: c.JSONValue): PersistentVolum
   return {
     accessModes: c.readOpt(obj["accessModes"], x => c.readList(x, c.checkStr)),
     dataSource: c.readOpt(obj["dataSource"], toTypedLocalObjectReference),
+    dataSourceRef: c.readOpt(obj["dataSourceRef"], toTypedLocalObjectReference),
     resources: c.readOpt(obj["resources"], toResourceRequirements),
     selector: c.readOpt(obj["selector"], MetaV1.toLabelSelector),
     storageClassName: c.readOpt(obj["storageClassName"], c.checkStr),
@@ -1750,6 +1732,7 @@ export function fromPersistentVolumeClaimSpec(input: PersistentVolumeClaimSpec):
   return {
     ...input,
     dataSource: input.dataSource != null ? fromTypedLocalObjectReference(input.dataSource) : undefined,
+    dataSourceRef: input.dataSourceRef != null ? fromTypedLocalObjectReference(input.dataSourceRef) : undefined,
     resources: input.resources != null ? fromResourceRequirements(input.resources) : undefined,
     selector: input.selector != null ? MetaV1.fromLabelSelector(input.selector) : undefined,
   }}
@@ -2447,7 +2430,7 @@ export function fromNodeSpec(input: NodeSpec): c.JSONValue {
     taints: input.taints?.map(fromTaint),
   }}
 
-/** NodeConfigSource specifies a source of node configuration. Exactly one subfield (excluding metadata) must be non-nil. */
+/** NodeConfigSource specifies a source of node configuration. Exactly one subfield (excluding metadata) must be non-nil. This API is deprecated since 1.22 */
 export interface NodeConfigSource {
   configMap?: ConfigMapNodeConfigSource | null;
 }
@@ -4089,7 +4072,6 @@ export interface ServiceSpec {
   selector?: Record<string,string> | null;
   sessionAffinity?: string | null;
   sessionAffinityConfig?: SessionAffinityConfig | null;
-  topologyKeys?: Array<string> | null;
   type?: string | null;
 }
 export function toServiceSpec(input: c.JSONValue): ServiceSpec {
@@ -4113,7 +4095,6 @@ export function toServiceSpec(input: c.JSONValue): ServiceSpec {
     selector: c.readOpt(obj["selector"], x => c.readMap(x, c.checkStr)),
     sessionAffinity: c.readOpt(obj["sessionAffinity"], c.checkStr),
     sessionAffinityConfig: c.readOpt(obj["sessionAffinityConfig"], toSessionAffinityConfig),
-    topologyKeys: c.readOpt(obj["topologyKeys"], x => c.readList(x, c.checkStr)),
     type: c.readOpt(obj["type"], c.checkStr),
   }}
 export function fromServiceSpec(input: ServiceSpec): c.JSONValue {

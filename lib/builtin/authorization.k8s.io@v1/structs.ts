@@ -224,6 +224,7 @@ export function fromSelfSubjectRulesReview(input: SelfSubjectRulesReview): c.JSO
     status: input.status != null ? fromSubjectRulesReviewStatus(input.status) : undefined,
   }}
 
+/** SelfSubjectRulesReviewSpec defines the specification for SelfSubjectRulesReview. */
 export interface SelfSubjectRulesReviewSpec {
   namespace?: string | null;
 }

@@ -297,6 +297,7 @@ export interface ManagedFieldsEntry {
   fieldsV1?: FieldsV1 | null;
   manager?: string | null;
   operation?: string | null;
+  subresource?: string | null;
   time?: c.Time | null;
 }
 export function toManagedFieldsEntry(input: c.JSONValue): ManagedFieldsEntry {
@@ -307,6 +308,7 @@ export function toManagedFieldsEntry(input: c.JSONValue): ManagedFieldsEntry {
     fieldsV1: c.readOpt(obj["fieldsV1"], toFieldsV1),
     manager: c.readOpt(obj["manager"], c.checkStr),
     operation: c.readOpt(obj["operation"], c.checkStr),
+    subresource: c.readOpt(obj["subresource"], c.checkStr),
     time: c.readOpt(obj["time"], c.toTime),
   }}
 export function fromManagedFieldsEntry(input: ManagedFieldsEntry): c.JSONValue {

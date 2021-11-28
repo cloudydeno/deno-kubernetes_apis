@@ -12,14 +12,14 @@ type ListOf<T> = {
 export interface HTTPIngressPath {
   backend: IngressBackend;
   path?: string | null;
-  pathType?: string | null;
+  pathType: string;
 }
 export function toHTTPIngressPath(input: c.JSONValue): HTTPIngressPath {
   const obj = c.checkObj(input);
   return {
     backend: toIngressBackend(obj["backend"]),
     path: c.readOpt(obj["path"], c.checkStr),
-    pathType: c.readOpt(obj["pathType"], c.checkStr),
+    pathType: c.checkStr(obj["pathType"]),
   }}
 export function fromHTTPIngressPath(input: HTTPIngressPath): c.JSONValue {
   return {

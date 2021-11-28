@@ -7,6 +7,28 @@ type ListOf<T> = {
   items: Array<T>;
 };
 
+/** Eviction evicts a pod from its node subject to certain policies and safety constraints. This is a subresource of Pod.  A request to cause such an eviction is created by POSTing to .../pods/<pod name>/evictions. */
+export interface Eviction {
+  apiVersion?: string | null;
+  deleteOptions?: MetaV1.DeleteOptions | null;
+  kind?: string | null;
+  metadata?: MetaV1.ObjectMeta | null;
+}
+export function toEviction(input: c.JSONValue): Eviction {
+  const obj = c.checkObj(input);
+  return {
+    apiVersion: c.readOpt(obj["apiVersion"], c.checkStr),
+    deleteOptions: c.readOpt(obj["deleteOptions"], MetaV1.toDeleteOptions),
+    kind: c.readOpt(obj["kind"], c.checkStr),
+    metadata: c.readOpt(obj["metadata"], MetaV1.toObjectMeta),
+  }}
+export function fromEviction(input: Eviction): c.JSONValue {
+  return {
+    ...input,
+    deleteOptions: input.deleteOptions != null ? MetaV1.fromDeleteOptions(input.deleteOptions) : undefined,
+    metadata: input.metadata != null ? MetaV1.fromObjectMeta(input.metadata) : undefined,
+  }}
+
 /** PodDisruptionBudget is an object to define the max disruption that can be caused to a collection of pods */
 export interface PodDisruptionBudget {
   apiVersion?: "policy/v1";
