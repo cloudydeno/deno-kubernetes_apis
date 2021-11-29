@@ -1,15 +1,14 @@
 #!/usr/bin/env -S deno run --allow-net --allow-read --allow-env --allow-run
 
 import { autoDetectClient, readAllItems } from '../client.ts';
-import { ApiextensionsV1beta1Api } from "../builtin/apiextensions.k8s.io@v1beta1/mod.ts";
+import { ApiextensionsV1Api } from "../builtin/apiextensions.k8s.io@v1/mod.ts";
 
 const restClient = await autoDetectClient();
 
-const appsApi = new ApiextensionsV1beta1Api(restClient);
+const appsApi = new ApiextensionsV1Api(restClient);
 for await (const crd of readAllItems(t => appsApi
     .getCustomResourceDefinitionList({ limit: 25, continue: t }))) {
 
   console.log(crd.metadata?.name,
-      crd.spec.version,
-      crd.spec.versions?.map(x => x.name));
+      crd.spec.versions.map(x => x.name));
 }
