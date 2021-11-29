@@ -6,12 +6,12 @@ import { toStatus } from './builtin/meta@v1/structs.ts';
 import {
   JSONObject, JSONValue,
   RequestOptions,
-} from "https://deno.land/x/kubernetes_client@v0.2.4/lib/contract.ts";
+} from "https://deno.land/x/kubernetes_client@v0.3.2/lib/contract.ts";
 
-export * from "https://deno.land/x/kubernetes_client@v0.2.4/lib/contract.ts";
+export * from "https://deno.land/x/kubernetes_client@v0.3.2/lib/contract.ts";
 export {
   WatchEventTransformer
-} from "https://deno.land/x/kubernetes_client@v0.2.4/lib/stream-transformers.ts";
+} from "https://deno.land/x/kubernetes_client@v0.3.2/lib/stream-transformers.ts";
 
 // Helpers used to validate/transform structures from or for the wire
 // And some other stuff :)

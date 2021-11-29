@@ -1,10 +1,10 @@
 #!/usr/bin/env -S deno run --allow-net --allow-read --allow-env --allow-run
 
 import { autoDetectClient, Reflector } from "../client.ts";
-import { NetworkingV1beta1Api } from "../builtin/networking.k8s.io@v1beta1/mod.ts";
+import { NetworkingV1Api } from "../builtin/networking.k8s.io@v1/mod.ts";
 
 const restClient = await autoDetectClient();
-const netApi = new NetworkingV1beta1Api(restClient);
+const netApi = new NetworkingV1Api(restClient);
 
 // Set up a client-side cache of cluster-wide Ingresses matching a specific label
 const reflector = new Reflector(

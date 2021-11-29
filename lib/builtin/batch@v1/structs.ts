@@ -180,6 +180,7 @@ export interface JobStatus {
   failed?: number | null;
   startTime?: c.Time | null;
   succeeded?: number | null;
+  uncountedTerminatedPods?: UncountedTerminatedPods | null;
 }
 export function toJobStatus(input: c.JSONValue): JobStatus {
   const obj = c.checkObj(input);
@@ -191,6 +192,7 @@ export function toJobStatus(input: c.JSONValue): JobStatus {
     failed: c.readOpt(obj["failed"], c.checkNum),
     startTime: c.readOpt(obj["startTime"], c.toTime),
     succeeded: c.readOpt(obj["succeeded"], c.checkNum),
+    uncountedTerminatedPods: c.readOpt(obj["uncountedTerminatedPods"], toUncountedTerminatedPods),
   }}
 export function fromJobStatus(input: JobStatus): c.JSONValue {
   return {
@@ -198,6 +200,7 @@ export function fromJobStatus(input: JobStatus): c.JSONValue {
     completionTime: input.completionTime != null ? c.fromTime(input.completionTime) : undefined,
     conditions: input.conditions?.map(fromJobCondition),
     startTime: input.startTime != null ? c.fromTime(input.startTime) : undefined,
+    uncountedTerminatedPods: input.uncountedTerminatedPods != null ? fromUncountedTerminatedPods(input.uncountedTerminatedPods) : undefined,
   }}
 
 /** JobCondition describes current state of a job. */
@@ -224,6 +227,22 @@ export function fromJobCondition(input: JobCondition): c.JSONValue {
     ...input,
     lastProbeTime: input.lastProbeTime != null ? c.fromTime(input.lastProbeTime) : undefined,
     lastTransitionTime: input.lastTransitionTime != null ? c.fromTime(input.lastTransitionTime) : undefined,
+  }}
+
+/** UncountedTerminatedPods holds UIDs of Pods that have terminated but haven't been accounted in Job status counters. */
+export interface UncountedTerminatedPods {
+  failed?: Array<string> | null;
+  succeeded?: Array<string> | null;
+}
+export function toUncountedTerminatedPods(input: c.JSONValue): UncountedTerminatedPods {
+  const obj = c.checkObj(input);
+  return {
+    failed: c.readOpt(obj["failed"], x => c.readList(x, c.checkStr)),
+    succeeded: c.readOpt(obj["succeeded"], x => c.readList(x, c.checkStr)),
+  }}
+export function fromUncountedTerminatedPods(input: UncountedTerminatedPods): c.JSONValue {
+  return {
+    ...input,
   }}
 
 /** JobList is a collection of jobs. */

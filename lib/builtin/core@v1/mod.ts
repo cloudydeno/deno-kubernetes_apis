@@ -5,7 +5,7 @@ import * as c from "../../common.ts";
 import * as operations from "../../operations.ts";
 import * as AuthenticationV1 from "../authentication.k8s.io@v1/structs.ts";
 import * as AutoscalingV1 from "../autoscaling@v1/structs.ts";
-import * as PolicyV1beta1 from "../policy@v1beta1/structs.ts";
+import * as PolicyV1 from "../policy@v1/structs.ts";
 import * as MetaV1 from "../meta@v1/structs.ts";
 import * as CoreV1 from "./structs.ts";
 
@@ -1381,51 +1381,51 @@ export class CoreV1NamespacedApi {
     return CoreV1.toBinding(resp);
   }
 
-  async readPodEphemeralcontainers(name: string, opts: operations.NoOpts = {}) {
+  async getPodEphemeralcontainers(name: string, opts: operations.NoOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}pods/${name}/ephemeralcontainers`,
       expectJson: true,
       abortSignal: opts.abortSignal,
     });
-    return CoreV1.toEphemeralContainers(resp);
+    return CoreV1.toPod(resp);
   }
 
-  async replacePodEphemeralcontainers(name: string, body: CoreV1.EphemeralContainers, opts: operations.PutOpts = {}) {
+  async replacePodEphemeralcontainers(name: string, body: CoreV1.Pod, opts: operations.PutOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PUT",
       path: `${this.#root}pods/${name}/ephemeralcontainers`,
       expectJson: true,
       querystring: operations.formatPutOpts(opts),
-      bodyJson: CoreV1.fromEphemeralContainers(body),
+      bodyJson: CoreV1.fromPod(body),
       abortSignal: opts.abortSignal,
     });
-    return CoreV1.toEphemeralContainers(resp);
+    return CoreV1.toPod(resp);
   }
 
-  async patchPodEphemeralcontainers(name: string, type: c.PatchType, body: CoreV1.EphemeralContainers | c.JsonPatch, opts: operations.PatchOpts = {}) {
+  async patchPodEphemeralcontainers(name: string, type: c.PatchType, body: CoreV1.Pod | c.JsonPatch, opts: operations.PatchOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}pods/${name}/ephemeralcontainers`,
       expectJson: true,
       querystring: operations.formatPatchOpts(opts),
       contentType: c.getPatchContentType(type),
-      bodyJson: Array.isArray(body) ? body : CoreV1.fromEphemeralContainers(body),
+      bodyJson: Array.isArray(body) ? body : CoreV1.fromPod(body),
       abortSignal: opts.abortSignal,
     });
-    return CoreV1.toEphemeralContainers(resp);
+    return CoreV1.toPod(resp);
   }
 
-  async createPodEviction(name: string, body: PolicyV1beta1.Eviction, opts: operations.PutOpts = {}) {
+  async createPodEviction(name: string, body: PolicyV1.Eviction, opts: operations.PutOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "POST",
       path: `${this.#root}pods/${name}/eviction`,
       expectJson: true,
       querystring: operations.formatPutOpts(opts),
-      bodyJson: PolicyV1beta1.fromEviction(body),
+      bodyJson: PolicyV1.fromEviction(body),
       abortSignal: opts.abortSignal,
     });
-    return PolicyV1beta1.toEviction(resp);
+    return PolicyV1.toEviction(resp);
   }
 
   async connectGetPodExec(name: string, opts: {

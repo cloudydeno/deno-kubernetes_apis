@@ -505,6 +505,7 @@ export function fromStatefulSet(input: StatefulSet): c.JSONValue {
 
 /** A StatefulSetSpec is the specification of a StatefulSet. */
 export interface StatefulSetSpec {
+  minReadySeconds?: number | null;
   podManagementPolicy?: string | null;
   replicas?: number | null;
   revisionHistoryLimit?: number | null;
@@ -517,6 +518,7 @@ export interface StatefulSetSpec {
 export function toStatefulSetSpec(input: c.JSONValue): StatefulSetSpec {
   const obj = c.checkObj(input);
   return {
+    minReadySeconds: c.readOpt(obj["minReadySeconds"], c.checkNum),
     podManagementPolicy: c.readOpt(obj["podManagementPolicy"], c.checkStr),
     replicas: c.readOpt(obj["replicas"], c.checkNum),
     revisionHistoryLimit: c.readOpt(obj["revisionHistoryLimit"], c.checkNum),
@@ -554,6 +556,7 @@ export function fromStatefulSetUpdateStrategy(input: StatefulSetUpdateStrategy):
 
 /** StatefulSetStatus represents the current state of a StatefulSet. */
 export interface StatefulSetStatus {
+  availableReplicas?: number | null;
   collisionCount?: number | null;
   conditions?: Array<StatefulSetCondition> | null;
   currentReplicas?: number | null;
@@ -567,6 +570,7 @@ export interface StatefulSetStatus {
 export function toStatefulSetStatus(input: c.JSONValue): StatefulSetStatus {
   const obj = c.checkObj(input);
   return {
+    availableReplicas: c.readOpt(obj["availableReplicas"], c.checkNum),
     collisionCount: c.readOpt(obj["collisionCount"], c.checkNum),
     conditions: c.readOpt(obj["conditions"], x => c.readList(x, toStatefulSetCondition)),
     currentReplicas: c.readOpt(obj["currentReplicas"], c.checkNum),

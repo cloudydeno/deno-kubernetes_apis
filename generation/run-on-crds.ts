@@ -7,13 +7,9 @@ import { ShapeLibrary } from "./describe-shapes.ts";
 import {
   CustomResourceDefinition as CRDv1,
   toCustomResourceDefinition as toCRDv1,
-} from "../lib/builtin/apiextensions.k8s.io@v1/structs.ts";
-import {
-  CustomResourceDefinition as CRDv1beta1,
-  toCustomResourceDefinition as toCRDv1beta1,
   CustomResourceSubresources,
   CustomResourceDefinitionNames,
-} from "../lib/builtin/apiextensions.k8s.io@v1beta1/structs.ts";
+} from "../lib/builtin/apiextensions.k8s.io@v1/structs.ts";
 
 const knownOpts = {
   GetListOpts: 'continue,fieldSelector,labelSelector,limit,resourceVersion,resourceVersionMatch,timeoutSeconds',
@@ -26,7 +22,6 @@ const knownOpts = {
 };
 
 const v1CRDs = new Array<CRDv1>();
-const v1beta1CRDs = new Array<CRDv1beta1>();
 
 for await (const dirEntry of Deno.readDir(Deno.args[0])) {
   if (!dirEntry.isFile) continue;
@@ -40,14 +35,11 @@ for await (const dirEntry of Deno.readDir(Deno.args[0])) {
   if (typing.kind !== "CustomResourceDefinition") throw new Error(
     `I didn't see a CRD in ${dirEntry.name}`);
   switch (typing.apiVersion) {
-    case 'apiextensions.k8s.io/v1beta1':
-      v1beta1CRDs.push(toCRDv1beta1(doc as JSONValue));
-      break;
     case 'apiextensions.k8s.io/v1':
       v1CRDs.push(toCRDv1(doc as JSONValue));
       break;
     default: throw new Error(
-    `The CRD in ${dirEntry.name} uses an unsupported apiVersion`);
+      `The CRD in ${dirEntry.name} uses an unsupported apiVersion ${JSON.stringify(typing.apiVersion)}`);
   }
 }
 
@@ -142,43 +134,6 @@ if (v1CRDs.length > 0) {
         scope: crd.spec.scope,
         subResources: {...version.subresources},
       });
-    }
-  }
-
-} else if (v1beta1CRDs.length > 0) {
-
-  for (const crd of v1beta1CRDs) {
-    for (const version of crd.spec.versions ?? []) {
-
-      const schema = version.schema?.openAPIV3Schema;
-      if (!schema) throw new Error(
-        `TODO: No schema given for ${crd.spec.names.kind}`);
-
-      processCRD({
-        apiGroup: crd.spec.group,
-        apiVersion: version.name,
-        schema: schema as OpenAPI2SchemaObject,
-        names: crd.spec.names,
-        scope: crd.spec.scope,
-        subResources: {...version.subresources, ...crd.spec.subresources},
-      });
-
-    }
-    if (crd.spec.version) {
-
-      const schema = crd.spec.validation?.openAPIV3Schema;
-      if (!schema) throw new Error(
-        `TODO: No schema given for ${crd.spec.names.kind}`);
-
-      processCRD({
-        apiGroup: crd.spec.group,
-        apiVersion: crd.spec.version,
-        schema: schema as OpenAPI2SchemaObject,
-        names: crd.spec.names,
-        scope: crd.spec.scope,
-        subResources: {...crd.spec.subresources},
-      });
-
     }
   }
 
