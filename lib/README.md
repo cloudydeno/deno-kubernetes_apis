@@ -26,15 +26,19 @@ console.log(podList);
 // see files in examples/ for more API demos (watching, creation, etc)
 ```
 
-When running locally (with `kubectl` set up), you probably just to add `--allow-run` to run this.
+When running locally (with `kubectl` set up), you probably just to add `--allow-run=kubectl` to run this.
 For a container being deployed onto a cluster, there's more flags to provide instead;
 see `/x/kubernetes_client` for more information.
 
-NOTE: Although the APIs all accept an `AbortSignal`,
-Deno's `fetch()` function does not yet support `AbortSignal` and
-cancelling API calls is thus not well-supported at this time.
-
 ## Changelog
+
+* `v0.3.2` on `2021-12-02`:
+  * Updating `/x/kubernetes_client` API contract to `v0.3.2`.
+  * Includes 'builtin' APIs generated from K8s `v1.22.4`.
+    * Numerous `v1beta1` API versions were removed in favor of stable `v1` APIs.
+    * Further API changes are detailed in Github Releases.
+  * `cert-manager` and `external-dns` CRDs have been updated from the latest releases.
+  * Added CRDs for `argo-cd`.
 
 * `v0.3.1` on `2021-05-09`:
   * Updating `/x/kubernetes_client` API contract to `v0.2.4`.

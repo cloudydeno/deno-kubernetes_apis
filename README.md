@@ -33,13 +33,14 @@ There's also third-party projects that register CRDs, such as cert-manager.
 OpenAPI specs are almost never published by these projects,
 so generating APIs for them generally means feeding CRD YAML files into the codegen and guessing.
 This is an imperfect art but so far works well for `cert-manager` and `exernal-dns`.
-Alternatively, the CRDs could be installed onto a real control plane and then the APIed extracted.
+Alternatively, the CRDs could be installed onto a real control plane and then the APIs extracted.
 
 Several examples of addressing third party APIs might be:
 
 * `https://k8s-apis.deno.dev/v1/cert-manager@v1.0.4/acme.cert-manager.io@v1alpha2/mod.ts`
 * `https://k8s-apis.deno.dev/v1/external-dns@v0.7.4/externaldns.k8s.io@v1alpha1/mod.ts`
 * `https://k8s-apis.deno.dev/v1/velero@v1.5.2/velero.io@v1/mod.ts`
+* `https://k8s-apis.deno.dev/v1/argo-cd@v2.1.7/argoproj.io@v1alpha1/mod.ts`
 
 The only sort of 'directory' of CRDs is likely [Operator Hub](https://operatorhub.io/)
 though it is also lacking CRDs that are not explicitly tied to an "Operator".
