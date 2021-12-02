@@ -1,5 +1,11 @@
 ![Deno CI](https://github.com/danopia/deno-kubernetes_apis/workflows/CI/badge.svg?branch=main)
 
+# `/x/kubernetes_apis`
+
+NOTE: This README is about code generation concepts.
+
+Users of this library should click into [`lib/`](./lib) for the actual README!
+
 ## Kubernetes compatability
 
 APIs are generated from Kubernetes OpenAPI specs, which are large JSON files.
