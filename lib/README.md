@@ -34,6 +34,11 @@ see `/x/kubernetes_client` for more information.
 
 * Unreleased:
   * Updating `/x/kubernetes_client` API contract to `v0.5.0`.
+  * Includes 'builtin' APIs generated from K8s `v1.26.1`.
+    * Numerous alpha and beta APIs removed, including autoscaling, batch, and policy
+    * Further API changes are detailed in Github Releases.
+  * `cert-manager` has been updated. Removes v1beta1, v1alpha3, and v1alpha2 APIs.
+  * `argo-cd` has been updated. Adds a new `ApplicationSet` CRD.
 
 * `v0.3.2` on `2021-12-02`:
   * Updating `/x/kubernetes_client` API contract to `v0.3.2`.
