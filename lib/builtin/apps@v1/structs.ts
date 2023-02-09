@@ -463,11 +463,13 @@ export function toReplicaSetList(input: c.JSONValue): ReplicaSetList & c.ApiKind
 
 /** RollingUpdateStatefulSetStrategy is used to communicate parameter for RollingUpdateStatefulSetStrategyType. */
 export interface RollingUpdateStatefulSetStrategy {
+  maxUnavailable?: c.IntOrString | null;
   partition?: number | null;
 }
 export function toRollingUpdateStatefulSetStrategy(input: c.JSONValue): RollingUpdateStatefulSetStrategy {
   const obj = c.checkObj(input);
   return {
+    maxUnavailable: c.readOpt(obj["maxUnavailable"], c.toIntOrString),
     partition: c.readOpt(obj["partition"], c.checkNum),
   }}
 export function fromRollingUpdateStatefulSetStrategy(input: RollingUpdateStatefulSetStrategy): c.JSONValue {
@@ -476,8 +478,9 @@ export function fromRollingUpdateStatefulSetStrategy(input: RollingUpdateStatefu
   }}
 
 /** StatefulSet represents a set of pods with consistent identities. Identities are defined as:
- - Network: A single stable DNS and hostname.
- - Storage: As many VolumeClaims as requested.
+  - Network: A single stable DNS and hostname.
+  - Storage: As many VolumeClaims as requested.
+
 The StatefulSet guarantees that a given network identity will always map to the same storage identity. */
 export interface StatefulSet {
   apiVersion?: "apps/v1";
@@ -506,6 +509,8 @@ export function fromStatefulSet(input: StatefulSet): c.JSONValue {
 /** A StatefulSetSpec is the specification of a StatefulSet. */
 export interface StatefulSetSpec {
   minReadySeconds?: number | null;
+  ordinals?: StatefulSetOrdinals | null;
+  persistentVolumeClaimRetentionPolicy?: StatefulSetPersistentVolumeClaimRetentionPolicy | null;
   podManagementPolicy?: string | null;
   replicas?: number | null;
   revisionHistoryLimit?: number | null;
@@ -519,6 +524,8 @@ export function toStatefulSetSpec(input: c.JSONValue): StatefulSetSpec {
   const obj = c.checkObj(input);
   return {
     minReadySeconds: c.readOpt(obj["minReadySeconds"], c.checkNum),
+    ordinals: c.readOpt(obj["ordinals"], toStatefulSetOrdinals),
+    persistentVolumeClaimRetentionPolicy: c.readOpt(obj["persistentVolumeClaimRetentionPolicy"], toStatefulSetPersistentVolumeClaimRetentionPolicy),
     podManagementPolicy: c.readOpt(obj["podManagementPolicy"], c.checkStr),
     replicas: c.readOpt(obj["replicas"], c.checkNum),
     revisionHistoryLimit: c.readOpt(obj["revisionHistoryLimit"], c.checkNum),
@@ -531,10 +538,42 @@ export function toStatefulSetSpec(input: c.JSONValue): StatefulSetSpec {
 export function fromStatefulSetSpec(input: StatefulSetSpec): c.JSONValue {
   return {
     ...input,
+    ordinals: input.ordinals != null ? fromStatefulSetOrdinals(input.ordinals) : undefined,
+    persistentVolumeClaimRetentionPolicy: input.persistentVolumeClaimRetentionPolicy != null ? fromStatefulSetPersistentVolumeClaimRetentionPolicy(input.persistentVolumeClaimRetentionPolicy) : undefined,
     selector: input.selector != null ? MetaV1.fromLabelSelector(input.selector) : undefined,
     template: input.template != null ? CoreV1.fromPodTemplateSpec(input.template) : undefined,
     updateStrategy: input.updateStrategy != null ? fromStatefulSetUpdateStrategy(input.updateStrategy) : undefined,
     volumeClaimTemplates: input.volumeClaimTemplates?.map(CoreV1.fromPersistentVolumeClaim),
+  }}
+
+/** StatefulSetOrdinals describes the policy used for replica ordinal assignment in this StatefulSet. */
+export interface StatefulSetOrdinals {
+  start?: number | null;
+}
+export function toStatefulSetOrdinals(input: c.JSONValue): StatefulSetOrdinals {
+  const obj = c.checkObj(input);
+  return {
+    start: c.readOpt(obj["start"], c.checkNum),
+  }}
+export function fromStatefulSetOrdinals(input: StatefulSetOrdinals): c.JSONValue {
+  return {
+    ...input,
+  }}
+
+/** StatefulSetPersistentVolumeClaimRetentionPolicy describes the policy used for PVCs created from the StatefulSet VolumeClaimTemplates. */
+export interface StatefulSetPersistentVolumeClaimRetentionPolicy {
+  whenDeleted?: string | null;
+  whenScaled?: string | null;
+}
+export function toStatefulSetPersistentVolumeClaimRetentionPolicy(input: c.JSONValue): StatefulSetPersistentVolumeClaimRetentionPolicy {
+  const obj = c.checkObj(input);
+  return {
+    whenDeleted: c.readOpt(obj["whenDeleted"], c.checkStr),
+    whenScaled: c.readOpt(obj["whenScaled"], c.checkStr),
+  }}
+export function fromStatefulSetPersistentVolumeClaimRetentionPolicy(input: StatefulSetPersistentVolumeClaimRetentionPolicy): c.JSONValue {
+  return {
+    ...input,
   }}
 
 /** StatefulSetUpdateStrategy indicates the strategy that the StatefulSet controller will use to perform updates. It includes any additional parameters necessary to perform the update for the indicated strategy. */

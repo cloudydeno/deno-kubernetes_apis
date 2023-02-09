@@ -36,12 +36,21 @@ export class SchedulingV1Api {
     return resp.pipeThrough(new c.WatchEventTransformer(SchedulingV1.toPriorityClass, MetaV1.toStatus));
   }
 
-  async createPriorityClass(body: SchedulingV1.PriorityClass, opts: operations.PutOpts = {}) {
+  async createPriorityClass(body: SchedulingV1.PriorityClass, opts: {
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+    abortSignal?: AbortSignal;
+  } = {}) {
+    const query = new URLSearchParams;
+    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
+    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
+    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
     const resp = await this.#client.performRequest({
       method: "POST",
       path: `${this.#root}priorityclasses`,
       expectJson: true,
-      querystring: operations.formatPutOpts(opts),
+      querystring: query,
       bodyJson: SchedulingV1.fromPriorityClass(body),
       abortSignal: opts.abortSignal,
     });
@@ -80,24 +89,44 @@ export class SchedulingV1Api {
     return MetaV1.toStatus(resp);
   }
 
-  async replacePriorityClass(name: string, body: SchedulingV1.PriorityClass, opts: operations.PutOpts = {}) {
+  async replacePriorityClass(name: string, body: SchedulingV1.PriorityClass, opts: {
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+    abortSignal?: AbortSignal;
+  } = {}) {
+    const query = new URLSearchParams;
+    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
+    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
+    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
     const resp = await this.#client.performRequest({
       method: "PUT",
       path: `${this.#root}priorityclasses/${name}`,
       expectJson: true,
-      querystring: operations.formatPutOpts(opts),
+      querystring: query,
       bodyJson: SchedulingV1.fromPriorityClass(body),
       abortSignal: opts.abortSignal,
     });
     return SchedulingV1.toPriorityClass(resp);
   }
 
-  async patchPriorityClass(name: string, type: c.PatchType, body: SchedulingV1.PriorityClass | c.JsonPatch, opts: operations.PatchOpts = {}) {
+  async patchPriorityClass(name: string, body: SchedulingV1.PriorityClass, opts: {
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+    force?: boolean;
+    abortSignal?: AbortSignal;
+  } = {}) {
+    const query = new URLSearchParams;
+    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
+    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
+    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
+    if (opts["force"] != null) query.append("force", opts["force"] ? '1' : '0');
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}priorityclasses/${name}`,
       expectJson: true,
-      querystring: operations.formatPatchOpts(opts),
+      querystring: query,
       contentType: c.getPatchContentType(type),
       bodyJson: Array.isArray(body) ? body : SchedulingV1.fromPriorityClass(body),
       abortSignal: opts.abortSignal,

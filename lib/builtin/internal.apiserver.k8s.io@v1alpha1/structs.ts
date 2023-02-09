@@ -25,8 +25,7 @@ export function fromServerStorageVersion(input: ServerStorageVersion): c.JSONVal
     ...input,
   }}
 
-/** 
- Storage version of a specific resource. */
+/** Storage version of a specific resource. */
 export interface StorageVersion {
   apiVersion?: "internal.apiserver.k8s.io/v1alpha1";
   kind?: "StorageVersion";

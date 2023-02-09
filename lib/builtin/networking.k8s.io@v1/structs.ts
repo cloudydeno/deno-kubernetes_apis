@@ -93,7 +93,7 @@ export function fromHTTPIngressRuleValue(input: HTTPIngressRuleValue): c.JSONVal
     paths: input.paths?.map(fromHTTPIngressPath),
   }}
 
-/** IPBlock describes a particular CIDR (Ex. "192.168.1.1/24","2001:db9::/64") that is allowed to the pods matched by a NetworkPolicySpec's podSelector. The except entry describes CIDRs that should not be included within this rule. */
+/** IPBlock describes a particular CIDR (Ex. "192.168.1.0/24","2001:db8::/64") that is allowed to the pods matched by a NetworkPolicySpec's podSelector. The except entry describes CIDRs that should not be included within this rule. */
 export interface IPBlock {
   cidr: string;
   except?: Array<string> | null;
@@ -192,17 +192,69 @@ export function fromIngressTLS(input: IngressTLS): c.JSONValue {
 
 /** IngressStatus describe the current state of the Ingress. */
 export interface IngressStatus {
-  loadBalancer?: CoreV1.LoadBalancerStatus | null;
+  loadBalancer?: IngressLoadBalancerStatus | null;
 }
 export function toIngressStatus(input: c.JSONValue): IngressStatus {
   const obj = c.checkObj(input);
   return {
-    loadBalancer: c.readOpt(obj["loadBalancer"], CoreV1.toLoadBalancerStatus),
+    loadBalancer: c.readOpt(obj["loadBalancer"], toIngressLoadBalancerStatus),
   }}
 export function fromIngressStatus(input: IngressStatus): c.JSONValue {
   return {
     ...input,
-    loadBalancer: input.loadBalancer != null ? CoreV1.fromLoadBalancerStatus(input.loadBalancer) : undefined,
+    loadBalancer: input.loadBalancer != null ? fromIngressLoadBalancerStatus(input.loadBalancer) : undefined,
+  }}
+
+/** IngressLoadBalancerStatus represents the status of a load-balancer. */
+export interface IngressLoadBalancerStatus {
+  ingress?: Array<IngressLoadBalancerIngress> | null;
+}
+export function toIngressLoadBalancerStatus(input: c.JSONValue): IngressLoadBalancerStatus {
+  const obj = c.checkObj(input);
+  return {
+    ingress: c.readOpt(obj["ingress"], x => c.readList(x, toIngressLoadBalancerIngress)),
+  }}
+export function fromIngressLoadBalancerStatus(input: IngressLoadBalancerStatus): c.JSONValue {
+  return {
+    ...input,
+    ingress: input.ingress?.map(fromIngressLoadBalancerIngress),
+  }}
+
+/** IngressLoadBalancerIngress represents the status of a load-balancer ingress point. */
+export interface IngressLoadBalancerIngress {
+  hostname?: string | null;
+  ip?: string | null;
+  ports?: Array<IngressPortStatus> | null;
+}
+export function toIngressLoadBalancerIngress(input: c.JSONValue): IngressLoadBalancerIngress {
+  const obj = c.checkObj(input);
+  return {
+    hostname: c.readOpt(obj["hostname"], c.checkStr),
+    ip: c.readOpt(obj["ip"], c.checkStr),
+    ports: c.readOpt(obj["ports"], x => c.readList(x, toIngressPortStatus)),
+  }}
+export function fromIngressLoadBalancerIngress(input: IngressLoadBalancerIngress): c.JSONValue {
+  return {
+    ...input,
+    ports: input.ports?.map(fromIngressPortStatus),
+  }}
+
+/** IngressPortStatus represents the error condition of a service port */
+export interface IngressPortStatus {
+  error?: string | null;
+  port: number;
+  protocol: string;
+}
+export function toIngressPortStatus(input: c.JSONValue): IngressPortStatus {
+  const obj = c.checkObj(input);
+  return {
+    error: c.readOpt(obj["error"], c.checkStr),
+    port: c.checkNum(obj["port"]),
+    protocol: c.checkStr(obj["protocol"]),
+  }}
+export function fromIngressPortStatus(input: IngressPortStatus): c.JSONValue {
+  return {
+    ...input,
   }}
 
 /** IngressClass represents the class of the Ingress, referenced by the Ingress Spec. The `ingressclass.kubernetes.io/is-default-class` annotation can be used to indicate that an IngressClass should be considered default. When a single IngressClass resource has this annotation set to true, new Ingress resources without a class specified will be assigned this default class. */
@@ -298,6 +350,7 @@ export interface NetworkPolicy {
   kind?: "NetworkPolicy";
   metadata?: MetaV1.ObjectMeta | null;
   spec?: NetworkPolicySpec | null;
+  status?: NetworkPolicyStatus | null;
 }
 export function toNetworkPolicy(input: c.JSONValue): NetworkPolicy & c.ApiKind {
   const obj = c.checkObj(input);
@@ -305,6 +358,7 @@ export function toNetworkPolicy(input: c.JSONValue): NetworkPolicy & c.ApiKind {
     ...c.assertOrAddApiVersionAndKind(obj, "networking.k8s.io/v1", "NetworkPolicy"),
     metadata: c.readOpt(obj["metadata"], MetaV1.toObjectMeta),
     spec: c.readOpt(obj["spec"], toNetworkPolicySpec),
+    status: c.readOpt(obj["status"], toNetworkPolicyStatus),
   }}
 export function fromNetworkPolicy(input: NetworkPolicy): c.JSONValue {
   return {
@@ -312,6 +366,7 @@ export function fromNetworkPolicy(input: NetworkPolicy): c.JSONValue {
     ...input,
     metadata: input.metadata != null ? MetaV1.fromObjectMeta(input.metadata) : undefined,
     spec: input.spec != null ? fromNetworkPolicySpec(input.spec) : undefined,
+    status: input.status != null ? fromNetworkPolicyStatus(input.status) : undefined,
   }}
 
 /** NetworkPolicySpec provides the specification of a NetworkPolicy */
@@ -410,6 +465,21 @@ export function fromNetworkPolicyIngressRule(input: NetworkPolicyIngressRule): c
     ...input,
     from: input.from?.map(fromNetworkPolicyPeer),
     ports: input.ports?.map(fromNetworkPolicyPort),
+  }}
+
+/** NetworkPolicyStatus describe the current state of the NetworkPolicy. */
+export interface NetworkPolicyStatus {
+  conditions?: Array<MetaV1.Condition> | null;
+}
+export function toNetworkPolicyStatus(input: c.JSONValue): NetworkPolicyStatus {
+  const obj = c.checkObj(input);
+  return {
+    conditions: c.readOpt(obj["conditions"], x => c.readList(x, MetaV1.toCondition)),
+  }}
+export function fromNetworkPolicyStatus(input: NetworkPolicyStatus): c.JSONValue {
+  return {
+    ...input,
+    conditions: input.conditions?.map(MetaV1.fromCondition),
   }}
 
 /** NetworkPolicyList is a list of NetworkPolicy objects. */

@@ -44,12 +44,21 @@ export class NetworkingV1Api {
     return resp.pipeThrough(new c.WatchEventTransformer(NetworkingV1.toIngressClass, MetaV1.toStatus));
   }
 
-  async createIngressClass(body: NetworkingV1.IngressClass, opts: operations.PutOpts = {}) {
+  async createIngressClass(body: NetworkingV1.IngressClass, opts: {
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+    abortSignal?: AbortSignal;
+  } = {}) {
+    const query = new URLSearchParams;
+    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
+    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
+    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
     const resp = await this.#client.performRequest({
       method: "POST",
       path: `${this.#root}ingressclasses`,
       expectJson: true,
-      querystring: operations.formatPutOpts(opts),
+      querystring: query,
       bodyJson: NetworkingV1.fromIngressClass(body),
       abortSignal: opts.abortSignal,
     });
@@ -88,24 +97,44 @@ export class NetworkingV1Api {
     return MetaV1.toStatus(resp);
   }
 
-  async replaceIngressClass(name: string, body: NetworkingV1.IngressClass, opts: operations.PutOpts = {}) {
+  async replaceIngressClass(name: string, body: NetworkingV1.IngressClass, opts: {
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+    abortSignal?: AbortSignal;
+  } = {}) {
+    const query = new URLSearchParams;
+    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
+    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
+    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
     const resp = await this.#client.performRequest({
       method: "PUT",
       path: `${this.#root}ingressclasses/${name}`,
       expectJson: true,
-      querystring: operations.formatPutOpts(opts),
+      querystring: query,
       bodyJson: NetworkingV1.fromIngressClass(body),
       abortSignal: opts.abortSignal,
     });
     return NetworkingV1.toIngressClass(resp);
   }
 
-  async patchIngressClass(name: string, type: c.PatchType, body: NetworkingV1.IngressClass | c.JsonPatch, opts: operations.PatchOpts = {}) {
+  async patchIngressClass(name: string, body: NetworkingV1.IngressClass, opts: {
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+    force?: boolean;
+    abortSignal?: AbortSignal;
+  } = {}) {
+    const query = new URLSearchParams;
+    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
+    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
+    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
+    if (opts["force"] != null) query.append("force", opts["force"] ? '1' : '0');
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}ingressclasses/${name}`,
       expectJson: true,
-      querystring: operations.formatPatchOpts(opts),
+      querystring: query,
       contentType: c.getPatchContentType(type),
       bodyJson: Array.isArray(body) ? body : NetworkingV1.fromIngressClass(body),
       abortSignal: opts.abortSignal,
@@ -192,12 +221,21 @@ export class NetworkingV1NamespacedApi {
     return resp.pipeThrough(new c.WatchEventTransformer(NetworkingV1.toIngress, MetaV1.toStatus));
   }
 
-  async createIngress(body: NetworkingV1.Ingress, opts: operations.PutOpts = {}) {
+  async createIngress(body: NetworkingV1.Ingress, opts: {
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+    abortSignal?: AbortSignal;
+  } = {}) {
+    const query = new URLSearchParams;
+    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
+    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
+    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
     const resp = await this.#client.performRequest({
       method: "POST",
       path: `${this.#root}ingresses`,
       expectJson: true,
-      querystring: operations.formatPutOpts(opts),
+      querystring: query,
       bodyJson: NetworkingV1.fromIngress(body),
       abortSignal: opts.abortSignal,
     });
@@ -236,24 +274,44 @@ export class NetworkingV1NamespacedApi {
     return MetaV1.toStatus(resp);
   }
 
-  async replaceIngress(name: string, body: NetworkingV1.Ingress, opts: operations.PutOpts = {}) {
+  async replaceIngress(name: string, body: NetworkingV1.Ingress, opts: {
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+    abortSignal?: AbortSignal;
+  } = {}) {
+    const query = new URLSearchParams;
+    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
+    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
+    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
     const resp = await this.#client.performRequest({
       method: "PUT",
       path: `${this.#root}ingresses/${name}`,
       expectJson: true,
-      querystring: operations.formatPutOpts(opts),
+      querystring: query,
       bodyJson: NetworkingV1.fromIngress(body),
       abortSignal: opts.abortSignal,
     });
     return NetworkingV1.toIngress(resp);
   }
 
-  async patchIngress(name: string, type: c.PatchType, body: NetworkingV1.Ingress | c.JsonPatch, opts: operations.PatchOpts = {}) {
+  async patchIngress(name: string, body: NetworkingV1.Ingress, opts: {
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+    force?: boolean;
+    abortSignal?: AbortSignal;
+  } = {}) {
+    const query = new URLSearchParams;
+    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
+    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
+    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
+    if (opts["force"] != null) query.append("force", opts["force"] ? '1' : '0');
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}ingresses/${name}`,
       expectJson: true,
-      querystring: operations.formatPatchOpts(opts),
+      querystring: query,
       contentType: c.getPatchContentType(type),
       bodyJson: Array.isArray(body) ? body : NetworkingV1.fromIngress(body),
       abortSignal: opts.abortSignal,
@@ -271,24 +329,44 @@ export class NetworkingV1NamespacedApi {
     return NetworkingV1.toIngress(resp);
   }
 
-  async replaceIngressStatus(name: string, body: NetworkingV1.Ingress, opts: operations.PutOpts = {}) {
+  async replaceIngressStatus(name: string, body: NetworkingV1.Ingress, opts: {
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+    abortSignal?: AbortSignal;
+  } = {}) {
+    const query = new URLSearchParams;
+    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
+    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
+    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
     const resp = await this.#client.performRequest({
       method: "PUT",
       path: `${this.#root}ingresses/${name}/status`,
       expectJson: true,
-      querystring: operations.formatPutOpts(opts),
+      querystring: query,
       bodyJson: NetworkingV1.fromIngress(body),
       abortSignal: opts.abortSignal,
     });
     return NetworkingV1.toIngress(resp);
   }
 
-  async patchIngressStatus(name: string, type: c.PatchType, body: NetworkingV1.Ingress | c.JsonPatch, opts: operations.PatchOpts = {}) {
+  async patchIngressStatus(name: string, body: NetworkingV1.Ingress, opts: {
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+    force?: boolean;
+    abortSignal?: AbortSignal;
+  } = {}) {
+    const query = new URLSearchParams;
+    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
+    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
+    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
+    if (opts["force"] != null) query.append("force", opts["force"] ? '1' : '0');
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}ingresses/${name}/status`,
       expectJson: true,
-      querystring: operations.formatPatchOpts(opts),
+      querystring: query,
       contentType: c.getPatchContentType(type),
       bodyJson: Array.isArray(body) ? body : NetworkingV1.fromIngress(body),
       abortSignal: opts.abortSignal,
@@ -319,12 +397,21 @@ export class NetworkingV1NamespacedApi {
     return resp.pipeThrough(new c.WatchEventTransformer(NetworkingV1.toNetworkPolicy, MetaV1.toStatus));
   }
 
-  async createNetworkPolicy(body: NetworkingV1.NetworkPolicy, opts: operations.PutOpts = {}) {
+  async createNetworkPolicy(body: NetworkingV1.NetworkPolicy, opts: {
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+    abortSignal?: AbortSignal;
+  } = {}) {
+    const query = new URLSearchParams;
+    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
+    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
+    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
     const resp = await this.#client.performRequest({
       method: "POST",
       path: `${this.#root}networkpolicies`,
       expectJson: true,
-      querystring: operations.formatPutOpts(opts),
+      querystring: query,
       bodyJson: NetworkingV1.fromNetworkPolicy(body),
       abortSignal: opts.abortSignal,
     });
@@ -363,24 +450,99 @@ export class NetworkingV1NamespacedApi {
     return MetaV1.toStatus(resp);
   }
 
-  async replaceNetworkPolicy(name: string, body: NetworkingV1.NetworkPolicy, opts: operations.PutOpts = {}) {
+  async replaceNetworkPolicy(name: string, body: NetworkingV1.NetworkPolicy, opts: {
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+    abortSignal?: AbortSignal;
+  } = {}) {
+    const query = new URLSearchParams;
+    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
+    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
+    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
     const resp = await this.#client.performRequest({
       method: "PUT",
       path: `${this.#root}networkpolicies/${name}`,
       expectJson: true,
-      querystring: operations.formatPutOpts(opts),
+      querystring: query,
       bodyJson: NetworkingV1.fromNetworkPolicy(body),
       abortSignal: opts.abortSignal,
     });
     return NetworkingV1.toNetworkPolicy(resp);
   }
 
-  async patchNetworkPolicy(name: string, type: c.PatchType, body: NetworkingV1.NetworkPolicy | c.JsonPatch, opts: operations.PatchOpts = {}) {
+  async patchNetworkPolicy(name: string, body: NetworkingV1.NetworkPolicy, opts: {
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+    force?: boolean;
+    abortSignal?: AbortSignal;
+  } = {}) {
+    const query = new URLSearchParams;
+    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
+    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
+    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
+    if (opts["force"] != null) query.append("force", opts["force"] ? '1' : '0');
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}networkpolicies/${name}`,
       expectJson: true,
-      querystring: operations.formatPatchOpts(opts),
+      querystring: query,
+      contentType: c.getPatchContentType(type),
+      bodyJson: Array.isArray(body) ? body : NetworkingV1.fromNetworkPolicy(body),
+      abortSignal: opts.abortSignal,
+    });
+    return NetworkingV1.toNetworkPolicy(resp);
+  }
+
+  async getNetworkPolicyStatus(name: string, opts: operations.NoOpts = {}) {
+    const resp = await this.#client.performRequest({
+      method: "GET",
+      path: `${this.#root}networkpolicies/${name}/status`,
+      expectJson: true,
+      abortSignal: opts.abortSignal,
+    });
+    return NetworkingV1.toNetworkPolicy(resp);
+  }
+
+  async replaceNetworkPolicyStatus(name: string, body: NetworkingV1.NetworkPolicy, opts: {
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+    abortSignal?: AbortSignal;
+  } = {}) {
+    const query = new URLSearchParams;
+    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
+    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
+    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
+    const resp = await this.#client.performRequest({
+      method: "PUT",
+      path: `${this.#root}networkpolicies/${name}/status`,
+      expectJson: true,
+      querystring: query,
+      bodyJson: NetworkingV1.fromNetworkPolicy(body),
+      abortSignal: opts.abortSignal,
+    });
+    return NetworkingV1.toNetworkPolicy(resp);
+  }
+
+  async patchNetworkPolicyStatus(name: string, body: NetworkingV1.NetworkPolicy, opts: {
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+    force?: boolean;
+    abortSignal?: AbortSignal;
+  } = {}) {
+    const query = new URLSearchParams;
+    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
+    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
+    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
+    if (opts["force"] != null) query.append("force", opts["force"] ? '1' : '0');
+    const resp = await this.#client.performRequest({
+      method: "PATCH",
+      path: `${this.#root}networkpolicies/${name}/status`,
+      expectJson: true,
+      querystring: query,
       contentType: c.getPatchContentType(type),
       bodyJson: Array.isArray(body) ? body : NetworkingV1.fromNetworkPolicy(body),
       abortSignal: opts.abortSignal,

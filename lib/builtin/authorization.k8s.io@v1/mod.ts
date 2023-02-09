@@ -21,36 +21,63 @@ export class AuthorizationV1Api {
     return new AuthorizationV1NamespacedApi(this.#client, this.#client.defaultNamespace);
   }
 
-  async createSelfSubjectAccessReview(body: AuthorizationV1.SelfSubjectAccessReview, opts: operations.PutOpts = {}) {
+  async createSelfSubjectAccessReview(body: AuthorizationV1.SelfSubjectAccessReview, opts: {
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+    abortSignal?: AbortSignal;
+  } = {}) {
+    const query = new URLSearchParams;
+    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
+    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
+    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
     const resp = await this.#client.performRequest({
       method: "POST",
       path: `${this.#root}selfsubjectaccessreviews`,
       expectJson: true,
-      querystring: operations.formatPutOpts(opts),
+      querystring: query,
       bodyJson: AuthorizationV1.fromSelfSubjectAccessReview(body),
       abortSignal: opts.abortSignal,
     });
     return AuthorizationV1.toSelfSubjectAccessReview(resp);
   }
 
-  async createSelfSubjectRulesReview(body: AuthorizationV1.SelfSubjectRulesReview, opts: operations.PutOpts = {}) {
+  async createSelfSubjectRulesReview(body: AuthorizationV1.SelfSubjectRulesReview, opts: {
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+    abortSignal?: AbortSignal;
+  } = {}) {
+    const query = new URLSearchParams;
+    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
+    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
+    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
     const resp = await this.#client.performRequest({
       method: "POST",
       path: `${this.#root}selfsubjectrulesreviews`,
       expectJson: true,
-      querystring: operations.formatPutOpts(opts),
+      querystring: query,
       bodyJson: AuthorizationV1.fromSelfSubjectRulesReview(body),
       abortSignal: opts.abortSignal,
     });
     return AuthorizationV1.toSelfSubjectRulesReview(resp);
   }
 
-  async createSubjectAccessReview(body: AuthorizationV1.SubjectAccessReview, opts: operations.PutOpts = {}) {
+  async createSubjectAccessReview(body: AuthorizationV1.SubjectAccessReview, opts: {
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+    abortSignal?: AbortSignal;
+  } = {}) {
+    const query = new URLSearchParams;
+    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
+    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
+    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
     const resp = await this.#client.performRequest({
       method: "POST",
       path: `${this.#root}subjectaccessreviews`,
       expectJson: true,
-      querystring: operations.formatPutOpts(opts),
+      querystring: query,
       bodyJson: AuthorizationV1.fromSubjectAccessReview(body),
       abortSignal: opts.abortSignal,
     });
@@ -67,12 +94,21 @@ export class AuthorizationV1NamespacedApi {
     this.#root = `/apis/authorization.k8s.io/v1/namespaces/${namespace}/`;
   }
 
-  async createLocalSubjectAccessReview(body: AuthorizationV1.LocalSubjectAccessReview, opts: operations.PutOpts = {}) {
+  async createLocalSubjectAccessReview(body: AuthorizationV1.LocalSubjectAccessReview, opts: {
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+    abortSignal?: AbortSignal;
+  } = {}) {
+    const query = new URLSearchParams;
+    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
+    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
+    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
     const resp = await this.#client.performRequest({
       method: "POST",
       path: `${this.#root}localsubjectaccessreviews`,
       expectJson: true,
-      querystring: operations.formatPutOpts(opts),
+      querystring: query,
       bodyJson: AuthorizationV1.fromLocalSubjectAccessReview(body),
       abortSignal: opts.abortSignal,
     });

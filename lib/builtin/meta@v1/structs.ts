@@ -321,7 +321,6 @@ export function fromManagedFieldsEntry(input: ManagedFieldsEntry): c.JSONValue {
 /** ObjectMeta is metadata that all persisted resources must have, which includes all objects users must create. */
 export interface ObjectMeta {
   annotations?: Record<string,string> | null;
-  clusterName?: string | null;
   creationTimestamp?: c.Time | null;
   deletionGracePeriodSeconds?: number | null;
   deletionTimestamp?: c.Time | null;
@@ -341,7 +340,6 @@ export function toObjectMeta(input: c.JSONValue): ObjectMeta {
   const obj = c.checkObj(input);
   return {
     annotations: c.readOpt(obj["annotations"], x => c.readMap(x, c.checkStr)),
-    clusterName: c.readOpt(obj["clusterName"], c.checkStr),
     creationTimestamp: c.readOpt(obj["creationTimestamp"], c.toTime),
     deletionGracePeriodSeconds: c.readOpt(obj["deletionGracePeriodSeconds"], c.checkNum),
     deletionTimestamp: c.readOpt(obj["deletionTimestamp"], c.toTime),
@@ -404,21 +402,22 @@ export function fromPatch(input: Patch): c.JSONValue {
 
 /** Status is a return value for calls that don't return other objects. */
 export interface Status {
-  apiVersion?: "v1";
-  kind?: "Status";
+  apiVersion?: string | null;
   code?: number | null;
   details?: StatusDetails | null;
+  kind?: string | null;
   message?: string | null;
   metadata?: ListMeta | null;
   reason?: string | null;
   status?: string | null;
 }
-export function toStatus(input: c.JSONValue): Status & c.ApiKind {
+export function toStatus(input: c.JSONValue): Status {
   const obj = c.checkObj(input);
   return {
-    ...c.assertOrAddApiVersionAndKind(obj, "v1", "Status"),
+    apiVersion: c.readOpt(obj["apiVersion"], c.checkStr),
     code: c.readOpt(obj["code"], c.checkNum),
     details: c.readOpt(obj["details"], toStatusDetails),
+    kind: c.readOpt(obj["kind"], c.checkStr),
     message: c.readOpt(obj["message"], c.checkStr),
     metadata: c.readOpt(obj["metadata"], toListMeta),
     reason: c.readOpt(obj["reason"], c.checkStr),
@@ -426,7 +425,6 @@ export function toStatus(input: c.JSONValue): Status & c.ApiKind {
   }}
 export function fromStatus(input: Status): c.JSONValue {
   return {
-    ...c.assertOrAddApiVersionAndKind(input, "v1", "Status"),
     ...input,
     details: input.details != null ? fromStatusDetails(input.details) : undefined,
     metadata: input.metadata != null ? fromListMeta(input.metadata) : undefined,

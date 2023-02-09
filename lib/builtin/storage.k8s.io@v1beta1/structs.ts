@@ -15,7 +15,7 @@ The following three cases all imply that no capacity is available for a certain 
 
 The producer of these objects can decide which approach is more suitable.
 
-They are consumed by the kube-scheduler if the CSIStorageCapacity beta feature gate is enabled there and a CSI driver opts into capacity-aware scheduling with CSIDriver.StorageCapacity. */
+They are consumed by the kube-scheduler when a CSI driver opts into capacity-aware scheduling with CSIDriverSpec.StorageCapacity. The scheduler compares the MaximumVolumeSize against the requested size of pending volumes to filter out unsuitable nodes. If MaximumVolumeSize is unset, it falls back to a comparison against the less precise Capacity. If that is also unset, the scheduler assumes that capacity is insufficient and tries some other node. */
 export interface CSIStorageCapacity {
   apiVersion?: "storage.k8s.io/v1beta1";
   kind?: "CSIStorageCapacity";

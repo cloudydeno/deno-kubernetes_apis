@@ -36,12 +36,21 @@ export class AdmissionregistrationV1Api {
     return resp.pipeThrough(new c.WatchEventTransformer(AdmissionregistrationV1.toMutatingWebhookConfiguration, MetaV1.toStatus));
   }
 
-  async createMutatingWebhookConfiguration(body: AdmissionregistrationV1.MutatingWebhookConfiguration, opts: operations.PutOpts = {}) {
+  async createMutatingWebhookConfiguration(body: AdmissionregistrationV1.MutatingWebhookConfiguration, opts: {
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+    abortSignal?: AbortSignal;
+  } = {}) {
+    const query = new URLSearchParams;
+    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
+    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
+    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
     const resp = await this.#client.performRequest({
       method: "POST",
       path: `${this.#root}mutatingwebhookconfigurations`,
       expectJson: true,
-      querystring: operations.formatPutOpts(opts),
+      querystring: query,
       bodyJson: AdmissionregistrationV1.fromMutatingWebhookConfiguration(body),
       abortSignal: opts.abortSignal,
     });
@@ -80,24 +89,44 @@ export class AdmissionregistrationV1Api {
     return MetaV1.toStatus(resp);
   }
 
-  async replaceMutatingWebhookConfiguration(name: string, body: AdmissionregistrationV1.MutatingWebhookConfiguration, opts: operations.PutOpts = {}) {
+  async replaceMutatingWebhookConfiguration(name: string, body: AdmissionregistrationV1.MutatingWebhookConfiguration, opts: {
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+    abortSignal?: AbortSignal;
+  } = {}) {
+    const query = new URLSearchParams;
+    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
+    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
+    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
     const resp = await this.#client.performRequest({
       method: "PUT",
       path: `${this.#root}mutatingwebhookconfigurations/${name}`,
       expectJson: true,
-      querystring: operations.formatPutOpts(opts),
+      querystring: query,
       bodyJson: AdmissionregistrationV1.fromMutatingWebhookConfiguration(body),
       abortSignal: opts.abortSignal,
     });
     return AdmissionregistrationV1.toMutatingWebhookConfiguration(resp);
   }
 
-  async patchMutatingWebhookConfiguration(name: string, type: c.PatchType, body: AdmissionregistrationV1.MutatingWebhookConfiguration | c.JsonPatch, opts: operations.PatchOpts = {}) {
+  async patchMutatingWebhookConfiguration(name: string, body: AdmissionregistrationV1.MutatingWebhookConfiguration, opts: {
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+    force?: boolean;
+    abortSignal?: AbortSignal;
+  } = {}) {
+    const query = new URLSearchParams;
+    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
+    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
+    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
+    if (opts["force"] != null) query.append("force", opts["force"] ? '1' : '0');
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}mutatingwebhookconfigurations/${name}`,
       expectJson: true,
-      querystring: operations.formatPatchOpts(opts),
+      querystring: query,
       contentType: c.getPatchContentType(type),
       bodyJson: Array.isArray(body) ? body : AdmissionregistrationV1.fromMutatingWebhookConfiguration(body),
       abortSignal: opts.abortSignal,
@@ -128,12 +157,21 @@ export class AdmissionregistrationV1Api {
     return resp.pipeThrough(new c.WatchEventTransformer(AdmissionregistrationV1.toValidatingWebhookConfiguration, MetaV1.toStatus));
   }
 
-  async createValidatingWebhookConfiguration(body: AdmissionregistrationV1.ValidatingWebhookConfiguration, opts: operations.PutOpts = {}) {
+  async createValidatingWebhookConfiguration(body: AdmissionregistrationV1.ValidatingWebhookConfiguration, opts: {
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+    abortSignal?: AbortSignal;
+  } = {}) {
+    const query = new URLSearchParams;
+    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
+    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
+    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
     const resp = await this.#client.performRequest({
       method: "POST",
       path: `${this.#root}validatingwebhookconfigurations`,
       expectJson: true,
-      querystring: operations.formatPutOpts(opts),
+      querystring: query,
       bodyJson: AdmissionregistrationV1.fromValidatingWebhookConfiguration(body),
       abortSignal: opts.abortSignal,
     });
@@ -172,24 +210,44 @@ export class AdmissionregistrationV1Api {
     return MetaV1.toStatus(resp);
   }
 
-  async replaceValidatingWebhookConfiguration(name: string, body: AdmissionregistrationV1.ValidatingWebhookConfiguration, opts: operations.PutOpts = {}) {
+  async replaceValidatingWebhookConfiguration(name: string, body: AdmissionregistrationV1.ValidatingWebhookConfiguration, opts: {
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+    abortSignal?: AbortSignal;
+  } = {}) {
+    const query = new URLSearchParams;
+    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
+    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
+    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
     const resp = await this.#client.performRequest({
       method: "PUT",
       path: `${this.#root}validatingwebhookconfigurations/${name}`,
       expectJson: true,
-      querystring: operations.formatPutOpts(opts),
+      querystring: query,
       bodyJson: AdmissionregistrationV1.fromValidatingWebhookConfiguration(body),
       abortSignal: opts.abortSignal,
     });
     return AdmissionregistrationV1.toValidatingWebhookConfiguration(resp);
   }
 
-  async patchValidatingWebhookConfiguration(name: string, type: c.PatchType, body: AdmissionregistrationV1.ValidatingWebhookConfiguration | c.JsonPatch, opts: operations.PatchOpts = {}) {
+  async patchValidatingWebhookConfiguration(name: string, body: AdmissionregistrationV1.ValidatingWebhookConfiguration, opts: {
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+    force?: boolean;
+    abortSignal?: AbortSignal;
+  } = {}) {
+    const query = new URLSearchParams;
+    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
+    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
+    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
+    if (opts["force"] != null) query.append("force", opts["force"] ? '1' : '0');
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}validatingwebhookconfigurations/${name}`,
       expectJson: true,
-      querystring: operations.formatPatchOpts(opts),
+      querystring: query,
       contentType: c.getPatchContentType(type),
       bodyJson: Array.isArray(body) ? body : AdmissionregistrationV1.fromValidatingWebhookConfiguration(body),
       abortSignal: opts.abortSignal,

@@ -77,12 +77,21 @@ export class StorageV1beta1NamespacedApi {
     return resp.pipeThrough(new c.WatchEventTransformer(StorageV1beta1.toCSIStorageCapacity, MetaV1.toStatus));
   }
 
-  async createCSIStorageCapacity(body: StorageV1beta1.CSIStorageCapacity, opts: operations.PutOpts = {}) {
+  async createCSIStorageCapacity(body: StorageV1beta1.CSIStorageCapacity, opts: {
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+    abortSignal?: AbortSignal;
+  } = {}) {
+    const query = new URLSearchParams;
+    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
+    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
+    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
     const resp = await this.#client.performRequest({
       method: "POST",
       path: `${this.#root}csistoragecapacities`,
       expectJson: true,
-      querystring: operations.formatPutOpts(opts),
+      querystring: query,
       bodyJson: StorageV1beta1.fromCSIStorageCapacity(body),
       abortSignal: opts.abortSignal,
     });
@@ -121,24 +130,44 @@ export class StorageV1beta1NamespacedApi {
     return MetaV1.toStatus(resp);
   }
 
-  async replaceCSIStorageCapacity(name: string, body: StorageV1beta1.CSIStorageCapacity, opts: operations.PutOpts = {}) {
+  async replaceCSIStorageCapacity(name: string, body: StorageV1beta1.CSIStorageCapacity, opts: {
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+    abortSignal?: AbortSignal;
+  } = {}) {
+    const query = new URLSearchParams;
+    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
+    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
+    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
     const resp = await this.#client.performRequest({
       method: "PUT",
       path: `${this.#root}csistoragecapacities/${name}`,
       expectJson: true,
-      querystring: operations.formatPutOpts(opts),
+      querystring: query,
       bodyJson: StorageV1beta1.fromCSIStorageCapacity(body),
       abortSignal: opts.abortSignal,
     });
     return StorageV1beta1.toCSIStorageCapacity(resp);
   }
 
-  async patchCSIStorageCapacity(name: string, type: c.PatchType, body: StorageV1beta1.CSIStorageCapacity | c.JsonPatch, opts: operations.PatchOpts = {}) {
+  async patchCSIStorageCapacity(name: string, body: StorageV1beta1.CSIStorageCapacity, opts: {
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+    force?: boolean;
+    abortSignal?: AbortSignal;
+  } = {}) {
+    const query = new URLSearchParams;
+    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
+    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
+    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
+    if (opts["force"] != null) query.append("force", opts["force"] ? '1' : '0');
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}csistoragecapacities/${name}`,
       expectJson: true,
-      querystring: operations.formatPatchOpts(opts),
+      querystring: query,
       contentType: c.getPatchContentType(type),
       bodyJson: Array.isArray(body) ? body : StorageV1beta1.fromCSIStorageCapacity(body),
       abortSignal: opts.abortSignal,

@@ -36,12 +36,21 @@ export class InternalApiserverV1alpha1Api {
     return resp.pipeThrough(new c.WatchEventTransformer(InternalApiserverV1alpha1.toStorageVersion, MetaV1.toStatus));
   }
 
-  async createStorageVersion(body: InternalApiserverV1alpha1.StorageVersion, opts: operations.PutOpts = {}) {
+  async createStorageVersion(body: InternalApiserverV1alpha1.StorageVersion, opts: {
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+    abortSignal?: AbortSignal;
+  } = {}) {
+    const query = new URLSearchParams;
+    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
+    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
+    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
     const resp = await this.#client.performRequest({
       method: "POST",
       path: `${this.#root}storageversions`,
       expectJson: true,
-      querystring: operations.formatPutOpts(opts),
+      querystring: query,
       bodyJson: InternalApiserverV1alpha1.fromStorageVersion(body),
       abortSignal: opts.abortSignal,
     });
@@ -80,24 +89,44 @@ export class InternalApiserverV1alpha1Api {
     return MetaV1.toStatus(resp);
   }
 
-  async replaceStorageVersion(name: string, body: InternalApiserverV1alpha1.StorageVersion, opts: operations.PutOpts = {}) {
+  async replaceStorageVersion(name: string, body: InternalApiserverV1alpha1.StorageVersion, opts: {
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+    abortSignal?: AbortSignal;
+  } = {}) {
+    const query = new URLSearchParams;
+    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
+    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
+    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
     const resp = await this.#client.performRequest({
       method: "PUT",
       path: `${this.#root}storageversions/${name}`,
       expectJson: true,
-      querystring: operations.formatPutOpts(opts),
+      querystring: query,
       bodyJson: InternalApiserverV1alpha1.fromStorageVersion(body),
       abortSignal: opts.abortSignal,
     });
     return InternalApiserverV1alpha1.toStorageVersion(resp);
   }
 
-  async patchStorageVersion(name: string, type: c.PatchType, body: InternalApiserverV1alpha1.StorageVersion | c.JsonPatch, opts: operations.PatchOpts = {}) {
+  async patchStorageVersion(name: string, body: InternalApiserverV1alpha1.StorageVersion, opts: {
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+    force?: boolean;
+    abortSignal?: AbortSignal;
+  } = {}) {
+    const query = new URLSearchParams;
+    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
+    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
+    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
+    if (opts["force"] != null) query.append("force", opts["force"] ? '1' : '0');
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}storageversions/${name}`,
       expectJson: true,
-      querystring: operations.formatPatchOpts(opts),
+      querystring: query,
       contentType: c.getPatchContentType(type),
       bodyJson: Array.isArray(body) ? body : InternalApiserverV1alpha1.fromStorageVersion(body),
       abortSignal: opts.abortSignal,
@@ -115,24 +144,44 @@ export class InternalApiserverV1alpha1Api {
     return InternalApiserverV1alpha1.toStorageVersion(resp);
   }
 
-  async replaceStorageVersionStatus(name: string, body: InternalApiserverV1alpha1.StorageVersion, opts: operations.PutOpts = {}) {
+  async replaceStorageVersionStatus(name: string, body: InternalApiserverV1alpha1.StorageVersion, opts: {
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+    abortSignal?: AbortSignal;
+  } = {}) {
+    const query = new URLSearchParams;
+    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
+    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
+    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
     const resp = await this.#client.performRequest({
       method: "PUT",
       path: `${this.#root}storageversions/${name}/status`,
       expectJson: true,
-      querystring: operations.formatPutOpts(opts),
+      querystring: query,
       bodyJson: InternalApiserverV1alpha1.fromStorageVersion(body),
       abortSignal: opts.abortSignal,
     });
     return InternalApiserverV1alpha1.toStorageVersion(resp);
   }
 
-  async patchStorageVersionStatus(name: string, type: c.PatchType, body: InternalApiserverV1alpha1.StorageVersion | c.JsonPatch, opts: operations.PatchOpts = {}) {
+  async patchStorageVersionStatus(name: string, body: InternalApiserverV1alpha1.StorageVersion, opts: {
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+    force?: boolean;
+    abortSignal?: AbortSignal;
+  } = {}) {
+    const query = new URLSearchParams;
+    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
+    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
+    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
+    if (opts["force"] != null) query.append("force", opts["force"] ? '1' : '0');
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}storageversions/${name}/status`,
       expectJson: true,
-      querystring: operations.formatPatchOpts(opts),
+      querystring: query,
       contentType: c.getPatchContentType(type),
       bodyJson: Array.isArray(body) ? body : InternalApiserverV1alpha1.fromStorageVersion(body),
       abortSignal: opts.abortSignal,

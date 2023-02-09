@@ -77,12 +77,21 @@ export class EventsV1NamespacedApi {
     return resp.pipeThrough(new c.WatchEventTransformer(EventsV1.toEvent, MetaV1.toStatus));
   }
 
-  async createEvent(body: EventsV1.Event, opts: operations.PutOpts = {}) {
+  async createEvent(body: EventsV1.Event, opts: {
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+    abortSignal?: AbortSignal;
+  } = {}) {
+    const query = new URLSearchParams;
+    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
+    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
+    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
     const resp = await this.#client.performRequest({
       method: "POST",
       path: `${this.#root}events`,
       expectJson: true,
-      querystring: operations.formatPutOpts(opts),
+      querystring: query,
       bodyJson: EventsV1.fromEvent(body),
       abortSignal: opts.abortSignal,
     });
@@ -121,24 +130,44 @@ export class EventsV1NamespacedApi {
     return MetaV1.toStatus(resp);
   }
 
-  async replaceEvent(name: string, body: EventsV1.Event, opts: operations.PutOpts = {}) {
+  async replaceEvent(name: string, body: EventsV1.Event, opts: {
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+    abortSignal?: AbortSignal;
+  } = {}) {
+    const query = new URLSearchParams;
+    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
+    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
+    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
     const resp = await this.#client.performRequest({
       method: "PUT",
       path: `${this.#root}events/${name}`,
       expectJson: true,
-      querystring: operations.formatPutOpts(opts),
+      querystring: query,
       bodyJson: EventsV1.fromEvent(body),
       abortSignal: opts.abortSignal,
     });
     return EventsV1.toEvent(resp);
   }
 
-  async patchEvent(name: string, type: c.PatchType, body: EventsV1.Event | c.JsonPatch, opts: operations.PatchOpts = {}) {
+  async patchEvent(name: string, body: EventsV1.Event, opts: {
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+    force?: boolean;
+    abortSignal?: AbortSignal;
+  } = {}) {
+    const query = new URLSearchParams;
+    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
+    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
+    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
+    if (opts["force"] != null) query.append("force", opts["force"] ? '1' : '0');
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}events/${name}`,
       expectJson: true,
-      querystring: operations.formatPatchOpts(opts),
+      querystring: query,
       contentType: c.getPatchContentType(type),
       bodyJson: Array.isArray(body) ? body : EventsV1.fromEvent(body),
       abortSignal: opts.abortSignal,

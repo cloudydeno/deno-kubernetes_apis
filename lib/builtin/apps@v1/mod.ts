@@ -170,12 +170,21 @@ export class AppsV1NamespacedApi {
     return resp.pipeThrough(new c.WatchEventTransformer(AppsV1.toControllerRevision, MetaV1.toStatus));
   }
 
-  async createControllerRevision(body: AppsV1.ControllerRevision, opts: operations.PutOpts = {}) {
+  async createControllerRevision(body: AppsV1.ControllerRevision, opts: {
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+    abortSignal?: AbortSignal;
+  } = {}) {
+    const query = new URLSearchParams;
+    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
+    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
+    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
     const resp = await this.#client.performRequest({
       method: "POST",
       path: `${this.#root}controllerrevisions`,
       expectJson: true,
-      querystring: operations.formatPutOpts(opts),
+      querystring: query,
       bodyJson: AppsV1.fromControllerRevision(body),
       abortSignal: opts.abortSignal,
     });
@@ -214,24 +223,44 @@ export class AppsV1NamespacedApi {
     return MetaV1.toStatus(resp);
   }
 
-  async replaceControllerRevision(name: string, body: AppsV1.ControllerRevision, opts: operations.PutOpts = {}) {
+  async replaceControllerRevision(name: string, body: AppsV1.ControllerRevision, opts: {
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+    abortSignal?: AbortSignal;
+  } = {}) {
+    const query = new URLSearchParams;
+    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
+    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
+    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
     const resp = await this.#client.performRequest({
       method: "PUT",
       path: `${this.#root}controllerrevisions/${name}`,
       expectJson: true,
-      querystring: operations.formatPutOpts(opts),
+      querystring: query,
       bodyJson: AppsV1.fromControllerRevision(body),
       abortSignal: opts.abortSignal,
     });
     return AppsV1.toControllerRevision(resp);
   }
 
-  async patchControllerRevision(name: string, type: c.PatchType, body: AppsV1.ControllerRevision | c.JsonPatch, opts: operations.PatchOpts = {}) {
+  async patchControllerRevision(name: string, body: AppsV1.ControllerRevision, opts: {
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+    force?: boolean;
+    abortSignal?: AbortSignal;
+  } = {}) {
+    const query = new URLSearchParams;
+    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
+    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
+    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
+    if (opts["force"] != null) query.append("force", opts["force"] ? '1' : '0');
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}controllerrevisions/${name}`,
       expectJson: true,
-      querystring: operations.formatPatchOpts(opts),
+      querystring: query,
       contentType: c.getPatchContentType(type),
       bodyJson: Array.isArray(body) ? body : AppsV1.fromControllerRevision(body),
       abortSignal: opts.abortSignal,
@@ -262,12 +291,21 @@ export class AppsV1NamespacedApi {
     return resp.pipeThrough(new c.WatchEventTransformer(AppsV1.toDaemonSet, MetaV1.toStatus));
   }
 
-  async createDaemonSet(body: AppsV1.DaemonSet, opts: operations.PutOpts = {}) {
+  async createDaemonSet(body: AppsV1.DaemonSet, opts: {
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+    abortSignal?: AbortSignal;
+  } = {}) {
+    const query = new URLSearchParams;
+    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
+    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
+    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
     const resp = await this.#client.performRequest({
       method: "POST",
       path: `${this.#root}daemonsets`,
       expectJson: true,
-      querystring: operations.formatPutOpts(opts),
+      querystring: query,
       bodyJson: AppsV1.fromDaemonSet(body),
       abortSignal: opts.abortSignal,
     });
@@ -306,24 +344,44 @@ export class AppsV1NamespacedApi {
     return MetaV1.toStatus(resp);
   }
 
-  async replaceDaemonSet(name: string, body: AppsV1.DaemonSet, opts: operations.PutOpts = {}) {
+  async replaceDaemonSet(name: string, body: AppsV1.DaemonSet, opts: {
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+    abortSignal?: AbortSignal;
+  } = {}) {
+    const query = new URLSearchParams;
+    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
+    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
+    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
     const resp = await this.#client.performRequest({
       method: "PUT",
       path: `${this.#root}daemonsets/${name}`,
       expectJson: true,
-      querystring: operations.formatPutOpts(opts),
+      querystring: query,
       bodyJson: AppsV1.fromDaemonSet(body),
       abortSignal: opts.abortSignal,
     });
     return AppsV1.toDaemonSet(resp);
   }
 
-  async patchDaemonSet(name: string, type: c.PatchType, body: AppsV1.DaemonSet | c.JsonPatch, opts: operations.PatchOpts = {}) {
+  async patchDaemonSet(name: string, body: AppsV1.DaemonSet, opts: {
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+    force?: boolean;
+    abortSignal?: AbortSignal;
+  } = {}) {
+    const query = new URLSearchParams;
+    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
+    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
+    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
+    if (opts["force"] != null) query.append("force", opts["force"] ? '1' : '0');
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}daemonsets/${name}`,
       expectJson: true,
-      querystring: operations.formatPatchOpts(opts),
+      querystring: query,
       contentType: c.getPatchContentType(type),
       bodyJson: Array.isArray(body) ? body : AppsV1.fromDaemonSet(body),
       abortSignal: opts.abortSignal,
@@ -341,24 +399,44 @@ export class AppsV1NamespacedApi {
     return AppsV1.toDaemonSet(resp);
   }
 
-  async replaceDaemonSetStatus(name: string, body: AppsV1.DaemonSet, opts: operations.PutOpts = {}) {
+  async replaceDaemonSetStatus(name: string, body: AppsV1.DaemonSet, opts: {
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+    abortSignal?: AbortSignal;
+  } = {}) {
+    const query = new URLSearchParams;
+    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
+    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
+    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
     const resp = await this.#client.performRequest({
       method: "PUT",
       path: `${this.#root}daemonsets/${name}/status`,
       expectJson: true,
-      querystring: operations.formatPutOpts(opts),
+      querystring: query,
       bodyJson: AppsV1.fromDaemonSet(body),
       abortSignal: opts.abortSignal,
     });
     return AppsV1.toDaemonSet(resp);
   }
 
-  async patchDaemonSetStatus(name: string, type: c.PatchType, body: AppsV1.DaemonSet | c.JsonPatch, opts: operations.PatchOpts = {}) {
+  async patchDaemonSetStatus(name: string, body: AppsV1.DaemonSet, opts: {
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+    force?: boolean;
+    abortSignal?: AbortSignal;
+  } = {}) {
+    const query = new URLSearchParams;
+    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
+    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
+    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
+    if (opts["force"] != null) query.append("force", opts["force"] ? '1' : '0');
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}daemonsets/${name}/status`,
       expectJson: true,
-      querystring: operations.formatPatchOpts(opts),
+      querystring: query,
       contentType: c.getPatchContentType(type),
       bodyJson: Array.isArray(body) ? body : AppsV1.fromDaemonSet(body),
       abortSignal: opts.abortSignal,
@@ -389,12 +467,21 @@ export class AppsV1NamespacedApi {
     return resp.pipeThrough(new c.WatchEventTransformer(AppsV1.toDeployment, MetaV1.toStatus));
   }
 
-  async createDeployment(body: AppsV1.Deployment, opts: operations.PutOpts = {}) {
+  async createDeployment(body: AppsV1.Deployment, opts: {
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+    abortSignal?: AbortSignal;
+  } = {}) {
+    const query = new URLSearchParams;
+    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
+    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
+    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
     const resp = await this.#client.performRequest({
       method: "POST",
       path: `${this.#root}deployments`,
       expectJson: true,
-      querystring: operations.formatPutOpts(opts),
+      querystring: query,
       bodyJson: AppsV1.fromDeployment(body),
       abortSignal: opts.abortSignal,
     });
@@ -433,24 +520,44 @@ export class AppsV1NamespacedApi {
     return MetaV1.toStatus(resp);
   }
 
-  async replaceDeployment(name: string, body: AppsV1.Deployment, opts: operations.PutOpts = {}) {
+  async replaceDeployment(name: string, body: AppsV1.Deployment, opts: {
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+    abortSignal?: AbortSignal;
+  } = {}) {
+    const query = new URLSearchParams;
+    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
+    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
+    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
     const resp = await this.#client.performRequest({
       method: "PUT",
       path: `${this.#root}deployments/${name}`,
       expectJson: true,
-      querystring: operations.formatPutOpts(opts),
+      querystring: query,
       bodyJson: AppsV1.fromDeployment(body),
       abortSignal: opts.abortSignal,
     });
     return AppsV1.toDeployment(resp);
   }
 
-  async patchDeployment(name: string, type: c.PatchType, body: AppsV1.Deployment | c.JsonPatch, opts: operations.PatchOpts = {}) {
+  async patchDeployment(name: string, body: AppsV1.Deployment, opts: {
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+    force?: boolean;
+    abortSignal?: AbortSignal;
+  } = {}) {
+    const query = new URLSearchParams;
+    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
+    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
+    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
+    if (opts["force"] != null) query.append("force", opts["force"] ? '1' : '0');
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}deployments/${name}`,
       expectJson: true,
-      querystring: operations.formatPatchOpts(opts),
+      querystring: query,
       contentType: c.getPatchContentType(type),
       bodyJson: Array.isArray(body) ? body : AppsV1.fromDeployment(body),
       abortSignal: opts.abortSignal,
@@ -468,24 +575,44 @@ export class AppsV1NamespacedApi {
     return AutoscalingV1.toScale(resp);
   }
 
-  async replaceDeploymentScale(name: string, body: AutoscalingV1.Scale, opts: operations.PutOpts = {}) {
+  async replaceDeploymentScale(name: string, body: AutoscalingV1.Scale, opts: {
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+    abortSignal?: AbortSignal;
+  } = {}) {
+    const query = new URLSearchParams;
+    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
+    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
+    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
     const resp = await this.#client.performRequest({
       method: "PUT",
       path: `${this.#root}deployments/${name}/scale`,
       expectJson: true,
-      querystring: operations.formatPutOpts(opts),
+      querystring: query,
       bodyJson: AutoscalingV1.fromScale(body),
       abortSignal: opts.abortSignal,
     });
     return AutoscalingV1.toScale(resp);
   }
 
-  async patchDeploymentScale(name: string, type: c.PatchType, body: AutoscalingV1.Scale | c.JsonPatch, opts: operations.PatchOpts = {}) {
+  async patchDeploymentScale(name: string, body: AutoscalingV1.Scale, opts: {
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+    force?: boolean;
+    abortSignal?: AbortSignal;
+  } = {}) {
+    const query = new URLSearchParams;
+    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
+    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
+    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
+    if (opts["force"] != null) query.append("force", opts["force"] ? '1' : '0');
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}deployments/${name}/scale`,
       expectJson: true,
-      querystring: operations.formatPatchOpts(opts),
+      querystring: query,
       contentType: c.getPatchContentType(type),
       bodyJson: Array.isArray(body) ? body : AutoscalingV1.fromScale(body),
       abortSignal: opts.abortSignal,
@@ -503,24 +630,44 @@ export class AppsV1NamespacedApi {
     return AppsV1.toDeployment(resp);
   }
 
-  async replaceDeploymentStatus(name: string, body: AppsV1.Deployment, opts: operations.PutOpts = {}) {
+  async replaceDeploymentStatus(name: string, body: AppsV1.Deployment, opts: {
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+    abortSignal?: AbortSignal;
+  } = {}) {
+    const query = new URLSearchParams;
+    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
+    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
+    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
     const resp = await this.#client.performRequest({
       method: "PUT",
       path: `${this.#root}deployments/${name}/status`,
       expectJson: true,
-      querystring: operations.formatPutOpts(opts),
+      querystring: query,
       bodyJson: AppsV1.fromDeployment(body),
       abortSignal: opts.abortSignal,
     });
     return AppsV1.toDeployment(resp);
   }
 
-  async patchDeploymentStatus(name: string, type: c.PatchType, body: AppsV1.Deployment | c.JsonPatch, opts: operations.PatchOpts = {}) {
+  async patchDeploymentStatus(name: string, body: AppsV1.Deployment, opts: {
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+    force?: boolean;
+    abortSignal?: AbortSignal;
+  } = {}) {
+    const query = new URLSearchParams;
+    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
+    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
+    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
+    if (opts["force"] != null) query.append("force", opts["force"] ? '1' : '0');
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}deployments/${name}/status`,
       expectJson: true,
-      querystring: operations.formatPatchOpts(opts),
+      querystring: query,
       contentType: c.getPatchContentType(type),
       bodyJson: Array.isArray(body) ? body : AppsV1.fromDeployment(body),
       abortSignal: opts.abortSignal,
@@ -551,12 +698,21 @@ export class AppsV1NamespacedApi {
     return resp.pipeThrough(new c.WatchEventTransformer(AppsV1.toReplicaSet, MetaV1.toStatus));
   }
 
-  async createReplicaSet(body: AppsV1.ReplicaSet, opts: operations.PutOpts = {}) {
+  async createReplicaSet(body: AppsV1.ReplicaSet, opts: {
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+    abortSignal?: AbortSignal;
+  } = {}) {
+    const query = new URLSearchParams;
+    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
+    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
+    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
     const resp = await this.#client.performRequest({
       method: "POST",
       path: `${this.#root}replicasets`,
       expectJson: true,
-      querystring: operations.formatPutOpts(opts),
+      querystring: query,
       bodyJson: AppsV1.fromReplicaSet(body),
       abortSignal: opts.abortSignal,
     });
@@ -595,24 +751,44 @@ export class AppsV1NamespacedApi {
     return MetaV1.toStatus(resp);
   }
 
-  async replaceReplicaSet(name: string, body: AppsV1.ReplicaSet, opts: operations.PutOpts = {}) {
+  async replaceReplicaSet(name: string, body: AppsV1.ReplicaSet, opts: {
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+    abortSignal?: AbortSignal;
+  } = {}) {
+    const query = new URLSearchParams;
+    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
+    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
+    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
     const resp = await this.#client.performRequest({
       method: "PUT",
       path: `${this.#root}replicasets/${name}`,
       expectJson: true,
-      querystring: operations.formatPutOpts(opts),
+      querystring: query,
       bodyJson: AppsV1.fromReplicaSet(body),
       abortSignal: opts.abortSignal,
     });
     return AppsV1.toReplicaSet(resp);
   }
 
-  async patchReplicaSet(name: string, type: c.PatchType, body: AppsV1.ReplicaSet | c.JsonPatch, opts: operations.PatchOpts = {}) {
+  async patchReplicaSet(name: string, body: AppsV1.ReplicaSet, opts: {
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+    force?: boolean;
+    abortSignal?: AbortSignal;
+  } = {}) {
+    const query = new URLSearchParams;
+    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
+    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
+    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
+    if (opts["force"] != null) query.append("force", opts["force"] ? '1' : '0');
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}replicasets/${name}`,
       expectJson: true,
-      querystring: operations.formatPatchOpts(opts),
+      querystring: query,
       contentType: c.getPatchContentType(type),
       bodyJson: Array.isArray(body) ? body : AppsV1.fromReplicaSet(body),
       abortSignal: opts.abortSignal,
@@ -630,24 +806,44 @@ export class AppsV1NamespacedApi {
     return AutoscalingV1.toScale(resp);
   }
 
-  async replaceReplicaSetScale(name: string, body: AutoscalingV1.Scale, opts: operations.PutOpts = {}) {
+  async replaceReplicaSetScale(name: string, body: AutoscalingV1.Scale, opts: {
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+    abortSignal?: AbortSignal;
+  } = {}) {
+    const query = new URLSearchParams;
+    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
+    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
+    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
     const resp = await this.#client.performRequest({
       method: "PUT",
       path: `${this.#root}replicasets/${name}/scale`,
       expectJson: true,
-      querystring: operations.formatPutOpts(opts),
+      querystring: query,
       bodyJson: AutoscalingV1.fromScale(body),
       abortSignal: opts.abortSignal,
     });
     return AutoscalingV1.toScale(resp);
   }
 
-  async patchReplicaSetScale(name: string, type: c.PatchType, body: AutoscalingV1.Scale | c.JsonPatch, opts: operations.PatchOpts = {}) {
+  async patchReplicaSetScale(name: string, body: AutoscalingV1.Scale, opts: {
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+    force?: boolean;
+    abortSignal?: AbortSignal;
+  } = {}) {
+    const query = new URLSearchParams;
+    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
+    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
+    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
+    if (opts["force"] != null) query.append("force", opts["force"] ? '1' : '0');
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}replicasets/${name}/scale`,
       expectJson: true,
-      querystring: operations.formatPatchOpts(opts),
+      querystring: query,
       contentType: c.getPatchContentType(type),
       bodyJson: Array.isArray(body) ? body : AutoscalingV1.fromScale(body),
       abortSignal: opts.abortSignal,
@@ -665,24 +861,44 @@ export class AppsV1NamespacedApi {
     return AppsV1.toReplicaSet(resp);
   }
 
-  async replaceReplicaSetStatus(name: string, body: AppsV1.ReplicaSet, opts: operations.PutOpts = {}) {
+  async replaceReplicaSetStatus(name: string, body: AppsV1.ReplicaSet, opts: {
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+    abortSignal?: AbortSignal;
+  } = {}) {
+    const query = new URLSearchParams;
+    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
+    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
+    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
     const resp = await this.#client.performRequest({
       method: "PUT",
       path: `${this.#root}replicasets/${name}/status`,
       expectJson: true,
-      querystring: operations.formatPutOpts(opts),
+      querystring: query,
       bodyJson: AppsV1.fromReplicaSet(body),
       abortSignal: opts.abortSignal,
     });
     return AppsV1.toReplicaSet(resp);
   }
 
-  async patchReplicaSetStatus(name: string, type: c.PatchType, body: AppsV1.ReplicaSet | c.JsonPatch, opts: operations.PatchOpts = {}) {
+  async patchReplicaSetStatus(name: string, body: AppsV1.ReplicaSet, opts: {
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+    force?: boolean;
+    abortSignal?: AbortSignal;
+  } = {}) {
+    const query = new URLSearchParams;
+    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
+    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
+    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
+    if (opts["force"] != null) query.append("force", opts["force"] ? '1' : '0');
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}replicasets/${name}/status`,
       expectJson: true,
-      querystring: operations.formatPatchOpts(opts),
+      querystring: query,
       contentType: c.getPatchContentType(type),
       bodyJson: Array.isArray(body) ? body : AppsV1.fromReplicaSet(body),
       abortSignal: opts.abortSignal,
@@ -713,12 +929,21 @@ export class AppsV1NamespacedApi {
     return resp.pipeThrough(new c.WatchEventTransformer(AppsV1.toStatefulSet, MetaV1.toStatus));
   }
 
-  async createStatefulSet(body: AppsV1.StatefulSet, opts: operations.PutOpts = {}) {
+  async createStatefulSet(body: AppsV1.StatefulSet, opts: {
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+    abortSignal?: AbortSignal;
+  } = {}) {
+    const query = new URLSearchParams;
+    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
+    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
+    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
     const resp = await this.#client.performRequest({
       method: "POST",
       path: `${this.#root}statefulsets`,
       expectJson: true,
-      querystring: operations.formatPutOpts(opts),
+      querystring: query,
       bodyJson: AppsV1.fromStatefulSet(body),
       abortSignal: opts.abortSignal,
     });
@@ -757,24 +982,44 @@ export class AppsV1NamespacedApi {
     return MetaV1.toStatus(resp);
   }
 
-  async replaceStatefulSet(name: string, body: AppsV1.StatefulSet, opts: operations.PutOpts = {}) {
+  async replaceStatefulSet(name: string, body: AppsV1.StatefulSet, opts: {
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+    abortSignal?: AbortSignal;
+  } = {}) {
+    const query = new URLSearchParams;
+    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
+    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
+    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
     const resp = await this.#client.performRequest({
       method: "PUT",
       path: `${this.#root}statefulsets/${name}`,
       expectJson: true,
-      querystring: operations.formatPutOpts(opts),
+      querystring: query,
       bodyJson: AppsV1.fromStatefulSet(body),
       abortSignal: opts.abortSignal,
     });
     return AppsV1.toStatefulSet(resp);
   }
 
-  async patchStatefulSet(name: string, type: c.PatchType, body: AppsV1.StatefulSet | c.JsonPatch, opts: operations.PatchOpts = {}) {
+  async patchStatefulSet(name: string, body: AppsV1.StatefulSet, opts: {
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+    force?: boolean;
+    abortSignal?: AbortSignal;
+  } = {}) {
+    const query = new URLSearchParams;
+    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
+    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
+    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
+    if (opts["force"] != null) query.append("force", opts["force"] ? '1' : '0');
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}statefulsets/${name}`,
       expectJson: true,
-      querystring: operations.formatPatchOpts(opts),
+      querystring: query,
       contentType: c.getPatchContentType(type),
       bodyJson: Array.isArray(body) ? body : AppsV1.fromStatefulSet(body),
       abortSignal: opts.abortSignal,
@@ -792,24 +1037,44 @@ export class AppsV1NamespacedApi {
     return AutoscalingV1.toScale(resp);
   }
 
-  async replaceStatefulSetScale(name: string, body: AutoscalingV1.Scale, opts: operations.PutOpts = {}) {
+  async replaceStatefulSetScale(name: string, body: AutoscalingV1.Scale, opts: {
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+    abortSignal?: AbortSignal;
+  } = {}) {
+    const query = new URLSearchParams;
+    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
+    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
+    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
     const resp = await this.#client.performRequest({
       method: "PUT",
       path: `${this.#root}statefulsets/${name}/scale`,
       expectJson: true,
-      querystring: operations.formatPutOpts(opts),
+      querystring: query,
       bodyJson: AutoscalingV1.fromScale(body),
       abortSignal: opts.abortSignal,
     });
     return AutoscalingV1.toScale(resp);
   }
 
-  async patchStatefulSetScale(name: string, type: c.PatchType, body: AutoscalingV1.Scale | c.JsonPatch, opts: operations.PatchOpts = {}) {
+  async patchStatefulSetScale(name: string, body: AutoscalingV1.Scale, opts: {
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+    force?: boolean;
+    abortSignal?: AbortSignal;
+  } = {}) {
+    const query = new URLSearchParams;
+    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
+    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
+    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
+    if (opts["force"] != null) query.append("force", opts["force"] ? '1' : '0');
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}statefulsets/${name}/scale`,
       expectJson: true,
-      querystring: operations.formatPatchOpts(opts),
+      querystring: query,
       contentType: c.getPatchContentType(type),
       bodyJson: Array.isArray(body) ? body : AutoscalingV1.fromScale(body),
       abortSignal: opts.abortSignal,
@@ -827,24 +1092,44 @@ export class AppsV1NamespacedApi {
     return AppsV1.toStatefulSet(resp);
   }
 
-  async replaceStatefulSetStatus(name: string, body: AppsV1.StatefulSet, opts: operations.PutOpts = {}) {
+  async replaceStatefulSetStatus(name: string, body: AppsV1.StatefulSet, opts: {
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+    abortSignal?: AbortSignal;
+  } = {}) {
+    const query = new URLSearchParams;
+    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
+    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
+    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
     const resp = await this.#client.performRequest({
       method: "PUT",
       path: `${this.#root}statefulsets/${name}/status`,
       expectJson: true,
-      querystring: operations.formatPutOpts(opts),
+      querystring: query,
       bodyJson: AppsV1.fromStatefulSet(body),
       abortSignal: opts.abortSignal,
     });
     return AppsV1.toStatefulSet(resp);
   }
 
-  async patchStatefulSetStatus(name: string, type: c.PatchType, body: AppsV1.StatefulSet | c.JsonPatch, opts: operations.PatchOpts = {}) {
+  async patchStatefulSetStatus(name: string, body: AppsV1.StatefulSet, opts: {
+    dryRun?: string;
+    fieldManager?: string;
+    fieldValidation?: string;
+    force?: boolean;
+    abortSignal?: AbortSignal;
+  } = {}) {
+    const query = new URLSearchParams;
+    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
+    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
+    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
+    if (opts["force"] != null) query.append("force", opts["force"] ? '1' : '0');
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}statefulsets/${name}/status`,
       expectJson: true,
-      querystring: operations.formatPatchOpts(opts),
+      querystring: query,
       contentType: c.getPatchContentType(type),
       bodyJson: Array.isArray(body) ? body : AppsV1.fromStatefulSet(body),
       abortSignal: opts.abortSignal,

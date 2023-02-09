@@ -59,6 +59,7 @@ export interface PodDisruptionBudgetSpec {
   maxUnavailable?: c.IntOrString | null;
   minAvailable?: c.IntOrString | null;
   selector?: MetaV1.LabelSelector | null;
+  unhealthyPodEvictionPolicy?: string | null;
 }
 export function toPodDisruptionBudgetSpec(input: c.JSONValue): PodDisruptionBudgetSpec {
   const obj = c.checkObj(input);
@@ -66,6 +67,7 @@ export function toPodDisruptionBudgetSpec(input: c.JSONValue): PodDisruptionBudg
     maxUnavailable: c.readOpt(obj["maxUnavailable"], c.toIntOrString),
     minAvailable: c.readOpt(obj["minAvailable"], c.toIntOrString),
     selector: c.readOpt(obj["selector"], MetaV1.toLabelSelector),
+    unhealthyPodEvictionPolicy: c.readOpt(obj["unhealthyPodEvictionPolicy"], c.checkStr),
   }}
 export function fromPodDisruptionBudgetSpec(input: PodDisruptionBudgetSpec): c.JSONValue {
   return {
