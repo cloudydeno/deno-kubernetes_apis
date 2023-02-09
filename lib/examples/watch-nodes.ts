@@ -1,4 +1,4 @@
-#!/usr/bin/env -S deno run --allow-net --allow-read --allow-env --allow-run
+#!/usr/bin/env -S deno run --allow-net --allow-read --allow-env --allow-run --unstable
 
 import { autoDetectClient, Reflector } from "../client.ts";
 // import { CoreV1Api } from "../builtin/core@v1/mod.ts";

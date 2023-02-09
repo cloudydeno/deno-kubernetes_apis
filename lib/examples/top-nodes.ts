@@ -1,4 +1,4 @@
-#!/usr/bin/env -S deno run --allow-net --allow-read --allow-env --allow-run
+#!/usr/bin/env -S deno run --allow-net --allow-read --allow-env --allow-run --unstable
 
 /*
  * Pulls the latest metrics from every node and prints some high-level metrics.
@@ -38,7 +38,7 @@ for (const node of nodeList.items) {
   try {
     // Fetch metrics from the actual node, via the Kubernetes APIServer
     const summary = await coreApi.proxyNodeRequest(nodeName, {
-      port: 10255,
+      port: 10250,
       method: 'GET',
       path: '/stats/summary',
       expectJson: true, // runs JSON.parse on the response body

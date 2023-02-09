@@ -1,4 +1,4 @@
-#!/usr/bin/env -S deno run --allow-net --allow-read --allow-env --allow-run
+#!/usr/bin/env -S deno run --allow-net --allow-read --allow-env --allow-run --unstable
 
 import { autoDetectClient, readAllItems } from '../client.ts';
 import { AppsV1Api } from "../builtin/apps@v1/mod.ts";
@@ -15,5 +15,5 @@ for await (const deploy of readAllItems(t => appsApi.getDeploymentListForAllName
 }
 
 const coreApi = new CoreV1Api(restClient);
-const nodes = await coreApi.getNode('pet-ausbox');
-console.log(nodes.status);
+const {items: [node]} = await coreApi.getNodeList({limit: 1});
+console.log(node.status);

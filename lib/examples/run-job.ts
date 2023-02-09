@@ -1,12 +1,13 @@
-#!/usr/bin/env -S deno run --allow-net --allow-read --allow-env --allow-run
+#!/usr/bin/env -S deno run --allow-net --allow-read --allow-env --allow-run --unstable
 
 import { autoDetectClient } from "../client.ts";
 import { CoreV1Api } from "../builtin/core@v1/mod.ts";
 import { BatchV1Api } from "../builtin/batch@v1/mod.ts";
 
 const restClient = await autoDetectClient();
-const batchApi = new BatchV1Api(restClient).namespace("dust-poc");
-const coreApi = new CoreV1Api(restClient).namespace("dust-poc");
+const namespace = restClient.defaultNamespace ?? 'default';
+const batchApi = new BatchV1Api(restClient).namespace(namespace);
+const coreApi = new CoreV1Api(restClient).namespace(namespace);
 
 const job = await batchApi.createJob({
   metadata: {
