@@ -44,21 +44,12 @@ export class StorageV1Api {
     return resp.pipeThrough(new c.WatchEventTransformer(StorageV1.toCSIDriver, MetaV1.toStatus));
   }
 
-  async createCSIDriver(body: StorageV1.CSIDriver, opts: {
-    dryRun?: string;
-    fieldManager?: string;
-    fieldValidation?: string;
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
-    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
-    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
-    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
+  async createCSIDriver(body: StorageV1.CSIDriver, opts: operations.PutOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "POST",
       path: `${this.#root}csidrivers`,
       expectJson: true,
-      querystring: query,
+      querystring: operations.formatPutOpts(opts),
       bodyJson: StorageV1.fromCSIDriver(body),
       abortSignal: opts.abortSignal,
     });
@@ -97,44 +88,24 @@ export class StorageV1Api {
     return StorageV1.toCSIDriver(resp);
   }
 
-  async replaceCSIDriver(name: string, body: StorageV1.CSIDriver, opts: {
-    dryRun?: string;
-    fieldManager?: string;
-    fieldValidation?: string;
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
-    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
-    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
-    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
+  async replaceCSIDriver(name: string, body: StorageV1.CSIDriver, opts: operations.PutOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PUT",
       path: `${this.#root}csidrivers/${name}`,
       expectJson: true,
-      querystring: query,
+      querystring: operations.formatPutOpts(opts),
       bodyJson: StorageV1.fromCSIDriver(body),
       abortSignal: opts.abortSignal,
     });
     return StorageV1.toCSIDriver(resp);
   }
 
-  async patchCSIDriver(name: string, body: StorageV1.CSIDriver, opts: {
-    dryRun?: string;
-    fieldManager?: string;
-    fieldValidation?: string;
-    force?: boolean;
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
-    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
-    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
-    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
-    if (opts["force"] != null) query.append("force", opts["force"] ? '1' : '0');
+  async patchCSIDriver(name: string, type: c.PatchType, body: StorageV1.CSIDriver | c.JsonPatch, opts: operations.PatchOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}csidrivers/${name}`,
       expectJson: true,
-      querystring: query,
+      querystring: operations.formatPatchOpts(opts),
       contentType: c.getPatchContentType(type),
       bodyJson: Array.isArray(body) ? body : StorageV1.fromCSIDriver(body),
       abortSignal: opts.abortSignal,
@@ -165,21 +136,12 @@ export class StorageV1Api {
     return resp.pipeThrough(new c.WatchEventTransformer(StorageV1.toCSINode, MetaV1.toStatus));
   }
 
-  async createCSINode(body: StorageV1.CSINode, opts: {
-    dryRun?: string;
-    fieldManager?: string;
-    fieldValidation?: string;
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
-    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
-    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
-    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
+  async createCSINode(body: StorageV1.CSINode, opts: operations.PutOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "POST",
       path: `${this.#root}csinodes`,
       expectJson: true,
-      querystring: query,
+      querystring: operations.formatPutOpts(opts),
       bodyJson: StorageV1.fromCSINode(body),
       abortSignal: opts.abortSignal,
     });
@@ -218,44 +180,24 @@ export class StorageV1Api {
     return StorageV1.toCSINode(resp);
   }
 
-  async replaceCSINode(name: string, body: StorageV1.CSINode, opts: {
-    dryRun?: string;
-    fieldManager?: string;
-    fieldValidation?: string;
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
-    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
-    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
-    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
+  async replaceCSINode(name: string, body: StorageV1.CSINode, opts: operations.PutOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PUT",
       path: `${this.#root}csinodes/${name}`,
       expectJson: true,
-      querystring: query,
+      querystring: operations.formatPutOpts(opts),
       bodyJson: StorageV1.fromCSINode(body),
       abortSignal: opts.abortSignal,
     });
     return StorageV1.toCSINode(resp);
   }
 
-  async patchCSINode(name: string, body: StorageV1.CSINode, opts: {
-    dryRun?: string;
-    fieldManager?: string;
-    fieldValidation?: string;
-    force?: boolean;
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
-    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
-    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
-    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
-    if (opts["force"] != null) query.append("force", opts["force"] ? '1' : '0');
+  async patchCSINode(name: string, type: c.PatchType, body: StorageV1.CSINode | c.JsonPatch, opts: operations.PatchOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}csinodes/${name}`,
       expectJson: true,
-      querystring: query,
+      querystring: operations.formatPatchOpts(opts),
       contentType: c.getPatchContentType(type),
       bodyJson: Array.isArray(body) ? body : StorageV1.fromCSINode(body),
       abortSignal: opts.abortSignal,
@@ -309,21 +251,12 @@ export class StorageV1Api {
     return resp.pipeThrough(new c.WatchEventTransformer(StorageV1.toStorageClass, MetaV1.toStatus));
   }
 
-  async createStorageClass(body: StorageV1.StorageClass, opts: {
-    dryRun?: string;
-    fieldManager?: string;
-    fieldValidation?: string;
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
-    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
-    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
-    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
+  async createStorageClass(body: StorageV1.StorageClass, opts: operations.PutOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "POST",
       path: `${this.#root}storageclasses`,
       expectJson: true,
-      querystring: query,
+      querystring: operations.formatPutOpts(opts),
       bodyJson: StorageV1.fromStorageClass(body),
       abortSignal: opts.abortSignal,
     });
@@ -362,44 +295,24 @@ export class StorageV1Api {
     return StorageV1.toStorageClass(resp);
   }
 
-  async replaceStorageClass(name: string, body: StorageV1.StorageClass, opts: {
-    dryRun?: string;
-    fieldManager?: string;
-    fieldValidation?: string;
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
-    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
-    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
-    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
+  async replaceStorageClass(name: string, body: StorageV1.StorageClass, opts: operations.PutOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PUT",
       path: `${this.#root}storageclasses/${name}`,
       expectJson: true,
-      querystring: query,
+      querystring: operations.formatPutOpts(opts),
       bodyJson: StorageV1.fromStorageClass(body),
       abortSignal: opts.abortSignal,
     });
     return StorageV1.toStorageClass(resp);
   }
 
-  async patchStorageClass(name: string, body: StorageV1.StorageClass, opts: {
-    dryRun?: string;
-    fieldManager?: string;
-    fieldValidation?: string;
-    force?: boolean;
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
-    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
-    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
-    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
-    if (opts["force"] != null) query.append("force", opts["force"] ? '1' : '0');
+  async patchStorageClass(name: string, type: c.PatchType, body: StorageV1.StorageClass | c.JsonPatch, opts: operations.PatchOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}storageclasses/${name}`,
       expectJson: true,
-      querystring: query,
+      querystring: operations.formatPatchOpts(opts),
       contentType: c.getPatchContentType(type),
       bodyJson: Array.isArray(body) ? body : StorageV1.fromStorageClass(body),
       abortSignal: opts.abortSignal,
@@ -430,21 +343,12 @@ export class StorageV1Api {
     return resp.pipeThrough(new c.WatchEventTransformer(StorageV1.toVolumeAttachment, MetaV1.toStatus));
   }
 
-  async createVolumeAttachment(body: StorageV1.VolumeAttachment, opts: {
-    dryRun?: string;
-    fieldManager?: string;
-    fieldValidation?: string;
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
-    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
-    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
-    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
+  async createVolumeAttachment(body: StorageV1.VolumeAttachment, opts: operations.PutOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "POST",
       path: `${this.#root}volumeattachments`,
       expectJson: true,
-      querystring: query,
+      querystring: operations.formatPutOpts(opts),
       bodyJson: StorageV1.fromVolumeAttachment(body),
       abortSignal: opts.abortSignal,
     });
@@ -483,44 +387,24 @@ export class StorageV1Api {
     return StorageV1.toVolumeAttachment(resp);
   }
 
-  async replaceVolumeAttachment(name: string, body: StorageV1.VolumeAttachment, opts: {
-    dryRun?: string;
-    fieldManager?: string;
-    fieldValidation?: string;
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
-    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
-    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
-    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
+  async replaceVolumeAttachment(name: string, body: StorageV1.VolumeAttachment, opts: operations.PutOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PUT",
       path: `${this.#root}volumeattachments/${name}`,
       expectJson: true,
-      querystring: query,
+      querystring: operations.formatPutOpts(opts),
       bodyJson: StorageV1.fromVolumeAttachment(body),
       abortSignal: opts.abortSignal,
     });
     return StorageV1.toVolumeAttachment(resp);
   }
 
-  async patchVolumeAttachment(name: string, body: StorageV1.VolumeAttachment, opts: {
-    dryRun?: string;
-    fieldManager?: string;
-    fieldValidation?: string;
-    force?: boolean;
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
-    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
-    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
-    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
-    if (opts["force"] != null) query.append("force", opts["force"] ? '1' : '0');
+  async patchVolumeAttachment(name: string, type: c.PatchType, body: StorageV1.VolumeAttachment | c.JsonPatch, opts: operations.PatchOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}volumeattachments/${name}`,
       expectJson: true,
-      querystring: query,
+      querystring: operations.formatPatchOpts(opts),
       contentType: c.getPatchContentType(type),
       bodyJson: Array.isArray(body) ? body : StorageV1.fromVolumeAttachment(body),
       abortSignal: opts.abortSignal,
@@ -538,44 +422,24 @@ export class StorageV1Api {
     return StorageV1.toVolumeAttachment(resp);
   }
 
-  async replaceVolumeAttachmentStatus(name: string, body: StorageV1.VolumeAttachment, opts: {
-    dryRun?: string;
-    fieldManager?: string;
-    fieldValidation?: string;
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
-    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
-    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
-    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
+  async replaceVolumeAttachmentStatus(name: string, body: StorageV1.VolumeAttachment, opts: operations.PutOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PUT",
       path: `${this.#root}volumeattachments/${name}/status`,
       expectJson: true,
-      querystring: query,
+      querystring: operations.formatPutOpts(opts),
       bodyJson: StorageV1.fromVolumeAttachment(body),
       abortSignal: opts.abortSignal,
     });
     return StorageV1.toVolumeAttachment(resp);
   }
 
-  async patchVolumeAttachmentStatus(name: string, body: StorageV1.VolumeAttachment, opts: {
-    dryRun?: string;
-    fieldManager?: string;
-    fieldValidation?: string;
-    force?: boolean;
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
-    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
-    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
-    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
-    if (opts["force"] != null) query.append("force", opts["force"] ? '1' : '0');
+  async patchVolumeAttachmentStatus(name: string, type: c.PatchType, body: StorageV1.VolumeAttachment | c.JsonPatch, opts: operations.PatchOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}volumeattachments/${name}/status`,
       expectJson: true,
-      querystring: query,
+      querystring: operations.formatPatchOpts(opts),
       contentType: c.getPatchContentType(type),
       bodyJson: Array.isArray(body) ? body : StorageV1.fromVolumeAttachment(body),
       abortSignal: opts.abortSignal,
@@ -616,21 +480,12 @@ export class StorageV1NamespacedApi {
     return resp.pipeThrough(new c.WatchEventTransformer(StorageV1.toCSIStorageCapacity, MetaV1.toStatus));
   }
 
-  async createCSIStorageCapacity(body: StorageV1.CSIStorageCapacity, opts: {
-    dryRun?: string;
-    fieldManager?: string;
-    fieldValidation?: string;
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
-    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
-    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
-    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
+  async createCSIStorageCapacity(body: StorageV1.CSIStorageCapacity, opts: operations.PutOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "POST",
       path: `${this.#root}csistoragecapacities`,
       expectJson: true,
-      querystring: query,
+      querystring: operations.formatPutOpts(opts),
       bodyJson: StorageV1.fromCSIStorageCapacity(body),
       abortSignal: opts.abortSignal,
     });
@@ -669,44 +524,24 @@ export class StorageV1NamespacedApi {
     return MetaV1.toStatus(resp);
   }
 
-  async replaceCSIStorageCapacity(name: string, body: StorageV1.CSIStorageCapacity, opts: {
-    dryRun?: string;
-    fieldManager?: string;
-    fieldValidation?: string;
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
-    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
-    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
-    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
+  async replaceCSIStorageCapacity(name: string, body: StorageV1.CSIStorageCapacity, opts: operations.PutOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PUT",
       path: `${this.#root}csistoragecapacities/${name}`,
       expectJson: true,
-      querystring: query,
+      querystring: operations.formatPutOpts(opts),
       bodyJson: StorageV1.fromCSIStorageCapacity(body),
       abortSignal: opts.abortSignal,
     });
     return StorageV1.toCSIStorageCapacity(resp);
   }
 
-  async patchCSIStorageCapacity(name: string, body: StorageV1.CSIStorageCapacity, opts: {
-    dryRun?: string;
-    fieldManager?: string;
-    fieldValidation?: string;
-    force?: boolean;
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
-    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
-    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
-    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
-    if (opts["force"] != null) query.append("force", opts["force"] ? '1' : '0');
+  async patchCSIStorageCapacity(name: string, type: c.PatchType, body: StorageV1.CSIStorageCapacity | c.JsonPatch, opts: operations.PatchOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}csistoragecapacities/${name}`,
       expectJson: true,
-      querystring: query,
+      querystring: operations.formatPatchOpts(opts),
       contentType: c.getPatchContentType(type),
       bodyJson: Array.isArray(body) ? body : StorageV1.fromCSIStorageCapacity(body),
       abortSignal: opts.abortSignal,

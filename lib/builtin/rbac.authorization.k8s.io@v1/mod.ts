@@ -44,21 +44,12 @@ export class RbacAuthorizationV1Api {
     return resp.pipeThrough(new c.WatchEventTransformer(RbacAuthorizationV1.toClusterRoleBinding, MetaV1.toStatus));
   }
 
-  async createClusterRoleBinding(body: RbacAuthorizationV1.ClusterRoleBinding, opts: {
-    dryRun?: string;
-    fieldManager?: string;
-    fieldValidation?: string;
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
-    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
-    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
-    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
+  async createClusterRoleBinding(body: RbacAuthorizationV1.ClusterRoleBinding, opts: operations.PutOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "POST",
       path: `${this.#root}clusterrolebindings`,
       expectJson: true,
-      querystring: query,
+      querystring: operations.formatPutOpts(opts),
       bodyJson: RbacAuthorizationV1.fromClusterRoleBinding(body),
       abortSignal: opts.abortSignal,
     });
@@ -97,44 +88,24 @@ export class RbacAuthorizationV1Api {
     return MetaV1.toStatus(resp);
   }
 
-  async replaceClusterRoleBinding(name: string, body: RbacAuthorizationV1.ClusterRoleBinding, opts: {
-    dryRun?: string;
-    fieldManager?: string;
-    fieldValidation?: string;
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
-    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
-    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
-    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
+  async replaceClusterRoleBinding(name: string, body: RbacAuthorizationV1.ClusterRoleBinding, opts: operations.PutOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PUT",
       path: `${this.#root}clusterrolebindings/${name}`,
       expectJson: true,
-      querystring: query,
+      querystring: operations.formatPutOpts(opts),
       bodyJson: RbacAuthorizationV1.fromClusterRoleBinding(body),
       abortSignal: opts.abortSignal,
     });
     return RbacAuthorizationV1.toClusterRoleBinding(resp);
   }
 
-  async patchClusterRoleBinding(name: string, body: RbacAuthorizationV1.ClusterRoleBinding, opts: {
-    dryRun?: string;
-    fieldManager?: string;
-    fieldValidation?: string;
-    force?: boolean;
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
-    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
-    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
-    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
-    if (opts["force"] != null) query.append("force", opts["force"] ? '1' : '0');
+  async patchClusterRoleBinding(name: string, type: c.PatchType, body: RbacAuthorizationV1.ClusterRoleBinding | c.JsonPatch, opts: operations.PatchOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}clusterrolebindings/${name}`,
       expectJson: true,
-      querystring: query,
+      querystring: operations.formatPatchOpts(opts),
       contentType: c.getPatchContentType(type),
       bodyJson: Array.isArray(body) ? body : RbacAuthorizationV1.fromClusterRoleBinding(body),
       abortSignal: opts.abortSignal,
@@ -165,21 +136,12 @@ export class RbacAuthorizationV1Api {
     return resp.pipeThrough(new c.WatchEventTransformer(RbacAuthorizationV1.toClusterRole, MetaV1.toStatus));
   }
 
-  async createClusterRole(body: RbacAuthorizationV1.ClusterRole, opts: {
-    dryRun?: string;
-    fieldManager?: string;
-    fieldValidation?: string;
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
-    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
-    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
-    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
+  async createClusterRole(body: RbacAuthorizationV1.ClusterRole, opts: operations.PutOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "POST",
       path: `${this.#root}clusterroles`,
       expectJson: true,
-      querystring: query,
+      querystring: operations.formatPutOpts(opts),
       bodyJson: RbacAuthorizationV1.fromClusterRole(body),
       abortSignal: opts.abortSignal,
     });
@@ -218,44 +180,24 @@ export class RbacAuthorizationV1Api {
     return MetaV1.toStatus(resp);
   }
 
-  async replaceClusterRole(name: string, body: RbacAuthorizationV1.ClusterRole, opts: {
-    dryRun?: string;
-    fieldManager?: string;
-    fieldValidation?: string;
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
-    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
-    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
-    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
+  async replaceClusterRole(name: string, body: RbacAuthorizationV1.ClusterRole, opts: operations.PutOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PUT",
       path: `${this.#root}clusterroles/${name}`,
       expectJson: true,
-      querystring: query,
+      querystring: operations.formatPutOpts(opts),
       bodyJson: RbacAuthorizationV1.fromClusterRole(body),
       abortSignal: opts.abortSignal,
     });
     return RbacAuthorizationV1.toClusterRole(resp);
   }
 
-  async patchClusterRole(name: string, body: RbacAuthorizationV1.ClusterRole, opts: {
-    dryRun?: string;
-    fieldManager?: string;
-    fieldValidation?: string;
-    force?: boolean;
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
-    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
-    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
-    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
-    if (opts["force"] != null) query.append("force", opts["force"] ? '1' : '0');
+  async patchClusterRole(name: string, type: c.PatchType, body: RbacAuthorizationV1.ClusterRole | c.JsonPatch, opts: operations.PatchOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}clusterroles/${name}`,
       expectJson: true,
-      querystring: query,
+      querystring: operations.formatPatchOpts(opts),
       contentType: c.getPatchContentType(type),
       bodyJson: Array.isArray(body) ? body : RbacAuthorizationV1.fromClusterRole(body),
       abortSignal: opts.abortSignal,
@@ -342,21 +284,12 @@ export class RbacAuthorizationV1NamespacedApi {
     return resp.pipeThrough(new c.WatchEventTransformer(RbacAuthorizationV1.toRoleBinding, MetaV1.toStatus));
   }
 
-  async createRoleBinding(body: RbacAuthorizationV1.RoleBinding, opts: {
-    dryRun?: string;
-    fieldManager?: string;
-    fieldValidation?: string;
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
-    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
-    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
-    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
+  async createRoleBinding(body: RbacAuthorizationV1.RoleBinding, opts: operations.PutOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "POST",
       path: `${this.#root}rolebindings`,
       expectJson: true,
-      querystring: query,
+      querystring: operations.formatPutOpts(opts),
       bodyJson: RbacAuthorizationV1.fromRoleBinding(body),
       abortSignal: opts.abortSignal,
     });
@@ -395,44 +328,24 @@ export class RbacAuthorizationV1NamespacedApi {
     return MetaV1.toStatus(resp);
   }
 
-  async replaceRoleBinding(name: string, body: RbacAuthorizationV1.RoleBinding, opts: {
-    dryRun?: string;
-    fieldManager?: string;
-    fieldValidation?: string;
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
-    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
-    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
-    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
+  async replaceRoleBinding(name: string, body: RbacAuthorizationV1.RoleBinding, opts: operations.PutOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PUT",
       path: `${this.#root}rolebindings/${name}`,
       expectJson: true,
-      querystring: query,
+      querystring: operations.formatPutOpts(opts),
       bodyJson: RbacAuthorizationV1.fromRoleBinding(body),
       abortSignal: opts.abortSignal,
     });
     return RbacAuthorizationV1.toRoleBinding(resp);
   }
 
-  async patchRoleBinding(name: string, body: RbacAuthorizationV1.RoleBinding, opts: {
-    dryRun?: string;
-    fieldManager?: string;
-    fieldValidation?: string;
-    force?: boolean;
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
-    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
-    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
-    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
-    if (opts["force"] != null) query.append("force", opts["force"] ? '1' : '0');
+  async patchRoleBinding(name: string, type: c.PatchType, body: RbacAuthorizationV1.RoleBinding | c.JsonPatch, opts: operations.PatchOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}rolebindings/${name}`,
       expectJson: true,
-      querystring: query,
+      querystring: operations.formatPatchOpts(opts),
       contentType: c.getPatchContentType(type),
       bodyJson: Array.isArray(body) ? body : RbacAuthorizationV1.fromRoleBinding(body),
       abortSignal: opts.abortSignal,
@@ -463,21 +376,12 @@ export class RbacAuthorizationV1NamespacedApi {
     return resp.pipeThrough(new c.WatchEventTransformer(RbacAuthorizationV1.toRole, MetaV1.toStatus));
   }
 
-  async createRole(body: RbacAuthorizationV1.Role, opts: {
-    dryRun?: string;
-    fieldManager?: string;
-    fieldValidation?: string;
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
-    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
-    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
-    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
+  async createRole(body: RbacAuthorizationV1.Role, opts: operations.PutOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "POST",
       path: `${this.#root}roles`,
       expectJson: true,
-      querystring: query,
+      querystring: operations.formatPutOpts(opts),
       bodyJson: RbacAuthorizationV1.fromRole(body),
       abortSignal: opts.abortSignal,
     });
@@ -516,44 +420,24 @@ export class RbacAuthorizationV1NamespacedApi {
     return MetaV1.toStatus(resp);
   }
 
-  async replaceRole(name: string, body: RbacAuthorizationV1.Role, opts: {
-    dryRun?: string;
-    fieldManager?: string;
-    fieldValidation?: string;
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
-    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
-    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
-    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
+  async replaceRole(name: string, body: RbacAuthorizationV1.Role, opts: operations.PutOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PUT",
       path: `${this.#root}roles/${name}`,
       expectJson: true,
-      querystring: query,
+      querystring: operations.formatPutOpts(opts),
       bodyJson: RbacAuthorizationV1.fromRole(body),
       abortSignal: opts.abortSignal,
     });
     return RbacAuthorizationV1.toRole(resp);
   }
 
-  async patchRole(name: string, body: RbacAuthorizationV1.Role, opts: {
-    dryRun?: string;
-    fieldManager?: string;
-    fieldValidation?: string;
-    force?: boolean;
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
-    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
-    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
-    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
-    if (opts["force"] != null) query.append("force", opts["force"] ? '1' : '0');
+  async patchRole(name: string, type: c.PatchType, body: RbacAuthorizationV1.Role | c.JsonPatch, opts: operations.PatchOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}roles/${name}`,
       expectJson: true,
-      querystring: query,
+      querystring: operations.formatPatchOpts(opts),
       contentType: c.getPatchContentType(type),
       bodyJson: Array.isArray(body) ? body : RbacAuthorizationV1.fromRole(body),
       abortSignal: opts.abortSignal,

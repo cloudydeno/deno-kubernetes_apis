@@ -100,21 +100,12 @@ export class BatchV1NamespacedApi {
     return resp.pipeThrough(new c.WatchEventTransformer(BatchV1.toCronJob, MetaV1.toStatus));
   }
 
-  async createCronJob(body: BatchV1.CronJob, opts: {
-    dryRun?: string;
-    fieldManager?: string;
-    fieldValidation?: string;
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
-    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
-    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
-    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
+  async createCronJob(body: BatchV1.CronJob, opts: operations.PutOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "POST",
       path: `${this.#root}cronjobs`,
       expectJson: true,
-      querystring: query,
+      querystring: operations.formatPutOpts(opts),
       bodyJson: BatchV1.fromCronJob(body),
       abortSignal: opts.abortSignal,
     });
@@ -153,44 +144,24 @@ export class BatchV1NamespacedApi {
     return MetaV1.toStatus(resp);
   }
 
-  async replaceCronJob(name: string, body: BatchV1.CronJob, opts: {
-    dryRun?: string;
-    fieldManager?: string;
-    fieldValidation?: string;
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
-    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
-    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
-    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
+  async replaceCronJob(name: string, body: BatchV1.CronJob, opts: operations.PutOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PUT",
       path: `${this.#root}cronjobs/${name}`,
       expectJson: true,
-      querystring: query,
+      querystring: operations.formatPutOpts(opts),
       bodyJson: BatchV1.fromCronJob(body),
       abortSignal: opts.abortSignal,
     });
     return BatchV1.toCronJob(resp);
   }
 
-  async patchCronJob(name: string, body: BatchV1.CronJob, opts: {
-    dryRun?: string;
-    fieldManager?: string;
-    fieldValidation?: string;
-    force?: boolean;
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
-    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
-    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
-    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
-    if (opts["force"] != null) query.append("force", opts["force"] ? '1' : '0');
+  async patchCronJob(name: string, type: c.PatchType, body: BatchV1.CronJob | c.JsonPatch, opts: operations.PatchOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}cronjobs/${name}`,
       expectJson: true,
-      querystring: query,
+      querystring: operations.formatPatchOpts(opts),
       contentType: c.getPatchContentType(type),
       bodyJson: Array.isArray(body) ? body : BatchV1.fromCronJob(body),
       abortSignal: opts.abortSignal,
@@ -208,44 +179,24 @@ export class BatchV1NamespacedApi {
     return BatchV1.toCronJob(resp);
   }
 
-  async replaceCronJobStatus(name: string, body: BatchV1.CronJob, opts: {
-    dryRun?: string;
-    fieldManager?: string;
-    fieldValidation?: string;
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
-    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
-    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
-    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
+  async replaceCronJobStatus(name: string, body: BatchV1.CronJob, opts: operations.PutOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PUT",
       path: `${this.#root}cronjobs/${name}/status`,
       expectJson: true,
-      querystring: query,
+      querystring: operations.formatPutOpts(opts),
       bodyJson: BatchV1.fromCronJob(body),
       abortSignal: opts.abortSignal,
     });
     return BatchV1.toCronJob(resp);
   }
 
-  async patchCronJobStatus(name: string, body: BatchV1.CronJob, opts: {
-    dryRun?: string;
-    fieldManager?: string;
-    fieldValidation?: string;
-    force?: boolean;
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
-    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
-    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
-    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
-    if (opts["force"] != null) query.append("force", opts["force"] ? '1' : '0');
+  async patchCronJobStatus(name: string, type: c.PatchType, body: BatchV1.CronJob | c.JsonPatch, opts: operations.PatchOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}cronjobs/${name}/status`,
       expectJson: true,
-      querystring: query,
+      querystring: operations.formatPatchOpts(opts),
       contentType: c.getPatchContentType(type),
       bodyJson: Array.isArray(body) ? body : BatchV1.fromCronJob(body),
       abortSignal: opts.abortSignal,
@@ -276,21 +227,12 @@ export class BatchV1NamespacedApi {
     return resp.pipeThrough(new c.WatchEventTransformer(BatchV1.toJob, MetaV1.toStatus));
   }
 
-  async createJob(body: BatchV1.Job, opts: {
-    dryRun?: string;
-    fieldManager?: string;
-    fieldValidation?: string;
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
-    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
-    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
-    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
+  async createJob(body: BatchV1.Job, opts: operations.PutOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "POST",
       path: `${this.#root}jobs`,
       expectJson: true,
-      querystring: query,
+      querystring: operations.formatPutOpts(opts),
       bodyJson: BatchV1.fromJob(body),
       abortSignal: opts.abortSignal,
     });
@@ -329,44 +271,24 @@ export class BatchV1NamespacedApi {
     return BatchV1.toJob(resp);
   }
 
-  async replaceJob(name: string, body: BatchV1.Job, opts: {
-    dryRun?: string;
-    fieldManager?: string;
-    fieldValidation?: string;
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
-    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
-    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
-    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
+  async replaceJob(name: string, body: BatchV1.Job, opts: operations.PutOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PUT",
       path: `${this.#root}jobs/${name}`,
       expectJson: true,
-      querystring: query,
+      querystring: operations.formatPutOpts(opts),
       bodyJson: BatchV1.fromJob(body),
       abortSignal: opts.abortSignal,
     });
     return BatchV1.toJob(resp);
   }
 
-  async patchJob(name: string, body: BatchV1.Job, opts: {
-    dryRun?: string;
-    fieldManager?: string;
-    fieldValidation?: string;
-    force?: boolean;
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
-    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
-    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
-    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
-    if (opts["force"] != null) query.append("force", opts["force"] ? '1' : '0');
+  async patchJob(name: string, type: c.PatchType, body: BatchV1.Job | c.JsonPatch, opts: operations.PatchOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}jobs/${name}`,
       expectJson: true,
-      querystring: query,
+      querystring: operations.formatPatchOpts(opts),
       contentType: c.getPatchContentType(type),
       bodyJson: Array.isArray(body) ? body : BatchV1.fromJob(body),
       abortSignal: opts.abortSignal,
@@ -384,44 +306,24 @@ export class BatchV1NamespacedApi {
     return BatchV1.toJob(resp);
   }
 
-  async replaceJobStatus(name: string, body: BatchV1.Job, opts: {
-    dryRun?: string;
-    fieldManager?: string;
-    fieldValidation?: string;
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
-    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
-    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
-    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
+  async replaceJobStatus(name: string, body: BatchV1.Job, opts: operations.PutOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PUT",
       path: `${this.#root}jobs/${name}/status`,
       expectJson: true,
-      querystring: query,
+      querystring: operations.formatPutOpts(opts),
       bodyJson: BatchV1.fromJob(body),
       abortSignal: opts.abortSignal,
     });
     return BatchV1.toJob(resp);
   }
 
-  async patchJobStatus(name: string, body: BatchV1.Job, opts: {
-    dryRun?: string;
-    fieldManager?: string;
-    fieldValidation?: string;
-    force?: boolean;
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
-    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
-    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
-    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
-    if (opts["force"] != null) query.append("force", opts["force"] ? '1' : '0');
+  async patchJobStatus(name: string, type: c.PatchType, body: BatchV1.Job | c.JsonPatch, opts: operations.PatchOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}jobs/${name}/status`,
       expectJson: true,
-      querystring: query,
+      querystring: operations.formatPatchOpts(opts),
       contentType: c.getPatchContentType(type),
       bodyJson: Array.isArray(body) ? body : BatchV1.fromJob(body),
       abortSignal: opts.abortSignal,

@@ -36,21 +36,12 @@ export class CertificatesV1Api {
     return resp.pipeThrough(new c.WatchEventTransformer(CertificatesV1.toCertificateSigningRequest, MetaV1.toStatus));
   }
 
-  async createCertificateSigningRequest(body: CertificatesV1.CertificateSigningRequest, opts: {
-    dryRun?: string;
-    fieldManager?: string;
-    fieldValidation?: string;
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
-    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
-    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
-    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
+  async createCertificateSigningRequest(body: CertificatesV1.CertificateSigningRequest, opts: operations.PutOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "POST",
       path: `${this.#root}certificatesigningrequests`,
       expectJson: true,
-      querystring: query,
+      querystring: operations.formatPutOpts(opts),
       bodyJson: CertificatesV1.fromCertificateSigningRequest(body),
       abortSignal: opts.abortSignal,
     });
@@ -89,44 +80,24 @@ export class CertificatesV1Api {
     return MetaV1.toStatus(resp);
   }
 
-  async replaceCertificateSigningRequest(name: string, body: CertificatesV1.CertificateSigningRequest, opts: {
-    dryRun?: string;
-    fieldManager?: string;
-    fieldValidation?: string;
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
-    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
-    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
-    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
+  async replaceCertificateSigningRequest(name: string, body: CertificatesV1.CertificateSigningRequest, opts: operations.PutOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PUT",
       path: `${this.#root}certificatesigningrequests/${name}`,
       expectJson: true,
-      querystring: query,
+      querystring: operations.formatPutOpts(opts),
       bodyJson: CertificatesV1.fromCertificateSigningRequest(body),
       abortSignal: opts.abortSignal,
     });
     return CertificatesV1.toCertificateSigningRequest(resp);
   }
 
-  async patchCertificateSigningRequest(name: string, body: CertificatesV1.CertificateSigningRequest, opts: {
-    dryRun?: string;
-    fieldManager?: string;
-    fieldValidation?: string;
-    force?: boolean;
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
-    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
-    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
-    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
-    if (opts["force"] != null) query.append("force", opts["force"] ? '1' : '0');
+  async patchCertificateSigningRequest(name: string, type: c.PatchType, body: CertificatesV1.CertificateSigningRequest | c.JsonPatch, opts: operations.PatchOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}certificatesigningrequests/${name}`,
       expectJson: true,
-      querystring: query,
+      querystring: operations.formatPatchOpts(opts),
       contentType: c.getPatchContentType(type),
       bodyJson: Array.isArray(body) ? body : CertificatesV1.fromCertificateSigningRequest(body),
       abortSignal: opts.abortSignal,
@@ -144,44 +115,24 @@ export class CertificatesV1Api {
     return CertificatesV1.toCertificateSigningRequest(resp);
   }
 
-  async replaceCertificateSigningRequestApproval(name: string, body: CertificatesV1.CertificateSigningRequest, opts: {
-    dryRun?: string;
-    fieldManager?: string;
-    fieldValidation?: string;
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
-    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
-    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
-    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
+  async replaceCertificateSigningRequestApproval(name: string, body: CertificatesV1.CertificateSigningRequest, opts: operations.PutOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PUT",
       path: `${this.#root}certificatesigningrequests/${name}/approval`,
       expectJson: true,
-      querystring: query,
+      querystring: operations.formatPutOpts(opts),
       bodyJson: CertificatesV1.fromCertificateSigningRequest(body),
       abortSignal: opts.abortSignal,
     });
     return CertificatesV1.toCertificateSigningRequest(resp);
   }
 
-  async patchCertificateSigningRequestApproval(name: string, body: CertificatesV1.CertificateSigningRequest, opts: {
-    dryRun?: string;
-    fieldManager?: string;
-    fieldValidation?: string;
-    force?: boolean;
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
-    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
-    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
-    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
-    if (opts["force"] != null) query.append("force", opts["force"] ? '1' : '0');
+  async patchCertificateSigningRequestApproval(name: string, type: c.PatchType, body: CertificatesV1.CertificateSigningRequest | c.JsonPatch, opts: operations.PatchOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}certificatesigningrequests/${name}/approval`,
       expectJson: true,
-      querystring: query,
+      querystring: operations.formatPatchOpts(opts),
       contentType: c.getPatchContentType(type),
       bodyJson: Array.isArray(body) ? body : CertificatesV1.fromCertificateSigningRequest(body),
       abortSignal: opts.abortSignal,
@@ -199,44 +150,24 @@ export class CertificatesV1Api {
     return CertificatesV1.toCertificateSigningRequest(resp);
   }
 
-  async replaceCertificateSigningRequestStatus(name: string, body: CertificatesV1.CertificateSigningRequest, opts: {
-    dryRun?: string;
-    fieldManager?: string;
-    fieldValidation?: string;
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
-    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
-    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
-    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
+  async replaceCertificateSigningRequestStatus(name: string, body: CertificatesV1.CertificateSigningRequest, opts: operations.PutOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PUT",
       path: `${this.#root}certificatesigningrequests/${name}/status`,
       expectJson: true,
-      querystring: query,
+      querystring: operations.formatPutOpts(opts),
       bodyJson: CertificatesV1.fromCertificateSigningRequest(body),
       abortSignal: opts.abortSignal,
     });
     return CertificatesV1.toCertificateSigningRequest(resp);
   }
 
-  async patchCertificateSigningRequestStatus(name: string, body: CertificatesV1.CertificateSigningRequest, opts: {
-    dryRun?: string;
-    fieldManager?: string;
-    fieldValidation?: string;
-    force?: boolean;
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
-    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
-    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
-    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
-    if (opts["force"] != null) query.append("force", opts["force"] ? '1' : '0');
+  async patchCertificateSigningRequestStatus(name: string, type: c.PatchType, body: CertificatesV1.CertificateSigningRequest | c.JsonPatch, opts: operations.PatchOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}certificatesigningrequests/${name}/status`,
       expectJson: true,
-      querystring: query,
+      querystring: operations.formatPatchOpts(opts),
       contentType: c.getPatchContentType(type),
       bodyJson: Array.isArray(body) ? body : CertificatesV1.fromCertificateSigningRequest(body),
       abortSignal: opts.abortSignal,

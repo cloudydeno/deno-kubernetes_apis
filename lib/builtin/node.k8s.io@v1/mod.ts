@@ -36,21 +36,12 @@ export class NodeV1Api {
     return resp.pipeThrough(new c.WatchEventTransformer(NodeV1.toRuntimeClass, MetaV1.toStatus));
   }
 
-  async createRuntimeClass(body: NodeV1.RuntimeClass, opts: {
-    dryRun?: string;
-    fieldManager?: string;
-    fieldValidation?: string;
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
-    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
-    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
-    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
+  async createRuntimeClass(body: NodeV1.RuntimeClass, opts: operations.PutOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "POST",
       path: `${this.#root}runtimeclasses`,
       expectJson: true,
-      querystring: query,
+      querystring: operations.formatPutOpts(opts),
       bodyJson: NodeV1.fromRuntimeClass(body),
       abortSignal: opts.abortSignal,
     });
@@ -89,44 +80,24 @@ export class NodeV1Api {
     return MetaV1.toStatus(resp);
   }
 
-  async replaceRuntimeClass(name: string, body: NodeV1.RuntimeClass, opts: {
-    dryRun?: string;
-    fieldManager?: string;
-    fieldValidation?: string;
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
-    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
-    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
-    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
+  async replaceRuntimeClass(name: string, body: NodeV1.RuntimeClass, opts: operations.PutOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PUT",
       path: `${this.#root}runtimeclasses/${name}`,
       expectJson: true,
-      querystring: query,
+      querystring: operations.formatPutOpts(opts),
       bodyJson: NodeV1.fromRuntimeClass(body),
       abortSignal: opts.abortSignal,
     });
     return NodeV1.toRuntimeClass(resp);
   }
 
-  async patchRuntimeClass(name: string, body: NodeV1.RuntimeClass, opts: {
-    dryRun?: string;
-    fieldManager?: string;
-    fieldValidation?: string;
-    force?: boolean;
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
-    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
-    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
-    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
-    if (opts["force"] != null) query.append("force", opts["force"] ? '1' : '0');
+  async patchRuntimeClass(name: string, type: c.PatchType, body: NodeV1.RuntimeClass | c.JsonPatch, opts: operations.PatchOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}runtimeclasses/${name}`,
       expectJson: true,
-      querystring: query,
+      querystring: operations.formatPatchOpts(opts),
       contentType: c.getPatchContentType(type),
       bodyJson: Array.isArray(body) ? body : NodeV1.fromRuntimeClass(body),
       abortSignal: opts.abortSignal,

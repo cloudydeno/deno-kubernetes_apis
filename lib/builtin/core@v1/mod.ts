@@ -160,21 +160,12 @@ export class CoreV1Api {
     return resp.pipeThrough(new c.WatchEventTransformer(CoreV1.toNamespace, MetaV1.toStatus));
   }
 
-  async createNamespace(body: CoreV1.Namespace, opts: {
-    dryRun?: string;
-    fieldManager?: string;
-    fieldValidation?: string;
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
-    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
-    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
-    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
+  async createNamespace(body: CoreV1.Namespace, opts: operations.PutOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "POST",
       path: `${this.#root}namespaces`,
       expectJson: true,
-      querystring: query,
+      querystring: operations.formatPutOpts(opts),
       bodyJson: CoreV1.fromNamespace(body),
       abortSignal: opts.abortSignal,
     });
@@ -202,44 +193,24 @@ export class CoreV1Api {
     return MetaV1.toStatus(resp);
   }
 
-  async replaceNamespace(name: string, body: CoreV1.Namespace, opts: {
-    dryRun?: string;
-    fieldManager?: string;
-    fieldValidation?: string;
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
-    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
-    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
-    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
+  async replaceNamespace(name: string, body: CoreV1.Namespace, opts: operations.PutOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PUT",
       path: `${this.#root}namespaces/${name}`,
       expectJson: true,
-      querystring: query,
+      querystring: operations.formatPutOpts(opts),
       bodyJson: CoreV1.fromNamespace(body),
       abortSignal: opts.abortSignal,
     });
     return CoreV1.toNamespace(resp);
   }
 
-  async patchNamespace(name: string, body: CoreV1.Namespace, opts: {
-    dryRun?: string;
-    fieldManager?: string;
-    fieldValidation?: string;
-    force?: boolean;
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
-    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
-    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
-    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
-    if (opts["force"] != null) query.append("force", opts["force"] ? '1' : '0');
+  async patchNamespace(name: string, type: c.PatchType, body: CoreV1.Namespace | c.JsonPatch, opts: operations.PatchOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}namespaces/${name}`,
       expectJson: true,
-      querystring: query,
+      querystring: operations.formatPatchOpts(opts),
       contentType: c.getPatchContentType(type),
       bodyJson: Array.isArray(body) ? body : CoreV1.fromNamespace(body),
       abortSignal: opts.abortSignal,
@@ -247,21 +218,12 @@ export class CoreV1Api {
     return CoreV1.toNamespace(resp);
   }
 
-  async replaceNamespaceFinalize(name: string, body: CoreV1.Namespace, opts: {
-    dryRun?: string;
-    fieldManager?: string;
-    fieldValidation?: string;
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
-    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
-    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
-    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
+  async replaceNamespaceFinalize(name: string, body: CoreV1.Namespace, opts: operations.PutOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PUT",
       path: `${this.#root}namespaces/${name}/finalize`,
       expectJson: true,
-      querystring: query,
+      querystring: operations.formatPutOpts(opts),
       bodyJson: CoreV1.fromNamespace(body),
       abortSignal: opts.abortSignal,
     });
@@ -278,44 +240,24 @@ export class CoreV1Api {
     return CoreV1.toNamespace(resp);
   }
 
-  async replaceNamespaceStatus(name: string, body: CoreV1.Namespace, opts: {
-    dryRun?: string;
-    fieldManager?: string;
-    fieldValidation?: string;
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
-    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
-    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
-    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
+  async replaceNamespaceStatus(name: string, body: CoreV1.Namespace, opts: operations.PutOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PUT",
       path: `${this.#root}namespaces/${name}/status`,
       expectJson: true,
-      querystring: query,
+      querystring: operations.formatPutOpts(opts),
       bodyJson: CoreV1.fromNamespace(body),
       abortSignal: opts.abortSignal,
     });
     return CoreV1.toNamespace(resp);
   }
 
-  async patchNamespaceStatus(name: string, body: CoreV1.Namespace, opts: {
-    dryRun?: string;
-    fieldManager?: string;
-    fieldValidation?: string;
-    force?: boolean;
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
-    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
-    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
-    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
-    if (opts["force"] != null) query.append("force", opts["force"] ? '1' : '0');
+  async patchNamespaceStatus(name: string, type: c.PatchType, body: CoreV1.Namespace | c.JsonPatch, opts: operations.PatchOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}namespaces/${name}/status`,
       expectJson: true,
-      querystring: query,
+      querystring: operations.formatPatchOpts(opts),
       contentType: c.getPatchContentType(type),
       bodyJson: Array.isArray(body) ? body : CoreV1.fromNamespace(body),
       abortSignal: opts.abortSignal,
@@ -346,21 +288,12 @@ export class CoreV1Api {
     return resp.pipeThrough(new c.WatchEventTransformer(CoreV1.toNode, MetaV1.toStatus));
   }
 
-  async createNode(body: CoreV1.Node, opts: {
-    dryRun?: string;
-    fieldManager?: string;
-    fieldValidation?: string;
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
-    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
-    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
-    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
+  async createNode(body: CoreV1.Node, opts: operations.PutOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "POST",
       path: `${this.#root}nodes`,
       expectJson: true,
-      querystring: query,
+      querystring: operations.formatPutOpts(opts),
       bodyJson: CoreV1.fromNode(body),
       abortSignal: opts.abortSignal,
     });
@@ -399,44 +332,24 @@ export class CoreV1Api {
     return MetaV1.toStatus(resp);
   }
 
-  async replaceNode(name: string, body: CoreV1.Node, opts: {
-    dryRun?: string;
-    fieldManager?: string;
-    fieldValidation?: string;
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
-    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
-    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
-    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
+  async replaceNode(name: string, body: CoreV1.Node, opts: operations.PutOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PUT",
       path: `${this.#root}nodes/${name}`,
       expectJson: true,
-      querystring: query,
+      querystring: operations.formatPutOpts(opts),
       bodyJson: CoreV1.fromNode(body),
       abortSignal: opts.abortSignal,
     });
     return CoreV1.toNode(resp);
   }
 
-  async patchNode(name: string, body: CoreV1.Node, opts: {
-    dryRun?: string;
-    fieldManager?: string;
-    fieldValidation?: string;
-    force?: boolean;
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
-    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
-    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
-    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
-    if (opts["force"] != null) query.append("force", opts["force"] ? '1' : '0');
+  async patchNode(name: string, type: c.PatchType, body: CoreV1.Node | c.JsonPatch, opts: operations.PatchOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}nodes/${name}`,
       expectJson: true,
-      querystring: query,
+      querystring: operations.formatPatchOpts(opts),
       contentType: c.getPatchContentType(type),
       bodyJson: Array.isArray(body) ? body : CoreV1.fromNode(body),
       abortSignal: opts.abortSignal,
@@ -465,44 +378,24 @@ export class CoreV1Api {
     return CoreV1.toNode(resp);
   }
 
-  async replaceNodeStatus(name: string, body: CoreV1.Node, opts: {
-    dryRun?: string;
-    fieldManager?: string;
-    fieldValidation?: string;
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
-    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
-    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
-    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
+  async replaceNodeStatus(name: string, body: CoreV1.Node, opts: operations.PutOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PUT",
       path: `${this.#root}nodes/${name}/status`,
       expectJson: true,
-      querystring: query,
+      querystring: operations.formatPutOpts(opts),
       bodyJson: CoreV1.fromNode(body),
       abortSignal: opts.abortSignal,
     });
     return CoreV1.toNode(resp);
   }
 
-  async patchNodeStatus(name: string, body: CoreV1.Node, opts: {
-    dryRun?: string;
-    fieldManager?: string;
-    fieldValidation?: string;
-    force?: boolean;
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
-    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
-    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
-    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
-    if (opts["force"] != null) query.append("force", opts["force"] ? '1' : '0');
+  async patchNodeStatus(name: string, type: c.PatchType, body: CoreV1.Node | c.JsonPatch, opts: operations.PatchOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}nodes/${name}/status`,
       expectJson: true,
-      querystring: query,
+      querystring: operations.formatPatchOpts(opts),
       contentType: c.getPatchContentType(type),
       bodyJson: Array.isArray(body) ? body : CoreV1.fromNode(body),
       abortSignal: opts.abortSignal,
@@ -556,21 +449,12 @@ export class CoreV1Api {
     return resp.pipeThrough(new c.WatchEventTransformer(CoreV1.toPersistentVolume, MetaV1.toStatus));
   }
 
-  async createPersistentVolume(body: CoreV1.PersistentVolume, opts: {
-    dryRun?: string;
-    fieldManager?: string;
-    fieldValidation?: string;
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
-    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
-    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
-    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
+  async createPersistentVolume(body: CoreV1.PersistentVolume, opts: operations.PutOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "POST",
       path: `${this.#root}persistentvolumes`,
       expectJson: true,
-      querystring: query,
+      querystring: operations.formatPutOpts(opts),
       bodyJson: CoreV1.fromPersistentVolume(body),
       abortSignal: opts.abortSignal,
     });
@@ -609,44 +493,24 @@ export class CoreV1Api {
     return CoreV1.toPersistentVolume(resp);
   }
 
-  async replacePersistentVolume(name: string, body: CoreV1.PersistentVolume, opts: {
-    dryRun?: string;
-    fieldManager?: string;
-    fieldValidation?: string;
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
-    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
-    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
-    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
+  async replacePersistentVolume(name: string, body: CoreV1.PersistentVolume, opts: operations.PutOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PUT",
       path: `${this.#root}persistentvolumes/${name}`,
       expectJson: true,
-      querystring: query,
+      querystring: operations.formatPutOpts(opts),
       bodyJson: CoreV1.fromPersistentVolume(body),
       abortSignal: opts.abortSignal,
     });
     return CoreV1.toPersistentVolume(resp);
   }
 
-  async patchPersistentVolume(name: string, body: CoreV1.PersistentVolume, opts: {
-    dryRun?: string;
-    fieldManager?: string;
-    fieldValidation?: string;
-    force?: boolean;
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
-    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
-    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
-    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
-    if (opts["force"] != null) query.append("force", opts["force"] ? '1' : '0');
+  async patchPersistentVolume(name: string, type: c.PatchType, body: CoreV1.PersistentVolume | c.JsonPatch, opts: operations.PatchOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}persistentvolumes/${name}`,
       expectJson: true,
-      querystring: query,
+      querystring: operations.formatPatchOpts(opts),
       contentType: c.getPatchContentType(type),
       bodyJson: Array.isArray(body) ? body : CoreV1.fromPersistentVolume(body),
       abortSignal: opts.abortSignal,
@@ -664,44 +528,24 @@ export class CoreV1Api {
     return CoreV1.toPersistentVolume(resp);
   }
 
-  async replacePersistentVolumeStatus(name: string, body: CoreV1.PersistentVolume, opts: {
-    dryRun?: string;
-    fieldManager?: string;
-    fieldValidation?: string;
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
-    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
-    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
-    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
+  async replacePersistentVolumeStatus(name: string, body: CoreV1.PersistentVolume, opts: operations.PutOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PUT",
       path: `${this.#root}persistentvolumes/${name}/status`,
       expectJson: true,
-      querystring: query,
+      querystring: operations.formatPutOpts(opts),
       bodyJson: CoreV1.fromPersistentVolume(body),
       abortSignal: opts.abortSignal,
     });
     return CoreV1.toPersistentVolume(resp);
   }
 
-  async patchPersistentVolumeStatus(name: string, body: CoreV1.PersistentVolume, opts: {
-    dryRun?: string;
-    fieldManager?: string;
-    fieldValidation?: string;
-    force?: boolean;
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
-    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
-    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
-    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
-    if (opts["force"] != null) query.append("force", opts["force"] ? '1' : '0');
+  async patchPersistentVolumeStatus(name: string, type: c.PatchType, body: CoreV1.PersistentVolume | c.JsonPatch, opts: operations.PatchOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}persistentvolumes/${name}/status`,
       expectJson: true,
-      querystring: query,
+      querystring: operations.formatPatchOpts(opts),
       contentType: c.getPatchContentType(type),
       bodyJson: Array.isArray(body) ? body : CoreV1.fromPersistentVolume(body),
       abortSignal: opts.abortSignal,
@@ -880,21 +724,12 @@ export class CoreV1NamespacedApi {
     this.#root = `/api/v1/namespaces/${namespace}/`;
   }
 
-  async createBinding(body: CoreV1.Binding, opts: {
-    dryRun?: string;
-    fieldManager?: string;
-    fieldValidation?: string;
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
-    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
-    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
-    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
+  async createBinding(body: CoreV1.Binding, opts: operations.PutOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "POST",
       path: `${this.#root}bindings`,
       expectJson: true,
-      querystring: query,
+      querystring: operations.formatPutOpts(opts),
       bodyJson: CoreV1.fromBinding(body),
       abortSignal: opts.abortSignal,
     });
@@ -924,21 +759,12 @@ export class CoreV1NamespacedApi {
     return resp.pipeThrough(new c.WatchEventTransformer(CoreV1.toConfigMap, MetaV1.toStatus));
   }
 
-  async createConfigMap(body: CoreV1.ConfigMap, opts: {
-    dryRun?: string;
-    fieldManager?: string;
-    fieldValidation?: string;
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
-    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
-    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
-    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
+  async createConfigMap(body: CoreV1.ConfigMap, opts: operations.PutOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "POST",
       path: `${this.#root}configmaps`,
       expectJson: true,
-      querystring: query,
+      querystring: operations.formatPutOpts(opts),
       bodyJson: CoreV1.fromConfigMap(body),
       abortSignal: opts.abortSignal,
     });
@@ -977,44 +803,24 @@ export class CoreV1NamespacedApi {
     return MetaV1.toStatus(resp);
   }
 
-  async replaceConfigMap(name: string, body: CoreV1.ConfigMap, opts: {
-    dryRun?: string;
-    fieldManager?: string;
-    fieldValidation?: string;
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
-    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
-    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
-    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
+  async replaceConfigMap(name: string, body: CoreV1.ConfigMap, opts: operations.PutOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PUT",
       path: `${this.#root}configmaps/${name}`,
       expectJson: true,
-      querystring: query,
+      querystring: operations.formatPutOpts(opts),
       bodyJson: CoreV1.fromConfigMap(body),
       abortSignal: opts.abortSignal,
     });
     return CoreV1.toConfigMap(resp);
   }
 
-  async patchConfigMap(name: string, body: CoreV1.ConfigMap, opts: {
-    dryRun?: string;
-    fieldManager?: string;
-    fieldValidation?: string;
-    force?: boolean;
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
-    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
-    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
-    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
-    if (opts["force"] != null) query.append("force", opts["force"] ? '1' : '0');
+  async patchConfigMap(name: string, type: c.PatchType, body: CoreV1.ConfigMap | c.JsonPatch, opts: operations.PatchOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}configmaps/${name}`,
       expectJson: true,
-      querystring: query,
+      querystring: operations.formatPatchOpts(opts),
       contentType: c.getPatchContentType(type),
       bodyJson: Array.isArray(body) ? body : CoreV1.fromConfigMap(body),
       abortSignal: opts.abortSignal,
@@ -1045,21 +851,12 @@ export class CoreV1NamespacedApi {
     return resp.pipeThrough(new c.WatchEventTransformer(CoreV1.toEndpoints, MetaV1.toStatus));
   }
 
-  async createEndpoints(body: CoreV1.Endpoints, opts: {
-    dryRun?: string;
-    fieldManager?: string;
-    fieldValidation?: string;
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
-    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
-    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
-    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
+  async createEndpoints(body: CoreV1.Endpoints, opts: operations.PutOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "POST",
       path: `${this.#root}endpoints`,
       expectJson: true,
-      querystring: query,
+      querystring: operations.formatPutOpts(opts),
       bodyJson: CoreV1.fromEndpoints(body),
       abortSignal: opts.abortSignal,
     });
@@ -1098,44 +895,24 @@ export class CoreV1NamespacedApi {
     return MetaV1.toStatus(resp);
   }
 
-  async replaceEndpoints(name: string, body: CoreV1.Endpoints, opts: {
-    dryRun?: string;
-    fieldManager?: string;
-    fieldValidation?: string;
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
-    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
-    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
-    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
+  async replaceEndpoints(name: string, body: CoreV1.Endpoints, opts: operations.PutOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PUT",
       path: `${this.#root}endpoints/${name}`,
       expectJson: true,
-      querystring: query,
+      querystring: operations.formatPutOpts(opts),
       bodyJson: CoreV1.fromEndpoints(body),
       abortSignal: opts.abortSignal,
     });
     return CoreV1.toEndpoints(resp);
   }
 
-  async patchEndpoints(name: string, body: CoreV1.Endpoints, opts: {
-    dryRun?: string;
-    fieldManager?: string;
-    fieldValidation?: string;
-    force?: boolean;
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
-    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
-    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
-    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
-    if (opts["force"] != null) query.append("force", opts["force"] ? '1' : '0');
+  async patchEndpoints(name: string, type: c.PatchType, body: CoreV1.Endpoints | c.JsonPatch, opts: operations.PatchOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}endpoints/${name}`,
       expectJson: true,
-      querystring: query,
+      querystring: operations.formatPatchOpts(opts),
       contentType: c.getPatchContentType(type),
       bodyJson: Array.isArray(body) ? body : CoreV1.fromEndpoints(body),
       abortSignal: opts.abortSignal,
@@ -1166,21 +943,12 @@ export class CoreV1NamespacedApi {
     return resp.pipeThrough(new c.WatchEventTransformer(CoreV1.toEvent, MetaV1.toStatus));
   }
 
-  async createEvent(body: CoreV1.Event, opts: {
-    dryRun?: string;
-    fieldManager?: string;
-    fieldValidation?: string;
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
-    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
-    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
-    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
+  async createEvent(body: CoreV1.Event, opts: operations.PutOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "POST",
       path: `${this.#root}events`,
       expectJson: true,
-      querystring: query,
+      querystring: operations.formatPutOpts(opts),
       bodyJson: CoreV1.fromEvent(body),
       abortSignal: opts.abortSignal,
     });
@@ -1219,44 +987,24 @@ export class CoreV1NamespacedApi {
     return MetaV1.toStatus(resp);
   }
 
-  async replaceEvent(name: string, body: CoreV1.Event, opts: {
-    dryRun?: string;
-    fieldManager?: string;
-    fieldValidation?: string;
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
-    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
-    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
-    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
+  async replaceEvent(name: string, body: CoreV1.Event, opts: operations.PutOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PUT",
       path: `${this.#root}events/${name}`,
       expectJson: true,
-      querystring: query,
+      querystring: operations.formatPutOpts(opts),
       bodyJson: CoreV1.fromEvent(body),
       abortSignal: opts.abortSignal,
     });
     return CoreV1.toEvent(resp);
   }
 
-  async patchEvent(name: string, body: CoreV1.Event, opts: {
-    dryRun?: string;
-    fieldManager?: string;
-    fieldValidation?: string;
-    force?: boolean;
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
-    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
-    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
-    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
-    if (opts["force"] != null) query.append("force", opts["force"] ? '1' : '0');
+  async patchEvent(name: string, type: c.PatchType, body: CoreV1.Event | c.JsonPatch, opts: operations.PatchOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}events/${name}`,
       expectJson: true,
-      querystring: query,
+      querystring: operations.formatPatchOpts(opts),
       contentType: c.getPatchContentType(type),
       bodyJson: Array.isArray(body) ? body : CoreV1.fromEvent(body),
       abortSignal: opts.abortSignal,
@@ -1287,21 +1035,12 @@ export class CoreV1NamespacedApi {
     return resp.pipeThrough(new c.WatchEventTransformer(CoreV1.toLimitRange, MetaV1.toStatus));
   }
 
-  async createLimitRange(body: CoreV1.LimitRange, opts: {
-    dryRun?: string;
-    fieldManager?: string;
-    fieldValidation?: string;
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
-    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
-    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
-    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
+  async createLimitRange(body: CoreV1.LimitRange, opts: operations.PutOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "POST",
       path: `${this.#root}limitranges`,
       expectJson: true,
-      querystring: query,
+      querystring: operations.formatPutOpts(opts),
       bodyJson: CoreV1.fromLimitRange(body),
       abortSignal: opts.abortSignal,
     });
@@ -1340,44 +1079,24 @@ export class CoreV1NamespacedApi {
     return MetaV1.toStatus(resp);
   }
 
-  async replaceLimitRange(name: string, body: CoreV1.LimitRange, opts: {
-    dryRun?: string;
-    fieldManager?: string;
-    fieldValidation?: string;
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
-    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
-    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
-    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
+  async replaceLimitRange(name: string, body: CoreV1.LimitRange, opts: operations.PutOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PUT",
       path: `${this.#root}limitranges/${name}`,
       expectJson: true,
-      querystring: query,
+      querystring: operations.formatPutOpts(opts),
       bodyJson: CoreV1.fromLimitRange(body),
       abortSignal: opts.abortSignal,
     });
     return CoreV1.toLimitRange(resp);
   }
 
-  async patchLimitRange(name: string, body: CoreV1.LimitRange, opts: {
-    dryRun?: string;
-    fieldManager?: string;
-    fieldValidation?: string;
-    force?: boolean;
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
-    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
-    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
-    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
-    if (opts["force"] != null) query.append("force", opts["force"] ? '1' : '0');
+  async patchLimitRange(name: string, type: c.PatchType, body: CoreV1.LimitRange | c.JsonPatch, opts: operations.PatchOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}limitranges/${name}`,
       expectJson: true,
-      querystring: query,
+      querystring: operations.formatPatchOpts(opts),
       contentType: c.getPatchContentType(type),
       bodyJson: Array.isArray(body) ? body : CoreV1.fromLimitRange(body),
       abortSignal: opts.abortSignal,
@@ -1408,21 +1127,12 @@ export class CoreV1NamespacedApi {
     return resp.pipeThrough(new c.WatchEventTransformer(CoreV1.toPersistentVolumeClaim, MetaV1.toStatus));
   }
 
-  async createPersistentVolumeClaim(body: CoreV1.PersistentVolumeClaim, opts: {
-    dryRun?: string;
-    fieldManager?: string;
-    fieldValidation?: string;
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
-    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
-    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
-    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
+  async createPersistentVolumeClaim(body: CoreV1.PersistentVolumeClaim, opts: operations.PutOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "POST",
       path: `${this.#root}persistentvolumeclaims`,
       expectJson: true,
-      querystring: query,
+      querystring: operations.formatPutOpts(opts),
       bodyJson: CoreV1.fromPersistentVolumeClaim(body),
       abortSignal: opts.abortSignal,
     });
@@ -1461,44 +1171,24 @@ export class CoreV1NamespacedApi {
     return CoreV1.toPersistentVolumeClaim(resp);
   }
 
-  async replacePersistentVolumeClaim(name: string, body: CoreV1.PersistentVolumeClaim, opts: {
-    dryRun?: string;
-    fieldManager?: string;
-    fieldValidation?: string;
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
-    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
-    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
-    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
+  async replacePersistentVolumeClaim(name: string, body: CoreV1.PersistentVolumeClaim, opts: operations.PutOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PUT",
       path: `${this.#root}persistentvolumeclaims/${name}`,
       expectJson: true,
-      querystring: query,
+      querystring: operations.formatPutOpts(opts),
       bodyJson: CoreV1.fromPersistentVolumeClaim(body),
       abortSignal: opts.abortSignal,
     });
     return CoreV1.toPersistentVolumeClaim(resp);
   }
 
-  async patchPersistentVolumeClaim(name: string, body: CoreV1.PersistentVolumeClaim, opts: {
-    dryRun?: string;
-    fieldManager?: string;
-    fieldValidation?: string;
-    force?: boolean;
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
-    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
-    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
-    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
-    if (opts["force"] != null) query.append("force", opts["force"] ? '1' : '0');
+  async patchPersistentVolumeClaim(name: string, type: c.PatchType, body: CoreV1.PersistentVolumeClaim | c.JsonPatch, opts: operations.PatchOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}persistentvolumeclaims/${name}`,
       expectJson: true,
-      querystring: query,
+      querystring: operations.formatPatchOpts(opts),
       contentType: c.getPatchContentType(type),
       bodyJson: Array.isArray(body) ? body : CoreV1.fromPersistentVolumeClaim(body),
       abortSignal: opts.abortSignal,
@@ -1516,44 +1206,24 @@ export class CoreV1NamespacedApi {
     return CoreV1.toPersistentVolumeClaim(resp);
   }
 
-  async replacePersistentVolumeClaimStatus(name: string, body: CoreV1.PersistentVolumeClaim, opts: {
-    dryRun?: string;
-    fieldManager?: string;
-    fieldValidation?: string;
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
-    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
-    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
-    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
+  async replacePersistentVolumeClaimStatus(name: string, body: CoreV1.PersistentVolumeClaim, opts: operations.PutOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PUT",
       path: `${this.#root}persistentvolumeclaims/${name}/status`,
       expectJson: true,
-      querystring: query,
+      querystring: operations.formatPutOpts(opts),
       bodyJson: CoreV1.fromPersistentVolumeClaim(body),
       abortSignal: opts.abortSignal,
     });
     return CoreV1.toPersistentVolumeClaim(resp);
   }
 
-  async patchPersistentVolumeClaimStatus(name: string, body: CoreV1.PersistentVolumeClaim, opts: {
-    dryRun?: string;
-    fieldManager?: string;
-    fieldValidation?: string;
-    force?: boolean;
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
-    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
-    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
-    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
-    if (opts["force"] != null) query.append("force", opts["force"] ? '1' : '0');
+  async patchPersistentVolumeClaimStatus(name: string, type: c.PatchType, body: CoreV1.PersistentVolumeClaim | c.JsonPatch, opts: operations.PatchOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}persistentvolumeclaims/${name}/status`,
       expectJson: true,
-      querystring: query,
+      querystring: operations.formatPatchOpts(opts),
       contentType: c.getPatchContentType(type),
       bodyJson: Array.isArray(body) ? body : CoreV1.fromPersistentVolumeClaim(body),
       abortSignal: opts.abortSignal,
@@ -1584,21 +1254,12 @@ export class CoreV1NamespacedApi {
     return resp.pipeThrough(new c.WatchEventTransformer(CoreV1.toPod, MetaV1.toStatus));
   }
 
-  async createPod(body: CoreV1.Pod, opts: {
-    dryRun?: string;
-    fieldManager?: string;
-    fieldValidation?: string;
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
-    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
-    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
-    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
+  async createPod(body: CoreV1.Pod, opts: operations.PutOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "POST",
       path: `${this.#root}pods`,
       expectJson: true,
-      querystring: query,
+      querystring: operations.formatPutOpts(opts),
       bodyJson: CoreV1.fromPod(body),
       abortSignal: opts.abortSignal,
     });
@@ -1637,44 +1298,24 @@ export class CoreV1NamespacedApi {
     return CoreV1.toPod(resp);
   }
 
-  async replacePod(name: string, body: CoreV1.Pod, opts: {
-    dryRun?: string;
-    fieldManager?: string;
-    fieldValidation?: string;
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
-    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
-    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
-    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
+  async replacePod(name: string, body: CoreV1.Pod, opts: operations.PutOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PUT",
       path: `${this.#root}pods/${name}`,
       expectJson: true,
-      querystring: query,
+      querystring: operations.formatPutOpts(opts),
       bodyJson: CoreV1.fromPod(body),
       abortSignal: opts.abortSignal,
     });
     return CoreV1.toPod(resp);
   }
 
-  async patchPod(name: string, body: CoreV1.Pod, opts: {
-    dryRun?: string;
-    fieldManager?: string;
-    fieldValidation?: string;
-    force?: boolean;
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
-    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
-    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
-    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
-    if (opts["force"] != null) query.append("force", opts["force"] ? '1' : '0');
+  async patchPod(name: string, type: c.PatchType, body: CoreV1.Pod | c.JsonPatch, opts: operations.PatchOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}pods/${name}`,
       expectJson: true,
-      querystring: query,
+      querystring: operations.formatPatchOpts(opts),
       contentType: c.getPatchContentType(type),
       bodyJson: Array.isArray(body) ? body : CoreV1.fromPod(body),
       abortSignal: opts.abortSignal,
@@ -1728,21 +1369,12 @@ export class CoreV1NamespacedApi {
     });
   }
 
-  async createPodBinding(name: string, body: CoreV1.Binding, opts: {
-    dryRun?: string;
-    fieldManager?: string;
-    fieldValidation?: string;
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
-    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
-    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
-    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
+  async createPodBinding(name: string, body: CoreV1.Binding, opts: operations.PutOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "POST",
       path: `${this.#root}pods/${name}/binding`,
       expectJson: true,
-      querystring: query,
+      querystring: operations.formatPutOpts(opts),
       bodyJson: CoreV1.fromBinding(body),
       abortSignal: opts.abortSignal,
     });
@@ -1759,44 +1391,24 @@ export class CoreV1NamespacedApi {
     return CoreV1.toPod(resp);
   }
 
-  async replacePodEphemeralcontainers(name: string, body: CoreV1.Pod, opts: {
-    dryRun?: string;
-    fieldManager?: string;
-    fieldValidation?: string;
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
-    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
-    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
-    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
+  async replacePodEphemeralcontainers(name: string, body: CoreV1.Pod, opts: operations.PutOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PUT",
       path: `${this.#root}pods/${name}/ephemeralcontainers`,
       expectJson: true,
-      querystring: query,
+      querystring: operations.formatPutOpts(opts),
       bodyJson: CoreV1.fromPod(body),
       abortSignal: opts.abortSignal,
     });
     return CoreV1.toPod(resp);
   }
 
-  async patchPodEphemeralcontainers(name: string, body: CoreV1.Pod, opts: {
-    dryRun?: string;
-    fieldManager?: string;
-    fieldValidation?: string;
-    force?: boolean;
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
-    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
-    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
-    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
-    if (opts["force"] != null) query.append("force", opts["force"] ? '1' : '0');
+  async patchPodEphemeralcontainers(name: string, type: c.PatchType, body: CoreV1.Pod | c.JsonPatch, opts: operations.PatchOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}pods/${name}/ephemeralcontainers`,
       expectJson: true,
-      querystring: query,
+      querystring: operations.formatPatchOpts(opts),
       contentType: c.getPatchContentType(type),
       bodyJson: Array.isArray(body) ? body : CoreV1.fromPod(body),
       abortSignal: opts.abortSignal,
@@ -1804,21 +1416,12 @@ export class CoreV1NamespacedApi {
     return CoreV1.toPod(resp);
   }
 
-  async createPodEviction(name: string, body: PolicyV1.Eviction, opts: {
-    dryRun?: string;
-    fieldManager?: string;
-    fieldValidation?: string;
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
-    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
-    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
-    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
+  async createPodEviction(name: string, body: PolicyV1.Eviction, opts: operations.PutOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "POST",
       path: `${this.#root}pods/${name}/eviction`,
       expectJson: true,
-      querystring: query,
+      querystring: operations.formatPutOpts(opts),
       bodyJson: PolicyV1.fromEviction(body),
       abortSignal: opts.abortSignal,
     });
@@ -1955,44 +1558,24 @@ export class CoreV1NamespacedApi {
     return CoreV1.toPod(resp);
   }
 
-  async replacePodStatus(name: string, body: CoreV1.Pod, opts: {
-    dryRun?: string;
-    fieldManager?: string;
-    fieldValidation?: string;
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
-    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
-    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
-    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
+  async replacePodStatus(name: string, body: CoreV1.Pod, opts: operations.PutOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PUT",
       path: `${this.#root}pods/${name}/status`,
       expectJson: true,
-      querystring: query,
+      querystring: operations.formatPutOpts(opts),
       bodyJson: CoreV1.fromPod(body),
       abortSignal: opts.abortSignal,
     });
     return CoreV1.toPod(resp);
   }
 
-  async patchPodStatus(name: string, body: CoreV1.Pod, opts: {
-    dryRun?: string;
-    fieldManager?: string;
-    fieldValidation?: string;
-    force?: boolean;
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
-    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
-    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
-    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
-    if (opts["force"] != null) query.append("force", opts["force"] ? '1' : '0');
+  async patchPodStatus(name: string, type: c.PatchType, body: CoreV1.Pod | c.JsonPatch, opts: operations.PatchOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}pods/${name}/status`,
       expectJson: true,
-      querystring: query,
+      querystring: operations.formatPatchOpts(opts),
       contentType: c.getPatchContentType(type),
       bodyJson: Array.isArray(body) ? body : CoreV1.fromPod(body),
       abortSignal: opts.abortSignal,
@@ -2023,21 +1606,12 @@ export class CoreV1NamespacedApi {
     return resp.pipeThrough(new c.WatchEventTransformer(CoreV1.toPodTemplate, MetaV1.toStatus));
   }
 
-  async createPodTemplate(body: CoreV1.PodTemplate, opts: {
-    dryRun?: string;
-    fieldManager?: string;
-    fieldValidation?: string;
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
-    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
-    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
-    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
+  async createPodTemplate(body: CoreV1.PodTemplate, opts: operations.PutOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "POST",
       path: `${this.#root}podtemplates`,
       expectJson: true,
-      querystring: query,
+      querystring: operations.formatPutOpts(opts),
       bodyJson: CoreV1.fromPodTemplate(body),
       abortSignal: opts.abortSignal,
     });
@@ -2076,44 +1650,24 @@ export class CoreV1NamespacedApi {
     return CoreV1.toPodTemplate(resp);
   }
 
-  async replacePodTemplate(name: string, body: CoreV1.PodTemplate, opts: {
-    dryRun?: string;
-    fieldManager?: string;
-    fieldValidation?: string;
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
-    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
-    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
-    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
+  async replacePodTemplate(name: string, body: CoreV1.PodTemplate, opts: operations.PutOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PUT",
       path: `${this.#root}podtemplates/${name}`,
       expectJson: true,
-      querystring: query,
+      querystring: operations.formatPutOpts(opts),
       bodyJson: CoreV1.fromPodTemplate(body),
       abortSignal: opts.abortSignal,
     });
     return CoreV1.toPodTemplate(resp);
   }
 
-  async patchPodTemplate(name: string, body: CoreV1.PodTemplate, opts: {
-    dryRun?: string;
-    fieldManager?: string;
-    fieldValidation?: string;
-    force?: boolean;
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
-    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
-    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
-    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
-    if (opts["force"] != null) query.append("force", opts["force"] ? '1' : '0');
+  async patchPodTemplate(name: string, type: c.PatchType, body: CoreV1.PodTemplate | c.JsonPatch, opts: operations.PatchOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}podtemplates/${name}`,
       expectJson: true,
-      querystring: query,
+      querystring: operations.formatPatchOpts(opts),
       contentType: c.getPatchContentType(type),
       bodyJson: Array.isArray(body) ? body : CoreV1.fromPodTemplate(body),
       abortSignal: opts.abortSignal,
@@ -2144,21 +1698,12 @@ export class CoreV1NamespacedApi {
     return resp.pipeThrough(new c.WatchEventTransformer(CoreV1.toReplicationController, MetaV1.toStatus));
   }
 
-  async createReplicationController(body: CoreV1.ReplicationController, opts: {
-    dryRun?: string;
-    fieldManager?: string;
-    fieldValidation?: string;
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
-    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
-    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
-    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
+  async createReplicationController(body: CoreV1.ReplicationController, opts: operations.PutOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "POST",
       path: `${this.#root}replicationcontrollers`,
       expectJson: true,
-      querystring: query,
+      querystring: operations.formatPutOpts(opts),
       bodyJson: CoreV1.fromReplicationController(body),
       abortSignal: opts.abortSignal,
     });
@@ -2197,44 +1742,24 @@ export class CoreV1NamespacedApi {
     return MetaV1.toStatus(resp);
   }
 
-  async replaceReplicationController(name: string, body: CoreV1.ReplicationController, opts: {
-    dryRun?: string;
-    fieldManager?: string;
-    fieldValidation?: string;
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
-    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
-    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
-    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
+  async replaceReplicationController(name: string, body: CoreV1.ReplicationController, opts: operations.PutOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PUT",
       path: `${this.#root}replicationcontrollers/${name}`,
       expectJson: true,
-      querystring: query,
+      querystring: operations.formatPutOpts(opts),
       bodyJson: CoreV1.fromReplicationController(body),
       abortSignal: opts.abortSignal,
     });
     return CoreV1.toReplicationController(resp);
   }
 
-  async patchReplicationController(name: string, body: CoreV1.ReplicationController, opts: {
-    dryRun?: string;
-    fieldManager?: string;
-    fieldValidation?: string;
-    force?: boolean;
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
-    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
-    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
-    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
-    if (opts["force"] != null) query.append("force", opts["force"] ? '1' : '0');
+  async patchReplicationController(name: string, type: c.PatchType, body: CoreV1.ReplicationController | c.JsonPatch, opts: operations.PatchOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}replicationcontrollers/${name}`,
       expectJson: true,
-      querystring: query,
+      querystring: operations.formatPatchOpts(opts),
       contentType: c.getPatchContentType(type),
       bodyJson: Array.isArray(body) ? body : CoreV1.fromReplicationController(body),
       abortSignal: opts.abortSignal,
@@ -2252,44 +1777,24 @@ export class CoreV1NamespacedApi {
     return AutoscalingV1.toScale(resp);
   }
 
-  async replaceReplicationControllerScale(name: string, body: AutoscalingV1.Scale, opts: {
-    dryRun?: string;
-    fieldManager?: string;
-    fieldValidation?: string;
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
-    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
-    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
-    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
+  async replaceReplicationControllerScale(name: string, body: AutoscalingV1.Scale, opts: operations.PutOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PUT",
       path: `${this.#root}replicationcontrollers/${name}/scale`,
       expectJson: true,
-      querystring: query,
+      querystring: operations.formatPutOpts(opts),
       bodyJson: AutoscalingV1.fromScale(body),
       abortSignal: opts.abortSignal,
     });
     return AutoscalingV1.toScale(resp);
   }
 
-  async patchReplicationControllerScale(name: string, body: AutoscalingV1.Scale, opts: {
-    dryRun?: string;
-    fieldManager?: string;
-    fieldValidation?: string;
-    force?: boolean;
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
-    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
-    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
-    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
-    if (opts["force"] != null) query.append("force", opts["force"] ? '1' : '0');
+  async patchReplicationControllerScale(name: string, type: c.PatchType, body: AutoscalingV1.Scale | c.JsonPatch, opts: operations.PatchOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}replicationcontrollers/${name}/scale`,
       expectJson: true,
-      querystring: query,
+      querystring: operations.formatPatchOpts(opts),
       contentType: c.getPatchContentType(type),
       bodyJson: Array.isArray(body) ? body : AutoscalingV1.fromScale(body),
       abortSignal: opts.abortSignal,
@@ -2307,44 +1812,24 @@ export class CoreV1NamespacedApi {
     return CoreV1.toReplicationController(resp);
   }
 
-  async replaceReplicationControllerStatus(name: string, body: CoreV1.ReplicationController, opts: {
-    dryRun?: string;
-    fieldManager?: string;
-    fieldValidation?: string;
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
-    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
-    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
-    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
+  async replaceReplicationControllerStatus(name: string, body: CoreV1.ReplicationController, opts: operations.PutOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PUT",
       path: `${this.#root}replicationcontrollers/${name}/status`,
       expectJson: true,
-      querystring: query,
+      querystring: operations.formatPutOpts(opts),
       bodyJson: CoreV1.fromReplicationController(body),
       abortSignal: opts.abortSignal,
     });
     return CoreV1.toReplicationController(resp);
   }
 
-  async patchReplicationControllerStatus(name: string, body: CoreV1.ReplicationController, opts: {
-    dryRun?: string;
-    fieldManager?: string;
-    fieldValidation?: string;
-    force?: boolean;
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
-    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
-    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
-    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
-    if (opts["force"] != null) query.append("force", opts["force"] ? '1' : '0');
+  async patchReplicationControllerStatus(name: string, type: c.PatchType, body: CoreV1.ReplicationController | c.JsonPatch, opts: operations.PatchOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}replicationcontrollers/${name}/status`,
       expectJson: true,
-      querystring: query,
+      querystring: operations.formatPatchOpts(opts),
       contentType: c.getPatchContentType(type),
       bodyJson: Array.isArray(body) ? body : CoreV1.fromReplicationController(body),
       abortSignal: opts.abortSignal,
@@ -2375,21 +1860,12 @@ export class CoreV1NamespacedApi {
     return resp.pipeThrough(new c.WatchEventTransformer(CoreV1.toResourceQuota, MetaV1.toStatus));
   }
 
-  async createResourceQuota(body: CoreV1.ResourceQuota, opts: {
-    dryRun?: string;
-    fieldManager?: string;
-    fieldValidation?: string;
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
-    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
-    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
-    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
+  async createResourceQuota(body: CoreV1.ResourceQuota, opts: operations.PutOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "POST",
       path: `${this.#root}resourcequotas`,
       expectJson: true,
-      querystring: query,
+      querystring: operations.formatPutOpts(opts),
       bodyJson: CoreV1.fromResourceQuota(body),
       abortSignal: opts.abortSignal,
     });
@@ -2428,44 +1904,24 @@ export class CoreV1NamespacedApi {
     return CoreV1.toResourceQuota(resp);
   }
 
-  async replaceResourceQuota(name: string, body: CoreV1.ResourceQuota, opts: {
-    dryRun?: string;
-    fieldManager?: string;
-    fieldValidation?: string;
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
-    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
-    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
-    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
+  async replaceResourceQuota(name: string, body: CoreV1.ResourceQuota, opts: operations.PutOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PUT",
       path: `${this.#root}resourcequotas/${name}`,
       expectJson: true,
-      querystring: query,
+      querystring: operations.formatPutOpts(opts),
       bodyJson: CoreV1.fromResourceQuota(body),
       abortSignal: opts.abortSignal,
     });
     return CoreV1.toResourceQuota(resp);
   }
 
-  async patchResourceQuota(name: string, body: CoreV1.ResourceQuota, opts: {
-    dryRun?: string;
-    fieldManager?: string;
-    fieldValidation?: string;
-    force?: boolean;
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
-    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
-    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
-    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
-    if (opts["force"] != null) query.append("force", opts["force"] ? '1' : '0');
+  async patchResourceQuota(name: string, type: c.PatchType, body: CoreV1.ResourceQuota | c.JsonPatch, opts: operations.PatchOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}resourcequotas/${name}`,
       expectJson: true,
-      querystring: query,
+      querystring: operations.formatPatchOpts(opts),
       contentType: c.getPatchContentType(type),
       bodyJson: Array.isArray(body) ? body : CoreV1.fromResourceQuota(body),
       abortSignal: opts.abortSignal,
@@ -2483,44 +1939,24 @@ export class CoreV1NamespacedApi {
     return CoreV1.toResourceQuota(resp);
   }
 
-  async replaceResourceQuotaStatus(name: string, body: CoreV1.ResourceQuota, opts: {
-    dryRun?: string;
-    fieldManager?: string;
-    fieldValidation?: string;
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
-    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
-    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
-    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
+  async replaceResourceQuotaStatus(name: string, body: CoreV1.ResourceQuota, opts: operations.PutOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PUT",
       path: `${this.#root}resourcequotas/${name}/status`,
       expectJson: true,
-      querystring: query,
+      querystring: operations.formatPutOpts(opts),
       bodyJson: CoreV1.fromResourceQuota(body),
       abortSignal: opts.abortSignal,
     });
     return CoreV1.toResourceQuota(resp);
   }
 
-  async patchResourceQuotaStatus(name: string, body: CoreV1.ResourceQuota, opts: {
-    dryRun?: string;
-    fieldManager?: string;
-    fieldValidation?: string;
-    force?: boolean;
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
-    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
-    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
-    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
-    if (opts["force"] != null) query.append("force", opts["force"] ? '1' : '0');
+  async patchResourceQuotaStatus(name: string, type: c.PatchType, body: CoreV1.ResourceQuota | c.JsonPatch, opts: operations.PatchOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}resourcequotas/${name}/status`,
       expectJson: true,
-      querystring: query,
+      querystring: operations.formatPatchOpts(opts),
       contentType: c.getPatchContentType(type),
       bodyJson: Array.isArray(body) ? body : CoreV1.fromResourceQuota(body),
       abortSignal: opts.abortSignal,
@@ -2551,21 +1987,12 @@ export class CoreV1NamespacedApi {
     return resp.pipeThrough(new c.WatchEventTransformer(CoreV1.toSecret, MetaV1.toStatus));
   }
 
-  async createSecret(body: CoreV1.Secret, opts: {
-    dryRun?: string;
-    fieldManager?: string;
-    fieldValidation?: string;
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
-    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
-    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
-    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
+  async createSecret(body: CoreV1.Secret, opts: operations.PutOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "POST",
       path: `${this.#root}secrets`,
       expectJson: true,
-      querystring: query,
+      querystring: operations.formatPutOpts(opts),
       bodyJson: CoreV1.fromSecret(body),
       abortSignal: opts.abortSignal,
     });
@@ -2604,44 +2031,24 @@ export class CoreV1NamespacedApi {
     return MetaV1.toStatus(resp);
   }
 
-  async replaceSecret(name: string, body: CoreV1.Secret, opts: {
-    dryRun?: string;
-    fieldManager?: string;
-    fieldValidation?: string;
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
-    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
-    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
-    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
+  async replaceSecret(name: string, body: CoreV1.Secret, opts: operations.PutOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PUT",
       path: `${this.#root}secrets/${name}`,
       expectJson: true,
-      querystring: query,
+      querystring: operations.formatPutOpts(opts),
       bodyJson: CoreV1.fromSecret(body),
       abortSignal: opts.abortSignal,
     });
     return CoreV1.toSecret(resp);
   }
 
-  async patchSecret(name: string, body: CoreV1.Secret, opts: {
-    dryRun?: string;
-    fieldManager?: string;
-    fieldValidation?: string;
-    force?: boolean;
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
-    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
-    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
-    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
-    if (opts["force"] != null) query.append("force", opts["force"] ? '1' : '0');
+  async patchSecret(name: string, type: c.PatchType, body: CoreV1.Secret | c.JsonPatch, opts: operations.PatchOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}secrets/${name}`,
       expectJson: true,
-      querystring: query,
+      querystring: operations.formatPatchOpts(opts),
       contentType: c.getPatchContentType(type),
       bodyJson: Array.isArray(body) ? body : CoreV1.fromSecret(body),
       abortSignal: opts.abortSignal,
@@ -2672,21 +2079,12 @@ export class CoreV1NamespacedApi {
     return resp.pipeThrough(new c.WatchEventTransformer(CoreV1.toServiceAccount, MetaV1.toStatus));
   }
 
-  async createServiceAccount(body: CoreV1.ServiceAccount, opts: {
-    dryRun?: string;
-    fieldManager?: string;
-    fieldValidation?: string;
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
-    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
-    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
-    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
+  async createServiceAccount(body: CoreV1.ServiceAccount, opts: operations.PutOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "POST",
       path: `${this.#root}serviceaccounts`,
       expectJson: true,
-      querystring: query,
+      querystring: operations.formatPutOpts(opts),
       bodyJson: CoreV1.fromServiceAccount(body),
       abortSignal: opts.abortSignal,
     });
@@ -2725,44 +2123,24 @@ export class CoreV1NamespacedApi {
     return CoreV1.toServiceAccount(resp);
   }
 
-  async replaceServiceAccount(name: string, body: CoreV1.ServiceAccount, opts: {
-    dryRun?: string;
-    fieldManager?: string;
-    fieldValidation?: string;
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
-    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
-    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
-    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
+  async replaceServiceAccount(name: string, body: CoreV1.ServiceAccount, opts: operations.PutOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PUT",
       path: `${this.#root}serviceaccounts/${name}`,
       expectJson: true,
-      querystring: query,
+      querystring: operations.formatPutOpts(opts),
       bodyJson: CoreV1.fromServiceAccount(body),
       abortSignal: opts.abortSignal,
     });
     return CoreV1.toServiceAccount(resp);
   }
 
-  async patchServiceAccount(name: string, body: CoreV1.ServiceAccount, opts: {
-    dryRun?: string;
-    fieldManager?: string;
-    fieldValidation?: string;
-    force?: boolean;
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
-    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
-    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
-    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
-    if (opts["force"] != null) query.append("force", opts["force"] ? '1' : '0');
+  async patchServiceAccount(name: string, type: c.PatchType, body: CoreV1.ServiceAccount | c.JsonPatch, opts: operations.PatchOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}serviceaccounts/${name}`,
       expectJson: true,
-      querystring: query,
+      querystring: operations.formatPatchOpts(opts),
       contentType: c.getPatchContentType(type),
       bodyJson: Array.isArray(body) ? body : CoreV1.fromServiceAccount(body),
       abortSignal: opts.abortSignal,
@@ -2770,21 +2148,12 @@ export class CoreV1NamespacedApi {
     return CoreV1.toServiceAccount(resp);
   }
 
-  async createServiceAccountToken(name: string, body: AuthenticationV1.TokenRequest, opts: {
-    dryRun?: string;
-    fieldManager?: string;
-    fieldValidation?: string;
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
-    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
-    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
-    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
+  async createServiceAccountToken(name: string, body: AuthenticationV1.TokenRequest, opts: operations.PutOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "POST",
       path: `${this.#root}serviceaccounts/${name}/token`,
       expectJson: true,
-      querystring: query,
+      querystring: operations.formatPutOpts(opts),
       bodyJson: AuthenticationV1.fromTokenRequest(body),
       abortSignal: opts.abortSignal,
     });
@@ -2814,21 +2183,12 @@ export class CoreV1NamespacedApi {
     return resp.pipeThrough(new c.WatchEventTransformer(CoreV1.toService, MetaV1.toStatus));
   }
 
-  async createService(body: CoreV1.Service, opts: {
-    dryRun?: string;
-    fieldManager?: string;
-    fieldValidation?: string;
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
-    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
-    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
-    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
+  async createService(body: CoreV1.Service, opts: operations.PutOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "POST",
       path: `${this.#root}services`,
       expectJson: true,
-      querystring: query,
+      querystring: operations.formatPutOpts(opts),
       bodyJson: CoreV1.fromService(body),
       abortSignal: opts.abortSignal,
     });
@@ -2867,44 +2227,24 @@ export class CoreV1NamespacedApi {
     return CoreV1.toService(resp);
   }
 
-  async replaceService(name: string, body: CoreV1.Service, opts: {
-    dryRun?: string;
-    fieldManager?: string;
-    fieldValidation?: string;
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
-    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
-    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
-    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
+  async replaceService(name: string, body: CoreV1.Service, opts: operations.PutOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PUT",
       path: `${this.#root}services/${name}`,
       expectJson: true,
-      querystring: query,
+      querystring: operations.formatPutOpts(opts),
       bodyJson: CoreV1.fromService(body),
       abortSignal: opts.abortSignal,
     });
     return CoreV1.toService(resp);
   }
 
-  async patchService(name: string, body: CoreV1.Service, opts: {
-    dryRun?: string;
-    fieldManager?: string;
-    fieldValidation?: string;
-    force?: boolean;
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
-    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
-    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
-    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
-    if (opts["force"] != null) query.append("force", opts["force"] ? '1' : '0');
+  async patchService(name: string, type: c.PatchType, body: CoreV1.Service | c.JsonPatch, opts: operations.PatchOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}services/${name}`,
       expectJson: true,
-      querystring: query,
+      querystring: operations.formatPatchOpts(opts),
       contentType: c.getPatchContentType(type),
       bodyJson: Array.isArray(body) ? body : CoreV1.fromService(body),
       abortSignal: opts.abortSignal,
@@ -2933,44 +2273,24 @@ export class CoreV1NamespacedApi {
     return CoreV1.toService(resp);
   }
 
-  async replaceServiceStatus(name: string, body: CoreV1.Service, opts: {
-    dryRun?: string;
-    fieldManager?: string;
-    fieldValidation?: string;
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
-    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
-    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
-    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
+  async replaceServiceStatus(name: string, body: CoreV1.Service, opts: operations.PutOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PUT",
       path: `${this.#root}services/${name}/status`,
       expectJson: true,
-      querystring: query,
+      querystring: operations.formatPutOpts(opts),
       bodyJson: CoreV1.fromService(body),
       abortSignal: opts.abortSignal,
     });
     return CoreV1.toService(resp);
   }
 
-  async patchServiceStatus(name: string, body: CoreV1.Service, opts: {
-    dryRun?: string;
-    fieldManager?: string;
-    fieldValidation?: string;
-    force?: boolean;
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
-    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
-    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
-    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
-    if (opts["force"] != null) query.append("force", opts["force"] ? '1' : '0');
+  async patchServiceStatus(name: string, type: c.PatchType, body: CoreV1.Service | c.JsonPatch, opts: operations.PatchOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}services/${name}/status`,
       expectJson: true,
-      querystring: query,
+      querystring: operations.formatPatchOpts(opts),
       contentType: c.getPatchContentType(type),
       bodyJson: Array.isArray(body) ? body : CoreV1.fromService(body),
       abortSignal: opts.abortSignal,

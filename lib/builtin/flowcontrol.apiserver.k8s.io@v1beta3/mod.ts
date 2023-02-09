@@ -36,21 +36,12 @@ export class FlowcontrolApiserverV1beta3Api {
     return resp.pipeThrough(new c.WatchEventTransformer(FlowcontrolApiserverV1beta3.toFlowSchema, MetaV1.toStatus));
   }
 
-  async createFlowSchema(body: FlowcontrolApiserverV1beta3.FlowSchema, opts: {
-    dryRun?: string;
-    fieldManager?: string;
-    fieldValidation?: string;
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
-    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
-    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
-    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
+  async createFlowSchema(body: FlowcontrolApiserverV1beta3.FlowSchema, opts: operations.PutOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "POST",
       path: `${this.#root}flowschemas`,
       expectJson: true,
-      querystring: query,
+      querystring: operations.formatPutOpts(opts),
       bodyJson: FlowcontrolApiserverV1beta3.fromFlowSchema(body),
       abortSignal: opts.abortSignal,
     });
@@ -89,44 +80,24 @@ export class FlowcontrolApiserverV1beta3Api {
     return MetaV1.toStatus(resp);
   }
 
-  async replaceFlowSchema(name: string, body: FlowcontrolApiserverV1beta3.FlowSchema, opts: {
-    dryRun?: string;
-    fieldManager?: string;
-    fieldValidation?: string;
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
-    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
-    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
-    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
+  async replaceFlowSchema(name: string, body: FlowcontrolApiserverV1beta3.FlowSchema, opts: operations.PutOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PUT",
       path: `${this.#root}flowschemas/${name}`,
       expectJson: true,
-      querystring: query,
+      querystring: operations.formatPutOpts(opts),
       bodyJson: FlowcontrolApiserverV1beta3.fromFlowSchema(body),
       abortSignal: opts.abortSignal,
     });
     return FlowcontrolApiserverV1beta3.toFlowSchema(resp);
   }
 
-  async patchFlowSchema(name: string, body: FlowcontrolApiserverV1beta3.FlowSchema, opts: {
-    dryRun?: string;
-    fieldManager?: string;
-    fieldValidation?: string;
-    force?: boolean;
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
-    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
-    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
-    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
-    if (opts["force"] != null) query.append("force", opts["force"] ? '1' : '0');
+  async patchFlowSchema(name: string, type: c.PatchType, body: FlowcontrolApiserverV1beta3.FlowSchema | c.JsonPatch, opts: operations.PatchOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}flowschemas/${name}`,
       expectJson: true,
-      querystring: query,
+      querystring: operations.formatPatchOpts(opts),
       contentType: c.getPatchContentType(type),
       bodyJson: Array.isArray(body) ? body : FlowcontrolApiserverV1beta3.fromFlowSchema(body),
       abortSignal: opts.abortSignal,
@@ -144,44 +115,24 @@ export class FlowcontrolApiserverV1beta3Api {
     return FlowcontrolApiserverV1beta3.toFlowSchema(resp);
   }
 
-  async replaceFlowSchemaStatus(name: string, body: FlowcontrolApiserverV1beta3.FlowSchema, opts: {
-    dryRun?: string;
-    fieldManager?: string;
-    fieldValidation?: string;
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
-    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
-    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
-    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
+  async replaceFlowSchemaStatus(name: string, body: FlowcontrolApiserverV1beta3.FlowSchema, opts: operations.PutOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PUT",
       path: `${this.#root}flowschemas/${name}/status`,
       expectJson: true,
-      querystring: query,
+      querystring: operations.formatPutOpts(opts),
       bodyJson: FlowcontrolApiserverV1beta3.fromFlowSchema(body),
       abortSignal: opts.abortSignal,
     });
     return FlowcontrolApiserverV1beta3.toFlowSchema(resp);
   }
 
-  async patchFlowSchemaStatus(name: string, body: FlowcontrolApiserverV1beta3.FlowSchema, opts: {
-    dryRun?: string;
-    fieldManager?: string;
-    fieldValidation?: string;
-    force?: boolean;
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
-    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
-    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
-    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
-    if (opts["force"] != null) query.append("force", opts["force"] ? '1' : '0');
+  async patchFlowSchemaStatus(name: string, type: c.PatchType, body: FlowcontrolApiserverV1beta3.FlowSchema | c.JsonPatch, opts: operations.PatchOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}flowschemas/${name}/status`,
       expectJson: true,
-      querystring: query,
+      querystring: operations.formatPatchOpts(opts),
       contentType: c.getPatchContentType(type),
       bodyJson: Array.isArray(body) ? body : FlowcontrolApiserverV1beta3.fromFlowSchema(body),
       abortSignal: opts.abortSignal,
@@ -212,21 +163,12 @@ export class FlowcontrolApiserverV1beta3Api {
     return resp.pipeThrough(new c.WatchEventTransformer(FlowcontrolApiserverV1beta3.toPriorityLevelConfiguration, MetaV1.toStatus));
   }
 
-  async createPriorityLevelConfiguration(body: FlowcontrolApiserverV1beta3.PriorityLevelConfiguration, opts: {
-    dryRun?: string;
-    fieldManager?: string;
-    fieldValidation?: string;
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
-    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
-    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
-    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
+  async createPriorityLevelConfiguration(body: FlowcontrolApiserverV1beta3.PriorityLevelConfiguration, opts: operations.PutOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "POST",
       path: `${this.#root}prioritylevelconfigurations`,
       expectJson: true,
-      querystring: query,
+      querystring: operations.formatPutOpts(opts),
       bodyJson: FlowcontrolApiserverV1beta3.fromPriorityLevelConfiguration(body),
       abortSignal: opts.abortSignal,
     });
@@ -265,44 +207,24 @@ export class FlowcontrolApiserverV1beta3Api {
     return MetaV1.toStatus(resp);
   }
 
-  async replacePriorityLevelConfiguration(name: string, body: FlowcontrolApiserverV1beta3.PriorityLevelConfiguration, opts: {
-    dryRun?: string;
-    fieldManager?: string;
-    fieldValidation?: string;
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
-    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
-    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
-    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
+  async replacePriorityLevelConfiguration(name: string, body: FlowcontrolApiserverV1beta3.PriorityLevelConfiguration, opts: operations.PutOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PUT",
       path: `${this.#root}prioritylevelconfigurations/${name}`,
       expectJson: true,
-      querystring: query,
+      querystring: operations.formatPutOpts(opts),
       bodyJson: FlowcontrolApiserverV1beta3.fromPriorityLevelConfiguration(body),
       abortSignal: opts.abortSignal,
     });
     return FlowcontrolApiserverV1beta3.toPriorityLevelConfiguration(resp);
   }
 
-  async patchPriorityLevelConfiguration(name: string, body: FlowcontrolApiserverV1beta3.PriorityLevelConfiguration, opts: {
-    dryRun?: string;
-    fieldManager?: string;
-    fieldValidation?: string;
-    force?: boolean;
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
-    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
-    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
-    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
-    if (opts["force"] != null) query.append("force", opts["force"] ? '1' : '0');
+  async patchPriorityLevelConfiguration(name: string, type: c.PatchType, body: FlowcontrolApiserverV1beta3.PriorityLevelConfiguration | c.JsonPatch, opts: operations.PatchOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}prioritylevelconfigurations/${name}`,
       expectJson: true,
-      querystring: query,
+      querystring: operations.formatPatchOpts(opts),
       contentType: c.getPatchContentType(type),
       bodyJson: Array.isArray(body) ? body : FlowcontrolApiserverV1beta3.fromPriorityLevelConfiguration(body),
       abortSignal: opts.abortSignal,
@@ -320,44 +242,24 @@ export class FlowcontrolApiserverV1beta3Api {
     return FlowcontrolApiserverV1beta3.toPriorityLevelConfiguration(resp);
   }
 
-  async replacePriorityLevelConfigurationStatus(name: string, body: FlowcontrolApiserverV1beta3.PriorityLevelConfiguration, opts: {
-    dryRun?: string;
-    fieldManager?: string;
-    fieldValidation?: string;
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
-    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
-    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
-    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
+  async replacePriorityLevelConfigurationStatus(name: string, body: FlowcontrolApiserverV1beta3.PriorityLevelConfiguration, opts: operations.PutOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PUT",
       path: `${this.#root}prioritylevelconfigurations/${name}/status`,
       expectJson: true,
-      querystring: query,
+      querystring: operations.formatPutOpts(opts),
       bodyJson: FlowcontrolApiserverV1beta3.fromPriorityLevelConfiguration(body),
       abortSignal: opts.abortSignal,
     });
     return FlowcontrolApiserverV1beta3.toPriorityLevelConfiguration(resp);
   }
 
-  async patchPriorityLevelConfigurationStatus(name: string, body: FlowcontrolApiserverV1beta3.PriorityLevelConfiguration, opts: {
-    dryRun?: string;
-    fieldManager?: string;
-    fieldValidation?: string;
-    force?: boolean;
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
-    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
-    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
-    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
-    if (opts["force"] != null) query.append("force", opts["force"] ? '1' : '0');
+  async patchPriorityLevelConfigurationStatus(name: string, type: c.PatchType, body: FlowcontrolApiserverV1beta3.PriorityLevelConfiguration | c.JsonPatch, opts: operations.PatchOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}prioritylevelconfigurations/${name}/status`,
       expectJson: true,
-      querystring: query,
+      querystring: operations.formatPatchOpts(opts),
       contentType: c.getPatchContentType(type),
       bodyJson: Array.isArray(body) ? body : FlowcontrolApiserverV1beta3.fromPriorityLevelConfiguration(body),
       abortSignal: opts.abortSignal,

@@ -36,21 +36,12 @@ export class NetworkingV1alpha1Api {
     return resp.pipeThrough(new c.WatchEventTransformer(NetworkingV1alpha1.toClusterCIDR, MetaV1.toStatus));
   }
 
-  async createClusterCIDR(body: NetworkingV1alpha1.ClusterCIDR, opts: {
-    dryRun?: string;
-    fieldManager?: string;
-    fieldValidation?: string;
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
-    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
-    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
-    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
+  async createClusterCIDR(body: NetworkingV1alpha1.ClusterCIDR, opts: operations.PutOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "POST",
       path: `${this.#root}clustercidrs`,
       expectJson: true,
-      querystring: query,
+      querystring: operations.formatPutOpts(opts),
       bodyJson: NetworkingV1alpha1.fromClusterCIDR(body),
       abortSignal: opts.abortSignal,
     });
@@ -89,44 +80,24 @@ export class NetworkingV1alpha1Api {
     return MetaV1.toStatus(resp);
   }
 
-  async replaceClusterCIDR(name: string, body: NetworkingV1alpha1.ClusterCIDR, opts: {
-    dryRun?: string;
-    fieldManager?: string;
-    fieldValidation?: string;
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
-    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
-    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
-    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
+  async replaceClusterCIDR(name: string, body: NetworkingV1alpha1.ClusterCIDR, opts: operations.PutOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PUT",
       path: `${this.#root}clustercidrs/${name}`,
       expectJson: true,
-      querystring: query,
+      querystring: operations.formatPutOpts(opts),
       bodyJson: NetworkingV1alpha1.fromClusterCIDR(body),
       abortSignal: opts.abortSignal,
     });
     return NetworkingV1alpha1.toClusterCIDR(resp);
   }
 
-  async patchClusterCIDR(name: string, body: NetworkingV1alpha1.ClusterCIDR, opts: {
-    dryRun?: string;
-    fieldManager?: string;
-    fieldValidation?: string;
-    force?: boolean;
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
-    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
-    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
-    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
-    if (opts["force"] != null) query.append("force", opts["force"] ? '1' : '0');
+  async patchClusterCIDR(name: string, type: c.PatchType, body: NetworkingV1alpha1.ClusterCIDR | c.JsonPatch, opts: operations.PatchOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}clustercidrs/${name}`,
       expectJson: true,
-      querystring: query,
+      querystring: operations.formatPatchOpts(opts),
       contentType: c.getPatchContentType(type),
       bodyJson: Array.isArray(body) ? body : NetworkingV1alpha1.fromClusterCIDR(body),
       abortSignal: opts.abortSignal,

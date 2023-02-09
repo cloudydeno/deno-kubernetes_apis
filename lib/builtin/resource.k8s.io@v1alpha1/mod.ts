@@ -113,21 +113,12 @@ export class ResourceV1alpha1Api {
     return resp.pipeThrough(new c.WatchEventTransformer(ResourceV1alpha1.toResourceClass, MetaV1.toStatus));
   }
 
-  async createResourceClass(body: ResourceV1alpha1.ResourceClass, opts: {
-    dryRun?: string;
-    fieldManager?: string;
-    fieldValidation?: string;
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
-    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
-    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
-    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
+  async createResourceClass(body: ResourceV1alpha1.ResourceClass, opts: operations.PutOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "POST",
       path: `${this.#root}resourceclasses`,
       expectJson: true,
-      querystring: query,
+      querystring: operations.formatPutOpts(opts),
       bodyJson: ResourceV1alpha1.fromResourceClass(body),
       abortSignal: opts.abortSignal,
     });
@@ -166,44 +157,24 @@ export class ResourceV1alpha1Api {
     return ResourceV1alpha1.toResourceClass(resp);
   }
 
-  async replaceResourceClass(name: string, body: ResourceV1alpha1.ResourceClass, opts: {
-    dryRun?: string;
-    fieldManager?: string;
-    fieldValidation?: string;
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
-    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
-    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
-    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
+  async replaceResourceClass(name: string, body: ResourceV1alpha1.ResourceClass, opts: operations.PutOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PUT",
       path: `${this.#root}resourceclasses/${name}`,
       expectJson: true,
-      querystring: query,
+      querystring: operations.formatPutOpts(opts),
       bodyJson: ResourceV1alpha1.fromResourceClass(body),
       abortSignal: opts.abortSignal,
     });
     return ResourceV1alpha1.toResourceClass(resp);
   }
 
-  async patchResourceClass(name: string, body: ResourceV1alpha1.ResourceClass, opts: {
-    dryRun?: string;
-    fieldManager?: string;
-    fieldValidation?: string;
-    force?: boolean;
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
-    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
-    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
-    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
-    if (opts["force"] != null) query.append("force", opts["force"] ? '1' : '0');
+  async patchResourceClass(name: string, type: c.PatchType, body: ResourceV1alpha1.ResourceClass | c.JsonPatch, opts: operations.PatchOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}resourceclasses/${name}`,
       expectJson: true,
-      querystring: query,
+      querystring: operations.formatPatchOpts(opts),
       contentType: c.getPatchContentType(type),
       bodyJson: Array.isArray(body) ? body : ResourceV1alpha1.fromResourceClass(body),
       abortSignal: opts.abortSignal,
@@ -244,21 +215,12 @@ export class ResourceV1alpha1NamespacedApi {
     return resp.pipeThrough(new c.WatchEventTransformer(ResourceV1alpha1.toPodScheduling, MetaV1.toStatus));
   }
 
-  async createPodScheduling(body: ResourceV1alpha1.PodScheduling, opts: {
-    dryRun?: string;
-    fieldManager?: string;
-    fieldValidation?: string;
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
-    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
-    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
-    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
+  async createPodScheduling(body: ResourceV1alpha1.PodScheduling, opts: operations.PutOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "POST",
       path: `${this.#root}podschedulings`,
       expectJson: true,
-      querystring: query,
+      querystring: operations.formatPutOpts(opts),
       bodyJson: ResourceV1alpha1.fromPodScheduling(body),
       abortSignal: opts.abortSignal,
     });
@@ -297,44 +259,24 @@ export class ResourceV1alpha1NamespacedApi {
     return ResourceV1alpha1.toPodScheduling(resp);
   }
 
-  async replacePodScheduling(name: string, body: ResourceV1alpha1.PodScheduling, opts: {
-    dryRun?: string;
-    fieldManager?: string;
-    fieldValidation?: string;
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
-    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
-    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
-    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
+  async replacePodScheduling(name: string, body: ResourceV1alpha1.PodScheduling, opts: operations.PutOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PUT",
       path: `${this.#root}podschedulings/${name}`,
       expectJson: true,
-      querystring: query,
+      querystring: operations.formatPutOpts(opts),
       bodyJson: ResourceV1alpha1.fromPodScheduling(body),
       abortSignal: opts.abortSignal,
     });
     return ResourceV1alpha1.toPodScheduling(resp);
   }
 
-  async patchPodScheduling(name: string, body: ResourceV1alpha1.PodScheduling, opts: {
-    dryRun?: string;
-    fieldManager?: string;
-    fieldValidation?: string;
-    force?: boolean;
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
-    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
-    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
-    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
-    if (opts["force"] != null) query.append("force", opts["force"] ? '1' : '0');
+  async patchPodScheduling(name: string, type: c.PatchType, body: ResourceV1alpha1.PodScheduling | c.JsonPatch, opts: operations.PatchOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}podschedulings/${name}`,
       expectJson: true,
-      querystring: query,
+      querystring: operations.formatPatchOpts(opts),
       contentType: c.getPatchContentType(type),
       bodyJson: Array.isArray(body) ? body : ResourceV1alpha1.fromPodScheduling(body),
       abortSignal: opts.abortSignal,
@@ -352,44 +294,24 @@ export class ResourceV1alpha1NamespacedApi {
     return ResourceV1alpha1.toPodScheduling(resp);
   }
 
-  async replacePodSchedulingStatus(name: string, body: ResourceV1alpha1.PodScheduling, opts: {
-    dryRun?: string;
-    fieldManager?: string;
-    fieldValidation?: string;
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
-    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
-    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
-    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
+  async replacePodSchedulingStatus(name: string, body: ResourceV1alpha1.PodScheduling, opts: operations.PutOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PUT",
       path: `${this.#root}podschedulings/${name}/status`,
       expectJson: true,
-      querystring: query,
+      querystring: operations.formatPutOpts(opts),
       bodyJson: ResourceV1alpha1.fromPodScheduling(body),
       abortSignal: opts.abortSignal,
     });
     return ResourceV1alpha1.toPodScheduling(resp);
   }
 
-  async patchPodSchedulingStatus(name: string, body: ResourceV1alpha1.PodScheduling, opts: {
-    dryRun?: string;
-    fieldManager?: string;
-    fieldValidation?: string;
-    force?: boolean;
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
-    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
-    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
-    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
-    if (opts["force"] != null) query.append("force", opts["force"] ? '1' : '0');
+  async patchPodSchedulingStatus(name: string, type: c.PatchType, body: ResourceV1alpha1.PodScheduling | c.JsonPatch, opts: operations.PatchOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}podschedulings/${name}/status`,
       expectJson: true,
-      querystring: query,
+      querystring: operations.formatPatchOpts(opts),
       contentType: c.getPatchContentType(type),
       bodyJson: Array.isArray(body) ? body : ResourceV1alpha1.fromPodScheduling(body),
       abortSignal: opts.abortSignal,
@@ -420,21 +342,12 @@ export class ResourceV1alpha1NamespacedApi {
     return resp.pipeThrough(new c.WatchEventTransformer(ResourceV1alpha1.toResourceClaim, MetaV1.toStatus));
   }
 
-  async createResourceClaim(body: ResourceV1alpha1.ResourceClaim, opts: {
-    dryRun?: string;
-    fieldManager?: string;
-    fieldValidation?: string;
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
-    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
-    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
-    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
+  async createResourceClaim(body: ResourceV1alpha1.ResourceClaim, opts: operations.PutOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "POST",
       path: `${this.#root}resourceclaims`,
       expectJson: true,
-      querystring: query,
+      querystring: operations.formatPutOpts(opts),
       bodyJson: ResourceV1alpha1.fromResourceClaim(body),
       abortSignal: opts.abortSignal,
     });
@@ -473,44 +386,24 @@ export class ResourceV1alpha1NamespacedApi {
     return ResourceV1alpha1.toResourceClaim(resp);
   }
 
-  async replaceResourceClaim(name: string, body: ResourceV1alpha1.ResourceClaim, opts: {
-    dryRun?: string;
-    fieldManager?: string;
-    fieldValidation?: string;
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
-    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
-    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
-    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
+  async replaceResourceClaim(name: string, body: ResourceV1alpha1.ResourceClaim, opts: operations.PutOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PUT",
       path: `${this.#root}resourceclaims/${name}`,
       expectJson: true,
-      querystring: query,
+      querystring: operations.formatPutOpts(opts),
       bodyJson: ResourceV1alpha1.fromResourceClaim(body),
       abortSignal: opts.abortSignal,
     });
     return ResourceV1alpha1.toResourceClaim(resp);
   }
 
-  async patchResourceClaim(name: string, body: ResourceV1alpha1.ResourceClaim, opts: {
-    dryRun?: string;
-    fieldManager?: string;
-    fieldValidation?: string;
-    force?: boolean;
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
-    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
-    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
-    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
-    if (opts["force"] != null) query.append("force", opts["force"] ? '1' : '0');
+  async patchResourceClaim(name: string, type: c.PatchType, body: ResourceV1alpha1.ResourceClaim | c.JsonPatch, opts: operations.PatchOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}resourceclaims/${name}`,
       expectJson: true,
-      querystring: query,
+      querystring: operations.formatPatchOpts(opts),
       contentType: c.getPatchContentType(type),
       bodyJson: Array.isArray(body) ? body : ResourceV1alpha1.fromResourceClaim(body),
       abortSignal: opts.abortSignal,
@@ -528,44 +421,24 @@ export class ResourceV1alpha1NamespacedApi {
     return ResourceV1alpha1.toResourceClaim(resp);
   }
 
-  async replaceResourceClaimStatus(name: string, body: ResourceV1alpha1.ResourceClaim, opts: {
-    dryRun?: string;
-    fieldManager?: string;
-    fieldValidation?: string;
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
-    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
-    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
-    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
+  async replaceResourceClaimStatus(name: string, body: ResourceV1alpha1.ResourceClaim, opts: operations.PutOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PUT",
       path: `${this.#root}resourceclaims/${name}/status`,
       expectJson: true,
-      querystring: query,
+      querystring: operations.formatPutOpts(opts),
       bodyJson: ResourceV1alpha1.fromResourceClaim(body),
       abortSignal: opts.abortSignal,
     });
     return ResourceV1alpha1.toResourceClaim(resp);
   }
 
-  async patchResourceClaimStatus(name: string, body: ResourceV1alpha1.ResourceClaim, opts: {
-    dryRun?: string;
-    fieldManager?: string;
-    fieldValidation?: string;
-    force?: boolean;
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
-    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
-    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
-    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
-    if (opts["force"] != null) query.append("force", opts["force"] ? '1' : '0');
+  async patchResourceClaimStatus(name: string, type: c.PatchType, body: ResourceV1alpha1.ResourceClaim | c.JsonPatch, opts: operations.PatchOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}resourceclaims/${name}/status`,
       expectJson: true,
-      querystring: query,
+      querystring: operations.formatPatchOpts(opts),
       contentType: c.getPatchContentType(type),
       bodyJson: Array.isArray(body) ? body : ResourceV1alpha1.fromResourceClaim(body),
       abortSignal: opts.abortSignal,
@@ -596,21 +469,12 @@ export class ResourceV1alpha1NamespacedApi {
     return resp.pipeThrough(new c.WatchEventTransformer(ResourceV1alpha1.toResourceClaimTemplate, MetaV1.toStatus));
   }
 
-  async createResourceClaimTemplate(body: ResourceV1alpha1.ResourceClaimTemplate, opts: {
-    dryRun?: string;
-    fieldManager?: string;
-    fieldValidation?: string;
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
-    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
-    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
-    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
+  async createResourceClaimTemplate(body: ResourceV1alpha1.ResourceClaimTemplate, opts: operations.PutOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "POST",
       path: `${this.#root}resourceclaimtemplates`,
       expectJson: true,
-      querystring: query,
+      querystring: operations.formatPutOpts(opts),
       bodyJson: ResourceV1alpha1.fromResourceClaimTemplate(body),
       abortSignal: opts.abortSignal,
     });
@@ -649,44 +513,24 @@ export class ResourceV1alpha1NamespacedApi {
     return ResourceV1alpha1.toResourceClaimTemplate(resp);
   }
 
-  async replaceResourceClaimTemplate(name: string, body: ResourceV1alpha1.ResourceClaimTemplate, opts: {
-    dryRun?: string;
-    fieldManager?: string;
-    fieldValidation?: string;
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
-    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
-    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
-    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
+  async replaceResourceClaimTemplate(name: string, body: ResourceV1alpha1.ResourceClaimTemplate, opts: operations.PutOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PUT",
       path: `${this.#root}resourceclaimtemplates/${name}`,
       expectJson: true,
-      querystring: query,
+      querystring: operations.formatPutOpts(opts),
       bodyJson: ResourceV1alpha1.fromResourceClaimTemplate(body),
       abortSignal: opts.abortSignal,
     });
     return ResourceV1alpha1.toResourceClaimTemplate(resp);
   }
 
-  async patchResourceClaimTemplate(name: string, body: ResourceV1alpha1.ResourceClaimTemplate, opts: {
-    dryRun?: string;
-    fieldManager?: string;
-    fieldValidation?: string;
-    force?: boolean;
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
-    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
-    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
-    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
-    if (opts["force"] != null) query.append("force", opts["force"] ? '1' : '0');
+  async patchResourceClaimTemplate(name: string, type: c.PatchType, body: ResourceV1alpha1.ResourceClaimTemplate | c.JsonPatch, opts: operations.PatchOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}resourceclaimtemplates/${name}`,
       expectJson: true,
-      querystring: query,
+      querystring: operations.formatPatchOpts(opts),
       contentType: c.getPatchContentType(type),
       bodyJson: Array.isArray(body) ? body : ResourceV1alpha1.fromResourceClaimTemplate(body),
       abortSignal: opts.abortSignal,

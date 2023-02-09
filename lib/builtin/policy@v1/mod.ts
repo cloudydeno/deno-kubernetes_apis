@@ -77,21 +77,12 @@ export class PolicyV1NamespacedApi {
     return resp.pipeThrough(new c.WatchEventTransformer(PolicyV1.toPodDisruptionBudget, MetaV1.toStatus));
   }
 
-  async createPodDisruptionBudget(body: PolicyV1.PodDisruptionBudget, opts: {
-    dryRun?: string;
-    fieldManager?: string;
-    fieldValidation?: string;
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
-    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
-    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
-    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
+  async createPodDisruptionBudget(body: PolicyV1.PodDisruptionBudget, opts: operations.PutOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "POST",
       path: `${this.#root}poddisruptionbudgets`,
       expectJson: true,
-      querystring: query,
+      querystring: operations.formatPutOpts(opts),
       bodyJson: PolicyV1.fromPodDisruptionBudget(body),
       abortSignal: opts.abortSignal,
     });
@@ -130,44 +121,24 @@ export class PolicyV1NamespacedApi {
     return MetaV1.toStatus(resp);
   }
 
-  async replacePodDisruptionBudget(name: string, body: PolicyV1.PodDisruptionBudget, opts: {
-    dryRun?: string;
-    fieldManager?: string;
-    fieldValidation?: string;
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
-    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
-    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
-    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
+  async replacePodDisruptionBudget(name: string, body: PolicyV1.PodDisruptionBudget, opts: operations.PutOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PUT",
       path: `${this.#root}poddisruptionbudgets/${name}`,
       expectJson: true,
-      querystring: query,
+      querystring: operations.formatPutOpts(opts),
       bodyJson: PolicyV1.fromPodDisruptionBudget(body),
       abortSignal: opts.abortSignal,
     });
     return PolicyV1.toPodDisruptionBudget(resp);
   }
 
-  async patchPodDisruptionBudget(name: string, body: PolicyV1.PodDisruptionBudget, opts: {
-    dryRun?: string;
-    fieldManager?: string;
-    fieldValidation?: string;
-    force?: boolean;
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
-    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
-    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
-    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
-    if (opts["force"] != null) query.append("force", opts["force"] ? '1' : '0');
+  async patchPodDisruptionBudget(name: string, type: c.PatchType, body: PolicyV1.PodDisruptionBudget | c.JsonPatch, opts: operations.PatchOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}poddisruptionbudgets/${name}`,
       expectJson: true,
-      querystring: query,
+      querystring: operations.formatPatchOpts(opts),
       contentType: c.getPatchContentType(type),
       bodyJson: Array.isArray(body) ? body : PolicyV1.fromPodDisruptionBudget(body),
       abortSignal: opts.abortSignal,
@@ -185,44 +156,24 @@ export class PolicyV1NamespacedApi {
     return PolicyV1.toPodDisruptionBudget(resp);
   }
 
-  async replacePodDisruptionBudgetStatus(name: string, body: PolicyV1.PodDisruptionBudget, opts: {
-    dryRun?: string;
-    fieldManager?: string;
-    fieldValidation?: string;
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
-    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
-    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
-    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
+  async replacePodDisruptionBudgetStatus(name: string, body: PolicyV1.PodDisruptionBudget, opts: operations.PutOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PUT",
       path: `${this.#root}poddisruptionbudgets/${name}/status`,
       expectJson: true,
-      querystring: query,
+      querystring: operations.formatPutOpts(opts),
       bodyJson: PolicyV1.fromPodDisruptionBudget(body),
       abortSignal: opts.abortSignal,
     });
     return PolicyV1.toPodDisruptionBudget(resp);
   }
 
-  async patchPodDisruptionBudgetStatus(name: string, body: PolicyV1.PodDisruptionBudget, opts: {
-    dryRun?: string;
-    fieldManager?: string;
-    fieldValidation?: string;
-    force?: boolean;
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
-    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
-    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
-    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
-    if (opts["force"] != null) query.append("force", opts["force"] ? '1' : '0');
+  async patchPodDisruptionBudgetStatus(name: string, type: c.PatchType, body: PolicyV1.PodDisruptionBudget | c.JsonPatch, opts: operations.PatchOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}poddisruptionbudgets/${name}/status`,
       expectJson: true,
-      querystring: query,
+      querystring: operations.formatPatchOpts(opts),
       contentType: c.getPatchContentType(type),
       bodyJson: Array.isArray(body) ? body : PolicyV1.fromPodDisruptionBudget(body),
       abortSignal: opts.abortSignal,

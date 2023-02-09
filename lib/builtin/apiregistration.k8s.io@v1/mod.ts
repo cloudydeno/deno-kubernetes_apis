@@ -36,21 +36,12 @@ export class ApiregistrationV1Api {
     return resp.pipeThrough(new c.WatchEventTransformer(ApiregistrationV1.toAPIService, MetaV1.toStatus));
   }
 
-  async createAPIService(body: ApiregistrationV1.APIService, opts: {
-    dryRun?: string;
-    fieldManager?: string;
-    fieldValidation?: string;
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
-    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
-    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
-    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
+  async createAPIService(body: ApiregistrationV1.APIService, opts: operations.PutOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "POST",
       path: `${this.#root}apiservices`,
       expectJson: true,
-      querystring: query,
+      querystring: operations.formatPutOpts(opts),
       bodyJson: ApiregistrationV1.fromAPIService(body),
       abortSignal: opts.abortSignal,
     });
@@ -89,44 +80,24 @@ export class ApiregistrationV1Api {
     return MetaV1.toStatus(resp);
   }
 
-  async replaceAPIService(name: string, body: ApiregistrationV1.APIService, opts: {
-    dryRun?: string;
-    fieldManager?: string;
-    fieldValidation?: string;
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
-    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
-    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
-    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
+  async replaceAPIService(name: string, body: ApiregistrationV1.APIService, opts: operations.PutOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PUT",
       path: `${this.#root}apiservices/${name}`,
       expectJson: true,
-      querystring: query,
+      querystring: operations.formatPutOpts(opts),
       bodyJson: ApiregistrationV1.fromAPIService(body),
       abortSignal: opts.abortSignal,
     });
     return ApiregistrationV1.toAPIService(resp);
   }
 
-  async patchAPIService(name: string, body: ApiregistrationV1.APIService, opts: {
-    dryRun?: string;
-    fieldManager?: string;
-    fieldValidation?: string;
-    force?: boolean;
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
-    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
-    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
-    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
-    if (opts["force"] != null) query.append("force", opts["force"] ? '1' : '0');
+  async patchAPIService(name: string, type: c.PatchType, body: ApiregistrationV1.APIService | c.JsonPatch, opts: operations.PatchOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}apiservices/${name}`,
       expectJson: true,
-      querystring: query,
+      querystring: operations.formatPatchOpts(opts),
       contentType: c.getPatchContentType(type),
       bodyJson: Array.isArray(body) ? body : ApiregistrationV1.fromAPIService(body),
       abortSignal: opts.abortSignal,
@@ -144,44 +115,24 @@ export class ApiregistrationV1Api {
     return ApiregistrationV1.toAPIService(resp);
   }
 
-  async replaceAPIServiceStatus(name: string, body: ApiregistrationV1.APIService, opts: {
-    dryRun?: string;
-    fieldManager?: string;
-    fieldValidation?: string;
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
-    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
-    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
-    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
+  async replaceAPIServiceStatus(name: string, body: ApiregistrationV1.APIService, opts: operations.PutOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PUT",
       path: `${this.#root}apiservices/${name}/status`,
       expectJson: true,
-      querystring: query,
+      querystring: operations.formatPutOpts(opts),
       bodyJson: ApiregistrationV1.fromAPIService(body),
       abortSignal: opts.abortSignal,
     });
     return ApiregistrationV1.toAPIService(resp);
   }
 
-  async patchAPIServiceStatus(name: string, body: ApiregistrationV1.APIService, opts: {
-    dryRun?: string;
-    fieldManager?: string;
-    fieldValidation?: string;
-    force?: boolean;
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
-    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
-    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
-    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
-    if (opts["force"] != null) query.append("force", opts["force"] ? '1' : '0');
+  async patchAPIServiceStatus(name: string, type: c.PatchType, body: ApiregistrationV1.APIService | c.JsonPatch, opts: operations.PatchOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}apiservices/${name}/status`,
       expectJson: true,
-      querystring: query,
+      querystring: operations.formatPatchOpts(opts),
       contentType: c.getPatchContentType(type),
       bodyJson: Array.isArray(body) ? body : ApiregistrationV1.fromAPIService(body),
       abortSignal: opts.abortSignal,

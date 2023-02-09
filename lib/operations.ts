@@ -47,12 +47,14 @@ export function formatWatchListOpts(opts: WatchListOpts): URLSearchParams {
 export interface PutOpts {
   dryRun?: string;
   fieldManager?: string;
+  fieldValidation?: string;
   abortSignal?: AbortSignal;
 };
 export function formatPutOpts(opts: PutOpts): URLSearchParams {
   const query = new URLSearchParams;
   if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
   if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
+  if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
   return query;
 }
 
@@ -89,6 +91,7 @@ export function formatDeleteListOpts(opts: DeleteListOpts): URLSearchParams {
 export interface PatchOpts {
   dryRun?: string;
   fieldManager?: string;
+  fieldValidation?: string;
   force?: boolean;
   abortSignal?: AbortSignal;
 };
@@ -96,6 +99,7 @@ export function formatPatchOpts(opts: PatchOpts): URLSearchParams {
   const query = new URLSearchParams;
   if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
   if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
+  if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
   if (opts["force"] != null) query.append("force", opts["force"] ? '1' : '0');
   return query;
 }

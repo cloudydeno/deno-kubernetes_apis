@@ -36,21 +36,12 @@ export class ApiextensionsV1Api {
     return resp.pipeThrough(new c.WatchEventTransformer(ApiextensionsV1.toCustomResourceDefinition, MetaV1.toStatus));
   }
 
-  async createCustomResourceDefinition(body: ApiextensionsV1.CustomResourceDefinition, opts: {
-    dryRun?: string;
-    fieldManager?: string;
-    fieldValidation?: string;
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
-    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
-    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
-    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
+  async createCustomResourceDefinition(body: ApiextensionsV1.CustomResourceDefinition, opts: operations.PutOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "POST",
       path: `${this.#root}customresourcedefinitions`,
       expectJson: true,
-      querystring: query,
+      querystring: operations.formatPutOpts(opts),
       bodyJson: ApiextensionsV1.fromCustomResourceDefinition(body),
       abortSignal: opts.abortSignal,
     });
@@ -89,44 +80,24 @@ export class ApiextensionsV1Api {
     return MetaV1.toStatus(resp);
   }
 
-  async replaceCustomResourceDefinition(name: string, body: ApiextensionsV1.CustomResourceDefinition, opts: {
-    dryRun?: string;
-    fieldManager?: string;
-    fieldValidation?: string;
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
-    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
-    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
-    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
+  async replaceCustomResourceDefinition(name: string, body: ApiextensionsV1.CustomResourceDefinition, opts: operations.PutOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PUT",
       path: `${this.#root}customresourcedefinitions/${name}`,
       expectJson: true,
-      querystring: query,
+      querystring: operations.formatPutOpts(opts),
       bodyJson: ApiextensionsV1.fromCustomResourceDefinition(body),
       abortSignal: opts.abortSignal,
     });
     return ApiextensionsV1.toCustomResourceDefinition(resp);
   }
 
-  async patchCustomResourceDefinition(name: string, body: ApiextensionsV1.CustomResourceDefinition, opts: {
-    dryRun?: string;
-    fieldManager?: string;
-    fieldValidation?: string;
-    force?: boolean;
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
-    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
-    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
-    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
-    if (opts["force"] != null) query.append("force", opts["force"] ? '1' : '0');
+  async patchCustomResourceDefinition(name: string, type: c.PatchType, body: ApiextensionsV1.CustomResourceDefinition | c.JsonPatch, opts: operations.PatchOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}customresourcedefinitions/${name}`,
       expectJson: true,
-      querystring: query,
+      querystring: operations.formatPatchOpts(opts),
       contentType: c.getPatchContentType(type),
       bodyJson: Array.isArray(body) ? body : ApiextensionsV1.fromCustomResourceDefinition(body),
       abortSignal: opts.abortSignal,
@@ -144,44 +115,24 @@ export class ApiextensionsV1Api {
     return ApiextensionsV1.toCustomResourceDefinition(resp);
   }
 
-  async replaceCustomResourceDefinitionStatus(name: string, body: ApiextensionsV1.CustomResourceDefinition, opts: {
-    dryRun?: string;
-    fieldManager?: string;
-    fieldValidation?: string;
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
-    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
-    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
-    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
+  async replaceCustomResourceDefinitionStatus(name: string, body: ApiextensionsV1.CustomResourceDefinition, opts: operations.PutOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PUT",
       path: `${this.#root}customresourcedefinitions/${name}/status`,
       expectJson: true,
-      querystring: query,
+      querystring: operations.formatPutOpts(opts),
       bodyJson: ApiextensionsV1.fromCustomResourceDefinition(body),
       abortSignal: opts.abortSignal,
     });
     return ApiextensionsV1.toCustomResourceDefinition(resp);
   }
 
-  async patchCustomResourceDefinitionStatus(name: string, body: ApiextensionsV1.CustomResourceDefinition, opts: {
-    dryRun?: string;
-    fieldManager?: string;
-    fieldValidation?: string;
-    force?: boolean;
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
-    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
-    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
-    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
-    if (opts["force"] != null) query.append("force", opts["force"] ? '1' : '0');
+  async patchCustomResourceDefinitionStatus(name: string, type: c.PatchType, body: ApiextensionsV1.CustomResourceDefinition | c.JsonPatch, opts: operations.PatchOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}customresourcedefinitions/${name}/status`,
       expectJson: true,
-      querystring: query,
+      querystring: operations.formatPatchOpts(opts),
       contentType: c.getPatchContentType(type),
       bodyJson: Array.isArray(body) ? body : ApiextensionsV1.fromCustomResourceDefinition(body),
       abortSignal: opts.abortSignal,

@@ -13,21 +13,12 @@ export class AuthenticationV1Api {
     this.#client = client;
   }
 
-  async createTokenReview(body: AuthenticationV1.TokenReview, opts: {
-    dryRun?: string;
-    fieldManager?: string;
-    fieldValidation?: string;
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
-    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
-    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
-    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
+  async createTokenReview(body: AuthenticationV1.TokenReview, opts: operations.PutOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "POST",
       path: `${this.#root}tokenreviews`,
       expectJson: true,
-      querystring: query,
+      querystring: operations.formatPutOpts(opts),
       bodyJson: AuthenticationV1.fromTokenReview(body),
       abortSignal: opts.abortSignal,
     });

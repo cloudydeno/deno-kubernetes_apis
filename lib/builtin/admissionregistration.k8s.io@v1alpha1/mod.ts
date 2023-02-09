@@ -36,21 +36,12 @@ export class AdmissionregistrationV1alpha1Api {
     return resp.pipeThrough(new c.WatchEventTransformer(AdmissionregistrationV1alpha1.toValidatingAdmissionPolicy, MetaV1.toStatus));
   }
 
-  async createValidatingAdmissionPolicy(body: AdmissionregistrationV1alpha1.ValidatingAdmissionPolicy, opts: {
-    dryRun?: string;
-    fieldManager?: string;
-    fieldValidation?: string;
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
-    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
-    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
-    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
+  async createValidatingAdmissionPolicy(body: AdmissionregistrationV1alpha1.ValidatingAdmissionPolicy, opts: operations.PutOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "POST",
       path: `${this.#root}validatingadmissionpolicies`,
       expectJson: true,
-      querystring: query,
+      querystring: operations.formatPutOpts(opts),
       bodyJson: AdmissionregistrationV1alpha1.fromValidatingAdmissionPolicy(body),
       abortSignal: opts.abortSignal,
     });
@@ -89,44 +80,24 @@ export class AdmissionregistrationV1alpha1Api {
     return MetaV1.toStatus(resp);
   }
 
-  async replaceValidatingAdmissionPolicy(name: string, body: AdmissionregistrationV1alpha1.ValidatingAdmissionPolicy, opts: {
-    dryRun?: string;
-    fieldManager?: string;
-    fieldValidation?: string;
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
-    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
-    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
-    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
+  async replaceValidatingAdmissionPolicy(name: string, body: AdmissionregistrationV1alpha1.ValidatingAdmissionPolicy, opts: operations.PutOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PUT",
       path: `${this.#root}validatingadmissionpolicies/${name}`,
       expectJson: true,
-      querystring: query,
+      querystring: operations.formatPutOpts(opts),
       bodyJson: AdmissionregistrationV1alpha1.fromValidatingAdmissionPolicy(body),
       abortSignal: opts.abortSignal,
     });
     return AdmissionregistrationV1alpha1.toValidatingAdmissionPolicy(resp);
   }
 
-  async patchValidatingAdmissionPolicy(name: string, body: AdmissionregistrationV1alpha1.ValidatingAdmissionPolicy, opts: {
-    dryRun?: string;
-    fieldManager?: string;
-    fieldValidation?: string;
-    force?: boolean;
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
-    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
-    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
-    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
-    if (opts["force"] != null) query.append("force", opts["force"] ? '1' : '0');
+  async patchValidatingAdmissionPolicy(name: string, type: c.PatchType, body: AdmissionregistrationV1alpha1.ValidatingAdmissionPolicy | c.JsonPatch, opts: operations.PatchOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}validatingadmissionpolicies/${name}`,
       expectJson: true,
-      querystring: query,
+      querystring: operations.formatPatchOpts(opts),
       contentType: c.getPatchContentType(type),
       bodyJson: Array.isArray(body) ? body : AdmissionregistrationV1alpha1.fromValidatingAdmissionPolicy(body),
       abortSignal: opts.abortSignal,
@@ -157,21 +128,12 @@ export class AdmissionregistrationV1alpha1Api {
     return resp.pipeThrough(new c.WatchEventTransformer(AdmissionregistrationV1alpha1.toValidatingAdmissionPolicyBinding, MetaV1.toStatus));
   }
 
-  async createValidatingAdmissionPolicyBinding(body: AdmissionregistrationV1alpha1.ValidatingAdmissionPolicyBinding, opts: {
-    dryRun?: string;
-    fieldManager?: string;
-    fieldValidation?: string;
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
-    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
-    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
-    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
+  async createValidatingAdmissionPolicyBinding(body: AdmissionregistrationV1alpha1.ValidatingAdmissionPolicyBinding, opts: operations.PutOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "POST",
       path: `${this.#root}validatingadmissionpolicybindings`,
       expectJson: true,
-      querystring: query,
+      querystring: operations.formatPutOpts(opts),
       bodyJson: AdmissionregistrationV1alpha1.fromValidatingAdmissionPolicyBinding(body),
       abortSignal: opts.abortSignal,
     });
@@ -210,44 +172,24 @@ export class AdmissionregistrationV1alpha1Api {
     return MetaV1.toStatus(resp);
   }
 
-  async replaceValidatingAdmissionPolicyBinding(name: string, body: AdmissionregistrationV1alpha1.ValidatingAdmissionPolicyBinding, opts: {
-    dryRun?: string;
-    fieldManager?: string;
-    fieldValidation?: string;
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
-    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
-    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
-    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
+  async replaceValidatingAdmissionPolicyBinding(name: string, body: AdmissionregistrationV1alpha1.ValidatingAdmissionPolicyBinding, opts: operations.PutOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PUT",
       path: `${this.#root}validatingadmissionpolicybindings/${name}`,
       expectJson: true,
-      querystring: query,
+      querystring: operations.formatPutOpts(opts),
       bodyJson: AdmissionregistrationV1alpha1.fromValidatingAdmissionPolicyBinding(body),
       abortSignal: opts.abortSignal,
     });
     return AdmissionregistrationV1alpha1.toValidatingAdmissionPolicyBinding(resp);
   }
 
-  async patchValidatingAdmissionPolicyBinding(name: string, body: AdmissionregistrationV1alpha1.ValidatingAdmissionPolicyBinding, opts: {
-    dryRun?: string;
-    fieldManager?: string;
-    fieldValidation?: string;
-    force?: boolean;
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
-    if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
-    if (opts["fieldManager"] != null) query.append("fieldManager", opts["fieldManager"]);
-    if (opts["fieldValidation"] != null) query.append("fieldValidation", opts["fieldValidation"]);
-    if (opts["force"] != null) query.append("force", opts["force"] ? '1' : '0');
+  async patchValidatingAdmissionPolicyBinding(name: string, type: c.PatchType, body: AdmissionregistrationV1alpha1.ValidatingAdmissionPolicyBinding | c.JsonPatch, opts: operations.PatchOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}validatingadmissionpolicybindings/${name}`,
       expectJson: true,
-      querystring: query,
+      querystring: operations.formatPatchOpts(opts),
       contentType: c.getPatchContentType(type),
       bodyJson: Array.isArray(body) ? body : AdmissionregistrationV1alpha1.fromValidatingAdmissionPolicyBinding(body),
       abortSignal: opts.abortSignal,
