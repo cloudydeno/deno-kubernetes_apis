@@ -32,13 +32,18 @@ see `/x/kubernetes_client` for more information.
 
 ## Changelog
 
-* Unreleased:
+* `v0.4.0` on `2023-02-10`:
   * Updating `/x/kubernetes_client` API contract to `v0.5.0`.
+  * Breaking change: The return type of delete functions has been widened to a union.
+    * If you were using a deletion response, you can use type narrowing to detect which Kind was returned.
+    * See [#4](https://github.com/cloudydeno/deno-kubernetes_apis/issues/4) for more information.
   * Includes 'builtin' APIs generated from K8s `v1.26.1`.
     * Numerous alpha and beta APIs removed, including autoscaling, batch, and policy
     * Further API changes are detailed in Github Releases.
-  * `cert-manager` has been updated. Removes v1beta1, v1alpha3, and v1alpha2 APIs.
-  * `argo-cd` has been updated. Adds a new `ApplicationSet` CRD.
+  * `cert-manager` CRDs have been updated. Removes v1beta1, v1alpha3, and v1alpha2 APIs.
+  * `argo-cd` CRDs have been updated. Adds a new `ApplicationSet` CRD.
+    * Some nested structures were deduplicated to reduce code size.
+  * Added CRDs for [Vertical Pod Autoscaler](https://github.com/kubernetes/autoscaler/tree/master/vertical-pod-autoscaler).
   * Add `streamPodLogs` to allow fetching pod logs as a `ReadableStream<string>`.
 
 * `v0.3.2` on `2021-12-02`:
