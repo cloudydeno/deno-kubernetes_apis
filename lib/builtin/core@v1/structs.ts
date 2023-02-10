@@ -343,6 +343,7 @@ export interface CSIPersistentVolumeSource {
   controllerPublishSecretRef?: SecretReference | null;
   driver: string;
   fsType?: string | null;
+  nodeExpandSecretRef?: SecretReference | null;
   nodePublishSecretRef?: SecretReference | null;
   nodeStageSecretRef?: SecretReference | null;
   readOnly?: boolean | null;
@@ -356,6 +357,7 @@ export function toCSIPersistentVolumeSource(input: c.JSONValue): CSIPersistentVo
     controllerPublishSecretRef: c.readOpt(obj["controllerPublishSecretRef"], toSecretReference),
     driver: c.checkStr(obj["driver"]),
     fsType: c.readOpt(obj["fsType"], c.checkStr),
+    nodeExpandSecretRef: c.readOpt(obj["nodeExpandSecretRef"], toSecretReference),
     nodePublishSecretRef: c.readOpt(obj["nodePublishSecretRef"], toSecretReference),
     nodeStageSecretRef: c.readOpt(obj["nodeStageSecretRef"], toSecretReference),
     readOnly: c.readOpt(obj["readOnly"], c.checkBool),
@@ -367,6 +369,7 @@ export function fromCSIPersistentVolumeSource(input: CSIPersistentVolumeSource):
     ...input,
     controllerExpandSecretRef: input.controllerExpandSecretRef != null ? fromSecretReference(input.controllerExpandSecretRef) : undefined,
     controllerPublishSecretRef: input.controllerPublishSecretRef != null ? fromSecretReference(input.controllerPublishSecretRef) : undefined,
+    nodeExpandSecretRef: input.nodeExpandSecretRef != null ? fromSecretReference(input.nodeExpandSecretRef) : undefined,
     nodePublishSecretRef: input.nodePublishSecretRef != null ? fromSecretReference(input.nodePublishSecretRef) : undefined,
     nodeStageSecretRef: input.nodeStageSecretRef != null ? fromSecretReference(input.nodeStageSecretRef) : undefined,
   }}
@@ -530,6 +533,24 @@ export function fromCinderVolumeSource(input: CinderVolumeSource): c.JSONValue {
   return {
     ...input,
     secretRef: input.secretRef != null ? fromLocalObjectReference(input.secretRef) : undefined,
+  }}
+
+/** ClaimSource describes a reference to a ResourceClaim.
+
+Exactly one of these fields should be set.  Consumers of this type must treat an empty object as if it has an unknown value. */
+export interface ClaimSource {
+  resourceClaimName?: string | null;
+  resourceClaimTemplateName?: string | null;
+}
+export function toClaimSource(input: c.JSONValue): ClaimSource {
+  const obj = c.checkObj(input);
+  return {
+    resourceClaimName: c.readOpt(obj["resourceClaimName"], c.checkStr),
+    resourceClaimTemplateName: c.readOpt(obj["resourceClaimTemplateName"], c.checkStr),
+  }}
+export function fromClaimSource(input: ClaimSource): c.JSONValue {
+  return {
+    ...input,
   }}
 
 /** ClientIPConfig represents the configurations of Client IP based session affinity. */
@@ -962,36 +983,36 @@ export function fromSecretEnvSource(input: SecretEnvSource): c.JSONValue {
 
 /** Lifecycle describes actions that the management system should take in response to container lifecycle events. For the PostStart and PreStop lifecycle handlers, management of the container blocks until the action is complete, unless the container process fails, in which case the handler is aborted. */
 export interface Lifecycle {
-  postStart?: Handler | null;
-  preStop?: Handler | null;
+  postStart?: LifecycleHandler | null;
+  preStop?: LifecycleHandler | null;
 }
 export function toLifecycle(input: c.JSONValue): Lifecycle {
   const obj = c.checkObj(input);
   return {
-    postStart: c.readOpt(obj["postStart"], toHandler),
-    preStop: c.readOpt(obj["preStop"], toHandler),
+    postStart: c.readOpt(obj["postStart"], toLifecycleHandler),
+    preStop: c.readOpt(obj["preStop"], toLifecycleHandler),
   }}
 export function fromLifecycle(input: Lifecycle): c.JSONValue {
   return {
     ...input,
-    postStart: input.postStart != null ? fromHandler(input.postStart) : undefined,
-    preStop: input.preStop != null ? fromHandler(input.preStop) : undefined,
+    postStart: input.postStart != null ? fromLifecycleHandler(input.postStart) : undefined,
+    preStop: input.preStop != null ? fromLifecycleHandler(input.preStop) : undefined,
   }}
 
-/** Handler defines a specific action that should be taken */
-export interface Handler {
+/** LifecycleHandler defines a specific action that should be taken in a lifecycle hook. One and only one of the fields, except TCPSocket must be specified. */
+export interface LifecycleHandler {
   exec?: ExecAction | null;
   httpGet?: HTTPGetAction | null;
   tcpSocket?: TCPSocketAction | null;
 }
-export function toHandler(input: c.JSONValue): Handler {
+export function toLifecycleHandler(input: c.JSONValue): LifecycleHandler {
   const obj = c.checkObj(input);
   return {
     exec: c.readOpt(obj["exec"], toExecAction),
     httpGet: c.readOpt(obj["httpGet"], toHTTPGetAction),
     tcpSocket: c.readOpt(obj["tcpSocket"], toTCPSocketAction),
   }}
-export function fromHandler(input: Handler): c.JSONValue {
+export function fromLifecycleHandler(input: LifecycleHandler): c.JSONValue {
   return {
     ...input,
     exec: input.exec != null ? fromExecAction(input.exec) : undefined,
@@ -1072,6 +1093,7 @@ export function fromTCPSocketAction(input: TCPSocketAction): c.JSONValue {
 export interface Probe {
   exec?: ExecAction | null;
   failureThreshold?: number | null;
+  grpc?: GRPCAction | null;
   httpGet?: HTTPGetAction | null;
   initialDelaySeconds?: number | null;
   periodSeconds?: number | null;
@@ -1085,6 +1107,7 @@ export function toProbe(input: c.JSONValue): Probe {
   return {
     exec: c.readOpt(obj["exec"], toExecAction),
     failureThreshold: c.readOpt(obj["failureThreshold"], c.checkNum),
+    grpc: c.readOpt(obj["grpc"], toGRPCAction),
     httpGet: c.readOpt(obj["httpGet"], toHTTPGetAction),
     initialDelaySeconds: c.readOpt(obj["initialDelaySeconds"], c.checkNum),
     periodSeconds: c.readOpt(obj["periodSeconds"], c.checkNum),
@@ -1097,8 +1120,24 @@ export function fromProbe(input: Probe): c.JSONValue {
   return {
     ...input,
     exec: input.exec != null ? fromExecAction(input.exec) : undefined,
+    grpc: input.grpc != null ? fromGRPCAction(input.grpc) : undefined,
     httpGet: input.httpGet != null ? fromHTTPGetAction(input.httpGet) : undefined,
     tcpSocket: input.tcpSocket != null ? fromTCPSocketAction(input.tcpSocket) : undefined,
+  }}
+
+export interface GRPCAction {
+  port: number;
+  service?: string | null;
+}
+export function toGRPCAction(input: c.JSONValue): GRPCAction {
+  const obj = c.checkObj(input);
+  return {
+    port: c.checkNum(obj["port"]),
+    service: c.readOpt(obj["service"], c.checkStr),
+  }}
+export function fromGRPCAction(input: GRPCAction): c.JSONValue {
+  return {
+    ...input,
   }}
 
 /** ContainerPort represents a network port in a single container. */
@@ -1125,20 +1164,37 @@ export function fromContainerPort(input: ContainerPort): c.JSONValue {
 
 /** ResourceRequirements describes the compute resource requirements. */
 export interface ResourceRequirements {
+  claims?: Array<ResourceClaim> | null;
   limits?: Record<string,c.Quantity> | null;
   requests?: Record<string,c.Quantity> | null;
 }
 export function toResourceRequirements(input: c.JSONValue): ResourceRequirements {
   const obj = c.checkObj(input);
   return {
+    claims: c.readOpt(obj["claims"], x => c.readList(x, toResourceClaim)),
     limits: c.readOpt(obj["limits"], x => c.readMap(x, c.toQuantity)),
     requests: c.readOpt(obj["requests"], x => c.readMap(x, c.toQuantity)),
   }}
 export function fromResourceRequirements(input: ResourceRequirements): c.JSONValue {
   return {
     ...input,
+    claims: input.claims?.map(fromResourceClaim),
     limits: c.writeMap(input.limits, c.fromQuantity),
     requests: c.writeMap(input.requests, c.fromQuantity),
+  }}
+
+/** ResourceClaim references one entry in PodSpec.ResourceClaims. */
+export interface ResourceClaim {
+  name: string;
+}
+export function toResourceClaim(input: c.JSONValue): ResourceClaim {
+  const obj = c.checkObj(input);
+  return {
+    name: c.checkStr(obj["name"]),
+  }}
+export function fromResourceClaim(input: ResourceClaim): c.JSONValue {
+  return {
+    ...input,
   }}
 
 /** SecurityContext holds security configuration that will be applied to a container. Some fields are present in both SecurityContext and PodSecurityContext.  When both are set, the values in SecurityContext take precedence. */
@@ -1530,13 +1586,16 @@ export function fromEndpointPort(input: EndpointPort): c.JSONValue {
   }}
 
 /** EndpointSubset is a group of addresses with a common set of ports. The expanded set of endpoints is the Cartesian product of Addresses x Ports. For example, given:
-  {
-    Addresses: [{"ip": "10.10.1.1"}, {"ip": "10.10.2.2"}],
-    Ports:     [{"name": "a", "port": 8675}, {"name": "b", "port": 309}]
-  }
+
+	{
+	  Addresses: [{"ip": "10.10.1.1"}, {"ip": "10.10.2.2"}],
+	  Ports:     [{"name": "a", "port": 8675}, {"name": "b", "port": 309}]
+	}
+
 The resulting set of endpoints can be viewed as:
-    a: [ 10.10.1.1:8675, 10.10.2.2:8675 ],
-    b: [ 10.10.1.1:309, 10.10.2.2:309 ] */
+
+	a: [ 10.10.1.1:8675, 10.10.2.2:8675 ],
+	b: [ 10.10.1.1:309, 10.10.2.2:309 ] */
 export interface EndpointSubset {
   addresses?: Array<EndpointAddress> | null;
   notReadyAddresses?: Array<EndpointAddress> | null;
@@ -1558,17 +1617,18 @@ export function fromEndpointSubset(input: EndpointSubset): c.JSONValue {
   }}
 
 /** Endpoints is a collection of endpoints that implement the actual service. Example:
-  Name: "mysvc",
-  Subsets: [
-    {
-      Addresses: [{"ip": "10.10.1.1"}, {"ip": "10.10.2.2"}],
-      Ports: [{"name": "a", "port": 8675}, {"name": "b", "port": 309}]
-    },
-    {
-      Addresses: [{"ip": "10.10.3.3"}],
-      Ports: [{"name": "a", "port": 93}, {"name": "b", "port": 76}]
-    },
- ] */
+
+	 Name: "mysvc",
+	 Subsets: [
+	   {
+	     Addresses: [{"ip": "10.10.1.1"}, {"ip": "10.10.2.2"}],
+	     Ports: [{"name": "a", "port": 8675}, {"name": "b", "port": 309}]
+	   },
+	   {
+	     Addresses: [{"ip": "10.10.3.3"}],
+	     Ports: [{"name": "a", "port": 93}, {"name": "b", "port": 76}]
+	   },
+	] */
 export interface Endpoints {
   apiVersion?: "v1";
   kind?: "Endpoints";
@@ -1603,7 +1663,9 @@ export function toEndpointsList(input: c.JSONValue): EndpointsList & c.ApiKind {
     items: c.readList(obj.items, toEndpoints),
   }}
 
-/** An EphemeralContainer is a container that may be added temporarily to an existing pod for user-initiated activities such as debugging. Ephemeral containers have no resource or scheduling guarantees, and they will not be restarted when they exit or when a pod is removed or restarted. If an ephemeral container causes a pod to exceed its resource allocation, the pod may be evicted. Ephemeral containers may not be added by directly updating the pod spec. They must be added via the pod's ephemeralcontainers subresource, and they will appear in the pod spec once added. This is an alpha feature enabled by the EphemeralContainers feature flag. */
+/** An EphemeralContainer is a temporary container that you may add to an existing Pod for user-initiated activities such as debugging. Ephemeral containers have no resource or scheduling guarantees, and they will not be restarted when they exit or when a Pod is removed or restarted. The kubelet may evict a Pod if an ephemeral container causes the Pod to exceed its resource allocation.
+
+To add an ephemeral container, use the ephemeralcontainers subresource of an existing Pod. Ephemeral containers may not be removed or restarted. */
 export interface EphemeralContainer {
   args?: Array<string> | null;
   command?: Array<string> | null;
@@ -1709,7 +1771,7 @@ export function fromPersistentVolumeClaimTemplate(input: PersistentVolumeClaimTe
 export interface PersistentVolumeClaimSpec {
   accessModes?: Array<string> | null;
   dataSource?: TypedLocalObjectReference | null;
-  dataSourceRef?: TypedLocalObjectReference | null;
+  dataSourceRef?: TypedObjectReference | null;
   resources?: ResourceRequirements | null;
   selector?: MetaV1.LabelSelector | null;
   storageClassName?: string | null;
@@ -1721,7 +1783,7 @@ export function toPersistentVolumeClaimSpec(input: c.JSONValue): PersistentVolum
   return {
     accessModes: c.readOpt(obj["accessModes"], x => c.readList(x, c.checkStr)),
     dataSource: c.readOpt(obj["dataSource"], toTypedLocalObjectReference),
-    dataSourceRef: c.readOpt(obj["dataSourceRef"], toTypedLocalObjectReference),
+    dataSourceRef: c.readOpt(obj["dataSourceRef"], toTypedObjectReference),
     resources: c.readOpt(obj["resources"], toResourceRequirements),
     selector: c.readOpt(obj["selector"], MetaV1.toLabelSelector),
     storageClassName: c.readOpt(obj["storageClassName"], c.checkStr),
@@ -1732,7 +1794,7 @@ export function fromPersistentVolumeClaimSpec(input: PersistentVolumeClaimSpec):
   return {
     ...input,
     dataSource: input.dataSource != null ? fromTypedLocalObjectReference(input.dataSource) : undefined,
-    dataSourceRef: input.dataSourceRef != null ? fromTypedLocalObjectReference(input.dataSourceRef) : undefined,
+    dataSourceRef: input.dataSourceRef != null ? fromTypedObjectReference(input.dataSourceRef) : undefined,
     resources: input.resources != null ? fromResourceRequirements(input.resources) : undefined,
     selector: input.selector != null ? MetaV1.fromLabelSelector(input.selector) : undefined,
   }}
@@ -1751,6 +1813,25 @@ export function toTypedLocalObjectReference(input: c.JSONValue): TypedLocalObjec
     name: c.checkStr(obj["name"]),
   }}
 export function fromTypedLocalObjectReference(input: TypedLocalObjectReference): c.JSONValue {
+  return {
+    ...input,
+  }}
+
+export interface TypedObjectReference {
+  apiGroup?: string | null;
+  kind: string;
+  name: string;
+  namespace?: string | null;
+}
+export function toTypedObjectReference(input: c.JSONValue): TypedObjectReference {
+  const obj = c.checkObj(input);
+  return {
+    apiGroup: c.readOpt(obj["apiGroup"], c.checkStr),
+    kind: c.checkStr(obj["kind"]),
+    name: c.checkStr(obj["name"]),
+    namespace: c.readOpt(obj["namespace"], c.checkStr),
+  }}
+export function fromTypedObjectReference(input: TypedObjectReference): c.JSONValue {
   return {
     ...input,
   }}
@@ -2980,21 +3061,26 @@ export function fromPersistentVolumeClaim(input: PersistentVolumeClaim): c.JSONV
 /** PersistentVolumeClaimStatus is the current status of a persistent volume claim. */
 export interface PersistentVolumeClaimStatus {
   accessModes?: Array<string> | null;
+  allocatedResources?: Record<string,c.Quantity> | null;
   capacity?: Record<string,c.Quantity> | null;
   conditions?: Array<PersistentVolumeClaimCondition> | null;
   phase?: string | null;
+  resizeStatus?: string | null;
 }
 export function toPersistentVolumeClaimStatus(input: c.JSONValue): PersistentVolumeClaimStatus {
   const obj = c.checkObj(input);
   return {
     accessModes: c.readOpt(obj["accessModes"], x => c.readList(x, c.checkStr)),
+    allocatedResources: c.readOpt(obj["allocatedResources"], x => c.readMap(x, c.toQuantity)),
     capacity: c.readOpt(obj["capacity"], x => c.readMap(x, c.toQuantity)),
     conditions: c.readOpt(obj["conditions"], x => c.readList(x, toPersistentVolumeClaimCondition)),
     phase: c.readOpt(obj["phase"], c.checkStr),
+    resizeStatus: c.readOpt(obj["resizeStatus"], c.checkStr),
   }}
 export function fromPersistentVolumeClaimStatus(input: PersistentVolumeClaimStatus): c.JSONValue {
   return {
     ...input,
+    allocatedResources: c.writeMap(input.allocatedResources, c.fromQuantity),
     capacity: c.writeMap(input.capacity, c.fromQuantity),
     conditions: input.conditions?.map(fromPersistentVolumeClaimCondition),
   }}
@@ -3106,19 +3192,23 @@ export interface PodSpec {
   hostIPC?: boolean | null;
   hostNetwork?: boolean | null;
   hostPID?: boolean | null;
+  hostUsers?: boolean | null;
   hostname?: string | null;
   imagePullSecrets?: Array<LocalObjectReference> | null;
   initContainers?: Array<Container> | null;
   nodeName?: string | null;
   nodeSelector?: Record<string,string> | null;
+  os?: PodOS | null;
   overhead?: Record<string,c.Quantity> | null;
   preemptionPolicy?: string | null;
   priority?: number | null;
   priorityClassName?: string | null;
   readinessGates?: Array<PodReadinessGate> | null;
+  resourceClaims?: Array<PodResourceClaim> | null;
   restartPolicy?: string | null;
   runtimeClassName?: string | null;
   schedulerName?: string | null;
+  schedulingGates?: Array<PodSchedulingGate> | null;
   securityContext?: PodSecurityContext | null;
   serviceAccount?: string | null;
   serviceAccountName?: string | null;
@@ -3145,19 +3235,23 @@ export function toPodSpec(input: c.JSONValue): PodSpec {
     hostIPC: c.readOpt(obj["hostIPC"], c.checkBool),
     hostNetwork: c.readOpt(obj["hostNetwork"], c.checkBool),
     hostPID: c.readOpt(obj["hostPID"], c.checkBool),
+    hostUsers: c.readOpt(obj["hostUsers"], c.checkBool),
     hostname: c.readOpt(obj["hostname"], c.checkStr),
     imagePullSecrets: c.readOpt(obj["imagePullSecrets"], x => c.readList(x, toLocalObjectReference)),
     initContainers: c.readOpt(obj["initContainers"], x => c.readList(x, toContainer)),
     nodeName: c.readOpt(obj["nodeName"], c.checkStr),
     nodeSelector: c.readOpt(obj["nodeSelector"], x => c.readMap(x, c.checkStr)),
+    os: c.readOpt(obj["os"], toPodOS),
     overhead: c.readOpt(obj["overhead"], x => c.readMap(x, c.toQuantity)),
     preemptionPolicy: c.readOpt(obj["preemptionPolicy"], c.checkStr),
     priority: c.readOpt(obj["priority"], c.checkNum),
     priorityClassName: c.readOpt(obj["priorityClassName"], c.checkStr),
     readinessGates: c.readOpt(obj["readinessGates"], x => c.readList(x, toPodReadinessGate)),
+    resourceClaims: c.readOpt(obj["resourceClaims"], x => c.readList(x, toPodResourceClaim)),
     restartPolicy: c.readOpt(obj["restartPolicy"], c.checkStr),
     runtimeClassName: c.readOpt(obj["runtimeClassName"], c.checkStr),
     schedulerName: c.readOpt(obj["schedulerName"], c.checkStr),
+    schedulingGates: c.readOpt(obj["schedulingGates"], x => c.readList(x, toPodSchedulingGate)),
     securityContext: c.readOpt(obj["securityContext"], toPodSecurityContext),
     serviceAccount: c.readOpt(obj["serviceAccount"], c.checkStr),
     serviceAccountName: c.readOpt(obj["serviceAccountName"], c.checkStr),
@@ -3179,8 +3273,11 @@ export function fromPodSpec(input: PodSpec): c.JSONValue {
     hostAliases: input.hostAliases?.map(fromHostAlias),
     imagePullSecrets: input.imagePullSecrets?.map(fromLocalObjectReference),
     initContainers: input.initContainers?.map(fromContainer),
+    os: input.os != null ? fromPodOS(input.os) : undefined,
     overhead: c.writeMap(input.overhead, c.fromQuantity),
     readinessGates: input.readinessGates?.map(fromPodReadinessGate),
+    resourceClaims: input.resourceClaims?.map(fromPodResourceClaim),
+    schedulingGates: input.schedulingGates?.map(fromPodSchedulingGate),
     securityContext: input.securityContext != null ? fromPodSecurityContext(input.securityContext) : undefined,
     tolerations: input.tolerations?.map(fromToleration),
     topologySpreadConstraints: input.topologySpreadConstraints?.map(fromTopologySpreadConstraint),
@@ -3222,6 +3319,20 @@ export function fromPodDNSConfigOption(input: PodDNSConfigOption): c.JSONValue {
     ...input,
   }}
 
+/** PodOS defines the OS parameters of a pod. */
+export interface PodOS {
+  name: string;
+}
+export function toPodOS(input: c.JSONValue): PodOS {
+  const obj = c.checkObj(input);
+  return {
+    name: c.checkStr(obj["name"]),
+  }}
+export function fromPodOS(input: PodOS): c.JSONValue {
+  return {
+    ...input,
+  }}
+
 /** PodReadinessGate contains the reference to a pod condition */
 export interface PodReadinessGate {
   conditionType: string;
@@ -3232,6 +3343,37 @@ export function toPodReadinessGate(input: c.JSONValue): PodReadinessGate {
     conditionType: c.checkStr(obj["conditionType"]),
   }}
 export function fromPodReadinessGate(input: PodReadinessGate): c.JSONValue {
+  return {
+    ...input,
+  }}
+
+/** PodResourceClaim references exactly one ResourceClaim through a ClaimSource. It adds a name to it that uniquely identifies the ResourceClaim inside the Pod. Containers that need access to the ResourceClaim reference it with this name. */
+export interface PodResourceClaim {
+  name: string;
+  source?: ClaimSource | null;
+}
+export function toPodResourceClaim(input: c.JSONValue): PodResourceClaim {
+  const obj = c.checkObj(input);
+  return {
+    name: c.checkStr(obj["name"]),
+    source: c.readOpt(obj["source"], toClaimSource),
+  }}
+export function fromPodResourceClaim(input: PodResourceClaim): c.JSONValue {
+  return {
+    ...input,
+    source: input.source != null ? fromClaimSource(input.source) : undefined,
+  }}
+
+/** PodSchedulingGate is associated to a Pod to guard its scheduling. */
+export interface PodSchedulingGate {
+  name: string;
+}
+export function toPodSchedulingGate(input: c.JSONValue): PodSchedulingGate {
+  const obj = c.checkObj(input);
+  return {
+    name: c.checkStr(obj["name"]),
+  }}
+export function fromPodSchedulingGate(input: PodSchedulingGate): c.JSONValue {
   return {
     ...input,
   }}
@@ -3313,7 +3455,11 @@ export function fromToleration(input: Toleration): c.JSONValue {
 /** TopologySpreadConstraint specifies how to spread matching pods among the given topology. */
 export interface TopologySpreadConstraint {
   labelSelector?: MetaV1.LabelSelector | null;
+  matchLabelKeys?: Array<string> | null;
   maxSkew: number;
+  minDomains?: number | null;
+  nodeAffinityPolicy?: string | null;
+  nodeTaintsPolicy?: string | null;
   topologyKey: string;
   whenUnsatisfiable: string;
 }
@@ -3321,7 +3467,11 @@ export function toTopologySpreadConstraint(input: c.JSONValue): TopologySpreadCo
   const obj = c.checkObj(input);
   return {
     labelSelector: c.readOpt(obj["labelSelector"], MetaV1.toLabelSelector),
+    matchLabelKeys: c.readOpt(obj["matchLabelKeys"], x => c.readList(x, c.checkStr)),
     maxSkew: c.checkNum(obj["maxSkew"]),
+    minDomains: c.readOpt(obj["minDomains"], c.checkNum),
+    nodeAffinityPolicy: c.readOpt(obj["nodeAffinityPolicy"], c.checkStr),
+    nodeTaintsPolicy: c.readOpt(obj["nodeTaintsPolicy"], c.checkStr),
     topologyKey: c.checkStr(obj["topologyKey"]),
     whenUnsatisfiable: c.checkStr(obj["whenUnsatisfiable"]),
   }}
@@ -3691,7 +3841,8 @@ export function fromPodCondition(input: PodCondition): c.JSONValue {
   }}
 
 /** IP address information for entries in the (plural) PodIPs field. Each entry includes:
-   IP: An IP address allocated to the pod. Routable at least within the cluster. */
+
+	IP: An IP address allocated to the pod. Routable at least within the cluster. */
 export interface PodIP {
   ip?: string | null;
 }

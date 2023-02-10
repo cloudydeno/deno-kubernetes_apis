@@ -1,7 +1,13 @@
 #!/bin/sh -eux
 
-./generation/sources/builtin.sh v1.22.4
+# https://github.com/kubernetes/kubernetes/releases
+./generation/sources/builtin.sh v1.26.1
 
-./generation/sources/argo-cd.sh v2.1.7
-./generation/sources/cert-manager.sh v1.6.1
-./generation/sources/external-dns.sh v0.10.1
+# https://github.com/argoproj/argo-cd/releases
+./generation/sources/argo-cd.sh v2.6.1
+
+# https://github.com/cert-manager/cert-manager/releases
+./generation/sources/cert-manager.sh v1.11.0
+
+# https://github.com/kubernetes-sigs/external-dns/releases
+./generation/sources/external-dns.sh v0.13.2

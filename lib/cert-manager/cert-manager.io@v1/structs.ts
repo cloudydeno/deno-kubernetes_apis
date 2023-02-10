@@ -138,6 +138,9 @@ export interface Certificate {
   kind?: "Certificate";
   metadata?: MetaV1.ObjectMeta | null;
   spec: {
+    additionalOutputFormats?: Array<{
+      type: "DER" | "CombinedPEM" | c.UnexpectedEnumValue;
+    }> | null;
     commonName?: string | null;
     dnsNames?: Array<string> | null;
     duration?: string | null;
@@ -160,10 +163,11 @@ export interface Certificate {
         passwordSecretRef: SecretRef;
       } | null;
     } | null;
+    literalSubject?: string | null;
     privateKey?: {
       algorithm?: "RSA" | "ECDSA" | "Ed25519" | c.UnexpectedEnumValue | null;
       encoding?: "PKCS1" | "PKCS8" | c.UnexpectedEnumValue | null;
-      rotationPolicy?: string | null;
+      rotationPolicy?: "Never" | "Always" | c.UnexpectedEnumValue | null;
       size?: number | null;
     } | null;
     renewBefore?: string | null;
@@ -195,6 +199,7 @@ export interface Certificate {
       status: "True" | "False" | "Unknown" | c.UnexpectedEnumValue;
       type: string;
     }> | null;
+    failedIssuanceAttempts?: number | null;
     lastFailureTime?: c.Time | null;
     nextPrivateKeySecretName?: string | null;
     notAfter?: c.Time | null;
@@ -245,6 +250,7 @@ export function fromCertificate(input: Certificate): c.JSONValue {
 export function toCertificate_spec(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
+    additionalOutputFormats: c.readOpt(obj["additionalOutputFormats"], x => c.readList(x, toCertificate_spec_additionalOutputFormats)),
     commonName: c.readOpt(obj["commonName"], c.checkStr),
     dnsNames: c.readOpt(obj["dnsNames"], x => c.readList(x, c.checkStr)),
     duration: c.readOpt(obj["duration"], c.checkStr),
@@ -254,6 +260,7 @@ export function toCertificate_spec(input: c.JSONValue) {
     isCA: c.readOpt(obj["isCA"], c.checkBool),
     issuerRef: toCertificate_spec_issuerRef(obj["issuerRef"]),
     keystores: c.readOpt(obj["keystores"], toCertificate_spec_keystores),
+    literalSubject: c.readOpt(obj["literalSubject"], c.checkStr),
     privateKey: c.readOpt(obj["privateKey"], toCertificate_spec_privateKey),
     renewBefore: c.readOpt(obj["renewBefore"], c.checkStr),
     revisionHistoryLimit: c.readOpt(obj["revisionHistoryLimit"], c.checkNum),
@@ -267,12 +274,18 @@ export function toCertificate_status(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     conditions: c.readOpt(obj["conditions"], x => c.readList(x, toCertificate_status_conditions)),
+    failedIssuanceAttempts: c.readOpt(obj["failedIssuanceAttempts"], c.checkNum),
     lastFailureTime: c.readOpt(obj["lastFailureTime"], c.toTime),
     nextPrivateKeySecretName: c.readOpt(obj["nextPrivateKeySecretName"], c.checkStr),
     notAfter: c.readOpt(obj["notAfter"], c.toTime),
     notBefore: c.readOpt(obj["notBefore"], c.toTime),
     renewalTime: c.readOpt(obj["renewalTime"], c.toTime),
     revision: c.readOpt(obj["revision"], c.checkNum),
+  }}
+export function toCertificate_spec_additionalOutputFormats(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    type: (x => c.readEnum<"DER" | "CombinedPEM" | c.UnexpectedEnumValue>(x))(obj["type"]),
   }}
 export function toCertificate_spec_issuerRef(input: c.JSONValue) {
   const obj = c.checkObj(input);
@@ -292,7 +305,7 @@ export function toCertificate_spec_privateKey(input: c.JSONValue) {
   return {
     algorithm: c.readOpt(obj["algorithm"], (x => c.readEnum<"RSA" | "ECDSA" | "Ed25519" | c.UnexpectedEnumValue>(x))),
     encoding: c.readOpt(obj["encoding"], (x => c.readEnum<"PKCS1" | "PKCS8" | c.UnexpectedEnumValue>(x))),
-    rotationPolicy: c.readOpt(obj["rotationPolicy"], c.checkStr),
+    rotationPolicy: c.readOpt(obj["rotationPolicy"], (x => c.readEnum<"Never" | "Always" | c.UnexpectedEnumValue>(x))),
     size: c.readOpt(obj["size"], c.checkNum),
   }}
 export function toCertificate_spec_secretTemplate(input: c.JSONValue) {
@@ -351,6 +364,7 @@ export function toCertificateList(input: c.JSONValue): CertificateList & c.ApiKi
 /** Desired state of the Issuer or ClusterIssuer resource. */
 export interface IssuerSpec {
   acme?: {
+    caBundle?: string | null;
     disableAccountKeyGeneration?: boolean | null;
     email?: string | null;
     enableDurationFeature?: boolean | null;
@@ -388,6 +402,7 @@ export interface IssuerSpec {
       tokenSecretRef?: SecretRef | null;
     };
     caBundle?: string | null;
+    caBundleSecretRef?: SecretRef | null;
     namespace?: string | null;
     path: string;
     server: string;
@@ -442,6 +457,7 @@ export function fromIssuerSpec(input: IssuerSpec): c.JSONValue {
         } : undefined,
         tokenSecretRef: input.vault.auth.tokenSecretRef != null ? fromSecretRef(input.vault.auth.tokenSecretRef) : undefined,
       } : undefined,
+      caBundleSecretRef: input.vault.caBundleSecretRef != null ? fromSecretRef(input.vault.caBundleSecretRef) : undefined,
     } : undefined,
     venafi: input.venafi != null ? {
       ...input.venafi,
@@ -454,6 +470,7 @@ export function fromIssuerSpec(input: IssuerSpec): c.JSONValue {
 export function toIssuerSpec_acme(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
+    caBundle: c.readOpt(obj["caBundle"], c.checkStr),
     disableAccountKeyGeneration: c.readOpt(obj["disableAccountKeyGeneration"], c.checkBool),
     email: c.readOpt(obj["email"], c.checkStr),
     enableDurationFeature: c.readOpt(obj["enableDurationFeature"], c.checkBool),
@@ -481,6 +498,7 @@ export function toIssuerSpec_vault(input: c.JSONValue) {
   return {
     auth: toIssuerSpec_vault_auth(obj["auth"]),
     caBundle: c.readOpt(obj["caBundle"], c.checkStr),
+    caBundleSecretRef: c.readOpt(obj["caBundleSecretRef"], toSecretRef),
     namespace: c.readOpt(obj["namespace"], c.checkStr),
     path: c.checkStr(obj["path"]),
     server: c.checkStr(obj["server"]),
@@ -587,6 +605,7 @@ export interface SolverSpec {
     } | null;
     route53?: {
       accessKeyID?: string | null;
+      accessKeyIDSecretRef?: SecretRef | null;
       hostedZoneID?: string | null;
       region: string;
       role?: string | null;
@@ -601,6 +620,14 @@ export interface SolverSpec {
   http01?: {
     gatewayHTTPRoute?: {
       labels?: Record<string,string> | null;
+      parentRefs?: Array<{
+        group?: string | null;
+        kind?: string | null;
+        name: string;
+        namespace?: string | null;
+        port?: number | null;
+        sectionName?: string | null;
+      }> | null;
       serviceType?: string | null;
     } | null;
     ingress?: {
@@ -685,6 +712,7 @@ export function fromSolverSpec(input: SolverSpec): c.JSONValue {
       } : undefined,
       route53: input.dns01.route53 != null ? {
         ...input.dns01.route53,
+        accessKeyIDSecretRef: input.dns01.route53.accessKeyIDSecretRef != null ? fromSecretRef(input.dns01.route53.accessKeyIDSecretRef) : undefined,
         secretAccessKeySecretRef: input.dns01.route53.secretAccessKeySecretRef != null ? fromSecretRef(input.dns01.route53.secretAccessKeySecretRef) : undefined,
       } : undefined,
     } : undefined,
@@ -786,6 +814,7 @@ export function toSolverSpec_dns01_route53(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     accessKeyID: c.readOpt(obj["accessKeyID"], c.checkStr),
+    accessKeyIDSecretRef: c.readOpt(obj["accessKeyIDSecretRef"], toSecretRef),
     hostedZoneID: c.readOpt(obj["hostedZoneID"], c.checkStr),
     region: c.checkStr(obj["region"]),
     role: c.readOpt(obj["role"], c.checkStr),
@@ -802,6 +831,7 @@ export function toSolverSpec_http01_gatewayHTTPRoute(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     labels: c.readOpt(obj["labels"], x => c.readMap(x, c.checkStr)),
+    parentRefs: c.readOpt(obj["parentRefs"], x => c.readList(x, toSolverSpec_http01_gatewayHTTPRoute_parentRefs)),
     serviceType: c.readOpt(obj["serviceType"], c.checkStr),
   }}
 export function toSolverSpec_http01_ingress(input: c.JSONValue) {
@@ -818,6 +848,16 @@ export function toSolverSpec_dns01_azureDNS_managedIdentity(input: c.JSONValue) 
   return {
     clientID: c.readOpt(obj["clientID"], c.checkStr),
     resourceID: c.readOpt(obj["resourceID"], c.checkStr),
+  }}
+export function toSolverSpec_http01_gatewayHTTPRoute_parentRefs(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    group: c.readOpt(obj["group"], c.checkStr),
+    kind: c.readOpt(obj["kind"], c.checkStr),
+    name: c.checkStr(obj["name"]),
+    namespace: c.readOpt(obj["namespace"], c.checkStr),
+    port: c.readOpt(obj["port"], c.checkNum),
+    sectionName: c.readOpt(obj["sectionName"], c.checkStr),
   }}
 export function toSolverSpec_http01_ingress_ingressTemplate(input: c.JSONValue) {
   const obj = c.checkObj(input);

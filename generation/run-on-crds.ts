@@ -14,9 +14,9 @@ import {
 const knownOpts = {
   GetListOpts: 'continue,fieldSelector,labelSelector,limit,resourceVersion,resourceVersionMatch,timeoutSeconds',
   WatchListOpts: 'allowWatchBookmarks,fieldSelector,labelSelector,resourceVersion,resourceVersionMatch,timeoutSeconds',
-  PutOpts: 'dryRun,fieldManager', // both CreateOpts and ReplaceOpts
+  PutOpts: 'dryRun,fieldManager,fieldValidation', // both CreateOpts and ReplaceOpts
   DeleteListOpts: 'continue,dryRun,fieldSelector,gracePeriodSeconds,labelSelector,limit,orphanDependents,propagationPolicy,resourceVersion,resourceVersionMatch,timeoutSeconds',
-  PatchOpts: 'dryRun,fieldManager,force',
+  PatchOpts: 'dryRun,fieldManager,fieldValidation,force',
   GetOpts: '',
   DeleteOpts: 'dryRun,gracePeriodSeconds,orphanDependents,propagationPolicy',
 };

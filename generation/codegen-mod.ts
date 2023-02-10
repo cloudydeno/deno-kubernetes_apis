@@ -6,9 +6,9 @@ const knownOpts: Record<string,string|undefined> = {
   '': 'NoOpts',
   'continue,fieldSelector,labelSelector,limit,resourceVersion,resourceVersionMatch,timeoutSeconds': 'GetListOpts',
   'allowWatchBookmarks,fieldSelector,labelSelector,resourceVersion,resourceVersionMatch,timeoutSeconds': 'WatchListOpts',
-  'dryRun,fieldManager': 'PutOpts', // both CreateOpts and ReplaceOpts
+  'dryRun,fieldManager,fieldValidation': 'PutOpts', // both CreateOpts and ReplaceOpts
   'continue,dryRun,fieldSelector,gracePeriodSeconds,labelSelector,limit,orphanDependents,propagationPolicy,resourceVersion,resourceVersionMatch,timeoutSeconds': 'DeleteListOpts',
-  'dryRun,fieldManager,force': 'PatchOpts',
+  'dryRun,fieldManager,fieldValidation,force': 'PatchOpts',
   'exact,export': 'GetOpts',
   'dryRun,gracePeriodSeconds,orphanDependents,propagationPolicy': 'DeleteOpts',
 };

@@ -44,6 +44,29 @@ export class ArgoprojIoV1alpha1Api {
     return resp.pipeThrough(new c.WatchEventTransformer(ArgoprojIoV1alpha1.toApplication, MetaV1.toStatus));
   }
 
+  async getApplicationSetListForAllNamespaces(opts: operations.GetListOpts = {}) {
+    const resp = await this.#client.performRequest({
+      method: "GET",
+      path: `${this.#root}applicationsets`,
+      expectJson: true,
+      querystring: operations.formatGetListOpts(opts),
+      abortSignal: opts.abortSignal,
+    });
+    return ArgoprojIoV1alpha1.toApplicationSetList(resp);
+  }
+
+  async watchApplicationSetListForAllNamespaces(opts: operations.WatchListOpts = {}) {
+    const resp = await this.#client.performRequest({
+      method: "GET",
+      path: `${this.#root}applicationsets`,
+      expectJson: true,
+      expectStream: true,
+      querystring: operations.formatWatchListOpts(opts),
+      abortSignal: opts.abortSignal,
+    });
+    return resp.pipeThrough(new c.WatchEventTransformer(ArgoprojIoV1alpha1.toApplicationSet, MetaV1.toStatus));
+  }
+
   async getAppProjectListForAllNamespaces(opts: operations.GetListOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "GET",
@@ -167,6 +190,133 @@ export class ArgoprojIoV1alpha1NamespacedApi {
       abortSignal: opts.abortSignal,
     });
     return ArgoprojIoV1alpha1.toApplication(resp);
+  }
+
+  async getApplicationSetList(opts: operations.GetListOpts = {}) {
+    const resp = await this.#client.performRequest({
+      method: "GET",
+      path: `${this.#root}applicationsets`,
+      expectJson: true,
+      querystring: operations.formatGetListOpts(opts),
+      abortSignal: opts.abortSignal,
+    });
+    return ArgoprojIoV1alpha1.toApplicationSetList(resp);
+  }
+
+  async watchApplicationSetList(opts: operations.WatchListOpts = {}) {
+    const resp = await this.#client.performRequest({
+      method: "GET",
+      path: `${this.#root}applicationsets`,
+      expectJson: true,
+      expectStream: true,
+      querystring: operations.formatWatchListOpts(opts),
+      abortSignal: opts.abortSignal,
+    });
+    return resp.pipeThrough(new c.WatchEventTransformer(ArgoprojIoV1alpha1.toApplicationSet, MetaV1.toStatus));
+  }
+
+  async createApplicationSet(body: ArgoprojIoV1alpha1.ApplicationSet, opts: operations.PutOpts = {}) {
+    const resp = await this.#client.performRequest({
+      method: "POST",
+      path: `${this.#root}applicationsets`,
+      expectJson: true,
+      querystring: operations.formatPutOpts(opts),
+      bodyJson: ArgoprojIoV1alpha1.fromApplicationSet(body),
+      abortSignal: opts.abortSignal,
+    });
+    return ArgoprojIoV1alpha1.toApplicationSet(resp);
+  }
+
+  async deleteApplicationSetList(opts: operations.DeleteListOpts = {}) {
+    const resp = await this.#client.performRequest({
+      method: "DELETE",
+      path: `${this.#root}applicationsets`,
+      expectJson: true,
+      querystring: operations.formatDeleteListOpts(opts),
+      abortSignal: opts.abortSignal,
+    });
+    return ArgoprojIoV1alpha1.toApplicationSetList(resp);
+  }
+
+  async getApplicationSet(name: string, opts: operations.NoOpts = {}) {
+    const resp = await this.#client.performRequest({
+      method: "GET",
+      path: `${this.#root}applicationsets/${name}`,
+      expectJson: true,
+      abortSignal: opts.abortSignal,
+    });
+    return ArgoprojIoV1alpha1.toApplicationSet(resp);
+  }
+
+  async deleteApplicationSet(name: string, opts: operations.DeleteOpts = {}) {
+    const resp = await this.#client.performRequest({
+      method: "DELETE",
+      path: `${this.#root}applicationsets/${name}`,
+      expectJson: true,
+      querystring: operations.formatDeleteOpts(opts),
+      abortSignal: opts.abortSignal,
+    });
+    return MetaV1.toStatus(resp);
+  }
+
+  async replaceApplicationSet(name: string, body: ArgoprojIoV1alpha1.ApplicationSet, opts: operations.PutOpts = {}) {
+    const resp = await this.#client.performRequest({
+      method: "PUT",
+      path: `${this.#root}applicationsets/${name}`,
+      expectJson: true,
+      querystring: operations.formatPutOpts(opts),
+      bodyJson: ArgoprojIoV1alpha1.fromApplicationSet(body),
+      abortSignal: opts.abortSignal,
+    });
+    return ArgoprojIoV1alpha1.toApplicationSet(resp);
+  }
+
+  async patchApplicationSet(name: string, type: c.PatchType, body: ArgoprojIoV1alpha1.ApplicationSet | c.JsonPatch, opts: operations.PatchOpts = {}) {
+    const resp = await this.#client.performRequest({
+      method: "PATCH",
+      path: `${this.#root}applicationsets/${name}`,
+      expectJson: true,
+      querystring: operations.formatPatchOpts(opts),
+      contentType: c.getPatchContentType(type),
+      bodyJson: Array.isArray(body) ? body : ArgoprojIoV1alpha1.fromApplicationSet(body),
+      abortSignal: opts.abortSignal,
+    });
+    return ArgoprojIoV1alpha1.toApplicationSet(resp);
+  }
+
+  async getApplicationSetStatus(name: string, opts: operations.NoOpts = {}) {
+    const resp = await this.#client.performRequest({
+      method: "GET",
+      path: `${this.#root}applicationsets/${name}/status`,
+      expectJson: true,
+      abortSignal: opts.abortSignal,
+    });
+    return ArgoprojIoV1alpha1.toApplicationSet(resp);
+  }
+
+  async replaceApplicationSetStatus(name: string, body: ArgoprojIoV1alpha1.ApplicationSet, opts: operations.PutOpts = {}) {
+    const resp = await this.#client.performRequest({
+      method: "PUT",
+      path: `${this.#root}applicationsets/${name}/status`,
+      expectJson: true,
+      querystring: operations.formatPutOpts(opts),
+      bodyJson: ArgoprojIoV1alpha1.fromApplicationSet(body),
+      abortSignal: opts.abortSignal,
+    });
+    return ArgoprojIoV1alpha1.toApplicationSet(resp);
+  }
+
+  async patchApplicationSetStatus(name: string, type: c.PatchType, body: ArgoprojIoV1alpha1.ApplicationSet | c.JsonPatch, opts: operations.PatchOpts = {}) {
+    const resp = await this.#client.performRequest({
+      method: "PATCH",
+      path: `${this.#root}applicationsets/${name}/status`,
+      expectJson: true,
+      querystring: operations.formatPatchOpts(opts),
+      contentType: c.getPatchContentType(type),
+      bodyJson: Array.isArray(body) ? body : ArgoprojIoV1alpha1.fromApplicationSet(body),
+      abortSignal: opts.abortSignal,
+    });
+    return ArgoprojIoV1alpha1.toApplicationSet(resp);
   }
 
   async getAppProjectList(opts: operations.GetListOpts = {}) {

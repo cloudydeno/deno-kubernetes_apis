@@ -21,7 +21,7 @@ export function generateFromStruct(topShape: ApiShape, inputRef: string): string
 
   if (topShape.type !== 'structure') throw new Error(`TODO`);
   for (const [name, shape] of topShape.fields) {
-    const fieldRef = `${inputRef}.${name}`;
+    const fieldRef = name.includes('-') ? `${inputRef}['${name}']` : `${inputRef}.${name}`;
     switch (shape.type) {
       case 'structure': {
         if (shape.reference) {

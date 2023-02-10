@@ -388,4 +388,39 @@ export class NetworkingV1NamespacedApi {
     return NetworkingV1.toNetworkPolicy(resp);
   }
 
+  async getNetworkPolicyStatus(name: string, opts: operations.NoOpts = {}) {
+    const resp = await this.#client.performRequest({
+      method: "GET",
+      path: `${this.#root}networkpolicies/${name}/status`,
+      expectJson: true,
+      abortSignal: opts.abortSignal,
+    });
+    return NetworkingV1.toNetworkPolicy(resp);
+  }
+
+  async replaceNetworkPolicyStatus(name: string, body: NetworkingV1.NetworkPolicy, opts: operations.PutOpts = {}) {
+    const resp = await this.#client.performRequest({
+      method: "PUT",
+      path: `${this.#root}networkpolicies/${name}/status`,
+      expectJson: true,
+      querystring: operations.formatPutOpts(opts),
+      bodyJson: NetworkingV1.fromNetworkPolicy(body),
+      abortSignal: opts.abortSignal,
+    });
+    return NetworkingV1.toNetworkPolicy(resp);
+  }
+
+  async patchNetworkPolicyStatus(name: string, type: c.PatchType, body: NetworkingV1.NetworkPolicy | c.JsonPatch, opts: operations.PatchOpts = {}) {
+    const resp = await this.#client.performRequest({
+      method: "PATCH",
+      path: `${this.#root}networkpolicies/${name}/status`,
+      expectJson: true,
+      querystring: operations.formatPatchOpts(opts),
+      contentType: c.getPatchContentType(type),
+      bodyJson: Array.isArray(body) ? body : NetworkingV1.fromNetworkPolicy(body),
+      abortSignal: opts.abortSignal,
+    });
+    return NetworkingV1.toNetworkPolicy(resp);
+  }
+
 }

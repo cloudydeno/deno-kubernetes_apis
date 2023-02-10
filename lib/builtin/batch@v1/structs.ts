@@ -42,6 +42,7 @@ export interface CronJobSpec {
   startingDeadlineSeconds?: number | null;
   successfulJobsHistoryLimit?: number | null;
   suspend?: boolean | null;
+  timeZone?: string | null;
 }
 export function toCronJobSpec(input: c.JSONValue): CronJobSpec {
   const obj = c.checkObj(input);
@@ -53,6 +54,7 @@ export function toCronJobSpec(input: c.JSONValue): CronJobSpec {
     startingDeadlineSeconds: c.readOpt(obj["startingDeadlineSeconds"], c.checkNum),
     successfulJobsHistoryLimit: c.readOpt(obj["successfulJobsHistoryLimit"], c.checkNum),
     suspend: c.readOpt(obj["suspend"], c.checkBool),
+    timeZone: c.readOpt(obj["timeZone"], c.checkStr),
   }}
 export function fromCronJobSpec(input: CronJobSpec): c.JSONValue {
   return {
@@ -86,6 +88,7 @@ export interface JobSpec {
   completions?: number | null;
   manualSelector?: boolean | null;
   parallelism?: number | null;
+  podFailurePolicy?: PodFailurePolicy | null;
   selector?: MetaV1.LabelSelector | null;
   suspend?: boolean | null;
   template: CoreV1.PodTemplateSpec;
@@ -100,6 +103,7 @@ export function toJobSpec(input: c.JSONValue): JobSpec {
     completions: c.readOpt(obj["completions"], c.checkNum),
     manualSelector: c.readOpt(obj["manualSelector"], c.checkBool),
     parallelism: c.readOpt(obj["parallelism"], c.checkNum),
+    podFailurePolicy: c.readOpt(obj["podFailurePolicy"], toPodFailurePolicy),
     selector: c.readOpt(obj["selector"], MetaV1.toLabelSelector),
     suspend: c.readOpt(obj["suspend"], c.checkBool),
     template: CoreV1.toPodTemplateSpec(obj["template"]),
@@ -108,8 +112,78 @@ export function toJobSpec(input: c.JSONValue): JobSpec {
 export function fromJobSpec(input: JobSpec): c.JSONValue {
   return {
     ...input,
+    podFailurePolicy: input.podFailurePolicy != null ? fromPodFailurePolicy(input.podFailurePolicy) : undefined,
     selector: input.selector != null ? MetaV1.fromLabelSelector(input.selector) : undefined,
     template: input.template != null ? CoreV1.fromPodTemplateSpec(input.template) : undefined,
+  }}
+
+/** PodFailurePolicy describes how failed pods influence the backoffLimit. */
+export interface PodFailurePolicy {
+  rules: Array<PodFailurePolicyRule>;
+}
+export function toPodFailurePolicy(input: c.JSONValue): PodFailurePolicy {
+  const obj = c.checkObj(input);
+  return {
+    rules: c.readList(obj["rules"], toPodFailurePolicyRule),
+  }}
+export function fromPodFailurePolicy(input: PodFailurePolicy): c.JSONValue {
+  return {
+    ...input,
+    rules: input.rules?.map(fromPodFailurePolicyRule),
+  }}
+
+/** PodFailurePolicyRule describes how a pod failure is handled when the requirements are met. One of OnExitCodes and onPodConditions, but not both, can be used in each rule. */
+export interface PodFailurePolicyRule {
+  action: string;
+  onExitCodes?: PodFailurePolicyOnExitCodesRequirement | null;
+  onPodConditions: Array<PodFailurePolicyOnPodConditionsPattern>;
+}
+export function toPodFailurePolicyRule(input: c.JSONValue): PodFailurePolicyRule {
+  const obj = c.checkObj(input);
+  return {
+    action: c.checkStr(obj["action"]),
+    onExitCodes: c.readOpt(obj["onExitCodes"], toPodFailurePolicyOnExitCodesRequirement),
+    onPodConditions: c.readList(obj["onPodConditions"], toPodFailurePolicyOnPodConditionsPattern),
+  }}
+export function fromPodFailurePolicyRule(input: PodFailurePolicyRule): c.JSONValue {
+  return {
+    ...input,
+    onExitCodes: input.onExitCodes != null ? fromPodFailurePolicyOnExitCodesRequirement(input.onExitCodes) : undefined,
+    onPodConditions: input.onPodConditions?.map(fromPodFailurePolicyOnPodConditionsPattern),
+  }}
+
+/** PodFailurePolicyOnExitCodesRequirement describes the requirement for handling a failed pod based on its container exit codes. In particular, it lookups the .state.terminated.exitCode for each app container and init container status, represented by the .status.containerStatuses and .status.initContainerStatuses fields in the Pod status, respectively. Containers completed with success (exit code 0) are excluded from the requirement check. */
+export interface PodFailurePolicyOnExitCodesRequirement {
+  containerName?: string | null;
+  operator: string;
+  values: Array<number>;
+}
+export function toPodFailurePolicyOnExitCodesRequirement(input: c.JSONValue): PodFailurePolicyOnExitCodesRequirement {
+  const obj = c.checkObj(input);
+  return {
+    containerName: c.readOpt(obj["containerName"], c.checkStr),
+    operator: c.checkStr(obj["operator"]),
+    values: c.readList(obj["values"], c.checkNum),
+  }}
+export function fromPodFailurePolicyOnExitCodesRequirement(input: PodFailurePolicyOnExitCodesRequirement): c.JSONValue {
+  return {
+    ...input,
+  }}
+
+/** PodFailurePolicyOnPodConditionsPattern describes a pattern for matching an actual pod condition type. */
+export interface PodFailurePolicyOnPodConditionsPattern {
+  status: string;
+  type: string;
+}
+export function toPodFailurePolicyOnPodConditionsPattern(input: c.JSONValue): PodFailurePolicyOnPodConditionsPattern {
+  const obj = c.checkObj(input);
+  return {
+    status: c.checkStr(obj["status"]),
+    type: c.checkStr(obj["type"]),
+  }}
+export function fromPodFailurePolicyOnPodConditionsPattern(input: PodFailurePolicyOnPodConditionsPattern): c.JSONValue {
+  return {
+    ...input,
   }}
 
 /** CronJobStatus represents the current state of a cron job. */
@@ -178,6 +252,7 @@ export interface JobStatus {
   completionTime?: c.Time | null;
   conditions?: Array<JobCondition> | null;
   failed?: number | null;
+  ready?: number | null;
   startTime?: c.Time | null;
   succeeded?: number | null;
   uncountedTerminatedPods?: UncountedTerminatedPods | null;
@@ -190,6 +265,7 @@ export function toJobStatus(input: c.JSONValue): JobStatus {
     completionTime: c.readOpt(obj["completionTime"], c.toTime),
     conditions: c.readOpt(obj["conditions"], x => c.readList(x, toJobCondition)),
     failed: c.readOpt(obj["failed"], c.checkNum),
+    ready: c.readOpt(obj["ready"], c.checkNum),
     startTime: c.readOpt(obj["startTime"], c.toTime),
     succeeded: c.readOpt(obj["succeeded"], c.checkNum),
     uncountedTerminatedPods: c.readOpt(obj["uncountedTerminatedPods"], toUncountedTerminatedPods),

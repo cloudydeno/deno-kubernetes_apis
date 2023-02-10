@@ -271,6 +271,7 @@ export interface JSONSchemaProps {
   'x-kubernetes-list-type'?: string | null;
   'x-kubernetes-map-type'?: string | null;
   'x-kubernetes-preserve-unknown-fields'?: boolean | null;
+  'x-kubernetes-validations'?: Array<ValidationRule> | null;
 }
 export function toJSONSchemaProps(input: c.JSONValue): JSONSchemaProps {
   const obj = c.checkObj(input);
@@ -318,6 +319,7 @@ export function toJSONSchemaProps(input: c.JSONValue): JSONSchemaProps {
     'x-kubernetes-list-type': c.readOpt(obj["x-kubernetes-list-type"], c.checkStr),
     'x-kubernetes-map-type': c.readOpt(obj["x-kubernetes-map-type"], c.checkStr),
     'x-kubernetes-preserve-unknown-fields': c.readOpt(obj["x-kubernetes-preserve-unknown-fields"], c.checkBool),
+    'x-kubernetes-validations': c.readOpt(obj["x-kubernetes-validations"], x => c.readList(x, toValidationRule)),
   }}
 export function fromJSONSchemaProps(input: JSONSchemaProps): c.JSONValue {
   return {
@@ -330,6 +332,7 @@ export function fromJSONSchemaProps(input: JSONSchemaProps): c.JSONValue {
     oneOf: input.oneOf?.map(fromJSONSchemaProps),
     patternProperties: c.writeMap(input.patternProperties, fromJSONSchemaProps),
     properties: c.writeMap(input.properties, fromJSONSchemaProps),
+    'x-kubernetes-validations': input['x-kubernetes-validations']?.map(fromValidationRule),
   }}
 
 /** JSONSchemaPropsOrBool represents JSONSchemaProps or a boolean value. Defaults to true for the boolean property. */
@@ -359,6 +362,22 @@ export function fromExternalDocumentation(input: ExternalDocumentation): c.JSONV
 
 /** JSONSchemaPropsOrArray represents a value that can either be a JSONSchemaProps or an array of JSONSchemaProps. Mainly here for serialization purposes. */
 export type JSONSchemaPropsOrArray = c.JSONValue;
+
+/** ValidationRule describes a validation rule written in the CEL expression language. */
+export interface ValidationRule {
+  message?: string | null;
+  rule: string;
+}
+export function toValidationRule(input: c.JSONValue): ValidationRule {
+  const obj = c.checkObj(input);
+  return {
+    message: c.readOpt(obj["message"], c.checkStr),
+    rule: c.checkStr(obj["rule"]),
+  }}
+export function fromValidationRule(input: ValidationRule): c.JSONValue {
+  return {
+    ...input,
+  }}
 
 /** CustomResourceSubresources defines the status and scale subresources for CustomResources. */
 export interface CustomResourceSubresources {

@@ -2223,6 +2223,17 @@ export class CoreV1NamespacedApi {
     return CoreV1.toService(resp);
   }
 
+  async deleteServiceList(opts: operations.DeleteListOpts = {}) {
+    const resp = await this.#client.performRequest({
+      method: "DELETE",
+      path: `${this.#root}services`,
+      expectJson: true,
+      querystring: operations.formatDeleteListOpts(opts),
+      abortSignal: opts.abortSignal,
+    });
+    return CoreV1.toServiceList(resp);
+  }
+
   async getService(name: string, opts: operations.NoOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "GET",
@@ -2241,7 +2252,7 @@ export class CoreV1NamespacedApi {
       querystring: operations.formatDeleteOpts(opts),
       abortSignal: opts.abortSignal,
     });
-    return MetaV1.toStatus(resp);
+    return CoreV1.toService(resp);
   }
 
   async replaceService(name: string, body: CoreV1.Service, opts: operations.PutOpts = {}) {

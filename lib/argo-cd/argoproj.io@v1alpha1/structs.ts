@@ -40,6 +40,7 @@ export interface Application {
         namespace?: string | null;
       }> | null;
       revision?: string | null;
+      revisions?: Array<string> | null;
       source?: {
         chart?: string | null;
         directory?: {
@@ -65,23 +66,18 @@ export interface Application {
             name?: string | null;
             path?: string | null;
           }> | null;
+          ignoreMissingValueFiles?: boolean | null;
           parameters?: Array<{
             forceString?: boolean | null;
             name?: string | null;
             value?: string | null;
           }> | null;
+          passCredentials?: boolean | null;
           releaseName?: string | null;
+          skipCrds?: boolean | null;
           valueFiles?: Array<string> | null;
           values?: string | null;
           version?: string | null;
-        } | null;
-        ksonnet?: {
-          environment?: string | null;
-          parameters?: Array<{
-            component?: string | null;
-            name: string;
-            value: string;
-          }> | null;
         } | null;
         kustomize?: {
           commonAnnotations?: Record<string,string> | null;
@@ -100,10 +96,83 @@ export interface Application {
             value: string;
           }> | null;
           name?: string | null;
+          parameters?: Array<{
+            array?: Array<string> | null;
+            map?: Record<string,string> | null;
+            name?: string | null;
+            string?: string | null;
+          }> | null;
         } | null;
+        ref?: string | null;
         repoURL: string;
         targetRevision?: string | null;
       } | null;
+      sources?: Array<{
+        chart?: string | null;
+        directory?: {
+          exclude?: string | null;
+          include?: string | null;
+          jsonnet?: {
+            extVars?: Array<{
+              code?: boolean | null;
+              name: string;
+              value: string;
+            }> | null;
+            libs?: Array<string> | null;
+            tlas?: Array<{
+              code?: boolean | null;
+              name: string;
+              value: string;
+            }> | null;
+          } | null;
+          recurse?: boolean | null;
+        } | null;
+        helm?: {
+          fileParameters?: Array<{
+            name?: string | null;
+            path?: string | null;
+          }> | null;
+          ignoreMissingValueFiles?: boolean | null;
+          parameters?: Array<{
+            forceString?: boolean | null;
+            name?: string | null;
+            value?: string | null;
+          }> | null;
+          passCredentials?: boolean | null;
+          releaseName?: string | null;
+          skipCrds?: boolean | null;
+          valueFiles?: Array<string> | null;
+          values?: string | null;
+          version?: string | null;
+        } | null;
+        kustomize?: {
+          commonAnnotations?: Record<string,string> | null;
+          commonLabels?: Record<string,string> | null;
+          forceCommonAnnotations?: boolean | null;
+          forceCommonLabels?: boolean | null;
+          images?: Array<string> | null;
+          namePrefix?: string | null;
+          nameSuffix?: string | null;
+          version?: string | null;
+        } | null;
+        path?: string | null;
+        plugin?: {
+          env?: Array<{
+            name: string;
+            value: string;
+          }> | null;
+          name?: string | null;
+          parameters?: Array<{
+            array?: Array<string> | null;
+            map?: Record<string,string> | null;
+            name?: string | null;
+            string?: string | null;
+          }> | null;
+        } | null;
+        ref?: string | null;
+        repoURL: string;
+        targetRevision?: string | null;
+      }> | null;
       syncOptions?: Array<string> | null;
       syncStrategy?: {
         apply?: {
@@ -126,6 +195,7 @@ export interface Application {
       jqPathExpressions?: Array<string> | null;
       jsonPointers?: Array<string> | null;
       kind: string;
+      managedFieldsManagers?: Array<string> | null;
       name?: string | null;
       namespace?: string | null;
     }> | null;
@@ -135,7 +205,7 @@ export interface Application {
     }> | null;
     project: string;
     revisionHistoryLimit?: number | null;
-    source: {
+    source?: {
       chart?: string | null;
       directory?: {
         exclude?: string | null;
@@ -160,23 +230,18 @@ export interface Application {
           name?: string | null;
           path?: string | null;
         }> | null;
+        ignoreMissingValueFiles?: boolean | null;
         parameters?: Array<{
           forceString?: boolean | null;
           name?: string | null;
           value?: string | null;
         }> | null;
+        passCredentials?: boolean | null;
         releaseName?: string | null;
+        skipCrds?: boolean | null;
         valueFiles?: Array<string> | null;
         values?: string | null;
         version?: string | null;
-      } | null;
-      ksonnet?: {
-        environment?: string | null;
-        parameters?: Array<{
-          component?: string | null;
-          name: string;
-          value: string;
-        }> | null;
       } | null;
       kustomize?: {
         commonAnnotations?: Record<string,string> | null;
@@ -195,15 +260,92 @@ export interface Application {
           value: string;
         }> | null;
         name?: string | null;
+        parameters?: Array<{
+          array?: Array<string> | null;
+          map?: Record<string,string> | null;
+          name?: string | null;
+          string?: string | null;
+        }> | null;
       } | null;
+      ref?: string | null;
       repoURL: string;
       targetRevision?: string | null;
-    };
+    } | null;
+    sources?: Array<{
+      chart?: string | null;
+      directory?: {
+        exclude?: string | null;
+        include?: string | null;
+        jsonnet?: {
+          extVars?: Array<{
+            code?: boolean | null;
+            name: string;
+            value: string;
+          }> | null;
+          libs?: Array<string> | null;
+          tlas?: Array<{
+            code?: boolean | null;
+            name: string;
+            value: string;
+          }> | null;
+        } | null;
+        recurse?: boolean | null;
+      } | null;
+      helm?: {
+        fileParameters?: Array<{
+          name?: string | null;
+          path?: string | null;
+        }> | null;
+        ignoreMissingValueFiles?: boolean | null;
+        parameters?: Array<{
+          forceString?: boolean | null;
+          name?: string | null;
+          value?: string | null;
+        }> | null;
+        passCredentials?: boolean | null;
+        releaseName?: string | null;
+        skipCrds?: boolean | null;
+        valueFiles?: Array<string> | null;
+        values?: string | null;
+        version?: string | null;
+      } | null;
+      kustomize?: {
+        commonAnnotations?: Record<string,string> | null;
+        commonLabels?: Record<string,string> | null;
+        forceCommonAnnotations?: boolean | null;
+        forceCommonLabels?: boolean | null;
+        images?: Array<string> | null;
+        namePrefix?: string | null;
+        nameSuffix?: string | null;
+        version?: string | null;
+      } | null;
+      path?: string | null;
+      plugin?: {
+        env?: Array<{
+          name: string;
+          value: string;
+        }> | null;
+        name?: string | null;
+        parameters?: Array<{
+          array?: Array<string> | null;
+          map?: Record<string,string> | null;
+          name?: string | null;
+          string?: string | null;
+        }> | null;
+      } | null;
+      ref?: string | null;
+      repoURL: string;
+      targetRevision?: string | null;
+    }> | null;
     syncPolicy?: {
       automated?: {
         allowEmpty?: boolean | null;
         prune?: boolean | null;
         selfHeal?: boolean | null;
+      } | null;
+      managedNamespaceMetadata?: {
+        annotations?: Record<string,string> | null;
+        labels?: Record<string,string> | null;
       } | null;
       retry?: {
         backoff?: {
@@ -230,7 +372,8 @@ export interface Application {
       deployStartedAt?: c.Time | null;
       deployedAt: c.Time;
       id: number;
-      revision: string;
+      revision?: string | null;
+      revisions?: Array<string> | null;
       source?: {
         chart?: string | null;
         directory?: {
@@ -256,23 +399,18 @@ export interface Application {
             name?: string | null;
             path?: string | null;
           }> | null;
+          ignoreMissingValueFiles?: boolean | null;
           parameters?: Array<{
             forceString?: boolean | null;
             name?: string | null;
             value?: string | null;
           }> | null;
+          passCredentials?: boolean | null;
           releaseName?: string | null;
+          skipCrds?: boolean | null;
           valueFiles?: Array<string> | null;
           values?: string | null;
           version?: string | null;
-        } | null;
-        ksonnet?: {
-          environment?: string | null;
-          parameters?: Array<{
-            component?: string | null;
-            name: string;
-            value: string;
-          }> | null;
         } | null;
         kustomize?: {
           commonAnnotations?: Record<string,string> | null;
@@ -291,10 +429,83 @@ export interface Application {
             value: string;
           }> | null;
           name?: string | null;
+          parameters?: Array<{
+            array?: Array<string> | null;
+            map?: Record<string,string> | null;
+            name?: string | null;
+            string?: string | null;
+          }> | null;
         } | null;
+        ref?: string | null;
         repoURL: string;
         targetRevision?: string | null;
       } | null;
+      sources?: Array<{
+        chart?: string | null;
+        directory?: {
+          exclude?: string | null;
+          include?: string | null;
+          jsonnet?: {
+            extVars?: Array<{
+              code?: boolean | null;
+              name: string;
+              value: string;
+            }> | null;
+            libs?: Array<string> | null;
+            tlas?: Array<{
+              code?: boolean | null;
+              name: string;
+              value: string;
+            }> | null;
+          } | null;
+          recurse?: boolean | null;
+        } | null;
+        helm?: {
+          fileParameters?: Array<{
+            name?: string | null;
+            path?: string | null;
+          }> | null;
+          ignoreMissingValueFiles?: boolean | null;
+          parameters?: Array<{
+            forceString?: boolean | null;
+            name?: string | null;
+            value?: string | null;
+          }> | null;
+          passCredentials?: boolean | null;
+          releaseName?: string | null;
+          skipCrds?: boolean | null;
+          valueFiles?: Array<string> | null;
+          values?: string | null;
+          version?: string | null;
+        } | null;
+        kustomize?: {
+          commonAnnotations?: Record<string,string> | null;
+          commonLabels?: Record<string,string> | null;
+          forceCommonAnnotations?: boolean | null;
+          forceCommonLabels?: boolean | null;
+          images?: Array<string> | null;
+          namePrefix?: string | null;
+          nameSuffix?: string | null;
+          version?: string | null;
+        } | null;
+        path?: string | null;
+        plugin?: {
+          env?: Array<{
+            name: string;
+            value: string;
+          }> | null;
+          name?: string | null;
+          parameters?: Array<{
+            array?: Array<string> | null;
+            map?: Record<string,string> | null;
+            name?: string | null;
+            string?: string | null;
+          }> | null;
+        } | null;
+        ref?: string | null;
+        repoURL: string;
+        targetRevision?: string | null;
+      }> | null;
     }> | null;
     observedAt?: c.Time | null;
     operationState?: {
@@ -328,6 +539,7 @@ export interface Application {
             namespace?: string | null;
           }> | null;
           revision?: string | null;
+          revisions?: Array<string> | null;
           source?: {
             chart?: string | null;
             directory?: {
@@ -353,23 +565,18 @@ export interface Application {
                 name?: string | null;
                 path?: string | null;
               }> | null;
+              ignoreMissingValueFiles?: boolean | null;
               parameters?: Array<{
                 forceString?: boolean | null;
                 name?: string | null;
                 value?: string | null;
               }> | null;
+              passCredentials?: boolean | null;
               releaseName?: string | null;
+              skipCrds?: boolean | null;
               valueFiles?: Array<string> | null;
               values?: string | null;
               version?: string | null;
-            } | null;
-            ksonnet?: {
-              environment?: string | null;
-              parameters?: Array<{
-                component?: string | null;
-                name: string;
-                value: string;
-              }> | null;
             } | null;
             kustomize?: {
               commonAnnotations?: Record<string,string> | null;
@@ -388,10 +595,83 @@ export interface Application {
                 value: string;
               }> | null;
               name?: string | null;
+              parameters?: Array<{
+                array?: Array<string> | null;
+                map?: Record<string,string> | null;
+                name?: string | null;
+                string?: string | null;
+              }> | null;
             } | null;
+            ref?: string | null;
             repoURL: string;
             targetRevision?: string | null;
           } | null;
+          sources?: Array<{
+            chart?: string | null;
+            directory?: {
+              exclude?: string | null;
+              include?: string | null;
+              jsonnet?: {
+                extVars?: Array<{
+                  code?: boolean | null;
+                  name: string;
+                  value: string;
+                }> | null;
+                libs?: Array<string> | null;
+                tlas?: Array<{
+                  code?: boolean | null;
+                  name: string;
+                  value: string;
+                }> | null;
+              } | null;
+              recurse?: boolean | null;
+            } | null;
+            helm?: {
+              fileParameters?: Array<{
+                name?: string | null;
+                path?: string | null;
+              }> | null;
+              ignoreMissingValueFiles?: boolean | null;
+              parameters?: Array<{
+                forceString?: boolean | null;
+                name?: string | null;
+                value?: string | null;
+              }> | null;
+              passCredentials?: boolean | null;
+              releaseName?: string | null;
+              skipCrds?: boolean | null;
+              valueFiles?: Array<string> | null;
+              values?: string | null;
+              version?: string | null;
+            } | null;
+            kustomize?: {
+              commonAnnotations?: Record<string,string> | null;
+              commonLabels?: Record<string,string> | null;
+              forceCommonAnnotations?: boolean | null;
+              forceCommonLabels?: boolean | null;
+              images?: Array<string> | null;
+              namePrefix?: string | null;
+              nameSuffix?: string | null;
+              version?: string | null;
+            } | null;
+            path?: string | null;
+            plugin?: {
+              env?: Array<{
+                name: string;
+                value: string;
+              }> | null;
+              name?: string | null;
+              parameters?: Array<{
+                array?: Array<string> | null;
+                map?: Record<string,string> | null;
+                name?: string | null;
+                string?: string | null;
+              }> | null;
+            } | null;
+            ref?: string | null;
+            repoURL: string;
+            targetRevision?: string | null;
+          }> | null;
           syncOptions?: Array<string> | null;
           syncStrategy?: {
             apply?: {
@@ -420,6 +700,7 @@ export interface Application {
           version: string;
         }> | null;
         revision: string;
+        revisions?: Array<string> | null;
         source?: {
           chart?: string | null;
           directory?: {
@@ -445,23 +726,18 @@ export interface Application {
               name?: string | null;
               path?: string | null;
             }> | null;
+            ignoreMissingValueFiles?: boolean | null;
             parameters?: Array<{
               forceString?: boolean | null;
               name?: string | null;
               value?: string | null;
             }> | null;
+            passCredentials?: boolean | null;
             releaseName?: string | null;
+            skipCrds?: boolean | null;
             valueFiles?: Array<string> | null;
             values?: string | null;
             version?: string | null;
-          } | null;
-          ksonnet?: {
-            environment?: string | null;
-            parameters?: Array<{
-              component?: string | null;
-              name: string;
-              value: string;
-            }> | null;
           } | null;
           kustomize?: {
             commonAnnotations?: Record<string,string> | null;
@@ -480,40 +756,18 @@ export interface Application {
               value: string;
             }> | null;
             name?: string | null;
+            parameters?: Array<{
+              array?: Array<string> | null;
+              map?: Record<string,string> | null;
+              name?: string | null;
+              string?: string | null;
+            }> | null;
           } | null;
+          ref?: string | null;
           repoURL: string;
           targetRevision?: string | null;
         } | null;
-      } | null;
-    } | null;
-    reconciledAt?: c.Time | null;
-    resources?: Array<{
-      group?: string | null;
-      health?: {
-        message?: string | null;
-        status?: string | null;
-      } | null;
-      hook?: boolean | null;
-      kind?: string | null;
-      name?: string | null;
-      namespace?: string | null;
-      requiresPruning?: boolean | null;
-      status?: string | null;
-      version?: string | null;
-    }> | null;
-    sourceType?: string | null;
-    summary?: {
-      externalURLs?: Array<string> | null;
-      images?: Array<string> | null;
-    } | null;
-    sync?: {
-      comparedTo?: {
-        destination: {
-          name?: string | null;
-          namespace?: string | null;
-          server?: string | null;
-        };
-        source: {
+        sources?: Array<{
           chart?: string | null;
           directory?: {
             exclude?: string | null;
@@ -538,23 +792,18 @@ export interface Application {
               name?: string | null;
               path?: string | null;
             }> | null;
+            ignoreMissingValueFiles?: boolean | null;
             parameters?: Array<{
               forceString?: boolean | null;
               name?: string | null;
               value?: string | null;
             }> | null;
+            passCredentials?: boolean | null;
             releaseName?: string | null;
+            skipCrds?: boolean | null;
             valueFiles?: Array<string> | null;
             values?: string | null;
             version?: string | null;
-          } | null;
-          ksonnet?: {
-            environment?: string | null;
-            parameters?: Array<{
-              component?: string | null;
-              name: string;
-              value: string;
-            }> | null;
           } | null;
           kustomize?: {
             commonAnnotations?: Record<string,string> | null;
@@ -573,12 +822,184 @@ export interface Application {
               value: string;
             }> | null;
             name?: string | null;
+            parameters?: Array<{
+              array?: Array<string> | null;
+              map?: Record<string,string> | null;
+              name?: string | null;
+              string?: string | null;
+            }> | null;
           } | null;
+          ref?: string | null;
           repoURL: string;
           targetRevision?: string | null;
+        }> | null;
+      } | null;
+    } | null;
+    reconciledAt?: c.Time | null;
+    resourceHealthSource?: string | null;
+    resources?: Array<{
+      group?: string | null;
+      health?: {
+        message?: string | null;
+        status?: string | null;
+      } | null;
+      hook?: boolean | null;
+      kind?: string | null;
+      name?: string | null;
+      namespace?: string | null;
+      requiresPruning?: boolean | null;
+      status?: string | null;
+      syncWave?: number | null;
+      version?: string | null;
+    }> | null;
+    sourceType?: string | null;
+    sourceTypes?: Array<string> | null;
+    summary?: {
+      externalURLs?: Array<string> | null;
+      images?: Array<string> | null;
+    } | null;
+    sync?: {
+      comparedTo?: {
+        destination: {
+          name?: string | null;
+          namespace?: string | null;
+          server?: string | null;
         };
+        source?: {
+          chart?: string | null;
+          directory?: {
+            exclude?: string | null;
+            include?: string | null;
+            jsonnet?: {
+              extVars?: Array<{
+                code?: boolean | null;
+                name: string;
+                value: string;
+              }> | null;
+              libs?: Array<string> | null;
+              tlas?: Array<{
+                code?: boolean | null;
+                name: string;
+                value: string;
+              }> | null;
+            } | null;
+            recurse?: boolean | null;
+          } | null;
+          helm?: {
+            fileParameters?: Array<{
+              name?: string | null;
+              path?: string | null;
+            }> | null;
+            ignoreMissingValueFiles?: boolean | null;
+            parameters?: Array<{
+              forceString?: boolean | null;
+              name?: string | null;
+              value?: string | null;
+            }> | null;
+            passCredentials?: boolean | null;
+            releaseName?: string | null;
+            skipCrds?: boolean | null;
+            valueFiles?: Array<string> | null;
+            values?: string | null;
+            version?: string | null;
+          } | null;
+          kustomize?: {
+            commonAnnotations?: Record<string,string> | null;
+            commonLabels?: Record<string,string> | null;
+            forceCommonAnnotations?: boolean | null;
+            forceCommonLabels?: boolean | null;
+            images?: Array<string> | null;
+            namePrefix?: string | null;
+            nameSuffix?: string | null;
+            version?: string | null;
+          } | null;
+          path?: string | null;
+          plugin?: {
+            env?: Array<{
+              name: string;
+              value: string;
+            }> | null;
+            name?: string | null;
+            parameters?: Array<{
+              array?: Array<string> | null;
+              map?: Record<string,string> | null;
+              name?: string | null;
+              string?: string | null;
+            }> | null;
+          } | null;
+          ref?: string | null;
+          repoURL: string;
+          targetRevision?: string | null;
+        } | null;
+        sources?: Array<{
+          chart?: string | null;
+          directory?: {
+            exclude?: string | null;
+            include?: string | null;
+            jsonnet?: {
+              extVars?: Array<{
+                code?: boolean | null;
+                name: string;
+                value: string;
+              }> | null;
+              libs?: Array<string> | null;
+              tlas?: Array<{
+                code?: boolean | null;
+                name: string;
+                value: string;
+              }> | null;
+            } | null;
+            recurse?: boolean | null;
+          } | null;
+          helm?: {
+            fileParameters?: Array<{
+              name?: string | null;
+              path?: string | null;
+            }> | null;
+            ignoreMissingValueFiles?: boolean | null;
+            parameters?: Array<{
+              forceString?: boolean | null;
+              name?: string | null;
+              value?: string | null;
+            }> | null;
+            passCredentials?: boolean | null;
+            releaseName?: string | null;
+            skipCrds?: boolean | null;
+            valueFiles?: Array<string> | null;
+            values?: string | null;
+            version?: string | null;
+          } | null;
+          kustomize?: {
+            commonAnnotations?: Record<string,string> | null;
+            commonLabels?: Record<string,string> | null;
+            forceCommonAnnotations?: boolean | null;
+            forceCommonLabels?: boolean | null;
+            images?: Array<string> | null;
+            namePrefix?: string | null;
+            nameSuffix?: string | null;
+            version?: string | null;
+          } | null;
+          path?: string | null;
+          plugin?: {
+            env?: Array<{
+              name: string;
+              value: string;
+            }> | null;
+            name?: string | null;
+            parameters?: Array<{
+              array?: Array<string> | null;
+              map?: Record<string,string> | null;
+              name?: string | null;
+              string?: string | null;
+            }> | null;
+          } | null;
+          ref?: string | null;
+          repoURL: string;
+          targetRevision?: string | null;
+        }> | null;
       } | null;
       revision?: string | null;
+      revisions?: Array<string> | null;
       status: string;
     } | null;
   } | null;
@@ -633,7 +1054,8 @@ export function toApplication_spec(input: c.JSONValue) {
     info: c.readOpt(obj["info"], x => c.readList(x, toApplication_spec_info)),
     project: c.checkStr(obj["project"]),
     revisionHistoryLimit: c.readOpt(obj["revisionHistoryLimit"], c.checkNum),
-    source: toApplication_spec_source(obj["source"]),
+    source: c.readOpt(obj["source"], toApplication_spec_source),
+    sources: c.readOpt(obj["sources"], x => c.readList(x, toApplication_spec_sources)),
     syncPolicy: c.readOpt(obj["syncPolicy"], toApplication_spec_syncPolicy),
   }}
 export function toApplication_status(input: c.JSONValue) {
@@ -645,8 +1067,10 @@ export function toApplication_status(input: c.JSONValue) {
     observedAt: c.readOpt(obj["observedAt"], c.toTime),
     operationState: c.readOpt(obj["operationState"], toApplication_status_operationState),
     reconciledAt: c.readOpt(obj["reconciledAt"], c.toTime),
+    resourceHealthSource: c.readOpt(obj["resourceHealthSource"], c.checkStr),
     resources: c.readOpt(obj["resources"], x => c.readList(x, toApplication_status_resources)),
     sourceType: c.readOpt(obj["sourceType"], c.checkStr),
+    sourceTypes: c.readOpt(obj["sourceTypes"], x => c.readList(x, c.checkStr)),
     summary: c.readOpt(obj["summary"], toApplication_status_summary),
     sync: c.readOpt(obj["sync"], toApplication_status_sync),
   }}
@@ -676,7 +1100,9 @@ export function toApplication_operation_sync(input: c.JSONValue) {
     prune: c.readOpt(obj["prune"], c.checkBool),
     resources: c.readOpt(obj["resources"], x => c.readList(x, toApplication_operation_sync_resources)),
     revision: c.readOpt(obj["revision"], c.checkStr),
+    revisions: c.readOpt(obj["revisions"], x => c.readList(x, c.checkStr)),
     source: c.readOpt(obj["source"], toApplication_operation_sync_source),
+    sources: c.readOpt(obj["sources"], x => c.readList(x, toApplication_operation_sync_sources)),
     syncOptions: c.readOpt(obj["syncOptions"], x => c.readList(x, c.checkStr)),
     syncStrategy: c.readOpt(obj["syncStrategy"], toApplication_operation_sync_syncStrategy),
   }}
@@ -694,6 +1120,7 @@ export function toApplication_spec_ignoreDifferences(input: c.JSONValue) {
     jqPathExpressions: c.readOpt(obj["jqPathExpressions"], x => c.readList(x, c.checkStr)),
     jsonPointers: c.readOpt(obj["jsonPointers"], x => c.readList(x, c.checkStr)),
     kind: c.checkStr(obj["kind"]),
+    managedFieldsManagers: c.readOpt(obj["managedFieldsManagers"], x => c.readList(x, c.checkStr)),
     name: c.readOpt(obj["name"], c.checkStr),
     namespace: c.readOpt(obj["namespace"], c.checkStr),
   }}
@@ -709,10 +1136,23 @@ export function toApplication_spec_source(input: c.JSONValue) {
     chart: c.readOpt(obj["chart"], c.checkStr),
     directory: c.readOpt(obj["directory"], toApplication_spec_source_directory),
     helm: c.readOpt(obj["helm"], toApplication_spec_source_helm),
-    ksonnet: c.readOpt(obj["ksonnet"], toApplication_spec_source_ksonnet),
     kustomize: c.readOpt(obj["kustomize"], toApplication_spec_source_kustomize),
     path: c.readOpt(obj["path"], c.checkStr),
     plugin: c.readOpt(obj["plugin"], toApplication_spec_source_plugin),
+    ref: c.readOpt(obj["ref"], c.checkStr),
+    repoURL: c.checkStr(obj["repoURL"]),
+    targetRevision: c.readOpt(obj["targetRevision"], c.checkStr),
+  }}
+export function toApplication_spec_sources(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    chart: c.readOpt(obj["chart"], c.checkStr),
+    directory: c.readOpt(obj["directory"], toApplication_spec_sources_directory),
+    helm: c.readOpt(obj["helm"], toApplication_spec_sources_helm),
+    kustomize: c.readOpt(obj["kustomize"], toApplication_spec_sources_kustomize),
+    path: c.readOpt(obj["path"], c.checkStr),
+    plugin: c.readOpt(obj["plugin"], toApplication_spec_sources_plugin),
+    ref: c.readOpt(obj["ref"], c.checkStr),
     repoURL: c.checkStr(obj["repoURL"]),
     targetRevision: c.readOpt(obj["targetRevision"], c.checkStr),
   }}
@@ -720,6 +1160,7 @@ export function toApplication_spec_syncPolicy(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     automated: c.readOpt(obj["automated"], toApplication_spec_syncPolicy_automated),
+    managedNamespaceMetadata: c.readOpt(obj["managedNamespaceMetadata"], toApplication_spec_syncPolicy_managedNamespaceMetadata),
     retry: c.readOpt(obj["retry"], toApplication_spec_syncPolicy_retry),
     syncOptions: c.readOpt(obj["syncOptions"], x => c.readList(x, c.checkStr)),
   }}
@@ -742,8 +1183,10 @@ export function toApplication_status_history(input: c.JSONValue) {
     deployStartedAt: c.readOpt(obj["deployStartedAt"], c.toTime),
     deployedAt: c.toTime(obj["deployedAt"]),
     id: c.checkNum(obj["id"]),
-    revision: c.checkStr(obj["revision"]),
+    revision: c.readOpt(obj["revision"], c.checkStr),
+    revisions: c.readOpt(obj["revisions"], x => c.readList(x, c.checkStr)),
     source: c.readOpt(obj["source"], toApplication_status_history_source),
+    sources: c.readOpt(obj["sources"], x => c.readList(x, toApplication_status_history_sources)),
   }}
 export function toApplication_status_operationState(input: c.JSONValue) {
   const obj = c.checkObj(input);
@@ -767,6 +1210,7 @@ export function toApplication_status_resources(input: c.JSONValue) {
     namespace: c.readOpt(obj["namespace"], c.checkStr),
     requiresPruning: c.readOpt(obj["requiresPruning"], c.checkBool),
     status: c.readOpt(obj["status"], c.checkStr),
+    syncWave: c.readOpt(obj["syncWave"], c.checkNum),
     version: c.readOpt(obj["version"], c.checkStr),
   }}
 export function toApplication_status_summary(input: c.JSONValue) {
@@ -780,6 +1224,7 @@ export function toApplication_status_sync(input: c.JSONValue) {
   return {
     comparedTo: c.readOpt(obj["comparedTo"], toApplication_status_sync_comparedTo),
     revision: c.readOpt(obj["revision"], c.checkStr),
+    revisions: c.readOpt(obj["revisions"], x => c.readList(x, c.checkStr)),
     status: c.checkStr(obj["status"]),
   }}
 export function toApplication_operation_retry_backoff(input: c.JSONValue) {
@@ -803,10 +1248,23 @@ export function toApplication_operation_sync_source(input: c.JSONValue) {
     chart: c.readOpt(obj["chart"], c.checkStr),
     directory: c.readOpt(obj["directory"], toApplication_operation_sync_source_directory),
     helm: c.readOpt(obj["helm"], toApplication_operation_sync_source_helm),
-    ksonnet: c.readOpt(obj["ksonnet"], toApplication_operation_sync_source_ksonnet),
     kustomize: c.readOpt(obj["kustomize"], toApplication_operation_sync_source_kustomize),
     path: c.readOpt(obj["path"], c.checkStr),
     plugin: c.readOpt(obj["plugin"], toApplication_operation_sync_source_plugin),
+    ref: c.readOpt(obj["ref"], c.checkStr),
+    repoURL: c.checkStr(obj["repoURL"]),
+    targetRevision: c.readOpt(obj["targetRevision"], c.checkStr),
+  }}
+export function toApplication_operation_sync_sources(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    chart: c.readOpt(obj["chart"], c.checkStr),
+    directory: c.readOpt(obj["directory"], toApplication_operation_sync_sources_directory),
+    helm: c.readOpt(obj["helm"], toApplication_operation_sync_sources_helm),
+    kustomize: c.readOpt(obj["kustomize"], toApplication_operation_sync_sources_kustomize),
+    path: c.readOpt(obj["path"], c.checkStr),
+    plugin: c.readOpt(obj["plugin"], toApplication_operation_sync_sources_plugin),
+    ref: c.readOpt(obj["ref"], c.checkStr),
     repoURL: c.checkStr(obj["repoURL"]),
     targetRevision: c.readOpt(obj["targetRevision"], c.checkStr),
   }}
@@ -828,17 +1286,14 @@ export function toApplication_spec_source_helm(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     fileParameters: c.readOpt(obj["fileParameters"], x => c.readList(x, toApplication_spec_source_helm_fileParameters)),
+    ignoreMissingValueFiles: c.readOpt(obj["ignoreMissingValueFiles"], c.checkBool),
     parameters: c.readOpt(obj["parameters"], x => c.readList(x, toApplication_spec_source_helm_parameters)),
+    passCredentials: c.readOpt(obj["passCredentials"], c.checkBool),
     releaseName: c.readOpt(obj["releaseName"], c.checkStr),
+    skipCrds: c.readOpt(obj["skipCrds"], c.checkBool),
     valueFiles: c.readOpt(obj["valueFiles"], x => c.readList(x, c.checkStr)),
     values: c.readOpt(obj["values"], c.checkStr),
     version: c.readOpt(obj["version"], c.checkStr),
-  }}
-export function toApplication_spec_source_ksonnet(input: c.JSONValue) {
-  const obj = c.checkObj(input);
-  return {
-    environment: c.readOpt(obj["environment"], c.checkStr),
-    parameters: c.readOpt(obj["parameters"], x => c.readList(x, toApplication_spec_source_ksonnet_parameters)),
   }}
 export function toApplication_spec_source_kustomize(input: c.JSONValue) {
   const obj = c.checkObj(input);
@@ -857,6 +1312,47 @@ export function toApplication_spec_source_plugin(input: c.JSONValue) {
   return {
     env: c.readOpt(obj["env"], x => c.readList(x, toApplication_spec_source_plugin_env)),
     name: c.readOpt(obj["name"], c.checkStr),
+    parameters: c.readOpt(obj["parameters"], x => c.readList(x, toApplication_spec_source_plugin_parameters)),
+  }}
+export function toApplication_spec_sources_directory(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    exclude: c.readOpt(obj["exclude"], c.checkStr),
+    include: c.readOpt(obj["include"], c.checkStr),
+    jsonnet: c.readOpt(obj["jsonnet"], toApplication_spec_sources_directory_jsonnet),
+    recurse: c.readOpt(obj["recurse"], c.checkBool),
+  }}
+export function toApplication_spec_sources_helm(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    fileParameters: c.readOpt(obj["fileParameters"], x => c.readList(x, toApplication_spec_sources_helm_fileParameters)),
+    ignoreMissingValueFiles: c.readOpt(obj["ignoreMissingValueFiles"], c.checkBool),
+    parameters: c.readOpt(obj["parameters"], x => c.readList(x, toApplication_spec_sources_helm_parameters)),
+    passCredentials: c.readOpt(obj["passCredentials"], c.checkBool),
+    releaseName: c.readOpt(obj["releaseName"], c.checkStr),
+    skipCrds: c.readOpt(obj["skipCrds"], c.checkBool),
+    valueFiles: c.readOpt(obj["valueFiles"], x => c.readList(x, c.checkStr)),
+    values: c.readOpt(obj["values"], c.checkStr),
+    version: c.readOpt(obj["version"], c.checkStr),
+  }}
+export function toApplication_spec_sources_kustomize(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    commonAnnotations: c.readOpt(obj["commonAnnotations"], x => c.readMap(x, c.checkStr)),
+    commonLabels: c.readOpt(obj["commonLabels"], x => c.readMap(x, c.checkStr)),
+    forceCommonAnnotations: c.readOpt(obj["forceCommonAnnotations"], c.checkBool),
+    forceCommonLabels: c.readOpt(obj["forceCommonLabels"], c.checkBool),
+    images: c.readOpt(obj["images"], x => c.readList(x, c.checkStr)),
+    namePrefix: c.readOpt(obj["namePrefix"], c.checkStr),
+    nameSuffix: c.readOpt(obj["nameSuffix"], c.checkStr),
+    version: c.readOpt(obj["version"], c.checkStr),
+  }}
+export function toApplication_spec_sources_plugin(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    env: c.readOpt(obj["env"], x => c.readList(x, toApplication_spec_sources_plugin_env)),
+    name: c.readOpt(obj["name"], c.checkStr),
+    parameters: c.readOpt(obj["parameters"], x => c.readList(x, toApplication_spec_sources_plugin_parameters)),
   }}
 export function toApplication_spec_syncPolicy_automated(input: c.JSONValue) {
   const obj = c.checkObj(input);
@@ -864,6 +1360,12 @@ export function toApplication_spec_syncPolicy_automated(input: c.JSONValue) {
     allowEmpty: c.readOpt(obj["allowEmpty"], c.checkBool),
     prune: c.readOpt(obj["prune"], c.checkBool),
     selfHeal: c.readOpt(obj["selfHeal"], c.checkBool),
+  }}
+export function toApplication_spec_syncPolicy_managedNamespaceMetadata(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    annotations: c.readOpt(obj["annotations"], x => c.readMap(x, c.checkStr)),
+    labels: c.readOpt(obj["labels"], x => c.readMap(x, c.checkStr)),
   }}
 export function toApplication_spec_syncPolicy_retry(input: c.JSONValue) {
   const obj = c.checkObj(input);
@@ -877,10 +1379,23 @@ export function toApplication_status_history_source(input: c.JSONValue) {
     chart: c.readOpt(obj["chart"], c.checkStr),
     directory: c.readOpt(obj["directory"], toApplication_status_history_source_directory),
     helm: c.readOpt(obj["helm"], toApplication_status_history_source_helm),
-    ksonnet: c.readOpt(obj["ksonnet"], toApplication_status_history_source_ksonnet),
     kustomize: c.readOpt(obj["kustomize"], toApplication_status_history_source_kustomize),
     path: c.readOpt(obj["path"], c.checkStr),
     plugin: c.readOpt(obj["plugin"], toApplication_status_history_source_plugin),
+    ref: c.readOpt(obj["ref"], c.checkStr),
+    repoURL: c.checkStr(obj["repoURL"]),
+    targetRevision: c.readOpt(obj["targetRevision"], c.checkStr),
+  }}
+export function toApplication_status_history_sources(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    chart: c.readOpt(obj["chart"], c.checkStr),
+    directory: c.readOpt(obj["directory"], toApplication_status_history_sources_directory),
+    helm: c.readOpt(obj["helm"], toApplication_status_history_sources_helm),
+    kustomize: c.readOpt(obj["kustomize"], toApplication_status_history_sources_kustomize),
+    path: c.readOpt(obj["path"], c.checkStr),
+    plugin: c.readOpt(obj["plugin"], toApplication_status_history_sources_plugin),
+    ref: c.readOpt(obj["ref"], c.checkStr),
     repoURL: c.checkStr(obj["repoURL"]),
     targetRevision: c.readOpt(obj["targetRevision"], c.checkStr),
   }}
@@ -897,7 +1412,9 @@ export function toApplication_status_operationState_syncResult(input: c.JSONValu
   return {
     resources: c.readOpt(obj["resources"], x => c.readList(x, toApplication_status_operationState_syncResult_resources)),
     revision: c.checkStr(obj["revision"]),
+    revisions: c.readOpt(obj["revisions"], x => c.readList(x, c.checkStr)),
     source: c.readOpt(obj["source"], toApplication_status_operationState_syncResult_source),
+    sources: c.readOpt(obj["sources"], x => c.readList(x, toApplication_status_operationState_syncResult_sources)),
   }}
 export function toApplication_status_resources_health(input: c.JSONValue) {
   const obj = c.checkObj(input);
@@ -909,7 +1426,8 @@ export function toApplication_status_sync_comparedTo(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     destination: toApplication_status_sync_comparedTo_destination(obj["destination"]),
-    source: toApplication_status_sync_comparedTo_source(obj["source"]),
+    source: c.readOpt(obj["source"], toApplication_status_sync_comparedTo_source),
+    sources: c.readOpt(obj["sources"], x => c.readList(x, toApplication_status_sync_comparedTo_sources)),
   }}
 export function toApplication_operation_sync_source_directory(input: c.JSONValue) {
   const obj = c.checkObj(input);
@@ -923,17 +1441,14 @@ export function toApplication_operation_sync_source_helm(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     fileParameters: c.readOpt(obj["fileParameters"], x => c.readList(x, toApplication_operation_sync_source_helm_fileParameters)),
+    ignoreMissingValueFiles: c.readOpt(obj["ignoreMissingValueFiles"], c.checkBool),
     parameters: c.readOpt(obj["parameters"], x => c.readList(x, toApplication_operation_sync_source_helm_parameters)),
+    passCredentials: c.readOpt(obj["passCredentials"], c.checkBool),
     releaseName: c.readOpt(obj["releaseName"], c.checkStr),
+    skipCrds: c.readOpt(obj["skipCrds"], c.checkBool),
     valueFiles: c.readOpt(obj["valueFiles"], x => c.readList(x, c.checkStr)),
     values: c.readOpt(obj["values"], c.checkStr),
     version: c.readOpt(obj["version"], c.checkStr),
-  }}
-export function toApplication_operation_sync_source_ksonnet(input: c.JSONValue) {
-  const obj = c.checkObj(input);
-  return {
-    environment: c.readOpt(obj["environment"], c.checkStr),
-    parameters: c.readOpt(obj["parameters"], x => c.readList(x, toApplication_operation_sync_source_ksonnet_parameters)),
   }}
 export function toApplication_operation_sync_source_kustomize(input: c.JSONValue) {
   const obj = c.checkObj(input);
@@ -952,6 +1467,47 @@ export function toApplication_operation_sync_source_plugin(input: c.JSONValue) {
   return {
     env: c.readOpt(obj["env"], x => c.readList(x, toApplication_operation_sync_source_plugin_env)),
     name: c.readOpt(obj["name"], c.checkStr),
+    parameters: c.readOpt(obj["parameters"], x => c.readList(x, toApplication_operation_sync_source_plugin_parameters)),
+  }}
+export function toApplication_operation_sync_sources_directory(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    exclude: c.readOpt(obj["exclude"], c.checkStr),
+    include: c.readOpt(obj["include"], c.checkStr),
+    jsonnet: c.readOpt(obj["jsonnet"], toApplication_operation_sync_sources_directory_jsonnet),
+    recurse: c.readOpt(obj["recurse"], c.checkBool),
+  }}
+export function toApplication_operation_sync_sources_helm(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    fileParameters: c.readOpt(obj["fileParameters"], x => c.readList(x, toApplication_operation_sync_sources_helm_fileParameters)),
+    ignoreMissingValueFiles: c.readOpt(obj["ignoreMissingValueFiles"], c.checkBool),
+    parameters: c.readOpt(obj["parameters"], x => c.readList(x, toApplication_operation_sync_sources_helm_parameters)),
+    passCredentials: c.readOpt(obj["passCredentials"], c.checkBool),
+    releaseName: c.readOpt(obj["releaseName"], c.checkStr),
+    skipCrds: c.readOpt(obj["skipCrds"], c.checkBool),
+    valueFiles: c.readOpt(obj["valueFiles"], x => c.readList(x, c.checkStr)),
+    values: c.readOpt(obj["values"], c.checkStr),
+    version: c.readOpt(obj["version"], c.checkStr),
+  }}
+export function toApplication_operation_sync_sources_kustomize(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    commonAnnotations: c.readOpt(obj["commonAnnotations"], x => c.readMap(x, c.checkStr)),
+    commonLabels: c.readOpt(obj["commonLabels"], x => c.readMap(x, c.checkStr)),
+    forceCommonAnnotations: c.readOpt(obj["forceCommonAnnotations"], c.checkBool),
+    forceCommonLabels: c.readOpt(obj["forceCommonLabels"], c.checkBool),
+    images: c.readOpt(obj["images"], x => c.readList(x, c.checkStr)),
+    namePrefix: c.readOpt(obj["namePrefix"], c.checkStr),
+    nameSuffix: c.readOpt(obj["nameSuffix"], c.checkStr),
+    version: c.readOpt(obj["version"], c.checkStr),
+  }}
+export function toApplication_operation_sync_sources_plugin(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    env: c.readOpt(obj["env"], x => c.readList(x, toApplication_operation_sync_sources_plugin_env)),
+    name: c.readOpt(obj["name"], c.checkStr),
+    parameters: c.readOpt(obj["parameters"], x => c.readList(x, toApplication_operation_sync_sources_plugin_parameters)),
   }}
 export function toApplication_operation_sync_syncStrategy_apply(input: c.JSONValue) {
   const obj = c.checkObj(input);
@@ -983,18 +1539,53 @@ export function toApplication_spec_source_helm_parameters(input: c.JSONValue) {
     name: c.readOpt(obj["name"], c.checkStr),
     value: c.readOpt(obj["value"], c.checkStr),
   }}
-export function toApplication_spec_source_ksonnet_parameters(input: c.JSONValue) {
-  const obj = c.checkObj(input);
-  return {
-    component: c.readOpt(obj["component"], c.checkStr),
-    name: c.checkStr(obj["name"]),
-    value: c.checkStr(obj["value"]),
-  }}
 export function toApplication_spec_source_plugin_env(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     name: c.checkStr(obj["name"]),
     value: c.checkStr(obj["value"]),
+  }}
+export function toApplication_spec_source_plugin_parameters(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    array: c.readOpt(obj["array"], x => c.readList(x, c.checkStr)),
+    map: c.readOpt(obj["map"], x => c.readMap(x, c.checkStr)),
+    name: c.readOpt(obj["name"], c.checkStr),
+    string: c.readOpt(obj["string"], c.checkStr),
+  }}
+export function toApplication_spec_sources_directory_jsonnet(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    extVars: c.readOpt(obj["extVars"], x => c.readList(x, toApplication_spec_sources_directory_jsonnet_extVars)),
+    libs: c.readOpt(obj["libs"], x => c.readList(x, c.checkStr)),
+    tlas: c.readOpt(obj["tlas"], x => c.readList(x, toApplication_spec_sources_directory_jsonnet_tlas)),
+  }}
+export function toApplication_spec_sources_helm_fileParameters(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    name: c.readOpt(obj["name"], c.checkStr),
+    path: c.readOpt(obj["path"], c.checkStr),
+  }}
+export function toApplication_spec_sources_helm_parameters(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    forceString: c.readOpt(obj["forceString"], c.checkBool),
+    name: c.readOpt(obj["name"], c.checkStr),
+    value: c.readOpt(obj["value"], c.checkStr),
+  }}
+export function toApplication_spec_sources_plugin_env(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    name: c.checkStr(obj["name"]),
+    value: c.checkStr(obj["value"]),
+  }}
+export function toApplication_spec_sources_plugin_parameters(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    array: c.readOpt(obj["array"], x => c.readList(x, c.checkStr)),
+    map: c.readOpt(obj["map"], x => c.readMap(x, c.checkStr)),
+    name: c.readOpt(obj["name"], c.checkStr),
+    string: c.readOpt(obj["string"], c.checkStr),
   }}
 export function toApplication_spec_syncPolicy_retry_backoff(input: c.JSONValue) {
   const obj = c.checkObj(input);
@@ -1015,17 +1606,14 @@ export function toApplication_status_history_source_helm(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     fileParameters: c.readOpt(obj["fileParameters"], x => c.readList(x, toApplication_status_history_source_helm_fileParameters)),
+    ignoreMissingValueFiles: c.readOpt(obj["ignoreMissingValueFiles"], c.checkBool),
     parameters: c.readOpt(obj["parameters"], x => c.readList(x, toApplication_status_history_source_helm_parameters)),
+    passCredentials: c.readOpt(obj["passCredentials"], c.checkBool),
     releaseName: c.readOpt(obj["releaseName"], c.checkStr),
+    skipCrds: c.readOpt(obj["skipCrds"], c.checkBool),
     valueFiles: c.readOpt(obj["valueFiles"], x => c.readList(x, c.checkStr)),
     values: c.readOpt(obj["values"], c.checkStr),
     version: c.readOpt(obj["version"], c.checkStr),
-  }}
-export function toApplication_status_history_source_ksonnet(input: c.JSONValue) {
-  const obj = c.checkObj(input);
-  return {
-    environment: c.readOpt(obj["environment"], c.checkStr),
-    parameters: c.readOpt(obj["parameters"], x => c.readList(x, toApplication_status_history_source_ksonnet_parameters)),
   }}
 export function toApplication_status_history_source_kustomize(input: c.JSONValue) {
   const obj = c.checkObj(input);
@@ -1044,6 +1632,47 @@ export function toApplication_status_history_source_plugin(input: c.JSONValue) {
   return {
     env: c.readOpt(obj["env"], x => c.readList(x, toApplication_status_history_source_plugin_env)),
     name: c.readOpt(obj["name"], c.checkStr),
+    parameters: c.readOpt(obj["parameters"], x => c.readList(x, toApplication_status_history_source_plugin_parameters)),
+  }}
+export function toApplication_status_history_sources_directory(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    exclude: c.readOpt(obj["exclude"], c.checkStr),
+    include: c.readOpt(obj["include"], c.checkStr),
+    jsonnet: c.readOpt(obj["jsonnet"], toApplication_status_history_sources_directory_jsonnet),
+    recurse: c.readOpt(obj["recurse"], c.checkBool),
+  }}
+export function toApplication_status_history_sources_helm(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    fileParameters: c.readOpt(obj["fileParameters"], x => c.readList(x, toApplication_status_history_sources_helm_fileParameters)),
+    ignoreMissingValueFiles: c.readOpt(obj["ignoreMissingValueFiles"], c.checkBool),
+    parameters: c.readOpt(obj["parameters"], x => c.readList(x, toApplication_status_history_sources_helm_parameters)),
+    passCredentials: c.readOpt(obj["passCredentials"], c.checkBool),
+    releaseName: c.readOpt(obj["releaseName"], c.checkStr),
+    skipCrds: c.readOpt(obj["skipCrds"], c.checkBool),
+    valueFiles: c.readOpt(obj["valueFiles"], x => c.readList(x, c.checkStr)),
+    values: c.readOpt(obj["values"], c.checkStr),
+    version: c.readOpt(obj["version"], c.checkStr),
+  }}
+export function toApplication_status_history_sources_kustomize(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    commonAnnotations: c.readOpt(obj["commonAnnotations"], x => c.readMap(x, c.checkStr)),
+    commonLabels: c.readOpt(obj["commonLabels"], x => c.readMap(x, c.checkStr)),
+    forceCommonAnnotations: c.readOpt(obj["forceCommonAnnotations"], c.checkBool),
+    forceCommonLabels: c.readOpt(obj["forceCommonLabels"], c.checkBool),
+    images: c.readOpt(obj["images"], x => c.readList(x, c.checkStr)),
+    namePrefix: c.readOpt(obj["namePrefix"], c.checkStr),
+    nameSuffix: c.readOpt(obj["nameSuffix"], c.checkStr),
+    version: c.readOpt(obj["version"], c.checkStr),
+  }}
+export function toApplication_status_history_sources_plugin(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    env: c.readOpt(obj["env"], x => c.readList(x, toApplication_status_history_sources_plugin_env)),
+    name: c.readOpt(obj["name"], c.checkStr),
+    parameters: c.readOpt(obj["parameters"], x => c.readList(x, toApplication_status_history_sources_plugin_parameters)),
   }}
 export function toApplication_status_operationState_operation_info(input: c.JSONValue) {
   const obj = c.checkObj(input);
@@ -1071,7 +1700,9 @@ export function toApplication_status_operationState_operation_sync(input: c.JSON
     prune: c.readOpt(obj["prune"], c.checkBool),
     resources: c.readOpt(obj["resources"], x => c.readList(x, toApplication_status_operationState_operation_sync_resources)),
     revision: c.readOpt(obj["revision"], c.checkStr),
+    revisions: c.readOpt(obj["revisions"], x => c.readList(x, c.checkStr)),
     source: c.readOpt(obj["source"], toApplication_status_operationState_operation_sync_source),
+    sources: c.readOpt(obj["sources"], x => c.readList(x, toApplication_status_operationState_operation_sync_sources)),
     syncOptions: c.readOpt(obj["syncOptions"], x => c.readList(x, c.checkStr)),
     syncStrategy: c.readOpt(obj["syncStrategy"], toApplication_status_operationState_operation_sync_syncStrategy),
   }}
@@ -1095,10 +1726,23 @@ export function toApplication_status_operationState_syncResult_source(input: c.J
     chart: c.readOpt(obj["chart"], c.checkStr),
     directory: c.readOpt(obj["directory"], toApplication_status_operationState_syncResult_source_directory),
     helm: c.readOpt(obj["helm"], toApplication_status_operationState_syncResult_source_helm),
-    ksonnet: c.readOpt(obj["ksonnet"], toApplication_status_operationState_syncResult_source_ksonnet),
     kustomize: c.readOpt(obj["kustomize"], toApplication_status_operationState_syncResult_source_kustomize),
     path: c.readOpt(obj["path"], c.checkStr),
     plugin: c.readOpt(obj["plugin"], toApplication_status_operationState_syncResult_source_plugin),
+    ref: c.readOpt(obj["ref"], c.checkStr),
+    repoURL: c.checkStr(obj["repoURL"]),
+    targetRevision: c.readOpt(obj["targetRevision"], c.checkStr),
+  }}
+export function toApplication_status_operationState_syncResult_sources(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    chart: c.readOpt(obj["chart"], c.checkStr),
+    directory: c.readOpt(obj["directory"], toApplication_status_operationState_syncResult_sources_directory),
+    helm: c.readOpt(obj["helm"], toApplication_status_operationState_syncResult_sources_helm),
+    kustomize: c.readOpt(obj["kustomize"], toApplication_status_operationState_syncResult_sources_kustomize),
+    path: c.readOpt(obj["path"], c.checkStr),
+    plugin: c.readOpt(obj["plugin"], toApplication_status_operationState_syncResult_sources_plugin),
+    ref: c.readOpt(obj["ref"], c.checkStr),
     repoURL: c.checkStr(obj["repoURL"]),
     targetRevision: c.readOpt(obj["targetRevision"], c.checkStr),
   }}
@@ -1115,10 +1759,23 @@ export function toApplication_status_sync_comparedTo_source(input: c.JSONValue) 
     chart: c.readOpt(obj["chart"], c.checkStr),
     directory: c.readOpt(obj["directory"], toApplication_status_sync_comparedTo_source_directory),
     helm: c.readOpt(obj["helm"], toApplication_status_sync_comparedTo_source_helm),
-    ksonnet: c.readOpt(obj["ksonnet"], toApplication_status_sync_comparedTo_source_ksonnet),
     kustomize: c.readOpt(obj["kustomize"], toApplication_status_sync_comparedTo_source_kustomize),
     path: c.readOpt(obj["path"], c.checkStr),
     plugin: c.readOpt(obj["plugin"], toApplication_status_sync_comparedTo_source_plugin),
+    ref: c.readOpt(obj["ref"], c.checkStr),
+    repoURL: c.checkStr(obj["repoURL"]),
+    targetRevision: c.readOpt(obj["targetRevision"], c.checkStr),
+  }}
+export function toApplication_status_sync_comparedTo_sources(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    chart: c.readOpt(obj["chart"], c.checkStr),
+    directory: c.readOpt(obj["directory"], toApplication_status_sync_comparedTo_sources_directory),
+    helm: c.readOpt(obj["helm"], toApplication_status_sync_comparedTo_sources_helm),
+    kustomize: c.readOpt(obj["kustomize"], toApplication_status_sync_comparedTo_sources_kustomize),
+    path: c.readOpt(obj["path"], c.checkStr),
+    plugin: c.readOpt(obj["plugin"], toApplication_status_sync_comparedTo_sources_plugin),
+    ref: c.readOpt(obj["ref"], c.checkStr),
     repoURL: c.checkStr(obj["repoURL"]),
     targetRevision: c.readOpt(obj["targetRevision"], c.checkStr),
   }}
@@ -1142,18 +1799,53 @@ export function toApplication_operation_sync_source_helm_parameters(input: c.JSO
     name: c.readOpt(obj["name"], c.checkStr),
     value: c.readOpt(obj["value"], c.checkStr),
   }}
-export function toApplication_operation_sync_source_ksonnet_parameters(input: c.JSONValue) {
-  const obj = c.checkObj(input);
-  return {
-    component: c.readOpt(obj["component"], c.checkStr),
-    name: c.checkStr(obj["name"]),
-    value: c.checkStr(obj["value"]),
-  }}
 export function toApplication_operation_sync_source_plugin_env(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     name: c.checkStr(obj["name"]),
     value: c.checkStr(obj["value"]),
+  }}
+export function toApplication_operation_sync_source_plugin_parameters(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    array: c.readOpt(obj["array"], x => c.readList(x, c.checkStr)),
+    map: c.readOpt(obj["map"], x => c.readMap(x, c.checkStr)),
+    name: c.readOpt(obj["name"], c.checkStr),
+    string: c.readOpt(obj["string"], c.checkStr),
+  }}
+export function toApplication_operation_sync_sources_directory_jsonnet(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    extVars: c.readOpt(obj["extVars"], x => c.readList(x, toApplication_operation_sync_sources_directory_jsonnet_extVars)),
+    libs: c.readOpt(obj["libs"], x => c.readList(x, c.checkStr)),
+    tlas: c.readOpt(obj["tlas"], x => c.readList(x, toApplication_operation_sync_sources_directory_jsonnet_tlas)),
+  }}
+export function toApplication_operation_sync_sources_helm_fileParameters(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    name: c.readOpt(obj["name"], c.checkStr),
+    path: c.readOpt(obj["path"], c.checkStr),
+  }}
+export function toApplication_operation_sync_sources_helm_parameters(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    forceString: c.readOpt(obj["forceString"], c.checkBool),
+    name: c.readOpt(obj["name"], c.checkStr),
+    value: c.readOpt(obj["value"], c.checkStr),
+  }}
+export function toApplication_operation_sync_sources_plugin_env(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    name: c.checkStr(obj["name"]),
+    value: c.checkStr(obj["value"]),
+  }}
+export function toApplication_operation_sync_sources_plugin_parameters(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    array: c.readOpt(obj["array"], x => c.readList(x, c.checkStr)),
+    map: c.readOpt(obj["map"], x => c.readMap(x, c.checkStr)),
+    name: c.readOpt(obj["name"], c.checkStr),
+    string: c.readOpt(obj["string"], c.checkStr),
   }}
 export function toApplication_spec_source_directory_jsonnet_extVars(input: c.JSONValue) {
   const obj = c.checkObj(input);
@@ -1163,6 +1855,20 @@ export function toApplication_spec_source_directory_jsonnet_extVars(input: c.JSO
     value: c.checkStr(obj["value"]),
   }}
 export function toApplication_spec_source_directory_jsonnet_tlas(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    code: c.readOpt(obj["code"], c.checkBool),
+    name: c.checkStr(obj["name"]),
+    value: c.checkStr(obj["value"]),
+  }}
+export function toApplication_spec_sources_directory_jsonnet_extVars(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    code: c.readOpt(obj["code"], c.checkBool),
+    name: c.checkStr(obj["name"]),
+    value: c.checkStr(obj["value"]),
+  }}
+export function toApplication_spec_sources_directory_jsonnet_tlas(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     code: c.readOpt(obj["code"], c.checkBool),
@@ -1189,18 +1895,53 @@ export function toApplication_status_history_source_helm_parameters(input: c.JSO
     name: c.readOpt(obj["name"], c.checkStr),
     value: c.readOpt(obj["value"], c.checkStr),
   }}
-export function toApplication_status_history_source_ksonnet_parameters(input: c.JSONValue) {
-  const obj = c.checkObj(input);
-  return {
-    component: c.readOpt(obj["component"], c.checkStr),
-    name: c.checkStr(obj["name"]),
-    value: c.checkStr(obj["value"]),
-  }}
 export function toApplication_status_history_source_plugin_env(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     name: c.checkStr(obj["name"]),
     value: c.checkStr(obj["value"]),
+  }}
+export function toApplication_status_history_source_plugin_parameters(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    array: c.readOpt(obj["array"], x => c.readList(x, c.checkStr)),
+    map: c.readOpt(obj["map"], x => c.readMap(x, c.checkStr)),
+    name: c.readOpt(obj["name"], c.checkStr),
+    string: c.readOpt(obj["string"], c.checkStr),
+  }}
+export function toApplication_status_history_sources_directory_jsonnet(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    extVars: c.readOpt(obj["extVars"], x => c.readList(x, toApplication_status_history_sources_directory_jsonnet_extVars)),
+    libs: c.readOpt(obj["libs"], x => c.readList(x, c.checkStr)),
+    tlas: c.readOpt(obj["tlas"], x => c.readList(x, toApplication_status_history_sources_directory_jsonnet_tlas)),
+  }}
+export function toApplication_status_history_sources_helm_fileParameters(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    name: c.readOpt(obj["name"], c.checkStr),
+    path: c.readOpt(obj["path"], c.checkStr),
+  }}
+export function toApplication_status_history_sources_helm_parameters(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    forceString: c.readOpt(obj["forceString"], c.checkBool),
+    name: c.readOpt(obj["name"], c.checkStr),
+    value: c.readOpt(obj["value"], c.checkStr),
+  }}
+export function toApplication_status_history_sources_plugin_env(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    name: c.checkStr(obj["name"]),
+    value: c.checkStr(obj["value"]),
+  }}
+export function toApplication_status_history_sources_plugin_parameters(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    array: c.readOpt(obj["array"], x => c.readList(x, c.checkStr)),
+    map: c.readOpt(obj["map"], x => c.readMap(x, c.checkStr)),
+    name: c.readOpt(obj["name"], c.checkStr),
+    string: c.readOpt(obj["string"], c.checkStr),
   }}
 export function toApplication_status_operationState_operation_retry_backoff(input: c.JSONValue) {
   const obj = c.checkObj(input);
@@ -1223,10 +1964,23 @@ export function toApplication_status_operationState_operation_sync_source(input:
     chart: c.readOpt(obj["chart"], c.checkStr),
     directory: c.readOpt(obj["directory"], toApplication_status_operationState_operation_sync_source_directory),
     helm: c.readOpt(obj["helm"], toApplication_status_operationState_operation_sync_source_helm),
-    ksonnet: c.readOpt(obj["ksonnet"], toApplication_status_operationState_operation_sync_source_ksonnet),
     kustomize: c.readOpt(obj["kustomize"], toApplication_status_operationState_operation_sync_source_kustomize),
     path: c.readOpt(obj["path"], c.checkStr),
     plugin: c.readOpt(obj["plugin"], toApplication_status_operationState_operation_sync_source_plugin),
+    ref: c.readOpt(obj["ref"], c.checkStr),
+    repoURL: c.checkStr(obj["repoURL"]),
+    targetRevision: c.readOpt(obj["targetRevision"], c.checkStr),
+  }}
+export function toApplication_status_operationState_operation_sync_sources(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    chart: c.readOpt(obj["chart"], c.checkStr),
+    directory: c.readOpt(obj["directory"], toApplication_status_operationState_operation_sync_sources_directory),
+    helm: c.readOpt(obj["helm"], toApplication_status_operationState_operation_sync_sources_helm),
+    kustomize: c.readOpt(obj["kustomize"], toApplication_status_operationState_operation_sync_sources_kustomize),
+    path: c.readOpt(obj["path"], c.checkStr),
+    plugin: c.readOpt(obj["plugin"], toApplication_status_operationState_operation_sync_sources_plugin),
+    ref: c.readOpt(obj["ref"], c.checkStr),
     repoURL: c.checkStr(obj["repoURL"]),
     targetRevision: c.readOpt(obj["targetRevision"], c.checkStr),
   }}
@@ -1248,17 +2002,14 @@ export function toApplication_status_operationState_syncResult_source_helm(input
   const obj = c.checkObj(input);
   return {
     fileParameters: c.readOpt(obj["fileParameters"], x => c.readList(x, toApplication_status_operationState_syncResult_source_helm_fileParameters)),
+    ignoreMissingValueFiles: c.readOpt(obj["ignoreMissingValueFiles"], c.checkBool),
     parameters: c.readOpt(obj["parameters"], x => c.readList(x, toApplication_status_operationState_syncResult_source_helm_parameters)),
+    passCredentials: c.readOpt(obj["passCredentials"], c.checkBool),
     releaseName: c.readOpt(obj["releaseName"], c.checkStr),
+    skipCrds: c.readOpt(obj["skipCrds"], c.checkBool),
     valueFiles: c.readOpt(obj["valueFiles"], x => c.readList(x, c.checkStr)),
     values: c.readOpt(obj["values"], c.checkStr),
     version: c.readOpt(obj["version"], c.checkStr),
-  }}
-export function toApplication_status_operationState_syncResult_source_ksonnet(input: c.JSONValue) {
-  const obj = c.checkObj(input);
-  return {
-    environment: c.readOpt(obj["environment"], c.checkStr),
-    parameters: c.readOpt(obj["parameters"], x => c.readList(x, toApplication_status_operationState_syncResult_source_ksonnet_parameters)),
   }}
 export function toApplication_status_operationState_syncResult_source_kustomize(input: c.JSONValue) {
   const obj = c.checkObj(input);
@@ -1277,6 +2028,47 @@ export function toApplication_status_operationState_syncResult_source_plugin(inp
   return {
     env: c.readOpt(obj["env"], x => c.readList(x, toApplication_status_operationState_syncResult_source_plugin_env)),
     name: c.readOpt(obj["name"], c.checkStr),
+    parameters: c.readOpt(obj["parameters"], x => c.readList(x, toApplication_status_operationState_syncResult_source_plugin_parameters)),
+  }}
+export function toApplication_status_operationState_syncResult_sources_directory(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    exclude: c.readOpt(obj["exclude"], c.checkStr),
+    include: c.readOpt(obj["include"], c.checkStr),
+    jsonnet: c.readOpt(obj["jsonnet"], toApplication_status_operationState_syncResult_sources_directory_jsonnet),
+    recurse: c.readOpt(obj["recurse"], c.checkBool),
+  }}
+export function toApplication_status_operationState_syncResult_sources_helm(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    fileParameters: c.readOpt(obj["fileParameters"], x => c.readList(x, toApplication_status_operationState_syncResult_sources_helm_fileParameters)),
+    ignoreMissingValueFiles: c.readOpt(obj["ignoreMissingValueFiles"], c.checkBool),
+    parameters: c.readOpt(obj["parameters"], x => c.readList(x, toApplication_status_operationState_syncResult_sources_helm_parameters)),
+    passCredentials: c.readOpt(obj["passCredentials"], c.checkBool),
+    releaseName: c.readOpt(obj["releaseName"], c.checkStr),
+    skipCrds: c.readOpt(obj["skipCrds"], c.checkBool),
+    valueFiles: c.readOpt(obj["valueFiles"], x => c.readList(x, c.checkStr)),
+    values: c.readOpt(obj["values"], c.checkStr),
+    version: c.readOpt(obj["version"], c.checkStr),
+  }}
+export function toApplication_status_operationState_syncResult_sources_kustomize(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    commonAnnotations: c.readOpt(obj["commonAnnotations"], x => c.readMap(x, c.checkStr)),
+    commonLabels: c.readOpt(obj["commonLabels"], x => c.readMap(x, c.checkStr)),
+    forceCommonAnnotations: c.readOpt(obj["forceCommonAnnotations"], c.checkBool),
+    forceCommonLabels: c.readOpt(obj["forceCommonLabels"], c.checkBool),
+    images: c.readOpt(obj["images"], x => c.readList(x, c.checkStr)),
+    namePrefix: c.readOpt(obj["namePrefix"], c.checkStr),
+    nameSuffix: c.readOpt(obj["nameSuffix"], c.checkStr),
+    version: c.readOpt(obj["version"], c.checkStr),
+  }}
+export function toApplication_status_operationState_syncResult_sources_plugin(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    env: c.readOpt(obj["env"], x => c.readList(x, toApplication_status_operationState_syncResult_sources_plugin_env)),
+    name: c.readOpt(obj["name"], c.checkStr),
+    parameters: c.readOpt(obj["parameters"], x => c.readList(x, toApplication_status_operationState_syncResult_sources_plugin_parameters)),
   }}
 export function toApplication_status_sync_comparedTo_source_directory(input: c.JSONValue) {
   const obj = c.checkObj(input);
@@ -1290,17 +2082,14 @@ export function toApplication_status_sync_comparedTo_source_helm(input: c.JSONVa
   const obj = c.checkObj(input);
   return {
     fileParameters: c.readOpt(obj["fileParameters"], x => c.readList(x, toApplication_status_sync_comparedTo_source_helm_fileParameters)),
+    ignoreMissingValueFiles: c.readOpt(obj["ignoreMissingValueFiles"], c.checkBool),
     parameters: c.readOpt(obj["parameters"], x => c.readList(x, toApplication_status_sync_comparedTo_source_helm_parameters)),
+    passCredentials: c.readOpt(obj["passCredentials"], c.checkBool),
     releaseName: c.readOpt(obj["releaseName"], c.checkStr),
+    skipCrds: c.readOpt(obj["skipCrds"], c.checkBool),
     valueFiles: c.readOpt(obj["valueFiles"], x => c.readList(x, c.checkStr)),
     values: c.readOpt(obj["values"], c.checkStr),
     version: c.readOpt(obj["version"], c.checkStr),
-  }}
-export function toApplication_status_sync_comparedTo_source_ksonnet(input: c.JSONValue) {
-  const obj = c.checkObj(input);
-  return {
-    environment: c.readOpt(obj["environment"], c.checkStr),
-    parameters: c.readOpt(obj["parameters"], x => c.readList(x, toApplication_status_sync_comparedTo_source_ksonnet_parameters)),
   }}
 export function toApplication_status_sync_comparedTo_source_kustomize(input: c.JSONValue) {
   const obj = c.checkObj(input);
@@ -1319,6 +2108,47 @@ export function toApplication_status_sync_comparedTo_source_plugin(input: c.JSON
   return {
     env: c.readOpt(obj["env"], x => c.readList(x, toApplication_status_sync_comparedTo_source_plugin_env)),
     name: c.readOpt(obj["name"], c.checkStr),
+    parameters: c.readOpt(obj["parameters"], x => c.readList(x, toApplication_status_sync_comparedTo_source_plugin_parameters)),
+  }}
+export function toApplication_status_sync_comparedTo_sources_directory(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    exclude: c.readOpt(obj["exclude"], c.checkStr),
+    include: c.readOpt(obj["include"], c.checkStr),
+    jsonnet: c.readOpt(obj["jsonnet"], toApplication_status_sync_comparedTo_sources_directory_jsonnet),
+    recurse: c.readOpt(obj["recurse"], c.checkBool),
+  }}
+export function toApplication_status_sync_comparedTo_sources_helm(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    fileParameters: c.readOpt(obj["fileParameters"], x => c.readList(x, toApplication_status_sync_comparedTo_sources_helm_fileParameters)),
+    ignoreMissingValueFiles: c.readOpt(obj["ignoreMissingValueFiles"], c.checkBool),
+    parameters: c.readOpt(obj["parameters"], x => c.readList(x, toApplication_status_sync_comparedTo_sources_helm_parameters)),
+    passCredentials: c.readOpt(obj["passCredentials"], c.checkBool),
+    releaseName: c.readOpt(obj["releaseName"], c.checkStr),
+    skipCrds: c.readOpt(obj["skipCrds"], c.checkBool),
+    valueFiles: c.readOpt(obj["valueFiles"], x => c.readList(x, c.checkStr)),
+    values: c.readOpt(obj["values"], c.checkStr),
+    version: c.readOpt(obj["version"], c.checkStr),
+  }}
+export function toApplication_status_sync_comparedTo_sources_kustomize(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    commonAnnotations: c.readOpt(obj["commonAnnotations"], x => c.readMap(x, c.checkStr)),
+    commonLabels: c.readOpt(obj["commonLabels"], x => c.readMap(x, c.checkStr)),
+    forceCommonAnnotations: c.readOpt(obj["forceCommonAnnotations"], c.checkBool),
+    forceCommonLabels: c.readOpt(obj["forceCommonLabels"], c.checkBool),
+    images: c.readOpt(obj["images"], x => c.readList(x, c.checkStr)),
+    namePrefix: c.readOpt(obj["namePrefix"], c.checkStr),
+    nameSuffix: c.readOpt(obj["nameSuffix"], c.checkStr),
+    version: c.readOpt(obj["version"], c.checkStr),
+  }}
+export function toApplication_status_sync_comparedTo_sources_plugin(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    env: c.readOpt(obj["env"], x => c.readList(x, toApplication_status_sync_comparedTo_sources_plugin_env)),
+    name: c.readOpt(obj["name"], c.checkStr),
+    parameters: c.readOpt(obj["parameters"], x => c.readList(x, toApplication_status_sync_comparedTo_sources_plugin_parameters)),
   }}
 export function toApplication_operation_sync_source_directory_jsonnet_extVars(input: c.JSONValue) {
   const obj = c.checkObj(input);
@@ -1328,6 +2158,20 @@ export function toApplication_operation_sync_source_directory_jsonnet_extVars(in
     value: c.checkStr(obj["value"]),
   }}
 export function toApplication_operation_sync_source_directory_jsonnet_tlas(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    code: c.readOpt(obj["code"], c.checkBool),
+    name: c.checkStr(obj["name"]),
+    value: c.checkStr(obj["value"]),
+  }}
+export function toApplication_operation_sync_sources_directory_jsonnet_extVars(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    code: c.readOpt(obj["code"], c.checkBool),
+    name: c.checkStr(obj["name"]),
+    value: c.checkStr(obj["value"]),
+  }}
+export function toApplication_operation_sync_sources_directory_jsonnet_tlas(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     code: c.readOpt(obj["code"], c.checkBool),
@@ -1348,6 +2192,20 @@ export function toApplication_status_history_source_directory_jsonnet_tlas(input
     name: c.checkStr(obj["name"]),
     value: c.checkStr(obj["value"]),
   }}
+export function toApplication_status_history_sources_directory_jsonnet_extVars(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    code: c.readOpt(obj["code"], c.checkBool),
+    name: c.checkStr(obj["name"]),
+    value: c.checkStr(obj["value"]),
+  }}
+export function toApplication_status_history_sources_directory_jsonnet_tlas(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    code: c.readOpt(obj["code"], c.checkBool),
+    name: c.checkStr(obj["name"]),
+    value: c.checkStr(obj["value"]),
+  }}
 export function toApplication_status_operationState_operation_sync_source_directory(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
@@ -1360,17 +2218,14 @@ export function toApplication_status_operationState_operation_sync_source_helm(i
   const obj = c.checkObj(input);
   return {
     fileParameters: c.readOpt(obj["fileParameters"], x => c.readList(x, toApplication_status_operationState_operation_sync_source_helm_fileParameters)),
+    ignoreMissingValueFiles: c.readOpt(obj["ignoreMissingValueFiles"], c.checkBool),
     parameters: c.readOpt(obj["parameters"], x => c.readList(x, toApplication_status_operationState_operation_sync_source_helm_parameters)),
+    passCredentials: c.readOpt(obj["passCredentials"], c.checkBool),
     releaseName: c.readOpt(obj["releaseName"], c.checkStr),
+    skipCrds: c.readOpt(obj["skipCrds"], c.checkBool),
     valueFiles: c.readOpt(obj["valueFiles"], x => c.readList(x, c.checkStr)),
     values: c.readOpt(obj["values"], c.checkStr),
     version: c.readOpt(obj["version"], c.checkStr),
-  }}
-export function toApplication_status_operationState_operation_sync_source_ksonnet(input: c.JSONValue) {
-  const obj = c.checkObj(input);
-  return {
-    environment: c.readOpt(obj["environment"], c.checkStr),
-    parameters: c.readOpt(obj["parameters"], x => c.readList(x, toApplication_status_operationState_operation_sync_source_ksonnet_parameters)),
   }}
 export function toApplication_status_operationState_operation_sync_source_kustomize(input: c.JSONValue) {
   const obj = c.checkObj(input);
@@ -1389,6 +2244,47 @@ export function toApplication_status_operationState_operation_sync_source_plugin
   return {
     env: c.readOpt(obj["env"], x => c.readList(x, toApplication_status_operationState_operation_sync_source_plugin_env)),
     name: c.readOpt(obj["name"], c.checkStr),
+    parameters: c.readOpt(obj["parameters"], x => c.readList(x, toApplication_status_operationState_operation_sync_source_plugin_parameters)),
+  }}
+export function toApplication_status_operationState_operation_sync_sources_directory(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    exclude: c.readOpt(obj["exclude"], c.checkStr),
+    include: c.readOpt(obj["include"], c.checkStr),
+    jsonnet: c.readOpt(obj["jsonnet"], toApplication_status_operationState_operation_sync_sources_directory_jsonnet),
+    recurse: c.readOpt(obj["recurse"], c.checkBool),
+  }}
+export function toApplication_status_operationState_operation_sync_sources_helm(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    fileParameters: c.readOpt(obj["fileParameters"], x => c.readList(x, toApplication_status_operationState_operation_sync_sources_helm_fileParameters)),
+    ignoreMissingValueFiles: c.readOpt(obj["ignoreMissingValueFiles"], c.checkBool),
+    parameters: c.readOpt(obj["parameters"], x => c.readList(x, toApplication_status_operationState_operation_sync_sources_helm_parameters)),
+    passCredentials: c.readOpt(obj["passCredentials"], c.checkBool),
+    releaseName: c.readOpt(obj["releaseName"], c.checkStr),
+    skipCrds: c.readOpt(obj["skipCrds"], c.checkBool),
+    valueFiles: c.readOpt(obj["valueFiles"], x => c.readList(x, c.checkStr)),
+    values: c.readOpt(obj["values"], c.checkStr),
+    version: c.readOpt(obj["version"], c.checkStr),
+  }}
+export function toApplication_status_operationState_operation_sync_sources_kustomize(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    commonAnnotations: c.readOpt(obj["commonAnnotations"], x => c.readMap(x, c.checkStr)),
+    commonLabels: c.readOpt(obj["commonLabels"], x => c.readMap(x, c.checkStr)),
+    forceCommonAnnotations: c.readOpt(obj["forceCommonAnnotations"], c.checkBool),
+    forceCommonLabels: c.readOpt(obj["forceCommonLabels"], c.checkBool),
+    images: c.readOpt(obj["images"], x => c.readList(x, c.checkStr)),
+    namePrefix: c.readOpt(obj["namePrefix"], c.checkStr),
+    nameSuffix: c.readOpt(obj["nameSuffix"], c.checkStr),
+    version: c.readOpt(obj["version"], c.checkStr),
+  }}
+export function toApplication_status_operationState_operation_sync_sources_plugin(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    env: c.readOpt(obj["env"], x => c.readList(x, toApplication_status_operationState_operation_sync_sources_plugin_env)),
+    name: c.readOpt(obj["name"], c.checkStr),
+    parameters: c.readOpt(obj["parameters"], x => c.readList(x, toApplication_status_operationState_operation_sync_sources_plugin_parameters)),
   }}
 export function toApplication_status_operationState_operation_sync_syncStrategy_apply(input: c.JSONValue) {
   const obj = c.checkObj(input);
@@ -1420,18 +2316,53 @@ export function toApplication_status_operationState_syncResult_source_helm_param
     name: c.readOpt(obj["name"], c.checkStr),
     value: c.readOpt(obj["value"], c.checkStr),
   }}
-export function toApplication_status_operationState_syncResult_source_ksonnet_parameters(input: c.JSONValue) {
-  const obj = c.checkObj(input);
-  return {
-    component: c.readOpt(obj["component"], c.checkStr),
-    name: c.checkStr(obj["name"]),
-    value: c.checkStr(obj["value"]),
-  }}
 export function toApplication_status_operationState_syncResult_source_plugin_env(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     name: c.checkStr(obj["name"]),
     value: c.checkStr(obj["value"]),
+  }}
+export function toApplication_status_operationState_syncResult_source_plugin_parameters(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    array: c.readOpt(obj["array"], x => c.readList(x, c.checkStr)),
+    map: c.readOpt(obj["map"], x => c.readMap(x, c.checkStr)),
+    name: c.readOpt(obj["name"], c.checkStr),
+    string: c.readOpt(obj["string"], c.checkStr),
+  }}
+export function toApplication_status_operationState_syncResult_sources_directory_jsonnet(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    extVars: c.readOpt(obj["extVars"], x => c.readList(x, toApplication_status_operationState_syncResult_sources_directory_jsonnet_extVars)),
+    libs: c.readOpt(obj["libs"], x => c.readList(x, c.checkStr)),
+    tlas: c.readOpt(obj["tlas"], x => c.readList(x, toApplication_status_operationState_syncResult_sources_directory_jsonnet_tlas)),
+  }}
+export function toApplication_status_operationState_syncResult_sources_helm_fileParameters(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    name: c.readOpt(obj["name"], c.checkStr),
+    path: c.readOpt(obj["path"], c.checkStr),
+  }}
+export function toApplication_status_operationState_syncResult_sources_helm_parameters(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    forceString: c.readOpt(obj["forceString"], c.checkBool),
+    name: c.readOpt(obj["name"], c.checkStr),
+    value: c.readOpt(obj["value"], c.checkStr),
+  }}
+export function toApplication_status_operationState_syncResult_sources_plugin_env(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    name: c.checkStr(obj["name"]),
+    value: c.checkStr(obj["value"]),
+  }}
+export function toApplication_status_operationState_syncResult_sources_plugin_parameters(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    array: c.readOpt(obj["array"], x => c.readList(x, c.checkStr)),
+    map: c.readOpt(obj["map"], x => c.readMap(x, c.checkStr)),
+    name: c.readOpt(obj["name"], c.checkStr),
+    string: c.readOpt(obj["string"], c.checkStr),
   }}
 export function toApplication_status_sync_comparedTo_source_directory_jsonnet(input: c.JSONValue) {
   const obj = c.checkObj(input);
@@ -1453,18 +2384,53 @@ export function toApplication_status_sync_comparedTo_source_helm_parameters(inpu
     name: c.readOpt(obj["name"], c.checkStr),
     value: c.readOpt(obj["value"], c.checkStr),
   }}
-export function toApplication_status_sync_comparedTo_source_ksonnet_parameters(input: c.JSONValue) {
-  const obj = c.checkObj(input);
-  return {
-    component: c.readOpt(obj["component"], c.checkStr),
-    name: c.checkStr(obj["name"]),
-    value: c.checkStr(obj["value"]),
-  }}
 export function toApplication_status_sync_comparedTo_source_plugin_env(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     name: c.checkStr(obj["name"]),
     value: c.checkStr(obj["value"]),
+  }}
+export function toApplication_status_sync_comparedTo_source_plugin_parameters(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    array: c.readOpt(obj["array"], x => c.readList(x, c.checkStr)),
+    map: c.readOpt(obj["map"], x => c.readMap(x, c.checkStr)),
+    name: c.readOpt(obj["name"], c.checkStr),
+    string: c.readOpt(obj["string"], c.checkStr),
+  }}
+export function toApplication_status_sync_comparedTo_sources_directory_jsonnet(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    extVars: c.readOpt(obj["extVars"], x => c.readList(x, toApplication_status_sync_comparedTo_sources_directory_jsonnet_extVars)),
+    libs: c.readOpt(obj["libs"], x => c.readList(x, c.checkStr)),
+    tlas: c.readOpt(obj["tlas"], x => c.readList(x, toApplication_status_sync_comparedTo_sources_directory_jsonnet_tlas)),
+  }}
+export function toApplication_status_sync_comparedTo_sources_helm_fileParameters(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    name: c.readOpt(obj["name"], c.checkStr),
+    path: c.readOpt(obj["path"], c.checkStr),
+  }}
+export function toApplication_status_sync_comparedTo_sources_helm_parameters(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    forceString: c.readOpt(obj["forceString"], c.checkBool),
+    name: c.readOpt(obj["name"], c.checkStr),
+    value: c.readOpt(obj["value"], c.checkStr),
+  }}
+export function toApplication_status_sync_comparedTo_sources_plugin_env(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    name: c.checkStr(obj["name"]),
+    value: c.checkStr(obj["value"]),
+  }}
+export function toApplication_status_sync_comparedTo_sources_plugin_parameters(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    array: c.readOpt(obj["array"], x => c.readList(x, c.checkStr)),
+    map: c.readOpt(obj["map"], x => c.readMap(x, c.checkStr)),
+    name: c.readOpt(obj["name"], c.checkStr),
+    string: c.readOpt(obj["string"], c.checkStr),
   }}
 export function toApplication_status_operationState_operation_sync_source_directory_jsonnet(input: c.JSONValue) {
   const obj = c.checkObj(input);
@@ -1486,18 +2452,53 @@ export function toApplication_status_operationState_operation_sync_source_helm_p
     name: c.readOpt(obj["name"], c.checkStr),
     value: c.readOpt(obj["value"], c.checkStr),
   }}
-export function toApplication_status_operationState_operation_sync_source_ksonnet_parameters(input: c.JSONValue) {
-  const obj = c.checkObj(input);
-  return {
-    component: c.readOpt(obj["component"], c.checkStr),
-    name: c.checkStr(obj["name"]),
-    value: c.checkStr(obj["value"]),
-  }}
 export function toApplication_status_operationState_operation_sync_source_plugin_env(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     name: c.checkStr(obj["name"]),
     value: c.checkStr(obj["value"]),
+  }}
+export function toApplication_status_operationState_operation_sync_source_plugin_parameters(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    array: c.readOpt(obj["array"], x => c.readList(x, c.checkStr)),
+    map: c.readOpt(obj["map"], x => c.readMap(x, c.checkStr)),
+    name: c.readOpt(obj["name"], c.checkStr),
+    string: c.readOpt(obj["string"], c.checkStr),
+  }}
+export function toApplication_status_operationState_operation_sync_sources_directory_jsonnet(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    extVars: c.readOpt(obj["extVars"], x => c.readList(x, toApplication_status_operationState_operation_sync_sources_directory_jsonnet_extVars)),
+    libs: c.readOpt(obj["libs"], x => c.readList(x, c.checkStr)),
+    tlas: c.readOpt(obj["tlas"], x => c.readList(x, toApplication_status_operationState_operation_sync_sources_directory_jsonnet_tlas)),
+  }}
+export function toApplication_status_operationState_operation_sync_sources_helm_fileParameters(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    name: c.readOpt(obj["name"], c.checkStr),
+    path: c.readOpt(obj["path"], c.checkStr),
+  }}
+export function toApplication_status_operationState_operation_sync_sources_helm_parameters(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    forceString: c.readOpt(obj["forceString"], c.checkBool),
+    name: c.readOpt(obj["name"], c.checkStr),
+    value: c.readOpt(obj["value"], c.checkStr),
+  }}
+export function toApplication_status_operationState_operation_sync_sources_plugin_env(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    name: c.checkStr(obj["name"]),
+    value: c.checkStr(obj["value"]),
+  }}
+export function toApplication_status_operationState_operation_sync_sources_plugin_parameters(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    array: c.readOpt(obj["array"], x => c.readList(x, c.checkStr)),
+    map: c.readOpt(obj["map"], x => c.readMap(x, c.checkStr)),
+    name: c.readOpt(obj["name"], c.checkStr),
+    string: c.readOpt(obj["string"], c.checkStr),
   }}
 export function toApplication_status_operationState_syncResult_source_directory_jsonnet_extVars(input: c.JSONValue) {
   const obj = c.checkObj(input);
@@ -1507,6 +2508,20 @@ export function toApplication_status_operationState_syncResult_source_directory_
     value: c.checkStr(obj["value"]),
   }}
 export function toApplication_status_operationState_syncResult_source_directory_jsonnet_tlas(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    code: c.readOpt(obj["code"], c.checkBool),
+    name: c.checkStr(obj["name"]),
+    value: c.checkStr(obj["value"]),
+  }}
+export function toApplication_status_operationState_syncResult_sources_directory_jsonnet_extVars(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    code: c.readOpt(obj["code"], c.checkBool),
+    name: c.checkStr(obj["name"]),
+    value: c.checkStr(obj["value"]),
+  }}
+export function toApplication_status_operationState_syncResult_sources_directory_jsonnet_tlas(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     code: c.readOpt(obj["code"], c.checkBool),
@@ -1527,6 +2542,20 @@ export function toApplication_status_sync_comparedTo_source_directory_jsonnet_tl
     name: c.checkStr(obj["name"]),
     value: c.checkStr(obj["value"]),
   }}
+export function toApplication_status_sync_comparedTo_sources_directory_jsonnet_extVars(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    code: c.readOpt(obj["code"], c.checkBool),
+    name: c.checkStr(obj["name"]),
+    value: c.checkStr(obj["value"]),
+  }}
+export function toApplication_status_sync_comparedTo_sources_directory_jsonnet_tlas(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    code: c.readOpt(obj["code"], c.checkBool),
+    name: c.checkStr(obj["name"]),
+    value: c.checkStr(obj["value"]),
+  }}
 export function toApplication_status_operationState_operation_sync_source_directory_jsonnet_extVars(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
@@ -1535,6 +2564,20 @@ export function toApplication_status_operationState_operation_sync_source_direct
     value: c.checkStr(obj["value"]),
   }}
 export function toApplication_status_operationState_operation_sync_source_directory_jsonnet_tlas(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    code: c.readOpt(obj["code"], c.checkBool),
+    name: c.checkStr(obj["name"]),
+    value: c.checkStr(obj["value"]),
+  }}
+export function toApplication_status_operationState_operation_sync_sources_directory_jsonnet_extVars(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    code: c.readOpt(obj["code"], c.checkBool),
+    name: c.checkStr(obj["name"]),
+    value: c.checkStr(obj["value"]),
+  }}
+export function toApplication_status_operationState_operation_sync_sources_directory_jsonnet_tlas(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     code: c.readOpt(obj["code"], c.checkBool),
@@ -1552,6 +2595,11442 @@ export function toApplicationList(input: c.JSONValue): ApplicationList & c.ApiKi
     ...c.assertOrAddApiVersionAndKind(obj, "argoproj.io/v1alpha1", "ApplicationList"),
     metadata: MetaV1.toListMeta(obj.metadata),
     items: c.readList(obj.items, toApplication),
+  }}
+
+export interface ApplicationSet {
+  apiVersion?: "argoproj.io/v1alpha1";
+  kind?: "ApplicationSet";
+  metadata: MetaV1.ObjectMeta;
+  spec: {
+    generators: Array<{
+      clusterDecisionResource?: {
+        configMapRef: string;
+        labelSelector?: {
+          matchExpressions?: Array<{
+            key: string;
+            operator: string;
+            values?: Array<string> | null;
+          }> | null;
+          matchLabels?: Record<string,string> | null;
+        } | null;
+        name?: string | null;
+        requeueAfterSeconds?: number | null;
+        template?: {
+          metadata: {
+            annotations?: Record<string,string> | null;
+            finalizers?: Array<string> | null;
+            labels?: Record<string,string> | null;
+            name?: string | null;
+            namespace?: string | null;
+          };
+          spec: {
+            destination: {
+              name?: string | null;
+              namespace?: string | null;
+              server?: string | null;
+            };
+            ignoreDifferences?: Array<{
+              group?: string | null;
+              jqPathExpressions?: Array<string> | null;
+              jsonPointers?: Array<string> | null;
+              kind: string;
+              managedFieldsManagers?: Array<string> | null;
+              name?: string | null;
+              namespace?: string | null;
+            }> | null;
+            info?: Array<{
+              name: string;
+              value: string;
+            }> | null;
+            project: string;
+            revisionHistoryLimit?: number | null;
+            source?: {
+              chart?: string | null;
+              directory?: {
+                exclude?: string | null;
+                include?: string | null;
+                jsonnet?: {
+                  extVars?: Array<{
+                    code?: boolean | null;
+                    name: string;
+                    value: string;
+                  }> | null;
+                  libs?: Array<string> | null;
+                  tlas?: Array<{
+                    code?: boolean | null;
+                    name: string;
+                    value: string;
+                  }> | null;
+                } | null;
+                recurse?: boolean | null;
+              } | null;
+              helm?: {
+                fileParameters?: Array<{
+                  name?: string | null;
+                  path?: string | null;
+                }> | null;
+                ignoreMissingValueFiles?: boolean | null;
+                parameters?: Array<{
+                  forceString?: boolean | null;
+                  name?: string | null;
+                  value?: string | null;
+                }> | null;
+                passCredentials?: boolean | null;
+                releaseName?: string | null;
+                skipCrds?: boolean | null;
+                valueFiles?: Array<string> | null;
+                values?: string | null;
+                version?: string | null;
+              } | null;
+              kustomize?: {
+                commonAnnotations?: Record<string,string> | null;
+                commonLabels?: Record<string,string> | null;
+                forceCommonAnnotations?: boolean | null;
+                forceCommonLabels?: boolean | null;
+                images?: Array<string> | null;
+                namePrefix?: string | null;
+                nameSuffix?: string | null;
+                version?: string | null;
+              } | null;
+              path?: string | null;
+              plugin?: {
+                env?: Array<{
+                  name: string;
+                  value: string;
+                }> | null;
+                name?: string | null;
+                parameters?: Array<{
+                  array?: Array<string> | null;
+                  map?: Record<string,string> | null;
+                  name?: string | null;
+                  string?: string | null;
+                }> | null;
+              } | null;
+              ref?: string | null;
+              repoURL: string;
+              targetRevision?: string | null;
+            } | null;
+            sources?: Array<{
+              chart?: string | null;
+              directory?: {
+                exclude?: string | null;
+                include?: string | null;
+                jsonnet?: {
+                  extVars?: Array<{
+                    code?: boolean | null;
+                    name: string;
+                    value: string;
+                  }> | null;
+                  libs?: Array<string> | null;
+                  tlas?: Array<{
+                    code?: boolean | null;
+                    name: string;
+                    value: string;
+                  }> | null;
+                } | null;
+                recurse?: boolean | null;
+              } | null;
+              helm?: {
+                fileParameters?: Array<{
+                  name?: string | null;
+                  path?: string | null;
+                }> | null;
+                ignoreMissingValueFiles?: boolean | null;
+                parameters?: Array<{
+                  forceString?: boolean | null;
+                  name?: string | null;
+                  value?: string | null;
+                }> | null;
+                passCredentials?: boolean | null;
+                releaseName?: string | null;
+                skipCrds?: boolean | null;
+                valueFiles?: Array<string> | null;
+                values?: string | null;
+                version?: string | null;
+              } | null;
+              kustomize?: {
+                commonAnnotations?: Record<string,string> | null;
+                commonLabels?: Record<string,string> | null;
+                forceCommonAnnotations?: boolean | null;
+                forceCommonLabels?: boolean | null;
+                images?: Array<string> | null;
+                namePrefix?: string | null;
+                nameSuffix?: string | null;
+                version?: string | null;
+              } | null;
+              path?: string | null;
+              plugin?: {
+                env?: Array<{
+                  name: string;
+                  value: string;
+                }> | null;
+                name?: string | null;
+                parameters?: Array<{
+                  array?: Array<string> | null;
+                  map?: Record<string,string> | null;
+                  name?: string | null;
+                  string?: string | null;
+                }> | null;
+              } | null;
+              ref?: string | null;
+              repoURL: string;
+              targetRevision?: string | null;
+            }> | null;
+            syncPolicy?: {
+              automated?: {
+                allowEmpty?: boolean | null;
+                prune?: boolean | null;
+                selfHeal?: boolean | null;
+              } | null;
+              managedNamespaceMetadata?: {
+                annotations?: Record<string,string> | null;
+                labels?: Record<string,string> | null;
+              } | null;
+              retry?: {
+                backoff?: {
+                  duration?: string | null;
+                  factor?: number | null;
+                  maxDuration?: string | null;
+                } | null;
+                limit?: number | null;
+              } | null;
+              syncOptions?: Array<string> | null;
+            } | null;
+          };
+        } | null;
+        values?: Record<string,string> | null;
+      } | null;
+      clusters?: {
+        selector?: {
+          matchExpressions?: Array<{
+            key: string;
+            operator: string;
+            values?: Array<string> | null;
+          }> | null;
+          matchLabels?: Record<string,string> | null;
+        } | null;
+        template?: {
+          metadata: {
+            annotations?: Record<string,string> | null;
+            finalizers?: Array<string> | null;
+            labels?: Record<string,string> | null;
+            name?: string | null;
+            namespace?: string | null;
+          };
+          spec: {
+            destination: {
+              name?: string | null;
+              namespace?: string | null;
+              server?: string | null;
+            };
+            ignoreDifferences?: Array<{
+              group?: string | null;
+              jqPathExpressions?: Array<string> | null;
+              jsonPointers?: Array<string> | null;
+              kind: string;
+              managedFieldsManagers?: Array<string> | null;
+              name?: string | null;
+              namespace?: string | null;
+            }> | null;
+            info?: Array<{
+              name: string;
+              value: string;
+            }> | null;
+            project: string;
+            revisionHistoryLimit?: number | null;
+            source?: {
+              chart?: string | null;
+              directory?: {
+                exclude?: string | null;
+                include?: string | null;
+                jsonnet?: {
+                  extVars?: Array<{
+                    code?: boolean | null;
+                    name: string;
+                    value: string;
+                  }> | null;
+                  libs?: Array<string> | null;
+                  tlas?: Array<{
+                    code?: boolean | null;
+                    name: string;
+                    value: string;
+                  }> | null;
+                } | null;
+                recurse?: boolean | null;
+              } | null;
+              helm?: {
+                fileParameters?: Array<{
+                  name?: string | null;
+                  path?: string | null;
+                }> | null;
+                ignoreMissingValueFiles?: boolean | null;
+                parameters?: Array<{
+                  forceString?: boolean | null;
+                  name?: string | null;
+                  value?: string | null;
+                }> | null;
+                passCredentials?: boolean | null;
+                releaseName?: string | null;
+                skipCrds?: boolean | null;
+                valueFiles?: Array<string> | null;
+                values?: string | null;
+                version?: string | null;
+              } | null;
+              kustomize?: {
+                commonAnnotations?: Record<string,string> | null;
+                commonLabels?: Record<string,string> | null;
+                forceCommonAnnotations?: boolean | null;
+                forceCommonLabels?: boolean | null;
+                images?: Array<string> | null;
+                namePrefix?: string | null;
+                nameSuffix?: string | null;
+                version?: string | null;
+              } | null;
+              path?: string | null;
+              plugin?: {
+                env?: Array<{
+                  name: string;
+                  value: string;
+                }> | null;
+                name?: string | null;
+                parameters?: Array<{
+                  array?: Array<string> | null;
+                  map?: Record<string,string> | null;
+                  name?: string | null;
+                  string?: string | null;
+                }> | null;
+              } | null;
+              ref?: string | null;
+              repoURL: string;
+              targetRevision?: string | null;
+            } | null;
+            sources?: Array<{
+              chart?: string | null;
+              directory?: {
+                exclude?: string | null;
+                include?: string | null;
+                jsonnet?: {
+                  extVars?: Array<{
+                    code?: boolean | null;
+                    name: string;
+                    value: string;
+                  }> | null;
+                  libs?: Array<string> | null;
+                  tlas?: Array<{
+                    code?: boolean | null;
+                    name: string;
+                    value: string;
+                  }> | null;
+                } | null;
+                recurse?: boolean | null;
+              } | null;
+              helm?: {
+                fileParameters?: Array<{
+                  name?: string | null;
+                  path?: string | null;
+                }> | null;
+                ignoreMissingValueFiles?: boolean | null;
+                parameters?: Array<{
+                  forceString?: boolean | null;
+                  name?: string | null;
+                  value?: string | null;
+                }> | null;
+                passCredentials?: boolean | null;
+                releaseName?: string | null;
+                skipCrds?: boolean | null;
+                valueFiles?: Array<string> | null;
+                values?: string | null;
+                version?: string | null;
+              } | null;
+              kustomize?: {
+                commonAnnotations?: Record<string,string> | null;
+                commonLabels?: Record<string,string> | null;
+                forceCommonAnnotations?: boolean | null;
+                forceCommonLabels?: boolean | null;
+                images?: Array<string> | null;
+                namePrefix?: string | null;
+                nameSuffix?: string | null;
+                version?: string | null;
+              } | null;
+              path?: string | null;
+              plugin?: {
+                env?: Array<{
+                  name: string;
+                  value: string;
+                }> | null;
+                name?: string | null;
+                parameters?: Array<{
+                  array?: Array<string> | null;
+                  map?: Record<string,string> | null;
+                  name?: string | null;
+                  string?: string | null;
+                }> | null;
+              } | null;
+              ref?: string | null;
+              repoURL: string;
+              targetRevision?: string | null;
+            }> | null;
+            syncPolicy?: {
+              automated?: {
+                allowEmpty?: boolean | null;
+                prune?: boolean | null;
+                selfHeal?: boolean | null;
+              } | null;
+              managedNamespaceMetadata?: {
+                annotations?: Record<string,string> | null;
+                labels?: Record<string,string> | null;
+              } | null;
+              retry?: {
+                backoff?: {
+                  duration?: string | null;
+                  factor?: number | null;
+                  maxDuration?: string | null;
+                } | null;
+                limit?: number | null;
+              } | null;
+              syncOptions?: Array<string> | null;
+            } | null;
+          };
+        } | null;
+        values?: Record<string,string> | null;
+      } | null;
+      git?: {
+        directories?: Array<{
+          exclude?: boolean | null;
+          path: string;
+        }> | null;
+        files?: Array<{
+          path: string;
+        }> | null;
+        pathParamPrefix?: string | null;
+        repoURL: string;
+        requeueAfterSeconds?: number | null;
+        revision: string;
+        template?: {
+          metadata: {
+            annotations?: Record<string,string> | null;
+            finalizers?: Array<string> | null;
+            labels?: Record<string,string> | null;
+            name?: string | null;
+            namespace?: string | null;
+          };
+          spec: {
+            destination: {
+              name?: string | null;
+              namespace?: string | null;
+              server?: string | null;
+            };
+            ignoreDifferences?: Array<{
+              group?: string | null;
+              jqPathExpressions?: Array<string> | null;
+              jsonPointers?: Array<string> | null;
+              kind: string;
+              managedFieldsManagers?: Array<string> | null;
+              name?: string | null;
+              namespace?: string | null;
+            }> | null;
+            info?: Array<{
+              name: string;
+              value: string;
+            }> | null;
+            project: string;
+            revisionHistoryLimit?: number | null;
+            source?: {
+              chart?: string | null;
+              directory?: {
+                exclude?: string | null;
+                include?: string | null;
+                jsonnet?: {
+                  extVars?: Array<{
+                    code?: boolean | null;
+                    name: string;
+                    value: string;
+                  }> | null;
+                  libs?: Array<string> | null;
+                  tlas?: Array<{
+                    code?: boolean | null;
+                    name: string;
+                    value: string;
+                  }> | null;
+                } | null;
+                recurse?: boolean | null;
+              } | null;
+              helm?: {
+                fileParameters?: Array<{
+                  name?: string | null;
+                  path?: string | null;
+                }> | null;
+                ignoreMissingValueFiles?: boolean | null;
+                parameters?: Array<{
+                  forceString?: boolean | null;
+                  name?: string | null;
+                  value?: string | null;
+                }> | null;
+                passCredentials?: boolean | null;
+                releaseName?: string | null;
+                skipCrds?: boolean | null;
+                valueFiles?: Array<string> | null;
+                values?: string | null;
+                version?: string | null;
+              } | null;
+              kustomize?: {
+                commonAnnotations?: Record<string,string> | null;
+                commonLabels?: Record<string,string> | null;
+                forceCommonAnnotations?: boolean | null;
+                forceCommonLabels?: boolean | null;
+                images?: Array<string> | null;
+                namePrefix?: string | null;
+                nameSuffix?: string | null;
+                version?: string | null;
+              } | null;
+              path?: string | null;
+              plugin?: {
+                env?: Array<{
+                  name: string;
+                  value: string;
+                }> | null;
+                name?: string | null;
+                parameters?: Array<{
+                  array?: Array<string> | null;
+                  map?: Record<string,string> | null;
+                  name?: string | null;
+                  string?: string | null;
+                }> | null;
+              } | null;
+              ref?: string | null;
+              repoURL: string;
+              targetRevision?: string | null;
+            } | null;
+            sources?: Array<{
+              chart?: string | null;
+              directory?: {
+                exclude?: string | null;
+                include?: string | null;
+                jsonnet?: {
+                  extVars?: Array<{
+                    code?: boolean | null;
+                    name: string;
+                    value: string;
+                  }> | null;
+                  libs?: Array<string> | null;
+                  tlas?: Array<{
+                    code?: boolean | null;
+                    name: string;
+                    value: string;
+                  }> | null;
+                } | null;
+                recurse?: boolean | null;
+              } | null;
+              helm?: {
+                fileParameters?: Array<{
+                  name?: string | null;
+                  path?: string | null;
+                }> | null;
+                ignoreMissingValueFiles?: boolean | null;
+                parameters?: Array<{
+                  forceString?: boolean | null;
+                  name?: string | null;
+                  value?: string | null;
+                }> | null;
+                passCredentials?: boolean | null;
+                releaseName?: string | null;
+                skipCrds?: boolean | null;
+                valueFiles?: Array<string> | null;
+                values?: string | null;
+                version?: string | null;
+              } | null;
+              kustomize?: {
+                commonAnnotations?: Record<string,string> | null;
+                commonLabels?: Record<string,string> | null;
+                forceCommonAnnotations?: boolean | null;
+                forceCommonLabels?: boolean | null;
+                images?: Array<string> | null;
+                namePrefix?: string | null;
+                nameSuffix?: string | null;
+                version?: string | null;
+              } | null;
+              path?: string | null;
+              plugin?: {
+                env?: Array<{
+                  name: string;
+                  value: string;
+                }> | null;
+                name?: string | null;
+                parameters?: Array<{
+                  array?: Array<string> | null;
+                  map?: Record<string,string> | null;
+                  name?: string | null;
+                  string?: string | null;
+                }> | null;
+              } | null;
+              ref?: string | null;
+              repoURL: string;
+              targetRevision?: string | null;
+            }> | null;
+            syncPolicy?: {
+              automated?: {
+                allowEmpty?: boolean | null;
+                prune?: boolean | null;
+                selfHeal?: boolean | null;
+              } | null;
+              managedNamespaceMetadata?: {
+                annotations?: Record<string,string> | null;
+                labels?: Record<string,string> | null;
+              } | null;
+              retry?: {
+                backoff?: {
+                  duration?: string | null;
+                  factor?: number | null;
+                  maxDuration?: string | null;
+                } | null;
+                limit?: number | null;
+              } | null;
+              syncOptions?: Array<string> | null;
+            } | null;
+          };
+        } | null;
+      } | null;
+      list?: {
+        elements: Array<c.JSONValue>;
+        template?: {
+          metadata: {
+            annotations?: Record<string,string> | null;
+            finalizers?: Array<string> | null;
+            labels?: Record<string,string> | null;
+            name?: string | null;
+            namespace?: string | null;
+          };
+          spec: {
+            destination: {
+              name?: string | null;
+              namespace?: string | null;
+              server?: string | null;
+            };
+            ignoreDifferences?: Array<{
+              group?: string | null;
+              jqPathExpressions?: Array<string> | null;
+              jsonPointers?: Array<string> | null;
+              kind: string;
+              managedFieldsManagers?: Array<string> | null;
+              name?: string | null;
+              namespace?: string | null;
+            }> | null;
+            info?: Array<{
+              name: string;
+              value: string;
+            }> | null;
+            project: string;
+            revisionHistoryLimit?: number | null;
+            source?: {
+              chart?: string | null;
+              directory?: {
+                exclude?: string | null;
+                include?: string | null;
+                jsonnet?: {
+                  extVars?: Array<{
+                    code?: boolean | null;
+                    name: string;
+                    value: string;
+                  }> | null;
+                  libs?: Array<string> | null;
+                  tlas?: Array<{
+                    code?: boolean | null;
+                    name: string;
+                    value: string;
+                  }> | null;
+                } | null;
+                recurse?: boolean | null;
+              } | null;
+              helm?: {
+                fileParameters?: Array<{
+                  name?: string | null;
+                  path?: string | null;
+                }> | null;
+                ignoreMissingValueFiles?: boolean | null;
+                parameters?: Array<{
+                  forceString?: boolean | null;
+                  name?: string | null;
+                  value?: string | null;
+                }> | null;
+                passCredentials?: boolean | null;
+                releaseName?: string | null;
+                skipCrds?: boolean | null;
+                valueFiles?: Array<string> | null;
+                values?: string | null;
+                version?: string | null;
+              } | null;
+              kustomize?: {
+                commonAnnotations?: Record<string,string> | null;
+                commonLabels?: Record<string,string> | null;
+                forceCommonAnnotations?: boolean | null;
+                forceCommonLabels?: boolean | null;
+                images?: Array<string> | null;
+                namePrefix?: string | null;
+                nameSuffix?: string | null;
+                version?: string | null;
+              } | null;
+              path?: string | null;
+              plugin?: {
+                env?: Array<{
+                  name: string;
+                  value: string;
+                }> | null;
+                name?: string | null;
+                parameters?: Array<{
+                  array?: Array<string> | null;
+                  map?: Record<string,string> | null;
+                  name?: string | null;
+                  string?: string | null;
+                }> | null;
+              } | null;
+              ref?: string | null;
+              repoURL: string;
+              targetRevision?: string | null;
+            } | null;
+            sources?: Array<{
+              chart?: string | null;
+              directory?: {
+                exclude?: string | null;
+                include?: string | null;
+                jsonnet?: {
+                  extVars?: Array<{
+                    code?: boolean | null;
+                    name: string;
+                    value: string;
+                  }> | null;
+                  libs?: Array<string> | null;
+                  tlas?: Array<{
+                    code?: boolean | null;
+                    name: string;
+                    value: string;
+                  }> | null;
+                } | null;
+                recurse?: boolean | null;
+              } | null;
+              helm?: {
+                fileParameters?: Array<{
+                  name?: string | null;
+                  path?: string | null;
+                }> | null;
+                ignoreMissingValueFiles?: boolean | null;
+                parameters?: Array<{
+                  forceString?: boolean | null;
+                  name?: string | null;
+                  value?: string | null;
+                }> | null;
+                passCredentials?: boolean | null;
+                releaseName?: string | null;
+                skipCrds?: boolean | null;
+                valueFiles?: Array<string> | null;
+                values?: string | null;
+                version?: string | null;
+              } | null;
+              kustomize?: {
+                commonAnnotations?: Record<string,string> | null;
+                commonLabels?: Record<string,string> | null;
+                forceCommonAnnotations?: boolean | null;
+                forceCommonLabels?: boolean | null;
+                images?: Array<string> | null;
+                namePrefix?: string | null;
+                nameSuffix?: string | null;
+                version?: string | null;
+              } | null;
+              path?: string | null;
+              plugin?: {
+                env?: Array<{
+                  name: string;
+                  value: string;
+                }> | null;
+                name?: string | null;
+                parameters?: Array<{
+                  array?: Array<string> | null;
+                  map?: Record<string,string> | null;
+                  name?: string | null;
+                  string?: string | null;
+                }> | null;
+              } | null;
+              ref?: string | null;
+              repoURL: string;
+              targetRevision?: string | null;
+            }> | null;
+            syncPolicy?: {
+              automated?: {
+                allowEmpty?: boolean | null;
+                prune?: boolean | null;
+                selfHeal?: boolean | null;
+              } | null;
+              managedNamespaceMetadata?: {
+                annotations?: Record<string,string> | null;
+                labels?: Record<string,string> | null;
+              } | null;
+              retry?: {
+                backoff?: {
+                  duration?: string | null;
+                  factor?: number | null;
+                  maxDuration?: string | null;
+                } | null;
+                limit?: number | null;
+              } | null;
+              syncOptions?: Array<string> | null;
+            } | null;
+          };
+        } | null;
+      } | null;
+      matrix?: {
+        generators: Array<{
+          clusterDecisionResource?: {
+            configMapRef: string;
+            labelSelector?: {
+              matchExpressions?: Array<{
+                key: string;
+                operator: string;
+                values?: Array<string> | null;
+              }> | null;
+              matchLabels?: Record<string,string> | null;
+            } | null;
+            name?: string | null;
+            requeueAfterSeconds?: number | null;
+            template?: {
+              metadata: {
+                annotations?: Record<string,string> | null;
+                finalizers?: Array<string> | null;
+                labels?: Record<string,string> | null;
+                name?: string | null;
+                namespace?: string | null;
+              };
+              spec: {
+                destination: {
+                  name?: string | null;
+                  namespace?: string | null;
+                  server?: string | null;
+                };
+                ignoreDifferences?: Array<{
+                  group?: string | null;
+                  jqPathExpressions?: Array<string> | null;
+                  jsonPointers?: Array<string> | null;
+                  kind: string;
+                  managedFieldsManagers?: Array<string> | null;
+                  name?: string | null;
+                  namespace?: string | null;
+                }> | null;
+                info?: Array<{
+                  name: string;
+                  value: string;
+                }> | null;
+                project: string;
+                revisionHistoryLimit?: number | null;
+                source?: {
+                  chart?: string | null;
+                  directory?: {
+                    exclude?: string | null;
+                    include?: string | null;
+                    jsonnet?: {
+                      extVars?: Array<{
+                        code?: boolean | null;
+                        name: string;
+                        value: string;
+                      }> | null;
+                      libs?: Array<string> | null;
+                      tlas?: Array<{
+                        code?: boolean | null;
+                        name: string;
+                        value: string;
+                      }> | null;
+                    } | null;
+                    recurse?: boolean | null;
+                  } | null;
+                  helm?: {
+                    fileParameters?: Array<{
+                      name?: string | null;
+                      path?: string | null;
+                    }> | null;
+                    ignoreMissingValueFiles?: boolean | null;
+                    parameters?: Array<{
+                      forceString?: boolean | null;
+                      name?: string | null;
+                      value?: string | null;
+                    }> | null;
+                    passCredentials?: boolean | null;
+                    releaseName?: string | null;
+                    skipCrds?: boolean | null;
+                    valueFiles?: Array<string> | null;
+                    values?: string | null;
+                    version?: string | null;
+                  } | null;
+                  kustomize?: {
+                    commonAnnotations?: Record<string,string> | null;
+                    commonLabels?: Record<string,string> | null;
+                    forceCommonAnnotations?: boolean | null;
+                    forceCommonLabels?: boolean | null;
+                    images?: Array<string> | null;
+                    namePrefix?: string | null;
+                    nameSuffix?: string | null;
+                    version?: string | null;
+                  } | null;
+                  path?: string | null;
+                  plugin?: {
+                    env?: Array<{
+                      name: string;
+                      value: string;
+                    }> | null;
+                    name?: string | null;
+                    parameters?: Array<{
+                      array?: Array<string> | null;
+                      map?: Record<string,string> | null;
+                      name?: string | null;
+                      string?: string | null;
+                    }> | null;
+                  } | null;
+                  ref?: string | null;
+                  repoURL: string;
+                  targetRevision?: string | null;
+                } | null;
+                sources?: Array<{
+                  chart?: string | null;
+                  directory?: {
+                    exclude?: string | null;
+                    include?: string | null;
+                    jsonnet?: {
+                      extVars?: Array<{
+                        code?: boolean | null;
+                        name: string;
+                        value: string;
+                      }> | null;
+                      libs?: Array<string> | null;
+                      tlas?: Array<{
+                        code?: boolean | null;
+                        name: string;
+                        value: string;
+                      }> | null;
+                    } | null;
+                    recurse?: boolean | null;
+                  } | null;
+                  helm?: {
+                    fileParameters?: Array<{
+                      name?: string | null;
+                      path?: string | null;
+                    }> | null;
+                    ignoreMissingValueFiles?: boolean | null;
+                    parameters?: Array<{
+                      forceString?: boolean | null;
+                      name?: string | null;
+                      value?: string | null;
+                    }> | null;
+                    passCredentials?: boolean | null;
+                    releaseName?: string | null;
+                    skipCrds?: boolean | null;
+                    valueFiles?: Array<string> | null;
+                    values?: string | null;
+                    version?: string | null;
+                  } | null;
+                  kustomize?: {
+                    commonAnnotations?: Record<string,string> | null;
+                    commonLabels?: Record<string,string> | null;
+                    forceCommonAnnotations?: boolean | null;
+                    forceCommonLabels?: boolean | null;
+                    images?: Array<string> | null;
+                    namePrefix?: string | null;
+                    nameSuffix?: string | null;
+                    version?: string | null;
+                  } | null;
+                  path?: string | null;
+                  plugin?: {
+                    env?: Array<{
+                      name: string;
+                      value: string;
+                    }> | null;
+                    name?: string | null;
+                    parameters?: Array<{
+                      array?: Array<string> | null;
+                      map?: Record<string,string> | null;
+                      name?: string | null;
+                      string?: string | null;
+                    }> | null;
+                  } | null;
+                  ref?: string | null;
+                  repoURL: string;
+                  targetRevision?: string | null;
+                }> | null;
+                syncPolicy?: {
+                  automated?: {
+                    allowEmpty?: boolean | null;
+                    prune?: boolean | null;
+                    selfHeal?: boolean | null;
+                  } | null;
+                  managedNamespaceMetadata?: {
+                    annotations?: Record<string,string> | null;
+                    labels?: Record<string,string> | null;
+                  } | null;
+                  retry?: {
+                    backoff?: {
+                      duration?: string | null;
+                      factor?: number | null;
+                      maxDuration?: string | null;
+                    } | null;
+                    limit?: number | null;
+                  } | null;
+                  syncOptions?: Array<string> | null;
+                } | null;
+              };
+            } | null;
+            values?: Record<string,string> | null;
+          } | null;
+          clusters?: {
+            selector?: {
+              matchExpressions?: Array<{
+                key: string;
+                operator: string;
+                values?: Array<string> | null;
+              }> | null;
+              matchLabels?: Record<string,string> | null;
+            } | null;
+            template?: {
+              metadata: {
+                annotations?: Record<string,string> | null;
+                finalizers?: Array<string> | null;
+                labels?: Record<string,string> | null;
+                name?: string | null;
+                namespace?: string | null;
+              };
+              spec: {
+                destination: {
+                  name?: string | null;
+                  namespace?: string | null;
+                  server?: string | null;
+                };
+                ignoreDifferences?: Array<{
+                  group?: string | null;
+                  jqPathExpressions?: Array<string> | null;
+                  jsonPointers?: Array<string> | null;
+                  kind: string;
+                  managedFieldsManagers?: Array<string> | null;
+                  name?: string | null;
+                  namespace?: string | null;
+                }> | null;
+                info?: Array<{
+                  name: string;
+                  value: string;
+                }> | null;
+                project: string;
+                revisionHistoryLimit?: number | null;
+                source?: {
+                  chart?: string | null;
+                  directory?: {
+                    exclude?: string | null;
+                    include?: string | null;
+                    jsonnet?: {
+                      extVars?: Array<{
+                        code?: boolean | null;
+                        name: string;
+                        value: string;
+                      }> | null;
+                      libs?: Array<string> | null;
+                      tlas?: Array<{
+                        code?: boolean | null;
+                        name: string;
+                        value: string;
+                      }> | null;
+                    } | null;
+                    recurse?: boolean | null;
+                  } | null;
+                  helm?: {
+                    fileParameters?: Array<{
+                      name?: string | null;
+                      path?: string | null;
+                    }> | null;
+                    ignoreMissingValueFiles?: boolean | null;
+                    parameters?: Array<{
+                      forceString?: boolean | null;
+                      name?: string | null;
+                      value?: string | null;
+                    }> | null;
+                    passCredentials?: boolean | null;
+                    releaseName?: string | null;
+                    skipCrds?: boolean | null;
+                    valueFiles?: Array<string> | null;
+                    values?: string | null;
+                    version?: string | null;
+                  } | null;
+                  kustomize?: {
+                    commonAnnotations?: Record<string,string> | null;
+                    commonLabels?: Record<string,string> | null;
+                    forceCommonAnnotations?: boolean | null;
+                    forceCommonLabels?: boolean | null;
+                    images?: Array<string> | null;
+                    namePrefix?: string | null;
+                    nameSuffix?: string | null;
+                    version?: string | null;
+                  } | null;
+                  path?: string | null;
+                  plugin?: {
+                    env?: Array<{
+                      name: string;
+                      value: string;
+                    }> | null;
+                    name?: string | null;
+                    parameters?: Array<{
+                      array?: Array<string> | null;
+                      map?: Record<string,string> | null;
+                      name?: string | null;
+                      string?: string | null;
+                    }> | null;
+                  } | null;
+                  ref?: string | null;
+                  repoURL: string;
+                  targetRevision?: string | null;
+                } | null;
+                sources?: Array<{
+                  chart?: string | null;
+                  directory?: {
+                    exclude?: string | null;
+                    include?: string | null;
+                    jsonnet?: {
+                      extVars?: Array<{
+                        code?: boolean | null;
+                        name: string;
+                        value: string;
+                      }> | null;
+                      libs?: Array<string> | null;
+                      tlas?: Array<{
+                        code?: boolean | null;
+                        name: string;
+                        value: string;
+                      }> | null;
+                    } | null;
+                    recurse?: boolean | null;
+                  } | null;
+                  helm?: {
+                    fileParameters?: Array<{
+                      name?: string | null;
+                      path?: string | null;
+                    }> | null;
+                    ignoreMissingValueFiles?: boolean | null;
+                    parameters?: Array<{
+                      forceString?: boolean | null;
+                      name?: string | null;
+                      value?: string | null;
+                    }> | null;
+                    passCredentials?: boolean | null;
+                    releaseName?: string | null;
+                    skipCrds?: boolean | null;
+                    valueFiles?: Array<string> | null;
+                    values?: string | null;
+                    version?: string | null;
+                  } | null;
+                  kustomize?: {
+                    commonAnnotations?: Record<string,string> | null;
+                    commonLabels?: Record<string,string> | null;
+                    forceCommonAnnotations?: boolean | null;
+                    forceCommonLabels?: boolean | null;
+                    images?: Array<string> | null;
+                    namePrefix?: string | null;
+                    nameSuffix?: string | null;
+                    version?: string | null;
+                  } | null;
+                  path?: string | null;
+                  plugin?: {
+                    env?: Array<{
+                      name: string;
+                      value: string;
+                    }> | null;
+                    name?: string | null;
+                    parameters?: Array<{
+                      array?: Array<string> | null;
+                      map?: Record<string,string> | null;
+                      name?: string | null;
+                      string?: string | null;
+                    }> | null;
+                  } | null;
+                  ref?: string | null;
+                  repoURL: string;
+                  targetRevision?: string | null;
+                }> | null;
+                syncPolicy?: {
+                  automated?: {
+                    allowEmpty?: boolean | null;
+                    prune?: boolean | null;
+                    selfHeal?: boolean | null;
+                  } | null;
+                  managedNamespaceMetadata?: {
+                    annotations?: Record<string,string> | null;
+                    labels?: Record<string,string> | null;
+                  } | null;
+                  retry?: {
+                    backoff?: {
+                      duration?: string | null;
+                      factor?: number | null;
+                      maxDuration?: string | null;
+                    } | null;
+                    limit?: number | null;
+                  } | null;
+                  syncOptions?: Array<string> | null;
+                } | null;
+              };
+            } | null;
+            values?: Record<string,string> | null;
+          } | null;
+          git?: {
+            directories?: Array<{
+              exclude?: boolean | null;
+              path: string;
+            }> | null;
+            files?: Array<{
+              path: string;
+            }> | null;
+            pathParamPrefix?: string | null;
+            repoURL: string;
+            requeueAfterSeconds?: number | null;
+            revision: string;
+            template?: {
+              metadata: {
+                annotations?: Record<string,string> | null;
+                finalizers?: Array<string> | null;
+                labels?: Record<string,string> | null;
+                name?: string | null;
+                namespace?: string | null;
+              };
+              spec: {
+                destination: {
+                  name?: string | null;
+                  namespace?: string | null;
+                  server?: string | null;
+                };
+                ignoreDifferences?: Array<{
+                  group?: string | null;
+                  jqPathExpressions?: Array<string> | null;
+                  jsonPointers?: Array<string> | null;
+                  kind: string;
+                  managedFieldsManagers?: Array<string> | null;
+                  name?: string | null;
+                  namespace?: string | null;
+                }> | null;
+                info?: Array<{
+                  name: string;
+                  value: string;
+                }> | null;
+                project: string;
+                revisionHistoryLimit?: number | null;
+                source?: {
+                  chart?: string | null;
+                  directory?: {
+                    exclude?: string | null;
+                    include?: string | null;
+                    jsonnet?: {
+                      extVars?: Array<{
+                        code?: boolean | null;
+                        name: string;
+                        value: string;
+                      }> | null;
+                      libs?: Array<string> | null;
+                      tlas?: Array<{
+                        code?: boolean | null;
+                        name: string;
+                        value: string;
+                      }> | null;
+                    } | null;
+                    recurse?: boolean | null;
+                  } | null;
+                  helm?: {
+                    fileParameters?: Array<{
+                      name?: string | null;
+                      path?: string | null;
+                    }> | null;
+                    ignoreMissingValueFiles?: boolean | null;
+                    parameters?: Array<{
+                      forceString?: boolean | null;
+                      name?: string | null;
+                      value?: string | null;
+                    }> | null;
+                    passCredentials?: boolean | null;
+                    releaseName?: string | null;
+                    skipCrds?: boolean | null;
+                    valueFiles?: Array<string> | null;
+                    values?: string | null;
+                    version?: string | null;
+                  } | null;
+                  kustomize?: {
+                    commonAnnotations?: Record<string,string> | null;
+                    commonLabels?: Record<string,string> | null;
+                    forceCommonAnnotations?: boolean | null;
+                    forceCommonLabels?: boolean | null;
+                    images?: Array<string> | null;
+                    namePrefix?: string | null;
+                    nameSuffix?: string | null;
+                    version?: string | null;
+                  } | null;
+                  path?: string | null;
+                  plugin?: {
+                    env?: Array<{
+                      name: string;
+                      value: string;
+                    }> | null;
+                    name?: string | null;
+                    parameters?: Array<{
+                      array?: Array<string> | null;
+                      map?: Record<string,string> | null;
+                      name?: string | null;
+                      string?: string | null;
+                    }> | null;
+                  } | null;
+                  ref?: string | null;
+                  repoURL: string;
+                  targetRevision?: string | null;
+                } | null;
+                sources?: Array<{
+                  chart?: string | null;
+                  directory?: {
+                    exclude?: string | null;
+                    include?: string | null;
+                    jsonnet?: {
+                      extVars?: Array<{
+                        code?: boolean | null;
+                        name: string;
+                        value: string;
+                      }> | null;
+                      libs?: Array<string> | null;
+                      tlas?: Array<{
+                        code?: boolean | null;
+                        name: string;
+                        value: string;
+                      }> | null;
+                    } | null;
+                    recurse?: boolean | null;
+                  } | null;
+                  helm?: {
+                    fileParameters?: Array<{
+                      name?: string | null;
+                      path?: string | null;
+                    }> | null;
+                    ignoreMissingValueFiles?: boolean | null;
+                    parameters?: Array<{
+                      forceString?: boolean | null;
+                      name?: string | null;
+                      value?: string | null;
+                    }> | null;
+                    passCredentials?: boolean | null;
+                    releaseName?: string | null;
+                    skipCrds?: boolean | null;
+                    valueFiles?: Array<string> | null;
+                    values?: string | null;
+                    version?: string | null;
+                  } | null;
+                  kustomize?: {
+                    commonAnnotations?: Record<string,string> | null;
+                    commonLabels?: Record<string,string> | null;
+                    forceCommonAnnotations?: boolean | null;
+                    forceCommonLabels?: boolean | null;
+                    images?: Array<string> | null;
+                    namePrefix?: string | null;
+                    nameSuffix?: string | null;
+                    version?: string | null;
+                  } | null;
+                  path?: string | null;
+                  plugin?: {
+                    env?: Array<{
+                      name: string;
+                      value: string;
+                    }> | null;
+                    name?: string | null;
+                    parameters?: Array<{
+                      array?: Array<string> | null;
+                      map?: Record<string,string> | null;
+                      name?: string | null;
+                      string?: string | null;
+                    }> | null;
+                  } | null;
+                  ref?: string | null;
+                  repoURL: string;
+                  targetRevision?: string | null;
+                }> | null;
+                syncPolicy?: {
+                  automated?: {
+                    allowEmpty?: boolean | null;
+                    prune?: boolean | null;
+                    selfHeal?: boolean | null;
+                  } | null;
+                  managedNamespaceMetadata?: {
+                    annotations?: Record<string,string> | null;
+                    labels?: Record<string,string> | null;
+                  } | null;
+                  retry?: {
+                    backoff?: {
+                      duration?: string | null;
+                      factor?: number | null;
+                      maxDuration?: string | null;
+                    } | null;
+                    limit?: number | null;
+                  } | null;
+                  syncOptions?: Array<string> | null;
+                } | null;
+              };
+            } | null;
+          } | null;
+          list?: {
+            elements: Array<c.JSONValue>;
+            template?: {
+              metadata: {
+                annotations?: Record<string,string> | null;
+                finalizers?: Array<string> | null;
+                labels?: Record<string,string> | null;
+                name?: string | null;
+                namespace?: string | null;
+              };
+              spec: {
+                destination: {
+                  name?: string | null;
+                  namespace?: string | null;
+                  server?: string | null;
+                };
+                ignoreDifferences?: Array<{
+                  group?: string | null;
+                  jqPathExpressions?: Array<string> | null;
+                  jsonPointers?: Array<string> | null;
+                  kind: string;
+                  managedFieldsManagers?: Array<string> | null;
+                  name?: string | null;
+                  namespace?: string | null;
+                }> | null;
+                info?: Array<{
+                  name: string;
+                  value: string;
+                }> | null;
+                project: string;
+                revisionHistoryLimit?: number | null;
+                source?: {
+                  chart?: string | null;
+                  directory?: {
+                    exclude?: string | null;
+                    include?: string | null;
+                    jsonnet?: {
+                      extVars?: Array<{
+                        code?: boolean | null;
+                        name: string;
+                        value: string;
+                      }> | null;
+                      libs?: Array<string> | null;
+                      tlas?: Array<{
+                        code?: boolean | null;
+                        name: string;
+                        value: string;
+                      }> | null;
+                    } | null;
+                    recurse?: boolean | null;
+                  } | null;
+                  helm?: {
+                    fileParameters?: Array<{
+                      name?: string | null;
+                      path?: string | null;
+                    }> | null;
+                    ignoreMissingValueFiles?: boolean | null;
+                    parameters?: Array<{
+                      forceString?: boolean | null;
+                      name?: string | null;
+                      value?: string | null;
+                    }> | null;
+                    passCredentials?: boolean | null;
+                    releaseName?: string | null;
+                    skipCrds?: boolean | null;
+                    valueFiles?: Array<string> | null;
+                    values?: string | null;
+                    version?: string | null;
+                  } | null;
+                  kustomize?: {
+                    commonAnnotations?: Record<string,string> | null;
+                    commonLabels?: Record<string,string> | null;
+                    forceCommonAnnotations?: boolean | null;
+                    forceCommonLabels?: boolean | null;
+                    images?: Array<string> | null;
+                    namePrefix?: string | null;
+                    nameSuffix?: string | null;
+                    version?: string | null;
+                  } | null;
+                  path?: string | null;
+                  plugin?: {
+                    env?: Array<{
+                      name: string;
+                      value: string;
+                    }> | null;
+                    name?: string | null;
+                    parameters?: Array<{
+                      array?: Array<string> | null;
+                      map?: Record<string,string> | null;
+                      name?: string | null;
+                      string?: string | null;
+                    }> | null;
+                  } | null;
+                  ref?: string | null;
+                  repoURL: string;
+                  targetRevision?: string | null;
+                } | null;
+                sources?: Array<{
+                  chart?: string | null;
+                  directory?: {
+                    exclude?: string | null;
+                    include?: string | null;
+                    jsonnet?: {
+                      extVars?: Array<{
+                        code?: boolean | null;
+                        name: string;
+                        value: string;
+                      }> | null;
+                      libs?: Array<string> | null;
+                      tlas?: Array<{
+                        code?: boolean | null;
+                        name: string;
+                        value: string;
+                      }> | null;
+                    } | null;
+                    recurse?: boolean | null;
+                  } | null;
+                  helm?: {
+                    fileParameters?: Array<{
+                      name?: string | null;
+                      path?: string | null;
+                    }> | null;
+                    ignoreMissingValueFiles?: boolean | null;
+                    parameters?: Array<{
+                      forceString?: boolean | null;
+                      name?: string | null;
+                      value?: string | null;
+                    }> | null;
+                    passCredentials?: boolean | null;
+                    releaseName?: string | null;
+                    skipCrds?: boolean | null;
+                    valueFiles?: Array<string> | null;
+                    values?: string | null;
+                    version?: string | null;
+                  } | null;
+                  kustomize?: {
+                    commonAnnotations?: Record<string,string> | null;
+                    commonLabels?: Record<string,string> | null;
+                    forceCommonAnnotations?: boolean | null;
+                    forceCommonLabels?: boolean | null;
+                    images?: Array<string> | null;
+                    namePrefix?: string | null;
+                    nameSuffix?: string | null;
+                    version?: string | null;
+                  } | null;
+                  path?: string | null;
+                  plugin?: {
+                    env?: Array<{
+                      name: string;
+                      value: string;
+                    }> | null;
+                    name?: string | null;
+                    parameters?: Array<{
+                      array?: Array<string> | null;
+                      map?: Record<string,string> | null;
+                      name?: string | null;
+                      string?: string | null;
+                    }> | null;
+                  } | null;
+                  ref?: string | null;
+                  repoURL: string;
+                  targetRevision?: string | null;
+                }> | null;
+                syncPolicy?: {
+                  automated?: {
+                    allowEmpty?: boolean | null;
+                    prune?: boolean | null;
+                    selfHeal?: boolean | null;
+                  } | null;
+                  managedNamespaceMetadata?: {
+                    annotations?: Record<string,string> | null;
+                    labels?: Record<string,string> | null;
+                  } | null;
+                  retry?: {
+                    backoff?: {
+                      duration?: string | null;
+                      factor?: number | null;
+                      maxDuration?: string | null;
+                    } | null;
+                    limit?: number | null;
+                  } | null;
+                  syncOptions?: Array<string> | null;
+                } | null;
+              };
+            } | null;
+          } | null;
+          matrix?: c.JSONValue | null;
+          merge?: c.JSONValue | null;
+          pullRequest?: {
+            bitbucketServer?: {
+              api: string;
+              basicAuth?: {
+                passwordRef: {
+                  key: string;
+                  secretName: string;
+                };
+                username: string;
+              } | null;
+              project: string;
+              repo: string;
+            } | null;
+            filters?: Array<{
+              branchMatch?: string | null;
+            }> | null;
+            gitea?: {
+              api: string;
+              insecure?: boolean | null;
+              owner: string;
+              repo: string;
+              tokenRef?: {
+                key: string;
+                secretName: string;
+              } | null;
+            } | null;
+            github?: {
+              api?: string | null;
+              appSecretName?: string | null;
+              labels?: Array<string> | null;
+              owner: string;
+              repo: string;
+              tokenRef?: {
+                key: string;
+                secretName: string;
+              } | null;
+            } | null;
+            gitlab?: {
+              api?: string | null;
+              labels?: Array<string> | null;
+              project: string;
+              pullRequestState?: string | null;
+              tokenRef?: {
+                key: string;
+                secretName: string;
+              } | null;
+            } | null;
+            requeueAfterSeconds?: number | null;
+            template?: {
+              metadata: {
+                annotations?: Record<string,string> | null;
+                finalizers?: Array<string> | null;
+                labels?: Record<string,string> | null;
+                name?: string | null;
+                namespace?: string | null;
+              };
+              spec: {
+                destination: {
+                  name?: string | null;
+                  namespace?: string | null;
+                  server?: string | null;
+                };
+                ignoreDifferences?: Array<{
+                  group?: string | null;
+                  jqPathExpressions?: Array<string> | null;
+                  jsonPointers?: Array<string> | null;
+                  kind: string;
+                  managedFieldsManagers?: Array<string> | null;
+                  name?: string | null;
+                  namespace?: string | null;
+                }> | null;
+                info?: Array<{
+                  name: string;
+                  value: string;
+                }> | null;
+                project: string;
+                revisionHistoryLimit?: number | null;
+                source?: {
+                  chart?: string | null;
+                  directory?: {
+                    exclude?: string | null;
+                    include?: string | null;
+                    jsonnet?: {
+                      extVars?: Array<{
+                        code?: boolean | null;
+                        name: string;
+                        value: string;
+                      }> | null;
+                      libs?: Array<string> | null;
+                      tlas?: Array<{
+                        code?: boolean | null;
+                        name: string;
+                        value: string;
+                      }> | null;
+                    } | null;
+                    recurse?: boolean | null;
+                  } | null;
+                  helm?: {
+                    fileParameters?: Array<{
+                      name?: string | null;
+                      path?: string | null;
+                    }> | null;
+                    ignoreMissingValueFiles?: boolean | null;
+                    parameters?: Array<{
+                      forceString?: boolean | null;
+                      name?: string | null;
+                      value?: string | null;
+                    }> | null;
+                    passCredentials?: boolean | null;
+                    releaseName?: string | null;
+                    skipCrds?: boolean | null;
+                    valueFiles?: Array<string> | null;
+                    values?: string | null;
+                    version?: string | null;
+                  } | null;
+                  kustomize?: {
+                    commonAnnotations?: Record<string,string> | null;
+                    commonLabels?: Record<string,string> | null;
+                    forceCommonAnnotations?: boolean | null;
+                    forceCommonLabels?: boolean | null;
+                    images?: Array<string> | null;
+                    namePrefix?: string | null;
+                    nameSuffix?: string | null;
+                    version?: string | null;
+                  } | null;
+                  path?: string | null;
+                  plugin?: {
+                    env?: Array<{
+                      name: string;
+                      value: string;
+                    }> | null;
+                    name?: string | null;
+                    parameters?: Array<{
+                      array?: Array<string> | null;
+                      map?: Record<string,string> | null;
+                      name?: string | null;
+                      string?: string | null;
+                    }> | null;
+                  } | null;
+                  ref?: string | null;
+                  repoURL: string;
+                  targetRevision?: string | null;
+                } | null;
+                sources?: Array<{
+                  chart?: string | null;
+                  directory?: {
+                    exclude?: string | null;
+                    include?: string | null;
+                    jsonnet?: {
+                      extVars?: Array<{
+                        code?: boolean | null;
+                        name: string;
+                        value: string;
+                      }> | null;
+                      libs?: Array<string> | null;
+                      tlas?: Array<{
+                        code?: boolean | null;
+                        name: string;
+                        value: string;
+                      }> | null;
+                    } | null;
+                    recurse?: boolean | null;
+                  } | null;
+                  helm?: {
+                    fileParameters?: Array<{
+                      name?: string | null;
+                      path?: string | null;
+                    }> | null;
+                    ignoreMissingValueFiles?: boolean | null;
+                    parameters?: Array<{
+                      forceString?: boolean | null;
+                      name?: string | null;
+                      value?: string | null;
+                    }> | null;
+                    passCredentials?: boolean | null;
+                    releaseName?: string | null;
+                    skipCrds?: boolean | null;
+                    valueFiles?: Array<string> | null;
+                    values?: string | null;
+                    version?: string | null;
+                  } | null;
+                  kustomize?: {
+                    commonAnnotations?: Record<string,string> | null;
+                    commonLabels?: Record<string,string> | null;
+                    forceCommonAnnotations?: boolean | null;
+                    forceCommonLabels?: boolean | null;
+                    images?: Array<string> | null;
+                    namePrefix?: string | null;
+                    nameSuffix?: string | null;
+                    version?: string | null;
+                  } | null;
+                  path?: string | null;
+                  plugin?: {
+                    env?: Array<{
+                      name: string;
+                      value: string;
+                    }> | null;
+                    name?: string | null;
+                    parameters?: Array<{
+                      array?: Array<string> | null;
+                      map?: Record<string,string> | null;
+                      name?: string | null;
+                      string?: string | null;
+                    }> | null;
+                  } | null;
+                  ref?: string | null;
+                  repoURL: string;
+                  targetRevision?: string | null;
+                }> | null;
+                syncPolicy?: {
+                  automated?: {
+                    allowEmpty?: boolean | null;
+                    prune?: boolean | null;
+                    selfHeal?: boolean | null;
+                  } | null;
+                  managedNamespaceMetadata?: {
+                    annotations?: Record<string,string> | null;
+                    labels?: Record<string,string> | null;
+                  } | null;
+                  retry?: {
+                    backoff?: {
+                      duration?: string | null;
+                      factor?: number | null;
+                      maxDuration?: string | null;
+                    } | null;
+                    limit?: number | null;
+                  } | null;
+                  syncOptions?: Array<string> | null;
+                } | null;
+              };
+            } | null;
+          } | null;
+          scmProvider?: {
+            azureDevOps?: {
+              accessTokenRef: {
+                key: string;
+                secretName: string;
+              };
+              allBranches?: boolean | null;
+              api?: string | null;
+              organization: string;
+              teamProject: string;
+            } | null;
+            bitbucket?: {
+              allBranches?: boolean | null;
+              appPasswordRef: {
+                key: string;
+                secretName: string;
+              };
+              owner: string;
+              user: string;
+            } | null;
+            bitbucketServer?: {
+              allBranches?: boolean | null;
+              api: string;
+              basicAuth?: {
+                passwordRef: {
+                  key: string;
+                  secretName: string;
+                };
+                username: string;
+              } | null;
+              project: string;
+            } | null;
+            cloneProtocol?: string | null;
+            filters?: Array<{
+              branchMatch?: string | null;
+              labelMatch?: string | null;
+              pathsDoNotExist?: Array<string> | null;
+              pathsExist?: Array<string> | null;
+              repositoryMatch?: string | null;
+            }> | null;
+            gitea?: {
+              allBranches?: boolean | null;
+              api: string;
+              insecure?: boolean | null;
+              owner: string;
+              tokenRef?: {
+                key: string;
+                secretName: string;
+              } | null;
+            } | null;
+            github?: {
+              allBranches?: boolean | null;
+              api?: string | null;
+              appSecretName?: string | null;
+              organization: string;
+              tokenRef?: {
+                key: string;
+                secretName: string;
+              } | null;
+            } | null;
+            gitlab?: {
+              allBranches?: boolean | null;
+              api?: string | null;
+              group: string;
+              includeSubgroups?: boolean | null;
+              tokenRef?: {
+                key: string;
+                secretName: string;
+              } | null;
+            } | null;
+            requeueAfterSeconds?: number | null;
+            template?: {
+              metadata: {
+                annotations?: Record<string,string> | null;
+                finalizers?: Array<string> | null;
+                labels?: Record<string,string> | null;
+                name?: string | null;
+                namespace?: string | null;
+              };
+              spec: {
+                destination: {
+                  name?: string | null;
+                  namespace?: string | null;
+                  server?: string | null;
+                };
+                ignoreDifferences?: Array<{
+                  group?: string | null;
+                  jqPathExpressions?: Array<string> | null;
+                  jsonPointers?: Array<string> | null;
+                  kind: string;
+                  managedFieldsManagers?: Array<string> | null;
+                  name?: string | null;
+                  namespace?: string | null;
+                }> | null;
+                info?: Array<{
+                  name: string;
+                  value: string;
+                }> | null;
+                project: string;
+                revisionHistoryLimit?: number | null;
+                source?: {
+                  chart?: string | null;
+                  directory?: {
+                    exclude?: string | null;
+                    include?: string | null;
+                    jsonnet?: {
+                      extVars?: Array<{
+                        code?: boolean | null;
+                        name: string;
+                        value: string;
+                      }> | null;
+                      libs?: Array<string> | null;
+                      tlas?: Array<{
+                        code?: boolean | null;
+                        name: string;
+                        value: string;
+                      }> | null;
+                    } | null;
+                    recurse?: boolean | null;
+                  } | null;
+                  helm?: {
+                    fileParameters?: Array<{
+                      name?: string | null;
+                      path?: string | null;
+                    }> | null;
+                    ignoreMissingValueFiles?: boolean | null;
+                    parameters?: Array<{
+                      forceString?: boolean | null;
+                      name?: string | null;
+                      value?: string | null;
+                    }> | null;
+                    passCredentials?: boolean | null;
+                    releaseName?: string | null;
+                    skipCrds?: boolean | null;
+                    valueFiles?: Array<string> | null;
+                    values?: string | null;
+                    version?: string | null;
+                  } | null;
+                  kustomize?: {
+                    commonAnnotations?: Record<string,string> | null;
+                    commonLabels?: Record<string,string> | null;
+                    forceCommonAnnotations?: boolean | null;
+                    forceCommonLabels?: boolean | null;
+                    images?: Array<string> | null;
+                    namePrefix?: string | null;
+                    nameSuffix?: string | null;
+                    version?: string | null;
+                  } | null;
+                  path?: string | null;
+                  plugin?: {
+                    env?: Array<{
+                      name: string;
+                      value: string;
+                    }> | null;
+                    name?: string | null;
+                    parameters?: Array<{
+                      array?: Array<string> | null;
+                      map?: Record<string,string> | null;
+                      name?: string | null;
+                      string?: string | null;
+                    }> | null;
+                  } | null;
+                  ref?: string | null;
+                  repoURL: string;
+                  targetRevision?: string | null;
+                } | null;
+                sources?: Array<{
+                  chart?: string | null;
+                  directory?: {
+                    exclude?: string | null;
+                    include?: string | null;
+                    jsonnet?: {
+                      extVars?: Array<{
+                        code?: boolean | null;
+                        name: string;
+                        value: string;
+                      }> | null;
+                      libs?: Array<string> | null;
+                      tlas?: Array<{
+                        code?: boolean | null;
+                        name: string;
+                        value: string;
+                      }> | null;
+                    } | null;
+                    recurse?: boolean | null;
+                  } | null;
+                  helm?: {
+                    fileParameters?: Array<{
+                      name?: string | null;
+                      path?: string | null;
+                    }> | null;
+                    ignoreMissingValueFiles?: boolean | null;
+                    parameters?: Array<{
+                      forceString?: boolean | null;
+                      name?: string | null;
+                      value?: string | null;
+                    }> | null;
+                    passCredentials?: boolean | null;
+                    releaseName?: string | null;
+                    skipCrds?: boolean | null;
+                    valueFiles?: Array<string> | null;
+                    values?: string | null;
+                    version?: string | null;
+                  } | null;
+                  kustomize?: {
+                    commonAnnotations?: Record<string,string> | null;
+                    commonLabels?: Record<string,string> | null;
+                    forceCommonAnnotations?: boolean | null;
+                    forceCommonLabels?: boolean | null;
+                    images?: Array<string> | null;
+                    namePrefix?: string | null;
+                    nameSuffix?: string | null;
+                    version?: string | null;
+                  } | null;
+                  path?: string | null;
+                  plugin?: {
+                    env?: Array<{
+                      name: string;
+                      value: string;
+                    }> | null;
+                    name?: string | null;
+                    parameters?: Array<{
+                      array?: Array<string> | null;
+                      map?: Record<string,string> | null;
+                      name?: string | null;
+                      string?: string | null;
+                    }> | null;
+                  } | null;
+                  ref?: string | null;
+                  repoURL: string;
+                  targetRevision?: string | null;
+                }> | null;
+                syncPolicy?: {
+                  automated?: {
+                    allowEmpty?: boolean | null;
+                    prune?: boolean | null;
+                    selfHeal?: boolean | null;
+                  } | null;
+                  managedNamespaceMetadata?: {
+                    annotations?: Record<string,string> | null;
+                    labels?: Record<string,string> | null;
+                  } | null;
+                  retry?: {
+                    backoff?: {
+                      duration?: string | null;
+                      factor?: number | null;
+                      maxDuration?: string | null;
+                    } | null;
+                    limit?: number | null;
+                  } | null;
+                  syncOptions?: Array<string> | null;
+                } | null;
+              };
+            } | null;
+          } | null;
+          selector?: {
+            matchExpressions?: Array<{
+              key: string;
+              operator: string;
+              values?: Array<string> | null;
+            }> | null;
+            matchLabels?: Record<string,string> | null;
+          } | null;
+        }>;
+        template?: {
+          metadata: {
+            annotations?: Record<string,string> | null;
+            finalizers?: Array<string> | null;
+            labels?: Record<string,string> | null;
+            name?: string | null;
+            namespace?: string | null;
+          };
+          spec: {
+            destination: {
+              name?: string | null;
+              namespace?: string | null;
+              server?: string | null;
+            };
+            ignoreDifferences?: Array<{
+              group?: string | null;
+              jqPathExpressions?: Array<string> | null;
+              jsonPointers?: Array<string> | null;
+              kind: string;
+              managedFieldsManagers?: Array<string> | null;
+              name?: string | null;
+              namespace?: string | null;
+            }> | null;
+            info?: Array<{
+              name: string;
+              value: string;
+            }> | null;
+            project: string;
+            revisionHistoryLimit?: number | null;
+            source?: {
+              chart?: string | null;
+              directory?: {
+                exclude?: string | null;
+                include?: string | null;
+                jsonnet?: {
+                  extVars?: Array<{
+                    code?: boolean | null;
+                    name: string;
+                    value: string;
+                  }> | null;
+                  libs?: Array<string> | null;
+                  tlas?: Array<{
+                    code?: boolean | null;
+                    name: string;
+                    value: string;
+                  }> | null;
+                } | null;
+                recurse?: boolean | null;
+              } | null;
+              helm?: {
+                fileParameters?: Array<{
+                  name?: string | null;
+                  path?: string | null;
+                }> | null;
+                ignoreMissingValueFiles?: boolean | null;
+                parameters?: Array<{
+                  forceString?: boolean | null;
+                  name?: string | null;
+                  value?: string | null;
+                }> | null;
+                passCredentials?: boolean | null;
+                releaseName?: string | null;
+                skipCrds?: boolean | null;
+                valueFiles?: Array<string> | null;
+                values?: string | null;
+                version?: string | null;
+              } | null;
+              kustomize?: {
+                commonAnnotations?: Record<string,string> | null;
+                commonLabels?: Record<string,string> | null;
+                forceCommonAnnotations?: boolean | null;
+                forceCommonLabels?: boolean | null;
+                images?: Array<string> | null;
+                namePrefix?: string | null;
+                nameSuffix?: string | null;
+                version?: string | null;
+              } | null;
+              path?: string | null;
+              plugin?: {
+                env?: Array<{
+                  name: string;
+                  value: string;
+                }> | null;
+                name?: string | null;
+                parameters?: Array<{
+                  array?: Array<string> | null;
+                  map?: Record<string,string> | null;
+                  name?: string | null;
+                  string?: string | null;
+                }> | null;
+              } | null;
+              ref?: string | null;
+              repoURL: string;
+              targetRevision?: string | null;
+            } | null;
+            sources?: Array<{
+              chart?: string | null;
+              directory?: {
+                exclude?: string | null;
+                include?: string | null;
+                jsonnet?: {
+                  extVars?: Array<{
+                    code?: boolean | null;
+                    name: string;
+                    value: string;
+                  }> | null;
+                  libs?: Array<string> | null;
+                  tlas?: Array<{
+                    code?: boolean | null;
+                    name: string;
+                    value: string;
+                  }> | null;
+                } | null;
+                recurse?: boolean | null;
+              } | null;
+              helm?: {
+                fileParameters?: Array<{
+                  name?: string | null;
+                  path?: string | null;
+                }> | null;
+                ignoreMissingValueFiles?: boolean | null;
+                parameters?: Array<{
+                  forceString?: boolean | null;
+                  name?: string | null;
+                  value?: string | null;
+                }> | null;
+                passCredentials?: boolean | null;
+                releaseName?: string | null;
+                skipCrds?: boolean | null;
+                valueFiles?: Array<string> | null;
+                values?: string | null;
+                version?: string | null;
+              } | null;
+              kustomize?: {
+                commonAnnotations?: Record<string,string> | null;
+                commonLabels?: Record<string,string> | null;
+                forceCommonAnnotations?: boolean | null;
+                forceCommonLabels?: boolean | null;
+                images?: Array<string> | null;
+                namePrefix?: string | null;
+                nameSuffix?: string | null;
+                version?: string | null;
+              } | null;
+              path?: string | null;
+              plugin?: {
+                env?: Array<{
+                  name: string;
+                  value: string;
+                }> | null;
+                name?: string | null;
+                parameters?: Array<{
+                  array?: Array<string> | null;
+                  map?: Record<string,string> | null;
+                  name?: string | null;
+                  string?: string | null;
+                }> | null;
+              } | null;
+              ref?: string | null;
+              repoURL: string;
+              targetRevision?: string | null;
+            }> | null;
+            syncPolicy?: {
+              automated?: {
+                allowEmpty?: boolean | null;
+                prune?: boolean | null;
+                selfHeal?: boolean | null;
+              } | null;
+              managedNamespaceMetadata?: {
+                annotations?: Record<string,string> | null;
+                labels?: Record<string,string> | null;
+              } | null;
+              retry?: {
+                backoff?: {
+                  duration?: string | null;
+                  factor?: number | null;
+                  maxDuration?: string | null;
+                } | null;
+                limit?: number | null;
+              } | null;
+              syncOptions?: Array<string> | null;
+            } | null;
+          };
+        } | null;
+      } | null;
+      merge?: {
+        generators: Array<{
+          clusterDecisionResource?: {
+            configMapRef: string;
+            labelSelector?: {
+              matchExpressions?: Array<{
+                key: string;
+                operator: string;
+                values?: Array<string> | null;
+              }> | null;
+              matchLabels?: Record<string,string> | null;
+            } | null;
+            name?: string | null;
+            requeueAfterSeconds?: number | null;
+            template?: {
+              metadata: {
+                annotations?: Record<string,string> | null;
+                finalizers?: Array<string> | null;
+                labels?: Record<string,string> | null;
+                name?: string | null;
+                namespace?: string | null;
+              };
+              spec: {
+                destination: {
+                  name?: string | null;
+                  namespace?: string | null;
+                  server?: string | null;
+                };
+                ignoreDifferences?: Array<{
+                  group?: string | null;
+                  jqPathExpressions?: Array<string> | null;
+                  jsonPointers?: Array<string> | null;
+                  kind: string;
+                  managedFieldsManagers?: Array<string> | null;
+                  name?: string | null;
+                  namespace?: string | null;
+                }> | null;
+                info?: Array<{
+                  name: string;
+                  value: string;
+                }> | null;
+                project: string;
+                revisionHistoryLimit?: number | null;
+                source?: {
+                  chart?: string | null;
+                  directory?: {
+                    exclude?: string | null;
+                    include?: string | null;
+                    jsonnet?: {
+                      extVars?: Array<{
+                        code?: boolean | null;
+                        name: string;
+                        value: string;
+                      }> | null;
+                      libs?: Array<string> | null;
+                      tlas?: Array<{
+                        code?: boolean | null;
+                        name: string;
+                        value: string;
+                      }> | null;
+                    } | null;
+                    recurse?: boolean | null;
+                  } | null;
+                  helm?: {
+                    fileParameters?: Array<{
+                      name?: string | null;
+                      path?: string | null;
+                    }> | null;
+                    ignoreMissingValueFiles?: boolean | null;
+                    parameters?: Array<{
+                      forceString?: boolean | null;
+                      name?: string | null;
+                      value?: string | null;
+                    }> | null;
+                    passCredentials?: boolean | null;
+                    releaseName?: string | null;
+                    skipCrds?: boolean | null;
+                    valueFiles?: Array<string> | null;
+                    values?: string | null;
+                    version?: string | null;
+                  } | null;
+                  kustomize?: {
+                    commonAnnotations?: Record<string,string> | null;
+                    commonLabels?: Record<string,string> | null;
+                    forceCommonAnnotations?: boolean | null;
+                    forceCommonLabels?: boolean | null;
+                    images?: Array<string> | null;
+                    namePrefix?: string | null;
+                    nameSuffix?: string | null;
+                    version?: string | null;
+                  } | null;
+                  path?: string | null;
+                  plugin?: {
+                    env?: Array<{
+                      name: string;
+                      value: string;
+                    }> | null;
+                    name?: string | null;
+                    parameters?: Array<{
+                      array?: Array<string> | null;
+                      map?: Record<string,string> | null;
+                      name?: string | null;
+                      string?: string | null;
+                    }> | null;
+                  } | null;
+                  ref?: string | null;
+                  repoURL: string;
+                  targetRevision?: string | null;
+                } | null;
+                sources?: Array<{
+                  chart?: string | null;
+                  directory?: {
+                    exclude?: string | null;
+                    include?: string | null;
+                    jsonnet?: {
+                      extVars?: Array<{
+                        code?: boolean | null;
+                        name: string;
+                        value: string;
+                      }> | null;
+                      libs?: Array<string> | null;
+                      tlas?: Array<{
+                        code?: boolean | null;
+                        name: string;
+                        value: string;
+                      }> | null;
+                    } | null;
+                    recurse?: boolean | null;
+                  } | null;
+                  helm?: {
+                    fileParameters?: Array<{
+                      name?: string | null;
+                      path?: string | null;
+                    }> | null;
+                    ignoreMissingValueFiles?: boolean | null;
+                    parameters?: Array<{
+                      forceString?: boolean | null;
+                      name?: string | null;
+                      value?: string | null;
+                    }> | null;
+                    passCredentials?: boolean | null;
+                    releaseName?: string | null;
+                    skipCrds?: boolean | null;
+                    valueFiles?: Array<string> | null;
+                    values?: string | null;
+                    version?: string | null;
+                  } | null;
+                  kustomize?: {
+                    commonAnnotations?: Record<string,string> | null;
+                    commonLabels?: Record<string,string> | null;
+                    forceCommonAnnotations?: boolean | null;
+                    forceCommonLabels?: boolean | null;
+                    images?: Array<string> | null;
+                    namePrefix?: string | null;
+                    nameSuffix?: string | null;
+                    version?: string | null;
+                  } | null;
+                  path?: string | null;
+                  plugin?: {
+                    env?: Array<{
+                      name: string;
+                      value: string;
+                    }> | null;
+                    name?: string | null;
+                    parameters?: Array<{
+                      array?: Array<string> | null;
+                      map?: Record<string,string> | null;
+                      name?: string | null;
+                      string?: string | null;
+                    }> | null;
+                  } | null;
+                  ref?: string | null;
+                  repoURL: string;
+                  targetRevision?: string | null;
+                }> | null;
+                syncPolicy?: {
+                  automated?: {
+                    allowEmpty?: boolean | null;
+                    prune?: boolean | null;
+                    selfHeal?: boolean | null;
+                  } | null;
+                  managedNamespaceMetadata?: {
+                    annotations?: Record<string,string> | null;
+                    labels?: Record<string,string> | null;
+                  } | null;
+                  retry?: {
+                    backoff?: {
+                      duration?: string | null;
+                      factor?: number | null;
+                      maxDuration?: string | null;
+                    } | null;
+                    limit?: number | null;
+                  } | null;
+                  syncOptions?: Array<string> | null;
+                } | null;
+              };
+            } | null;
+            values?: Record<string,string> | null;
+          } | null;
+          clusters?: {
+            selector?: {
+              matchExpressions?: Array<{
+                key: string;
+                operator: string;
+                values?: Array<string> | null;
+              }> | null;
+              matchLabels?: Record<string,string> | null;
+            } | null;
+            template?: {
+              metadata: {
+                annotations?: Record<string,string> | null;
+                finalizers?: Array<string> | null;
+                labels?: Record<string,string> | null;
+                name?: string | null;
+                namespace?: string | null;
+              };
+              spec: {
+                destination: {
+                  name?: string | null;
+                  namespace?: string | null;
+                  server?: string | null;
+                };
+                ignoreDifferences?: Array<{
+                  group?: string | null;
+                  jqPathExpressions?: Array<string> | null;
+                  jsonPointers?: Array<string> | null;
+                  kind: string;
+                  managedFieldsManagers?: Array<string> | null;
+                  name?: string | null;
+                  namespace?: string | null;
+                }> | null;
+                info?: Array<{
+                  name: string;
+                  value: string;
+                }> | null;
+                project: string;
+                revisionHistoryLimit?: number | null;
+                source?: {
+                  chart?: string | null;
+                  directory?: {
+                    exclude?: string | null;
+                    include?: string | null;
+                    jsonnet?: {
+                      extVars?: Array<{
+                        code?: boolean | null;
+                        name: string;
+                        value: string;
+                      }> | null;
+                      libs?: Array<string> | null;
+                      tlas?: Array<{
+                        code?: boolean | null;
+                        name: string;
+                        value: string;
+                      }> | null;
+                    } | null;
+                    recurse?: boolean | null;
+                  } | null;
+                  helm?: {
+                    fileParameters?: Array<{
+                      name?: string | null;
+                      path?: string | null;
+                    }> | null;
+                    ignoreMissingValueFiles?: boolean | null;
+                    parameters?: Array<{
+                      forceString?: boolean | null;
+                      name?: string | null;
+                      value?: string | null;
+                    }> | null;
+                    passCredentials?: boolean | null;
+                    releaseName?: string | null;
+                    skipCrds?: boolean | null;
+                    valueFiles?: Array<string> | null;
+                    values?: string | null;
+                    version?: string | null;
+                  } | null;
+                  kustomize?: {
+                    commonAnnotations?: Record<string,string> | null;
+                    commonLabels?: Record<string,string> | null;
+                    forceCommonAnnotations?: boolean | null;
+                    forceCommonLabels?: boolean | null;
+                    images?: Array<string> | null;
+                    namePrefix?: string | null;
+                    nameSuffix?: string | null;
+                    version?: string | null;
+                  } | null;
+                  path?: string | null;
+                  plugin?: {
+                    env?: Array<{
+                      name: string;
+                      value: string;
+                    }> | null;
+                    name?: string | null;
+                    parameters?: Array<{
+                      array?: Array<string> | null;
+                      map?: Record<string,string> | null;
+                      name?: string | null;
+                      string?: string | null;
+                    }> | null;
+                  } | null;
+                  ref?: string | null;
+                  repoURL: string;
+                  targetRevision?: string | null;
+                } | null;
+                sources?: Array<{
+                  chart?: string | null;
+                  directory?: {
+                    exclude?: string | null;
+                    include?: string | null;
+                    jsonnet?: {
+                      extVars?: Array<{
+                        code?: boolean | null;
+                        name: string;
+                        value: string;
+                      }> | null;
+                      libs?: Array<string> | null;
+                      tlas?: Array<{
+                        code?: boolean | null;
+                        name: string;
+                        value: string;
+                      }> | null;
+                    } | null;
+                    recurse?: boolean | null;
+                  } | null;
+                  helm?: {
+                    fileParameters?: Array<{
+                      name?: string | null;
+                      path?: string | null;
+                    }> | null;
+                    ignoreMissingValueFiles?: boolean | null;
+                    parameters?: Array<{
+                      forceString?: boolean | null;
+                      name?: string | null;
+                      value?: string | null;
+                    }> | null;
+                    passCredentials?: boolean | null;
+                    releaseName?: string | null;
+                    skipCrds?: boolean | null;
+                    valueFiles?: Array<string> | null;
+                    values?: string | null;
+                    version?: string | null;
+                  } | null;
+                  kustomize?: {
+                    commonAnnotations?: Record<string,string> | null;
+                    commonLabels?: Record<string,string> | null;
+                    forceCommonAnnotations?: boolean | null;
+                    forceCommonLabels?: boolean | null;
+                    images?: Array<string> | null;
+                    namePrefix?: string | null;
+                    nameSuffix?: string | null;
+                    version?: string | null;
+                  } | null;
+                  path?: string | null;
+                  plugin?: {
+                    env?: Array<{
+                      name: string;
+                      value: string;
+                    }> | null;
+                    name?: string | null;
+                    parameters?: Array<{
+                      array?: Array<string> | null;
+                      map?: Record<string,string> | null;
+                      name?: string | null;
+                      string?: string | null;
+                    }> | null;
+                  } | null;
+                  ref?: string | null;
+                  repoURL: string;
+                  targetRevision?: string | null;
+                }> | null;
+                syncPolicy?: {
+                  automated?: {
+                    allowEmpty?: boolean | null;
+                    prune?: boolean | null;
+                    selfHeal?: boolean | null;
+                  } | null;
+                  managedNamespaceMetadata?: {
+                    annotations?: Record<string,string> | null;
+                    labels?: Record<string,string> | null;
+                  } | null;
+                  retry?: {
+                    backoff?: {
+                      duration?: string | null;
+                      factor?: number | null;
+                      maxDuration?: string | null;
+                    } | null;
+                    limit?: number | null;
+                  } | null;
+                  syncOptions?: Array<string> | null;
+                } | null;
+              };
+            } | null;
+            values?: Record<string,string> | null;
+          } | null;
+          git?: {
+            directories?: Array<{
+              exclude?: boolean | null;
+              path: string;
+            }> | null;
+            files?: Array<{
+              path: string;
+            }> | null;
+            pathParamPrefix?: string | null;
+            repoURL: string;
+            requeueAfterSeconds?: number | null;
+            revision: string;
+            template?: {
+              metadata: {
+                annotations?: Record<string,string> | null;
+                finalizers?: Array<string> | null;
+                labels?: Record<string,string> | null;
+                name?: string | null;
+                namespace?: string | null;
+              };
+              spec: {
+                destination: {
+                  name?: string | null;
+                  namespace?: string | null;
+                  server?: string | null;
+                };
+                ignoreDifferences?: Array<{
+                  group?: string | null;
+                  jqPathExpressions?: Array<string> | null;
+                  jsonPointers?: Array<string> | null;
+                  kind: string;
+                  managedFieldsManagers?: Array<string> | null;
+                  name?: string | null;
+                  namespace?: string | null;
+                }> | null;
+                info?: Array<{
+                  name: string;
+                  value: string;
+                }> | null;
+                project: string;
+                revisionHistoryLimit?: number | null;
+                source?: {
+                  chart?: string | null;
+                  directory?: {
+                    exclude?: string | null;
+                    include?: string | null;
+                    jsonnet?: {
+                      extVars?: Array<{
+                        code?: boolean | null;
+                        name: string;
+                        value: string;
+                      }> | null;
+                      libs?: Array<string> | null;
+                      tlas?: Array<{
+                        code?: boolean | null;
+                        name: string;
+                        value: string;
+                      }> | null;
+                    } | null;
+                    recurse?: boolean | null;
+                  } | null;
+                  helm?: {
+                    fileParameters?: Array<{
+                      name?: string | null;
+                      path?: string | null;
+                    }> | null;
+                    ignoreMissingValueFiles?: boolean | null;
+                    parameters?: Array<{
+                      forceString?: boolean | null;
+                      name?: string | null;
+                      value?: string | null;
+                    }> | null;
+                    passCredentials?: boolean | null;
+                    releaseName?: string | null;
+                    skipCrds?: boolean | null;
+                    valueFiles?: Array<string> | null;
+                    values?: string | null;
+                    version?: string | null;
+                  } | null;
+                  kustomize?: {
+                    commonAnnotations?: Record<string,string> | null;
+                    commonLabels?: Record<string,string> | null;
+                    forceCommonAnnotations?: boolean | null;
+                    forceCommonLabels?: boolean | null;
+                    images?: Array<string> | null;
+                    namePrefix?: string | null;
+                    nameSuffix?: string | null;
+                    version?: string | null;
+                  } | null;
+                  path?: string | null;
+                  plugin?: {
+                    env?: Array<{
+                      name: string;
+                      value: string;
+                    }> | null;
+                    name?: string | null;
+                    parameters?: Array<{
+                      array?: Array<string> | null;
+                      map?: Record<string,string> | null;
+                      name?: string | null;
+                      string?: string | null;
+                    }> | null;
+                  } | null;
+                  ref?: string | null;
+                  repoURL: string;
+                  targetRevision?: string | null;
+                } | null;
+                sources?: Array<{
+                  chart?: string | null;
+                  directory?: {
+                    exclude?: string | null;
+                    include?: string | null;
+                    jsonnet?: {
+                      extVars?: Array<{
+                        code?: boolean | null;
+                        name: string;
+                        value: string;
+                      }> | null;
+                      libs?: Array<string> | null;
+                      tlas?: Array<{
+                        code?: boolean | null;
+                        name: string;
+                        value: string;
+                      }> | null;
+                    } | null;
+                    recurse?: boolean | null;
+                  } | null;
+                  helm?: {
+                    fileParameters?: Array<{
+                      name?: string | null;
+                      path?: string | null;
+                    }> | null;
+                    ignoreMissingValueFiles?: boolean | null;
+                    parameters?: Array<{
+                      forceString?: boolean | null;
+                      name?: string | null;
+                      value?: string | null;
+                    }> | null;
+                    passCredentials?: boolean | null;
+                    releaseName?: string | null;
+                    skipCrds?: boolean | null;
+                    valueFiles?: Array<string> | null;
+                    values?: string | null;
+                    version?: string | null;
+                  } | null;
+                  kustomize?: {
+                    commonAnnotations?: Record<string,string> | null;
+                    commonLabels?: Record<string,string> | null;
+                    forceCommonAnnotations?: boolean | null;
+                    forceCommonLabels?: boolean | null;
+                    images?: Array<string> | null;
+                    namePrefix?: string | null;
+                    nameSuffix?: string | null;
+                    version?: string | null;
+                  } | null;
+                  path?: string | null;
+                  plugin?: {
+                    env?: Array<{
+                      name: string;
+                      value: string;
+                    }> | null;
+                    name?: string | null;
+                    parameters?: Array<{
+                      array?: Array<string> | null;
+                      map?: Record<string,string> | null;
+                      name?: string | null;
+                      string?: string | null;
+                    }> | null;
+                  } | null;
+                  ref?: string | null;
+                  repoURL: string;
+                  targetRevision?: string | null;
+                }> | null;
+                syncPolicy?: {
+                  automated?: {
+                    allowEmpty?: boolean | null;
+                    prune?: boolean | null;
+                    selfHeal?: boolean | null;
+                  } | null;
+                  managedNamespaceMetadata?: {
+                    annotations?: Record<string,string> | null;
+                    labels?: Record<string,string> | null;
+                  } | null;
+                  retry?: {
+                    backoff?: {
+                      duration?: string | null;
+                      factor?: number | null;
+                      maxDuration?: string | null;
+                    } | null;
+                    limit?: number | null;
+                  } | null;
+                  syncOptions?: Array<string> | null;
+                } | null;
+              };
+            } | null;
+          } | null;
+          list?: {
+            elements: Array<c.JSONValue>;
+            template?: {
+              metadata: {
+                annotations?: Record<string,string> | null;
+                finalizers?: Array<string> | null;
+                labels?: Record<string,string> | null;
+                name?: string | null;
+                namespace?: string | null;
+              };
+              spec: {
+                destination: {
+                  name?: string | null;
+                  namespace?: string | null;
+                  server?: string | null;
+                };
+                ignoreDifferences?: Array<{
+                  group?: string | null;
+                  jqPathExpressions?: Array<string> | null;
+                  jsonPointers?: Array<string> | null;
+                  kind: string;
+                  managedFieldsManagers?: Array<string> | null;
+                  name?: string | null;
+                  namespace?: string | null;
+                }> | null;
+                info?: Array<{
+                  name: string;
+                  value: string;
+                }> | null;
+                project: string;
+                revisionHistoryLimit?: number | null;
+                source?: {
+                  chart?: string | null;
+                  directory?: {
+                    exclude?: string | null;
+                    include?: string | null;
+                    jsonnet?: {
+                      extVars?: Array<{
+                        code?: boolean | null;
+                        name: string;
+                        value: string;
+                      }> | null;
+                      libs?: Array<string> | null;
+                      tlas?: Array<{
+                        code?: boolean | null;
+                        name: string;
+                        value: string;
+                      }> | null;
+                    } | null;
+                    recurse?: boolean | null;
+                  } | null;
+                  helm?: {
+                    fileParameters?: Array<{
+                      name?: string | null;
+                      path?: string | null;
+                    }> | null;
+                    ignoreMissingValueFiles?: boolean | null;
+                    parameters?: Array<{
+                      forceString?: boolean | null;
+                      name?: string | null;
+                      value?: string | null;
+                    }> | null;
+                    passCredentials?: boolean | null;
+                    releaseName?: string | null;
+                    skipCrds?: boolean | null;
+                    valueFiles?: Array<string> | null;
+                    values?: string | null;
+                    version?: string | null;
+                  } | null;
+                  kustomize?: {
+                    commonAnnotations?: Record<string,string> | null;
+                    commonLabels?: Record<string,string> | null;
+                    forceCommonAnnotations?: boolean | null;
+                    forceCommonLabels?: boolean | null;
+                    images?: Array<string> | null;
+                    namePrefix?: string | null;
+                    nameSuffix?: string | null;
+                    version?: string | null;
+                  } | null;
+                  path?: string | null;
+                  plugin?: {
+                    env?: Array<{
+                      name: string;
+                      value: string;
+                    }> | null;
+                    name?: string | null;
+                    parameters?: Array<{
+                      array?: Array<string> | null;
+                      map?: Record<string,string> | null;
+                      name?: string | null;
+                      string?: string | null;
+                    }> | null;
+                  } | null;
+                  ref?: string | null;
+                  repoURL: string;
+                  targetRevision?: string | null;
+                } | null;
+                sources?: Array<{
+                  chart?: string | null;
+                  directory?: {
+                    exclude?: string | null;
+                    include?: string | null;
+                    jsonnet?: {
+                      extVars?: Array<{
+                        code?: boolean | null;
+                        name: string;
+                        value: string;
+                      }> | null;
+                      libs?: Array<string> | null;
+                      tlas?: Array<{
+                        code?: boolean | null;
+                        name: string;
+                        value: string;
+                      }> | null;
+                    } | null;
+                    recurse?: boolean | null;
+                  } | null;
+                  helm?: {
+                    fileParameters?: Array<{
+                      name?: string | null;
+                      path?: string | null;
+                    }> | null;
+                    ignoreMissingValueFiles?: boolean | null;
+                    parameters?: Array<{
+                      forceString?: boolean | null;
+                      name?: string | null;
+                      value?: string | null;
+                    }> | null;
+                    passCredentials?: boolean | null;
+                    releaseName?: string | null;
+                    skipCrds?: boolean | null;
+                    valueFiles?: Array<string> | null;
+                    values?: string | null;
+                    version?: string | null;
+                  } | null;
+                  kustomize?: {
+                    commonAnnotations?: Record<string,string> | null;
+                    commonLabels?: Record<string,string> | null;
+                    forceCommonAnnotations?: boolean | null;
+                    forceCommonLabels?: boolean | null;
+                    images?: Array<string> | null;
+                    namePrefix?: string | null;
+                    nameSuffix?: string | null;
+                    version?: string | null;
+                  } | null;
+                  path?: string | null;
+                  plugin?: {
+                    env?: Array<{
+                      name: string;
+                      value: string;
+                    }> | null;
+                    name?: string | null;
+                    parameters?: Array<{
+                      array?: Array<string> | null;
+                      map?: Record<string,string> | null;
+                      name?: string | null;
+                      string?: string | null;
+                    }> | null;
+                  } | null;
+                  ref?: string | null;
+                  repoURL: string;
+                  targetRevision?: string | null;
+                }> | null;
+                syncPolicy?: {
+                  automated?: {
+                    allowEmpty?: boolean | null;
+                    prune?: boolean | null;
+                    selfHeal?: boolean | null;
+                  } | null;
+                  managedNamespaceMetadata?: {
+                    annotations?: Record<string,string> | null;
+                    labels?: Record<string,string> | null;
+                  } | null;
+                  retry?: {
+                    backoff?: {
+                      duration?: string | null;
+                      factor?: number | null;
+                      maxDuration?: string | null;
+                    } | null;
+                    limit?: number | null;
+                  } | null;
+                  syncOptions?: Array<string> | null;
+                } | null;
+              };
+            } | null;
+          } | null;
+          matrix?: c.JSONValue | null;
+          merge?: c.JSONValue | null;
+          pullRequest?: {
+            bitbucketServer?: {
+              api: string;
+              basicAuth?: {
+                passwordRef: {
+                  key: string;
+                  secretName: string;
+                };
+                username: string;
+              } | null;
+              project: string;
+              repo: string;
+            } | null;
+            filters?: Array<{
+              branchMatch?: string | null;
+            }> | null;
+            gitea?: {
+              api: string;
+              insecure?: boolean | null;
+              owner: string;
+              repo: string;
+              tokenRef?: {
+                key: string;
+                secretName: string;
+              } | null;
+            } | null;
+            github?: {
+              api?: string | null;
+              appSecretName?: string | null;
+              labels?: Array<string> | null;
+              owner: string;
+              repo: string;
+              tokenRef?: {
+                key: string;
+                secretName: string;
+              } | null;
+            } | null;
+            gitlab?: {
+              api?: string | null;
+              labels?: Array<string> | null;
+              project: string;
+              pullRequestState?: string | null;
+              tokenRef?: {
+                key: string;
+                secretName: string;
+              } | null;
+            } | null;
+            requeueAfterSeconds?: number | null;
+            template?: {
+              metadata: {
+                annotations?: Record<string,string> | null;
+                finalizers?: Array<string> | null;
+                labels?: Record<string,string> | null;
+                name?: string | null;
+                namespace?: string | null;
+              };
+              spec: {
+                destination: {
+                  name?: string | null;
+                  namespace?: string | null;
+                  server?: string | null;
+                };
+                ignoreDifferences?: Array<{
+                  group?: string | null;
+                  jqPathExpressions?: Array<string> | null;
+                  jsonPointers?: Array<string> | null;
+                  kind: string;
+                  managedFieldsManagers?: Array<string> | null;
+                  name?: string | null;
+                  namespace?: string | null;
+                }> | null;
+                info?: Array<{
+                  name: string;
+                  value: string;
+                }> | null;
+                project: string;
+                revisionHistoryLimit?: number | null;
+                source?: {
+                  chart?: string | null;
+                  directory?: {
+                    exclude?: string | null;
+                    include?: string | null;
+                    jsonnet?: {
+                      extVars?: Array<{
+                        code?: boolean | null;
+                        name: string;
+                        value: string;
+                      }> | null;
+                      libs?: Array<string> | null;
+                      tlas?: Array<{
+                        code?: boolean | null;
+                        name: string;
+                        value: string;
+                      }> | null;
+                    } | null;
+                    recurse?: boolean | null;
+                  } | null;
+                  helm?: {
+                    fileParameters?: Array<{
+                      name?: string | null;
+                      path?: string | null;
+                    }> | null;
+                    ignoreMissingValueFiles?: boolean | null;
+                    parameters?: Array<{
+                      forceString?: boolean | null;
+                      name?: string | null;
+                      value?: string | null;
+                    }> | null;
+                    passCredentials?: boolean | null;
+                    releaseName?: string | null;
+                    skipCrds?: boolean | null;
+                    valueFiles?: Array<string> | null;
+                    values?: string | null;
+                    version?: string | null;
+                  } | null;
+                  kustomize?: {
+                    commonAnnotations?: Record<string,string> | null;
+                    commonLabels?: Record<string,string> | null;
+                    forceCommonAnnotations?: boolean | null;
+                    forceCommonLabels?: boolean | null;
+                    images?: Array<string> | null;
+                    namePrefix?: string | null;
+                    nameSuffix?: string | null;
+                    version?: string | null;
+                  } | null;
+                  path?: string | null;
+                  plugin?: {
+                    env?: Array<{
+                      name: string;
+                      value: string;
+                    }> | null;
+                    name?: string | null;
+                    parameters?: Array<{
+                      array?: Array<string> | null;
+                      map?: Record<string,string> | null;
+                      name?: string | null;
+                      string?: string | null;
+                    }> | null;
+                  } | null;
+                  ref?: string | null;
+                  repoURL: string;
+                  targetRevision?: string | null;
+                } | null;
+                sources?: Array<{
+                  chart?: string | null;
+                  directory?: {
+                    exclude?: string | null;
+                    include?: string | null;
+                    jsonnet?: {
+                      extVars?: Array<{
+                        code?: boolean | null;
+                        name: string;
+                        value: string;
+                      }> | null;
+                      libs?: Array<string> | null;
+                      tlas?: Array<{
+                        code?: boolean | null;
+                        name: string;
+                        value: string;
+                      }> | null;
+                    } | null;
+                    recurse?: boolean | null;
+                  } | null;
+                  helm?: {
+                    fileParameters?: Array<{
+                      name?: string | null;
+                      path?: string | null;
+                    }> | null;
+                    ignoreMissingValueFiles?: boolean | null;
+                    parameters?: Array<{
+                      forceString?: boolean | null;
+                      name?: string | null;
+                      value?: string | null;
+                    }> | null;
+                    passCredentials?: boolean | null;
+                    releaseName?: string | null;
+                    skipCrds?: boolean | null;
+                    valueFiles?: Array<string> | null;
+                    values?: string | null;
+                    version?: string | null;
+                  } | null;
+                  kustomize?: {
+                    commonAnnotations?: Record<string,string> | null;
+                    commonLabels?: Record<string,string> | null;
+                    forceCommonAnnotations?: boolean | null;
+                    forceCommonLabels?: boolean | null;
+                    images?: Array<string> | null;
+                    namePrefix?: string | null;
+                    nameSuffix?: string | null;
+                    version?: string | null;
+                  } | null;
+                  path?: string | null;
+                  plugin?: {
+                    env?: Array<{
+                      name: string;
+                      value: string;
+                    }> | null;
+                    name?: string | null;
+                    parameters?: Array<{
+                      array?: Array<string> | null;
+                      map?: Record<string,string> | null;
+                      name?: string | null;
+                      string?: string | null;
+                    }> | null;
+                  } | null;
+                  ref?: string | null;
+                  repoURL: string;
+                  targetRevision?: string | null;
+                }> | null;
+                syncPolicy?: {
+                  automated?: {
+                    allowEmpty?: boolean | null;
+                    prune?: boolean | null;
+                    selfHeal?: boolean | null;
+                  } | null;
+                  managedNamespaceMetadata?: {
+                    annotations?: Record<string,string> | null;
+                    labels?: Record<string,string> | null;
+                  } | null;
+                  retry?: {
+                    backoff?: {
+                      duration?: string | null;
+                      factor?: number | null;
+                      maxDuration?: string | null;
+                    } | null;
+                    limit?: number | null;
+                  } | null;
+                  syncOptions?: Array<string> | null;
+                } | null;
+              };
+            } | null;
+          } | null;
+          scmProvider?: {
+            azureDevOps?: {
+              accessTokenRef: {
+                key: string;
+                secretName: string;
+              };
+              allBranches?: boolean | null;
+              api?: string | null;
+              organization: string;
+              teamProject: string;
+            } | null;
+            bitbucket?: {
+              allBranches?: boolean | null;
+              appPasswordRef: {
+                key: string;
+                secretName: string;
+              };
+              owner: string;
+              user: string;
+            } | null;
+            bitbucketServer?: {
+              allBranches?: boolean | null;
+              api: string;
+              basicAuth?: {
+                passwordRef: {
+                  key: string;
+                  secretName: string;
+                };
+                username: string;
+              } | null;
+              project: string;
+            } | null;
+            cloneProtocol?: string | null;
+            filters?: Array<{
+              branchMatch?: string | null;
+              labelMatch?: string | null;
+              pathsDoNotExist?: Array<string> | null;
+              pathsExist?: Array<string> | null;
+              repositoryMatch?: string | null;
+            }> | null;
+            gitea?: {
+              allBranches?: boolean | null;
+              api: string;
+              insecure?: boolean | null;
+              owner: string;
+              tokenRef?: {
+                key: string;
+                secretName: string;
+              } | null;
+            } | null;
+            github?: {
+              allBranches?: boolean | null;
+              api?: string | null;
+              appSecretName?: string | null;
+              organization: string;
+              tokenRef?: {
+                key: string;
+                secretName: string;
+              } | null;
+            } | null;
+            gitlab?: {
+              allBranches?: boolean | null;
+              api?: string | null;
+              group: string;
+              includeSubgroups?: boolean | null;
+              tokenRef?: {
+                key: string;
+                secretName: string;
+              } | null;
+            } | null;
+            requeueAfterSeconds?: number | null;
+            template?: {
+              metadata: {
+                annotations?: Record<string,string> | null;
+                finalizers?: Array<string> | null;
+                labels?: Record<string,string> | null;
+                name?: string | null;
+                namespace?: string | null;
+              };
+              spec: {
+                destination: {
+                  name?: string | null;
+                  namespace?: string | null;
+                  server?: string | null;
+                };
+                ignoreDifferences?: Array<{
+                  group?: string | null;
+                  jqPathExpressions?: Array<string> | null;
+                  jsonPointers?: Array<string> | null;
+                  kind: string;
+                  managedFieldsManagers?: Array<string> | null;
+                  name?: string | null;
+                  namespace?: string | null;
+                }> | null;
+                info?: Array<{
+                  name: string;
+                  value: string;
+                }> | null;
+                project: string;
+                revisionHistoryLimit?: number | null;
+                source?: {
+                  chart?: string | null;
+                  directory?: {
+                    exclude?: string | null;
+                    include?: string | null;
+                    jsonnet?: {
+                      extVars?: Array<{
+                        code?: boolean | null;
+                        name: string;
+                        value: string;
+                      }> | null;
+                      libs?: Array<string> | null;
+                      tlas?: Array<{
+                        code?: boolean | null;
+                        name: string;
+                        value: string;
+                      }> | null;
+                    } | null;
+                    recurse?: boolean | null;
+                  } | null;
+                  helm?: {
+                    fileParameters?: Array<{
+                      name?: string | null;
+                      path?: string | null;
+                    }> | null;
+                    ignoreMissingValueFiles?: boolean | null;
+                    parameters?: Array<{
+                      forceString?: boolean | null;
+                      name?: string | null;
+                      value?: string | null;
+                    }> | null;
+                    passCredentials?: boolean | null;
+                    releaseName?: string | null;
+                    skipCrds?: boolean | null;
+                    valueFiles?: Array<string> | null;
+                    values?: string | null;
+                    version?: string | null;
+                  } | null;
+                  kustomize?: {
+                    commonAnnotations?: Record<string,string> | null;
+                    commonLabels?: Record<string,string> | null;
+                    forceCommonAnnotations?: boolean | null;
+                    forceCommonLabels?: boolean | null;
+                    images?: Array<string> | null;
+                    namePrefix?: string | null;
+                    nameSuffix?: string | null;
+                    version?: string | null;
+                  } | null;
+                  path?: string | null;
+                  plugin?: {
+                    env?: Array<{
+                      name: string;
+                      value: string;
+                    }> | null;
+                    name?: string | null;
+                    parameters?: Array<{
+                      array?: Array<string> | null;
+                      map?: Record<string,string> | null;
+                      name?: string | null;
+                      string?: string | null;
+                    }> | null;
+                  } | null;
+                  ref?: string | null;
+                  repoURL: string;
+                  targetRevision?: string | null;
+                } | null;
+                sources?: Array<{
+                  chart?: string | null;
+                  directory?: {
+                    exclude?: string | null;
+                    include?: string | null;
+                    jsonnet?: {
+                      extVars?: Array<{
+                        code?: boolean | null;
+                        name: string;
+                        value: string;
+                      }> | null;
+                      libs?: Array<string> | null;
+                      tlas?: Array<{
+                        code?: boolean | null;
+                        name: string;
+                        value: string;
+                      }> | null;
+                    } | null;
+                    recurse?: boolean | null;
+                  } | null;
+                  helm?: {
+                    fileParameters?: Array<{
+                      name?: string | null;
+                      path?: string | null;
+                    }> | null;
+                    ignoreMissingValueFiles?: boolean | null;
+                    parameters?: Array<{
+                      forceString?: boolean | null;
+                      name?: string | null;
+                      value?: string | null;
+                    }> | null;
+                    passCredentials?: boolean | null;
+                    releaseName?: string | null;
+                    skipCrds?: boolean | null;
+                    valueFiles?: Array<string> | null;
+                    values?: string | null;
+                    version?: string | null;
+                  } | null;
+                  kustomize?: {
+                    commonAnnotations?: Record<string,string> | null;
+                    commonLabels?: Record<string,string> | null;
+                    forceCommonAnnotations?: boolean | null;
+                    forceCommonLabels?: boolean | null;
+                    images?: Array<string> | null;
+                    namePrefix?: string | null;
+                    nameSuffix?: string | null;
+                    version?: string | null;
+                  } | null;
+                  path?: string | null;
+                  plugin?: {
+                    env?: Array<{
+                      name: string;
+                      value: string;
+                    }> | null;
+                    name?: string | null;
+                    parameters?: Array<{
+                      array?: Array<string> | null;
+                      map?: Record<string,string> | null;
+                      name?: string | null;
+                      string?: string | null;
+                    }> | null;
+                  } | null;
+                  ref?: string | null;
+                  repoURL: string;
+                  targetRevision?: string | null;
+                }> | null;
+                syncPolicy?: {
+                  automated?: {
+                    allowEmpty?: boolean | null;
+                    prune?: boolean | null;
+                    selfHeal?: boolean | null;
+                  } | null;
+                  managedNamespaceMetadata?: {
+                    annotations?: Record<string,string> | null;
+                    labels?: Record<string,string> | null;
+                  } | null;
+                  retry?: {
+                    backoff?: {
+                      duration?: string | null;
+                      factor?: number | null;
+                      maxDuration?: string | null;
+                    } | null;
+                    limit?: number | null;
+                  } | null;
+                  syncOptions?: Array<string> | null;
+                } | null;
+              };
+            } | null;
+          } | null;
+          selector?: {
+            matchExpressions?: Array<{
+              key: string;
+              operator: string;
+              values?: Array<string> | null;
+            }> | null;
+            matchLabels?: Record<string,string> | null;
+          } | null;
+        }>;
+        mergeKeys: Array<string>;
+        template?: {
+          metadata: {
+            annotations?: Record<string,string> | null;
+            finalizers?: Array<string> | null;
+            labels?: Record<string,string> | null;
+            name?: string | null;
+            namespace?: string | null;
+          };
+          spec: {
+            destination: {
+              name?: string | null;
+              namespace?: string | null;
+              server?: string | null;
+            };
+            ignoreDifferences?: Array<{
+              group?: string | null;
+              jqPathExpressions?: Array<string> | null;
+              jsonPointers?: Array<string> | null;
+              kind: string;
+              managedFieldsManagers?: Array<string> | null;
+              name?: string | null;
+              namespace?: string | null;
+            }> | null;
+            info?: Array<{
+              name: string;
+              value: string;
+            }> | null;
+            project: string;
+            revisionHistoryLimit?: number | null;
+            source?: {
+              chart?: string | null;
+              directory?: {
+                exclude?: string | null;
+                include?: string | null;
+                jsonnet?: {
+                  extVars?: Array<{
+                    code?: boolean | null;
+                    name: string;
+                    value: string;
+                  }> | null;
+                  libs?: Array<string> | null;
+                  tlas?: Array<{
+                    code?: boolean | null;
+                    name: string;
+                    value: string;
+                  }> | null;
+                } | null;
+                recurse?: boolean | null;
+              } | null;
+              helm?: {
+                fileParameters?: Array<{
+                  name?: string | null;
+                  path?: string | null;
+                }> | null;
+                ignoreMissingValueFiles?: boolean | null;
+                parameters?: Array<{
+                  forceString?: boolean | null;
+                  name?: string | null;
+                  value?: string | null;
+                }> | null;
+                passCredentials?: boolean | null;
+                releaseName?: string | null;
+                skipCrds?: boolean | null;
+                valueFiles?: Array<string> | null;
+                values?: string | null;
+                version?: string | null;
+              } | null;
+              kustomize?: {
+                commonAnnotations?: Record<string,string> | null;
+                commonLabels?: Record<string,string> | null;
+                forceCommonAnnotations?: boolean | null;
+                forceCommonLabels?: boolean | null;
+                images?: Array<string> | null;
+                namePrefix?: string | null;
+                nameSuffix?: string | null;
+                version?: string | null;
+              } | null;
+              path?: string | null;
+              plugin?: {
+                env?: Array<{
+                  name: string;
+                  value: string;
+                }> | null;
+                name?: string | null;
+                parameters?: Array<{
+                  array?: Array<string> | null;
+                  map?: Record<string,string> | null;
+                  name?: string | null;
+                  string?: string | null;
+                }> | null;
+              } | null;
+              ref?: string | null;
+              repoURL: string;
+              targetRevision?: string | null;
+            } | null;
+            sources?: Array<{
+              chart?: string | null;
+              directory?: {
+                exclude?: string | null;
+                include?: string | null;
+                jsonnet?: {
+                  extVars?: Array<{
+                    code?: boolean | null;
+                    name: string;
+                    value: string;
+                  }> | null;
+                  libs?: Array<string> | null;
+                  tlas?: Array<{
+                    code?: boolean | null;
+                    name: string;
+                    value: string;
+                  }> | null;
+                } | null;
+                recurse?: boolean | null;
+              } | null;
+              helm?: {
+                fileParameters?: Array<{
+                  name?: string | null;
+                  path?: string | null;
+                }> | null;
+                ignoreMissingValueFiles?: boolean | null;
+                parameters?: Array<{
+                  forceString?: boolean | null;
+                  name?: string | null;
+                  value?: string | null;
+                }> | null;
+                passCredentials?: boolean | null;
+                releaseName?: string | null;
+                skipCrds?: boolean | null;
+                valueFiles?: Array<string> | null;
+                values?: string | null;
+                version?: string | null;
+              } | null;
+              kustomize?: {
+                commonAnnotations?: Record<string,string> | null;
+                commonLabels?: Record<string,string> | null;
+                forceCommonAnnotations?: boolean | null;
+                forceCommonLabels?: boolean | null;
+                images?: Array<string> | null;
+                namePrefix?: string | null;
+                nameSuffix?: string | null;
+                version?: string | null;
+              } | null;
+              path?: string | null;
+              plugin?: {
+                env?: Array<{
+                  name: string;
+                  value: string;
+                }> | null;
+                name?: string | null;
+                parameters?: Array<{
+                  array?: Array<string> | null;
+                  map?: Record<string,string> | null;
+                  name?: string | null;
+                  string?: string | null;
+                }> | null;
+              } | null;
+              ref?: string | null;
+              repoURL: string;
+              targetRevision?: string | null;
+            }> | null;
+            syncPolicy?: {
+              automated?: {
+                allowEmpty?: boolean | null;
+                prune?: boolean | null;
+                selfHeal?: boolean | null;
+              } | null;
+              managedNamespaceMetadata?: {
+                annotations?: Record<string,string> | null;
+                labels?: Record<string,string> | null;
+              } | null;
+              retry?: {
+                backoff?: {
+                  duration?: string | null;
+                  factor?: number | null;
+                  maxDuration?: string | null;
+                } | null;
+                limit?: number | null;
+              } | null;
+              syncOptions?: Array<string> | null;
+            } | null;
+          };
+        } | null;
+      } | null;
+      pullRequest?: {
+        bitbucketServer?: {
+          api: string;
+          basicAuth?: {
+            passwordRef: {
+              key: string;
+              secretName: string;
+            };
+            username: string;
+          } | null;
+          project: string;
+          repo: string;
+        } | null;
+        filters?: Array<{
+          branchMatch?: string | null;
+        }> | null;
+        gitea?: {
+          api: string;
+          insecure?: boolean | null;
+          owner: string;
+          repo: string;
+          tokenRef?: {
+            key: string;
+            secretName: string;
+          } | null;
+        } | null;
+        github?: {
+          api?: string | null;
+          appSecretName?: string | null;
+          labels?: Array<string> | null;
+          owner: string;
+          repo: string;
+          tokenRef?: {
+            key: string;
+            secretName: string;
+          } | null;
+        } | null;
+        gitlab?: {
+          api?: string | null;
+          labels?: Array<string> | null;
+          project: string;
+          pullRequestState?: string | null;
+          tokenRef?: {
+            key: string;
+            secretName: string;
+          } | null;
+        } | null;
+        requeueAfterSeconds?: number | null;
+        template?: {
+          metadata: {
+            annotations?: Record<string,string> | null;
+            finalizers?: Array<string> | null;
+            labels?: Record<string,string> | null;
+            name?: string | null;
+            namespace?: string | null;
+          };
+          spec: {
+            destination: {
+              name?: string | null;
+              namespace?: string | null;
+              server?: string | null;
+            };
+            ignoreDifferences?: Array<{
+              group?: string | null;
+              jqPathExpressions?: Array<string> | null;
+              jsonPointers?: Array<string> | null;
+              kind: string;
+              managedFieldsManagers?: Array<string> | null;
+              name?: string | null;
+              namespace?: string | null;
+            }> | null;
+            info?: Array<{
+              name: string;
+              value: string;
+            }> | null;
+            project: string;
+            revisionHistoryLimit?: number | null;
+            source?: {
+              chart?: string | null;
+              directory?: {
+                exclude?: string | null;
+                include?: string | null;
+                jsonnet?: {
+                  extVars?: Array<{
+                    code?: boolean | null;
+                    name: string;
+                    value: string;
+                  }> | null;
+                  libs?: Array<string> | null;
+                  tlas?: Array<{
+                    code?: boolean | null;
+                    name: string;
+                    value: string;
+                  }> | null;
+                } | null;
+                recurse?: boolean | null;
+              } | null;
+              helm?: {
+                fileParameters?: Array<{
+                  name?: string | null;
+                  path?: string | null;
+                }> | null;
+                ignoreMissingValueFiles?: boolean | null;
+                parameters?: Array<{
+                  forceString?: boolean | null;
+                  name?: string | null;
+                  value?: string | null;
+                }> | null;
+                passCredentials?: boolean | null;
+                releaseName?: string | null;
+                skipCrds?: boolean | null;
+                valueFiles?: Array<string> | null;
+                values?: string | null;
+                version?: string | null;
+              } | null;
+              kustomize?: {
+                commonAnnotations?: Record<string,string> | null;
+                commonLabels?: Record<string,string> | null;
+                forceCommonAnnotations?: boolean | null;
+                forceCommonLabels?: boolean | null;
+                images?: Array<string> | null;
+                namePrefix?: string | null;
+                nameSuffix?: string | null;
+                version?: string | null;
+              } | null;
+              path?: string | null;
+              plugin?: {
+                env?: Array<{
+                  name: string;
+                  value: string;
+                }> | null;
+                name?: string | null;
+                parameters?: Array<{
+                  array?: Array<string> | null;
+                  map?: Record<string,string> | null;
+                  name?: string | null;
+                  string?: string | null;
+                }> | null;
+              } | null;
+              ref?: string | null;
+              repoURL: string;
+              targetRevision?: string | null;
+            } | null;
+            sources?: Array<{
+              chart?: string | null;
+              directory?: {
+                exclude?: string | null;
+                include?: string | null;
+                jsonnet?: {
+                  extVars?: Array<{
+                    code?: boolean | null;
+                    name: string;
+                    value: string;
+                  }> | null;
+                  libs?: Array<string> | null;
+                  tlas?: Array<{
+                    code?: boolean | null;
+                    name: string;
+                    value: string;
+                  }> | null;
+                } | null;
+                recurse?: boolean | null;
+              } | null;
+              helm?: {
+                fileParameters?: Array<{
+                  name?: string | null;
+                  path?: string | null;
+                }> | null;
+                ignoreMissingValueFiles?: boolean | null;
+                parameters?: Array<{
+                  forceString?: boolean | null;
+                  name?: string | null;
+                  value?: string | null;
+                }> | null;
+                passCredentials?: boolean | null;
+                releaseName?: string | null;
+                skipCrds?: boolean | null;
+                valueFiles?: Array<string> | null;
+                values?: string | null;
+                version?: string | null;
+              } | null;
+              kustomize?: {
+                commonAnnotations?: Record<string,string> | null;
+                commonLabels?: Record<string,string> | null;
+                forceCommonAnnotations?: boolean | null;
+                forceCommonLabels?: boolean | null;
+                images?: Array<string> | null;
+                namePrefix?: string | null;
+                nameSuffix?: string | null;
+                version?: string | null;
+              } | null;
+              path?: string | null;
+              plugin?: {
+                env?: Array<{
+                  name: string;
+                  value: string;
+                }> | null;
+                name?: string | null;
+                parameters?: Array<{
+                  array?: Array<string> | null;
+                  map?: Record<string,string> | null;
+                  name?: string | null;
+                  string?: string | null;
+                }> | null;
+              } | null;
+              ref?: string | null;
+              repoURL: string;
+              targetRevision?: string | null;
+            }> | null;
+            syncPolicy?: {
+              automated?: {
+                allowEmpty?: boolean | null;
+                prune?: boolean | null;
+                selfHeal?: boolean | null;
+              } | null;
+              managedNamespaceMetadata?: {
+                annotations?: Record<string,string> | null;
+                labels?: Record<string,string> | null;
+              } | null;
+              retry?: {
+                backoff?: {
+                  duration?: string | null;
+                  factor?: number | null;
+                  maxDuration?: string | null;
+                } | null;
+                limit?: number | null;
+              } | null;
+              syncOptions?: Array<string> | null;
+            } | null;
+          };
+        } | null;
+      } | null;
+      scmProvider?: {
+        azureDevOps?: {
+          accessTokenRef: {
+            key: string;
+            secretName: string;
+          };
+          allBranches?: boolean | null;
+          api?: string | null;
+          organization: string;
+          teamProject: string;
+        } | null;
+        bitbucket?: {
+          allBranches?: boolean | null;
+          appPasswordRef: {
+            key: string;
+            secretName: string;
+          };
+          owner: string;
+          user: string;
+        } | null;
+        bitbucketServer?: {
+          allBranches?: boolean | null;
+          api: string;
+          basicAuth?: {
+            passwordRef: {
+              key: string;
+              secretName: string;
+            };
+            username: string;
+          } | null;
+          project: string;
+        } | null;
+        cloneProtocol?: string | null;
+        filters?: Array<{
+          branchMatch?: string | null;
+          labelMatch?: string | null;
+          pathsDoNotExist?: Array<string> | null;
+          pathsExist?: Array<string> | null;
+          repositoryMatch?: string | null;
+        }> | null;
+        gitea?: {
+          allBranches?: boolean | null;
+          api: string;
+          insecure?: boolean | null;
+          owner: string;
+          tokenRef?: {
+            key: string;
+            secretName: string;
+          } | null;
+        } | null;
+        github?: {
+          allBranches?: boolean | null;
+          api?: string | null;
+          appSecretName?: string | null;
+          organization: string;
+          tokenRef?: {
+            key: string;
+            secretName: string;
+          } | null;
+        } | null;
+        gitlab?: {
+          allBranches?: boolean | null;
+          api?: string | null;
+          group: string;
+          includeSubgroups?: boolean | null;
+          tokenRef?: {
+            key: string;
+            secretName: string;
+          } | null;
+        } | null;
+        requeueAfterSeconds?: number | null;
+        template?: {
+          metadata: {
+            annotations?: Record<string,string> | null;
+            finalizers?: Array<string> | null;
+            labels?: Record<string,string> | null;
+            name?: string | null;
+            namespace?: string | null;
+          };
+          spec: {
+            destination: {
+              name?: string | null;
+              namespace?: string | null;
+              server?: string | null;
+            };
+            ignoreDifferences?: Array<{
+              group?: string | null;
+              jqPathExpressions?: Array<string> | null;
+              jsonPointers?: Array<string> | null;
+              kind: string;
+              managedFieldsManagers?: Array<string> | null;
+              name?: string | null;
+              namespace?: string | null;
+            }> | null;
+            info?: Array<{
+              name: string;
+              value: string;
+            }> | null;
+            project: string;
+            revisionHistoryLimit?: number | null;
+            source?: {
+              chart?: string | null;
+              directory?: {
+                exclude?: string | null;
+                include?: string | null;
+                jsonnet?: {
+                  extVars?: Array<{
+                    code?: boolean | null;
+                    name: string;
+                    value: string;
+                  }> | null;
+                  libs?: Array<string> | null;
+                  tlas?: Array<{
+                    code?: boolean | null;
+                    name: string;
+                    value: string;
+                  }> | null;
+                } | null;
+                recurse?: boolean | null;
+              } | null;
+              helm?: {
+                fileParameters?: Array<{
+                  name?: string | null;
+                  path?: string | null;
+                }> | null;
+                ignoreMissingValueFiles?: boolean | null;
+                parameters?: Array<{
+                  forceString?: boolean | null;
+                  name?: string | null;
+                  value?: string | null;
+                }> | null;
+                passCredentials?: boolean | null;
+                releaseName?: string | null;
+                skipCrds?: boolean | null;
+                valueFiles?: Array<string> | null;
+                values?: string | null;
+                version?: string | null;
+              } | null;
+              kustomize?: {
+                commonAnnotations?: Record<string,string> | null;
+                commonLabels?: Record<string,string> | null;
+                forceCommonAnnotations?: boolean | null;
+                forceCommonLabels?: boolean | null;
+                images?: Array<string> | null;
+                namePrefix?: string | null;
+                nameSuffix?: string | null;
+                version?: string | null;
+              } | null;
+              path?: string | null;
+              plugin?: {
+                env?: Array<{
+                  name: string;
+                  value: string;
+                }> | null;
+                name?: string | null;
+                parameters?: Array<{
+                  array?: Array<string> | null;
+                  map?: Record<string,string> | null;
+                  name?: string | null;
+                  string?: string | null;
+                }> | null;
+              } | null;
+              ref?: string | null;
+              repoURL: string;
+              targetRevision?: string | null;
+            } | null;
+            sources?: Array<{
+              chart?: string | null;
+              directory?: {
+                exclude?: string | null;
+                include?: string | null;
+                jsonnet?: {
+                  extVars?: Array<{
+                    code?: boolean | null;
+                    name: string;
+                    value: string;
+                  }> | null;
+                  libs?: Array<string> | null;
+                  tlas?: Array<{
+                    code?: boolean | null;
+                    name: string;
+                    value: string;
+                  }> | null;
+                } | null;
+                recurse?: boolean | null;
+              } | null;
+              helm?: {
+                fileParameters?: Array<{
+                  name?: string | null;
+                  path?: string | null;
+                }> | null;
+                ignoreMissingValueFiles?: boolean | null;
+                parameters?: Array<{
+                  forceString?: boolean | null;
+                  name?: string | null;
+                  value?: string | null;
+                }> | null;
+                passCredentials?: boolean | null;
+                releaseName?: string | null;
+                skipCrds?: boolean | null;
+                valueFiles?: Array<string> | null;
+                values?: string | null;
+                version?: string | null;
+              } | null;
+              kustomize?: {
+                commonAnnotations?: Record<string,string> | null;
+                commonLabels?: Record<string,string> | null;
+                forceCommonAnnotations?: boolean | null;
+                forceCommonLabels?: boolean | null;
+                images?: Array<string> | null;
+                namePrefix?: string | null;
+                nameSuffix?: string | null;
+                version?: string | null;
+              } | null;
+              path?: string | null;
+              plugin?: {
+                env?: Array<{
+                  name: string;
+                  value: string;
+                }> | null;
+                name?: string | null;
+                parameters?: Array<{
+                  array?: Array<string> | null;
+                  map?: Record<string,string> | null;
+                  name?: string | null;
+                  string?: string | null;
+                }> | null;
+              } | null;
+              ref?: string | null;
+              repoURL: string;
+              targetRevision?: string | null;
+            }> | null;
+            syncPolicy?: {
+              automated?: {
+                allowEmpty?: boolean | null;
+                prune?: boolean | null;
+                selfHeal?: boolean | null;
+              } | null;
+              managedNamespaceMetadata?: {
+                annotations?: Record<string,string> | null;
+                labels?: Record<string,string> | null;
+              } | null;
+              retry?: {
+                backoff?: {
+                  duration?: string | null;
+                  factor?: number | null;
+                  maxDuration?: string | null;
+                } | null;
+                limit?: number | null;
+              } | null;
+              syncOptions?: Array<string> | null;
+            } | null;
+          };
+        } | null;
+      } | null;
+      selector?: {
+        matchExpressions?: Array<{
+          key: string;
+          operator: string;
+          values?: Array<string> | null;
+        }> | null;
+        matchLabels?: Record<string,string> | null;
+      } | null;
+    }>;
+    goTemplate?: boolean | null;
+    strategy?: {
+      rollingSync?: {
+        steps?: Array<{
+          matchExpressions?: Array<{
+            key?: string | null;
+            operator?: string | null;
+            values?: Array<string> | null;
+          }> | null;
+          maxUpdate?: c.IntOrString | null;
+        }> | null;
+      } | null;
+      type?: string | null;
+    } | null;
+    syncPolicy?: {
+      preserveResourcesOnDeletion?: boolean | null;
+    } | null;
+    template: {
+      metadata: {
+        annotations?: Record<string,string> | null;
+        finalizers?: Array<string> | null;
+        labels?: Record<string,string> | null;
+        name?: string | null;
+        namespace?: string | null;
+      };
+      spec: {
+        destination: {
+          name?: string | null;
+          namespace?: string | null;
+          server?: string | null;
+        };
+        ignoreDifferences?: Array<{
+          group?: string | null;
+          jqPathExpressions?: Array<string> | null;
+          jsonPointers?: Array<string> | null;
+          kind: string;
+          managedFieldsManagers?: Array<string> | null;
+          name?: string | null;
+          namespace?: string | null;
+        }> | null;
+        info?: Array<{
+          name: string;
+          value: string;
+        }> | null;
+        project: string;
+        revisionHistoryLimit?: number | null;
+        source?: {
+          chart?: string | null;
+          directory?: {
+            exclude?: string | null;
+            include?: string | null;
+            jsonnet?: {
+              extVars?: Array<{
+                code?: boolean | null;
+                name: string;
+                value: string;
+              }> | null;
+              libs?: Array<string> | null;
+              tlas?: Array<{
+                code?: boolean | null;
+                name: string;
+                value: string;
+              }> | null;
+            } | null;
+            recurse?: boolean | null;
+          } | null;
+          helm?: {
+            fileParameters?: Array<{
+              name?: string | null;
+              path?: string | null;
+            }> | null;
+            ignoreMissingValueFiles?: boolean | null;
+            parameters?: Array<{
+              forceString?: boolean | null;
+              name?: string | null;
+              value?: string | null;
+            }> | null;
+            passCredentials?: boolean | null;
+            releaseName?: string | null;
+            skipCrds?: boolean | null;
+            valueFiles?: Array<string> | null;
+            values?: string | null;
+            version?: string | null;
+          } | null;
+          kustomize?: {
+            commonAnnotations?: Record<string,string> | null;
+            commonLabels?: Record<string,string> | null;
+            forceCommonAnnotations?: boolean | null;
+            forceCommonLabels?: boolean | null;
+            images?: Array<string> | null;
+            namePrefix?: string | null;
+            nameSuffix?: string | null;
+            version?: string | null;
+          } | null;
+          path?: string | null;
+          plugin?: {
+            env?: Array<{
+              name: string;
+              value: string;
+            }> | null;
+            name?: string | null;
+            parameters?: Array<{
+              array?: Array<string> | null;
+              map?: Record<string,string> | null;
+              name?: string | null;
+              string?: string | null;
+            }> | null;
+          } | null;
+          ref?: string | null;
+          repoURL: string;
+          targetRevision?: string | null;
+        } | null;
+        sources?: Array<{
+          chart?: string | null;
+          directory?: {
+            exclude?: string | null;
+            include?: string | null;
+            jsonnet?: {
+              extVars?: Array<{
+                code?: boolean | null;
+                name: string;
+                value: string;
+              }> | null;
+              libs?: Array<string> | null;
+              tlas?: Array<{
+                code?: boolean | null;
+                name: string;
+                value: string;
+              }> | null;
+            } | null;
+            recurse?: boolean | null;
+          } | null;
+          helm?: {
+            fileParameters?: Array<{
+              name?: string | null;
+              path?: string | null;
+            }> | null;
+            ignoreMissingValueFiles?: boolean | null;
+            parameters?: Array<{
+              forceString?: boolean | null;
+              name?: string | null;
+              value?: string | null;
+            }> | null;
+            passCredentials?: boolean | null;
+            releaseName?: string | null;
+            skipCrds?: boolean | null;
+            valueFiles?: Array<string> | null;
+            values?: string | null;
+            version?: string | null;
+          } | null;
+          kustomize?: {
+            commonAnnotations?: Record<string,string> | null;
+            commonLabels?: Record<string,string> | null;
+            forceCommonAnnotations?: boolean | null;
+            forceCommonLabels?: boolean | null;
+            images?: Array<string> | null;
+            namePrefix?: string | null;
+            nameSuffix?: string | null;
+            version?: string | null;
+          } | null;
+          path?: string | null;
+          plugin?: {
+            env?: Array<{
+              name: string;
+              value: string;
+            }> | null;
+            name?: string | null;
+            parameters?: Array<{
+              array?: Array<string> | null;
+              map?: Record<string,string> | null;
+              name?: string | null;
+              string?: string | null;
+            }> | null;
+          } | null;
+          ref?: string | null;
+          repoURL: string;
+          targetRevision?: string | null;
+        }> | null;
+        syncPolicy?: {
+          automated?: {
+            allowEmpty?: boolean | null;
+            prune?: boolean | null;
+            selfHeal?: boolean | null;
+          } | null;
+          managedNamespaceMetadata?: {
+            annotations?: Record<string,string> | null;
+            labels?: Record<string,string> | null;
+          } | null;
+          retry?: {
+            backoff?: {
+              duration?: string | null;
+              factor?: number | null;
+              maxDuration?: string | null;
+            } | null;
+            limit?: number | null;
+          } | null;
+          syncOptions?: Array<string> | null;
+        } | null;
+      };
+    };
+  };
+  status?: {
+    applicationStatus?: Array<{
+      application: string;
+      lastTransitionTime?: c.Time | null;
+      message: string;
+      status: string;
+      step: string;
+    }> | null;
+    conditions?: Array<{
+      lastTransitionTime?: c.Time | null;
+      message: string;
+      reason: string;
+      status: string;
+      type: string;
+    }> | null;
+  } | null;
+}
+export function toApplicationSet(input: c.JSONValue): ApplicationSet & c.ApiKind {
+  const obj = c.checkObj(input);
+  return {
+    ...c.assertOrAddApiVersionAndKind(obj, "argoproj.io/v1alpha1", "ApplicationSet"),
+    metadata: MetaV1.toObjectMeta(obj["metadata"]),
+    spec: toApplicationSet_spec(obj["spec"]),
+    status: c.readOpt(obj["status"], toApplicationSet_status),
+  }}
+export function fromApplicationSet(input: ApplicationSet): c.JSONValue {
+  return {
+    ...c.assertOrAddApiVersionAndKind(input, "argoproj.io/v1alpha1", "ApplicationSet"),
+    ...input,
+    metadata: input.metadata != null ? MetaV1.fromObjectMeta(input.metadata) : undefined,
+    status: input.status != null ? {
+      ...input.status,
+      applicationStatus: input.status.applicationStatus?.map(x => ({
+        ...x,
+        lastTransitionTime: x.lastTransitionTime != null ? c.fromTime(x.lastTransitionTime) : undefined,
+      })),
+      conditions: input.status.conditions?.map(x => ({
+        ...x,
+        lastTransitionTime: x.lastTransitionTime != null ? c.fromTime(x.lastTransitionTime) : undefined,
+      })),
+    } : undefined,
+  }}
+export function toApplicationSet_spec(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    generators: c.readList(obj["generators"], toApplicationSet_spec_generators),
+    goTemplate: c.readOpt(obj["goTemplate"], c.checkBool),
+    strategy: c.readOpt(obj["strategy"], toApplicationSet_spec_strategy),
+    syncPolicy: c.readOpt(obj["syncPolicy"], toApplicationSet_spec_syncPolicy),
+    template: toApplicationSet_spec_template(obj["template"]),
+  }}
+export function toApplicationSet_status(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    applicationStatus: c.readOpt(obj["applicationStatus"], x => c.readList(x, toApplicationSet_status_applicationStatus)),
+    conditions: c.readOpt(obj["conditions"], x => c.readList(x, toApplicationSet_status_conditions)),
+  }}
+export function toApplicationSet_spec_generators(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    clusterDecisionResource: c.readOpt(obj["clusterDecisionResource"], toApplicationSet_spec_generators_clusterDecisionResource),
+    clusters: c.readOpt(obj["clusters"], toApplicationSet_spec_generators_clusters),
+    git: c.readOpt(obj["git"], toApplicationSet_spec_generators_git),
+    list: c.readOpt(obj["list"], toApplicationSet_spec_generators_list),
+    matrix: c.readOpt(obj["matrix"], toApplicationSet_spec_generators_matrix),
+    merge: c.readOpt(obj["merge"], toApplicationSet_spec_generators_merge),
+    pullRequest: c.readOpt(obj["pullRequest"], toApplicationSet_spec_generators_pullRequest),
+    scmProvider: c.readOpt(obj["scmProvider"], toApplicationSet_spec_generators_scmProvider),
+    selector: c.readOpt(obj["selector"], toApplicationSet_spec_generators_selector),
+  }}
+export function toApplicationSet_spec_strategy(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    rollingSync: c.readOpt(obj["rollingSync"], toApplicationSet_spec_strategy_rollingSync),
+    type: c.readOpt(obj["type"], c.checkStr),
+  }}
+export function toApplicationSet_spec_syncPolicy(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    preserveResourcesOnDeletion: c.readOpt(obj["preserveResourcesOnDeletion"], c.checkBool),
+  }}
+export function toApplicationSet_spec_template(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    metadata: toApplicationSet_spec_template_metadata(obj["metadata"]),
+    spec: toApplicationSet_spec_template_spec(obj["spec"]),
+  }}
+export function toApplicationSet_status_applicationStatus(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    application: c.checkStr(obj["application"]),
+    lastTransitionTime: c.readOpt(obj["lastTransitionTime"], c.toTime),
+    message: c.checkStr(obj["message"]),
+    status: c.checkStr(obj["status"]),
+    step: c.checkStr(obj["step"]),
+  }}
+export function toApplicationSet_status_conditions(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    lastTransitionTime: c.readOpt(obj["lastTransitionTime"], c.toTime),
+    message: c.checkStr(obj["message"]),
+    reason: c.checkStr(obj["reason"]),
+    status: c.checkStr(obj["status"]),
+    type: c.checkStr(obj["type"]),
+  }}
+export function toApplicationSet_spec_generators_clusterDecisionResource(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    configMapRef: c.checkStr(obj["configMapRef"]),
+    labelSelector: c.readOpt(obj["labelSelector"], toApplicationSet_spec_generators_clusterDecisionResource_labelSelector),
+    name: c.readOpt(obj["name"], c.checkStr),
+    requeueAfterSeconds: c.readOpt(obj["requeueAfterSeconds"], c.checkNum),
+    template: c.readOpt(obj["template"], toApplicationSet_spec_generators_clusterDecisionResource_template),
+    values: c.readOpt(obj["values"], x => c.readMap(x, c.checkStr)),
+  }}
+export function toApplicationSet_spec_generators_clusters(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    selector: c.readOpt(obj["selector"], toApplicationSet_spec_generators_clusters_selector),
+    template: c.readOpt(obj["template"], toApplicationSet_spec_generators_clusters_template),
+    values: c.readOpt(obj["values"], x => c.readMap(x, c.checkStr)),
+  }}
+export function toApplicationSet_spec_generators_git(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    directories: c.readOpt(obj["directories"], x => c.readList(x, toApplicationSet_spec_generators_git_directories)),
+    files: c.readOpt(obj["files"], x => c.readList(x, toApplicationSet_spec_generators_git_files)),
+    pathParamPrefix: c.readOpt(obj["pathParamPrefix"], c.checkStr),
+    repoURL: c.checkStr(obj["repoURL"]),
+    requeueAfterSeconds: c.readOpt(obj["requeueAfterSeconds"], c.checkNum),
+    revision: c.checkStr(obj["revision"]),
+    template: c.readOpt(obj["template"], toApplicationSet_spec_generators_git_template),
+  }}
+export function toApplicationSet_spec_generators_list(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    elements: c.readList(obj["elements"], c.identity),
+    template: c.readOpt(obj["template"], toApplicationSet_spec_generators_list_template),
+  }}
+export function toApplicationSet_spec_generators_matrix(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    generators: c.readList(obj["generators"], toApplicationSet_spec_generators_matrix_generators),
+    template: c.readOpt(obj["template"], toApplicationSet_spec_generators_matrix_template),
+  }}
+export function toApplicationSet_spec_generators_merge(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    generators: c.readList(obj["generators"], toApplicationSet_spec_generators_merge_generators),
+    mergeKeys: c.readList(obj["mergeKeys"], c.checkStr),
+    template: c.readOpt(obj["template"], toApplicationSet_spec_generators_merge_template),
+  }}
+export function toApplicationSet_spec_generators_pullRequest(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    bitbucketServer: c.readOpt(obj["bitbucketServer"], toApplicationSet_spec_generators_pullRequest_bitbucketServer),
+    filters: c.readOpt(obj["filters"], x => c.readList(x, toApplicationSet_spec_generators_pullRequest_filters)),
+    gitea: c.readOpt(obj["gitea"], toApplicationSet_spec_generators_pullRequest_gitea),
+    github: c.readOpt(obj["github"], toApplicationSet_spec_generators_pullRequest_github),
+    gitlab: c.readOpt(obj["gitlab"], toApplicationSet_spec_generators_pullRequest_gitlab),
+    requeueAfterSeconds: c.readOpt(obj["requeueAfterSeconds"], c.checkNum),
+    template: c.readOpt(obj["template"], toApplicationSet_spec_generators_pullRequest_template),
+  }}
+export function toApplicationSet_spec_generators_scmProvider(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    azureDevOps: c.readOpt(obj["azureDevOps"], toApplicationSet_spec_generators_scmProvider_azureDevOps),
+    bitbucket: c.readOpt(obj["bitbucket"], toApplicationSet_spec_generators_scmProvider_bitbucket),
+    bitbucketServer: c.readOpt(obj["bitbucketServer"], toApplicationSet_spec_generators_scmProvider_bitbucketServer),
+    cloneProtocol: c.readOpt(obj["cloneProtocol"], c.checkStr),
+    filters: c.readOpt(obj["filters"], x => c.readList(x, toApplicationSet_spec_generators_scmProvider_filters)),
+    gitea: c.readOpt(obj["gitea"], toApplicationSet_spec_generators_scmProvider_gitea),
+    github: c.readOpt(obj["github"], toApplicationSet_spec_generators_scmProvider_github),
+    gitlab: c.readOpt(obj["gitlab"], toApplicationSet_spec_generators_scmProvider_gitlab),
+    requeueAfterSeconds: c.readOpt(obj["requeueAfterSeconds"], c.checkNum),
+    template: c.readOpt(obj["template"], toApplicationSet_spec_generators_scmProvider_template),
+  }}
+export function toApplicationSet_spec_generators_selector(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    matchExpressions: c.readOpt(obj["matchExpressions"], x => c.readList(x, toApplicationSet_spec_generators_selector_matchExpressions)),
+    matchLabels: c.readOpt(obj["matchLabels"], x => c.readMap(x, c.checkStr)),
+  }}
+export function toApplicationSet_spec_strategy_rollingSync(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    steps: c.readOpt(obj["steps"], x => c.readList(x, toApplicationSet_spec_strategy_rollingSync_steps)),
+  }}
+export function toApplicationSet_spec_template_metadata(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    annotations: c.readOpt(obj["annotations"], x => c.readMap(x, c.checkStr)),
+    finalizers: c.readOpt(obj["finalizers"], x => c.readList(x, c.checkStr)),
+    labels: c.readOpt(obj["labels"], x => c.readMap(x, c.checkStr)),
+    name: c.readOpt(obj["name"], c.checkStr),
+    namespace: c.readOpt(obj["namespace"], c.checkStr),
+  }}
+export function toApplicationSet_spec_template_spec(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    destination: toApplicationSet_spec_template_spec_destination(obj["destination"]),
+    ignoreDifferences: c.readOpt(obj["ignoreDifferences"], x => c.readList(x, toApplicationSet_spec_template_spec_ignoreDifferences)),
+    info: c.readOpt(obj["info"], x => c.readList(x, toApplicationSet_spec_template_spec_info)),
+    project: c.checkStr(obj["project"]),
+    revisionHistoryLimit: c.readOpt(obj["revisionHistoryLimit"], c.checkNum),
+    source: c.readOpt(obj["source"], toApplicationSet_spec_template_spec_source),
+    sources: c.readOpt(obj["sources"], x => c.readList(x, toApplicationSet_spec_template_spec_sources)),
+    syncPolicy: c.readOpt(obj["syncPolicy"], toApplicationSet_spec_template_spec_syncPolicy),
+  }}
+export function toApplicationSet_spec_generators_clusterDecisionResource_labelSelector(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    matchExpressions: c.readOpt(obj["matchExpressions"], x => c.readList(x, toApplicationSet_spec_generators_clusterDecisionResource_labelSelector_matchExpressions)),
+    matchLabels: c.readOpt(obj["matchLabels"], x => c.readMap(x, c.checkStr)),
+  }}
+export function toApplicationSet_spec_generators_clusterDecisionResource_template(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    metadata: toApplicationSet_spec_generators_clusterDecisionResource_template_metadata(obj["metadata"]),
+    spec: toApplicationSet_spec_generators_clusterDecisionResource_template_spec(obj["spec"]),
+  }}
+export function toApplicationSet_spec_generators_clusters_selector(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    matchExpressions: c.readOpt(obj["matchExpressions"], x => c.readList(x, toApplicationSet_spec_generators_clusters_selector_matchExpressions)),
+    matchLabels: c.readOpt(obj["matchLabels"], x => c.readMap(x, c.checkStr)),
+  }}
+export function toApplicationSet_spec_generators_clusters_template(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    metadata: toApplicationSet_spec_generators_clusters_template_metadata(obj["metadata"]),
+    spec: toApplicationSet_spec_generators_clusters_template_spec(obj["spec"]),
+  }}
+export function toApplicationSet_spec_generators_git_directories(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    exclude: c.readOpt(obj["exclude"], c.checkBool),
+    path: c.checkStr(obj["path"]),
+  }}
+export function toApplicationSet_spec_generators_git_files(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    path: c.checkStr(obj["path"]),
+  }}
+export function toApplicationSet_spec_generators_git_template(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    metadata: toApplicationSet_spec_generators_git_template_metadata(obj["metadata"]),
+    spec: toApplicationSet_spec_generators_git_template_spec(obj["spec"]),
+  }}
+export function toApplicationSet_spec_generators_list_template(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    metadata: toApplicationSet_spec_generators_list_template_metadata(obj["metadata"]),
+    spec: toApplicationSet_spec_generators_list_template_spec(obj["spec"]),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    clusterDecisionResource: c.readOpt(obj["clusterDecisionResource"], toApplicationSet_spec_generators_matrix_generators_clusterDecisionResource),
+    clusters: c.readOpt(obj["clusters"], toApplicationSet_spec_generators_matrix_generators_clusters),
+    git: c.readOpt(obj["git"], toApplicationSet_spec_generators_matrix_generators_git),
+    list: c.readOpt(obj["list"], toApplicationSet_spec_generators_matrix_generators_list),
+    matrix: c.readOpt(obj["matrix"], c.identity),
+    merge: c.readOpt(obj["merge"], c.identity),
+    pullRequest: c.readOpt(obj["pullRequest"], toApplicationSet_spec_generators_matrix_generators_pullRequest),
+    scmProvider: c.readOpt(obj["scmProvider"], toApplicationSet_spec_generators_matrix_generators_scmProvider),
+    selector: c.readOpt(obj["selector"], toApplicationSet_spec_generators_matrix_generators_selector),
+  }}
+export function toApplicationSet_spec_generators_matrix_template(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    metadata: toApplicationSet_spec_generators_matrix_template_metadata(obj["metadata"]),
+    spec: toApplicationSet_spec_generators_matrix_template_spec(obj["spec"]),
+  }}
+export function toApplicationSet_spec_generators_merge_generators(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    clusterDecisionResource: c.readOpt(obj["clusterDecisionResource"], toApplicationSet_spec_generators_merge_generators_clusterDecisionResource),
+    clusters: c.readOpt(obj["clusters"], toApplicationSet_spec_generators_merge_generators_clusters),
+    git: c.readOpt(obj["git"], toApplicationSet_spec_generators_merge_generators_git),
+    list: c.readOpt(obj["list"], toApplicationSet_spec_generators_merge_generators_list),
+    matrix: c.readOpt(obj["matrix"], c.identity),
+    merge: c.readOpt(obj["merge"], c.identity),
+    pullRequest: c.readOpt(obj["pullRequest"], toApplicationSet_spec_generators_merge_generators_pullRequest),
+    scmProvider: c.readOpt(obj["scmProvider"], toApplicationSet_spec_generators_merge_generators_scmProvider),
+    selector: c.readOpt(obj["selector"], toApplicationSet_spec_generators_merge_generators_selector),
+  }}
+export function toApplicationSet_spec_generators_merge_template(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    metadata: toApplicationSet_spec_generators_merge_template_metadata(obj["metadata"]),
+    spec: toApplicationSet_spec_generators_merge_template_spec(obj["spec"]),
+  }}
+export function toApplicationSet_spec_generators_pullRequest_bitbucketServer(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    api: c.checkStr(obj["api"]),
+    basicAuth: c.readOpt(obj["basicAuth"], toApplicationSet_spec_generators_pullRequest_bitbucketServer_basicAuth),
+    project: c.checkStr(obj["project"]),
+    repo: c.checkStr(obj["repo"]),
+  }}
+export function toApplicationSet_spec_generators_pullRequest_filters(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    branchMatch: c.readOpt(obj["branchMatch"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_pullRequest_gitea(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    api: c.checkStr(obj["api"]),
+    insecure: c.readOpt(obj["insecure"], c.checkBool),
+    owner: c.checkStr(obj["owner"]),
+    repo: c.checkStr(obj["repo"]),
+    tokenRef: c.readOpt(obj["tokenRef"], toApplicationSet_spec_generators_pullRequest_gitea_tokenRef),
+  }}
+export function toApplicationSet_spec_generators_pullRequest_github(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    api: c.readOpt(obj["api"], c.checkStr),
+    appSecretName: c.readOpt(obj["appSecretName"], c.checkStr),
+    labels: c.readOpt(obj["labels"], x => c.readList(x, c.checkStr)),
+    owner: c.checkStr(obj["owner"]),
+    repo: c.checkStr(obj["repo"]),
+    tokenRef: c.readOpt(obj["tokenRef"], toApplicationSet_spec_generators_pullRequest_github_tokenRef),
+  }}
+export function toApplicationSet_spec_generators_pullRequest_gitlab(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    api: c.readOpt(obj["api"], c.checkStr),
+    labels: c.readOpt(obj["labels"], x => c.readList(x, c.checkStr)),
+    project: c.checkStr(obj["project"]),
+    pullRequestState: c.readOpt(obj["pullRequestState"], c.checkStr),
+    tokenRef: c.readOpt(obj["tokenRef"], toApplicationSet_spec_generators_pullRequest_gitlab_tokenRef),
+  }}
+export function toApplicationSet_spec_generators_pullRequest_template(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    metadata: toApplicationSet_spec_generators_pullRequest_template_metadata(obj["metadata"]),
+    spec: toApplicationSet_spec_generators_pullRequest_template_spec(obj["spec"]),
+  }}
+export function toApplicationSet_spec_generators_scmProvider_azureDevOps(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    accessTokenRef: toApplicationSet_spec_generators_scmProvider_azureDevOps_accessTokenRef(obj["accessTokenRef"]),
+    allBranches: c.readOpt(obj["allBranches"], c.checkBool),
+    api: c.readOpt(obj["api"], c.checkStr),
+    organization: c.checkStr(obj["organization"]),
+    teamProject: c.checkStr(obj["teamProject"]),
+  }}
+export function toApplicationSet_spec_generators_scmProvider_bitbucket(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    allBranches: c.readOpt(obj["allBranches"], c.checkBool),
+    appPasswordRef: toApplicationSet_spec_generators_scmProvider_bitbucket_appPasswordRef(obj["appPasswordRef"]),
+    owner: c.checkStr(obj["owner"]),
+    user: c.checkStr(obj["user"]),
+  }}
+export function toApplicationSet_spec_generators_scmProvider_bitbucketServer(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    allBranches: c.readOpt(obj["allBranches"], c.checkBool),
+    api: c.checkStr(obj["api"]),
+    basicAuth: c.readOpt(obj["basicAuth"], toApplicationSet_spec_generators_scmProvider_bitbucketServer_basicAuth),
+    project: c.checkStr(obj["project"]),
+  }}
+export function toApplicationSet_spec_generators_scmProvider_filters(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    branchMatch: c.readOpt(obj["branchMatch"], c.checkStr),
+    labelMatch: c.readOpt(obj["labelMatch"], c.checkStr),
+    pathsDoNotExist: c.readOpt(obj["pathsDoNotExist"], x => c.readList(x, c.checkStr)),
+    pathsExist: c.readOpt(obj["pathsExist"], x => c.readList(x, c.checkStr)),
+    repositoryMatch: c.readOpt(obj["repositoryMatch"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_scmProvider_gitea(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    allBranches: c.readOpt(obj["allBranches"], c.checkBool),
+    api: c.checkStr(obj["api"]),
+    insecure: c.readOpt(obj["insecure"], c.checkBool),
+    owner: c.checkStr(obj["owner"]),
+    tokenRef: c.readOpt(obj["tokenRef"], toApplicationSet_spec_generators_scmProvider_gitea_tokenRef),
+  }}
+export function toApplicationSet_spec_generators_scmProvider_github(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    allBranches: c.readOpt(obj["allBranches"], c.checkBool),
+    api: c.readOpt(obj["api"], c.checkStr),
+    appSecretName: c.readOpt(obj["appSecretName"], c.checkStr),
+    organization: c.checkStr(obj["organization"]),
+    tokenRef: c.readOpt(obj["tokenRef"], toApplicationSet_spec_generators_scmProvider_github_tokenRef),
+  }}
+export function toApplicationSet_spec_generators_scmProvider_gitlab(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    allBranches: c.readOpt(obj["allBranches"], c.checkBool),
+    api: c.readOpt(obj["api"], c.checkStr),
+    group: c.checkStr(obj["group"]),
+    includeSubgroups: c.readOpt(obj["includeSubgroups"], c.checkBool),
+    tokenRef: c.readOpt(obj["tokenRef"], toApplicationSet_spec_generators_scmProvider_gitlab_tokenRef),
+  }}
+export function toApplicationSet_spec_generators_scmProvider_template(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    metadata: toApplicationSet_spec_generators_scmProvider_template_metadata(obj["metadata"]),
+    spec: toApplicationSet_spec_generators_scmProvider_template_spec(obj["spec"]),
+  }}
+export function toApplicationSet_spec_generators_selector_matchExpressions(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    key: c.checkStr(obj["key"]),
+    operator: c.checkStr(obj["operator"]),
+    values: c.readOpt(obj["values"], x => c.readList(x, c.checkStr)),
+  }}
+export function toApplicationSet_spec_strategy_rollingSync_steps(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    matchExpressions: c.readOpt(obj["matchExpressions"], x => c.readList(x, toApplicationSet_spec_strategy_rollingSync_steps_matchExpressions)),
+    maxUpdate: c.readOpt(obj["maxUpdate"], c.toIntOrString),
+  }}
+export function toApplicationSet_spec_template_spec_destination(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    name: c.readOpt(obj["name"], c.checkStr),
+    namespace: c.readOpt(obj["namespace"], c.checkStr),
+    server: c.readOpt(obj["server"], c.checkStr),
+  }}
+export function toApplicationSet_spec_template_spec_ignoreDifferences(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    group: c.readOpt(obj["group"], c.checkStr),
+    jqPathExpressions: c.readOpt(obj["jqPathExpressions"], x => c.readList(x, c.checkStr)),
+    jsonPointers: c.readOpt(obj["jsonPointers"], x => c.readList(x, c.checkStr)),
+    kind: c.checkStr(obj["kind"]),
+    managedFieldsManagers: c.readOpt(obj["managedFieldsManagers"], x => c.readList(x, c.checkStr)),
+    name: c.readOpt(obj["name"], c.checkStr),
+    namespace: c.readOpt(obj["namespace"], c.checkStr),
+  }}
+export function toApplicationSet_spec_template_spec_info(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    name: c.checkStr(obj["name"]),
+    value: c.checkStr(obj["value"]),
+  }}
+export function toApplicationSet_spec_template_spec_source(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    chart: c.readOpt(obj["chart"], c.checkStr),
+    directory: c.readOpt(obj["directory"], toApplicationSet_spec_template_spec_source_directory),
+    helm: c.readOpt(obj["helm"], toApplicationSet_spec_template_spec_source_helm),
+    kustomize: c.readOpt(obj["kustomize"], toApplicationSet_spec_template_spec_source_kustomize),
+    path: c.readOpt(obj["path"], c.checkStr),
+    plugin: c.readOpt(obj["plugin"], toApplicationSet_spec_template_spec_source_plugin),
+    ref: c.readOpt(obj["ref"], c.checkStr),
+    repoURL: c.checkStr(obj["repoURL"]),
+    targetRevision: c.readOpt(obj["targetRevision"], c.checkStr),
+  }}
+export function toApplicationSet_spec_template_spec_sources(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    chart: c.readOpt(obj["chart"], c.checkStr),
+    directory: c.readOpt(obj["directory"], toApplicationSet_spec_template_spec_sources_directory),
+    helm: c.readOpt(obj["helm"], toApplicationSet_spec_template_spec_sources_helm),
+    kustomize: c.readOpt(obj["kustomize"], toApplicationSet_spec_template_spec_sources_kustomize),
+    path: c.readOpt(obj["path"], c.checkStr),
+    plugin: c.readOpt(obj["plugin"], toApplicationSet_spec_template_spec_sources_plugin),
+    ref: c.readOpt(obj["ref"], c.checkStr),
+    repoURL: c.checkStr(obj["repoURL"]),
+    targetRevision: c.readOpt(obj["targetRevision"], c.checkStr),
+  }}
+export function toApplicationSet_spec_template_spec_syncPolicy(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    automated: c.readOpt(obj["automated"], toApplicationSet_spec_template_spec_syncPolicy_automated),
+    managedNamespaceMetadata: c.readOpt(obj["managedNamespaceMetadata"], toApplicationSet_spec_template_spec_syncPolicy_managedNamespaceMetadata),
+    retry: c.readOpt(obj["retry"], toApplicationSet_spec_template_spec_syncPolicy_retry),
+    syncOptions: c.readOpt(obj["syncOptions"], x => c.readList(x, c.checkStr)),
+  }}
+export function toApplicationSet_spec_generators_clusterDecisionResource_labelSelector_matchExpressions(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    key: c.checkStr(obj["key"]),
+    operator: c.checkStr(obj["operator"]),
+    values: c.readOpt(obj["values"], x => c.readList(x, c.checkStr)),
+  }}
+export function toApplicationSet_spec_generators_clusterDecisionResource_template_metadata(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    annotations: c.readOpt(obj["annotations"], x => c.readMap(x, c.checkStr)),
+    finalizers: c.readOpt(obj["finalizers"], x => c.readList(x, c.checkStr)),
+    labels: c.readOpt(obj["labels"], x => c.readMap(x, c.checkStr)),
+    name: c.readOpt(obj["name"], c.checkStr),
+    namespace: c.readOpt(obj["namespace"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_clusterDecisionResource_template_spec(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    destination: toApplicationSet_spec_generators_clusterDecisionResource_template_spec_destination(obj["destination"]),
+    ignoreDifferences: c.readOpt(obj["ignoreDifferences"], x => c.readList(x, toApplicationSet_spec_generators_clusterDecisionResource_template_spec_ignoreDifferences)),
+    info: c.readOpt(obj["info"], x => c.readList(x, toApplicationSet_spec_generators_clusterDecisionResource_template_spec_info)),
+    project: c.checkStr(obj["project"]),
+    revisionHistoryLimit: c.readOpt(obj["revisionHistoryLimit"], c.checkNum),
+    source: c.readOpt(obj["source"], toApplicationSet_spec_generators_clusterDecisionResource_template_spec_source),
+    sources: c.readOpt(obj["sources"], x => c.readList(x, toApplicationSet_spec_generators_clusterDecisionResource_template_spec_sources)),
+    syncPolicy: c.readOpt(obj["syncPolicy"], toApplicationSet_spec_generators_clusterDecisionResource_template_spec_syncPolicy),
+  }}
+export function toApplicationSet_spec_generators_clusters_selector_matchExpressions(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    key: c.checkStr(obj["key"]),
+    operator: c.checkStr(obj["operator"]),
+    values: c.readOpt(obj["values"], x => c.readList(x, c.checkStr)),
+  }}
+export function toApplicationSet_spec_generators_clusters_template_metadata(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    annotations: c.readOpt(obj["annotations"], x => c.readMap(x, c.checkStr)),
+    finalizers: c.readOpt(obj["finalizers"], x => c.readList(x, c.checkStr)),
+    labels: c.readOpt(obj["labels"], x => c.readMap(x, c.checkStr)),
+    name: c.readOpt(obj["name"], c.checkStr),
+    namespace: c.readOpt(obj["namespace"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_clusters_template_spec(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    destination: toApplicationSet_spec_generators_clusters_template_spec_destination(obj["destination"]),
+    ignoreDifferences: c.readOpt(obj["ignoreDifferences"], x => c.readList(x, toApplicationSet_spec_generators_clusters_template_spec_ignoreDifferences)),
+    info: c.readOpt(obj["info"], x => c.readList(x, toApplicationSet_spec_generators_clusters_template_spec_info)),
+    project: c.checkStr(obj["project"]),
+    revisionHistoryLimit: c.readOpt(obj["revisionHistoryLimit"], c.checkNum),
+    source: c.readOpt(obj["source"], toApplicationSet_spec_generators_clusters_template_spec_source),
+    sources: c.readOpt(obj["sources"], x => c.readList(x, toApplicationSet_spec_generators_clusters_template_spec_sources)),
+    syncPolicy: c.readOpt(obj["syncPolicy"], toApplicationSet_spec_generators_clusters_template_spec_syncPolicy),
+  }}
+export function toApplicationSet_spec_generators_git_template_metadata(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    annotations: c.readOpt(obj["annotations"], x => c.readMap(x, c.checkStr)),
+    finalizers: c.readOpt(obj["finalizers"], x => c.readList(x, c.checkStr)),
+    labels: c.readOpt(obj["labels"], x => c.readMap(x, c.checkStr)),
+    name: c.readOpt(obj["name"], c.checkStr),
+    namespace: c.readOpt(obj["namespace"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_git_template_spec(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    destination: toApplicationSet_spec_generators_git_template_spec_destination(obj["destination"]),
+    ignoreDifferences: c.readOpt(obj["ignoreDifferences"], x => c.readList(x, toApplicationSet_spec_generators_git_template_spec_ignoreDifferences)),
+    info: c.readOpt(obj["info"], x => c.readList(x, toApplicationSet_spec_generators_git_template_spec_info)),
+    project: c.checkStr(obj["project"]),
+    revisionHistoryLimit: c.readOpt(obj["revisionHistoryLimit"], c.checkNum),
+    source: c.readOpt(obj["source"], toApplicationSet_spec_generators_git_template_spec_source),
+    sources: c.readOpt(obj["sources"], x => c.readList(x, toApplicationSet_spec_generators_git_template_spec_sources)),
+    syncPolicy: c.readOpt(obj["syncPolicy"], toApplicationSet_spec_generators_git_template_spec_syncPolicy),
+  }}
+export function toApplicationSet_spec_generators_list_template_metadata(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    annotations: c.readOpt(obj["annotations"], x => c.readMap(x, c.checkStr)),
+    finalizers: c.readOpt(obj["finalizers"], x => c.readList(x, c.checkStr)),
+    labels: c.readOpt(obj["labels"], x => c.readMap(x, c.checkStr)),
+    name: c.readOpt(obj["name"], c.checkStr),
+    namespace: c.readOpt(obj["namespace"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_list_template_spec(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    destination: toApplicationSet_spec_generators_list_template_spec_destination(obj["destination"]),
+    ignoreDifferences: c.readOpt(obj["ignoreDifferences"], x => c.readList(x, toApplicationSet_spec_generators_list_template_spec_ignoreDifferences)),
+    info: c.readOpt(obj["info"], x => c.readList(x, toApplicationSet_spec_generators_list_template_spec_info)),
+    project: c.checkStr(obj["project"]),
+    revisionHistoryLimit: c.readOpt(obj["revisionHistoryLimit"], c.checkNum),
+    source: c.readOpt(obj["source"], toApplicationSet_spec_generators_list_template_spec_source),
+    sources: c.readOpt(obj["sources"], x => c.readList(x, toApplicationSet_spec_generators_list_template_spec_sources)),
+    syncPolicy: c.readOpt(obj["syncPolicy"], toApplicationSet_spec_generators_list_template_spec_syncPolicy),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_clusterDecisionResource(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    configMapRef: c.checkStr(obj["configMapRef"]),
+    labelSelector: c.readOpt(obj["labelSelector"], toApplicationSet_spec_generators_matrix_generators_clusterDecisionResource_labelSelector),
+    name: c.readOpt(obj["name"], c.checkStr),
+    requeueAfterSeconds: c.readOpt(obj["requeueAfterSeconds"], c.checkNum),
+    template: c.readOpt(obj["template"], toApplicationSet_spec_generators_matrix_generators_clusterDecisionResource_template),
+    values: c.readOpt(obj["values"], x => c.readMap(x, c.checkStr)),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_clusters(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    selector: c.readOpt(obj["selector"], toApplicationSet_spec_generators_matrix_generators_clusters_selector),
+    template: c.readOpt(obj["template"], toApplicationSet_spec_generators_matrix_generators_clusters_template),
+    values: c.readOpt(obj["values"], x => c.readMap(x, c.checkStr)),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_git(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    directories: c.readOpt(obj["directories"], x => c.readList(x, toApplicationSet_spec_generators_matrix_generators_git_directories)),
+    files: c.readOpt(obj["files"], x => c.readList(x, toApplicationSet_spec_generators_matrix_generators_git_files)),
+    pathParamPrefix: c.readOpt(obj["pathParamPrefix"], c.checkStr),
+    repoURL: c.checkStr(obj["repoURL"]),
+    requeueAfterSeconds: c.readOpt(obj["requeueAfterSeconds"], c.checkNum),
+    revision: c.checkStr(obj["revision"]),
+    template: c.readOpt(obj["template"], toApplicationSet_spec_generators_matrix_generators_git_template),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_list(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    elements: c.readList(obj["elements"], c.identity),
+    template: c.readOpt(obj["template"], toApplicationSet_spec_generators_matrix_generators_list_template),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_pullRequest(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    bitbucketServer: c.readOpt(obj["bitbucketServer"], toApplicationSet_spec_generators_matrix_generators_pullRequest_bitbucketServer),
+    filters: c.readOpt(obj["filters"], x => c.readList(x, toApplicationSet_spec_generators_matrix_generators_pullRequest_filters)),
+    gitea: c.readOpt(obj["gitea"], toApplicationSet_spec_generators_matrix_generators_pullRequest_gitea),
+    github: c.readOpt(obj["github"], toApplicationSet_spec_generators_matrix_generators_pullRequest_github),
+    gitlab: c.readOpt(obj["gitlab"], toApplicationSet_spec_generators_matrix_generators_pullRequest_gitlab),
+    requeueAfterSeconds: c.readOpt(obj["requeueAfterSeconds"], c.checkNum),
+    template: c.readOpt(obj["template"], toApplicationSet_spec_generators_matrix_generators_pullRequest_template),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_scmProvider(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    azureDevOps: c.readOpt(obj["azureDevOps"], toApplicationSet_spec_generators_matrix_generators_scmProvider_azureDevOps),
+    bitbucket: c.readOpt(obj["bitbucket"], toApplicationSet_spec_generators_matrix_generators_scmProvider_bitbucket),
+    bitbucketServer: c.readOpt(obj["bitbucketServer"], toApplicationSet_spec_generators_matrix_generators_scmProvider_bitbucketServer),
+    cloneProtocol: c.readOpt(obj["cloneProtocol"], c.checkStr),
+    filters: c.readOpt(obj["filters"], x => c.readList(x, toApplicationSet_spec_generators_matrix_generators_scmProvider_filters)),
+    gitea: c.readOpt(obj["gitea"], toApplicationSet_spec_generators_matrix_generators_scmProvider_gitea),
+    github: c.readOpt(obj["github"], toApplicationSet_spec_generators_matrix_generators_scmProvider_github),
+    gitlab: c.readOpt(obj["gitlab"], toApplicationSet_spec_generators_matrix_generators_scmProvider_gitlab),
+    requeueAfterSeconds: c.readOpt(obj["requeueAfterSeconds"], c.checkNum),
+    template: c.readOpt(obj["template"], toApplicationSet_spec_generators_matrix_generators_scmProvider_template),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_selector(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    matchExpressions: c.readOpt(obj["matchExpressions"], x => c.readList(x, toApplicationSet_spec_generators_matrix_generators_selector_matchExpressions)),
+    matchLabels: c.readOpt(obj["matchLabels"], x => c.readMap(x, c.checkStr)),
+  }}
+export function toApplicationSet_spec_generators_matrix_template_metadata(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    annotations: c.readOpt(obj["annotations"], x => c.readMap(x, c.checkStr)),
+    finalizers: c.readOpt(obj["finalizers"], x => c.readList(x, c.checkStr)),
+    labels: c.readOpt(obj["labels"], x => c.readMap(x, c.checkStr)),
+    name: c.readOpt(obj["name"], c.checkStr),
+    namespace: c.readOpt(obj["namespace"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_matrix_template_spec(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    destination: toApplicationSet_spec_generators_matrix_template_spec_destination(obj["destination"]),
+    ignoreDifferences: c.readOpt(obj["ignoreDifferences"], x => c.readList(x, toApplicationSet_spec_generators_matrix_template_spec_ignoreDifferences)),
+    info: c.readOpt(obj["info"], x => c.readList(x, toApplicationSet_spec_generators_matrix_template_spec_info)),
+    project: c.checkStr(obj["project"]),
+    revisionHistoryLimit: c.readOpt(obj["revisionHistoryLimit"], c.checkNum),
+    source: c.readOpt(obj["source"], toApplicationSet_spec_generators_matrix_template_spec_source),
+    sources: c.readOpt(obj["sources"], x => c.readList(x, toApplicationSet_spec_generators_matrix_template_spec_sources)),
+    syncPolicy: c.readOpt(obj["syncPolicy"], toApplicationSet_spec_generators_matrix_template_spec_syncPolicy),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_clusterDecisionResource(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    configMapRef: c.checkStr(obj["configMapRef"]),
+    labelSelector: c.readOpt(obj["labelSelector"], toApplicationSet_spec_generators_merge_generators_clusterDecisionResource_labelSelector),
+    name: c.readOpt(obj["name"], c.checkStr),
+    requeueAfterSeconds: c.readOpt(obj["requeueAfterSeconds"], c.checkNum),
+    template: c.readOpt(obj["template"], toApplicationSet_spec_generators_merge_generators_clusterDecisionResource_template),
+    values: c.readOpt(obj["values"], x => c.readMap(x, c.checkStr)),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_clusters(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    selector: c.readOpt(obj["selector"], toApplicationSet_spec_generators_merge_generators_clusters_selector),
+    template: c.readOpt(obj["template"], toApplicationSet_spec_generators_merge_generators_clusters_template),
+    values: c.readOpt(obj["values"], x => c.readMap(x, c.checkStr)),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_git(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    directories: c.readOpt(obj["directories"], x => c.readList(x, toApplicationSet_spec_generators_merge_generators_git_directories)),
+    files: c.readOpt(obj["files"], x => c.readList(x, toApplicationSet_spec_generators_merge_generators_git_files)),
+    pathParamPrefix: c.readOpt(obj["pathParamPrefix"], c.checkStr),
+    repoURL: c.checkStr(obj["repoURL"]),
+    requeueAfterSeconds: c.readOpt(obj["requeueAfterSeconds"], c.checkNum),
+    revision: c.checkStr(obj["revision"]),
+    template: c.readOpt(obj["template"], toApplicationSet_spec_generators_merge_generators_git_template),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_list(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    elements: c.readList(obj["elements"], c.identity),
+    template: c.readOpt(obj["template"], toApplicationSet_spec_generators_merge_generators_list_template),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_pullRequest(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    bitbucketServer: c.readOpt(obj["bitbucketServer"], toApplicationSet_spec_generators_merge_generators_pullRequest_bitbucketServer),
+    filters: c.readOpt(obj["filters"], x => c.readList(x, toApplicationSet_spec_generators_merge_generators_pullRequest_filters)),
+    gitea: c.readOpt(obj["gitea"], toApplicationSet_spec_generators_merge_generators_pullRequest_gitea),
+    github: c.readOpt(obj["github"], toApplicationSet_spec_generators_merge_generators_pullRequest_github),
+    gitlab: c.readOpt(obj["gitlab"], toApplicationSet_spec_generators_merge_generators_pullRequest_gitlab),
+    requeueAfterSeconds: c.readOpt(obj["requeueAfterSeconds"], c.checkNum),
+    template: c.readOpt(obj["template"], toApplicationSet_spec_generators_merge_generators_pullRequest_template),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_scmProvider(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    azureDevOps: c.readOpt(obj["azureDevOps"], toApplicationSet_spec_generators_merge_generators_scmProvider_azureDevOps),
+    bitbucket: c.readOpt(obj["bitbucket"], toApplicationSet_spec_generators_merge_generators_scmProvider_bitbucket),
+    bitbucketServer: c.readOpt(obj["bitbucketServer"], toApplicationSet_spec_generators_merge_generators_scmProvider_bitbucketServer),
+    cloneProtocol: c.readOpt(obj["cloneProtocol"], c.checkStr),
+    filters: c.readOpt(obj["filters"], x => c.readList(x, toApplicationSet_spec_generators_merge_generators_scmProvider_filters)),
+    gitea: c.readOpt(obj["gitea"], toApplicationSet_spec_generators_merge_generators_scmProvider_gitea),
+    github: c.readOpt(obj["github"], toApplicationSet_spec_generators_merge_generators_scmProvider_github),
+    gitlab: c.readOpt(obj["gitlab"], toApplicationSet_spec_generators_merge_generators_scmProvider_gitlab),
+    requeueAfterSeconds: c.readOpt(obj["requeueAfterSeconds"], c.checkNum),
+    template: c.readOpt(obj["template"], toApplicationSet_spec_generators_merge_generators_scmProvider_template),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_selector(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    matchExpressions: c.readOpt(obj["matchExpressions"], x => c.readList(x, toApplicationSet_spec_generators_merge_generators_selector_matchExpressions)),
+    matchLabels: c.readOpt(obj["matchLabels"], x => c.readMap(x, c.checkStr)),
+  }}
+export function toApplicationSet_spec_generators_merge_template_metadata(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    annotations: c.readOpt(obj["annotations"], x => c.readMap(x, c.checkStr)),
+    finalizers: c.readOpt(obj["finalizers"], x => c.readList(x, c.checkStr)),
+    labels: c.readOpt(obj["labels"], x => c.readMap(x, c.checkStr)),
+    name: c.readOpt(obj["name"], c.checkStr),
+    namespace: c.readOpt(obj["namespace"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_merge_template_spec(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    destination: toApplicationSet_spec_generators_merge_template_spec_destination(obj["destination"]),
+    ignoreDifferences: c.readOpt(obj["ignoreDifferences"], x => c.readList(x, toApplicationSet_spec_generators_merge_template_spec_ignoreDifferences)),
+    info: c.readOpt(obj["info"], x => c.readList(x, toApplicationSet_spec_generators_merge_template_spec_info)),
+    project: c.checkStr(obj["project"]),
+    revisionHistoryLimit: c.readOpt(obj["revisionHistoryLimit"], c.checkNum),
+    source: c.readOpt(obj["source"], toApplicationSet_spec_generators_merge_template_spec_source),
+    sources: c.readOpt(obj["sources"], x => c.readList(x, toApplicationSet_spec_generators_merge_template_spec_sources)),
+    syncPolicy: c.readOpt(obj["syncPolicy"], toApplicationSet_spec_generators_merge_template_spec_syncPolicy),
+  }}
+export function toApplicationSet_spec_generators_pullRequest_bitbucketServer_basicAuth(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    passwordRef: toApplicationSet_spec_generators_pullRequest_bitbucketServer_basicAuth_passwordRef(obj["passwordRef"]),
+    username: c.checkStr(obj["username"]),
+  }}
+export function toApplicationSet_spec_generators_pullRequest_gitea_tokenRef(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    key: c.checkStr(obj["key"]),
+    secretName: c.checkStr(obj["secretName"]),
+  }}
+export function toApplicationSet_spec_generators_pullRequest_github_tokenRef(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    key: c.checkStr(obj["key"]),
+    secretName: c.checkStr(obj["secretName"]),
+  }}
+export function toApplicationSet_spec_generators_pullRequest_gitlab_tokenRef(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    key: c.checkStr(obj["key"]),
+    secretName: c.checkStr(obj["secretName"]),
+  }}
+export function toApplicationSet_spec_generators_pullRequest_template_metadata(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    annotations: c.readOpt(obj["annotations"], x => c.readMap(x, c.checkStr)),
+    finalizers: c.readOpt(obj["finalizers"], x => c.readList(x, c.checkStr)),
+    labels: c.readOpt(obj["labels"], x => c.readMap(x, c.checkStr)),
+    name: c.readOpt(obj["name"], c.checkStr),
+    namespace: c.readOpt(obj["namespace"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_pullRequest_template_spec(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    destination: toApplicationSet_spec_generators_pullRequest_template_spec_destination(obj["destination"]),
+    ignoreDifferences: c.readOpt(obj["ignoreDifferences"], x => c.readList(x, toApplicationSet_spec_generators_pullRequest_template_spec_ignoreDifferences)),
+    info: c.readOpt(obj["info"], x => c.readList(x, toApplicationSet_spec_generators_pullRequest_template_spec_info)),
+    project: c.checkStr(obj["project"]),
+    revisionHistoryLimit: c.readOpt(obj["revisionHistoryLimit"], c.checkNum),
+    source: c.readOpt(obj["source"], toApplicationSet_spec_generators_pullRequest_template_spec_source),
+    sources: c.readOpt(obj["sources"], x => c.readList(x, toApplicationSet_spec_generators_pullRequest_template_spec_sources)),
+    syncPolicy: c.readOpt(obj["syncPolicy"], toApplicationSet_spec_generators_pullRequest_template_spec_syncPolicy),
+  }}
+export function toApplicationSet_spec_generators_scmProvider_azureDevOps_accessTokenRef(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    key: c.checkStr(obj["key"]),
+    secretName: c.checkStr(obj["secretName"]),
+  }}
+export function toApplicationSet_spec_generators_scmProvider_bitbucket_appPasswordRef(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    key: c.checkStr(obj["key"]),
+    secretName: c.checkStr(obj["secretName"]),
+  }}
+export function toApplicationSet_spec_generators_scmProvider_bitbucketServer_basicAuth(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    passwordRef: toApplicationSet_spec_generators_scmProvider_bitbucketServer_basicAuth_passwordRef(obj["passwordRef"]),
+    username: c.checkStr(obj["username"]),
+  }}
+export function toApplicationSet_spec_generators_scmProvider_gitea_tokenRef(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    key: c.checkStr(obj["key"]),
+    secretName: c.checkStr(obj["secretName"]),
+  }}
+export function toApplicationSet_spec_generators_scmProvider_github_tokenRef(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    key: c.checkStr(obj["key"]),
+    secretName: c.checkStr(obj["secretName"]),
+  }}
+export function toApplicationSet_spec_generators_scmProvider_gitlab_tokenRef(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    key: c.checkStr(obj["key"]),
+    secretName: c.checkStr(obj["secretName"]),
+  }}
+export function toApplicationSet_spec_generators_scmProvider_template_metadata(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    annotations: c.readOpt(obj["annotations"], x => c.readMap(x, c.checkStr)),
+    finalizers: c.readOpt(obj["finalizers"], x => c.readList(x, c.checkStr)),
+    labels: c.readOpt(obj["labels"], x => c.readMap(x, c.checkStr)),
+    name: c.readOpt(obj["name"], c.checkStr),
+    namespace: c.readOpt(obj["namespace"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_scmProvider_template_spec(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    destination: toApplicationSet_spec_generators_scmProvider_template_spec_destination(obj["destination"]),
+    ignoreDifferences: c.readOpt(obj["ignoreDifferences"], x => c.readList(x, toApplicationSet_spec_generators_scmProvider_template_spec_ignoreDifferences)),
+    info: c.readOpt(obj["info"], x => c.readList(x, toApplicationSet_spec_generators_scmProvider_template_spec_info)),
+    project: c.checkStr(obj["project"]),
+    revisionHistoryLimit: c.readOpt(obj["revisionHistoryLimit"], c.checkNum),
+    source: c.readOpt(obj["source"], toApplicationSet_spec_generators_scmProvider_template_spec_source),
+    sources: c.readOpt(obj["sources"], x => c.readList(x, toApplicationSet_spec_generators_scmProvider_template_spec_sources)),
+    syncPolicy: c.readOpt(obj["syncPolicy"], toApplicationSet_spec_generators_scmProvider_template_spec_syncPolicy),
+  }}
+export function toApplicationSet_spec_strategy_rollingSync_steps_matchExpressions(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    key: c.readOpt(obj["key"], c.checkStr),
+    operator: c.readOpt(obj["operator"], c.checkStr),
+    values: c.readOpt(obj["values"], x => c.readList(x, c.checkStr)),
+  }}
+export function toApplicationSet_spec_template_spec_source_directory(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    exclude: c.readOpt(obj["exclude"], c.checkStr),
+    include: c.readOpt(obj["include"], c.checkStr),
+    jsonnet: c.readOpt(obj["jsonnet"], toApplicationSet_spec_template_spec_source_directory_jsonnet),
+    recurse: c.readOpt(obj["recurse"], c.checkBool),
+  }}
+export function toApplicationSet_spec_template_spec_source_helm(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    fileParameters: c.readOpt(obj["fileParameters"], x => c.readList(x, toApplicationSet_spec_template_spec_source_helm_fileParameters)),
+    ignoreMissingValueFiles: c.readOpt(obj["ignoreMissingValueFiles"], c.checkBool),
+    parameters: c.readOpt(obj["parameters"], x => c.readList(x, toApplicationSet_spec_template_spec_source_helm_parameters)),
+    passCredentials: c.readOpt(obj["passCredentials"], c.checkBool),
+    releaseName: c.readOpt(obj["releaseName"], c.checkStr),
+    skipCrds: c.readOpt(obj["skipCrds"], c.checkBool),
+    valueFiles: c.readOpt(obj["valueFiles"], x => c.readList(x, c.checkStr)),
+    values: c.readOpt(obj["values"], c.checkStr),
+    version: c.readOpt(obj["version"], c.checkStr),
+  }}
+export function toApplicationSet_spec_template_spec_source_kustomize(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    commonAnnotations: c.readOpt(obj["commonAnnotations"], x => c.readMap(x, c.checkStr)),
+    commonLabels: c.readOpt(obj["commonLabels"], x => c.readMap(x, c.checkStr)),
+    forceCommonAnnotations: c.readOpt(obj["forceCommonAnnotations"], c.checkBool),
+    forceCommonLabels: c.readOpt(obj["forceCommonLabels"], c.checkBool),
+    images: c.readOpt(obj["images"], x => c.readList(x, c.checkStr)),
+    namePrefix: c.readOpt(obj["namePrefix"], c.checkStr),
+    nameSuffix: c.readOpt(obj["nameSuffix"], c.checkStr),
+    version: c.readOpt(obj["version"], c.checkStr),
+  }}
+export function toApplicationSet_spec_template_spec_source_plugin(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    env: c.readOpt(obj["env"], x => c.readList(x, toApplicationSet_spec_template_spec_source_plugin_env)),
+    name: c.readOpt(obj["name"], c.checkStr),
+    parameters: c.readOpt(obj["parameters"], x => c.readList(x, toApplicationSet_spec_template_spec_source_plugin_parameters)),
+  }}
+export function toApplicationSet_spec_template_spec_sources_directory(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    exclude: c.readOpt(obj["exclude"], c.checkStr),
+    include: c.readOpt(obj["include"], c.checkStr),
+    jsonnet: c.readOpt(obj["jsonnet"], toApplicationSet_spec_template_spec_sources_directory_jsonnet),
+    recurse: c.readOpt(obj["recurse"], c.checkBool),
+  }}
+export function toApplicationSet_spec_template_spec_sources_helm(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    fileParameters: c.readOpt(obj["fileParameters"], x => c.readList(x, toApplicationSet_spec_template_spec_sources_helm_fileParameters)),
+    ignoreMissingValueFiles: c.readOpt(obj["ignoreMissingValueFiles"], c.checkBool),
+    parameters: c.readOpt(obj["parameters"], x => c.readList(x, toApplicationSet_spec_template_spec_sources_helm_parameters)),
+    passCredentials: c.readOpt(obj["passCredentials"], c.checkBool),
+    releaseName: c.readOpt(obj["releaseName"], c.checkStr),
+    skipCrds: c.readOpt(obj["skipCrds"], c.checkBool),
+    valueFiles: c.readOpt(obj["valueFiles"], x => c.readList(x, c.checkStr)),
+    values: c.readOpt(obj["values"], c.checkStr),
+    version: c.readOpt(obj["version"], c.checkStr),
+  }}
+export function toApplicationSet_spec_template_spec_sources_kustomize(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    commonAnnotations: c.readOpt(obj["commonAnnotations"], x => c.readMap(x, c.checkStr)),
+    commonLabels: c.readOpt(obj["commonLabels"], x => c.readMap(x, c.checkStr)),
+    forceCommonAnnotations: c.readOpt(obj["forceCommonAnnotations"], c.checkBool),
+    forceCommonLabels: c.readOpt(obj["forceCommonLabels"], c.checkBool),
+    images: c.readOpt(obj["images"], x => c.readList(x, c.checkStr)),
+    namePrefix: c.readOpt(obj["namePrefix"], c.checkStr),
+    nameSuffix: c.readOpt(obj["nameSuffix"], c.checkStr),
+    version: c.readOpt(obj["version"], c.checkStr),
+  }}
+export function toApplicationSet_spec_template_spec_sources_plugin(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    env: c.readOpt(obj["env"], x => c.readList(x, toApplicationSet_spec_template_spec_sources_plugin_env)),
+    name: c.readOpt(obj["name"], c.checkStr),
+    parameters: c.readOpt(obj["parameters"], x => c.readList(x, toApplicationSet_spec_template_spec_sources_plugin_parameters)),
+  }}
+export function toApplicationSet_spec_template_spec_syncPolicy_automated(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    allowEmpty: c.readOpt(obj["allowEmpty"], c.checkBool),
+    prune: c.readOpt(obj["prune"], c.checkBool),
+    selfHeal: c.readOpt(obj["selfHeal"], c.checkBool),
+  }}
+export function toApplicationSet_spec_template_spec_syncPolicy_managedNamespaceMetadata(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    annotations: c.readOpt(obj["annotations"], x => c.readMap(x, c.checkStr)),
+    labels: c.readOpt(obj["labels"], x => c.readMap(x, c.checkStr)),
+  }}
+export function toApplicationSet_spec_template_spec_syncPolicy_retry(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    backoff: c.readOpt(obj["backoff"], toApplicationSet_spec_template_spec_syncPolicy_retry_backoff),
+    limit: c.readOpt(obj["limit"], c.checkNum),
+  }}
+export function toApplicationSet_spec_generators_clusterDecisionResource_template_spec_destination(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    name: c.readOpt(obj["name"], c.checkStr),
+    namespace: c.readOpt(obj["namespace"], c.checkStr),
+    server: c.readOpt(obj["server"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_clusterDecisionResource_template_spec_ignoreDifferences(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    group: c.readOpt(obj["group"], c.checkStr),
+    jqPathExpressions: c.readOpt(obj["jqPathExpressions"], x => c.readList(x, c.checkStr)),
+    jsonPointers: c.readOpt(obj["jsonPointers"], x => c.readList(x, c.checkStr)),
+    kind: c.checkStr(obj["kind"]),
+    managedFieldsManagers: c.readOpt(obj["managedFieldsManagers"], x => c.readList(x, c.checkStr)),
+    name: c.readOpt(obj["name"], c.checkStr),
+    namespace: c.readOpt(obj["namespace"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_clusterDecisionResource_template_spec_info(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    name: c.checkStr(obj["name"]),
+    value: c.checkStr(obj["value"]),
+  }}
+export function toApplicationSet_spec_generators_clusterDecisionResource_template_spec_source(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    chart: c.readOpt(obj["chart"], c.checkStr),
+    directory: c.readOpt(obj["directory"], toApplicationSet_spec_generators_clusterDecisionResource_template_spec_source_directory),
+    helm: c.readOpt(obj["helm"], toApplicationSet_spec_generators_clusterDecisionResource_template_spec_source_helm),
+    kustomize: c.readOpt(obj["kustomize"], toApplicationSet_spec_generators_clusterDecisionResource_template_spec_source_kustomize),
+    path: c.readOpt(obj["path"], c.checkStr),
+    plugin: c.readOpt(obj["plugin"], toApplicationSet_spec_generators_clusterDecisionResource_template_spec_source_plugin),
+    ref: c.readOpt(obj["ref"], c.checkStr),
+    repoURL: c.checkStr(obj["repoURL"]),
+    targetRevision: c.readOpt(obj["targetRevision"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_clusterDecisionResource_template_spec_sources(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    chart: c.readOpt(obj["chart"], c.checkStr),
+    directory: c.readOpt(obj["directory"], toApplicationSet_spec_generators_clusterDecisionResource_template_spec_sources_directory),
+    helm: c.readOpt(obj["helm"], toApplicationSet_spec_generators_clusterDecisionResource_template_spec_sources_helm),
+    kustomize: c.readOpt(obj["kustomize"], toApplicationSet_spec_generators_clusterDecisionResource_template_spec_sources_kustomize),
+    path: c.readOpt(obj["path"], c.checkStr),
+    plugin: c.readOpt(obj["plugin"], toApplicationSet_spec_generators_clusterDecisionResource_template_spec_sources_plugin),
+    ref: c.readOpt(obj["ref"], c.checkStr),
+    repoURL: c.checkStr(obj["repoURL"]),
+    targetRevision: c.readOpt(obj["targetRevision"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_clusterDecisionResource_template_spec_syncPolicy(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    automated: c.readOpt(obj["automated"], toApplicationSet_spec_generators_clusterDecisionResource_template_spec_syncPolicy_automated),
+    managedNamespaceMetadata: c.readOpt(obj["managedNamespaceMetadata"], toApplicationSet_spec_generators_clusterDecisionResource_template_spec_syncPolicy_managedNamespaceMetadata),
+    retry: c.readOpt(obj["retry"], toApplicationSet_spec_generators_clusterDecisionResource_template_spec_syncPolicy_retry),
+    syncOptions: c.readOpt(obj["syncOptions"], x => c.readList(x, c.checkStr)),
+  }}
+export function toApplicationSet_spec_generators_clusters_template_spec_destination(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    name: c.readOpt(obj["name"], c.checkStr),
+    namespace: c.readOpt(obj["namespace"], c.checkStr),
+    server: c.readOpt(obj["server"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_clusters_template_spec_ignoreDifferences(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    group: c.readOpt(obj["group"], c.checkStr),
+    jqPathExpressions: c.readOpt(obj["jqPathExpressions"], x => c.readList(x, c.checkStr)),
+    jsonPointers: c.readOpt(obj["jsonPointers"], x => c.readList(x, c.checkStr)),
+    kind: c.checkStr(obj["kind"]),
+    managedFieldsManagers: c.readOpt(obj["managedFieldsManagers"], x => c.readList(x, c.checkStr)),
+    name: c.readOpt(obj["name"], c.checkStr),
+    namespace: c.readOpt(obj["namespace"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_clusters_template_spec_info(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    name: c.checkStr(obj["name"]),
+    value: c.checkStr(obj["value"]),
+  }}
+export function toApplicationSet_spec_generators_clusters_template_spec_source(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    chart: c.readOpt(obj["chart"], c.checkStr),
+    directory: c.readOpt(obj["directory"], toApplicationSet_spec_generators_clusters_template_spec_source_directory),
+    helm: c.readOpt(obj["helm"], toApplicationSet_spec_generators_clusters_template_spec_source_helm),
+    kustomize: c.readOpt(obj["kustomize"], toApplicationSet_spec_generators_clusters_template_spec_source_kustomize),
+    path: c.readOpt(obj["path"], c.checkStr),
+    plugin: c.readOpt(obj["plugin"], toApplicationSet_spec_generators_clusters_template_spec_source_plugin),
+    ref: c.readOpt(obj["ref"], c.checkStr),
+    repoURL: c.checkStr(obj["repoURL"]),
+    targetRevision: c.readOpt(obj["targetRevision"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_clusters_template_spec_sources(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    chart: c.readOpt(obj["chart"], c.checkStr),
+    directory: c.readOpt(obj["directory"], toApplicationSet_spec_generators_clusters_template_spec_sources_directory),
+    helm: c.readOpt(obj["helm"], toApplicationSet_spec_generators_clusters_template_spec_sources_helm),
+    kustomize: c.readOpt(obj["kustomize"], toApplicationSet_spec_generators_clusters_template_spec_sources_kustomize),
+    path: c.readOpt(obj["path"], c.checkStr),
+    plugin: c.readOpt(obj["plugin"], toApplicationSet_spec_generators_clusters_template_spec_sources_plugin),
+    ref: c.readOpt(obj["ref"], c.checkStr),
+    repoURL: c.checkStr(obj["repoURL"]),
+    targetRevision: c.readOpt(obj["targetRevision"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_clusters_template_spec_syncPolicy(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    automated: c.readOpt(obj["automated"], toApplicationSet_spec_generators_clusters_template_spec_syncPolicy_automated),
+    managedNamespaceMetadata: c.readOpt(obj["managedNamespaceMetadata"], toApplicationSet_spec_generators_clusters_template_spec_syncPolicy_managedNamespaceMetadata),
+    retry: c.readOpt(obj["retry"], toApplicationSet_spec_generators_clusters_template_spec_syncPolicy_retry),
+    syncOptions: c.readOpt(obj["syncOptions"], x => c.readList(x, c.checkStr)),
+  }}
+export function toApplicationSet_spec_generators_git_template_spec_destination(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    name: c.readOpt(obj["name"], c.checkStr),
+    namespace: c.readOpt(obj["namespace"], c.checkStr),
+    server: c.readOpt(obj["server"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_git_template_spec_ignoreDifferences(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    group: c.readOpt(obj["group"], c.checkStr),
+    jqPathExpressions: c.readOpt(obj["jqPathExpressions"], x => c.readList(x, c.checkStr)),
+    jsonPointers: c.readOpt(obj["jsonPointers"], x => c.readList(x, c.checkStr)),
+    kind: c.checkStr(obj["kind"]),
+    managedFieldsManagers: c.readOpt(obj["managedFieldsManagers"], x => c.readList(x, c.checkStr)),
+    name: c.readOpt(obj["name"], c.checkStr),
+    namespace: c.readOpt(obj["namespace"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_git_template_spec_info(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    name: c.checkStr(obj["name"]),
+    value: c.checkStr(obj["value"]),
+  }}
+export function toApplicationSet_spec_generators_git_template_spec_source(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    chart: c.readOpt(obj["chart"], c.checkStr),
+    directory: c.readOpt(obj["directory"], toApplicationSet_spec_generators_git_template_spec_source_directory),
+    helm: c.readOpt(obj["helm"], toApplicationSet_spec_generators_git_template_spec_source_helm),
+    kustomize: c.readOpt(obj["kustomize"], toApplicationSet_spec_generators_git_template_spec_source_kustomize),
+    path: c.readOpt(obj["path"], c.checkStr),
+    plugin: c.readOpt(obj["plugin"], toApplicationSet_spec_generators_git_template_spec_source_plugin),
+    ref: c.readOpt(obj["ref"], c.checkStr),
+    repoURL: c.checkStr(obj["repoURL"]),
+    targetRevision: c.readOpt(obj["targetRevision"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_git_template_spec_sources(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    chart: c.readOpt(obj["chart"], c.checkStr),
+    directory: c.readOpt(obj["directory"], toApplicationSet_spec_generators_git_template_spec_sources_directory),
+    helm: c.readOpt(obj["helm"], toApplicationSet_spec_generators_git_template_spec_sources_helm),
+    kustomize: c.readOpt(obj["kustomize"], toApplicationSet_spec_generators_git_template_spec_sources_kustomize),
+    path: c.readOpt(obj["path"], c.checkStr),
+    plugin: c.readOpt(obj["plugin"], toApplicationSet_spec_generators_git_template_spec_sources_plugin),
+    ref: c.readOpt(obj["ref"], c.checkStr),
+    repoURL: c.checkStr(obj["repoURL"]),
+    targetRevision: c.readOpt(obj["targetRevision"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_git_template_spec_syncPolicy(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    automated: c.readOpt(obj["automated"], toApplicationSet_spec_generators_git_template_spec_syncPolicy_automated),
+    managedNamespaceMetadata: c.readOpt(obj["managedNamespaceMetadata"], toApplicationSet_spec_generators_git_template_spec_syncPolicy_managedNamespaceMetadata),
+    retry: c.readOpt(obj["retry"], toApplicationSet_spec_generators_git_template_spec_syncPolicy_retry),
+    syncOptions: c.readOpt(obj["syncOptions"], x => c.readList(x, c.checkStr)),
+  }}
+export function toApplicationSet_spec_generators_list_template_spec_destination(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    name: c.readOpt(obj["name"], c.checkStr),
+    namespace: c.readOpt(obj["namespace"], c.checkStr),
+    server: c.readOpt(obj["server"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_list_template_spec_ignoreDifferences(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    group: c.readOpt(obj["group"], c.checkStr),
+    jqPathExpressions: c.readOpt(obj["jqPathExpressions"], x => c.readList(x, c.checkStr)),
+    jsonPointers: c.readOpt(obj["jsonPointers"], x => c.readList(x, c.checkStr)),
+    kind: c.checkStr(obj["kind"]),
+    managedFieldsManagers: c.readOpt(obj["managedFieldsManagers"], x => c.readList(x, c.checkStr)),
+    name: c.readOpt(obj["name"], c.checkStr),
+    namespace: c.readOpt(obj["namespace"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_list_template_spec_info(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    name: c.checkStr(obj["name"]),
+    value: c.checkStr(obj["value"]),
+  }}
+export function toApplicationSet_spec_generators_list_template_spec_source(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    chart: c.readOpt(obj["chart"], c.checkStr),
+    directory: c.readOpt(obj["directory"], toApplicationSet_spec_generators_list_template_spec_source_directory),
+    helm: c.readOpt(obj["helm"], toApplicationSet_spec_generators_list_template_spec_source_helm),
+    kustomize: c.readOpt(obj["kustomize"], toApplicationSet_spec_generators_list_template_spec_source_kustomize),
+    path: c.readOpt(obj["path"], c.checkStr),
+    plugin: c.readOpt(obj["plugin"], toApplicationSet_spec_generators_list_template_spec_source_plugin),
+    ref: c.readOpt(obj["ref"], c.checkStr),
+    repoURL: c.checkStr(obj["repoURL"]),
+    targetRevision: c.readOpt(obj["targetRevision"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_list_template_spec_sources(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    chart: c.readOpt(obj["chart"], c.checkStr),
+    directory: c.readOpt(obj["directory"], toApplicationSet_spec_generators_list_template_spec_sources_directory),
+    helm: c.readOpt(obj["helm"], toApplicationSet_spec_generators_list_template_spec_sources_helm),
+    kustomize: c.readOpt(obj["kustomize"], toApplicationSet_spec_generators_list_template_spec_sources_kustomize),
+    path: c.readOpt(obj["path"], c.checkStr),
+    plugin: c.readOpt(obj["plugin"], toApplicationSet_spec_generators_list_template_spec_sources_plugin),
+    ref: c.readOpt(obj["ref"], c.checkStr),
+    repoURL: c.checkStr(obj["repoURL"]),
+    targetRevision: c.readOpt(obj["targetRevision"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_list_template_spec_syncPolicy(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    automated: c.readOpt(obj["automated"], toApplicationSet_spec_generators_list_template_spec_syncPolicy_automated),
+    managedNamespaceMetadata: c.readOpt(obj["managedNamespaceMetadata"], toApplicationSet_spec_generators_list_template_spec_syncPolicy_managedNamespaceMetadata),
+    retry: c.readOpt(obj["retry"], toApplicationSet_spec_generators_list_template_spec_syncPolicy_retry),
+    syncOptions: c.readOpt(obj["syncOptions"], x => c.readList(x, c.checkStr)),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_clusterDecisionResource_labelSelector(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    matchExpressions: c.readOpt(obj["matchExpressions"], x => c.readList(x, toApplicationSet_spec_generators_matrix_generators_clusterDecisionResource_labelSelector_matchExpressions)),
+    matchLabels: c.readOpt(obj["matchLabels"], x => c.readMap(x, c.checkStr)),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_clusterDecisionResource_template(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    metadata: toApplicationSet_spec_generators_matrix_generators_clusterDecisionResource_template_metadata(obj["metadata"]),
+    spec: toApplicationSet_spec_generators_matrix_generators_clusterDecisionResource_template_spec(obj["spec"]),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_clusters_selector(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    matchExpressions: c.readOpt(obj["matchExpressions"], x => c.readList(x, toApplicationSet_spec_generators_matrix_generators_clusters_selector_matchExpressions)),
+    matchLabels: c.readOpt(obj["matchLabels"], x => c.readMap(x, c.checkStr)),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_clusters_template(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    metadata: toApplicationSet_spec_generators_matrix_generators_clusters_template_metadata(obj["metadata"]),
+    spec: toApplicationSet_spec_generators_matrix_generators_clusters_template_spec(obj["spec"]),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_git_directories(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    exclude: c.readOpt(obj["exclude"], c.checkBool),
+    path: c.checkStr(obj["path"]),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_git_files(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    path: c.checkStr(obj["path"]),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_git_template(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    metadata: toApplicationSet_spec_generators_matrix_generators_git_template_metadata(obj["metadata"]),
+    spec: toApplicationSet_spec_generators_matrix_generators_git_template_spec(obj["spec"]),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_list_template(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    metadata: toApplicationSet_spec_generators_matrix_generators_list_template_metadata(obj["metadata"]),
+    spec: toApplicationSet_spec_generators_matrix_generators_list_template_spec(obj["spec"]),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_pullRequest_bitbucketServer(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    api: c.checkStr(obj["api"]),
+    basicAuth: c.readOpt(obj["basicAuth"], toApplicationSet_spec_generators_matrix_generators_pullRequest_bitbucketServer_basicAuth),
+    project: c.checkStr(obj["project"]),
+    repo: c.checkStr(obj["repo"]),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_pullRequest_filters(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    branchMatch: c.readOpt(obj["branchMatch"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_pullRequest_gitea(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    api: c.checkStr(obj["api"]),
+    insecure: c.readOpt(obj["insecure"], c.checkBool),
+    owner: c.checkStr(obj["owner"]),
+    repo: c.checkStr(obj["repo"]),
+    tokenRef: c.readOpt(obj["tokenRef"], toApplicationSet_spec_generators_matrix_generators_pullRequest_gitea_tokenRef),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_pullRequest_github(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    api: c.readOpt(obj["api"], c.checkStr),
+    appSecretName: c.readOpt(obj["appSecretName"], c.checkStr),
+    labels: c.readOpt(obj["labels"], x => c.readList(x, c.checkStr)),
+    owner: c.checkStr(obj["owner"]),
+    repo: c.checkStr(obj["repo"]),
+    tokenRef: c.readOpt(obj["tokenRef"], toApplicationSet_spec_generators_matrix_generators_pullRequest_github_tokenRef),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_pullRequest_gitlab(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    api: c.readOpt(obj["api"], c.checkStr),
+    labels: c.readOpt(obj["labels"], x => c.readList(x, c.checkStr)),
+    project: c.checkStr(obj["project"]),
+    pullRequestState: c.readOpt(obj["pullRequestState"], c.checkStr),
+    tokenRef: c.readOpt(obj["tokenRef"], toApplicationSet_spec_generators_matrix_generators_pullRequest_gitlab_tokenRef),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_pullRequest_template(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    metadata: toApplicationSet_spec_generators_matrix_generators_pullRequest_template_metadata(obj["metadata"]),
+    spec: toApplicationSet_spec_generators_matrix_generators_pullRequest_template_spec(obj["spec"]),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_scmProvider_azureDevOps(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    accessTokenRef: toApplicationSet_spec_generators_matrix_generators_scmProvider_azureDevOps_accessTokenRef(obj["accessTokenRef"]),
+    allBranches: c.readOpt(obj["allBranches"], c.checkBool),
+    api: c.readOpt(obj["api"], c.checkStr),
+    organization: c.checkStr(obj["organization"]),
+    teamProject: c.checkStr(obj["teamProject"]),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_scmProvider_bitbucket(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    allBranches: c.readOpt(obj["allBranches"], c.checkBool),
+    appPasswordRef: toApplicationSet_spec_generators_matrix_generators_scmProvider_bitbucket_appPasswordRef(obj["appPasswordRef"]),
+    owner: c.checkStr(obj["owner"]),
+    user: c.checkStr(obj["user"]),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_scmProvider_bitbucketServer(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    allBranches: c.readOpt(obj["allBranches"], c.checkBool),
+    api: c.checkStr(obj["api"]),
+    basicAuth: c.readOpt(obj["basicAuth"], toApplicationSet_spec_generators_matrix_generators_scmProvider_bitbucketServer_basicAuth),
+    project: c.checkStr(obj["project"]),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_scmProvider_filters(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    branchMatch: c.readOpt(obj["branchMatch"], c.checkStr),
+    labelMatch: c.readOpt(obj["labelMatch"], c.checkStr),
+    pathsDoNotExist: c.readOpt(obj["pathsDoNotExist"], x => c.readList(x, c.checkStr)),
+    pathsExist: c.readOpt(obj["pathsExist"], x => c.readList(x, c.checkStr)),
+    repositoryMatch: c.readOpt(obj["repositoryMatch"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_scmProvider_gitea(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    allBranches: c.readOpt(obj["allBranches"], c.checkBool),
+    api: c.checkStr(obj["api"]),
+    insecure: c.readOpt(obj["insecure"], c.checkBool),
+    owner: c.checkStr(obj["owner"]),
+    tokenRef: c.readOpt(obj["tokenRef"], toApplicationSet_spec_generators_matrix_generators_scmProvider_gitea_tokenRef),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_scmProvider_github(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    allBranches: c.readOpt(obj["allBranches"], c.checkBool),
+    api: c.readOpt(obj["api"], c.checkStr),
+    appSecretName: c.readOpt(obj["appSecretName"], c.checkStr),
+    organization: c.checkStr(obj["organization"]),
+    tokenRef: c.readOpt(obj["tokenRef"], toApplicationSet_spec_generators_matrix_generators_scmProvider_github_tokenRef),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_scmProvider_gitlab(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    allBranches: c.readOpt(obj["allBranches"], c.checkBool),
+    api: c.readOpt(obj["api"], c.checkStr),
+    group: c.checkStr(obj["group"]),
+    includeSubgroups: c.readOpt(obj["includeSubgroups"], c.checkBool),
+    tokenRef: c.readOpt(obj["tokenRef"], toApplicationSet_spec_generators_matrix_generators_scmProvider_gitlab_tokenRef),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_scmProvider_template(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    metadata: toApplicationSet_spec_generators_matrix_generators_scmProvider_template_metadata(obj["metadata"]),
+    spec: toApplicationSet_spec_generators_matrix_generators_scmProvider_template_spec(obj["spec"]),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_selector_matchExpressions(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    key: c.checkStr(obj["key"]),
+    operator: c.checkStr(obj["operator"]),
+    values: c.readOpt(obj["values"], x => c.readList(x, c.checkStr)),
+  }}
+export function toApplicationSet_spec_generators_matrix_template_spec_destination(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    name: c.readOpt(obj["name"], c.checkStr),
+    namespace: c.readOpt(obj["namespace"], c.checkStr),
+    server: c.readOpt(obj["server"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_matrix_template_spec_ignoreDifferences(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    group: c.readOpt(obj["group"], c.checkStr),
+    jqPathExpressions: c.readOpt(obj["jqPathExpressions"], x => c.readList(x, c.checkStr)),
+    jsonPointers: c.readOpt(obj["jsonPointers"], x => c.readList(x, c.checkStr)),
+    kind: c.checkStr(obj["kind"]),
+    managedFieldsManagers: c.readOpt(obj["managedFieldsManagers"], x => c.readList(x, c.checkStr)),
+    name: c.readOpt(obj["name"], c.checkStr),
+    namespace: c.readOpt(obj["namespace"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_matrix_template_spec_info(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    name: c.checkStr(obj["name"]),
+    value: c.checkStr(obj["value"]),
+  }}
+export function toApplicationSet_spec_generators_matrix_template_spec_source(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    chart: c.readOpt(obj["chart"], c.checkStr),
+    directory: c.readOpt(obj["directory"], toApplicationSet_spec_generators_matrix_template_spec_source_directory),
+    helm: c.readOpt(obj["helm"], toApplicationSet_spec_generators_matrix_template_spec_source_helm),
+    kustomize: c.readOpt(obj["kustomize"], toApplicationSet_spec_generators_matrix_template_spec_source_kustomize),
+    path: c.readOpt(obj["path"], c.checkStr),
+    plugin: c.readOpt(obj["plugin"], toApplicationSet_spec_generators_matrix_template_spec_source_plugin),
+    ref: c.readOpt(obj["ref"], c.checkStr),
+    repoURL: c.checkStr(obj["repoURL"]),
+    targetRevision: c.readOpt(obj["targetRevision"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_matrix_template_spec_sources(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    chart: c.readOpt(obj["chart"], c.checkStr),
+    directory: c.readOpt(obj["directory"], toApplicationSet_spec_generators_matrix_template_spec_sources_directory),
+    helm: c.readOpt(obj["helm"], toApplicationSet_spec_generators_matrix_template_spec_sources_helm),
+    kustomize: c.readOpt(obj["kustomize"], toApplicationSet_spec_generators_matrix_template_spec_sources_kustomize),
+    path: c.readOpt(obj["path"], c.checkStr),
+    plugin: c.readOpt(obj["plugin"], toApplicationSet_spec_generators_matrix_template_spec_sources_plugin),
+    ref: c.readOpt(obj["ref"], c.checkStr),
+    repoURL: c.checkStr(obj["repoURL"]),
+    targetRevision: c.readOpt(obj["targetRevision"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_matrix_template_spec_syncPolicy(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    automated: c.readOpt(obj["automated"], toApplicationSet_spec_generators_matrix_template_spec_syncPolicy_automated),
+    managedNamespaceMetadata: c.readOpt(obj["managedNamespaceMetadata"], toApplicationSet_spec_generators_matrix_template_spec_syncPolicy_managedNamespaceMetadata),
+    retry: c.readOpt(obj["retry"], toApplicationSet_spec_generators_matrix_template_spec_syncPolicy_retry),
+    syncOptions: c.readOpt(obj["syncOptions"], x => c.readList(x, c.checkStr)),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_clusterDecisionResource_labelSelector(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    matchExpressions: c.readOpt(obj["matchExpressions"], x => c.readList(x, toApplicationSet_spec_generators_merge_generators_clusterDecisionResource_labelSelector_matchExpressions)),
+    matchLabels: c.readOpt(obj["matchLabels"], x => c.readMap(x, c.checkStr)),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_clusterDecisionResource_template(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    metadata: toApplicationSet_spec_generators_merge_generators_clusterDecisionResource_template_metadata(obj["metadata"]),
+    spec: toApplicationSet_spec_generators_merge_generators_clusterDecisionResource_template_spec(obj["spec"]),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_clusters_selector(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    matchExpressions: c.readOpt(obj["matchExpressions"], x => c.readList(x, toApplicationSet_spec_generators_merge_generators_clusters_selector_matchExpressions)),
+    matchLabels: c.readOpt(obj["matchLabels"], x => c.readMap(x, c.checkStr)),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_clusters_template(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    metadata: toApplicationSet_spec_generators_merge_generators_clusters_template_metadata(obj["metadata"]),
+    spec: toApplicationSet_spec_generators_merge_generators_clusters_template_spec(obj["spec"]),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_git_directories(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    exclude: c.readOpt(obj["exclude"], c.checkBool),
+    path: c.checkStr(obj["path"]),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_git_files(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    path: c.checkStr(obj["path"]),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_git_template(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    metadata: toApplicationSet_spec_generators_merge_generators_git_template_metadata(obj["metadata"]),
+    spec: toApplicationSet_spec_generators_merge_generators_git_template_spec(obj["spec"]),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_list_template(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    metadata: toApplicationSet_spec_generators_merge_generators_list_template_metadata(obj["metadata"]),
+    spec: toApplicationSet_spec_generators_merge_generators_list_template_spec(obj["spec"]),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_pullRequest_bitbucketServer(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    api: c.checkStr(obj["api"]),
+    basicAuth: c.readOpt(obj["basicAuth"], toApplicationSet_spec_generators_merge_generators_pullRequest_bitbucketServer_basicAuth),
+    project: c.checkStr(obj["project"]),
+    repo: c.checkStr(obj["repo"]),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_pullRequest_filters(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    branchMatch: c.readOpt(obj["branchMatch"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_pullRequest_gitea(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    api: c.checkStr(obj["api"]),
+    insecure: c.readOpt(obj["insecure"], c.checkBool),
+    owner: c.checkStr(obj["owner"]),
+    repo: c.checkStr(obj["repo"]),
+    tokenRef: c.readOpt(obj["tokenRef"], toApplicationSet_spec_generators_merge_generators_pullRequest_gitea_tokenRef),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_pullRequest_github(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    api: c.readOpt(obj["api"], c.checkStr),
+    appSecretName: c.readOpt(obj["appSecretName"], c.checkStr),
+    labels: c.readOpt(obj["labels"], x => c.readList(x, c.checkStr)),
+    owner: c.checkStr(obj["owner"]),
+    repo: c.checkStr(obj["repo"]),
+    tokenRef: c.readOpt(obj["tokenRef"], toApplicationSet_spec_generators_merge_generators_pullRequest_github_tokenRef),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_pullRequest_gitlab(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    api: c.readOpt(obj["api"], c.checkStr),
+    labels: c.readOpt(obj["labels"], x => c.readList(x, c.checkStr)),
+    project: c.checkStr(obj["project"]),
+    pullRequestState: c.readOpt(obj["pullRequestState"], c.checkStr),
+    tokenRef: c.readOpt(obj["tokenRef"], toApplicationSet_spec_generators_merge_generators_pullRequest_gitlab_tokenRef),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_pullRequest_template(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    metadata: toApplicationSet_spec_generators_merge_generators_pullRequest_template_metadata(obj["metadata"]),
+    spec: toApplicationSet_spec_generators_merge_generators_pullRequest_template_spec(obj["spec"]),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_scmProvider_azureDevOps(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    accessTokenRef: toApplicationSet_spec_generators_merge_generators_scmProvider_azureDevOps_accessTokenRef(obj["accessTokenRef"]),
+    allBranches: c.readOpt(obj["allBranches"], c.checkBool),
+    api: c.readOpt(obj["api"], c.checkStr),
+    organization: c.checkStr(obj["organization"]),
+    teamProject: c.checkStr(obj["teamProject"]),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_scmProvider_bitbucket(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    allBranches: c.readOpt(obj["allBranches"], c.checkBool),
+    appPasswordRef: toApplicationSet_spec_generators_merge_generators_scmProvider_bitbucket_appPasswordRef(obj["appPasswordRef"]),
+    owner: c.checkStr(obj["owner"]),
+    user: c.checkStr(obj["user"]),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_scmProvider_bitbucketServer(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    allBranches: c.readOpt(obj["allBranches"], c.checkBool),
+    api: c.checkStr(obj["api"]),
+    basicAuth: c.readOpt(obj["basicAuth"], toApplicationSet_spec_generators_merge_generators_scmProvider_bitbucketServer_basicAuth),
+    project: c.checkStr(obj["project"]),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_scmProvider_filters(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    branchMatch: c.readOpt(obj["branchMatch"], c.checkStr),
+    labelMatch: c.readOpt(obj["labelMatch"], c.checkStr),
+    pathsDoNotExist: c.readOpt(obj["pathsDoNotExist"], x => c.readList(x, c.checkStr)),
+    pathsExist: c.readOpt(obj["pathsExist"], x => c.readList(x, c.checkStr)),
+    repositoryMatch: c.readOpt(obj["repositoryMatch"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_scmProvider_gitea(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    allBranches: c.readOpt(obj["allBranches"], c.checkBool),
+    api: c.checkStr(obj["api"]),
+    insecure: c.readOpt(obj["insecure"], c.checkBool),
+    owner: c.checkStr(obj["owner"]),
+    tokenRef: c.readOpt(obj["tokenRef"], toApplicationSet_spec_generators_merge_generators_scmProvider_gitea_tokenRef),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_scmProvider_github(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    allBranches: c.readOpt(obj["allBranches"], c.checkBool),
+    api: c.readOpt(obj["api"], c.checkStr),
+    appSecretName: c.readOpt(obj["appSecretName"], c.checkStr),
+    organization: c.checkStr(obj["organization"]),
+    tokenRef: c.readOpt(obj["tokenRef"], toApplicationSet_spec_generators_merge_generators_scmProvider_github_tokenRef),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_scmProvider_gitlab(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    allBranches: c.readOpt(obj["allBranches"], c.checkBool),
+    api: c.readOpt(obj["api"], c.checkStr),
+    group: c.checkStr(obj["group"]),
+    includeSubgroups: c.readOpt(obj["includeSubgroups"], c.checkBool),
+    tokenRef: c.readOpt(obj["tokenRef"], toApplicationSet_spec_generators_merge_generators_scmProvider_gitlab_tokenRef),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_scmProvider_template(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    metadata: toApplicationSet_spec_generators_merge_generators_scmProvider_template_metadata(obj["metadata"]),
+    spec: toApplicationSet_spec_generators_merge_generators_scmProvider_template_spec(obj["spec"]),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_selector_matchExpressions(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    key: c.checkStr(obj["key"]),
+    operator: c.checkStr(obj["operator"]),
+    values: c.readOpt(obj["values"], x => c.readList(x, c.checkStr)),
+  }}
+export function toApplicationSet_spec_generators_merge_template_spec_destination(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    name: c.readOpt(obj["name"], c.checkStr),
+    namespace: c.readOpt(obj["namespace"], c.checkStr),
+    server: c.readOpt(obj["server"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_merge_template_spec_ignoreDifferences(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    group: c.readOpt(obj["group"], c.checkStr),
+    jqPathExpressions: c.readOpt(obj["jqPathExpressions"], x => c.readList(x, c.checkStr)),
+    jsonPointers: c.readOpt(obj["jsonPointers"], x => c.readList(x, c.checkStr)),
+    kind: c.checkStr(obj["kind"]),
+    managedFieldsManagers: c.readOpt(obj["managedFieldsManagers"], x => c.readList(x, c.checkStr)),
+    name: c.readOpt(obj["name"], c.checkStr),
+    namespace: c.readOpt(obj["namespace"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_merge_template_spec_info(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    name: c.checkStr(obj["name"]),
+    value: c.checkStr(obj["value"]),
+  }}
+export function toApplicationSet_spec_generators_merge_template_spec_source(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    chart: c.readOpt(obj["chart"], c.checkStr),
+    directory: c.readOpt(obj["directory"], toApplicationSet_spec_generators_merge_template_spec_source_directory),
+    helm: c.readOpt(obj["helm"], toApplicationSet_spec_generators_merge_template_spec_source_helm),
+    kustomize: c.readOpt(obj["kustomize"], toApplicationSet_spec_generators_merge_template_spec_source_kustomize),
+    path: c.readOpt(obj["path"], c.checkStr),
+    plugin: c.readOpt(obj["plugin"], toApplicationSet_spec_generators_merge_template_spec_source_plugin),
+    ref: c.readOpt(obj["ref"], c.checkStr),
+    repoURL: c.checkStr(obj["repoURL"]),
+    targetRevision: c.readOpt(obj["targetRevision"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_merge_template_spec_sources(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    chart: c.readOpt(obj["chart"], c.checkStr),
+    directory: c.readOpt(obj["directory"], toApplicationSet_spec_generators_merge_template_spec_sources_directory),
+    helm: c.readOpt(obj["helm"], toApplicationSet_spec_generators_merge_template_spec_sources_helm),
+    kustomize: c.readOpt(obj["kustomize"], toApplicationSet_spec_generators_merge_template_spec_sources_kustomize),
+    path: c.readOpt(obj["path"], c.checkStr),
+    plugin: c.readOpt(obj["plugin"], toApplicationSet_spec_generators_merge_template_spec_sources_plugin),
+    ref: c.readOpt(obj["ref"], c.checkStr),
+    repoURL: c.checkStr(obj["repoURL"]),
+    targetRevision: c.readOpt(obj["targetRevision"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_merge_template_spec_syncPolicy(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    automated: c.readOpt(obj["automated"], toApplicationSet_spec_generators_merge_template_spec_syncPolicy_automated),
+    managedNamespaceMetadata: c.readOpt(obj["managedNamespaceMetadata"], toApplicationSet_spec_generators_merge_template_spec_syncPolicy_managedNamespaceMetadata),
+    retry: c.readOpt(obj["retry"], toApplicationSet_spec_generators_merge_template_spec_syncPolicy_retry),
+    syncOptions: c.readOpt(obj["syncOptions"], x => c.readList(x, c.checkStr)),
+  }}
+export function toApplicationSet_spec_generators_pullRequest_bitbucketServer_basicAuth_passwordRef(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    key: c.checkStr(obj["key"]),
+    secretName: c.checkStr(obj["secretName"]),
+  }}
+export function toApplicationSet_spec_generators_pullRequest_template_spec_destination(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    name: c.readOpt(obj["name"], c.checkStr),
+    namespace: c.readOpt(obj["namespace"], c.checkStr),
+    server: c.readOpt(obj["server"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_pullRequest_template_spec_ignoreDifferences(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    group: c.readOpt(obj["group"], c.checkStr),
+    jqPathExpressions: c.readOpt(obj["jqPathExpressions"], x => c.readList(x, c.checkStr)),
+    jsonPointers: c.readOpt(obj["jsonPointers"], x => c.readList(x, c.checkStr)),
+    kind: c.checkStr(obj["kind"]),
+    managedFieldsManagers: c.readOpt(obj["managedFieldsManagers"], x => c.readList(x, c.checkStr)),
+    name: c.readOpt(obj["name"], c.checkStr),
+    namespace: c.readOpt(obj["namespace"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_pullRequest_template_spec_info(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    name: c.checkStr(obj["name"]),
+    value: c.checkStr(obj["value"]),
+  }}
+export function toApplicationSet_spec_generators_pullRequest_template_spec_source(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    chart: c.readOpt(obj["chart"], c.checkStr),
+    directory: c.readOpt(obj["directory"], toApplicationSet_spec_generators_pullRequest_template_spec_source_directory),
+    helm: c.readOpt(obj["helm"], toApplicationSet_spec_generators_pullRequest_template_spec_source_helm),
+    kustomize: c.readOpt(obj["kustomize"], toApplicationSet_spec_generators_pullRequest_template_spec_source_kustomize),
+    path: c.readOpt(obj["path"], c.checkStr),
+    plugin: c.readOpt(obj["plugin"], toApplicationSet_spec_generators_pullRequest_template_spec_source_plugin),
+    ref: c.readOpt(obj["ref"], c.checkStr),
+    repoURL: c.checkStr(obj["repoURL"]),
+    targetRevision: c.readOpt(obj["targetRevision"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_pullRequest_template_spec_sources(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    chart: c.readOpt(obj["chart"], c.checkStr),
+    directory: c.readOpt(obj["directory"], toApplicationSet_spec_generators_pullRequest_template_spec_sources_directory),
+    helm: c.readOpt(obj["helm"], toApplicationSet_spec_generators_pullRequest_template_spec_sources_helm),
+    kustomize: c.readOpt(obj["kustomize"], toApplicationSet_spec_generators_pullRequest_template_spec_sources_kustomize),
+    path: c.readOpt(obj["path"], c.checkStr),
+    plugin: c.readOpt(obj["plugin"], toApplicationSet_spec_generators_pullRequest_template_spec_sources_plugin),
+    ref: c.readOpt(obj["ref"], c.checkStr),
+    repoURL: c.checkStr(obj["repoURL"]),
+    targetRevision: c.readOpt(obj["targetRevision"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_pullRequest_template_spec_syncPolicy(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    automated: c.readOpt(obj["automated"], toApplicationSet_spec_generators_pullRequest_template_spec_syncPolicy_automated),
+    managedNamespaceMetadata: c.readOpt(obj["managedNamespaceMetadata"], toApplicationSet_spec_generators_pullRequest_template_spec_syncPolicy_managedNamespaceMetadata),
+    retry: c.readOpt(obj["retry"], toApplicationSet_spec_generators_pullRequest_template_spec_syncPolicy_retry),
+    syncOptions: c.readOpt(obj["syncOptions"], x => c.readList(x, c.checkStr)),
+  }}
+export function toApplicationSet_spec_generators_scmProvider_bitbucketServer_basicAuth_passwordRef(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    key: c.checkStr(obj["key"]),
+    secretName: c.checkStr(obj["secretName"]),
+  }}
+export function toApplicationSet_spec_generators_scmProvider_template_spec_destination(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    name: c.readOpt(obj["name"], c.checkStr),
+    namespace: c.readOpt(obj["namespace"], c.checkStr),
+    server: c.readOpt(obj["server"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_scmProvider_template_spec_ignoreDifferences(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    group: c.readOpt(obj["group"], c.checkStr),
+    jqPathExpressions: c.readOpt(obj["jqPathExpressions"], x => c.readList(x, c.checkStr)),
+    jsonPointers: c.readOpt(obj["jsonPointers"], x => c.readList(x, c.checkStr)),
+    kind: c.checkStr(obj["kind"]),
+    managedFieldsManagers: c.readOpt(obj["managedFieldsManagers"], x => c.readList(x, c.checkStr)),
+    name: c.readOpt(obj["name"], c.checkStr),
+    namespace: c.readOpt(obj["namespace"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_scmProvider_template_spec_info(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    name: c.checkStr(obj["name"]),
+    value: c.checkStr(obj["value"]),
+  }}
+export function toApplicationSet_spec_generators_scmProvider_template_spec_source(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    chart: c.readOpt(obj["chart"], c.checkStr),
+    directory: c.readOpt(obj["directory"], toApplicationSet_spec_generators_scmProvider_template_spec_source_directory),
+    helm: c.readOpt(obj["helm"], toApplicationSet_spec_generators_scmProvider_template_spec_source_helm),
+    kustomize: c.readOpt(obj["kustomize"], toApplicationSet_spec_generators_scmProvider_template_spec_source_kustomize),
+    path: c.readOpt(obj["path"], c.checkStr),
+    plugin: c.readOpt(obj["plugin"], toApplicationSet_spec_generators_scmProvider_template_spec_source_plugin),
+    ref: c.readOpt(obj["ref"], c.checkStr),
+    repoURL: c.checkStr(obj["repoURL"]),
+    targetRevision: c.readOpt(obj["targetRevision"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_scmProvider_template_spec_sources(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    chart: c.readOpt(obj["chart"], c.checkStr),
+    directory: c.readOpt(obj["directory"], toApplicationSet_spec_generators_scmProvider_template_spec_sources_directory),
+    helm: c.readOpt(obj["helm"], toApplicationSet_spec_generators_scmProvider_template_spec_sources_helm),
+    kustomize: c.readOpt(obj["kustomize"], toApplicationSet_spec_generators_scmProvider_template_spec_sources_kustomize),
+    path: c.readOpt(obj["path"], c.checkStr),
+    plugin: c.readOpt(obj["plugin"], toApplicationSet_spec_generators_scmProvider_template_spec_sources_plugin),
+    ref: c.readOpt(obj["ref"], c.checkStr),
+    repoURL: c.checkStr(obj["repoURL"]),
+    targetRevision: c.readOpt(obj["targetRevision"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_scmProvider_template_spec_syncPolicy(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    automated: c.readOpt(obj["automated"], toApplicationSet_spec_generators_scmProvider_template_spec_syncPolicy_automated),
+    managedNamespaceMetadata: c.readOpt(obj["managedNamespaceMetadata"], toApplicationSet_spec_generators_scmProvider_template_spec_syncPolicy_managedNamespaceMetadata),
+    retry: c.readOpt(obj["retry"], toApplicationSet_spec_generators_scmProvider_template_spec_syncPolicy_retry),
+    syncOptions: c.readOpt(obj["syncOptions"], x => c.readList(x, c.checkStr)),
+  }}
+export function toApplicationSet_spec_template_spec_source_directory_jsonnet(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    extVars: c.readOpt(obj["extVars"], x => c.readList(x, toApplicationSet_spec_template_spec_source_directory_jsonnet_extVars)),
+    libs: c.readOpt(obj["libs"], x => c.readList(x, c.checkStr)),
+    tlas: c.readOpt(obj["tlas"], x => c.readList(x, toApplicationSet_spec_template_spec_source_directory_jsonnet_tlas)),
+  }}
+export function toApplicationSet_spec_template_spec_source_helm_fileParameters(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    name: c.readOpt(obj["name"], c.checkStr),
+    path: c.readOpt(obj["path"], c.checkStr),
+  }}
+export function toApplicationSet_spec_template_spec_source_helm_parameters(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    forceString: c.readOpt(obj["forceString"], c.checkBool),
+    name: c.readOpt(obj["name"], c.checkStr),
+    value: c.readOpt(obj["value"], c.checkStr),
+  }}
+export function toApplicationSet_spec_template_spec_source_plugin_env(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    name: c.checkStr(obj["name"]),
+    value: c.checkStr(obj["value"]),
+  }}
+export function toApplicationSet_spec_template_spec_source_plugin_parameters(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    array: c.readOpt(obj["array"], x => c.readList(x, c.checkStr)),
+    map: c.readOpt(obj["map"], x => c.readMap(x, c.checkStr)),
+    name: c.readOpt(obj["name"], c.checkStr),
+    string: c.readOpt(obj["string"], c.checkStr),
+  }}
+export function toApplicationSet_spec_template_spec_sources_directory_jsonnet(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    extVars: c.readOpt(obj["extVars"], x => c.readList(x, toApplicationSet_spec_template_spec_sources_directory_jsonnet_extVars)),
+    libs: c.readOpt(obj["libs"], x => c.readList(x, c.checkStr)),
+    tlas: c.readOpt(obj["tlas"], x => c.readList(x, toApplicationSet_spec_template_spec_sources_directory_jsonnet_tlas)),
+  }}
+export function toApplicationSet_spec_template_spec_sources_helm_fileParameters(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    name: c.readOpt(obj["name"], c.checkStr),
+    path: c.readOpt(obj["path"], c.checkStr),
+  }}
+export function toApplicationSet_spec_template_spec_sources_helm_parameters(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    forceString: c.readOpt(obj["forceString"], c.checkBool),
+    name: c.readOpt(obj["name"], c.checkStr),
+    value: c.readOpt(obj["value"], c.checkStr),
+  }}
+export function toApplicationSet_spec_template_spec_sources_plugin_env(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    name: c.checkStr(obj["name"]),
+    value: c.checkStr(obj["value"]),
+  }}
+export function toApplicationSet_spec_template_spec_sources_plugin_parameters(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    array: c.readOpt(obj["array"], x => c.readList(x, c.checkStr)),
+    map: c.readOpt(obj["map"], x => c.readMap(x, c.checkStr)),
+    name: c.readOpt(obj["name"], c.checkStr),
+    string: c.readOpt(obj["string"], c.checkStr),
+  }}
+export function toApplicationSet_spec_template_spec_syncPolicy_retry_backoff(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    duration: c.readOpt(obj["duration"], c.checkStr),
+    factor: c.readOpt(obj["factor"], c.checkNum),
+    maxDuration: c.readOpt(obj["maxDuration"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_clusterDecisionResource_template_spec_source_directory(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    exclude: c.readOpt(obj["exclude"], c.checkStr),
+    include: c.readOpt(obj["include"], c.checkStr),
+    jsonnet: c.readOpt(obj["jsonnet"], toApplicationSet_spec_generators_clusterDecisionResource_template_spec_source_directory_jsonnet),
+    recurse: c.readOpt(obj["recurse"], c.checkBool),
+  }}
+export function toApplicationSet_spec_generators_clusterDecisionResource_template_spec_source_helm(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    fileParameters: c.readOpt(obj["fileParameters"], x => c.readList(x, toApplicationSet_spec_generators_clusterDecisionResource_template_spec_source_helm_fileParameters)),
+    ignoreMissingValueFiles: c.readOpt(obj["ignoreMissingValueFiles"], c.checkBool),
+    parameters: c.readOpt(obj["parameters"], x => c.readList(x, toApplicationSet_spec_generators_clusterDecisionResource_template_spec_source_helm_parameters)),
+    passCredentials: c.readOpt(obj["passCredentials"], c.checkBool),
+    releaseName: c.readOpt(obj["releaseName"], c.checkStr),
+    skipCrds: c.readOpt(obj["skipCrds"], c.checkBool),
+    valueFiles: c.readOpt(obj["valueFiles"], x => c.readList(x, c.checkStr)),
+    values: c.readOpt(obj["values"], c.checkStr),
+    version: c.readOpt(obj["version"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_clusterDecisionResource_template_spec_source_kustomize(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    commonAnnotations: c.readOpt(obj["commonAnnotations"], x => c.readMap(x, c.checkStr)),
+    commonLabels: c.readOpt(obj["commonLabels"], x => c.readMap(x, c.checkStr)),
+    forceCommonAnnotations: c.readOpt(obj["forceCommonAnnotations"], c.checkBool),
+    forceCommonLabels: c.readOpt(obj["forceCommonLabels"], c.checkBool),
+    images: c.readOpt(obj["images"], x => c.readList(x, c.checkStr)),
+    namePrefix: c.readOpt(obj["namePrefix"], c.checkStr),
+    nameSuffix: c.readOpt(obj["nameSuffix"], c.checkStr),
+    version: c.readOpt(obj["version"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_clusterDecisionResource_template_spec_source_plugin(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    env: c.readOpt(obj["env"], x => c.readList(x, toApplicationSet_spec_generators_clusterDecisionResource_template_spec_source_plugin_env)),
+    name: c.readOpt(obj["name"], c.checkStr),
+    parameters: c.readOpt(obj["parameters"], x => c.readList(x, toApplicationSet_spec_generators_clusterDecisionResource_template_spec_source_plugin_parameters)),
+  }}
+export function toApplicationSet_spec_generators_clusterDecisionResource_template_spec_sources_directory(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    exclude: c.readOpt(obj["exclude"], c.checkStr),
+    include: c.readOpt(obj["include"], c.checkStr),
+    jsonnet: c.readOpt(obj["jsonnet"], toApplicationSet_spec_generators_clusterDecisionResource_template_spec_sources_directory_jsonnet),
+    recurse: c.readOpt(obj["recurse"], c.checkBool),
+  }}
+export function toApplicationSet_spec_generators_clusterDecisionResource_template_spec_sources_helm(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    fileParameters: c.readOpt(obj["fileParameters"], x => c.readList(x, toApplicationSet_spec_generators_clusterDecisionResource_template_spec_sources_helm_fileParameters)),
+    ignoreMissingValueFiles: c.readOpt(obj["ignoreMissingValueFiles"], c.checkBool),
+    parameters: c.readOpt(obj["parameters"], x => c.readList(x, toApplicationSet_spec_generators_clusterDecisionResource_template_spec_sources_helm_parameters)),
+    passCredentials: c.readOpt(obj["passCredentials"], c.checkBool),
+    releaseName: c.readOpt(obj["releaseName"], c.checkStr),
+    skipCrds: c.readOpt(obj["skipCrds"], c.checkBool),
+    valueFiles: c.readOpt(obj["valueFiles"], x => c.readList(x, c.checkStr)),
+    values: c.readOpt(obj["values"], c.checkStr),
+    version: c.readOpt(obj["version"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_clusterDecisionResource_template_spec_sources_kustomize(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    commonAnnotations: c.readOpt(obj["commonAnnotations"], x => c.readMap(x, c.checkStr)),
+    commonLabels: c.readOpt(obj["commonLabels"], x => c.readMap(x, c.checkStr)),
+    forceCommonAnnotations: c.readOpt(obj["forceCommonAnnotations"], c.checkBool),
+    forceCommonLabels: c.readOpt(obj["forceCommonLabels"], c.checkBool),
+    images: c.readOpt(obj["images"], x => c.readList(x, c.checkStr)),
+    namePrefix: c.readOpt(obj["namePrefix"], c.checkStr),
+    nameSuffix: c.readOpt(obj["nameSuffix"], c.checkStr),
+    version: c.readOpt(obj["version"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_clusterDecisionResource_template_spec_sources_plugin(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    env: c.readOpt(obj["env"], x => c.readList(x, toApplicationSet_spec_generators_clusterDecisionResource_template_spec_sources_plugin_env)),
+    name: c.readOpt(obj["name"], c.checkStr),
+    parameters: c.readOpt(obj["parameters"], x => c.readList(x, toApplicationSet_spec_generators_clusterDecisionResource_template_spec_sources_plugin_parameters)),
+  }}
+export function toApplicationSet_spec_generators_clusterDecisionResource_template_spec_syncPolicy_automated(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    allowEmpty: c.readOpt(obj["allowEmpty"], c.checkBool),
+    prune: c.readOpt(obj["prune"], c.checkBool),
+    selfHeal: c.readOpt(obj["selfHeal"], c.checkBool),
+  }}
+export function toApplicationSet_spec_generators_clusterDecisionResource_template_spec_syncPolicy_managedNamespaceMetadata(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    annotations: c.readOpt(obj["annotations"], x => c.readMap(x, c.checkStr)),
+    labels: c.readOpt(obj["labels"], x => c.readMap(x, c.checkStr)),
+  }}
+export function toApplicationSet_spec_generators_clusterDecisionResource_template_spec_syncPolicy_retry(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    backoff: c.readOpt(obj["backoff"], toApplicationSet_spec_generators_clusterDecisionResource_template_spec_syncPolicy_retry_backoff),
+    limit: c.readOpt(obj["limit"], c.checkNum),
+  }}
+export function toApplicationSet_spec_generators_clusters_template_spec_source_directory(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    exclude: c.readOpt(obj["exclude"], c.checkStr),
+    include: c.readOpt(obj["include"], c.checkStr),
+    jsonnet: c.readOpt(obj["jsonnet"], toApplicationSet_spec_generators_clusters_template_spec_source_directory_jsonnet),
+    recurse: c.readOpt(obj["recurse"], c.checkBool),
+  }}
+export function toApplicationSet_spec_generators_clusters_template_spec_source_helm(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    fileParameters: c.readOpt(obj["fileParameters"], x => c.readList(x, toApplicationSet_spec_generators_clusters_template_spec_source_helm_fileParameters)),
+    ignoreMissingValueFiles: c.readOpt(obj["ignoreMissingValueFiles"], c.checkBool),
+    parameters: c.readOpt(obj["parameters"], x => c.readList(x, toApplicationSet_spec_generators_clusters_template_spec_source_helm_parameters)),
+    passCredentials: c.readOpt(obj["passCredentials"], c.checkBool),
+    releaseName: c.readOpt(obj["releaseName"], c.checkStr),
+    skipCrds: c.readOpt(obj["skipCrds"], c.checkBool),
+    valueFiles: c.readOpt(obj["valueFiles"], x => c.readList(x, c.checkStr)),
+    values: c.readOpt(obj["values"], c.checkStr),
+    version: c.readOpt(obj["version"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_clusters_template_spec_source_kustomize(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    commonAnnotations: c.readOpt(obj["commonAnnotations"], x => c.readMap(x, c.checkStr)),
+    commonLabels: c.readOpt(obj["commonLabels"], x => c.readMap(x, c.checkStr)),
+    forceCommonAnnotations: c.readOpt(obj["forceCommonAnnotations"], c.checkBool),
+    forceCommonLabels: c.readOpt(obj["forceCommonLabels"], c.checkBool),
+    images: c.readOpt(obj["images"], x => c.readList(x, c.checkStr)),
+    namePrefix: c.readOpt(obj["namePrefix"], c.checkStr),
+    nameSuffix: c.readOpt(obj["nameSuffix"], c.checkStr),
+    version: c.readOpt(obj["version"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_clusters_template_spec_source_plugin(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    env: c.readOpt(obj["env"], x => c.readList(x, toApplicationSet_spec_generators_clusters_template_spec_source_plugin_env)),
+    name: c.readOpt(obj["name"], c.checkStr),
+    parameters: c.readOpt(obj["parameters"], x => c.readList(x, toApplicationSet_spec_generators_clusters_template_spec_source_plugin_parameters)),
+  }}
+export function toApplicationSet_spec_generators_clusters_template_spec_sources_directory(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    exclude: c.readOpt(obj["exclude"], c.checkStr),
+    include: c.readOpt(obj["include"], c.checkStr),
+    jsonnet: c.readOpt(obj["jsonnet"], toApplicationSet_spec_generators_clusters_template_spec_sources_directory_jsonnet),
+    recurse: c.readOpt(obj["recurse"], c.checkBool),
+  }}
+export function toApplicationSet_spec_generators_clusters_template_spec_sources_helm(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    fileParameters: c.readOpt(obj["fileParameters"], x => c.readList(x, toApplicationSet_spec_generators_clusters_template_spec_sources_helm_fileParameters)),
+    ignoreMissingValueFiles: c.readOpt(obj["ignoreMissingValueFiles"], c.checkBool),
+    parameters: c.readOpt(obj["parameters"], x => c.readList(x, toApplicationSet_spec_generators_clusters_template_spec_sources_helm_parameters)),
+    passCredentials: c.readOpt(obj["passCredentials"], c.checkBool),
+    releaseName: c.readOpt(obj["releaseName"], c.checkStr),
+    skipCrds: c.readOpt(obj["skipCrds"], c.checkBool),
+    valueFiles: c.readOpt(obj["valueFiles"], x => c.readList(x, c.checkStr)),
+    values: c.readOpt(obj["values"], c.checkStr),
+    version: c.readOpt(obj["version"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_clusters_template_spec_sources_kustomize(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    commonAnnotations: c.readOpt(obj["commonAnnotations"], x => c.readMap(x, c.checkStr)),
+    commonLabels: c.readOpt(obj["commonLabels"], x => c.readMap(x, c.checkStr)),
+    forceCommonAnnotations: c.readOpt(obj["forceCommonAnnotations"], c.checkBool),
+    forceCommonLabels: c.readOpt(obj["forceCommonLabels"], c.checkBool),
+    images: c.readOpt(obj["images"], x => c.readList(x, c.checkStr)),
+    namePrefix: c.readOpt(obj["namePrefix"], c.checkStr),
+    nameSuffix: c.readOpt(obj["nameSuffix"], c.checkStr),
+    version: c.readOpt(obj["version"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_clusters_template_spec_sources_plugin(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    env: c.readOpt(obj["env"], x => c.readList(x, toApplicationSet_spec_generators_clusters_template_spec_sources_plugin_env)),
+    name: c.readOpt(obj["name"], c.checkStr),
+    parameters: c.readOpt(obj["parameters"], x => c.readList(x, toApplicationSet_spec_generators_clusters_template_spec_sources_plugin_parameters)),
+  }}
+export function toApplicationSet_spec_generators_clusters_template_spec_syncPolicy_automated(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    allowEmpty: c.readOpt(obj["allowEmpty"], c.checkBool),
+    prune: c.readOpt(obj["prune"], c.checkBool),
+    selfHeal: c.readOpt(obj["selfHeal"], c.checkBool),
+  }}
+export function toApplicationSet_spec_generators_clusters_template_spec_syncPolicy_managedNamespaceMetadata(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    annotations: c.readOpt(obj["annotations"], x => c.readMap(x, c.checkStr)),
+    labels: c.readOpt(obj["labels"], x => c.readMap(x, c.checkStr)),
+  }}
+export function toApplicationSet_spec_generators_clusters_template_spec_syncPolicy_retry(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    backoff: c.readOpt(obj["backoff"], toApplicationSet_spec_generators_clusters_template_spec_syncPolicy_retry_backoff),
+    limit: c.readOpt(obj["limit"], c.checkNum),
+  }}
+export function toApplicationSet_spec_generators_git_template_spec_source_directory(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    exclude: c.readOpt(obj["exclude"], c.checkStr),
+    include: c.readOpt(obj["include"], c.checkStr),
+    jsonnet: c.readOpt(obj["jsonnet"], toApplicationSet_spec_generators_git_template_spec_source_directory_jsonnet),
+    recurse: c.readOpt(obj["recurse"], c.checkBool),
+  }}
+export function toApplicationSet_spec_generators_git_template_spec_source_helm(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    fileParameters: c.readOpt(obj["fileParameters"], x => c.readList(x, toApplicationSet_spec_generators_git_template_spec_source_helm_fileParameters)),
+    ignoreMissingValueFiles: c.readOpt(obj["ignoreMissingValueFiles"], c.checkBool),
+    parameters: c.readOpt(obj["parameters"], x => c.readList(x, toApplicationSet_spec_generators_git_template_spec_source_helm_parameters)),
+    passCredentials: c.readOpt(obj["passCredentials"], c.checkBool),
+    releaseName: c.readOpt(obj["releaseName"], c.checkStr),
+    skipCrds: c.readOpt(obj["skipCrds"], c.checkBool),
+    valueFiles: c.readOpt(obj["valueFiles"], x => c.readList(x, c.checkStr)),
+    values: c.readOpt(obj["values"], c.checkStr),
+    version: c.readOpt(obj["version"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_git_template_spec_source_kustomize(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    commonAnnotations: c.readOpt(obj["commonAnnotations"], x => c.readMap(x, c.checkStr)),
+    commonLabels: c.readOpt(obj["commonLabels"], x => c.readMap(x, c.checkStr)),
+    forceCommonAnnotations: c.readOpt(obj["forceCommonAnnotations"], c.checkBool),
+    forceCommonLabels: c.readOpt(obj["forceCommonLabels"], c.checkBool),
+    images: c.readOpt(obj["images"], x => c.readList(x, c.checkStr)),
+    namePrefix: c.readOpt(obj["namePrefix"], c.checkStr),
+    nameSuffix: c.readOpt(obj["nameSuffix"], c.checkStr),
+    version: c.readOpt(obj["version"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_git_template_spec_source_plugin(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    env: c.readOpt(obj["env"], x => c.readList(x, toApplicationSet_spec_generators_git_template_spec_source_plugin_env)),
+    name: c.readOpt(obj["name"], c.checkStr),
+    parameters: c.readOpt(obj["parameters"], x => c.readList(x, toApplicationSet_spec_generators_git_template_spec_source_plugin_parameters)),
+  }}
+export function toApplicationSet_spec_generators_git_template_spec_sources_directory(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    exclude: c.readOpt(obj["exclude"], c.checkStr),
+    include: c.readOpt(obj["include"], c.checkStr),
+    jsonnet: c.readOpt(obj["jsonnet"], toApplicationSet_spec_generators_git_template_spec_sources_directory_jsonnet),
+    recurse: c.readOpt(obj["recurse"], c.checkBool),
+  }}
+export function toApplicationSet_spec_generators_git_template_spec_sources_helm(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    fileParameters: c.readOpt(obj["fileParameters"], x => c.readList(x, toApplicationSet_spec_generators_git_template_spec_sources_helm_fileParameters)),
+    ignoreMissingValueFiles: c.readOpt(obj["ignoreMissingValueFiles"], c.checkBool),
+    parameters: c.readOpt(obj["parameters"], x => c.readList(x, toApplicationSet_spec_generators_git_template_spec_sources_helm_parameters)),
+    passCredentials: c.readOpt(obj["passCredentials"], c.checkBool),
+    releaseName: c.readOpt(obj["releaseName"], c.checkStr),
+    skipCrds: c.readOpt(obj["skipCrds"], c.checkBool),
+    valueFiles: c.readOpt(obj["valueFiles"], x => c.readList(x, c.checkStr)),
+    values: c.readOpt(obj["values"], c.checkStr),
+    version: c.readOpt(obj["version"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_git_template_spec_sources_kustomize(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    commonAnnotations: c.readOpt(obj["commonAnnotations"], x => c.readMap(x, c.checkStr)),
+    commonLabels: c.readOpt(obj["commonLabels"], x => c.readMap(x, c.checkStr)),
+    forceCommonAnnotations: c.readOpt(obj["forceCommonAnnotations"], c.checkBool),
+    forceCommonLabels: c.readOpt(obj["forceCommonLabels"], c.checkBool),
+    images: c.readOpt(obj["images"], x => c.readList(x, c.checkStr)),
+    namePrefix: c.readOpt(obj["namePrefix"], c.checkStr),
+    nameSuffix: c.readOpt(obj["nameSuffix"], c.checkStr),
+    version: c.readOpt(obj["version"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_git_template_spec_sources_plugin(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    env: c.readOpt(obj["env"], x => c.readList(x, toApplicationSet_spec_generators_git_template_spec_sources_plugin_env)),
+    name: c.readOpt(obj["name"], c.checkStr),
+    parameters: c.readOpt(obj["parameters"], x => c.readList(x, toApplicationSet_spec_generators_git_template_spec_sources_plugin_parameters)),
+  }}
+export function toApplicationSet_spec_generators_git_template_spec_syncPolicy_automated(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    allowEmpty: c.readOpt(obj["allowEmpty"], c.checkBool),
+    prune: c.readOpt(obj["prune"], c.checkBool),
+    selfHeal: c.readOpt(obj["selfHeal"], c.checkBool),
+  }}
+export function toApplicationSet_spec_generators_git_template_spec_syncPolicy_managedNamespaceMetadata(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    annotations: c.readOpt(obj["annotations"], x => c.readMap(x, c.checkStr)),
+    labels: c.readOpt(obj["labels"], x => c.readMap(x, c.checkStr)),
+  }}
+export function toApplicationSet_spec_generators_git_template_spec_syncPolicy_retry(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    backoff: c.readOpt(obj["backoff"], toApplicationSet_spec_generators_git_template_spec_syncPolicy_retry_backoff),
+    limit: c.readOpt(obj["limit"], c.checkNum),
+  }}
+export function toApplicationSet_spec_generators_list_template_spec_source_directory(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    exclude: c.readOpt(obj["exclude"], c.checkStr),
+    include: c.readOpt(obj["include"], c.checkStr),
+    jsonnet: c.readOpt(obj["jsonnet"], toApplicationSet_spec_generators_list_template_spec_source_directory_jsonnet),
+    recurse: c.readOpt(obj["recurse"], c.checkBool),
+  }}
+export function toApplicationSet_spec_generators_list_template_spec_source_helm(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    fileParameters: c.readOpt(obj["fileParameters"], x => c.readList(x, toApplicationSet_spec_generators_list_template_spec_source_helm_fileParameters)),
+    ignoreMissingValueFiles: c.readOpt(obj["ignoreMissingValueFiles"], c.checkBool),
+    parameters: c.readOpt(obj["parameters"], x => c.readList(x, toApplicationSet_spec_generators_list_template_spec_source_helm_parameters)),
+    passCredentials: c.readOpt(obj["passCredentials"], c.checkBool),
+    releaseName: c.readOpt(obj["releaseName"], c.checkStr),
+    skipCrds: c.readOpt(obj["skipCrds"], c.checkBool),
+    valueFiles: c.readOpt(obj["valueFiles"], x => c.readList(x, c.checkStr)),
+    values: c.readOpt(obj["values"], c.checkStr),
+    version: c.readOpt(obj["version"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_list_template_spec_source_kustomize(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    commonAnnotations: c.readOpt(obj["commonAnnotations"], x => c.readMap(x, c.checkStr)),
+    commonLabels: c.readOpt(obj["commonLabels"], x => c.readMap(x, c.checkStr)),
+    forceCommonAnnotations: c.readOpt(obj["forceCommonAnnotations"], c.checkBool),
+    forceCommonLabels: c.readOpt(obj["forceCommonLabels"], c.checkBool),
+    images: c.readOpt(obj["images"], x => c.readList(x, c.checkStr)),
+    namePrefix: c.readOpt(obj["namePrefix"], c.checkStr),
+    nameSuffix: c.readOpt(obj["nameSuffix"], c.checkStr),
+    version: c.readOpt(obj["version"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_list_template_spec_source_plugin(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    env: c.readOpt(obj["env"], x => c.readList(x, toApplicationSet_spec_generators_list_template_spec_source_plugin_env)),
+    name: c.readOpt(obj["name"], c.checkStr),
+    parameters: c.readOpt(obj["parameters"], x => c.readList(x, toApplicationSet_spec_generators_list_template_spec_source_plugin_parameters)),
+  }}
+export function toApplicationSet_spec_generators_list_template_spec_sources_directory(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    exclude: c.readOpt(obj["exclude"], c.checkStr),
+    include: c.readOpt(obj["include"], c.checkStr),
+    jsonnet: c.readOpt(obj["jsonnet"], toApplicationSet_spec_generators_list_template_spec_sources_directory_jsonnet),
+    recurse: c.readOpt(obj["recurse"], c.checkBool),
+  }}
+export function toApplicationSet_spec_generators_list_template_spec_sources_helm(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    fileParameters: c.readOpt(obj["fileParameters"], x => c.readList(x, toApplicationSet_spec_generators_list_template_spec_sources_helm_fileParameters)),
+    ignoreMissingValueFiles: c.readOpt(obj["ignoreMissingValueFiles"], c.checkBool),
+    parameters: c.readOpt(obj["parameters"], x => c.readList(x, toApplicationSet_spec_generators_list_template_spec_sources_helm_parameters)),
+    passCredentials: c.readOpt(obj["passCredentials"], c.checkBool),
+    releaseName: c.readOpt(obj["releaseName"], c.checkStr),
+    skipCrds: c.readOpt(obj["skipCrds"], c.checkBool),
+    valueFiles: c.readOpt(obj["valueFiles"], x => c.readList(x, c.checkStr)),
+    values: c.readOpt(obj["values"], c.checkStr),
+    version: c.readOpt(obj["version"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_list_template_spec_sources_kustomize(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    commonAnnotations: c.readOpt(obj["commonAnnotations"], x => c.readMap(x, c.checkStr)),
+    commonLabels: c.readOpt(obj["commonLabels"], x => c.readMap(x, c.checkStr)),
+    forceCommonAnnotations: c.readOpt(obj["forceCommonAnnotations"], c.checkBool),
+    forceCommonLabels: c.readOpt(obj["forceCommonLabels"], c.checkBool),
+    images: c.readOpt(obj["images"], x => c.readList(x, c.checkStr)),
+    namePrefix: c.readOpt(obj["namePrefix"], c.checkStr),
+    nameSuffix: c.readOpt(obj["nameSuffix"], c.checkStr),
+    version: c.readOpt(obj["version"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_list_template_spec_sources_plugin(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    env: c.readOpt(obj["env"], x => c.readList(x, toApplicationSet_spec_generators_list_template_spec_sources_plugin_env)),
+    name: c.readOpt(obj["name"], c.checkStr),
+    parameters: c.readOpt(obj["parameters"], x => c.readList(x, toApplicationSet_spec_generators_list_template_spec_sources_plugin_parameters)),
+  }}
+export function toApplicationSet_spec_generators_list_template_spec_syncPolicy_automated(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    allowEmpty: c.readOpt(obj["allowEmpty"], c.checkBool),
+    prune: c.readOpt(obj["prune"], c.checkBool),
+    selfHeal: c.readOpt(obj["selfHeal"], c.checkBool),
+  }}
+export function toApplicationSet_spec_generators_list_template_spec_syncPolicy_managedNamespaceMetadata(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    annotations: c.readOpt(obj["annotations"], x => c.readMap(x, c.checkStr)),
+    labels: c.readOpt(obj["labels"], x => c.readMap(x, c.checkStr)),
+  }}
+export function toApplicationSet_spec_generators_list_template_spec_syncPolicy_retry(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    backoff: c.readOpt(obj["backoff"], toApplicationSet_spec_generators_list_template_spec_syncPolicy_retry_backoff),
+    limit: c.readOpt(obj["limit"], c.checkNum),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_clusterDecisionResource_labelSelector_matchExpressions(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    key: c.checkStr(obj["key"]),
+    operator: c.checkStr(obj["operator"]),
+    values: c.readOpt(obj["values"], x => c.readList(x, c.checkStr)),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_clusterDecisionResource_template_metadata(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    annotations: c.readOpt(obj["annotations"], x => c.readMap(x, c.checkStr)),
+    finalizers: c.readOpt(obj["finalizers"], x => c.readList(x, c.checkStr)),
+    labels: c.readOpt(obj["labels"], x => c.readMap(x, c.checkStr)),
+    name: c.readOpt(obj["name"], c.checkStr),
+    namespace: c.readOpt(obj["namespace"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_clusterDecisionResource_template_spec(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    destination: toApplicationSet_spec_generators_matrix_generators_clusterDecisionResource_template_spec_destination(obj["destination"]),
+    ignoreDifferences: c.readOpt(obj["ignoreDifferences"], x => c.readList(x, toApplicationSet_spec_generators_matrix_generators_clusterDecisionResource_template_spec_ignoreDifferences)),
+    info: c.readOpt(obj["info"], x => c.readList(x, toApplicationSet_spec_generators_matrix_generators_clusterDecisionResource_template_spec_info)),
+    project: c.checkStr(obj["project"]),
+    revisionHistoryLimit: c.readOpt(obj["revisionHistoryLimit"], c.checkNum),
+    source: c.readOpt(obj["source"], toApplicationSet_spec_generators_matrix_generators_clusterDecisionResource_template_spec_source),
+    sources: c.readOpt(obj["sources"], x => c.readList(x, toApplicationSet_spec_generators_matrix_generators_clusterDecisionResource_template_spec_sources)),
+    syncPolicy: c.readOpt(obj["syncPolicy"], toApplicationSet_spec_generators_matrix_generators_clusterDecisionResource_template_spec_syncPolicy),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_clusters_selector_matchExpressions(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    key: c.checkStr(obj["key"]),
+    operator: c.checkStr(obj["operator"]),
+    values: c.readOpt(obj["values"], x => c.readList(x, c.checkStr)),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_clusters_template_metadata(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    annotations: c.readOpt(obj["annotations"], x => c.readMap(x, c.checkStr)),
+    finalizers: c.readOpt(obj["finalizers"], x => c.readList(x, c.checkStr)),
+    labels: c.readOpt(obj["labels"], x => c.readMap(x, c.checkStr)),
+    name: c.readOpt(obj["name"], c.checkStr),
+    namespace: c.readOpt(obj["namespace"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_clusters_template_spec(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    destination: toApplicationSet_spec_generators_matrix_generators_clusters_template_spec_destination(obj["destination"]),
+    ignoreDifferences: c.readOpt(obj["ignoreDifferences"], x => c.readList(x, toApplicationSet_spec_generators_matrix_generators_clusters_template_spec_ignoreDifferences)),
+    info: c.readOpt(obj["info"], x => c.readList(x, toApplicationSet_spec_generators_matrix_generators_clusters_template_spec_info)),
+    project: c.checkStr(obj["project"]),
+    revisionHistoryLimit: c.readOpt(obj["revisionHistoryLimit"], c.checkNum),
+    source: c.readOpt(obj["source"], toApplicationSet_spec_generators_matrix_generators_clusters_template_spec_source),
+    sources: c.readOpt(obj["sources"], x => c.readList(x, toApplicationSet_spec_generators_matrix_generators_clusters_template_spec_sources)),
+    syncPolicy: c.readOpt(obj["syncPolicy"], toApplicationSet_spec_generators_matrix_generators_clusters_template_spec_syncPolicy),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_git_template_metadata(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    annotations: c.readOpt(obj["annotations"], x => c.readMap(x, c.checkStr)),
+    finalizers: c.readOpt(obj["finalizers"], x => c.readList(x, c.checkStr)),
+    labels: c.readOpt(obj["labels"], x => c.readMap(x, c.checkStr)),
+    name: c.readOpt(obj["name"], c.checkStr),
+    namespace: c.readOpt(obj["namespace"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_git_template_spec(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    destination: toApplicationSet_spec_generators_matrix_generators_git_template_spec_destination(obj["destination"]),
+    ignoreDifferences: c.readOpt(obj["ignoreDifferences"], x => c.readList(x, toApplicationSet_spec_generators_matrix_generators_git_template_spec_ignoreDifferences)),
+    info: c.readOpt(obj["info"], x => c.readList(x, toApplicationSet_spec_generators_matrix_generators_git_template_spec_info)),
+    project: c.checkStr(obj["project"]),
+    revisionHistoryLimit: c.readOpt(obj["revisionHistoryLimit"], c.checkNum),
+    source: c.readOpt(obj["source"], toApplicationSet_spec_generators_matrix_generators_git_template_spec_source),
+    sources: c.readOpt(obj["sources"], x => c.readList(x, toApplicationSet_spec_generators_matrix_generators_git_template_spec_sources)),
+    syncPolicy: c.readOpt(obj["syncPolicy"], toApplicationSet_spec_generators_matrix_generators_git_template_spec_syncPolicy),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_list_template_metadata(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    annotations: c.readOpt(obj["annotations"], x => c.readMap(x, c.checkStr)),
+    finalizers: c.readOpt(obj["finalizers"], x => c.readList(x, c.checkStr)),
+    labels: c.readOpt(obj["labels"], x => c.readMap(x, c.checkStr)),
+    name: c.readOpt(obj["name"], c.checkStr),
+    namespace: c.readOpt(obj["namespace"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_list_template_spec(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    destination: toApplicationSet_spec_generators_matrix_generators_list_template_spec_destination(obj["destination"]),
+    ignoreDifferences: c.readOpt(obj["ignoreDifferences"], x => c.readList(x, toApplicationSet_spec_generators_matrix_generators_list_template_spec_ignoreDifferences)),
+    info: c.readOpt(obj["info"], x => c.readList(x, toApplicationSet_spec_generators_matrix_generators_list_template_spec_info)),
+    project: c.checkStr(obj["project"]),
+    revisionHistoryLimit: c.readOpt(obj["revisionHistoryLimit"], c.checkNum),
+    source: c.readOpt(obj["source"], toApplicationSet_spec_generators_matrix_generators_list_template_spec_source),
+    sources: c.readOpt(obj["sources"], x => c.readList(x, toApplicationSet_spec_generators_matrix_generators_list_template_spec_sources)),
+    syncPolicy: c.readOpt(obj["syncPolicy"], toApplicationSet_spec_generators_matrix_generators_list_template_spec_syncPolicy),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_pullRequest_bitbucketServer_basicAuth(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    passwordRef: toApplicationSet_spec_generators_matrix_generators_pullRequest_bitbucketServer_basicAuth_passwordRef(obj["passwordRef"]),
+    username: c.checkStr(obj["username"]),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_pullRequest_gitea_tokenRef(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    key: c.checkStr(obj["key"]),
+    secretName: c.checkStr(obj["secretName"]),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_pullRequest_github_tokenRef(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    key: c.checkStr(obj["key"]),
+    secretName: c.checkStr(obj["secretName"]),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_pullRequest_gitlab_tokenRef(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    key: c.checkStr(obj["key"]),
+    secretName: c.checkStr(obj["secretName"]),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_pullRequest_template_metadata(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    annotations: c.readOpt(obj["annotations"], x => c.readMap(x, c.checkStr)),
+    finalizers: c.readOpt(obj["finalizers"], x => c.readList(x, c.checkStr)),
+    labels: c.readOpt(obj["labels"], x => c.readMap(x, c.checkStr)),
+    name: c.readOpt(obj["name"], c.checkStr),
+    namespace: c.readOpt(obj["namespace"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_pullRequest_template_spec(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    destination: toApplicationSet_spec_generators_matrix_generators_pullRequest_template_spec_destination(obj["destination"]),
+    ignoreDifferences: c.readOpt(obj["ignoreDifferences"], x => c.readList(x, toApplicationSet_spec_generators_matrix_generators_pullRequest_template_spec_ignoreDifferences)),
+    info: c.readOpt(obj["info"], x => c.readList(x, toApplicationSet_spec_generators_matrix_generators_pullRequest_template_spec_info)),
+    project: c.checkStr(obj["project"]),
+    revisionHistoryLimit: c.readOpt(obj["revisionHistoryLimit"], c.checkNum),
+    source: c.readOpt(obj["source"], toApplicationSet_spec_generators_matrix_generators_pullRequest_template_spec_source),
+    sources: c.readOpt(obj["sources"], x => c.readList(x, toApplicationSet_spec_generators_matrix_generators_pullRequest_template_spec_sources)),
+    syncPolicy: c.readOpt(obj["syncPolicy"], toApplicationSet_spec_generators_matrix_generators_pullRequest_template_spec_syncPolicy),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_scmProvider_azureDevOps_accessTokenRef(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    key: c.checkStr(obj["key"]),
+    secretName: c.checkStr(obj["secretName"]),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_scmProvider_bitbucket_appPasswordRef(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    key: c.checkStr(obj["key"]),
+    secretName: c.checkStr(obj["secretName"]),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_scmProvider_bitbucketServer_basicAuth(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    passwordRef: toApplicationSet_spec_generators_matrix_generators_scmProvider_bitbucketServer_basicAuth_passwordRef(obj["passwordRef"]),
+    username: c.checkStr(obj["username"]),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_scmProvider_gitea_tokenRef(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    key: c.checkStr(obj["key"]),
+    secretName: c.checkStr(obj["secretName"]),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_scmProvider_github_tokenRef(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    key: c.checkStr(obj["key"]),
+    secretName: c.checkStr(obj["secretName"]),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_scmProvider_gitlab_tokenRef(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    key: c.checkStr(obj["key"]),
+    secretName: c.checkStr(obj["secretName"]),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_scmProvider_template_metadata(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    annotations: c.readOpt(obj["annotations"], x => c.readMap(x, c.checkStr)),
+    finalizers: c.readOpt(obj["finalizers"], x => c.readList(x, c.checkStr)),
+    labels: c.readOpt(obj["labels"], x => c.readMap(x, c.checkStr)),
+    name: c.readOpt(obj["name"], c.checkStr),
+    namespace: c.readOpt(obj["namespace"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_scmProvider_template_spec(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    destination: toApplicationSet_spec_generators_matrix_generators_scmProvider_template_spec_destination(obj["destination"]),
+    ignoreDifferences: c.readOpt(obj["ignoreDifferences"], x => c.readList(x, toApplicationSet_spec_generators_matrix_generators_scmProvider_template_spec_ignoreDifferences)),
+    info: c.readOpt(obj["info"], x => c.readList(x, toApplicationSet_spec_generators_matrix_generators_scmProvider_template_spec_info)),
+    project: c.checkStr(obj["project"]),
+    revisionHistoryLimit: c.readOpt(obj["revisionHistoryLimit"], c.checkNum),
+    source: c.readOpt(obj["source"], toApplicationSet_spec_generators_matrix_generators_scmProvider_template_spec_source),
+    sources: c.readOpt(obj["sources"], x => c.readList(x, toApplicationSet_spec_generators_matrix_generators_scmProvider_template_spec_sources)),
+    syncPolicy: c.readOpt(obj["syncPolicy"], toApplicationSet_spec_generators_matrix_generators_scmProvider_template_spec_syncPolicy),
+  }}
+export function toApplicationSet_spec_generators_matrix_template_spec_source_directory(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    exclude: c.readOpt(obj["exclude"], c.checkStr),
+    include: c.readOpt(obj["include"], c.checkStr),
+    jsonnet: c.readOpt(obj["jsonnet"], toApplicationSet_spec_generators_matrix_template_spec_source_directory_jsonnet),
+    recurse: c.readOpt(obj["recurse"], c.checkBool),
+  }}
+export function toApplicationSet_spec_generators_matrix_template_spec_source_helm(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    fileParameters: c.readOpt(obj["fileParameters"], x => c.readList(x, toApplicationSet_spec_generators_matrix_template_spec_source_helm_fileParameters)),
+    ignoreMissingValueFiles: c.readOpt(obj["ignoreMissingValueFiles"], c.checkBool),
+    parameters: c.readOpt(obj["parameters"], x => c.readList(x, toApplicationSet_spec_generators_matrix_template_spec_source_helm_parameters)),
+    passCredentials: c.readOpt(obj["passCredentials"], c.checkBool),
+    releaseName: c.readOpt(obj["releaseName"], c.checkStr),
+    skipCrds: c.readOpt(obj["skipCrds"], c.checkBool),
+    valueFiles: c.readOpt(obj["valueFiles"], x => c.readList(x, c.checkStr)),
+    values: c.readOpt(obj["values"], c.checkStr),
+    version: c.readOpt(obj["version"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_matrix_template_spec_source_kustomize(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    commonAnnotations: c.readOpt(obj["commonAnnotations"], x => c.readMap(x, c.checkStr)),
+    commonLabels: c.readOpt(obj["commonLabels"], x => c.readMap(x, c.checkStr)),
+    forceCommonAnnotations: c.readOpt(obj["forceCommonAnnotations"], c.checkBool),
+    forceCommonLabels: c.readOpt(obj["forceCommonLabels"], c.checkBool),
+    images: c.readOpt(obj["images"], x => c.readList(x, c.checkStr)),
+    namePrefix: c.readOpt(obj["namePrefix"], c.checkStr),
+    nameSuffix: c.readOpt(obj["nameSuffix"], c.checkStr),
+    version: c.readOpt(obj["version"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_matrix_template_spec_source_plugin(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    env: c.readOpt(obj["env"], x => c.readList(x, toApplicationSet_spec_generators_matrix_template_spec_source_plugin_env)),
+    name: c.readOpt(obj["name"], c.checkStr),
+    parameters: c.readOpt(obj["parameters"], x => c.readList(x, toApplicationSet_spec_generators_matrix_template_spec_source_plugin_parameters)),
+  }}
+export function toApplicationSet_spec_generators_matrix_template_spec_sources_directory(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    exclude: c.readOpt(obj["exclude"], c.checkStr),
+    include: c.readOpt(obj["include"], c.checkStr),
+    jsonnet: c.readOpt(obj["jsonnet"], toApplicationSet_spec_generators_matrix_template_spec_sources_directory_jsonnet),
+    recurse: c.readOpt(obj["recurse"], c.checkBool),
+  }}
+export function toApplicationSet_spec_generators_matrix_template_spec_sources_helm(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    fileParameters: c.readOpt(obj["fileParameters"], x => c.readList(x, toApplicationSet_spec_generators_matrix_template_spec_sources_helm_fileParameters)),
+    ignoreMissingValueFiles: c.readOpt(obj["ignoreMissingValueFiles"], c.checkBool),
+    parameters: c.readOpt(obj["parameters"], x => c.readList(x, toApplicationSet_spec_generators_matrix_template_spec_sources_helm_parameters)),
+    passCredentials: c.readOpt(obj["passCredentials"], c.checkBool),
+    releaseName: c.readOpt(obj["releaseName"], c.checkStr),
+    skipCrds: c.readOpt(obj["skipCrds"], c.checkBool),
+    valueFiles: c.readOpt(obj["valueFiles"], x => c.readList(x, c.checkStr)),
+    values: c.readOpt(obj["values"], c.checkStr),
+    version: c.readOpt(obj["version"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_matrix_template_spec_sources_kustomize(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    commonAnnotations: c.readOpt(obj["commonAnnotations"], x => c.readMap(x, c.checkStr)),
+    commonLabels: c.readOpt(obj["commonLabels"], x => c.readMap(x, c.checkStr)),
+    forceCommonAnnotations: c.readOpt(obj["forceCommonAnnotations"], c.checkBool),
+    forceCommonLabels: c.readOpt(obj["forceCommonLabels"], c.checkBool),
+    images: c.readOpt(obj["images"], x => c.readList(x, c.checkStr)),
+    namePrefix: c.readOpt(obj["namePrefix"], c.checkStr),
+    nameSuffix: c.readOpt(obj["nameSuffix"], c.checkStr),
+    version: c.readOpt(obj["version"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_matrix_template_spec_sources_plugin(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    env: c.readOpt(obj["env"], x => c.readList(x, toApplicationSet_spec_generators_matrix_template_spec_sources_plugin_env)),
+    name: c.readOpt(obj["name"], c.checkStr),
+    parameters: c.readOpt(obj["parameters"], x => c.readList(x, toApplicationSet_spec_generators_matrix_template_spec_sources_plugin_parameters)),
+  }}
+export function toApplicationSet_spec_generators_matrix_template_spec_syncPolicy_automated(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    allowEmpty: c.readOpt(obj["allowEmpty"], c.checkBool),
+    prune: c.readOpt(obj["prune"], c.checkBool),
+    selfHeal: c.readOpt(obj["selfHeal"], c.checkBool),
+  }}
+export function toApplicationSet_spec_generators_matrix_template_spec_syncPolicy_managedNamespaceMetadata(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    annotations: c.readOpt(obj["annotations"], x => c.readMap(x, c.checkStr)),
+    labels: c.readOpt(obj["labels"], x => c.readMap(x, c.checkStr)),
+  }}
+export function toApplicationSet_spec_generators_matrix_template_spec_syncPolicy_retry(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    backoff: c.readOpt(obj["backoff"], toApplicationSet_spec_generators_matrix_template_spec_syncPolicy_retry_backoff),
+    limit: c.readOpt(obj["limit"], c.checkNum),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_clusterDecisionResource_labelSelector_matchExpressions(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    key: c.checkStr(obj["key"]),
+    operator: c.checkStr(obj["operator"]),
+    values: c.readOpt(obj["values"], x => c.readList(x, c.checkStr)),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_clusterDecisionResource_template_metadata(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    annotations: c.readOpt(obj["annotations"], x => c.readMap(x, c.checkStr)),
+    finalizers: c.readOpt(obj["finalizers"], x => c.readList(x, c.checkStr)),
+    labels: c.readOpt(obj["labels"], x => c.readMap(x, c.checkStr)),
+    name: c.readOpt(obj["name"], c.checkStr),
+    namespace: c.readOpt(obj["namespace"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_clusterDecisionResource_template_spec(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    destination: toApplicationSet_spec_generators_merge_generators_clusterDecisionResource_template_spec_destination(obj["destination"]),
+    ignoreDifferences: c.readOpt(obj["ignoreDifferences"], x => c.readList(x, toApplicationSet_spec_generators_merge_generators_clusterDecisionResource_template_spec_ignoreDifferences)),
+    info: c.readOpt(obj["info"], x => c.readList(x, toApplicationSet_spec_generators_merge_generators_clusterDecisionResource_template_spec_info)),
+    project: c.checkStr(obj["project"]),
+    revisionHistoryLimit: c.readOpt(obj["revisionHistoryLimit"], c.checkNum),
+    source: c.readOpt(obj["source"], toApplicationSet_spec_generators_merge_generators_clusterDecisionResource_template_spec_source),
+    sources: c.readOpt(obj["sources"], x => c.readList(x, toApplicationSet_spec_generators_merge_generators_clusterDecisionResource_template_spec_sources)),
+    syncPolicy: c.readOpt(obj["syncPolicy"], toApplicationSet_spec_generators_merge_generators_clusterDecisionResource_template_spec_syncPolicy),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_clusters_selector_matchExpressions(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    key: c.checkStr(obj["key"]),
+    operator: c.checkStr(obj["operator"]),
+    values: c.readOpt(obj["values"], x => c.readList(x, c.checkStr)),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_clusters_template_metadata(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    annotations: c.readOpt(obj["annotations"], x => c.readMap(x, c.checkStr)),
+    finalizers: c.readOpt(obj["finalizers"], x => c.readList(x, c.checkStr)),
+    labels: c.readOpt(obj["labels"], x => c.readMap(x, c.checkStr)),
+    name: c.readOpt(obj["name"], c.checkStr),
+    namespace: c.readOpt(obj["namespace"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_clusters_template_spec(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    destination: toApplicationSet_spec_generators_merge_generators_clusters_template_spec_destination(obj["destination"]),
+    ignoreDifferences: c.readOpt(obj["ignoreDifferences"], x => c.readList(x, toApplicationSet_spec_generators_merge_generators_clusters_template_spec_ignoreDifferences)),
+    info: c.readOpt(obj["info"], x => c.readList(x, toApplicationSet_spec_generators_merge_generators_clusters_template_spec_info)),
+    project: c.checkStr(obj["project"]),
+    revisionHistoryLimit: c.readOpt(obj["revisionHistoryLimit"], c.checkNum),
+    source: c.readOpt(obj["source"], toApplicationSet_spec_generators_merge_generators_clusters_template_spec_source),
+    sources: c.readOpt(obj["sources"], x => c.readList(x, toApplicationSet_spec_generators_merge_generators_clusters_template_spec_sources)),
+    syncPolicy: c.readOpt(obj["syncPolicy"], toApplicationSet_spec_generators_merge_generators_clusters_template_spec_syncPolicy),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_git_template_metadata(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    annotations: c.readOpt(obj["annotations"], x => c.readMap(x, c.checkStr)),
+    finalizers: c.readOpt(obj["finalizers"], x => c.readList(x, c.checkStr)),
+    labels: c.readOpt(obj["labels"], x => c.readMap(x, c.checkStr)),
+    name: c.readOpt(obj["name"], c.checkStr),
+    namespace: c.readOpt(obj["namespace"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_git_template_spec(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    destination: toApplicationSet_spec_generators_merge_generators_git_template_spec_destination(obj["destination"]),
+    ignoreDifferences: c.readOpt(obj["ignoreDifferences"], x => c.readList(x, toApplicationSet_spec_generators_merge_generators_git_template_spec_ignoreDifferences)),
+    info: c.readOpt(obj["info"], x => c.readList(x, toApplicationSet_spec_generators_merge_generators_git_template_spec_info)),
+    project: c.checkStr(obj["project"]),
+    revisionHistoryLimit: c.readOpt(obj["revisionHistoryLimit"], c.checkNum),
+    source: c.readOpt(obj["source"], toApplicationSet_spec_generators_merge_generators_git_template_spec_source),
+    sources: c.readOpt(obj["sources"], x => c.readList(x, toApplicationSet_spec_generators_merge_generators_git_template_spec_sources)),
+    syncPolicy: c.readOpt(obj["syncPolicy"], toApplicationSet_spec_generators_merge_generators_git_template_spec_syncPolicy),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_list_template_metadata(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    annotations: c.readOpt(obj["annotations"], x => c.readMap(x, c.checkStr)),
+    finalizers: c.readOpt(obj["finalizers"], x => c.readList(x, c.checkStr)),
+    labels: c.readOpt(obj["labels"], x => c.readMap(x, c.checkStr)),
+    name: c.readOpt(obj["name"], c.checkStr),
+    namespace: c.readOpt(obj["namespace"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_list_template_spec(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    destination: toApplicationSet_spec_generators_merge_generators_list_template_spec_destination(obj["destination"]),
+    ignoreDifferences: c.readOpt(obj["ignoreDifferences"], x => c.readList(x, toApplicationSet_spec_generators_merge_generators_list_template_spec_ignoreDifferences)),
+    info: c.readOpt(obj["info"], x => c.readList(x, toApplicationSet_spec_generators_merge_generators_list_template_spec_info)),
+    project: c.checkStr(obj["project"]),
+    revisionHistoryLimit: c.readOpt(obj["revisionHistoryLimit"], c.checkNum),
+    source: c.readOpt(obj["source"], toApplicationSet_spec_generators_merge_generators_list_template_spec_source),
+    sources: c.readOpt(obj["sources"], x => c.readList(x, toApplicationSet_spec_generators_merge_generators_list_template_spec_sources)),
+    syncPolicy: c.readOpt(obj["syncPolicy"], toApplicationSet_spec_generators_merge_generators_list_template_spec_syncPolicy),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_pullRequest_bitbucketServer_basicAuth(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    passwordRef: toApplicationSet_spec_generators_merge_generators_pullRequest_bitbucketServer_basicAuth_passwordRef(obj["passwordRef"]),
+    username: c.checkStr(obj["username"]),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_pullRequest_gitea_tokenRef(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    key: c.checkStr(obj["key"]),
+    secretName: c.checkStr(obj["secretName"]),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_pullRequest_github_tokenRef(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    key: c.checkStr(obj["key"]),
+    secretName: c.checkStr(obj["secretName"]),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_pullRequest_gitlab_tokenRef(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    key: c.checkStr(obj["key"]),
+    secretName: c.checkStr(obj["secretName"]),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_pullRequest_template_metadata(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    annotations: c.readOpt(obj["annotations"], x => c.readMap(x, c.checkStr)),
+    finalizers: c.readOpt(obj["finalizers"], x => c.readList(x, c.checkStr)),
+    labels: c.readOpt(obj["labels"], x => c.readMap(x, c.checkStr)),
+    name: c.readOpt(obj["name"], c.checkStr),
+    namespace: c.readOpt(obj["namespace"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_pullRequest_template_spec(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    destination: toApplicationSet_spec_generators_merge_generators_pullRequest_template_spec_destination(obj["destination"]),
+    ignoreDifferences: c.readOpt(obj["ignoreDifferences"], x => c.readList(x, toApplicationSet_spec_generators_merge_generators_pullRequest_template_spec_ignoreDifferences)),
+    info: c.readOpt(obj["info"], x => c.readList(x, toApplicationSet_spec_generators_merge_generators_pullRequest_template_spec_info)),
+    project: c.checkStr(obj["project"]),
+    revisionHistoryLimit: c.readOpt(obj["revisionHistoryLimit"], c.checkNum),
+    source: c.readOpt(obj["source"], toApplicationSet_spec_generators_merge_generators_pullRequest_template_spec_source),
+    sources: c.readOpt(obj["sources"], x => c.readList(x, toApplicationSet_spec_generators_merge_generators_pullRequest_template_spec_sources)),
+    syncPolicy: c.readOpt(obj["syncPolicy"], toApplicationSet_spec_generators_merge_generators_pullRequest_template_spec_syncPolicy),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_scmProvider_azureDevOps_accessTokenRef(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    key: c.checkStr(obj["key"]),
+    secretName: c.checkStr(obj["secretName"]),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_scmProvider_bitbucket_appPasswordRef(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    key: c.checkStr(obj["key"]),
+    secretName: c.checkStr(obj["secretName"]),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_scmProvider_bitbucketServer_basicAuth(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    passwordRef: toApplicationSet_spec_generators_merge_generators_scmProvider_bitbucketServer_basicAuth_passwordRef(obj["passwordRef"]),
+    username: c.checkStr(obj["username"]),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_scmProvider_gitea_tokenRef(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    key: c.checkStr(obj["key"]),
+    secretName: c.checkStr(obj["secretName"]),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_scmProvider_github_tokenRef(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    key: c.checkStr(obj["key"]),
+    secretName: c.checkStr(obj["secretName"]),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_scmProvider_gitlab_tokenRef(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    key: c.checkStr(obj["key"]),
+    secretName: c.checkStr(obj["secretName"]),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_scmProvider_template_metadata(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    annotations: c.readOpt(obj["annotations"], x => c.readMap(x, c.checkStr)),
+    finalizers: c.readOpt(obj["finalizers"], x => c.readList(x, c.checkStr)),
+    labels: c.readOpt(obj["labels"], x => c.readMap(x, c.checkStr)),
+    name: c.readOpt(obj["name"], c.checkStr),
+    namespace: c.readOpt(obj["namespace"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_scmProvider_template_spec(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    destination: toApplicationSet_spec_generators_merge_generators_scmProvider_template_spec_destination(obj["destination"]),
+    ignoreDifferences: c.readOpt(obj["ignoreDifferences"], x => c.readList(x, toApplicationSet_spec_generators_merge_generators_scmProvider_template_spec_ignoreDifferences)),
+    info: c.readOpt(obj["info"], x => c.readList(x, toApplicationSet_spec_generators_merge_generators_scmProvider_template_spec_info)),
+    project: c.checkStr(obj["project"]),
+    revisionHistoryLimit: c.readOpt(obj["revisionHistoryLimit"], c.checkNum),
+    source: c.readOpt(obj["source"], toApplicationSet_spec_generators_merge_generators_scmProvider_template_spec_source),
+    sources: c.readOpt(obj["sources"], x => c.readList(x, toApplicationSet_spec_generators_merge_generators_scmProvider_template_spec_sources)),
+    syncPolicy: c.readOpt(obj["syncPolicy"], toApplicationSet_spec_generators_merge_generators_scmProvider_template_spec_syncPolicy),
+  }}
+export function toApplicationSet_spec_generators_merge_template_spec_source_directory(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    exclude: c.readOpt(obj["exclude"], c.checkStr),
+    include: c.readOpt(obj["include"], c.checkStr),
+    jsonnet: c.readOpt(obj["jsonnet"], toApplicationSet_spec_generators_merge_template_spec_source_directory_jsonnet),
+    recurse: c.readOpt(obj["recurse"], c.checkBool),
+  }}
+export function toApplicationSet_spec_generators_merge_template_spec_source_helm(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    fileParameters: c.readOpt(obj["fileParameters"], x => c.readList(x, toApplicationSet_spec_generators_merge_template_spec_source_helm_fileParameters)),
+    ignoreMissingValueFiles: c.readOpt(obj["ignoreMissingValueFiles"], c.checkBool),
+    parameters: c.readOpt(obj["parameters"], x => c.readList(x, toApplicationSet_spec_generators_merge_template_spec_source_helm_parameters)),
+    passCredentials: c.readOpt(obj["passCredentials"], c.checkBool),
+    releaseName: c.readOpt(obj["releaseName"], c.checkStr),
+    skipCrds: c.readOpt(obj["skipCrds"], c.checkBool),
+    valueFiles: c.readOpt(obj["valueFiles"], x => c.readList(x, c.checkStr)),
+    values: c.readOpt(obj["values"], c.checkStr),
+    version: c.readOpt(obj["version"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_merge_template_spec_source_kustomize(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    commonAnnotations: c.readOpt(obj["commonAnnotations"], x => c.readMap(x, c.checkStr)),
+    commonLabels: c.readOpt(obj["commonLabels"], x => c.readMap(x, c.checkStr)),
+    forceCommonAnnotations: c.readOpt(obj["forceCommonAnnotations"], c.checkBool),
+    forceCommonLabels: c.readOpt(obj["forceCommonLabels"], c.checkBool),
+    images: c.readOpt(obj["images"], x => c.readList(x, c.checkStr)),
+    namePrefix: c.readOpt(obj["namePrefix"], c.checkStr),
+    nameSuffix: c.readOpt(obj["nameSuffix"], c.checkStr),
+    version: c.readOpt(obj["version"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_merge_template_spec_source_plugin(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    env: c.readOpt(obj["env"], x => c.readList(x, toApplicationSet_spec_generators_merge_template_spec_source_plugin_env)),
+    name: c.readOpt(obj["name"], c.checkStr),
+    parameters: c.readOpt(obj["parameters"], x => c.readList(x, toApplicationSet_spec_generators_merge_template_spec_source_plugin_parameters)),
+  }}
+export function toApplicationSet_spec_generators_merge_template_spec_sources_directory(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    exclude: c.readOpt(obj["exclude"], c.checkStr),
+    include: c.readOpt(obj["include"], c.checkStr),
+    jsonnet: c.readOpt(obj["jsonnet"], toApplicationSet_spec_generators_merge_template_spec_sources_directory_jsonnet),
+    recurse: c.readOpt(obj["recurse"], c.checkBool),
+  }}
+export function toApplicationSet_spec_generators_merge_template_spec_sources_helm(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    fileParameters: c.readOpt(obj["fileParameters"], x => c.readList(x, toApplicationSet_spec_generators_merge_template_spec_sources_helm_fileParameters)),
+    ignoreMissingValueFiles: c.readOpt(obj["ignoreMissingValueFiles"], c.checkBool),
+    parameters: c.readOpt(obj["parameters"], x => c.readList(x, toApplicationSet_spec_generators_merge_template_spec_sources_helm_parameters)),
+    passCredentials: c.readOpt(obj["passCredentials"], c.checkBool),
+    releaseName: c.readOpt(obj["releaseName"], c.checkStr),
+    skipCrds: c.readOpt(obj["skipCrds"], c.checkBool),
+    valueFiles: c.readOpt(obj["valueFiles"], x => c.readList(x, c.checkStr)),
+    values: c.readOpt(obj["values"], c.checkStr),
+    version: c.readOpt(obj["version"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_merge_template_spec_sources_kustomize(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    commonAnnotations: c.readOpt(obj["commonAnnotations"], x => c.readMap(x, c.checkStr)),
+    commonLabels: c.readOpt(obj["commonLabels"], x => c.readMap(x, c.checkStr)),
+    forceCommonAnnotations: c.readOpt(obj["forceCommonAnnotations"], c.checkBool),
+    forceCommonLabels: c.readOpt(obj["forceCommonLabels"], c.checkBool),
+    images: c.readOpt(obj["images"], x => c.readList(x, c.checkStr)),
+    namePrefix: c.readOpt(obj["namePrefix"], c.checkStr),
+    nameSuffix: c.readOpt(obj["nameSuffix"], c.checkStr),
+    version: c.readOpt(obj["version"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_merge_template_spec_sources_plugin(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    env: c.readOpt(obj["env"], x => c.readList(x, toApplicationSet_spec_generators_merge_template_spec_sources_plugin_env)),
+    name: c.readOpt(obj["name"], c.checkStr),
+    parameters: c.readOpt(obj["parameters"], x => c.readList(x, toApplicationSet_spec_generators_merge_template_spec_sources_plugin_parameters)),
+  }}
+export function toApplicationSet_spec_generators_merge_template_spec_syncPolicy_automated(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    allowEmpty: c.readOpt(obj["allowEmpty"], c.checkBool),
+    prune: c.readOpt(obj["prune"], c.checkBool),
+    selfHeal: c.readOpt(obj["selfHeal"], c.checkBool),
+  }}
+export function toApplicationSet_spec_generators_merge_template_spec_syncPolicy_managedNamespaceMetadata(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    annotations: c.readOpt(obj["annotations"], x => c.readMap(x, c.checkStr)),
+    labels: c.readOpt(obj["labels"], x => c.readMap(x, c.checkStr)),
+  }}
+export function toApplicationSet_spec_generators_merge_template_spec_syncPolicy_retry(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    backoff: c.readOpt(obj["backoff"], toApplicationSet_spec_generators_merge_template_spec_syncPolicy_retry_backoff),
+    limit: c.readOpt(obj["limit"], c.checkNum),
+  }}
+export function toApplicationSet_spec_generators_pullRequest_template_spec_source_directory(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    exclude: c.readOpt(obj["exclude"], c.checkStr),
+    include: c.readOpt(obj["include"], c.checkStr),
+    jsonnet: c.readOpt(obj["jsonnet"], toApplicationSet_spec_generators_pullRequest_template_spec_source_directory_jsonnet),
+    recurse: c.readOpt(obj["recurse"], c.checkBool),
+  }}
+export function toApplicationSet_spec_generators_pullRequest_template_spec_source_helm(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    fileParameters: c.readOpt(obj["fileParameters"], x => c.readList(x, toApplicationSet_spec_generators_pullRequest_template_spec_source_helm_fileParameters)),
+    ignoreMissingValueFiles: c.readOpt(obj["ignoreMissingValueFiles"], c.checkBool),
+    parameters: c.readOpt(obj["parameters"], x => c.readList(x, toApplicationSet_spec_generators_pullRequest_template_spec_source_helm_parameters)),
+    passCredentials: c.readOpt(obj["passCredentials"], c.checkBool),
+    releaseName: c.readOpt(obj["releaseName"], c.checkStr),
+    skipCrds: c.readOpt(obj["skipCrds"], c.checkBool),
+    valueFiles: c.readOpt(obj["valueFiles"], x => c.readList(x, c.checkStr)),
+    values: c.readOpt(obj["values"], c.checkStr),
+    version: c.readOpt(obj["version"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_pullRequest_template_spec_source_kustomize(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    commonAnnotations: c.readOpt(obj["commonAnnotations"], x => c.readMap(x, c.checkStr)),
+    commonLabels: c.readOpt(obj["commonLabels"], x => c.readMap(x, c.checkStr)),
+    forceCommonAnnotations: c.readOpt(obj["forceCommonAnnotations"], c.checkBool),
+    forceCommonLabels: c.readOpt(obj["forceCommonLabels"], c.checkBool),
+    images: c.readOpt(obj["images"], x => c.readList(x, c.checkStr)),
+    namePrefix: c.readOpt(obj["namePrefix"], c.checkStr),
+    nameSuffix: c.readOpt(obj["nameSuffix"], c.checkStr),
+    version: c.readOpt(obj["version"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_pullRequest_template_spec_source_plugin(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    env: c.readOpt(obj["env"], x => c.readList(x, toApplicationSet_spec_generators_pullRequest_template_spec_source_plugin_env)),
+    name: c.readOpt(obj["name"], c.checkStr),
+    parameters: c.readOpt(obj["parameters"], x => c.readList(x, toApplicationSet_spec_generators_pullRequest_template_spec_source_plugin_parameters)),
+  }}
+export function toApplicationSet_spec_generators_pullRequest_template_spec_sources_directory(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    exclude: c.readOpt(obj["exclude"], c.checkStr),
+    include: c.readOpt(obj["include"], c.checkStr),
+    jsonnet: c.readOpt(obj["jsonnet"], toApplicationSet_spec_generators_pullRequest_template_spec_sources_directory_jsonnet),
+    recurse: c.readOpt(obj["recurse"], c.checkBool),
+  }}
+export function toApplicationSet_spec_generators_pullRequest_template_spec_sources_helm(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    fileParameters: c.readOpt(obj["fileParameters"], x => c.readList(x, toApplicationSet_spec_generators_pullRequest_template_spec_sources_helm_fileParameters)),
+    ignoreMissingValueFiles: c.readOpt(obj["ignoreMissingValueFiles"], c.checkBool),
+    parameters: c.readOpt(obj["parameters"], x => c.readList(x, toApplicationSet_spec_generators_pullRequest_template_spec_sources_helm_parameters)),
+    passCredentials: c.readOpt(obj["passCredentials"], c.checkBool),
+    releaseName: c.readOpt(obj["releaseName"], c.checkStr),
+    skipCrds: c.readOpt(obj["skipCrds"], c.checkBool),
+    valueFiles: c.readOpt(obj["valueFiles"], x => c.readList(x, c.checkStr)),
+    values: c.readOpt(obj["values"], c.checkStr),
+    version: c.readOpt(obj["version"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_pullRequest_template_spec_sources_kustomize(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    commonAnnotations: c.readOpt(obj["commonAnnotations"], x => c.readMap(x, c.checkStr)),
+    commonLabels: c.readOpt(obj["commonLabels"], x => c.readMap(x, c.checkStr)),
+    forceCommonAnnotations: c.readOpt(obj["forceCommonAnnotations"], c.checkBool),
+    forceCommonLabels: c.readOpt(obj["forceCommonLabels"], c.checkBool),
+    images: c.readOpt(obj["images"], x => c.readList(x, c.checkStr)),
+    namePrefix: c.readOpt(obj["namePrefix"], c.checkStr),
+    nameSuffix: c.readOpt(obj["nameSuffix"], c.checkStr),
+    version: c.readOpt(obj["version"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_pullRequest_template_spec_sources_plugin(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    env: c.readOpt(obj["env"], x => c.readList(x, toApplicationSet_spec_generators_pullRequest_template_spec_sources_plugin_env)),
+    name: c.readOpt(obj["name"], c.checkStr),
+    parameters: c.readOpt(obj["parameters"], x => c.readList(x, toApplicationSet_spec_generators_pullRequest_template_spec_sources_plugin_parameters)),
+  }}
+export function toApplicationSet_spec_generators_pullRequest_template_spec_syncPolicy_automated(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    allowEmpty: c.readOpt(obj["allowEmpty"], c.checkBool),
+    prune: c.readOpt(obj["prune"], c.checkBool),
+    selfHeal: c.readOpt(obj["selfHeal"], c.checkBool),
+  }}
+export function toApplicationSet_spec_generators_pullRequest_template_spec_syncPolicy_managedNamespaceMetadata(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    annotations: c.readOpt(obj["annotations"], x => c.readMap(x, c.checkStr)),
+    labels: c.readOpt(obj["labels"], x => c.readMap(x, c.checkStr)),
+  }}
+export function toApplicationSet_spec_generators_pullRequest_template_spec_syncPolicy_retry(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    backoff: c.readOpt(obj["backoff"], toApplicationSet_spec_generators_pullRequest_template_spec_syncPolicy_retry_backoff),
+    limit: c.readOpt(obj["limit"], c.checkNum),
+  }}
+export function toApplicationSet_spec_generators_scmProvider_template_spec_source_directory(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    exclude: c.readOpt(obj["exclude"], c.checkStr),
+    include: c.readOpt(obj["include"], c.checkStr),
+    jsonnet: c.readOpt(obj["jsonnet"], toApplicationSet_spec_generators_scmProvider_template_spec_source_directory_jsonnet),
+    recurse: c.readOpt(obj["recurse"], c.checkBool),
+  }}
+export function toApplicationSet_spec_generators_scmProvider_template_spec_source_helm(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    fileParameters: c.readOpt(obj["fileParameters"], x => c.readList(x, toApplicationSet_spec_generators_scmProvider_template_spec_source_helm_fileParameters)),
+    ignoreMissingValueFiles: c.readOpt(obj["ignoreMissingValueFiles"], c.checkBool),
+    parameters: c.readOpt(obj["parameters"], x => c.readList(x, toApplicationSet_spec_generators_scmProvider_template_spec_source_helm_parameters)),
+    passCredentials: c.readOpt(obj["passCredentials"], c.checkBool),
+    releaseName: c.readOpt(obj["releaseName"], c.checkStr),
+    skipCrds: c.readOpt(obj["skipCrds"], c.checkBool),
+    valueFiles: c.readOpt(obj["valueFiles"], x => c.readList(x, c.checkStr)),
+    values: c.readOpt(obj["values"], c.checkStr),
+    version: c.readOpt(obj["version"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_scmProvider_template_spec_source_kustomize(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    commonAnnotations: c.readOpt(obj["commonAnnotations"], x => c.readMap(x, c.checkStr)),
+    commonLabels: c.readOpt(obj["commonLabels"], x => c.readMap(x, c.checkStr)),
+    forceCommonAnnotations: c.readOpt(obj["forceCommonAnnotations"], c.checkBool),
+    forceCommonLabels: c.readOpt(obj["forceCommonLabels"], c.checkBool),
+    images: c.readOpt(obj["images"], x => c.readList(x, c.checkStr)),
+    namePrefix: c.readOpt(obj["namePrefix"], c.checkStr),
+    nameSuffix: c.readOpt(obj["nameSuffix"], c.checkStr),
+    version: c.readOpt(obj["version"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_scmProvider_template_spec_source_plugin(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    env: c.readOpt(obj["env"], x => c.readList(x, toApplicationSet_spec_generators_scmProvider_template_spec_source_plugin_env)),
+    name: c.readOpt(obj["name"], c.checkStr),
+    parameters: c.readOpt(obj["parameters"], x => c.readList(x, toApplicationSet_spec_generators_scmProvider_template_spec_source_plugin_parameters)),
+  }}
+export function toApplicationSet_spec_generators_scmProvider_template_spec_sources_directory(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    exclude: c.readOpt(obj["exclude"], c.checkStr),
+    include: c.readOpt(obj["include"], c.checkStr),
+    jsonnet: c.readOpt(obj["jsonnet"], toApplicationSet_spec_generators_scmProvider_template_spec_sources_directory_jsonnet),
+    recurse: c.readOpt(obj["recurse"], c.checkBool),
+  }}
+export function toApplicationSet_spec_generators_scmProvider_template_spec_sources_helm(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    fileParameters: c.readOpt(obj["fileParameters"], x => c.readList(x, toApplicationSet_spec_generators_scmProvider_template_spec_sources_helm_fileParameters)),
+    ignoreMissingValueFiles: c.readOpt(obj["ignoreMissingValueFiles"], c.checkBool),
+    parameters: c.readOpt(obj["parameters"], x => c.readList(x, toApplicationSet_spec_generators_scmProvider_template_spec_sources_helm_parameters)),
+    passCredentials: c.readOpt(obj["passCredentials"], c.checkBool),
+    releaseName: c.readOpt(obj["releaseName"], c.checkStr),
+    skipCrds: c.readOpt(obj["skipCrds"], c.checkBool),
+    valueFiles: c.readOpt(obj["valueFiles"], x => c.readList(x, c.checkStr)),
+    values: c.readOpt(obj["values"], c.checkStr),
+    version: c.readOpt(obj["version"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_scmProvider_template_spec_sources_kustomize(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    commonAnnotations: c.readOpt(obj["commonAnnotations"], x => c.readMap(x, c.checkStr)),
+    commonLabels: c.readOpt(obj["commonLabels"], x => c.readMap(x, c.checkStr)),
+    forceCommonAnnotations: c.readOpt(obj["forceCommonAnnotations"], c.checkBool),
+    forceCommonLabels: c.readOpt(obj["forceCommonLabels"], c.checkBool),
+    images: c.readOpt(obj["images"], x => c.readList(x, c.checkStr)),
+    namePrefix: c.readOpt(obj["namePrefix"], c.checkStr),
+    nameSuffix: c.readOpt(obj["nameSuffix"], c.checkStr),
+    version: c.readOpt(obj["version"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_scmProvider_template_spec_sources_plugin(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    env: c.readOpt(obj["env"], x => c.readList(x, toApplicationSet_spec_generators_scmProvider_template_spec_sources_plugin_env)),
+    name: c.readOpt(obj["name"], c.checkStr),
+    parameters: c.readOpt(obj["parameters"], x => c.readList(x, toApplicationSet_spec_generators_scmProvider_template_spec_sources_plugin_parameters)),
+  }}
+export function toApplicationSet_spec_generators_scmProvider_template_spec_syncPolicy_automated(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    allowEmpty: c.readOpt(obj["allowEmpty"], c.checkBool),
+    prune: c.readOpt(obj["prune"], c.checkBool),
+    selfHeal: c.readOpt(obj["selfHeal"], c.checkBool),
+  }}
+export function toApplicationSet_spec_generators_scmProvider_template_spec_syncPolicy_managedNamespaceMetadata(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    annotations: c.readOpt(obj["annotations"], x => c.readMap(x, c.checkStr)),
+    labels: c.readOpt(obj["labels"], x => c.readMap(x, c.checkStr)),
+  }}
+export function toApplicationSet_spec_generators_scmProvider_template_spec_syncPolicy_retry(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    backoff: c.readOpt(obj["backoff"], toApplicationSet_spec_generators_scmProvider_template_spec_syncPolicy_retry_backoff),
+    limit: c.readOpt(obj["limit"], c.checkNum),
+  }}
+export function toApplicationSet_spec_template_spec_source_directory_jsonnet_extVars(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    code: c.readOpt(obj["code"], c.checkBool),
+    name: c.checkStr(obj["name"]),
+    value: c.checkStr(obj["value"]),
+  }}
+export function toApplicationSet_spec_template_spec_source_directory_jsonnet_tlas(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    code: c.readOpt(obj["code"], c.checkBool),
+    name: c.checkStr(obj["name"]),
+    value: c.checkStr(obj["value"]),
+  }}
+export function toApplicationSet_spec_template_spec_sources_directory_jsonnet_extVars(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    code: c.readOpt(obj["code"], c.checkBool),
+    name: c.checkStr(obj["name"]),
+    value: c.checkStr(obj["value"]),
+  }}
+export function toApplicationSet_spec_template_spec_sources_directory_jsonnet_tlas(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    code: c.readOpt(obj["code"], c.checkBool),
+    name: c.checkStr(obj["name"]),
+    value: c.checkStr(obj["value"]),
+  }}
+export function toApplicationSet_spec_generators_clusterDecisionResource_template_spec_source_directory_jsonnet(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    extVars: c.readOpt(obj["extVars"], x => c.readList(x, toApplicationSet_spec_generators_clusterDecisionResource_template_spec_source_directory_jsonnet_extVars)),
+    libs: c.readOpt(obj["libs"], x => c.readList(x, c.checkStr)),
+    tlas: c.readOpt(obj["tlas"], x => c.readList(x, toApplicationSet_spec_generators_clusterDecisionResource_template_spec_source_directory_jsonnet_tlas)),
+  }}
+export function toApplicationSet_spec_generators_clusterDecisionResource_template_spec_source_helm_fileParameters(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    name: c.readOpt(obj["name"], c.checkStr),
+    path: c.readOpt(obj["path"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_clusterDecisionResource_template_spec_source_helm_parameters(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    forceString: c.readOpt(obj["forceString"], c.checkBool),
+    name: c.readOpt(obj["name"], c.checkStr),
+    value: c.readOpt(obj["value"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_clusterDecisionResource_template_spec_source_plugin_env(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    name: c.checkStr(obj["name"]),
+    value: c.checkStr(obj["value"]),
+  }}
+export function toApplicationSet_spec_generators_clusterDecisionResource_template_spec_source_plugin_parameters(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    array: c.readOpt(obj["array"], x => c.readList(x, c.checkStr)),
+    map: c.readOpt(obj["map"], x => c.readMap(x, c.checkStr)),
+    name: c.readOpt(obj["name"], c.checkStr),
+    string: c.readOpt(obj["string"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_clusterDecisionResource_template_spec_sources_directory_jsonnet(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    extVars: c.readOpt(obj["extVars"], x => c.readList(x, toApplicationSet_spec_generators_clusterDecisionResource_template_spec_sources_directory_jsonnet_extVars)),
+    libs: c.readOpt(obj["libs"], x => c.readList(x, c.checkStr)),
+    tlas: c.readOpt(obj["tlas"], x => c.readList(x, toApplicationSet_spec_generators_clusterDecisionResource_template_spec_sources_directory_jsonnet_tlas)),
+  }}
+export function toApplicationSet_spec_generators_clusterDecisionResource_template_spec_sources_helm_fileParameters(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    name: c.readOpt(obj["name"], c.checkStr),
+    path: c.readOpt(obj["path"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_clusterDecisionResource_template_spec_sources_helm_parameters(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    forceString: c.readOpt(obj["forceString"], c.checkBool),
+    name: c.readOpt(obj["name"], c.checkStr),
+    value: c.readOpt(obj["value"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_clusterDecisionResource_template_spec_sources_plugin_env(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    name: c.checkStr(obj["name"]),
+    value: c.checkStr(obj["value"]),
+  }}
+export function toApplicationSet_spec_generators_clusterDecisionResource_template_spec_sources_plugin_parameters(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    array: c.readOpt(obj["array"], x => c.readList(x, c.checkStr)),
+    map: c.readOpt(obj["map"], x => c.readMap(x, c.checkStr)),
+    name: c.readOpt(obj["name"], c.checkStr),
+    string: c.readOpt(obj["string"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_clusterDecisionResource_template_spec_syncPolicy_retry_backoff(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    duration: c.readOpt(obj["duration"], c.checkStr),
+    factor: c.readOpt(obj["factor"], c.checkNum),
+    maxDuration: c.readOpt(obj["maxDuration"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_clusters_template_spec_source_directory_jsonnet(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    extVars: c.readOpt(obj["extVars"], x => c.readList(x, toApplicationSet_spec_generators_clusters_template_spec_source_directory_jsonnet_extVars)),
+    libs: c.readOpt(obj["libs"], x => c.readList(x, c.checkStr)),
+    tlas: c.readOpt(obj["tlas"], x => c.readList(x, toApplicationSet_spec_generators_clusters_template_spec_source_directory_jsonnet_tlas)),
+  }}
+export function toApplicationSet_spec_generators_clusters_template_spec_source_helm_fileParameters(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    name: c.readOpt(obj["name"], c.checkStr),
+    path: c.readOpt(obj["path"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_clusters_template_spec_source_helm_parameters(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    forceString: c.readOpt(obj["forceString"], c.checkBool),
+    name: c.readOpt(obj["name"], c.checkStr),
+    value: c.readOpt(obj["value"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_clusters_template_spec_source_plugin_env(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    name: c.checkStr(obj["name"]),
+    value: c.checkStr(obj["value"]),
+  }}
+export function toApplicationSet_spec_generators_clusters_template_spec_source_plugin_parameters(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    array: c.readOpt(obj["array"], x => c.readList(x, c.checkStr)),
+    map: c.readOpt(obj["map"], x => c.readMap(x, c.checkStr)),
+    name: c.readOpt(obj["name"], c.checkStr),
+    string: c.readOpt(obj["string"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_clusters_template_spec_sources_directory_jsonnet(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    extVars: c.readOpt(obj["extVars"], x => c.readList(x, toApplicationSet_spec_generators_clusters_template_spec_sources_directory_jsonnet_extVars)),
+    libs: c.readOpt(obj["libs"], x => c.readList(x, c.checkStr)),
+    tlas: c.readOpt(obj["tlas"], x => c.readList(x, toApplicationSet_spec_generators_clusters_template_spec_sources_directory_jsonnet_tlas)),
+  }}
+export function toApplicationSet_spec_generators_clusters_template_spec_sources_helm_fileParameters(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    name: c.readOpt(obj["name"], c.checkStr),
+    path: c.readOpt(obj["path"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_clusters_template_spec_sources_helm_parameters(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    forceString: c.readOpt(obj["forceString"], c.checkBool),
+    name: c.readOpt(obj["name"], c.checkStr),
+    value: c.readOpt(obj["value"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_clusters_template_spec_sources_plugin_env(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    name: c.checkStr(obj["name"]),
+    value: c.checkStr(obj["value"]),
+  }}
+export function toApplicationSet_spec_generators_clusters_template_spec_sources_plugin_parameters(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    array: c.readOpt(obj["array"], x => c.readList(x, c.checkStr)),
+    map: c.readOpt(obj["map"], x => c.readMap(x, c.checkStr)),
+    name: c.readOpt(obj["name"], c.checkStr),
+    string: c.readOpt(obj["string"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_clusters_template_spec_syncPolicy_retry_backoff(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    duration: c.readOpt(obj["duration"], c.checkStr),
+    factor: c.readOpt(obj["factor"], c.checkNum),
+    maxDuration: c.readOpt(obj["maxDuration"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_git_template_spec_source_directory_jsonnet(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    extVars: c.readOpt(obj["extVars"], x => c.readList(x, toApplicationSet_spec_generators_git_template_spec_source_directory_jsonnet_extVars)),
+    libs: c.readOpt(obj["libs"], x => c.readList(x, c.checkStr)),
+    tlas: c.readOpt(obj["tlas"], x => c.readList(x, toApplicationSet_spec_generators_git_template_spec_source_directory_jsonnet_tlas)),
+  }}
+export function toApplicationSet_spec_generators_git_template_spec_source_helm_fileParameters(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    name: c.readOpt(obj["name"], c.checkStr),
+    path: c.readOpt(obj["path"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_git_template_spec_source_helm_parameters(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    forceString: c.readOpt(obj["forceString"], c.checkBool),
+    name: c.readOpt(obj["name"], c.checkStr),
+    value: c.readOpt(obj["value"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_git_template_spec_source_plugin_env(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    name: c.checkStr(obj["name"]),
+    value: c.checkStr(obj["value"]),
+  }}
+export function toApplicationSet_spec_generators_git_template_spec_source_plugin_parameters(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    array: c.readOpt(obj["array"], x => c.readList(x, c.checkStr)),
+    map: c.readOpt(obj["map"], x => c.readMap(x, c.checkStr)),
+    name: c.readOpt(obj["name"], c.checkStr),
+    string: c.readOpt(obj["string"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_git_template_spec_sources_directory_jsonnet(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    extVars: c.readOpt(obj["extVars"], x => c.readList(x, toApplicationSet_spec_generators_git_template_spec_sources_directory_jsonnet_extVars)),
+    libs: c.readOpt(obj["libs"], x => c.readList(x, c.checkStr)),
+    tlas: c.readOpt(obj["tlas"], x => c.readList(x, toApplicationSet_spec_generators_git_template_spec_sources_directory_jsonnet_tlas)),
+  }}
+export function toApplicationSet_spec_generators_git_template_spec_sources_helm_fileParameters(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    name: c.readOpt(obj["name"], c.checkStr),
+    path: c.readOpt(obj["path"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_git_template_spec_sources_helm_parameters(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    forceString: c.readOpt(obj["forceString"], c.checkBool),
+    name: c.readOpt(obj["name"], c.checkStr),
+    value: c.readOpt(obj["value"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_git_template_spec_sources_plugin_env(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    name: c.checkStr(obj["name"]),
+    value: c.checkStr(obj["value"]),
+  }}
+export function toApplicationSet_spec_generators_git_template_spec_sources_plugin_parameters(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    array: c.readOpt(obj["array"], x => c.readList(x, c.checkStr)),
+    map: c.readOpt(obj["map"], x => c.readMap(x, c.checkStr)),
+    name: c.readOpt(obj["name"], c.checkStr),
+    string: c.readOpt(obj["string"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_git_template_spec_syncPolicy_retry_backoff(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    duration: c.readOpt(obj["duration"], c.checkStr),
+    factor: c.readOpt(obj["factor"], c.checkNum),
+    maxDuration: c.readOpt(obj["maxDuration"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_list_template_spec_source_directory_jsonnet(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    extVars: c.readOpt(obj["extVars"], x => c.readList(x, toApplicationSet_spec_generators_list_template_spec_source_directory_jsonnet_extVars)),
+    libs: c.readOpt(obj["libs"], x => c.readList(x, c.checkStr)),
+    tlas: c.readOpt(obj["tlas"], x => c.readList(x, toApplicationSet_spec_generators_list_template_spec_source_directory_jsonnet_tlas)),
+  }}
+export function toApplicationSet_spec_generators_list_template_spec_source_helm_fileParameters(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    name: c.readOpt(obj["name"], c.checkStr),
+    path: c.readOpt(obj["path"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_list_template_spec_source_helm_parameters(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    forceString: c.readOpt(obj["forceString"], c.checkBool),
+    name: c.readOpt(obj["name"], c.checkStr),
+    value: c.readOpt(obj["value"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_list_template_spec_source_plugin_env(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    name: c.checkStr(obj["name"]),
+    value: c.checkStr(obj["value"]),
+  }}
+export function toApplicationSet_spec_generators_list_template_spec_source_plugin_parameters(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    array: c.readOpt(obj["array"], x => c.readList(x, c.checkStr)),
+    map: c.readOpt(obj["map"], x => c.readMap(x, c.checkStr)),
+    name: c.readOpt(obj["name"], c.checkStr),
+    string: c.readOpt(obj["string"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_list_template_spec_sources_directory_jsonnet(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    extVars: c.readOpt(obj["extVars"], x => c.readList(x, toApplicationSet_spec_generators_list_template_spec_sources_directory_jsonnet_extVars)),
+    libs: c.readOpt(obj["libs"], x => c.readList(x, c.checkStr)),
+    tlas: c.readOpt(obj["tlas"], x => c.readList(x, toApplicationSet_spec_generators_list_template_spec_sources_directory_jsonnet_tlas)),
+  }}
+export function toApplicationSet_spec_generators_list_template_spec_sources_helm_fileParameters(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    name: c.readOpt(obj["name"], c.checkStr),
+    path: c.readOpt(obj["path"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_list_template_spec_sources_helm_parameters(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    forceString: c.readOpt(obj["forceString"], c.checkBool),
+    name: c.readOpt(obj["name"], c.checkStr),
+    value: c.readOpt(obj["value"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_list_template_spec_sources_plugin_env(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    name: c.checkStr(obj["name"]),
+    value: c.checkStr(obj["value"]),
+  }}
+export function toApplicationSet_spec_generators_list_template_spec_sources_plugin_parameters(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    array: c.readOpt(obj["array"], x => c.readList(x, c.checkStr)),
+    map: c.readOpt(obj["map"], x => c.readMap(x, c.checkStr)),
+    name: c.readOpt(obj["name"], c.checkStr),
+    string: c.readOpt(obj["string"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_list_template_spec_syncPolicy_retry_backoff(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    duration: c.readOpt(obj["duration"], c.checkStr),
+    factor: c.readOpt(obj["factor"], c.checkNum),
+    maxDuration: c.readOpt(obj["maxDuration"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_clusterDecisionResource_template_spec_destination(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    name: c.readOpt(obj["name"], c.checkStr),
+    namespace: c.readOpt(obj["namespace"], c.checkStr),
+    server: c.readOpt(obj["server"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_clusterDecisionResource_template_spec_ignoreDifferences(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    group: c.readOpt(obj["group"], c.checkStr),
+    jqPathExpressions: c.readOpt(obj["jqPathExpressions"], x => c.readList(x, c.checkStr)),
+    jsonPointers: c.readOpt(obj["jsonPointers"], x => c.readList(x, c.checkStr)),
+    kind: c.checkStr(obj["kind"]),
+    managedFieldsManagers: c.readOpt(obj["managedFieldsManagers"], x => c.readList(x, c.checkStr)),
+    name: c.readOpt(obj["name"], c.checkStr),
+    namespace: c.readOpt(obj["namespace"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_clusterDecisionResource_template_spec_info(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    name: c.checkStr(obj["name"]),
+    value: c.checkStr(obj["value"]),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_clusterDecisionResource_template_spec_source(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    chart: c.readOpt(obj["chart"], c.checkStr),
+    directory: c.readOpt(obj["directory"], toApplicationSet_spec_generators_matrix_generators_clusterDecisionResource_template_spec_source_directory),
+    helm: c.readOpt(obj["helm"], toApplicationSet_spec_generators_matrix_generators_clusterDecisionResource_template_spec_source_helm),
+    kustomize: c.readOpt(obj["kustomize"], toApplicationSet_spec_generators_matrix_generators_clusterDecisionResource_template_spec_source_kustomize),
+    path: c.readOpt(obj["path"], c.checkStr),
+    plugin: c.readOpt(obj["plugin"], toApplicationSet_spec_generators_matrix_generators_clusterDecisionResource_template_spec_source_plugin),
+    ref: c.readOpt(obj["ref"], c.checkStr),
+    repoURL: c.checkStr(obj["repoURL"]),
+    targetRevision: c.readOpt(obj["targetRevision"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_clusterDecisionResource_template_spec_sources(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    chart: c.readOpt(obj["chart"], c.checkStr),
+    directory: c.readOpt(obj["directory"], toApplicationSet_spec_generators_matrix_generators_clusterDecisionResource_template_spec_sources_directory),
+    helm: c.readOpt(obj["helm"], toApplicationSet_spec_generators_matrix_generators_clusterDecisionResource_template_spec_sources_helm),
+    kustomize: c.readOpt(obj["kustomize"], toApplicationSet_spec_generators_matrix_generators_clusterDecisionResource_template_spec_sources_kustomize),
+    path: c.readOpt(obj["path"], c.checkStr),
+    plugin: c.readOpt(obj["plugin"], toApplicationSet_spec_generators_matrix_generators_clusterDecisionResource_template_spec_sources_plugin),
+    ref: c.readOpt(obj["ref"], c.checkStr),
+    repoURL: c.checkStr(obj["repoURL"]),
+    targetRevision: c.readOpt(obj["targetRevision"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_clusterDecisionResource_template_spec_syncPolicy(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    automated: c.readOpt(obj["automated"], toApplicationSet_spec_generators_matrix_generators_clusterDecisionResource_template_spec_syncPolicy_automated),
+    managedNamespaceMetadata: c.readOpt(obj["managedNamespaceMetadata"], toApplicationSet_spec_generators_matrix_generators_clusterDecisionResource_template_spec_syncPolicy_managedNamespaceMetadata),
+    retry: c.readOpt(obj["retry"], toApplicationSet_spec_generators_matrix_generators_clusterDecisionResource_template_spec_syncPolicy_retry),
+    syncOptions: c.readOpt(obj["syncOptions"], x => c.readList(x, c.checkStr)),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_clusters_template_spec_destination(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    name: c.readOpt(obj["name"], c.checkStr),
+    namespace: c.readOpt(obj["namespace"], c.checkStr),
+    server: c.readOpt(obj["server"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_clusters_template_spec_ignoreDifferences(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    group: c.readOpt(obj["group"], c.checkStr),
+    jqPathExpressions: c.readOpt(obj["jqPathExpressions"], x => c.readList(x, c.checkStr)),
+    jsonPointers: c.readOpt(obj["jsonPointers"], x => c.readList(x, c.checkStr)),
+    kind: c.checkStr(obj["kind"]),
+    managedFieldsManagers: c.readOpt(obj["managedFieldsManagers"], x => c.readList(x, c.checkStr)),
+    name: c.readOpt(obj["name"], c.checkStr),
+    namespace: c.readOpt(obj["namespace"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_clusters_template_spec_info(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    name: c.checkStr(obj["name"]),
+    value: c.checkStr(obj["value"]),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_clusters_template_spec_source(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    chart: c.readOpt(obj["chart"], c.checkStr),
+    directory: c.readOpt(obj["directory"], toApplicationSet_spec_generators_matrix_generators_clusters_template_spec_source_directory),
+    helm: c.readOpt(obj["helm"], toApplicationSet_spec_generators_matrix_generators_clusters_template_spec_source_helm),
+    kustomize: c.readOpt(obj["kustomize"], toApplicationSet_spec_generators_matrix_generators_clusters_template_spec_source_kustomize),
+    path: c.readOpt(obj["path"], c.checkStr),
+    plugin: c.readOpt(obj["plugin"], toApplicationSet_spec_generators_matrix_generators_clusters_template_spec_source_plugin),
+    ref: c.readOpt(obj["ref"], c.checkStr),
+    repoURL: c.checkStr(obj["repoURL"]),
+    targetRevision: c.readOpt(obj["targetRevision"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_clusters_template_spec_sources(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    chart: c.readOpt(obj["chart"], c.checkStr),
+    directory: c.readOpt(obj["directory"], toApplicationSet_spec_generators_matrix_generators_clusters_template_spec_sources_directory),
+    helm: c.readOpt(obj["helm"], toApplicationSet_spec_generators_matrix_generators_clusters_template_spec_sources_helm),
+    kustomize: c.readOpt(obj["kustomize"], toApplicationSet_spec_generators_matrix_generators_clusters_template_spec_sources_kustomize),
+    path: c.readOpt(obj["path"], c.checkStr),
+    plugin: c.readOpt(obj["plugin"], toApplicationSet_spec_generators_matrix_generators_clusters_template_spec_sources_plugin),
+    ref: c.readOpt(obj["ref"], c.checkStr),
+    repoURL: c.checkStr(obj["repoURL"]),
+    targetRevision: c.readOpt(obj["targetRevision"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_clusters_template_spec_syncPolicy(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    automated: c.readOpt(obj["automated"], toApplicationSet_spec_generators_matrix_generators_clusters_template_spec_syncPolicy_automated),
+    managedNamespaceMetadata: c.readOpt(obj["managedNamespaceMetadata"], toApplicationSet_spec_generators_matrix_generators_clusters_template_spec_syncPolicy_managedNamespaceMetadata),
+    retry: c.readOpt(obj["retry"], toApplicationSet_spec_generators_matrix_generators_clusters_template_spec_syncPolicy_retry),
+    syncOptions: c.readOpt(obj["syncOptions"], x => c.readList(x, c.checkStr)),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_git_template_spec_destination(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    name: c.readOpt(obj["name"], c.checkStr),
+    namespace: c.readOpt(obj["namespace"], c.checkStr),
+    server: c.readOpt(obj["server"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_git_template_spec_ignoreDifferences(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    group: c.readOpt(obj["group"], c.checkStr),
+    jqPathExpressions: c.readOpt(obj["jqPathExpressions"], x => c.readList(x, c.checkStr)),
+    jsonPointers: c.readOpt(obj["jsonPointers"], x => c.readList(x, c.checkStr)),
+    kind: c.checkStr(obj["kind"]),
+    managedFieldsManagers: c.readOpt(obj["managedFieldsManagers"], x => c.readList(x, c.checkStr)),
+    name: c.readOpt(obj["name"], c.checkStr),
+    namespace: c.readOpt(obj["namespace"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_git_template_spec_info(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    name: c.checkStr(obj["name"]),
+    value: c.checkStr(obj["value"]),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_git_template_spec_source(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    chart: c.readOpt(obj["chart"], c.checkStr),
+    directory: c.readOpt(obj["directory"], toApplicationSet_spec_generators_matrix_generators_git_template_spec_source_directory),
+    helm: c.readOpt(obj["helm"], toApplicationSet_spec_generators_matrix_generators_git_template_spec_source_helm),
+    kustomize: c.readOpt(obj["kustomize"], toApplicationSet_spec_generators_matrix_generators_git_template_spec_source_kustomize),
+    path: c.readOpt(obj["path"], c.checkStr),
+    plugin: c.readOpt(obj["plugin"], toApplicationSet_spec_generators_matrix_generators_git_template_spec_source_plugin),
+    ref: c.readOpt(obj["ref"], c.checkStr),
+    repoURL: c.checkStr(obj["repoURL"]),
+    targetRevision: c.readOpt(obj["targetRevision"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_git_template_spec_sources(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    chart: c.readOpt(obj["chart"], c.checkStr),
+    directory: c.readOpt(obj["directory"], toApplicationSet_spec_generators_matrix_generators_git_template_spec_sources_directory),
+    helm: c.readOpt(obj["helm"], toApplicationSet_spec_generators_matrix_generators_git_template_spec_sources_helm),
+    kustomize: c.readOpt(obj["kustomize"], toApplicationSet_spec_generators_matrix_generators_git_template_spec_sources_kustomize),
+    path: c.readOpt(obj["path"], c.checkStr),
+    plugin: c.readOpt(obj["plugin"], toApplicationSet_spec_generators_matrix_generators_git_template_spec_sources_plugin),
+    ref: c.readOpt(obj["ref"], c.checkStr),
+    repoURL: c.checkStr(obj["repoURL"]),
+    targetRevision: c.readOpt(obj["targetRevision"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_git_template_spec_syncPolicy(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    automated: c.readOpt(obj["automated"], toApplicationSet_spec_generators_matrix_generators_git_template_spec_syncPolicy_automated),
+    managedNamespaceMetadata: c.readOpt(obj["managedNamespaceMetadata"], toApplicationSet_spec_generators_matrix_generators_git_template_spec_syncPolicy_managedNamespaceMetadata),
+    retry: c.readOpt(obj["retry"], toApplicationSet_spec_generators_matrix_generators_git_template_spec_syncPolicy_retry),
+    syncOptions: c.readOpt(obj["syncOptions"], x => c.readList(x, c.checkStr)),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_list_template_spec_destination(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    name: c.readOpt(obj["name"], c.checkStr),
+    namespace: c.readOpt(obj["namespace"], c.checkStr),
+    server: c.readOpt(obj["server"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_list_template_spec_ignoreDifferences(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    group: c.readOpt(obj["group"], c.checkStr),
+    jqPathExpressions: c.readOpt(obj["jqPathExpressions"], x => c.readList(x, c.checkStr)),
+    jsonPointers: c.readOpt(obj["jsonPointers"], x => c.readList(x, c.checkStr)),
+    kind: c.checkStr(obj["kind"]),
+    managedFieldsManagers: c.readOpt(obj["managedFieldsManagers"], x => c.readList(x, c.checkStr)),
+    name: c.readOpt(obj["name"], c.checkStr),
+    namespace: c.readOpt(obj["namespace"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_list_template_spec_info(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    name: c.checkStr(obj["name"]),
+    value: c.checkStr(obj["value"]),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_list_template_spec_source(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    chart: c.readOpt(obj["chart"], c.checkStr),
+    directory: c.readOpt(obj["directory"], toApplicationSet_spec_generators_matrix_generators_list_template_spec_source_directory),
+    helm: c.readOpt(obj["helm"], toApplicationSet_spec_generators_matrix_generators_list_template_spec_source_helm),
+    kustomize: c.readOpt(obj["kustomize"], toApplicationSet_spec_generators_matrix_generators_list_template_spec_source_kustomize),
+    path: c.readOpt(obj["path"], c.checkStr),
+    plugin: c.readOpt(obj["plugin"], toApplicationSet_spec_generators_matrix_generators_list_template_spec_source_plugin),
+    ref: c.readOpt(obj["ref"], c.checkStr),
+    repoURL: c.checkStr(obj["repoURL"]),
+    targetRevision: c.readOpt(obj["targetRevision"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_list_template_spec_sources(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    chart: c.readOpt(obj["chart"], c.checkStr),
+    directory: c.readOpt(obj["directory"], toApplicationSet_spec_generators_matrix_generators_list_template_spec_sources_directory),
+    helm: c.readOpt(obj["helm"], toApplicationSet_spec_generators_matrix_generators_list_template_spec_sources_helm),
+    kustomize: c.readOpt(obj["kustomize"], toApplicationSet_spec_generators_matrix_generators_list_template_spec_sources_kustomize),
+    path: c.readOpt(obj["path"], c.checkStr),
+    plugin: c.readOpt(obj["plugin"], toApplicationSet_spec_generators_matrix_generators_list_template_spec_sources_plugin),
+    ref: c.readOpt(obj["ref"], c.checkStr),
+    repoURL: c.checkStr(obj["repoURL"]),
+    targetRevision: c.readOpt(obj["targetRevision"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_list_template_spec_syncPolicy(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    automated: c.readOpt(obj["automated"], toApplicationSet_spec_generators_matrix_generators_list_template_spec_syncPolicy_automated),
+    managedNamespaceMetadata: c.readOpt(obj["managedNamespaceMetadata"], toApplicationSet_spec_generators_matrix_generators_list_template_spec_syncPolicy_managedNamespaceMetadata),
+    retry: c.readOpt(obj["retry"], toApplicationSet_spec_generators_matrix_generators_list_template_spec_syncPolicy_retry),
+    syncOptions: c.readOpt(obj["syncOptions"], x => c.readList(x, c.checkStr)),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_pullRequest_bitbucketServer_basicAuth_passwordRef(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    key: c.checkStr(obj["key"]),
+    secretName: c.checkStr(obj["secretName"]),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_pullRequest_template_spec_destination(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    name: c.readOpt(obj["name"], c.checkStr),
+    namespace: c.readOpt(obj["namespace"], c.checkStr),
+    server: c.readOpt(obj["server"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_pullRequest_template_spec_ignoreDifferences(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    group: c.readOpt(obj["group"], c.checkStr),
+    jqPathExpressions: c.readOpt(obj["jqPathExpressions"], x => c.readList(x, c.checkStr)),
+    jsonPointers: c.readOpt(obj["jsonPointers"], x => c.readList(x, c.checkStr)),
+    kind: c.checkStr(obj["kind"]),
+    managedFieldsManagers: c.readOpt(obj["managedFieldsManagers"], x => c.readList(x, c.checkStr)),
+    name: c.readOpt(obj["name"], c.checkStr),
+    namespace: c.readOpt(obj["namespace"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_pullRequest_template_spec_info(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    name: c.checkStr(obj["name"]),
+    value: c.checkStr(obj["value"]),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_pullRequest_template_spec_source(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    chart: c.readOpt(obj["chart"], c.checkStr),
+    directory: c.readOpt(obj["directory"], toApplicationSet_spec_generators_matrix_generators_pullRequest_template_spec_source_directory),
+    helm: c.readOpt(obj["helm"], toApplicationSet_spec_generators_matrix_generators_pullRequest_template_spec_source_helm),
+    kustomize: c.readOpt(obj["kustomize"], toApplicationSet_spec_generators_matrix_generators_pullRequest_template_spec_source_kustomize),
+    path: c.readOpt(obj["path"], c.checkStr),
+    plugin: c.readOpt(obj["plugin"], toApplicationSet_spec_generators_matrix_generators_pullRequest_template_spec_source_plugin),
+    ref: c.readOpt(obj["ref"], c.checkStr),
+    repoURL: c.checkStr(obj["repoURL"]),
+    targetRevision: c.readOpt(obj["targetRevision"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_pullRequest_template_spec_sources(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    chart: c.readOpt(obj["chart"], c.checkStr),
+    directory: c.readOpt(obj["directory"], toApplicationSet_spec_generators_matrix_generators_pullRequest_template_spec_sources_directory),
+    helm: c.readOpt(obj["helm"], toApplicationSet_spec_generators_matrix_generators_pullRequest_template_spec_sources_helm),
+    kustomize: c.readOpt(obj["kustomize"], toApplicationSet_spec_generators_matrix_generators_pullRequest_template_spec_sources_kustomize),
+    path: c.readOpt(obj["path"], c.checkStr),
+    plugin: c.readOpt(obj["plugin"], toApplicationSet_spec_generators_matrix_generators_pullRequest_template_spec_sources_plugin),
+    ref: c.readOpt(obj["ref"], c.checkStr),
+    repoURL: c.checkStr(obj["repoURL"]),
+    targetRevision: c.readOpt(obj["targetRevision"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_pullRequest_template_spec_syncPolicy(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    automated: c.readOpt(obj["automated"], toApplicationSet_spec_generators_matrix_generators_pullRequest_template_spec_syncPolicy_automated),
+    managedNamespaceMetadata: c.readOpt(obj["managedNamespaceMetadata"], toApplicationSet_spec_generators_matrix_generators_pullRequest_template_spec_syncPolicy_managedNamespaceMetadata),
+    retry: c.readOpt(obj["retry"], toApplicationSet_spec_generators_matrix_generators_pullRequest_template_spec_syncPolicy_retry),
+    syncOptions: c.readOpt(obj["syncOptions"], x => c.readList(x, c.checkStr)),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_scmProvider_bitbucketServer_basicAuth_passwordRef(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    key: c.checkStr(obj["key"]),
+    secretName: c.checkStr(obj["secretName"]),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_scmProvider_template_spec_destination(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    name: c.readOpt(obj["name"], c.checkStr),
+    namespace: c.readOpt(obj["namespace"], c.checkStr),
+    server: c.readOpt(obj["server"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_scmProvider_template_spec_ignoreDifferences(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    group: c.readOpt(obj["group"], c.checkStr),
+    jqPathExpressions: c.readOpt(obj["jqPathExpressions"], x => c.readList(x, c.checkStr)),
+    jsonPointers: c.readOpt(obj["jsonPointers"], x => c.readList(x, c.checkStr)),
+    kind: c.checkStr(obj["kind"]),
+    managedFieldsManagers: c.readOpt(obj["managedFieldsManagers"], x => c.readList(x, c.checkStr)),
+    name: c.readOpt(obj["name"], c.checkStr),
+    namespace: c.readOpt(obj["namespace"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_scmProvider_template_spec_info(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    name: c.checkStr(obj["name"]),
+    value: c.checkStr(obj["value"]),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_scmProvider_template_spec_source(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    chart: c.readOpt(obj["chart"], c.checkStr),
+    directory: c.readOpt(obj["directory"], toApplicationSet_spec_generators_matrix_generators_scmProvider_template_spec_source_directory),
+    helm: c.readOpt(obj["helm"], toApplicationSet_spec_generators_matrix_generators_scmProvider_template_spec_source_helm),
+    kustomize: c.readOpt(obj["kustomize"], toApplicationSet_spec_generators_matrix_generators_scmProvider_template_spec_source_kustomize),
+    path: c.readOpt(obj["path"], c.checkStr),
+    plugin: c.readOpt(obj["plugin"], toApplicationSet_spec_generators_matrix_generators_scmProvider_template_spec_source_plugin),
+    ref: c.readOpt(obj["ref"], c.checkStr),
+    repoURL: c.checkStr(obj["repoURL"]),
+    targetRevision: c.readOpt(obj["targetRevision"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_scmProvider_template_spec_sources(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    chart: c.readOpt(obj["chart"], c.checkStr),
+    directory: c.readOpt(obj["directory"], toApplicationSet_spec_generators_matrix_generators_scmProvider_template_spec_sources_directory),
+    helm: c.readOpt(obj["helm"], toApplicationSet_spec_generators_matrix_generators_scmProvider_template_spec_sources_helm),
+    kustomize: c.readOpt(obj["kustomize"], toApplicationSet_spec_generators_matrix_generators_scmProvider_template_spec_sources_kustomize),
+    path: c.readOpt(obj["path"], c.checkStr),
+    plugin: c.readOpt(obj["plugin"], toApplicationSet_spec_generators_matrix_generators_scmProvider_template_spec_sources_plugin),
+    ref: c.readOpt(obj["ref"], c.checkStr),
+    repoURL: c.checkStr(obj["repoURL"]),
+    targetRevision: c.readOpt(obj["targetRevision"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_scmProvider_template_spec_syncPolicy(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    automated: c.readOpt(obj["automated"], toApplicationSet_spec_generators_matrix_generators_scmProvider_template_spec_syncPolicy_automated),
+    managedNamespaceMetadata: c.readOpt(obj["managedNamespaceMetadata"], toApplicationSet_spec_generators_matrix_generators_scmProvider_template_spec_syncPolicy_managedNamespaceMetadata),
+    retry: c.readOpt(obj["retry"], toApplicationSet_spec_generators_matrix_generators_scmProvider_template_spec_syncPolicy_retry),
+    syncOptions: c.readOpt(obj["syncOptions"], x => c.readList(x, c.checkStr)),
+  }}
+export function toApplicationSet_spec_generators_matrix_template_spec_source_directory_jsonnet(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    extVars: c.readOpt(obj["extVars"], x => c.readList(x, toApplicationSet_spec_generators_matrix_template_spec_source_directory_jsonnet_extVars)),
+    libs: c.readOpt(obj["libs"], x => c.readList(x, c.checkStr)),
+    tlas: c.readOpt(obj["tlas"], x => c.readList(x, toApplicationSet_spec_generators_matrix_template_spec_source_directory_jsonnet_tlas)),
+  }}
+export function toApplicationSet_spec_generators_matrix_template_spec_source_helm_fileParameters(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    name: c.readOpt(obj["name"], c.checkStr),
+    path: c.readOpt(obj["path"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_matrix_template_spec_source_helm_parameters(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    forceString: c.readOpt(obj["forceString"], c.checkBool),
+    name: c.readOpt(obj["name"], c.checkStr),
+    value: c.readOpt(obj["value"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_matrix_template_spec_source_plugin_env(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    name: c.checkStr(obj["name"]),
+    value: c.checkStr(obj["value"]),
+  }}
+export function toApplicationSet_spec_generators_matrix_template_spec_source_plugin_parameters(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    array: c.readOpt(obj["array"], x => c.readList(x, c.checkStr)),
+    map: c.readOpt(obj["map"], x => c.readMap(x, c.checkStr)),
+    name: c.readOpt(obj["name"], c.checkStr),
+    string: c.readOpt(obj["string"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_matrix_template_spec_sources_directory_jsonnet(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    extVars: c.readOpt(obj["extVars"], x => c.readList(x, toApplicationSet_spec_generators_matrix_template_spec_sources_directory_jsonnet_extVars)),
+    libs: c.readOpt(obj["libs"], x => c.readList(x, c.checkStr)),
+    tlas: c.readOpt(obj["tlas"], x => c.readList(x, toApplicationSet_spec_generators_matrix_template_spec_sources_directory_jsonnet_tlas)),
+  }}
+export function toApplicationSet_spec_generators_matrix_template_spec_sources_helm_fileParameters(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    name: c.readOpt(obj["name"], c.checkStr),
+    path: c.readOpt(obj["path"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_matrix_template_spec_sources_helm_parameters(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    forceString: c.readOpt(obj["forceString"], c.checkBool),
+    name: c.readOpt(obj["name"], c.checkStr),
+    value: c.readOpt(obj["value"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_matrix_template_spec_sources_plugin_env(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    name: c.checkStr(obj["name"]),
+    value: c.checkStr(obj["value"]),
+  }}
+export function toApplicationSet_spec_generators_matrix_template_spec_sources_plugin_parameters(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    array: c.readOpt(obj["array"], x => c.readList(x, c.checkStr)),
+    map: c.readOpt(obj["map"], x => c.readMap(x, c.checkStr)),
+    name: c.readOpt(obj["name"], c.checkStr),
+    string: c.readOpt(obj["string"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_matrix_template_spec_syncPolicy_retry_backoff(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    duration: c.readOpt(obj["duration"], c.checkStr),
+    factor: c.readOpt(obj["factor"], c.checkNum),
+    maxDuration: c.readOpt(obj["maxDuration"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_clusterDecisionResource_template_spec_destination(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    name: c.readOpt(obj["name"], c.checkStr),
+    namespace: c.readOpt(obj["namespace"], c.checkStr),
+    server: c.readOpt(obj["server"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_clusterDecisionResource_template_spec_ignoreDifferences(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    group: c.readOpt(obj["group"], c.checkStr),
+    jqPathExpressions: c.readOpt(obj["jqPathExpressions"], x => c.readList(x, c.checkStr)),
+    jsonPointers: c.readOpt(obj["jsonPointers"], x => c.readList(x, c.checkStr)),
+    kind: c.checkStr(obj["kind"]),
+    managedFieldsManagers: c.readOpt(obj["managedFieldsManagers"], x => c.readList(x, c.checkStr)),
+    name: c.readOpt(obj["name"], c.checkStr),
+    namespace: c.readOpt(obj["namespace"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_clusterDecisionResource_template_spec_info(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    name: c.checkStr(obj["name"]),
+    value: c.checkStr(obj["value"]),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_clusterDecisionResource_template_spec_source(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    chart: c.readOpt(obj["chart"], c.checkStr),
+    directory: c.readOpt(obj["directory"], toApplicationSet_spec_generators_merge_generators_clusterDecisionResource_template_spec_source_directory),
+    helm: c.readOpt(obj["helm"], toApplicationSet_spec_generators_merge_generators_clusterDecisionResource_template_spec_source_helm),
+    kustomize: c.readOpt(obj["kustomize"], toApplicationSet_spec_generators_merge_generators_clusterDecisionResource_template_spec_source_kustomize),
+    path: c.readOpt(obj["path"], c.checkStr),
+    plugin: c.readOpt(obj["plugin"], toApplicationSet_spec_generators_merge_generators_clusterDecisionResource_template_spec_source_plugin),
+    ref: c.readOpt(obj["ref"], c.checkStr),
+    repoURL: c.checkStr(obj["repoURL"]),
+    targetRevision: c.readOpt(obj["targetRevision"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_clusterDecisionResource_template_spec_sources(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    chart: c.readOpt(obj["chart"], c.checkStr),
+    directory: c.readOpt(obj["directory"], toApplicationSet_spec_generators_merge_generators_clusterDecisionResource_template_spec_sources_directory),
+    helm: c.readOpt(obj["helm"], toApplicationSet_spec_generators_merge_generators_clusterDecisionResource_template_spec_sources_helm),
+    kustomize: c.readOpt(obj["kustomize"], toApplicationSet_spec_generators_merge_generators_clusterDecisionResource_template_spec_sources_kustomize),
+    path: c.readOpt(obj["path"], c.checkStr),
+    plugin: c.readOpt(obj["plugin"], toApplicationSet_spec_generators_merge_generators_clusterDecisionResource_template_spec_sources_plugin),
+    ref: c.readOpt(obj["ref"], c.checkStr),
+    repoURL: c.checkStr(obj["repoURL"]),
+    targetRevision: c.readOpt(obj["targetRevision"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_clusterDecisionResource_template_spec_syncPolicy(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    automated: c.readOpt(obj["automated"], toApplicationSet_spec_generators_merge_generators_clusterDecisionResource_template_spec_syncPolicy_automated),
+    managedNamespaceMetadata: c.readOpt(obj["managedNamespaceMetadata"], toApplicationSet_spec_generators_merge_generators_clusterDecisionResource_template_spec_syncPolicy_managedNamespaceMetadata),
+    retry: c.readOpt(obj["retry"], toApplicationSet_spec_generators_merge_generators_clusterDecisionResource_template_spec_syncPolicy_retry),
+    syncOptions: c.readOpt(obj["syncOptions"], x => c.readList(x, c.checkStr)),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_clusters_template_spec_destination(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    name: c.readOpt(obj["name"], c.checkStr),
+    namespace: c.readOpt(obj["namespace"], c.checkStr),
+    server: c.readOpt(obj["server"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_clusters_template_spec_ignoreDifferences(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    group: c.readOpt(obj["group"], c.checkStr),
+    jqPathExpressions: c.readOpt(obj["jqPathExpressions"], x => c.readList(x, c.checkStr)),
+    jsonPointers: c.readOpt(obj["jsonPointers"], x => c.readList(x, c.checkStr)),
+    kind: c.checkStr(obj["kind"]),
+    managedFieldsManagers: c.readOpt(obj["managedFieldsManagers"], x => c.readList(x, c.checkStr)),
+    name: c.readOpt(obj["name"], c.checkStr),
+    namespace: c.readOpt(obj["namespace"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_clusters_template_spec_info(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    name: c.checkStr(obj["name"]),
+    value: c.checkStr(obj["value"]),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_clusters_template_spec_source(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    chart: c.readOpt(obj["chart"], c.checkStr),
+    directory: c.readOpt(obj["directory"], toApplicationSet_spec_generators_merge_generators_clusters_template_spec_source_directory),
+    helm: c.readOpt(obj["helm"], toApplicationSet_spec_generators_merge_generators_clusters_template_spec_source_helm),
+    kustomize: c.readOpt(obj["kustomize"], toApplicationSet_spec_generators_merge_generators_clusters_template_spec_source_kustomize),
+    path: c.readOpt(obj["path"], c.checkStr),
+    plugin: c.readOpt(obj["plugin"], toApplicationSet_spec_generators_merge_generators_clusters_template_spec_source_plugin),
+    ref: c.readOpt(obj["ref"], c.checkStr),
+    repoURL: c.checkStr(obj["repoURL"]),
+    targetRevision: c.readOpt(obj["targetRevision"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_clusters_template_spec_sources(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    chart: c.readOpt(obj["chart"], c.checkStr),
+    directory: c.readOpt(obj["directory"], toApplicationSet_spec_generators_merge_generators_clusters_template_spec_sources_directory),
+    helm: c.readOpt(obj["helm"], toApplicationSet_spec_generators_merge_generators_clusters_template_spec_sources_helm),
+    kustomize: c.readOpt(obj["kustomize"], toApplicationSet_spec_generators_merge_generators_clusters_template_spec_sources_kustomize),
+    path: c.readOpt(obj["path"], c.checkStr),
+    plugin: c.readOpt(obj["plugin"], toApplicationSet_spec_generators_merge_generators_clusters_template_spec_sources_plugin),
+    ref: c.readOpt(obj["ref"], c.checkStr),
+    repoURL: c.checkStr(obj["repoURL"]),
+    targetRevision: c.readOpt(obj["targetRevision"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_clusters_template_spec_syncPolicy(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    automated: c.readOpt(obj["automated"], toApplicationSet_spec_generators_merge_generators_clusters_template_spec_syncPolicy_automated),
+    managedNamespaceMetadata: c.readOpt(obj["managedNamespaceMetadata"], toApplicationSet_spec_generators_merge_generators_clusters_template_spec_syncPolicy_managedNamespaceMetadata),
+    retry: c.readOpt(obj["retry"], toApplicationSet_spec_generators_merge_generators_clusters_template_spec_syncPolicy_retry),
+    syncOptions: c.readOpt(obj["syncOptions"], x => c.readList(x, c.checkStr)),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_git_template_spec_destination(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    name: c.readOpt(obj["name"], c.checkStr),
+    namespace: c.readOpt(obj["namespace"], c.checkStr),
+    server: c.readOpt(obj["server"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_git_template_spec_ignoreDifferences(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    group: c.readOpt(obj["group"], c.checkStr),
+    jqPathExpressions: c.readOpt(obj["jqPathExpressions"], x => c.readList(x, c.checkStr)),
+    jsonPointers: c.readOpt(obj["jsonPointers"], x => c.readList(x, c.checkStr)),
+    kind: c.checkStr(obj["kind"]),
+    managedFieldsManagers: c.readOpt(obj["managedFieldsManagers"], x => c.readList(x, c.checkStr)),
+    name: c.readOpt(obj["name"], c.checkStr),
+    namespace: c.readOpt(obj["namespace"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_git_template_spec_info(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    name: c.checkStr(obj["name"]),
+    value: c.checkStr(obj["value"]),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_git_template_spec_source(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    chart: c.readOpt(obj["chart"], c.checkStr),
+    directory: c.readOpt(obj["directory"], toApplicationSet_spec_generators_merge_generators_git_template_spec_source_directory),
+    helm: c.readOpt(obj["helm"], toApplicationSet_spec_generators_merge_generators_git_template_spec_source_helm),
+    kustomize: c.readOpt(obj["kustomize"], toApplicationSet_spec_generators_merge_generators_git_template_spec_source_kustomize),
+    path: c.readOpt(obj["path"], c.checkStr),
+    plugin: c.readOpt(obj["plugin"], toApplicationSet_spec_generators_merge_generators_git_template_spec_source_plugin),
+    ref: c.readOpt(obj["ref"], c.checkStr),
+    repoURL: c.checkStr(obj["repoURL"]),
+    targetRevision: c.readOpt(obj["targetRevision"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_git_template_spec_sources(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    chart: c.readOpt(obj["chart"], c.checkStr),
+    directory: c.readOpt(obj["directory"], toApplicationSet_spec_generators_merge_generators_git_template_spec_sources_directory),
+    helm: c.readOpt(obj["helm"], toApplicationSet_spec_generators_merge_generators_git_template_spec_sources_helm),
+    kustomize: c.readOpt(obj["kustomize"], toApplicationSet_spec_generators_merge_generators_git_template_spec_sources_kustomize),
+    path: c.readOpt(obj["path"], c.checkStr),
+    plugin: c.readOpt(obj["plugin"], toApplicationSet_spec_generators_merge_generators_git_template_spec_sources_plugin),
+    ref: c.readOpt(obj["ref"], c.checkStr),
+    repoURL: c.checkStr(obj["repoURL"]),
+    targetRevision: c.readOpt(obj["targetRevision"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_git_template_spec_syncPolicy(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    automated: c.readOpt(obj["automated"], toApplicationSet_spec_generators_merge_generators_git_template_spec_syncPolicy_automated),
+    managedNamespaceMetadata: c.readOpt(obj["managedNamespaceMetadata"], toApplicationSet_spec_generators_merge_generators_git_template_spec_syncPolicy_managedNamespaceMetadata),
+    retry: c.readOpt(obj["retry"], toApplicationSet_spec_generators_merge_generators_git_template_spec_syncPolicy_retry),
+    syncOptions: c.readOpt(obj["syncOptions"], x => c.readList(x, c.checkStr)),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_list_template_spec_destination(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    name: c.readOpt(obj["name"], c.checkStr),
+    namespace: c.readOpt(obj["namespace"], c.checkStr),
+    server: c.readOpt(obj["server"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_list_template_spec_ignoreDifferences(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    group: c.readOpt(obj["group"], c.checkStr),
+    jqPathExpressions: c.readOpt(obj["jqPathExpressions"], x => c.readList(x, c.checkStr)),
+    jsonPointers: c.readOpt(obj["jsonPointers"], x => c.readList(x, c.checkStr)),
+    kind: c.checkStr(obj["kind"]),
+    managedFieldsManagers: c.readOpt(obj["managedFieldsManagers"], x => c.readList(x, c.checkStr)),
+    name: c.readOpt(obj["name"], c.checkStr),
+    namespace: c.readOpt(obj["namespace"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_list_template_spec_info(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    name: c.checkStr(obj["name"]),
+    value: c.checkStr(obj["value"]),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_list_template_spec_source(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    chart: c.readOpt(obj["chart"], c.checkStr),
+    directory: c.readOpt(obj["directory"], toApplicationSet_spec_generators_merge_generators_list_template_spec_source_directory),
+    helm: c.readOpt(obj["helm"], toApplicationSet_spec_generators_merge_generators_list_template_spec_source_helm),
+    kustomize: c.readOpt(obj["kustomize"], toApplicationSet_spec_generators_merge_generators_list_template_spec_source_kustomize),
+    path: c.readOpt(obj["path"], c.checkStr),
+    plugin: c.readOpt(obj["plugin"], toApplicationSet_spec_generators_merge_generators_list_template_spec_source_plugin),
+    ref: c.readOpt(obj["ref"], c.checkStr),
+    repoURL: c.checkStr(obj["repoURL"]),
+    targetRevision: c.readOpt(obj["targetRevision"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_list_template_spec_sources(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    chart: c.readOpt(obj["chart"], c.checkStr),
+    directory: c.readOpt(obj["directory"], toApplicationSet_spec_generators_merge_generators_list_template_spec_sources_directory),
+    helm: c.readOpt(obj["helm"], toApplicationSet_spec_generators_merge_generators_list_template_spec_sources_helm),
+    kustomize: c.readOpt(obj["kustomize"], toApplicationSet_spec_generators_merge_generators_list_template_spec_sources_kustomize),
+    path: c.readOpt(obj["path"], c.checkStr),
+    plugin: c.readOpt(obj["plugin"], toApplicationSet_spec_generators_merge_generators_list_template_spec_sources_plugin),
+    ref: c.readOpt(obj["ref"], c.checkStr),
+    repoURL: c.checkStr(obj["repoURL"]),
+    targetRevision: c.readOpt(obj["targetRevision"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_list_template_spec_syncPolicy(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    automated: c.readOpt(obj["automated"], toApplicationSet_spec_generators_merge_generators_list_template_spec_syncPolicy_automated),
+    managedNamespaceMetadata: c.readOpt(obj["managedNamespaceMetadata"], toApplicationSet_spec_generators_merge_generators_list_template_spec_syncPolicy_managedNamespaceMetadata),
+    retry: c.readOpt(obj["retry"], toApplicationSet_spec_generators_merge_generators_list_template_spec_syncPolicy_retry),
+    syncOptions: c.readOpt(obj["syncOptions"], x => c.readList(x, c.checkStr)),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_pullRequest_bitbucketServer_basicAuth_passwordRef(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    key: c.checkStr(obj["key"]),
+    secretName: c.checkStr(obj["secretName"]),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_pullRequest_template_spec_destination(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    name: c.readOpt(obj["name"], c.checkStr),
+    namespace: c.readOpt(obj["namespace"], c.checkStr),
+    server: c.readOpt(obj["server"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_pullRequest_template_spec_ignoreDifferences(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    group: c.readOpt(obj["group"], c.checkStr),
+    jqPathExpressions: c.readOpt(obj["jqPathExpressions"], x => c.readList(x, c.checkStr)),
+    jsonPointers: c.readOpt(obj["jsonPointers"], x => c.readList(x, c.checkStr)),
+    kind: c.checkStr(obj["kind"]),
+    managedFieldsManagers: c.readOpt(obj["managedFieldsManagers"], x => c.readList(x, c.checkStr)),
+    name: c.readOpt(obj["name"], c.checkStr),
+    namespace: c.readOpt(obj["namespace"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_pullRequest_template_spec_info(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    name: c.checkStr(obj["name"]),
+    value: c.checkStr(obj["value"]),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_pullRequest_template_spec_source(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    chart: c.readOpt(obj["chart"], c.checkStr),
+    directory: c.readOpt(obj["directory"], toApplicationSet_spec_generators_merge_generators_pullRequest_template_spec_source_directory),
+    helm: c.readOpt(obj["helm"], toApplicationSet_spec_generators_merge_generators_pullRequest_template_spec_source_helm),
+    kustomize: c.readOpt(obj["kustomize"], toApplicationSet_spec_generators_merge_generators_pullRequest_template_spec_source_kustomize),
+    path: c.readOpt(obj["path"], c.checkStr),
+    plugin: c.readOpt(obj["plugin"], toApplicationSet_spec_generators_merge_generators_pullRequest_template_spec_source_plugin),
+    ref: c.readOpt(obj["ref"], c.checkStr),
+    repoURL: c.checkStr(obj["repoURL"]),
+    targetRevision: c.readOpt(obj["targetRevision"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_pullRequest_template_spec_sources(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    chart: c.readOpt(obj["chart"], c.checkStr),
+    directory: c.readOpt(obj["directory"], toApplicationSet_spec_generators_merge_generators_pullRequest_template_spec_sources_directory),
+    helm: c.readOpt(obj["helm"], toApplicationSet_spec_generators_merge_generators_pullRequest_template_spec_sources_helm),
+    kustomize: c.readOpt(obj["kustomize"], toApplicationSet_spec_generators_merge_generators_pullRequest_template_spec_sources_kustomize),
+    path: c.readOpt(obj["path"], c.checkStr),
+    plugin: c.readOpt(obj["plugin"], toApplicationSet_spec_generators_merge_generators_pullRequest_template_spec_sources_plugin),
+    ref: c.readOpt(obj["ref"], c.checkStr),
+    repoURL: c.checkStr(obj["repoURL"]),
+    targetRevision: c.readOpt(obj["targetRevision"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_pullRequest_template_spec_syncPolicy(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    automated: c.readOpt(obj["automated"], toApplicationSet_spec_generators_merge_generators_pullRequest_template_spec_syncPolicy_automated),
+    managedNamespaceMetadata: c.readOpt(obj["managedNamespaceMetadata"], toApplicationSet_spec_generators_merge_generators_pullRequest_template_spec_syncPolicy_managedNamespaceMetadata),
+    retry: c.readOpt(obj["retry"], toApplicationSet_spec_generators_merge_generators_pullRequest_template_spec_syncPolicy_retry),
+    syncOptions: c.readOpt(obj["syncOptions"], x => c.readList(x, c.checkStr)),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_scmProvider_bitbucketServer_basicAuth_passwordRef(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    key: c.checkStr(obj["key"]),
+    secretName: c.checkStr(obj["secretName"]),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_scmProvider_template_spec_destination(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    name: c.readOpt(obj["name"], c.checkStr),
+    namespace: c.readOpt(obj["namespace"], c.checkStr),
+    server: c.readOpt(obj["server"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_scmProvider_template_spec_ignoreDifferences(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    group: c.readOpt(obj["group"], c.checkStr),
+    jqPathExpressions: c.readOpt(obj["jqPathExpressions"], x => c.readList(x, c.checkStr)),
+    jsonPointers: c.readOpt(obj["jsonPointers"], x => c.readList(x, c.checkStr)),
+    kind: c.checkStr(obj["kind"]),
+    managedFieldsManagers: c.readOpt(obj["managedFieldsManagers"], x => c.readList(x, c.checkStr)),
+    name: c.readOpt(obj["name"], c.checkStr),
+    namespace: c.readOpt(obj["namespace"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_scmProvider_template_spec_info(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    name: c.checkStr(obj["name"]),
+    value: c.checkStr(obj["value"]),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_scmProvider_template_spec_source(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    chart: c.readOpt(obj["chart"], c.checkStr),
+    directory: c.readOpt(obj["directory"], toApplicationSet_spec_generators_merge_generators_scmProvider_template_spec_source_directory),
+    helm: c.readOpt(obj["helm"], toApplicationSet_spec_generators_merge_generators_scmProvider_template_spec_source_helm),
+    kustomize: c.readOpt(obj["kustomize"], toApplicationSet_spec_generators_merge_generators_scmProvider_template_spec_source_kustomize),
+    path: c.readOpt(obj["path"], c.checkStr),
+    plugin: c.readOpt(obj["plugin"], toApplicationSet_spec_generators_merge_generators_scmProvider_template_spec_source_plugin),
+    ref: c.readOpt(obj["ref"], c.checkStr),
+    repoURL: c.checkStr(obj["repoURL"]),
+    targetRevision: c.readOpt(obj["targetRevision"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_scmProvider_template_spec_sources(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    chart: c.readOpt(obj["chart"], c.checkStr),
+    directory: c.readOpt(obj["directory"], toApplicationSet_spec_generators_merge_generators_scmProvider_template_spec_sources_directory),
+    helm: c.readOpt(obj["helm"], toApplicationSet_spec_generators_merge_generators_scmProvider_template_spec_sources_helm),
+    kustomize: c.readOpt(obj["kustomize"], toApplicationSet_spec_generators_merge_generators_scmProvider_template_spec_sources_kustomize),
+    path: c.readOpt(obj["path"], c.checkStr),
+    plugin: c.readOpt(obj["plugin"], toApplicationSet_spec_generators_merge_generators_scmProvider_template_spec_sources_plugin),
+    ref: c.readOpt(obj["ref"], c.checkStr),
+    repoURL: c.checkStr(obj["repoURL"]),
+    targetRevision: c.readOpt(obj["targetRevision"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_scmProvider_template_spec_syncPolicy(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    automated: c.readOpt(obj["automated"], toApplicationSet_spec_generators_merge_generators_scmProvider_template_spec_syncPolicy_automated),
+    managedNamespaceMetadata: c.readOpt(obj["managedNamespaceMetadata"], toApplicationSet_spec_generators_merge_generators_scmProvider_template_spec_syncPolicy_managedNamespaceMetadata),
+    retry: c.readOpt(obj["retry"], toApplicationSet_spec_generators_merge_generators_scmProvider_template_spec_syncPolicy_retry),
+    syncOptions: c.readOpt(obj["syncOptions"], x => c.readList(x, c.checkStr)),
+  }}
+export function toApplicationSet_spec_generators_merge_template_spec_source_directory_jsonnet(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    extVars: c.readOpt(obj["extVars"], x => c.readList(x, toApplicationSet_spec_generators_merge_template_spec_source_directory_jsonnet_extVars)),
+    libs: c.readOpt(obj["libs"], x => c.readList(x, c.checkStr)),
+    tlas: c.readOpt(obj["tlas"], x => c.readList(x, toApplicationSet_spec_generators_merge_template_spec_source_directory_jsonnet_tlas)),
+  }}
+export function toApplicationSet_spec_generators_merge_template_spec_source_helm_fileParameters(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    name: c.readOpt(obj["name"], c.checkStr),
+    path: c.readOpt(obj["path"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_merge_template_spec_source_helm_parameters(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    forceString: c.readOpt(obj["forceString"], c.checkBool),
+    name: c.readOpt(obj["name"], c.checkStr),
+    value: c.readOpt(obj["value"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_merge_template_spec_source_plugin_env(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    name: c.checkStr(obj["name"]),
+    value: c.checkStr(obj["value"]),
+  }}
+export function toApplicationSet_spec_generators_merge_template_spec_source_plugin_parameters(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    array: c.readOpt(obj["array"], x => c.readList(x, c.checkStr)),
+    map: c.readOpt(obj["map"], x => c.readMap(x, c.checkStr)),
+    name: c.readOpt(obj["name"], c.checkStr),
+    string: c.readOpt(obj["string"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_merge_template_spec_sources_directory_jsonnet(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    extVars: c.readOpt(obj["extVars"], x => c.readList(x, toApplicationSet_spec_generators_merge_template_spec_sources_directory_jsonnet_extVars)),
+    libs: c.readOpt(obj["libs"], x => c.readList(x, c.checkStr)),
+    tlas: c.readOpt(obj["tlas"], x => c.readList(x, toApplicationSet_spec_generators_merge_template_spec_sources_directory_jsonnet_tlas)),
+  }}
+export function toApplicationSet_spec_generators_merge_template_spec_sources_helm_fileParameters(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    name: c.readOpt(obj["name"], c.checkStr),
+    path: c.readOpt(obj["path"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_merge_template_spec_sources_helm_parameters(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    forceString: c.readOpt(obj["forceString"], c.checkBool),
+    name: c.readOpt(obj["name"], c.checkStr),
+    value: c.readOpt(obj["value"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_merge_template_spec_sources_plugin_env(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    name: c.checkStr(obj["name"]),
+    value: c.checkStr(obj["value"]),
+  }}
+export function toApplicationSet_spec_generators_merge_template_spec_sources_plugin_parameters(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    array: c.readOpt(obj["array"], x => c.readList(x, c.checkStr)),
+    map: c.readOpt(obj["map"], x => c.readMap(x, c.checkStr)),
+    name: c.readOpt(obj["name"], c.checkStr),
+    string: c.readOpt(obj["string"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_merge_template_spec_syncPolicy_retry_backoff(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    duration: c.readOpt(obj["duration"], c.checkStr),
+    factor: c.readOpt(obj["factor"], c.checkNum),
+    maxDuration: c.readOpt(obj["maxDuration"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_pullRequest_template_spec_source_directory_jsonnet(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    extVars: c.readOpt(obj["extVars"], x => c.readList(x, toApplicationSet_spec_generators_pullRequest_template_spec_source_directory_jsonnet_extVars)),
+    libs: c.readOpt(obj["libs"], x => c.readList(x, c.checkStr)),
+    tlas: c.readOpt(obj["tlas"], x => c.readList(x, toApplicationSet_spec_generators_pullRequest_template_spec_source_directory_jsonnet_tlas)),
+  }}
+export function toApplicationSet_spec_generators_pullRequest_template_spec_source_helm_fileParameters(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    name: c.readOpt(obj["name"], c.checkStr),
+    path: c.readOpt(obj["path"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_pullRequest_template_spec_source_helm_parameters(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    forceString: c.readOpt(obj["forceString"], c.checkBool),
+    name: c.readOpt(obj["name"], c.checkStr),
+    value: c.readOpt(obj["value"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_pullRequest_template_spec_source_plugin_env(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    name: c.checkStr(obj["name"]),
+    value: c.checkStr(obj["value"]),
+  }}
+export function toApplicationSet_spec_generators_pullRequest_template_spec_source_plugin_parameters(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    array: c.readOpt(obj["array"], x => c.readList(x, c.checkStr)),
+    map: c.readOpt(obj["map"], x => c.readMap(x, c.checkStr)),
+    name: c.readOpt(obj["name"], c.checkStr),
+    string: c.readOpt(obj["string"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_pullRequest_template_spec_sources_directory_jsonnet(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    extVars: c.readOpt(obj["extVars"], x => c.readList(x, toApplicationSet_spec_generators_pullRequest_template_spec_sources_directory_jsonnet_extVars)),
+    libs: c.readOpt(obj["libs"], x => c.readList(x, c.checkStr)),
+    tlas: c.readOpt(obj["tlas"], x => c.readList(x, toApplicationSet_spec_generators_pullRequest_template_spec_sources_directory_jsonnet_tlas)),
+  }}
+export function toApplicationSet_spec_generators_pullRequest_template_spec_sources_helm_fileParameters(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    name: c.readOpt(obj["name"], c.checkStr),
+    path: c.readOpt(obj["path"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_pullRequest_template_spec_sources_helm_parameters(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    forceString: c.readOpt(obj["forceString"], c.checkBool),
+    name: c.readOpt(obj["name"], c.checkStr),
+    value: c.readOpt(obj["value"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_pullRequest_template_spec_sources_plugin_env(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    name: c.checkStr(obj["name"]),
+    value: c.checkStr(obj["value"]),
+  }}
+export function toApplicationSet_spec_generators_pullRequest_template_spec_sources_plugin_parameters(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    array: c.readOpt(obj["array"], x => c.readList(x, c.checkStr)),
+    map: c.readOpt(obj["map"], x => c.readMap(x, c.checkStr)),
+    name: c.readOpt(obj["name"], c.checkStr),
+    string: c.readOpt(obj["string"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_pullRequest_template_spec_syncPolicy_retry_backoff(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    duration: c.readOpt(obj["duration"], c.checkStr),
+    factor: c.readOpt(obj["factor"], c.checkNum),
+    maxDuration: c.readOpt(obj["maxDuration"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_scmProvider_template_spec_source_directory_jsonnet(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    extVars: c.readOpt(obj["extVars"], x => c.readList(x, toApplicationSet_spec_generators_scmProvider_template_spec_source_directory_jsonnet_extVars)),
+    libs: c.readOpt(obj["libs"], x => c.readList(x, c.checkStr)),
+    tlas: c.readOpt(obj["tlas"], x => c.readList(x, toApplicationSet_spec_generators_scmProvider_template_spec_source_directory_jsonnet_tlas)),
+  }}
+export function toApplicationSet_spec_generators_scmProvider_template_spec_source_helm_fileParameters(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    name: c.readOpt(obj["name"], c.checkStr),
+    path: c.readOpt(obj["path"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_scmProvider_template_spec_source_helm_parameters(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    forceString: c.readOpt(obj["forceString"], c.checkBool),
+    name: c.readOpt(obj["name"], c.checkStr),
+    value: c.readOpt(obj["value"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_scmProvider_template_spec_source_plugin_env(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    name: c.checkStr(obj["name"]),
+    value: c.checkStr(obj["value"]),
+  }}
+export function toApplicationSet_spec_generators_scmProvider_template_spec_source_plugin_parameters(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    array: c.readOpt(obj["array"], x => c.readList(x, c.checkStr)),
+    map: c.readOpt(obj["map"], x => c.readMap(x, c.checkStr)),
+    name: c.readOpt(obj["name"], c.checkStr),
+    string: c.readOpt(obj["string"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_scmProvider_template_spec_sources_directory_jsonnet(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    extVars: c.readOpt(obj["extVars"], x => c.readList(x, toApplicationSet_spec_generators_scmProvider_template_spec_sources_directory_jsonnet_extVars)),
+    libs: c.readOpt(obj["libs"], x => c.readList(x, c.checkStr)),
+    tlas: c.readOpt(obj["tlas"], x => c.readList(x, toApplicationSet_spec_generators_scmProvider_template_spec_sources_directory_jsonnet_tlas)),
+  }}
+export function toApplicationSet_spec_generators_scmProvider_template_spec_sources_helm_fileParameters(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    name: c.readOpt(obj["name"], c.checkStr),
+    path: c.readOpt(obj["path"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_scmProvider_template_spec_sources_helm_parameters(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    forceString: c.readOpt(obj["forceString"], c.checkBool),
+    name: c.readOpt(obj["name"], c.checkStr),
+    value: c.readOpt(obj["value"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_scmProvider_template_spec_sources_plugin_env(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    name: c.checkStr(obj["name"]),
+    value: c.checkStr(obj["value"]),
+  }}
+export function toApplicationSet_spec_generators_scmProvider_template_spec_sources_plugin_parameters(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    array: c.readOpt(obj["array"], x => c.readList(x, c.checkStr)),
+    map: c.readOpt(obj["map"], x => c.readMap(x, c.checkStr)),
+    name: c.readOpt(obj["name"], c.checkStr),
+    string: c.readOpt(obj["string"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_scmProvider_template_spec_syncPolicy_retry_backoff(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    duration: c.readOpt(obj["duration"], c.checkStr),
+    factor: c.readOpt(obj["factor"], c.checkNum),
+    maxDuration: c.readOpt(obj["maxDuration"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_clusterDecisionResource_template_spec_source_directory_jsonnet_extVars(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    code: c.readOpt(obj["code"], c.checkBool),
+    name: c.checkStr(obj["name"]),
+    value: c.checkStr(obj["value"]),
+  }}
+export function toApplicationSet_spec_generators_clusterDecisionResource_template_spec_source_directory_jsonnet_tlas(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    code: c.readOpt(obj["code"], c.checkBool),
+    name: c.checkStr(obj["name"]),
+    value: c.checkStr(obj["value"]),
+  }}
+export function toApplicationSet_spec_generators_clusterDecisionResource_template_spec_sources_directory_jsonnet_extVars(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    code: c.readOpt(obj["code"], c.checkBool),
+    name: c.checkStr(obj["name"]),
+    value: c.checkStr(obj["value"]),
+  }}
+export function toApplicationSet_spec_generators_clusterDecisionResource_template_spec_sources_directory_jsonnet_tlas(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    code: c.readOpt(obj["code"], c.checkBool),
+    name: c.checkStr(obj["name"]),
+    value: c.checkStr(obj["value"]),
+  }}
+export function toApplicationSet_spec_generators_clusters_template_spec_source_directory_jsonnet_extVars(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    code: c.readOpt(obj["code"], c.checkBool),
+    name: c.checkStr(obj["name"]),
+    value: c.checkStr(obj["value"]),
+  }}
+export function toApplicationSet_spec_generators_clusters_template_spec_source_directory_jsonnet_tlas(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    code: c.readOpt(obj["code"], c.checkBool),
+    name: c.checkStr(obj["name"]),
+    value: c.checkStr(obj["value"]),
+  }}
+export function toApplicationSet_spec_generators_clusters_template_spec_sources_directory_jsonnet_extVars(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    code: c.readOpt(obj["code"], c.checkBool),
+    name: c.checkStr(obj["name"]),
+    value: c.checkStr(obj["value"]),
+  }}
+export function toApplicationSet_spec_generators_clusters_template_spec_sources_directory_jsonnet_tlas(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    code: c.readOpt(obj["code"], c.checkBool),
+    name: c.checkStr(obj["name"]),
+    value: c.checkStr(obj["value"]),
+  }}
+export function toApplicationSet_spec_generators_git_template_spec_source_directory_jsonnet_extVars(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    code: c.readOpt(obj["code"], c.checkBool),
+    name: c.checkStr(obj["name"]),
+    value: c.checkStr(obj["value"]),
+  }}
+export function toApplicationSet_spec_generators_git_template_spec_source_directory_jsonnet_tlas(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    code: c.readOpt(obj["code"], c.checkBool),
+    name: c.checkStr(obj["name"]),
+    value: c.checkStr(obj["value"]),
+  }}
+export function toApplicationSet_spec_generators_git_template_spec_sources_directory_jsonnet_extVars(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    code: c.readOpt(obj["code"], c.checkBool),
+    name: c.checkStr(obj["name"]),
+    value: c.checkStr(obj["value"]),
+  }}
+export function toApplicationSet_spec_generators_git_template_spec_sources_directory_jsonnet_tlas(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    code: c.readOpt(obj["code"], c.checkBool),
+    name: c.checkStr(obj["name"]),
+    value: c.checkStr(obj["value"]),
+  }}
+export function toApplicationSet_spec_generators_list_template_spec_source_directory_jsonnet_extVars(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    code: c.readOpt(obj["code"], c.checkBool),
+    name: c.checkStr(obj["name"]),
+    value: c.checkStr(obj["value"]),
+  }}
+export function toApplicationSet_spec_generators_list_template_spec_source_directory_jsonnet_tlas(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    code: c.readOpt(obj["code"], c.checkBool),
+    name: c.checkStr(obj["name"]),
+    value: c.checkStr(obj["value"]),
+  }}
+export function toApplicationSet_spec_generators_list_template_spec_sources_directory_jsonnet_extVars(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    code: c.readOpt(obj["code"], c.checkBool),
+    name: c.checkStr(obj["name"]),
+    value: c.checkStr(obj["value"]),
+  }}
+export function toApplicationSet_spec_generators_list_template_spec_sources_directory_jsonnet_tlas(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    code: c.readOpt(obj["code"], c.checkBool),
+    name: c.checkStr(obj["name"]),
+    value: c.checkStr(obj["value"]),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_clusterDecisionResource_template_spec_source_directory(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    exclude: c.readOpt(obj["exclude"], c.checkStr),
+    include: c.readOpt(obj["include"], c.checkStr),
+    jsonnet: c.readOpt(obj["jsonnet"], toApplicationSet_spec_generators_matrix_generators_clusterDecisionResource_template_spec_source_directory_jsonnet),
+    recurse: c.readOpt(obj["recurse"], c.checkBool),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_clusterDecisionResource_template_spec_source_helm(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    fileParameters: c.readOpt(obj["fileParameters"], x => c.readList(x, toApplicationSet_spec_generators_matrix_generators_clusterDecisionResource_template_spec_source_helm_fileParameters)),
+    ignoreMissingValueFiles: c.readOpt(obj["ignoreMissingValueFiles"], c.checkBool),
+    parameters: c.readOpt(obj["parameters"], x => c.readList(x, toApplicationSet_spec_generators_matrix_generators_clusterDecisionResource_template_spec_source_helm_parameters)),
+    passCredentials: c.readOpt(obj["passCredentials"], c.checkBool),
+    releaseName: c.readOpt(obj["releaseName"], c.checkStr),
+    skipCrds: c.readOpt(obj["skipCrds"], c.checkBool),
+    valueFiles: c.readOpt(obj["valueFiles"], x => c.readList(x, c.checkStr)),
+    values: c.readOpt(obj["values"], c.checkStr),
+    version: c.readOpt(obj["version"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_clusterDecisionResource_template_spec_source_kustomize(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    commonAnnotations: c.readOpt(obj["commonAnnotations"], x => c.readMap(x, c.checkStr)),
+    commonLabels: c.readOpt(obj["commonLabels"], x => c.readMap(x, c.checkStr)),
+    forceCommonAnnotations: c.readOpt(obj["forceCommonAnnotations"], c.checkBool),
+    forceCommonLabels: c.readOpt(obj["forceCommonLabels"], c.checkBool),
+    images: c.readOpt(obj["images"], x => c.readList(x, c.checkStr)),
+    namePrefix: c.readOpt(obj["namePrefix"], c.checkStr),
+    nameSuffix: c.readOpt(obj["nameSuffix"], c.checkStr),
+    version: c.readOpt(obj["version"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_clusterDecisionResource_template_spec_source_plugin(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    env: c.readOpt(obj["env"], x => c.readList(x, toApplicationSet_spec_generators_matrix_generators_clusterDecisionResource_template_spec_source_plugin_env)),
+    name: c.readOpt(obj["name"], c.checkStr),
+    parameters: c.readOpt(obj["parameters"], x => c.readList(x, toApplicationSet_spec_generators_matrix_generators_clusterDecisionResource_template_spec_source_plugin_parameters)),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_clusterDecisionResource_template_spec_sources_directory(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    exclude: c.readOpt(obj["exclude"], c.checkStr),
+    include: c.readOpt(obj["include"], c.checkStr),
+    jsonnet: c.readOpt(obj["jsonnet"], toApplicationSet_spec_generators_matrix_generators_clusterDecisionResource_template_spec_sources_directory_jsonnet),
+    recurse: c.readOpt(obj["recurse"], c.checkBool),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_clusterDecisionResource_template_spec_sources_helm(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    fileParameters: c.readOpt(obj["fileParameters"], x => c.readList(x, toApplicationSet_spec_generators_matrix_generators_clusterDecisionResource_template_spec_sources_helm_fileParameters)),
+    ignoreMissingValueFiles: c.readOpt(obj["ignoreMissingValueFiles"], c.checkBool),
+    parameters: c.readOpt(obj["parameters"], x => c.readList(x, toApplicationSet_spec_generators_matrix_generators_clusterDecisionResource_template_spec_sources_helm_parameters)),
+    passCredentials: c.readOpt(obj["passCredentials"], c.checkBool),
+    releaseName: c.readOpt(obj["releaseName"], c.checkStr),
+    skipCrds: c.readOpt(obj["skipCrds"], c.checkBool),
+    valueFiles: c.readOpt(obj["valueFiles"], x => c.readList(x, c.checkStr)),
+    values: c.readOpt(obj["values"], c.checkStr),
+    version: c.readOpt(obj["version"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_clusterDecisionResource_template_spec_sources_kustomize(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    commonAnnotations: c.readOpt(obj["commonAnnotations"], x => c.readMap(x, c.checkStr)),
+    commonLabels: c.readOpt(obj["commonLabels"], x => c.readMap(x, c.checkStr)),
+    forceCommonAnnotations: c.readOpt(obj["forceCommonAnnotations"], c.checkBool),
+    forceCommonLabels: c.readOpt(obj["forceCommonLabels"], c.checkBool),
+    images: c.readOpt(obj["images"], x => c.readList(x, c.checkStr)),
+    namePrefix: c.readOpt(obj["namePrefix"], c.checkStr),
+    nameSuffix: c.readOpt(obj["nameSuffix"], c.checkStr),
+    version: c.readOpt(obj["version"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_clusterDecisionResource_template_spec_sources_plugin(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    env: c.readOpt(obj["env"], x => c.readList(x, toApplicationSet_spec_generators_matrix_generators_clusterDecisionResource_template_spec_sources_plugin_env)),
+    name: c.readOpt(obj["name"], c.checkStr),
+    parameters: c.readOpt(obj["parameters"], x => c.readList(x, toApplicationSet_spec_generators_matrix_generators_clusterDecisionResource_template_spec_sources_plugin_parameters)),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_clusterDecisionResource_template_spec_syncPolicy_automated(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    allowEmpty: c.readOpt(obj["allowEmpty"], c.checkBool),
+    prune: c.readOpt(obj["prune"], c.checkBool),
+    selfHeal: c.readOpt(obj["selfHeal"], c.checkBool),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_clusterDecisionResource_template_spec_syncPolicy_managedNamespaceMetadata(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    annotations: c.readOpt(obj["annotations"], x => c.readMap(x, c.checkStr)),
+    labels: c.readOpt(obj["labels"], x => c.readMap(x, c.checkStr)),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_clusterDecisionResource_template_spec_syncPolicy_retry(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    backoff: c.readOpt(obj["backoff"], toApplicationSet_spec_generators_matrix_generators_clusterDecisionResource_template_spec_syncPolicy_retry_backoff),
+    limit: c.readOpt(obj["limit"], c.checkNum),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_clusters_template_spec_source_directory(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    exclude: c.readOpt(obj["exclude"], c.checkStr),
+    include: c.readOpt(obj["include"], c.checkStr),
+    jsonnet: c.readOpt(obj["jsonnet"], toApplicationSet_spec_generators_matrix_generators_clusters_template_spec_source_directory_jsonnet),
+    recurse: c.readOpt(obj["recurse"], c.checkBool),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_clusters_template_spec_source_helm(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    fileParameters: c.readOpt(obj["fileParameters"], x => c.readList(x, toApplicationSet_spec_generators_matrix_generators_clusters_template_spec_source_helm_fileParameters)),
+    ignoreMissingValueFiles: c.readOpt(obj["ignoreMissingValueFiles"], c.checkBool),
+    parameters: c.readOpt(obj["parameters"], x => c.readList(x, toApplicationSet_spec_generators_matrix_generators_clusters_template_spec_source_helm_parameters)),
+    passCredentials: c.readOpt(obj["passCredentials"], c.checkBool),
+    releaseName: c.readOpt(obj["releaseName"], c.checkStr),
+    skipCrds: c.readOpt(obj["skipCrds"], c.checkBool),
+    valueFiles: c.readOpt(obj["valueFiles"], x => c.readList(x, c.checkStr)),
+    values: c.readOpt(obj["values"], c.checkStr),
+    version: c.readOpt(obj["version"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_clusters_template_spec_source_kustomize(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    commonAnnotations: c.readOpt(obj["commonAnnotations"], x => c.readMap(x, c.checkStr)),
+    commonLabels: c.readOpt(obj["commonLabels"], x => c.readMap(x, c.checkStr)),
+    forceCommonAnnotations: c.readOpt(obj["forceCommonAnnotations"], c.checkBool),
+    forceCommonLabels: c.readOpt(obj["forceCommonLabels"], c.checkBool),
+    images: c.readOpt(obj["images"], x => c.readList(x, c.checkStr)),
+    namePrefix: c.readOpt(obj["namePrefix"], c.checkStr),
+    nameSuffix: c.readOpt(obj["nameSuffix"], c.checkStr),
+    version: c.readOpt(obj["version"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_clusters_template_spec_source_plugin(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    env: c.readOpt(obj["env"], x => c.readList(x, toApplicationSet_spec_generators_matrix_generators_clusters_template_spec_source_plugin_env)),
+    name: c.readOpt(obj["name"], c.checkStr),
+    parameters: c.readOpt(obj["parameters"], x => c.readList(x, toApplicationSet_spec_generators_matrix_generators_clusters_template_spec_source_plugin_parameters)),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_clusters_template_spec_sources_directory(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    exclude: c.readOpt(obj["exclude"], c.checkStr),
+    include: c.readOpt(obj["include"], c.checkStr),
+    jsonnet: c.readOpt(obj["jsonnet"], toApplicationSet_spec_generators_matrix_generators_clusters_template_spec_sources_directory_jsonnet),
+    recurse: c.readOpt(obj["recurse"], c.checkBool),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_clusters_template_spec_sources_helm(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    fileParameters: c.readOpt(obj["fileParameters"], x => c.readList(x, toApplicationSet_spec_generators_matrix_generators_clusters_template_spec_sources_helm_fileParameters)),
+    ignoreMissingValueFiles: c.readOpt(obj["ignoreMissingValueFiles"], c.checkBool),
+    parameters: c.readOpt(obj["parameters"], x => c.readList(x, toApplicationSet_spec_generators_matrix_generators_clusters_template_spec_sources_helm_parameters)),
+    passCredentials: c.readOpt(obj["passCredentials"], c.checkBool),
+    releaseName: c.readOpt(obj["releaseName"], c.checkStr),
+    skipCrds: c.readOpt(obj["skipCrds"], c.checkBool),
+    valueFiles: c.readOpt(obj["valueFiles"], x => c.readList(x, c.checkStr)),
+    values: c.readOpt(obj["values"], c.checkStr),
+    version: c.readOpt(obj["version"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_clusters_template_spec_sources_kustomize(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    commonAnnotations: c.readOpt(obj["commonAnnotations"], x => c.readMap(x, c.checkStr)),
+    commonLabels: c.readOpt(obj["commonLabels"], x => c.readMap(x, c.checkStr)),
+    forceCommonAnnotations: c.readOpt(obj["forceCommonAnnotations"], c.checkBool),
+    forceCommonLabels: c.readOpt(obj["forceCommonLabels"], c.checkBool),
+    images: c.readOpt(obj["images"], x => c.readList(x, c.checkStr)),
+    namePrefix: c.readOpt(obj["namePrefix"], c.checkStr),
+    nameSuffix: c.readOpt(obj["nameSuffix"], c.checkStr),
+    version: c.readOpt(obj["version"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_clusters_template_spec_sources_plugin(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    env: c.readOpt(obj["env"], x => c.readList(x, toApplicationSet_spec_generators_matrix_generators_clusters_template_spec_sources_plugin_env)),
+    name: c.readOpt(obj["name"], c.checkStr),
+    parameters: c.readOpt(obj["parameters"], x => c.readList(x, toApplicationSet_spec_generators_matrix_generators_clusters_template_spec_sources_plugin_parameters)),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_clusters_template_spec_syncPolicy_automated(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    allowEmpty: c.readOpt(obj["allowEmpty"], c.checkBool),
+    prune: c.readOpt(obj["prune"], c.checkBool),
+    selfHeal: c.readOpt(obj["selfHeal"], c.checkBool),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_clusters_template_spec_syncPolicy_managedNamespaceMetadata(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    annotations: c.readOpt(obj["annotations"], x => c.readMap(x, c.checkStr)),
+    labels: c.readOpt(obj["labels"], x => c.readMap(x, c.checkStr)),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_clusters_template_spec_syncPolicy_retry(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    backoff: c.readOpt(obj["backoff"], toApplicationSet_spec_generators_matrix_generators_clusters_template_spec_syncPolicy_retry_backoff),
+    limit: c.readOpt(obj["limit"], c.checkNum),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_git_template_spec_source_directory(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    exclude: c.readOpt(obj["exclude"], c.checkStr),
+    include: c.readOpt(obj["include"], c.checkStr),
+    jsonnet: c.readOpt(obj["jsonnet"], toApplicationSet_spec_generators_matrix_generators_git_template_spec_source_directory_jsonnet),
+    recurse: c.readOpt(obj["recurse"], c.checkBool),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_git_template_spec_source_helm(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    fileParameters: c.readOpt(obj["fileParameters"], x => c.readList(x, toApplicationSet_spec_generators_matrix_generators_git_template_spec_source_helm_fileParameters)),
+    ignoreMissingValueFiles: c.readOpt(obj["ignoreMissingValueFiles"], c.checkBool),
+    parameters: c.readOpt(obj["parameters"], x => c.readList(x, toApplicationSet_spec_generators_matrix_generators_git_template_spec_source_helm_parameters)),
+    passCredentials: c.readOpt(obj["passCredentials"], c.checkBool),
+    releaseName: c.readOpt(obj["releaseName"], c.checkStr),
+    skipCrds: c.readOpt(obj["skipCrds"], c.checkBool),
+    valueFiles: c.readOpt(obj["valueFiles"], x => c.readList(x, c.checkStr)),
+    values: c.readOpt(obj["values"], c.checkStr),
+    version: c.readOpt(obj["version"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_git_template_spec_source_kustomize(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    commonAnnotations: c.readOpt(obj["commonAnnotations"], x => c.readMap(x, c.checkStr)),
+    commonLabels: c.readOpt(obj["commonLabels"], x => c.readMap(x, c.checkStr)),
+    forceCommonAnnotations: c.readOpt(obj["forceCommonAnnotations"], c.checkBool),
+    forceCommonLabels: c.readOpt(obj["forceCommonLabels"], c.checkBool),
+    images: c.readOpt(obj["images"], x => c.readList(x, c.checkStr)),
+    namePrefix: c.readOpt(obj["namePrefix"], c.checkStr),
+    nameSuffix: c.readOpt(obj["nameSuffix"], c.checkStr),
+    version: c.readOpt(obj["version"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_git_template_spec_source_plugin(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    env: c.readOpt(obj["env"], x => c.readList(x, toApplicationSet_spec_generators_matrix_generators_git_template_spec_source_plugin_env)),
+    name: c.readOpt(obj["name"], c.checkStr),
+    parameters: c.readOpt(obj["parameters"], x => c.readList(x, toApplicationSet_spec_generators_matrix_generators_git_template_spec_source_plugin_parameters)),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_git_template_spec_sources_directory(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    exclude: c.readOpt(obj["exclude"], c.checkStr),
+    include: c.readOpt(obj["include"], c.checkStr),
+    jsonnet: c.readOpt(obj["jsonnet"], toApplicationSet_spec_generators_matrix_generators_git_template_spec_sources_directory_jsonnet),
+    recurse: c.readOpt(obj["recurse"], c.checkBool),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_git_template_spec_sources_helm(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    fileParameters: c.readOpt(obj["fileParameters"], x => c.readList(x, toApplicationSet_spec_generators_matrix_generators_git_template_spec_sources_helm_fileParameters)),
+    ignoreMissingValueFiles: c.readOpt(obj["ignoreMissingValueFiles"], c.checkBool),
+    parameters: c.readOpt(obj["parameters"], x => c.readList(x, toApplicationSet_spec_generators_matrix_generators_git_template_spec_sources_helm_parameters)),
+    passCredentials: c.readOpt(obj["passCredentials"], c.checkBool),
+    releaseName: c.readOpt(obj["releaseName"], c.checkStr),
+    skipCrds: c.readOpt(obj["skipCrds"], c.checkBool),
+    valueFiles: c.readOpt(obj["valueFiles"], x => c.readList(x, c.checkStr)),
+    values: c.readOpt(obj["values"], c.checkStr),
+    version: c.readOpt(obj["version"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_git_template_spec_sources_kustomize(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    commonAnnotations: c.readOpt(obj["commonAnnotations"], x => c.readMap(x, c.checkStr)),
+    commonLabels: c.readOpt(obj["commonLabels"], x => c.readMap(x, c.checkStr)),
+    forceCommonAnnotations: c.readOpt(obj["forceCommonAnnotations"], c.checkBool),
+    forceCommonLabels: c.readOpt(obj["forceCommonLabels"], c.checkBool),
+    images: c.readOpt(obj["images"], x => c.readList(x, c.checkStr)),
+    namePrefix: c.readOpt(obj["namePrefix"], c.checkStr),
+    nameSuffix: c.readOpt(obj["nameSuffix"], c.checkStr),
+    version: c.readOpt(obj["version"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_git_template_spec_sources_plugin(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    env: c.readOpt(obj["env"], x => c.readList(x, toApplicationSet_spec_generators_matrix_generators_git_template_spec_sources_plugin_env)),
+    name: c.readOpt(obj["name"], c.checkStr),
+    parameters: c.readOpt(obj["parameters"], x => c.readList(x, toApplicationSet_spec_generators_matrix_generators_git_template_spec_sources_plugin_parameters)),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_git_template_spec_syncPolicy_automated(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    allowEmpty: c.readOpt(obj["allowEmpty"], c.checkBool),
+    prune: c.readOpt(obj["prune"], c.checkBool),
+    selfHeal: c.readOpt(obj["selfHeal"], c.checkBool),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_git_template_spec_syncPolicy_managedNamespaceMetadata(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    annotations: c.readOpt(obj["annotations"], x => c.readMap(x, c.checkStr)),
+    labels: c.readOpt(obj["labels"], x => c.readMap(x, c.checkStr)),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_git_template_spec_syncPolicy_retry(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    backoff: c.readOpt(obj["backoff"], toApplicationSet_spec_generators_matrix_generators_git_template_spec_syncPolicy_retry_backoff),
+    limit: c.readOpt(obj["limit"], c.checkNum),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_list_template_spec_source_directory(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    exclude: c.readOpt(obj["exclude"], c.checkStr),
+    include: c.readOpt(obj["include"], c.checkStr),
+    jsonnet: c.readOpt(obj["jsonnet"], toApplicationSet_spec_generators_matrix_generators_list_template_spec_source_directory_jsonnet),
+    recurse: c.readOpt(obj["recurse"], c.checkBool),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_list_template_spec_source_helm(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    fileParameters: c.readOpt(obj["fileParameters"], x => c.readList(x, toApplicationSet_spec_generators_matrix_generators_list_template_spec_source_helm_fileParameters)),
+    ignoreMissingValueFiles: c.readOpt(obj["ignoreMissingValueFiles"], c.checkBool),
+    parameters: c.readOpt(obj["parameters"], x => c.readList(x, toApplicationSet_spec_generators_matrix_generators_list_template_spec_source_helm_parameters)),
+    passCredentials: c.readOpt(obj["passCredentials"], c.checkBool),
+    releaseName: c.readOpt(obj["releaseName"], c.checkStr),
+    skipCrds: c.readOpt(obj["skipCrds"], c.checkBool),
+    valueFiles: c.readOpt(obj["valueFiles"], x => c.readList(x, c.checkStr)),
+    values: c.readOpt(obj["values"], c.checkStr),
+    version: c.readOpt(obj["version"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_list_template_spec_source_kustomize(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    commonAnnotations: c.readOpt(obj["commonAnnotations"], x => c.readMap(x, c.checkStr)),
+    commonLabels: c.readOpt(obj["commonLabels"], x => c.readMap(x, c.checkStr)),
+    forceCommonAnnotations: c.readOpt(obj["forceCommonAnnotations"], c.checkBool),
+    forceCommonLabels: c.readOpt(obj["forceCommonLabels"], c.checkBool),
+    images: c.readOpt(obj["images"], x => c.readList(x, c.checkStr)),
+    namePrefix: c.readOpt(obj["namePrefix"], c.checkStr),
+    nameSuffix: c.readOpt(obj["nameSuffix"], c.checkStr),
+    version: c.readOpt(obj["version"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_list_template_spec_source_plugin(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    env: c.readOpt(obj["env"], x => c.readList(x, toApplicationSet_spec_generators_matrix_generators_list_template_spec_source_plugin_env)),
+    name: c.readOpt(obj["name"], c.checkStr),
+    parameters: c.readOpt(obj["parameters"], x => c.readList(x, toApplicationSet_spec_generators_matrix_generators_list_template_spec_source_plugin_parameters)),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_list_template_spec_sources_directory(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    exclude: c.readOpt(obj["exclude"], c.checkStr),
+    include: c.readOpt(obj["include"], c.checkStr),
+    jsonnet: c.readOpt(obj["jsonnet"], toApplicationSet_spec_generators_matrix_generators_list_template_spec_sources_directory_jsonnet),
+    recurse: c.readOpt(obj["recurse"], c.checkBool),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_list_template_spec_sources_helm(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    fileParameters: c.readOpt(obj["fileParameters"], x => c.readList(x, toApplicationSet_spec_generators_matrix_generators_list_template_spec_sources_helm_fileParameters)),
+    ignoreMissingValueFiles: c.readOpt(obj["ignoreMissingValueFiles"], c.checkBool),
+    parameters: c.readOpt(obj["parameters"], x => c.readList(x, toApplicationSet_spec_generators_matrix_generators_list_template_spec_sources_helm_parameters)),
+    passCredentials: c.readOpt(obj["passCredentials"], c.checkBool),
+    releaseName: c.readOpt(obj["releaseName"], c.checkStr),
+    skipCrds: c.readOpt(obj["skipCrds"], c.checkBool),
+    valueFiles: c.readOpt(obj["valueFiles"], x => c.readList(x, c.checkStr)),
+    values: c.readOpt(obj["values"], c.checkStr),
+    version: c.readOpt(obj["version"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_list_template_spec_sources_kustomize(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    commonAnnotations: c.readOpt(obj["commonAnnotations"], x => c.readMap(x, c.checkStr)),
+    commonLabels: c.readOpt(obj["commonLabels"], x => c.readMap(x, c.checkStr)),
+    forceCommonAnnotations: c.readOpt(obj["forceCommonAnnotations"], c.checkBool),
+    forceCommonLabels: c.readOpt(obj["forceCommonLabels"], c.checkBool),
+    images: c.readOpt(obj["images"], x => c.readList(x, c.checkStr)),
+    namePrefix: c.readOpt(obj["namePrefix"], c.checkStr),
+    nameSuffix: c.readOpt(obj["nameSuffix"], c.checkStr),
+    version: c.readOpt(obj["version"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_list_template_spec_sources_plugin(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    env: c.readOpt(obj["env"], x => c.readList(x, toApplicationSet_spec_generators_matrix_generators_list_template_spec_sources_plugin_env)),
+    name: c.readOpt(obj["name"], c.checkStr),
+    parameters: c.readOpt(obj["parameters"], x => c.readList(x, toApplicationSet_spec_generators_matrix_generators_list_template_spec_sources_plugin_parameters)),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_list_template_spec_syncPolicy_automated(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    allowEmpty: c.readOpt(obj["allowEmpty"], c.checkBool),
+    prune: c.readOpt(obj["prune"], c.checkBool),
+    selfHeal: c.readOpt(obj["selfHeal"], c.checkBool),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_list_template_spec_syncPolicy_managedNamespaceMetadata(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    annotations: c.readOpt(obj["annotations"], x => c.readMap(x, c.checkStr)),
+    labels: c.readOpt(obj["labels"], x => c.readMap(x, c.checkStr)),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_list_template_spec_syncPolicy_retry(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    backoff: c.readOpt(obj["backoff"], toApplicationSet_spec_generators_matrix_generators_list_template_spec_syncPolicy_retry_backoff),
+    limit: c.readOpt(obj["limit"], c.checkNum),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_pullRequest_template_spec_source_directory(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    exclude: c.readOpt(obj["exclude"], c.checkStr),
+    include: c.readOpt(obj["include"], c.checkStr),
+    jsonnet: c.readOpt(obj["jsonnet"], toApplicationSet_spec_generators_matrix_generators_pullRequest_template_spec_source_directory_jsonnet),
+    recurse: c.readOpt(obj["recurse"], c.checkBool),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_pullRequest_template_spec_source_helm(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    fileParameters: c.readOpt(obj["fileParameters"], x => c.readList(x, toApplicationSet_spec_generators_matrix_generators_pullRequest_template_spec_source_helm_fileParameters)),
+    ignoreMissingValueFiles: c.readOpt(obj["ignoreMissingValueFiles"], c.checkBool),
+    parameters: c.readOpt(obj["parameters"], x => c.readList(x, toApplicationSet_spec_generators_matrix_generators_pullRequest_template_spec_source_helm_parameters)),
+    passCredentials: c.readOpt(obj["passCredentials"], c.checkBool),
+    releaseName: c.readOpt(obj["releaseName"], c.checkStr),
+    skipCrds: c.readOpt(obj["skipCrds"], c.checkBool),
+    valueFiles: c.readOpt(obj["valueFiles"], x => c.readList(x, c.checkStr)),
+    values: c.readOpt(obj["values"], c.checkStr),
+    version: c.readOpt(obj["version"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_pullRequest_template_spec_source_kustomize(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    commonAnnotations: c.readOpt(obj["commonAnnotations"], x => c.readMap(x, c.checkStr)),
+    commonLabels: c.readOpt(obj["commonLabels"], x => c.readMap(x, c.checkStr)),
+    forceCommonAnnotations: c.readOpt(obj["forceCommonAnnotations"], c.checkBool),
+    forceCommonLabels: c.readOpt(obj["forceCommonLabels"], c.checkBool),
+    images: c.readOpt(obj["images"], x => c.readList(x, c.checkStr)),
+    namePrefix: c.readOpt(obj["namePrefix"], c.checkStr),
+    nameSuffix: c.readOpt(obj["nameSuffix"], c.checkStr),
+    version: c.readOpt(obj["version"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_pullRequest_template_spec_source_plugin(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    env: c.readOpt(obj["env"], x => c.readList(x, toApplicationSet_spec_generators_matrix_generators_pullRequest_template_spec_source_plugin_env)),
+    name: c.readOpt(obj["name"], c.checkStr),
+    parameters: c.readOpt(obj["parameters"], x => c.readList(x, toApplicationSet_spec_generators_matrix_generators_pullRequest_template_spec_source_plugin_parameters)),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_pullRequest_template_spec_sources_directory(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    exclude: c.readOpt(obj["exclude"], c.checkStr),
+    include: c.readOpt(obj["include"], c.checkStr),
+    jsonnet: c.readOpt(obj["jsonnet"], toApplicationSet_spec_generators_matrix_generators_pullRequest_template_spec_sources_directory_jsonnet),
+    recurse: c.readOpt(obj["recurse"], c.checkBool),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_pullRequest_template_spec_sources_helm(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    fileParameters: c.readOpt(obj["fileParameters"], x => c.readList(x, toApplicationSet_spec_generators_matrix_generators_pullRequest_template_spec_sources_helm_fileParameters)),
+    ignoreMissingValueFiles: c.readOpt(obj["ignoreMissingValueFiles"], c.checkBool),
+    parameters: c.readOpt(obj["parameters"], x => c.readList(x, toApplicationSet_spec_generators_matrix_generators_pullRequest_template_spec_sources_helm_parameters)),
+    passCredentials: c.readOpt(obj["passCredentials"], c.checkBool),
+    releaseName: c.readOpt(obj["releaseName"], c.checkStr),
+    skipCrds: c.readOpt(obj["skipCrds"], c.checkBool),
+    valueFiles: c.readOpt(obj["valueFiles"], x => c.readList(x, c.checkStr)),
+    values: c.readOpt(obj["values"], c.checkStr),
+    version: c.readOpt(obj["version"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_pullRequest_template_spec_sources_kustomize(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    commonAnnotations: c.readOpt(obj["commonAnnotations"], x => c.readMap(x, c.checkStr)),
+    commonLabels: c.readOpt(obj["commonLabels"], x => c.readMap(x, c.checkStr)),
+    forceCommonAnnotations: c.readOpt(obj["forceCommonAnnotations"], c.checkBool),
+    forceCommonLabels: c.readOpt(obj["forceCommonLabels"], c.checkBool),
+    images: c.readOpt(obj["images"], x => c.readList(x, c.checkStr)),
+    namePrefix: c.readOpt(obj["namePrefix"], c.checkStr),
+    nameSuffix: c.readOpt(obj["nameSuffix"], c.checkStr),
+    version: c.readOpt(obj["version"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_pullRequest_template_spec_sources_plugin(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    env: c.readOpt(obj["env"], x => c.readList(x, toApplicationSet_spec_generators_matrix_generators_pullRequest_template_spec_sources_plugin_env)),
+    name: c.readOpt(obj["name"], c.checkStr),
+    parameters: c.readOpt(obj["parameters"], x => c.readList(x, toApplicationSet_spec_generators_matrix_generators_pullRequest_template_spec_sources_plugin_parameters)),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_pullRequest_template_spec_syncPolicy_automated(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    allowEmpty: c.readOpt(obj["allowEmpty"], c.checkBool),
+    prune: c.readOpt(obj["prune"], c.checkBool),
+    selfHeal: c.readOpt(obj["selfHeal"], c.checkBool),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_pullRequest_template_spec_syncPolicy_managedNamespaceMetadata(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    annotations: c.readOpt(obj["annotations"], x => c.readMap(x, c.checkStr)),
+    labels: c.readOpt(obj["labels"], x => c.readMap(x, c.checkStr)),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_pullRequest_template_spec_syncPolicy_retry(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    backoff: c.readOpt(obj["backoff"], toApplicationSet_spec_generators_matrix_generators_pullRequest_template_spec_syncPolicy_retry_backoff),
+    limit: c.readOpt(obj["limit"], c.checkNum),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_scmProvider_template_spec_source_directory(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    exclude: c.readOpt(obj["exclude"], c.checkStr),
+    include: c.readOpt(obj["include"], c.checkStr),
+    jsonnet: c.readOpt(obj["jsonnet"], toApplicationSet_spec_generators_matrix_generators_scmProvider_template_spec_source_directory_jsonnet),
+    recurse: c.readOpt(obj["recurse"], c.checkBool),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_scmProvider_template_spec_source_helm(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    fileParameters: c.readOpt(obj["fileParameters"], x => c.readList(x, toApplicationSet_spec_generators_matrix_generators_scmProvider_template_spec_source_helm_fileParameters)),
+    ignoreMissingValueFiles: c.readOpt(obj["ignoreMissingValueFiles"], c.checkBool),
+    parameters: c.readOpt(obj["parameters"], x => c.readList(x, toApplicationSet_spec_generators_matrix_generators_scmProvider_template_spec_source_helm_parameters)),
+    passCredentials: c.readOpt(obj["passCredentials"], c.checkBool),
+    releaseName: c.readOpt(obj["releaseName"], c.checkStr),
+    skipCrds: c.readOpt(obj["skipCrds"], c.checkBool),
+    valueFiles: c.readOpt(obj["valueFiles"], x => c.readList(x, c.checkStr)),
+    values: c.readOpt(obj["values"], c.checkStr),
+    version: c.readOpt(obj["version"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_scmProvider_template_spec_source_kustomize(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    commonAnnotations: c.readOpt(obj["commonAnnotations"], x => c.readMap(x, c.checkStr)),
+    commonLabels: c.readOpt(obj["commonLabels"], x => c.readMap(x, c.checkStr)),
+    forceCommonAnnotations: c.readOpt(obj["forceCommonAnnotations"], c.checkBool),
+    forceCommonLabels: c.readOpt(obj["forceCommonLabels"], c.checkBool),
+    images: c.readOpt(obj["images"], x => c.readList(x, c.checkStr)),
+    namePrefix: c.readOpt(obj["namePrefix"], c.checkStr),
+    nameSuffix: c.readOpt(obj["nameSuffix"], c.checkStr),
+    version: c.readOpt(obj["version"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_scmProvider_template_spec_source_plugin(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    env: c.readOpt(obj["env"], x => c.readList(x, toApplicationSet_spec_generators_matrix_generators_scmProvider_template_spec_source_plugin_env)),
+    name: c.readOpt(obj["name"], c.checkStr),
+    parameters: c.readOpt(obj["parameters"], x => c.readList(x, toApplicationSet_spec_generators_matrix_generators_scmProvider_template_spec_source_plugin_parameters)),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_scmProvider_template_spec_sources_directory(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    exclude: c.readOpt(obj["exclude"], c.checkStr),
+    include: c.readOpt(obj["include"], c.checkStr),
+    jsonnet: c.readOpt(obj["jsonnet"], toApplicationSet_spec_generators_matrix_generators_scmProvider_template_spec_sources_directory_jsonnet),
+    recurse: c.readOpt(obj["recurse"], c.checkBool),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_scmProvider_template_spec_sources_helm(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    fileParameters: c.readOpt(obj["fileParameters"], x => c.readList(x, toApplicationSet_spec_generators_matrix_generators_scmProvider_template_spec_sources_helm_fileParameters)),
+    ignoreMissingValueFiles: c.readOpt(obj["ignoreMissingValueFiles"], c.checkBool),
+    parameters: c.readOpt(obj["parameters"], x => c.readList(x, toApplicationSet_spec_generators_matrix_generators_scmProvider_template_spec_sources_helm_parameters)),
+    passCredentials: c.readOpt(obj["passCredentials"], c.checkBool),
+    releaseName: c.readOpt(obj["releaseName"], c.checkStr),
+    skipCrds: c.readOpt(obj["skipCrds"], c.checkBool),
+    valueFiles: c.readOpt(obj["valueFiles"], x => c.readList(x, c.checkStr)),
+    values: c.readOpt(obj["values"], c.checkStr),
+    version: c.readOpt(obj["version"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_scmProvider_template_spec_sources_kustomize(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    commonAnnotations: c.readOpt(obj["commonAnnotations"], x => c.readMap(x, c.checkStr)),
+    commonLabels: c.readOpt(obj["commonLabels"], x => c.readMap(x, c.checkStr)),
+    forceCommonAnnotations: c.readOpt(obj["forceCommonAnnotations"], c.checkBool),
+    forceCommonLabels: c.readOpt(obj["forceCommonLabels"], c.checkBool),
+    images: c.readOpt(obj["images"], x => c.readList(x, c.checkStr)),
+    namePrefix: c.readOpt(obj["namePrefix"], c.checkStr),
+    nameSuffix: c.readOpt(obj["nameSuffix"], c.checkStr),
+    version: c.readOpt(obj["version"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_scmProvider_template_spec_sources_plugin(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    env: c.readOpt(obj["env"], x => c.readList(x, toApplicationSet_spec_generators_matrix_generators_scmProvider_template_spec_sources_plugin_env)),
+    name: c.readOpt(obj["name"], c.checkStr),
+    parameters: c.readOpt(obj["parameters"], x => c.readList(x, toApplicationSet_spec_generators_matrix_generators_scmProvider_template_spec_sources_plugin_parameters)),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_scmProvider_template_spec_syncPolicy_automated(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    allowEmpty: c.readOpt(obj["allowEmpty"], c.checkBool),
+    prune: c.readOpt(obj["prune"], c.checkBool),
+    selfHeal: c.readOpt(obj["selfHeal"], c.checkBool),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_scmProvider_template_spec_syncPolicy_managedNamespaceMetadata(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    annotations: c.readOpt(obj["annotations"], x => c.readMap(x, c.checkStr)),
+    labels: c.readOpt(obj["labels"], x => c.readMap(x, c.checkStr)),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_scmProvider_template_spec_syncPolicy_retry(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    backoff: c.readOpt(obj["backoff"], toApplicationSet_spec_generators_matrix_generators_scmProvider_template_spec_syncPolicy_retry_backoff),
+    limit: c.readOpt(obj["limit"], c.checkNum),
+  }}
+export function toApplicationSet_spec_generators_matrix_template_spec_source_directory_jsonnet_extVars(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    code: c.readOpt(obj["code"], c.checkBool),
+    name: c.checkStr(obj["name"]),
+    value: c.checkStr(obj["value"]),
+  }}
+export function toApplicationSet_spec_generators_matrix_template_spec_source_directory_jsonnet_tlas(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    code: c.readOpt(obj["code"], c.checkBool),
+    name: c.checkStr(obj["name"]),
+    value: c.checkStr(obj["value"]),
+  }}
+export function toApplicationSet_spec_generators_matrix_template_spec_sources_directory_jsonnet_extVars(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    code: c.readOpt(obj["code"], c.checkBool),
+    name: c.checkStr(obj["name"]),
+    value: c.checkStr(obj["value"]),
+  }}
+export function toApplicationSet_spec_generators_matrix_template_spec_sources_directory_jsonnet_tlas(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    code: c.readOpt(obj["code"], c.checkBool),
+    name: c.checkStr(obj["name"]),
+    value: c.checkStr(obj["value"]),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_clusterDecisionResource_template_spec_source_directory(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    exclude: c.readOpt(obj["exclude"], c.checkStr),
+    include: c.readOpt(obj["include"], c.checkStr),
+    jsonnet: c.readOpt(obj["jsonnet"], toApplicationSet_spec_generators_merge_generators_clusterDecisionResource_template_spec_source_directory_jsonnet),
+    recurse: c.readOpt(obj["recurse"], c.checkBool),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_clusterDecisionResource_template_spec_source_helm(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    fileParameters: c.readOpt(obj["fileParameters"], x => c.readList(x, toApplicationSet_spec_generators_merge_generators_clusterDecisionResource_template_spec_source_helm_fileParameters)),
+    ignoreMissingValueFiles: c.readOpt(obj["ignoreMissingValueFiles"], c.checkBool),
+    parameters: c.readOpt(obj["parameters"], x => c.readList(x, toApplicationSet_spec_generators_merge_generators_clusterDecisionResource_template_spec_source_helm_parameters)),
+    passCredentials: c.readOpt(obj["passCredentials"], c.checkBool),
+    releaseName: c.readOpt(obj["releaseName"], c.checkStr),
+    skipCrds: c.readOpt(obj["skipCrds"], c.checkBool),
+    valueFiles: c.readOpt(obj["valueFiles"], x => c.readList(x, c.checkStr)),
+    values: c.readOpt(obj["values"], c.checkStr),
+    version: c.readOpt(obj["version"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_clusterDecisionResource_template_spec_source_kustomize(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    commonAnnotations: c.readOpt(obj["commonAnnotations"], x => c.readMap(x, c.checkStr)),
+    commonLabels: c.readOpt(obj["commonLabels"], x => c.readMap(x, c.checkStr)),
+    forceCommonAnnotations: c.readOpt(obj["forceCommonAnnotations"], c.checkBool),
+    forceCommonLabels: c.readOpt(obj["forceCommonLabels"], c.checkBool),
+    images: c.readOpt(obj["images"], x => c.readList(x, c.checkStr)),
+    namePrefix: c.readOpt(obj["namePrefix"], c.checkStr),
+    nameSuffix: c.readOpt(obj["nameSuffix"], c.checkStr),
+    version: c.readOpt(obj["version"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_clusterDecisionResource_template_spec_source_plugin(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    env: c.readOpt(obj["env"], x => c.readList(x, toApplicationSet_spec_generators_merge_generators_clusterDecisionResource_template_spec_source_plugin_env)),
+    name: c.readOpt(obj["name"], c.checkStr),
+    parameters: c.readOpt(obj["parameters"], x => c.readList(x, toApplicationSet_spec_generators_merge_generators_clusterDecisionResource_template_spec_source_plugin_parameters)),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_clusterDecisionResource_template_spec_sources_directory(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    exclude: c.readOpt(obj["exclude"], c.checkStr),
+    include: c.readOpt(obj["include"], c.checkStr),
+    jsonnet: c.readOpt(obj["jsonnet"], toApplicationSet_spec_generators_merge_generators_clusterDecisionResource_template_spec_sources_directory_jsonnet),
+    recurse: c.readOpt(obj["recurse"], c.checkBool),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_clusterDecisionResource_template_spec_sources_helm(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    fileParameters: c.readOpt(obj["fileParameters"], x => c.readList(x, toApplicationSet_spec_generators_merge_generators_clusterDecisionResource_template_spec_sources_helm_fileParameters)),
+    ignoreMissingValueFiles: c.readOpt(obj["ignoreMissingValueFiles"], c.checkBool),
+    parameters: c.readOpt(obj["parameters"], x => c.readList(x, toApplicationSet_spec_generators_merge_generators_clusterDecisionResource_template_spec_sources_helm_parameters)),
+    passCredentials: c.readOpt(obj["passCredentials"], c.checkBool),
+    releaseName: c.readOpt(obj["releaseName"], c.checkStr),
+    skipCrds: c.readOpt(obj["skipCrds"], c.checkBool),
+    valueFiles: c.readOpt(obj["valueFiles"], x => c.readList(x, c.checkStr)),
+    values: c.readOpt(obj["values"], c.checkStr),
+    version: c.readOpt(obj["version"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_clusterDecisionResource_template_spec_sources_kustomize(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    commonAnnotations: c.readOpt(obj["commonAnnotations"], x => c.readMap(x, c.checkStr)),
+    commonLabels: c.readOpt(obj["commonLabels"], x => c.readMap(x, c.checkStr)),
+    forceCommonAnnotations: c.readOpt(obj["forceCommonAnnotations"], c.checkBool),
+    forceCommonLabels: c.readOpt(obj["forceCommonLabels"], c.checkBool),
+    images: c.readOpt(obj["images"], x => c.readList(x, c.checkStr)),
+    namePrefix: c.readOpt(obj["namePrefix"], c.checkStr),
+    nameSuffix: c.readOpt(obj["nameSuffix"], c.checkStr),
+    version: c.readOpt(obj["version"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_clusterDecisionResource_template_spec_sources_plugin(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    env: c.readOpt(obj["env"], x => c.readList(x, toApplicationSet_spec_generators_merge_generators_clusterDecisionResource_template_spec_sources_plugin_env)),
+    name: c.readOpt(obj["name"], c.checkStr),
+    parameters: c.readOpt(obj["parameters"], x => c.readList(x, toApplicationSet_spec_generators_merge_generators_clusterDecisionResource_template_spec_sources_plugin_parameters)),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_clusterDecisionResource_template_spec_syncPolicy_automated(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    allowEmpty: c.readOpt(obj["allowEmpty"], c.checkBool),
+    prune: c.readOpt(obj["prune"], c.checkBool),
+    selfHeal: c.readOpt(obj["selfHeal"], c.checkBool),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_clusterDecisionResource_template_spec_syncPolicy_managedNamespaceMetadata(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    annotations: c.readOpt(obj["annotations"], x => c.readMap(x, c.checkStr)),
+    labels: c.readOpt(obj["labels"], x => c.readMap(x, c.checkStr)),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_clusterDecisionResource_template_spec_syncPolicy_retry(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    backoff: c.readOpt(obj["backoff"], toApplicationSet_spec_generators_merge_generators_clusterDecisionResource_template_spec_syncPolicy_retry_backoff),
+    limit: c.readOpt(obj["limit"], c.checkNum),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_clusters_template_spec_source_directory(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    exclude: c.readOpt(obj["exclude"], c.checkStr),
+    include: c.readOpt(obj["include"], c.checkStr),
+    jsonnet: c.readOpt(obj["jsonnet"], toApplicationSet_spec_generators_merge_generators_clusters_template_spec_source_directory_jsonnet),
+    recurse: c.readOpt(obj["recurse"], c.checkBool),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_clusters_template_spec_source_helm(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    fileParameters: c.readOpt(obj["fileParameters"], x => c.readList(x, toApplicationSet_spec_generators_merge_generators_clusters_template_spec_source_helm_fileParameters)),
+    ignoreMissingValueFiles: c.readOpt(obj["ignoreMissingValueFiles"], c.checkBool),
+    parameters: c.readOpt(obj["parameters"], x => c.readList(x, toApplicationSet_spec_generators_merge_generators_clusters_template_spec_source_helm_parameters)),
+    passCredentials: c.readOpt(obj["passCredentials"], c.checkBool),
+    releaseName: c.readOpt(obj["releaseName"], c.checkStr),
+    skipCrds: c.readOpt(obj["skipCrds"], c.checkBool),
+    valueFiles: c.readOpt(obj["valueFiles"], x => c.readList(x, c.checkStr)),
+    values: c.readOpt(obj["values"], c.checkStr),
+    version: c.readOpt(obj["version"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_clusters_template_spec_source_kustomize(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    commonAnnotations: c.readOpt(obj["commonAnnotations"], x => c.readMap(x, c.checkStr)),
+    commonLabels: c.readOpt(obj["commonLabels"], x => c.readMap(x, c.checkStr)),
+    forceCommonAnnotations: c.readOpt(obj["forceCommonAnnotations"], c.checkBool),
+    forceCommonLabels: c.readOpt(obj["forceCommonLabels"], c.checkBool),
+    images: c.readOpt(obj["images"], x => c.readList(x, c.checkStr)),
+    namePrefix: c.readOpt(obj["namePrefix"], c.checkStr),
+    nameSuffix: c.readOpt(obj["nameSuffix"], c.checkStr),
+    version: c.readOpt(obj["version"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_clusters_template_spec_source_plugin(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    env: c.readOpt(obj["env"], x => c.readList(x, toApplicationSet_spec_generators_merge_generators_clusters_template_spec_source_plugin_env)),
+    name: c.readOpt(obj["name"], c.checkStr),
+    parameters: c.readOpt(obj["parameters"], x => c.readList(x, toApplicationSet_spec_generators_merge_generators_clusters_template_spec_source_plugin_parameters)),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_clusters_template_spec_sources_directory(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    exclude: c.readOpt(obj["exclude"], c.checkStr),
+    include: c.readOpt(obj["include"], c.checkStr),
+    jsonnet: c.readOpt(obj["jsonnet"], toApplicationSet_spec_generators_merge_generators_clusters_template_spec_sources_directory_jsonnet),
+    recurse: c.readOpt(obj["recurse"], c.checkBool),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_clusters_template_spec_sources_helm(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    fileParameters: c.readOpt(obj["fileParameters"], x => c.readList(x, toApplicationSet_spec_generators_merge_generators_clusters_template_spec_sources_helm_fileParameters)),
+    ignoreMissingValueFiles: c.readOpt(obj["ignoreMissingValueFiles"], c.checkBool),
+    parameters: c.readOpt(obj["parameters"], x => c.readList(x, toApplicationSet_spec_generators_merge_generators_clusters_template_spec_sources_helm_parameters)),
+    passCredentials: c.readOpt(obj["passCredentials"], c.checkBool),
+    releaseName: c.readOpt(obj["releaseName"], c.checkStr),
+    skipCrds: c.readOpt(obj["skipCrds"], c.checkBool),
+    valueFiles: c.readOpt(obj["valueFiles"], x => c.readList(x, c.checkStr)),
+    values: c.readOpt(obj["values"], c.checkStr),
+    version: c.readOpt(obj["version"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_clusters_template_spec_sources_kustomize(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    commonAnnotations: c.readOpt(obj["commonAnnotations"], x => c.readMap(x, c.checkStr)),
+    commonLabels: c.readOpt(obj["commonLabels"], x => c.readMap(x, c.checkStr)),
+    forceCommonAnnotations: c.readOpt(obj["forceCommonAnnotations"], c.checkBool),
+    forceCommonLabels: c.readOpt(obj["forceCommonLabels"], c.checkBool),
+    images: c.readOpt(obj["images"], x => c.readList(x, c.checkStr)),
+    namePrefix: c.readOpt(obj["namePrefix"], c.checkStr),
+    nameSuffix: c.readOpt(obj["nameSuffix"], c.checkStr),
+    version: c.readOpt(obj["version"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_clusters_template_spec_sources_plugin(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    env: c.readOpt(obj["env"], x => c.readList(x, toApplicationSet_spec_generators_merge_generators_clusters_template_spec_sources_plugin_env)),
+    name: c.readOpt(obj["name"], c.checkStr),
+    parameters: c.readOpt(obj["parameters"], x => c.readList(x, toApplicationSet_spec_generators_merge_generators_clusters_template_spec_sources_plugin_parameters)),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_clusters_template_spec_syncPolicy_automated(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    allowEmpty: c.readOpt(obj["allowEmpty"], c.checkBool),
+    prune: c.readOpt(obj["prune"], c.checkBool),
+    selfHeal: c.readOpt(obj["selfHeal"], c.checkBool),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_clusters_template_spec_syncPolicy_managedNamespaceMetadata(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    annotations: c.readOpt(obj["annotations"], x => c.readMap(x, c.checkStr)),
+    labels: c.readOpt(obj["labels"], x => c.readMap(x, c.checkStr)),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_clusters_template_spec_syncPolicy_retry(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    backoff: c.readOpt(obj["backoff"], toApplicationSet_spec_generators_merge_generators_clusters_template_spec_syncPolicy_retry_backoff),
+    limit: c.readOpt(obj["limit"], c.checkNum),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_git_template_spec_source_directory(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    exclude: c.readOpt(obj["exclude"], c.checkStr),
+    include: c.readOpt(obj["include"], c.checkStr),
+    jsonnet: c.readOpt(obj["jsonnet"], toApplicationSet_spec_generators_merge_generators_git_template_spec_source_directory_jsonnet),
+    recurse: c.readOpt(obj["recurse"], c.checkBool),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_git_template_spec_source_helm(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    fileParameters: c.readOpt(obj["fileParameters"], x => c.readList(x, toApplicationSet_spec_generators_merge_generators_git_template_spec_source_helm_fileParameters)),
+    ignoreMissingValueFiles: c.readOpt(obj["ignoreMissingValueFiles"], c.checkBool),
+    parameters: c.readOpt(obj["parameters"], x => c.readList(x, toApplicationSet_spec_generators_merge_generators_git_template_spec_source_helm_parameters)),
+    passCredentials: c.readOpt(obj["passCredentials"], c.checkBool),
+    releaseName: c.readOpt(obj["releaseName"], c.checkStr),
+    skipCrds: c.readOpt(obj["skipCrds"], c.checkBool),
+    valueFiles: c.readOpt(obj["valueFiles"], x => c.readList(x, c.checkStr)),
+    values: c.readOpt(obj["values"], c.checkStr),
+    version: c.readOpt(obj["version"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_git_template_spec_source_kustomize(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    commonAnnotations: c.readOpt(obj["commonAnnotations"], x => c.readMap(x, c.checkStr)),
+    commonLabels: c.readOpt(obj["commonLabels"], x => c.readMap(x, c.checkStr)),
+    forceCommonAnnotations: c.readOpt(obj["forceCommonAnnotations"], c.checkBool),
+    forceCommonLabels: c.readOpt(obj["forceCommonLabels"], c.checkBool),
+    images: c.readOpt(obj["images"], x => c.readList(x, c.checkStr)),
+    namePrefix: c.readOpt(obj["namePrefix"], c.checkStr),
+    nameSuffix: c.readOpt(obj["nameSuffix"], c.checkStr),
+    version: c.readOpt(obj["version"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_git_template_spec_source_plugin(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    env: c.readOpt(obj["env"], x => c.readList(x, toApplicationSet_spec_generators_merge_generators_git_template_spec_source_plugin_env)),
+    name: c.readOpt(obj["name"], c.checkStr),
+    parameters: c.readOpt(obj["parameters"], x => c.readList(x, toApplicationSet_spec_generators_merge_generators_git_template_spec_source_plugin_parameters)),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_git_template_spec_sources_directory(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    exclude: c.readOpt(obj["exclude"], c.checkStr),
+    include: c.readOpt(obj["include"], c.checkStr),
+    jsonnet: c.readOpt(obj["jsonnet"], toApplicationSet_spec_generators_merge_generators_git_template_spec_sources_directory_jsonnet),
+    recurse: c.readOpt(obj["recurse"], c.checkBool),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_git_template_spec_sources_helm(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    fileParameters: c.readOpt(obj["fileParameters"], x => c.readList(x, toApplicationSet_spec_generators_merge_generators_git_template_spec_sources_helm_fileParameters)),
+    ignoreMissingValueFiles: c.readOpt(obj["ignoreMissingValueFiles"], c.checkBool),
+    parameters: c.readOpt(obj["parameters"], x => c.readList(x, toApplicationSet_spec_generators_merge_generators_git_template_spec_sources_helm_parameters)),
+    passCredentials: c.readOpt(obj["passCredentials"], c.checkBool),
+    releaseName: c.readOpt(obj["releaseName"], c.checkStr),
+    skipCrds: c.readOpt(obj["skipCrds"], c.checkBool),
+    valueFiles: c.readOpt(obj["valueFiles"], x => c.readList(x, c.checkStr)),
+    values: c.readOpt(obj["values"], c.checkStr),
+    version: c.readOpt(obj["version"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_git_template_spec_sources_kustomize(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    commonAnnotations: c.readOpt(obj["commonAnnotations"], x => c.readMap(x, c.checkStr)),
+    commonLabels: c.readOpt(obj["commonLabels"], x => c.readMap(x, c.checkStr)),
+    forceCommonAnnotations: c.readOpt(obj["forceCommonAnnotations"], c.checkBool),
+    forceCommonLabels: c.readOpt(obj["forceCommonLabels"], c.checkBool),
+    images: c.readOpt(obj["images"], x => c.readList(x, c.checkStr)),
+    namePrefix: c.readOpt(obj["namePrefix"], c.checkStr),
+    nameSuffix: c.readOpt(obj["nameSuffix"], c.checkStr),
+    version: c.readOpt(obj["version"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_git_template_spec_sources_plugin(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    env: c.readOpt(obj["env"], x => c.readList(x, toApplicationSet_spec_generators_merge_generators_git_template_spec_sources_plugin_env)),
+    name: c.readOpt(obj["name"], c.checkStr),
+    parameters: c.readOpt(obj["parameters"], x => c.readList(x, toApplicationSet_spec_generators_merge_generators_git_template_spec_sources_plugin_parameters)),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_git_template_spec_syncPolicy_automated(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    allowEmpty: c.readOpt(obj["allowEmpty"], c.checkBool),
+    prune: c.readOpt(obj["prune"], c.checkBool),
+    selfHeal: c.readOpt(obj["selfHeal"], c.checkBool),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_git_template_spec_syncPolicy_managedNamespaceMetadata(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    annotations: c.readOpt(obj["annotations"], x => c.readMap(x, c.checkStr)),
+    labels: c.readOpt(obj["labels"], x => c.readMap(x, c.checkStr)),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_git_template_spec_syncPolicy_retry(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    backoff: c.readOpt(obj["backoff"], toApplicationSet_spec_generators_merge_generators_git_template_spec_syncPolicy_retry_backoff),
+    limit: c.readOpt(obj["limit"], c.checkNum),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_list_template_spec_source_directory(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    exclude: c.readOpt(obj["exclude"], c.checkStr),
+    include: c.readOpt(obj["include"], c.checkStr),
+    jsonnet: c.readOpt(obj["jsonnet"], toApplicationSet_spec_generators_merge_generators_list_template_spec_source_directory_jsonnet),
+    recurse: c.readOpt(obj["recurse"], c.checkBool),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_list_template_spec_source_helm(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    fileParameters: c.readOpt(obj["fileParameters"], x => c.readList(x, toApplicationSet_spec_generators_merge_generators_list_template_spec_source_helm_fileParameters)),
+    ignoreMissingValueFiles: c.readOpt(obj["ignoreMissingValueFiles"], c.checkBool),
+    parameters: c.readOpt(obj["parameters"], x => c.readList(x, toApplicationSet_spec_generators_merge_generators_list_template_spec_source_helm_parameters)),
+    passCredentials: c.readOpt(obj["passCredentials"], c.checkBool),
+    releaseName: c.readOpt(obj["releaseName"], c.checkStr),
+    skipCrds: c.readOpt(obj["skipCrds"], c.checkBool),
+    valueFiles: c.readOpt(obj["valueFiles"], x => c.readList(x, c.checkStr)),
+    values: c.readOpt(obj["values"], c.checkStr),
+    version: c.readOpt(obj["version"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_list_template_spec_source_kustomize(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    commonAnnotations: c.readOpt(obj["commonAnnotations"], x => c.readMap(x, c.checkStr)),
+    commonLabels: c.readOpt(obj["commonLabels"], x => c.readMap(x, c.checkStr)),
+    forceCommonAnnotations: c.readOpt(obj["forceCommonAnnotations"], c.checkBool),
+    forceCommonLabels: c.readOpt(obj["forceCommonLabels"], c.checkBool),
+    images: c.readOpt(obj["images"], x => c.readList(x, c.checkStr)),
+    namePrefix: c.readOpt(obj["namePrefix"], c.checkStr),
+    nameSuffix: c.readOpt(obj["nameSuffix"], c.checkStr),
+    version: c.readOpt(obj["version"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_list_template_spec_source_plugin(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    env: c.readOpt(obj["env"], x => c.readList(x, toApplicationSet_spec_generators_merge_generators_list_template_spec_source_plugin_env)),
+    name: c.readOpt(obj["name"], c.checkStr),
+    parameters: c.readOpt(obj["parameters"], x => c.readList(x, toApplicationSet_spec_generators_merge_generators_list_template_spec_source_plugin_parameters)),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_list_template_spec_sources_directory(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    exclude: c.readOpt(obj["exclude"], c.checkStr),
+    include: c.readOpt(obj["include"], c.checkStr),
+    jsonnet: c.readOpt(obj["jsonnet"], toApplicationSet_spec_generators_merge_generators_list_template_spec_sources_directory_jsonnet),
+    recurse: c.readOpt(obj["recurse"], c.checkBool),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_list_template_spec_sources_helm(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    fileParameters: c.readOpt(obj["fileParameters"], x => c.readList(x, toApplicationSet_spec_generators_merge_generators_list_template_spec_sources_helm_fileParameters)),
+    ignoreMissingValueFiles: c.readOpt(obj["ignoreMissingValueFiles"], c.checkBool),
+    parameters: c.readOpt(obj["parameters"], x => c.readList(x, toApplicationSet_spec_generators_merge_generators_list_template_spec_sources_helm_parameters)),
+    passCredentials: c.readOpt(obj["passCredentials"], c.checkBool),
+    releaseName: c.readOpt(obj["releaseName"], c.checkStr),
+    skipCrds: c.readOpt(obj["skipCrds"], c.checkBool),
+    valueFiles: c.readOpt(obj["valueFiles"], x => c.readList(x, c.checkStr)),
+    values: c.readOpt(obj["values"], c.checkStr),
+    version: c.readOpt(obj["version"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_list_template_spec_sources_kustomize(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    commonAnnotations: c.readOpt(obj["commonAnnotations"], x => c.readMap(x, c.checkStr)),
+    commonLabels: c.readOpt(obj["commonLabels"], x => c.readMap(x, c.checkStr)),
+    forceCommonAnnotations: c.readOpt(obj["forceCommonAnnotations"], c.checkBool),
+    forceCommonLabels: c.readOpt(obj["forceCommonLabels"], c.checkBool),
+    images: c.readOpt(obj["images"], x => c.readList(x, c.checkStr)),
+    namePrefix: c.readOpt(obj["namePrefix"], c.checkStr),
+    nameSuffix: c.readOpt(obj["nameSuffix"], c.checkStr),
+    version: c.readOpt(obj["version"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_list_template_spec_sources_plugin(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    env: c.readOpt(obj["env"], x => c.readList(x, toApplicationSet_spec_generators_merge_generators_list_template_spec_sources_plugin_env)),
+    name: c.readOpt(obj["name"], c.checkStr),
+    parameters: c.readOpt(obj["parameters"], x => c.readList(x, toApplicationSet_spec_generators_merge_generators_list_template_spec_sources_plugin_parameters)),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_list_template_spec_syncPolicy_automated(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    allowEmpty: c.readOpt(obj["allowEmpty"], c.checkBool),
+    prune: c.readOpt(obj["prune"], c.checkBool),
+    selfHeal: c.readOpt(obj["selfHeal"], c.checkBool),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_list_template_spec_syncPolicy_managedNamespaceMetadata(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    annotations: c.readOpt(obj["annotations"], x => c.readMap(x, c.checkStr)),
+    labels: c.readOpt(obj["labels"], x => c.readMap(x, c.checkStr)),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_list_template_spec_syncPolicy_retry(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    backoff: c.readOpt(obj["backoff"], toApplicationSet_spec_generators_merge_generators_list_template_spec_syncPolicy_retry_backoff),
+    limit: c.readOpt(obj["limit"], c.checkNum),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_pullRequest_template_spec_source_directory(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    exclude: c.readOpt(obj["exclude"], c.checkStr),
+    include: c.readOpt(obj["include"], c.checkStr),
+    jsonnet: c.readOpt(obj["jsonnet"], toApplicationSet_spec_generators_merge_generators_pullRequest_template_spec_source_directory_jsonnet),
+    recurse: c.readOpt(obj["recurse"], c.checkBool),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_pullRequest_template_spec_source_helm(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    fileParameters: c.readOpt(obj["fileParameters"], x => c.readList(x, toApplicationSet_spec_generators_merge_generators_pullRequest_template_spec_source_helm_fileParameters)),
+    ignoreMissingValueFiles: c.readOpt(obj["ignoreMissingValueFiles"], c.checkBool),
+    parameters: c.readOpt(obj["parameters"], x => c.readList(x, toApplicationSet_spec_generators_merge_generators_pullRequest_template_spec_source_helm_parameters)),
+    passCredentials: c.readOpt(obj["passCredentials"], c.checkBool),
+    releaseName: c.readOpt(obj["releaseName"], c.checkStr),
+    skipCrds: c.readOpt(obj["skipCrds"], c.checkBool),
+    valueFiles: c.readOpt(obj["valueFiles"], x => c.readList(x, c.checkStr)),
+    values: c.readOpt(obj["values"], c.checkStr),
+    version: c.readOpt(obj["version"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_pullRequest_template_spec_source_kustomize(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    commonAnnotations: c.readOpt(obj["commonAnnotations"], x => c.readMap(x, c.checkStr)),
+    commonLabels: c.readOpt(obj["commonLabels"], x => c.readMap(x, c.checkStr)),
+    forceCommonAnnotations: c.readOpt(obj["forceCommonAnnotations"], c.checkBool),
+    forceCommonLabels: c.readOpt(obj["forceCommonLabels"], c.checkBool),
+    images: c.readOpt(obj["images"], x => c.readList(x, c.checkStr)),
+    namePrefix: c.readOpt(obj["namePrefix"], c.checkStr),
+    nameSuffix: c.readOpt(obj["nameSuffix"], c.checkStr),
+    version: c.readOpt(obj["version"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_pullRequest_template_spec_source_plugin(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    env: c.readOpt(obj["env"], x => c.readList(x, toApplicationSet_spec_generators_merge_generators_pullRequest_template_spec_source_plugin_env)),
+    name: c.readOpt(obj["name"], c.checkStr),
+    parameters: c.readOpt(obj["parameters"], x => c.readList(x, toApplicationSet_spec_generators_merge_generators_pullRequest_template_spec_source_plugin_parameters)),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_pullRequest_template_spec_sources_directory(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    exclude: c.readOpt(obj["exclude"], c.checkStr),
+    include: c.readOpt(obj["include"], c.checkStr),
+    jsonnet: c.readOpt(obj["jsonnet"], toApplicationSet_spec_generators_merge_generators_pullRequest_template_spec_sources_directory_jsonnet),
+    recurse: c.readOpt(obj["recurse"], c.checkBool),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_pullRequest_template_spec_sources_helm(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    fileParameters: c.readOpt(obj["fileParameters"], x => c.readList(x, toApplicationSet_spec_generators_merge_generators_pullRequest_template_spec_sources_helm_fileParameters)),
+    ignoreMissingValueFiles: c.readOpt(obj["ignoreMissingValueFiles"], c.checkBool),
+    parameters: c.readOpt(obj["parameters"], x => c.readList(x, toApplicationSet_spec_generators_merge_generators_pullRequest_template_spec_sources_helm_parameters)),
+    passCredentials: c.readOpt(obj["passCredentials"], c.checkBool),
+    releaseName: c.readOpt(obj["releaseName"], c.checkStr),
+    skipCrds: c.readOpt(obj["skipCrds"], c.checkBool),
+    valueFiles: c.readOpt(obj["valueFiles"], x => c.readList(x, c.checkStr)),
+    values: c.readOpt(obj["values"], c.checkStr),
+    version: c.readOpt(obj["version"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_pullRequest_template_spec_sources_kustomize(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    commonAnnotations: c.readOpt(obj["commonAnnotations"], x => c.readMap(x, c.checkStr)),
+    commonLabels: c.readOpt(obj["commonLabels"], x => c.readMap(x, c.checkStr)),
+    forceCommonAnnotations: c.readOpt(obj["forceCommonAnnotations"], c.checkBool),
+    forceCommonLabels: c.readOpt(obj["forceCommonLabels"], c.checkBool),
+    images: c.readOpt(obj["images"], x => c.readList(x, c.checkStr)),
+    namePrefix: c.readOpt(obj["namePrefix"], c.checkStr),
+    nameSuffix: c.readOpt(obj["nameSuffix"], c.checkStr),
+    version: c.readOpt(obj["version"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_pullRequest_template_spec_sources_plugin(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    env: c.readOpt(obj["env"], x => c.readList(x, toApplicationSet_spec_generators_merge_generators_pullRequest_template_spec_sources_plugin_env)),
+    name: c.readOpt(obj["name"], c.checkStr),
+    parameters: c.readOpt(obj["parameters"], x => c.readList(x, toApplicationSet_spec_generators_merge_generators_pullRequest_template_spec_sources_plugin_parameters)),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_pullRequest_template_spec_syncPolicy_automated(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    allowEmpty: c.readOpt(obj["allowEmpty"], c.checkBool),
+    prune: c.readOpt(obj["prune"], c.checkBool),
+    selfHeal: c.readOpt(obj["selfHeal"], c.checkBool),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_pullRequest_template_spec_syncPolicy_managedNamespaceMetadata(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    annotations: c.readOpt(obj["annotations"], x => c.readMap(x, c.checkStr)),
+    labels: c.readOpt(obj["labels"], x => c.readMap(x, c.checkStr)),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_pullRequest_template_spec_syncPolicy_retry(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    backoff: c.readOpt(obj["backoff"], toApplicationSet_spec_generators_merge_generators_pullRequest_template_spec_syncPolicy_retry_backoff),
+    limit: c.readOpt(obj["limit"], c.checkNum),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_scmProvider_template_spec_source_directory(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    exclude: c.readOpt(obj["exclude"], c.checkStr),
+    include: c.readOpt(obj["include"], c.checkStr),
+    jsonnet: c.readOpt(obj["jsonnet"], toApplicationSet_spec_generators_merge_generators_scmProvider_template_spec_source_directory_jsonnet),
+    recurse: c.readOpt(obj["recurse"], c.checkBool),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_scmProvider_template_spec_source_helm(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    fileParameters: c.readOpt(obj["fileParameters"], x => c.readList(x, toApplicationSet_spec_generators_merge_generators_scmProvider_template_spec_source_helm_fileParameters)),
+    ignoreMissingValueFiles: c.readOpt(obj["ignoreMissingValueFiles"], c.checkBool),
+    parameters: c.readOpt(obj["parameters"], x => c.readList(x, toApplicationSet_spec_generators_merge_generators_scmProvider_template_spec_source_helm_parameters)),
+    passCredentials: c.readOpt(obj["passCredentials"], c.checkBool),
+    releaseName: c.readOpt(obj["releaseName"], c.checkStr),
+    skipCrds: c.readOpt(obj["skipCrds"], c.checkBool),
+    valueFiles: c.readOpt(obj["valueFiles"], x => c.readList(x, c.checkStr)),
+    values: c.readOpt(obj["values"], c.checkStr),
+    version: c.readOpt(obj["version"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_scmProvider_template_spec_source_kustomize(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    commonAnnotations: c.readOpt(obj["commonAnnotations"], x => c.readMap(x, c.checkStr)),
+    commonLabels: c.readOpt(obj["commonLabels"], x => c.readMap(x, c.checkStr)),
+    forceCommonAnnotations: c.readOpt(obj["forceCommonAnnotations"], c.checkBool),
+    forceCommonLabels: c.readOpt(obj["forceCommonLabels"], c.checkBool),
+    images: c.readOpt(obj["images"], x => c.readList(x, c.checkStr)),
+    namePrefix: c.readOpt(obj["namePrefix"], c.checkStr),
+    nameSuffix: c.readOpt(obj["nameSuffix"], c.checkStr),
+    version: c.readOpt(obj["version"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_scmProvider_template_spec_source_plugin(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    env: c.readOpt(obj["env"], x => c.readList(x, toApplicationSet_spec_generators_merge_generators_scmProvider_template_spec_source_plugin_env)),
+    name: c.readOpt(obj["name"], c.checkStr),
+    parameters: c.readOpt(obj["parameters"], x => c.readList(x, toApplicationSet_spec_generators_merge_generators_scmProvider_template_spec_source_plugin_parameters)),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_scmProvider_template_spec_sources_directory(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    exclude: c.readOpt(obj["exclude"], c.checkStr),
+    include: c.readOpt(obj["include"], c.checkStr),
+    jsonnet: c.readOpt(obj["jsonnet"], toApplicationSet_spec_generators_merge_generators_scmProvider_template_spec_sources_directory_jsonnet),
+    recurse: c.readOpt(obj["recurse"], c.checkBool),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_scmProvider_template_spec_sources_helm(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    fileParameters: c.readOpt(obj["fileParameters"], x => c.readList(x, toApplicationSet_spec_generators_merge_generators_scmProvider_template_spec_sources_helm_fileParameters)),
+    ignoreMissingValueFiles: c.readOpt(obj["ignoreMissingValueFiles"], c.checkBool),
+    parameters: c.readOpt(obj["parameters"], x => c.readList(x, toApplicationSet_spec_generators_merge_generators_scmProvider_template_spec_sources_helm_parameters)),
+    passCredentials: c.readOpt(obj["passCredentials"], c.checkBool),
+    releaseName: c.readOpt(obj["releaseName"], c.checkStr),
+    skipCrds: c.readOpt(obj["skipCrds"], c.checkBool),
+    valueFiles: c.readOpt(obj["valueFiles"], x => c.readList(x, c.checkStr)),
+    values: c.readOpt(obj["values"], c.checkStr),
+    version: c.readOpt(obj["version"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_scmProvider_template_spec_sources_kustomize(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    commonAnnotations: c.readOpt(obj["commonAnnotations"], x => c.readMap(x, c.checkStr)),
+    commonLabels: c.readOpt(obj["commonLabels"], x => c.readMap(x, c.checkStr)),
+    forceCommonAnnotations: c.readOpt(obj["forceCommonAnnotations"], c.checkBool),
+    forceCommonLabels: c.readOpt(obj["forceCommonLabels"], c.checkBool),
+    images: c.readOpt(obj["images"], x => c.readList(x, c.checkStr)),
+    namePrefix: c.readOpt(obj["namePrefix"], c.checkStr),
+    nameSuffix: c.readOpt(obj["nameSuffix"], c.checkStr),
+    version: c.readOpt(obj["version"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_scmProvider_template_spec_sources_plugin(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    env: c.readOpt(obj["env"], x => c.readList(x, toApplicationSet_spec_generators_merge_generators_scmProvider_template_spec_sources_plugin_env)),
+    name: c.readOpt(obj["name"], c.checkStr),
+    parameters: c.readOpt(obj["parameters"], x => c.readList(x, toApplicationSet_spec_generators_merge_generators_scmProvider_template_spec_sources_plugin_parameters)),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_scmProvider_template_spec_syncPolicy_automated(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    allowEmpty: c.readOpt(obj["allowEmpty"], c.checkBool),
+    prune: c.readOpt(obj["prune"], c.checkBool),
+    selfHeal: c.readOpt(obj["selfHeal"], c.checkBool),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_scmProvider_template_spec_syncPolicy_managedNamespaceMetadata(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    annotations: c.readOpt(obj["annotations"], x => c.readMap(x, c.checkStr)),
+    labels: c.readOpt(obj["labels"], x => c.readMap(x, c.checkStr)),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_scmProvider_template_spec_syncPolicy_retry(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    backoff: c.readOpt(obj["backoff"], toApplicationSet_spec_generators_merge_generators_scmProvider_template_spec_syncPolicy_retry_backoff),
+    limit: c.readOpt(obj["limit"], c.checkNum),
+  }}
+export function toApplicationSet_spec_generators_merge_template_spec_source_directory_jsonnet_extVars(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    code: c.readOpt(obj["code"], c.checkBool),
+    name: c.checkStr(obj["name"]),
+    value: c.checkStr(obj["value"]),
+  }}
+export function toApplicationSet_spec_generators_merge_template_spec_source_directory_jsonnet_tlas(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    code: c.readOpt(obj["code"], c.checkBool),
+    name: c.checkStr(obj["name"]),
+    value: c.checkStr(obj["value"]),
+  }}
+export function toApplicationSet_spec_generators_merge_template_spec_sources_directory_jsonnet_extVars(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    code: c.readOpt(obj["code"], c.checkBool),
+    name: c.checkStr(obj["name"]),
+    value: c.checkStr(obj["value"]),
+  }}
+export function toApplicationSet_spec_generators_merge_template_spec_sources_directory_jsonnet_tlas(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    code: c.readOpt(obj["code"], c.checkBool),
+    name: c.checkStr(obj["name"]),
+    value: c.checkStr(obj["value"]),
+  }}
+export function toApplicationSet_spec_generators_pullRequest_template_spec_source_directory_jsonnet_extVars(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    code: c.readOpt(obj["code"], c.checkBool),
+    name: c.checkStr(obj["name"]),
+    value: c.checkStr(obj["value"]),
+  }}
+export function toApplicationSet_spec_generators_pullRequest_template_spec_source_directory_jsonnet_tlas(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    code: c.readOpt(obj["code"], c.checkBool),
+    name: c.checkStr(obj["name"]),
+    value: c.checkStr(obj["value"]),
+  }}
+export function toApplicationSet_spec_generators_pullRequest_template_spec_sources_directory_jsonnet_extVars(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    code: c.readOpt(obj["code"], c.checkBool),
+    name: c.checkStr(obj["name"]),
+    value: c.checkStr(obj["value"]),
+  }}
+export function toApplicationSet_spec_generators_pullRequest_template_spec_sources_directory_jsonnet_tlas(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    code: c.readOpt(obj["code"], c.checkBool),
+    name: c.checkStr(obj["name"]),
+    value: c.checkStr(obj["value"]),
+  }}
+export function toApplicationSet_spec_generators_scmProvider_template_spec_source_directory_jsonnet_extVars(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    code: c.readOpt(obj["code"], c.checkBool),
+    name: c.checkStr(obj["name"]),
+    value: c.checkStr(obj["value"]),
+  }}
+export function toApplicationSet_spec_generators_scmProvider_template_spec_source_directory_jsonnet_tlas(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    code: c.readOpt(obj["code"], c.checkBool),
+    name: c.checkStr(obj["name"]),
+    value: c.checkStr(obj["value"]),
+  }}
+export function toApplicationSet_spec_generators_scmProvider_template_spec_sources_directory_jsonnet_extVars(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    code: c.readOpt(obj["code"], c.checkBool),
+    name: c.checkStr(obj["name"]),
+    value: c.checkStr(obj["value"]),
+  }}
+export function toApplicationSet_spec_generators_scmProvider_template_spec_sources_directory_jsonnet_tlas(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    code: c.readOpt(obj["code"], c.checkBool),
+    name: c.checkStr(obj["name"]),
+    value: c.checkStr(obj["value"]),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_clusterDecisionResource_template_spec_source_directory_jsonnet(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    extVars: c.readOpt(obj["extVars"], x => c.readList(x, toApplicationSet_spec_generators_matrix_generators_clusterDecisionResource_template_spec_source_directory_jsonnet_extVars)),
+    libs: c.readOpt(obj["libs"], x => c.readList(x, c.checkStr)),
+    tlas: c.readOpt(obj["tlas"], x => c.readList(x, toApplicationSet_spec_generators_matrix_generators_clusterDecisionResource_template_spec_source_directory_jsonnet_tlas)),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_clusterDecisionResource_template_spec_source_helm_fileParameters(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    name: c.readOpt(obj["name"], c.checkStr),
+    path: c.readOpt(obj["path"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_clusterDecisionResource_template_spec_source_helm_parameters(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    forceString: c.readOpt(obj["forceString"], c.checkBool),
+    name: c.readOpt(obj["name"], c.checkStr),
+    value: c.readOpt(obj["value"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_clusterDecisionResource_template_spec_source_plugin_env(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    name: c.checkStr(obj["name"]),
+    value: c.checkStr(obj["value"]),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_clusterDecisionResource_template_spec_source_plugin_parameters(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    array: c.readOpt(obj["array"], x => c.readList(x, c.checkStr)),
+    map: c.readOpt(obj["map"], x => c.readMap(x, c.checkStr)),
+    name: c.readOpt(obj["name"], c.checkStr),
+    string: c.readOpt(obj["string"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_clusterDecisionResource_template_spec_sources_directory_jsonnet(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    extVars: c.readOpt(obj["extVars"], x => c.readList(x, toApplicationSet_spec_generators_matrix_generators_clusterDecisionResource_template_spec_sources_directory_jsonnet_extVars)),
+    libs: c.readOpt(obj["libs"], x => c.readList(x, c.checkStr)),
+    tlas: c.readOpt(obj["tlas"], x => c.readList(x, toApplicationSet_spec_generators_matrix_generators_clusterDecisionResource_template_spec_sources_directory_jsonnet_tlas)),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_clusterDecisionResource_template_spec_sources_helm_fileParameters(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    name: c.readOpt(obj["name"], c.checkStr),
+    path: c.readOpt(obj["path"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_clusterDecisionResource_template_spec_sources_helm_parameters(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    forceString: c.readOpt(obj["forceString"], c.checkBool),
+    name: c.readOpt(obj["name"], c.checkStr),
+    value: c.readOpt(obj["value"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_clusterDecisionResource_template_spec_sources_plugin_env(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    name: c.checkStr(obj["name"]),
+    value: c.checkStr(obj["value"]),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_clusterDecisionResource_template_spec_sources_plugin_parameters(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    array: c.readOpt(obj["array"], x => c.readList(x, c.checkStr)),
+    map: c.readOpt(obj["map"], x => c.readMap(x, c.checkStr)),
+    name: c.readOpt(obj["name"], c.checkStr),
+    string: c.readOpt(obj["string"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_clusterDecisionResource_template_spec_syncPolicy_retry_backoff(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    duration: c.readOpt(obj["duration"], c.checkStr),
+    factor: c.readOpt(obj["factor"], c.checkNum),
+    maxDuration: c.readOpt(obj["maxDuration"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_clusters_template_spec_source_directory_jsonnet(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    extVars: c.readOpt(obj["extVars"], x => c.readList(x, toApplicationSet_spec_generators_matrix_generators_clusters_template_spec_source_directory_jsonnet_extVars)),
+    libs: c.readOpt(obj["libs"], x => c.readList(x, c.checkStr)),
+    tlas: c.readOpt(obj["tlas"], x => c.readList(x, toApplicationSet_spec_generators_matrix_generators_clusters_template_spec_source_directory_jsonnet_tlas)),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_clusters_template_spec_source_helm_fileParameters(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    name: c.readOpt(obj["name"], c.checkStr),
+    path: c.readOpt(obj["path"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_clusters_template_spec_source_helm_parameters(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    forceString: c.readOpt(obj["forceString"], c.checkBool),
+    name: c.readOpt(obj["name"], c.checkStr),
+    value: c.readOpt(obj["value"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_clusters_template_spec_source_plugin_env(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    name: c.checkStr(obj["name"]),
+    value: c.checkStr(obj["value"]),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_clusters_template_spec_source_plugin_parameters(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    array: c.readOpt(obj["array"], x => c.readList(x, c.checkStr)),
+    map: c.readOpt(obj["map"], x => c.readMap(x, c.checkStr)),
+    name: c.readOpt(obj["name"], c.checkStr),
+    string: c.readOpt(obj["string"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_clusters_template_spec_sources_directory_jsonnet(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    extVars: c.readOpt(obj["extVars"], x => c.readList(x, toApplicationSet_spec_generators_matrix_generators_clusters_template_spec_sources_directory_jsonnet_extVars)),
+    libs: c.readOpt(obj["libs"], x => c.readList(x, c.checkStr)),
+    tlas: c.readOpt(obj["tlas"], x => c.readList(x, toApplicationSet_spec_generators_matrix_generators_clusters_template_spec_sources_directory_jsonnet_tlas)),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_clusters_template_spec_sources_helm_fileParameters(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    name: c.readOpt(obj["name"], c.checkStr),
+    path: c.readOpt(obj["path"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_clusters_template_spec_sources_helm_parameters(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    forceString: c.readOpt(obj["forceString"], c.checkBool),
+    name: c.readOpt(obj["name"], c.checkStr),
+    value: c.readOpt(obj["value"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_clusters_template_spec_sources_plugin_env(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    name: c.checkStr(obj["name"]),
+    value: c.checkStr(obj["value"]),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_clusters_template_spec_sources_plugin_parameters(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    array: c.readOpt(obj["array"], x => c.readList(x, c.checkStr)),
+    map: c.readOpt(obj["map"], x => c.readMap(x, c.checkStr)),
+    name: c.readOpt(obj["name"], c.checkStr),
+    string: c.readOpt(obj["string"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_clusters_template_spec_syncPolicy_retry_backoff(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    duration: c.readOpt(obj["duration"], c.checkStr),
+    factor: c.readOpt(obj["factor"], c.checkNum),
+    maxDuration: c.readOpt(obj["maxDuration"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_git_template_spec_source_directory_jsonnet(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    extVars: c.readOpt(obj["extVars"], x => c.readList(x, toApplicationSet_spec_generators_matrix_generators_git_template_spec_source_directory_jsonnet_extVars)),
+    libs: c.readOpt(obj["libs"], x => c.readList(x, c.checkStr)),
+    tlas: c.readOpt(obj["tlas"], x => c.readList(x, toApplicationSet_spec_generators_matrix_generators_git_template_spec_source_directory_jsonnet_tlas)),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_git_template_spec_source_helm_fileParameters(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    name: c.readOpt(obj["name"], c.checkStr),
+    path: c.readOpt(obj["path"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_git_template_spec_source_helm_parameters(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    forceString: c.readOpt(obj["forceString"], c.checkBool),
+    name: c.readOpt(obj["name"], c.checkStr),
+    value: c.readOpt(obj["value"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_git_template_spec_source_plugin_env(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    name: c.checkStr(obj["name"]),
+    value: c.checkStr(obj["value"]),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_git_template_spec_source_plugin_parameters(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    array: c.readOpt(obj["array"], x => c.readList(x, c.checkStr)),
+    map: c.readOpt(obj["map"], x => c.readMap(x, c.checkStr)),
+    name: c.readOpt(obj["name"], c.checkStr),
+    string: c.readOpt(obj["string"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_git_template_spec_sources_directory_jsonnet(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    extVars: c.readOpt(obj["extVars"], x => c.readList(x, toApplicationSet_spec_generators_matrix_generators_git_template_spec_sources_directory_jsonnet_extVars)),
+    libs: c.readOpt(obj["libs"], x => c.readList(x, c.checkStr)),
+    tlas: c.readOpt(obj["tlas"], x => c.readList(x, toApplicationSet_spec_generators_matrix_generators_git_template_spec_sources_directory_jsonnet_tlas)),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_git_template_spec_sources_helm_fileParameters(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    name: c.readOpt(obj["name"], c.checkStr),
+    path: c.readOpt(obj["path"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_git_template_spec_sources_helm_parameters(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    forceString: c.readOpt(obj["forceString"], c.checkBool),
+    name: c.readOpt(obj["name"], c.checkStr),
+    value: c.readOpt(obj["value"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_git_template_spec_sources_plugin_env(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    name: c.checkStr(obj["name"]),
+    value: c.checkStr(obj["value"]),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_git_template_spec_sources_plugin_parameters(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    array: c.readOpt(obj["array"], x => c.readList(x, c.checkStr)),
+    map: c.readOpt(obj["map"], x => c.readMap(x, c.checkStr)),
+    name: c.readOpt(obj["name"], c.checkStr),
+    string: c.readOpt(obj["string"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_git_template_spec_syncPolicy_retry_backoff(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    duration: c.readOpt(obj["duration"], c.checkStr),
+    factor: c.readOpt(obj["factor"], c.checkNum),
+    maxDuration: c.readOpt(obj["maxDuration"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_list_template_spec_source_directory_jsonnet(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    extVars: c.readOpt(obj["extVars"], x => c.readList(x, toApplicationSet_spec_generators_matrix_generators_list_template_spec_source_directory_jsonnet_extVars)),
+    libs: c.readOpt(obj["libs"], x => c.readList(x, c.checkStr)),
+    tlas: c.readOpt(obj["tlas"], x => c.readList(x, toApplicationSet_spec_generators_matrix_generators_list_template_spec_source_directory_jsonnet_tlas)),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_list_template_spec_source_helm_fileParameters(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    name: c.readOpt(obj["name"], c.checkStr),
+    path: c.readOpt(obj["path"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_list_template_spec_source_helm_parameters(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    forceString: c.readOpt(obj["forceString"], c.checkBool),
+    name: c.readOpt(obj["name"], c.checkStr),
+    value: c.readOpt(obj["value"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_list_template_spec_source_plugin_env(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    name: c.checkStr(obj["name"]),
+    value: c.checkStr(obj["value"]),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_list_template_spec_source_plugin_parameters(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    array: c.readOpt(obj["array"], x => c.readList(x, c.checkStr)),
+    map: c.readOpt(obj["map"], x => c.readMap(x, c.checkStr)),
+    name: c.readOpt(obj["name"], c.checkStr),
+    string: c.readOpt(obj["string"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_list_template_spec_sources_directory_jsonnet(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    extVars: c.readOpt(obj["extVars"], x => c.readList(x, toApplicationSet_spec_generators_matrix_generators_list_template_spec_sources_directory_jsonnet_extVars)),
+    libs: c.readOpt(obj["libs"], x => c.readList(x, c.checkStr)),
+    tlas: c.readOpt(obj["tlas"], x => c.readList(x, toApplicationSet_spec_generators_matrix_generators_list_template_spec_sources_directory_jsonnet_tlas)),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_list_template_spec_sources_helm_fileParameters(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    name: c.readOpt(obj["name"], c.checkStr),
+    path: c.readOpt(obj["path"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_list_template_spec_sources_helm_parameters(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    forceString: c.readOpt(obj["forceString"], c.checkBool),
+    name: c.readOpt(obj["name"], c.checkStr),
+    value: c.readOpt(obj["value"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_list_template_spec_sources_plugin_env(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    name: c.checkStr(obj["name"]),
+    value: c.checkStr(obj["value"]),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_list_template_spec_sources_plugin_parameters(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    array: c.readOpt(obj["array"], x => c.readList(x, c.checkStr)),
+    map: c.readOpt(obj["map"], x => c.readMap(x, c.checkStr)),
+    name: c.readOpt(obj["name"], c.checkStr),
+    string: c.readOpt(obj["string"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_list_template_spec_syncPolicy_retry_backoff(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    duration: c.readOpt(obj["duration"], c.checkStr),
+    factor: c.readOpt(obj["factor"], c.checkNum),
+    maxDuration: c.readOpt(obj["maxDuration"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_pullRequest_template_spec_source_directory_jsonnet(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    extVars: c.readOpt(obj["extVars"], x => c.readList(x, toApplicationSet_spec_generators_matrix_generators_pullRequest_template_spec_source_directory_jsonnet_extVars)),
+    libs: c.readOpt(obj["libs"], x => c.readList(x, c.checkStr)),
+    tlas: c.readOpt(obj["tlas"], x => c.readList(x, toApplicationSet_spec_generators_matrix_generators_pullRequest_template_spec_source_directory_jsonnet_tlas)),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_pullRequest_template_spec_source_helm_fileParameters(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    name: c.readOpt(obj["name"], c.checkStr),
+    path: c.readOpt(obj["path"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_pullRequest_template_spec_source_helm_parameters(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    forceString: c.readOpt(obj["forceString"], c.checkBool),
+    name: c.readOpt(obj["name"], c.checkStr),
+    value: c.readOpt(obj["value"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_pullRequest_template_spec_source_plugin_env(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    name: c.checkStr(obj["name"]),
+    value: c.checkStr(obj["value"]),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_pullRequest_template_spec_source_plugin_parameters(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    array: c.readOpt(obj["array"], x => c.readList(x, c.checkStr)),
+    map: c.readOpt(obj["map"], x => c.readMap(x, c.checkStr)),
+    name: c.readOpt(obj["name"], c.checkStr),
+    string: c.readOpt(obj["string"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_pullRequest_template_spec_sources_directory_jsonnet(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    extVars: c.readOpt(obj["extVars"], x => c.readList(x, toApplicationSet_spec_generators_matrix_generators_pullRequest_template_spec_sources_directory_jsonnet_extVars)),
+    libs: c.readOpt(obj["libs"], x => c.readList(x, c.checkStr)),
+    tlas: c.readOpt(obj["tlas"], x => c.readList(x, toApplicationSet_spec_generators_matrix_generators_pullRequest_template_spec_sources_directory_jsonnet_tlas)),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_pullRequest_template_spec_sources_helm_fileParameters(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    name: c.readOpt(obj["name"], c.checkStr),
+    path: c.readOpt(obj["path"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_pullRequest_template_spec_sources_helm_parameters(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    forceString: c.readOpt(obj["forceString"], c.checkBool),
+    name: c.readOpt(obj["name"], c.checkStr),
+    value: c.readOpt(obj["value"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_pullRequest_template_spec_sources_plugin_env(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    name: c.checkStr(obj["name"]),
+    value: c.checkStr(obj["value"]),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_pullRequest_template_spec_sources_plugin_parameters(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    array: c.readOpt(obj["array"], x => c.readList(x, c.checkStr)),
+    map: c.readOpt(obj["map"], x => c.readMap(x, c.checkStr)),
+    name: c.readOpt(obj["name"], c.checkStr),
+    string: c.readOpt(obj["string"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_pullRequest_template_spec_syncPolicy_retry_backoff(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    duration: c.readOpt(obj["duration"], c.checkStr),
+    factor: c.readOpt(obj["factor"], c.checkNum),
+    maxDuration: c.readOpt(obj["maxDuration"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_scmProvider_template_spec_source_directory_jsonnet(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    extVars: c.readOpt(obj["extVars"], x => c.readList(x, toApplicationSet_spec_generators_matrix_generators_scmProvider_template_spec_source_directory_jsonnet_extVars)),
+    libs: c.readOpt(obj["libs"], x => c.readList(x, c.checkStr)),
+    tlas: c.readOpt(obj["tlas"], x => c.readList(x, toApplicationSet_spec_generators_matrix_generators_scmProvider_template_spec_source_directory_jsonnet_tlas)),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_scmProvider_template_spec_source_helm_fileParameters(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    name: c.readOpt(obj["name"], c.checkStr),
+    path: c.readOpt(obj["path"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_scmProvider_template_spec_source_helm_parameters(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    forceString: c.readOpt(obj["forceString"], c.checkBool),
+    name: c.readOpt(obj["name"], c.checkStr),
+    value: c.readOpt(obj["value"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_scmProvider_template_spec_source_plugin_env(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    name: c.checkStr(obj["name"]),
+    value: c.checkStr(obj["value"]),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_scmProvider_template_spec_source_plugin_parameters(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    array: c.readOpt(obj["array"], x => c.readList(x, c.checkStr)),
+    map: c.readOpt(obj["map"], x => c.readMap(x, c.checkStr)),
+    name: c.readOpt(obj["name"], c.checkStr),
+    string: c.readOpt(obj["string"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_scmProvider_template_spec_sources_directory_jsonnet(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    extVars: c.readOpt(obj["extVars"], x => c.readList(x, toApplicationSet_spec_generators_matrix_generators_scmProvider_template_spec_sources_directory_jsonnet_extVars)),
+    libs: c.readOpt(obj["libs"], x => c.readList(x, c.checkStr)),
+    tlas: c.readOpt(obj["tlas"], x => c.readList(x, toApplicationSet_spec_generators_matrix_generators_scmProvider_template_spec_sources_directory_jsonnet_tlas)),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_scmProvider_template_spec_sources_helm_fileParameters(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    name: c.readOpt(obj["name"], c.checkStr),
+    path: c.readOpt(obj["path"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_scmProvider_template_spec_sources_helm_parameters(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    forceString: c.readOpt(obj["forceString"], c.checkBool),
+    name: c.readOpt(obj["name"], c.checkStr),
+    value: c.readOpt(obj["value"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_scmProvider_template_spec_sources_plugin_env(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    name: c.checkStr(obj["name"]),
+    value: c.checkStr(obj["value"]),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_scmProvider_template_spec_sources_plugin_parameters(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    array: c.readOpt(obj["array"], x => c.readList(x, c.checkStr)),
+    map: c.readOpt(obj["map"], x => c.readMap(x, c.checkStr)),
+    name: c.readOpt(obj["name"], c.checkStr),
+    string: c.readOpt(obj["string"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_scmProvider_template_spec_syncPolicy_retry_backoff(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    duration: c.readOpt(obj["duration"], c.checkStr),
+    factor: c.readOpt(obj["factor"], c.checkNum),
+    maxDuration: c.readOpt(obj["maxDuration"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_clusterDecisionResource_template_spec_source_directory_jsonnet(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    extVars: c.readOpt(obj["extVars"], x => c.readList(x, toApplicationSet_spec_generators_merge_generators_clusterDecisionResource_template_spec_source_directory_jsonnet_extVars)),
+    libs: c.readOpt(obj["libs"], x => c.readList(x, c.checkStr)),
+    tlas: c.readOpt(obj["tlas"], x => c.readList(x, toApplicationSet_spec_generators_merge_generators_clusterDecisionResource_template_spec_source_directory_jsonnet_tlas)),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_clusterDecisionResource_template_spec_source_helm_fileParameters(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    name: c.readOpt(obj["name"], c.checkStr),
+    path: c.readOpt(obj["path"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_clusterDecisionResource_template_spec_source_helm_parameters(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    forceString: c.readOpt(obj["forceString"], c.checkBool),
+    name: c.readOpt(obj["name"], c.checkStr),
+    value: c.readOpt(obj["value"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_clusterDecisionResource_template_spec_source_plugin_env(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    name: c.checkStr(obj["name"]),
+    value: c.checkStr(obj["value"]),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_clusterDecisionResource_template_spec_source_plugin_parameters(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    array: c.readOpt(obj["array"], x => c.readList(x, c.checkStr)),
+    map: c.readOpt(obj["map"], x => c.readMap(x, c.checkStr)),
+    name: c.readOpt(obj["name"], c.checkStr),
+    string: c.readOpt(obj["string"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_clusterDecisionResource_template_spec_sources_directory_jsonnet(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    extVars: c.readOpt(obj["extVars"], x => c.readList(x, toApplicationSet_spec_generators_merge_generators_clusterDecisionResource_template_spec_sources_directory_jsonnet_extVars)),
+    libs: c.readOpt(obj["libs"], x => c.readList(x, c.checkStr)),
+    tlas: c.readOpt(obj["tlas"], x => c.readList(x, toApplicationSet_spec_generators_merge_generators_clusterDecisionResource_template_spec_sources_directory_jsonnet_tlas)),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_clusterDecisionResource_template_spec_sources_helm_fileParameters(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    name: c.readOpt(obj["name"], c.checkStr),
+    path: c.readOpt(obj["path"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_clusterDecisionResource_template_spec_sources_helm_parameters(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    forceString: c.readOpt(obj["forceString"], c.checkBool),
+    name: c.readOpt(obj["name"], c.checkStr),
+    value: c.readOpt(obj["value"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_clusterDecisionResource_template_spec_sources_plugin_env(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    name: c.checkStr(obj["name"]),
+    value: c.checkStr(obj["value"]),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_clusterDecisionResource_template_spec_sources_plugin_parameters(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    array: c.readOpt(obj["array"], x => c.readList(x, c.checkStr)),
+    map: c.readOpt(obj["map"], x => c.readMap(x, c.checkStr)),
+    name: c.readOpt(obj["name"], c.checkStr),
+    string: c.readOpt(obj["string"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_clusterDecisionResource_template_spec_syncPolicy_retry_backoff(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    duration: c.readOpt(obj["duration"], c.checkStr),
+    factor: c.readOpt(obj["factor"], c.checkNum),
+    maxDuration: c.readOpt(obj["maxDuration"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_clusters_template_spec_source_directory_jsonnet(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    extVars: c.readOpt(obj["extVars"], x => c.readList(x, toApplicationSet_spec_generators_merge_generators_clusters_template_spec_source_directory_jsonnet_extVars)),
+    libs: c.readOpt(obj["libs"], x => c.readList(x, c.checkStr)),
+    tlas: c.readOpt(obj["tlas"], x => c.readList(x, toApplicationSet_spec_generators_merge_generators_clusters_template_spec_source_directory_jsonnet_tlas)),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_clusters_template_spec_source_helm_fileParameters(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    name: c.readOpt(obj["name"], c.checkStr),
+    path: c.readOpt(obj["path"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_clusters_template_spec_source_helm_parameters(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    forceString: c.readOpt(obj["forceString"], c.checkBool),
+    name: c.readOpt(obj["name"], c.checkStr),
+    value: c.readOpt(obj["value"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_clusters_template_spec_source_plugin_env(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    name: c.checkStr(obj["name"]),
+    value: c.checkStr(obj["value"]),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_clusters_template_spec_source_plugin_parameters(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    array: c.readOpt(obj["array"], x => c.readList(x, c.checkStr)),
+    map: c.readOpt(obj["map"], x => c.readMap(x, c.checkStr)),
+    name: c.readOpt(obj["name"], c.checkStr),
+    string: c.readOpt(obj["string"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_clusters_template_spec_sources_directory_jsonnet(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    extVars: c.readOpt(obj["extVars"], x => c.readList(x, toApplicationSet_spec_generators_merge_generators_clusters_template_spec_sources_directory_jsonnet_extVars)),
+    libs: c.readOpt(obj["libs"], x => c.readList(x, c.checkStr)),
+    tlas: c.readOpt(obj["tlas"], x => c.readList(x, toApplicationSet_spec_generators_merge_generators_clusters_template_spec_sources_directory_jsonnet_tlas)),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_clusters_template_spec_sources_helm_fileParameters(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    name: c.readOpt(obj["name"], c.checkStr),
+    path: c.readOpt(obj["path"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_clusters_template_spec_sources_helm_parameters(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    forceString: c.readOpt(obj["forceString"], c.checkBool),
+    name: c.readOpt(obj["name"], c.checkStr),
+    value: c.readOpt(obj["value"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_clusters_template_spec_sources_plugin_env(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    name: c.checkStr(obj["name"]),
+    value: c.checkStr(obj["value"]),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_clusters_template_spec_sources_plugin_parameters(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    array: c.readOpt(obj["array"], x => c.readList(x, c.checkStr)),
+    map: c.readOpt(obj["map"], x => c.readMap(x, c.checkStr)),
+    name: c.readOpt(obj["name"], c.checkStr),
+    string: c.readOpt(obj["string"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_clusters_template_spec_syncPolicy_retry_backoff(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    duration: c.readOpt(obj["duration"], c.checkStr),
+    factor: c.readOpt(obj["factor"], c.checkNum),
+    maxDuration: c.readOpt(obj["maxDuration"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_git_template_spec_source_directory_jsonnet(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    extVars: c.readOpt(obj["extVars"], x => c.readList(x, toApplicationSet_spec_generators_merge_generators_git_template_spec_source_directory_jsonnet_extVars)),
+    libs: c.readOpt(obj["libs"], x => c.readList(x, c.checkStr)),
+    tlas: c.readOpt(obj["tlas"], x => c.readList(x, toApplicationSet_spec_generators_merge_generators_git_template_spec_source_directory_jsonnet_tlas)),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_git_template_spec_source_helm_fileParameters(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    name: c.readOpt(obj["name"], c.checkStr),
+    path: c.readOpt(obj["path"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_git_template_spec_source_helm_parameters(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    forceString: c.readOpt(obj["forceString"], c.checkBool),
+    name: c.readOpt(obj["name"], c.checkStr),
+    value: c.readOpt(obj["value"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_git_template_spec_source_plugin_env(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    name: c.checkStr(obj["name"]),
+    value: c.checkStr(obj["value"]),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_git_template_spec_source_plugin_parameters(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    array: c.readOpt(obj["array"], x => c.readList(x, c.checkStr)),
+    map: c.readOpt(obj["map"], x => c.readMap(x, c.checkStr)),
+    name: c.readOpt(obj["name"], c.checkStr),
+    string: c.readOpt(obj["string"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_git_template_spec_sources_directory_jsonnet(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    extVars: c.readOpt(obj["extVars"], x => c.readList(x, toApplicationSet_spec_generators_merge_generators_git_template_spec_sources_directory_jsonnet_extVars)),
+    libs: c.readOpt(obj["libs"], x => c.readList(x, c.checkStr)),
+    tlas: c.readOpt(obj["tlas"], x => c.readList(x, toApplicationSet_spec_generators_merge_generators_git_template_spec_sources_directory_jsonnet_tlas)),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_git_template_spec_sources_helm_fileParameters(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    name: c.readOpt(obj["name"], c.checkStr),
+    path: c.readOpt(obj["path"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_git_template_spec_sources_helm_parameters(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    forceString: c.readOpt(obj["forceString"], c.checkBool),
+    name: c.readOpt(obj["name"], c.checkStr),
+    value: c.readOpt(obj["value"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_git_template_spec_sources_plugin_env(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    name: c.checkStr(obj["name"]),
+    value: c.checkStr(obj["value"]),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_git_template_spec_sources_plugin_parameters(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    array: c.readOpt(obj["array"], x => c.readList(x, c.checkStr)),
+    map: c.readOpt(obj["map"], x => c.readMap(x, c.checkStr)),
+    name: c.readOpt(obj["name"], c.checkStr),
+    string: c.readOpt(obj["string"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_git_template_spec_syncPolicy_retry_backoff(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    duration: c.readOpt(obj["duration"], c.checkStr),
+    factor: c.readOpt(obj["factor"], c.checkNum),
+    maxDuration: c.readOpt(obj["maxDuration"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_list_template_spec_source_directory_jsonnet(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    extVars: c.readOpt(obj["extVars"], x => c.readList(x, toApplicationSet_spec_generators_merge_generators_list_template_spec_source_directory_jsonnet_extVars)),
+    libs: c.readOpt(obj["libs"], x => c.readList(x, c.checkStr)),
+    tlas: c.readOpt(obj["tlas"], x => c.readList(x, toApplicationSet_spec_generators_merge_generators_list_template_spec_source_directory_jsonnet_tlas)),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_list_template_spec_source_helm_fileParameters(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    name: c.readOpt(obj["name"], c.checkStr),
+    path: c.readOpt(obj["path"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_list_template_spec_source_helm_parameters(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    forceString: c.readOpt(obj["forceString"], c.checkBool),
+    name: c.readOpt(obj["name"], c.checkStr),
+    value: c.readOpt(obj["value"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_list_template_spec_source_plugin_env(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    name: c.checkStr(obj["name"]),
+    value: c.checkStr(obj["value"]),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_list_template_spec_source_plugin_parameters(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    array: c.readOpt(obj["array"], x => c.readList(x, c.checkStr)),
+    map: c.readOpt(obj["map"], x => c.readMap(x, c.checkStr)),
+    name: c.readOpt(obj["name"], c.checkStr),
+    string: c.readOpt(obj["string"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_list_template_spec_sources_directory_jsonnet(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    extVars: c.readOpt(obj["extVars"], x => c.readList(x, toApplicationSet_spec_generators_merge_generators_list_template_spec_sources_directory_jsonnet_extVars)),
+    libs: c.readOpt(obj["libs"], x => c.readList(x, c.checkStr)),
+    tlas: c.readOpt(obj["tlas"], x => c.readList(x, toApplicationSet_spec_generators_merge_generators_list_template_spec_sources_directory_jsonnet_tlas)),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_list_template_spec_sources_helm_fileParameters(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    name: c.readOpt(obj["name"], c.checkStr),
+    path: c.readOpt(obj["path"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_list_template_spec_sources_helm_parameters(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    forceString: c.readOpt(obj["forceString"], c.checkBool),
+    name: c.readOpt(obj["name"], c.checkStr),
+    value: c.readOpt(obj["value"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_list_template_spec_sources_plugin_env(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    name: c.checkStr(obj["name"]),
+    value: c.checkStr(obj["value"]),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_list_template_spec_sources_plugin_parameters(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    array: c.readOpt(obj["array"], x => c.readList(x, c.checkStr)),
+    map: c.readOpt(obj["map"], x => c.readMap(x, c.checkStr)),
+    name: c.readOpt(obj["name"], c.checkStr),
+    string: c.readOpt(obj["string"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_list_template_spec_syncPolicy_retry_backoff(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    duration: c.readOpt(obj["duration"], c.checkStr),
+    factor: c.readOpt(obj["factor"], c.checkNum),
+    maxDuration: c.readOpt(obj["maxDuration"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_pullRequest_template_spec_source_directory_jsonnet(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    extVars: c.readOpt(obj["extVars"], x => c.readList(x, toApplicationSet_spec_generators_merge_generators_pullRequest_template_spec_source_directory_jsonnet_extVars)),
+    libs: c.readOpt(obj["libs"], x => c.readList(x, c.checkStr)),
+    tlas: c.readOpt(obj["tlas"], x => c.readList(x, toApplicationSet_spec_generators_merge_generators_pullRequest_template_spec_source_directory_jsonnet_tlas)),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_pullRequest_template_spec_source_helm_fileParameters(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    name: c.readOpt(obj["name"], c.checkStr),
+    path: c.readOpt(obj["path"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_pullRequest_template_spec_source_helm_parameters(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    forceString: c.readOpt(obj["forceString"], c.checkBool),
+    name: c.readOpt(obj["name"], c.checkStr),
+    value: c.readOpt(obj["value"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_pullRequest_template_spec_source_plugin_env(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    name: c.checkStr(obj["name"]),
+    value: c.checkStr(obj["value"]),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_pullRequest_template_spec_source_plugin_parameters(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    array: c.readOpt(obj["array"], x => c.readList(x, c.checkStr)),
+    map: c.readOpt(obj["map"], x => c.readMap(x, c.checkStr)),
+    name: c.readOpt(obj["name"], c.checkStr),
+    string: c.readOpt(obj["string"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_pullRequest_template_spec_sources_directory_jsonnet(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    extVars: c.readOpt(obj["extVars"], x => c.readList(x, toApplicationSet_spec_generators_merge_generators_pullRequest_template_spec_sources_directory_jsonnet_extVars)),
+    libs: c.readOpt(obj["libs"], x => c.readList(x, c.checkStr)),
+    tlas: c.readOpt(obj["tlas"], x => c.readList(x, toApplicationSet_spec_generators_merge_generators_pullRequest_template_spec_sources_directory_jsonnet_tlas)),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_pullRequest_template_spec_sources_helm_fileParameters(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    name: c.readOpt(obj["name"], c.checkStr),
+    path: c.readOpt(obj["path"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_pullRequest_template_spec_sources_helm_parameters(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    forceString: c.readOpt(obj["forceString"], c.checkBool),
+    name: c.readOpt(obj["name"], c.checkStr),
+    value: c.readOpt(obj["value"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_pullRequest_template_spec_sources_plugin_env(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    name: c.checkStr(obj["name"]),
+    value: c.checkStr(obj["value"]),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_pullRequest_template_spec_sources_plugin_parameters(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    array: c.readOpt(obj["array"], x => c.readList(x, c.checkStr)),
+    map: c.readOpt(obj["map"], x => c.readMap(x, c.checkStr)),
+    name: c.readOpt(obj["name"], c.checkStr),
+    string: c.readOpt(obj["string"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_pullRequest_template_spec_syncPolicy_retry_backoff(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    duration: c.readOpt(obj["duration"], c.checkStr),
+    factor: c.readOpt(obj["factor"], c.checkNum),
+    maxDuration: c.readOpt(obj["maxDuration"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_scmProvider_template_spec_source_directory_jsonnet(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    extVars: c.readOpt(obj["extVars"], x => c.readList(x, toApplicationSet_spec_generators_merge_generators_scmProvider_template_spec_source_directory_jsonnet_extVars)),
+    libs: c.readOpt(obj["libs"], x => c.readList(x, c.checkStr)),
+    tlas: c.readOpt(obj["tlas"], x => c.readList(x, toApplicationSet_spec_generators_merge_generators_scmProvider_template_spec_source_directory_jsonnet_tlas)),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_scmProvider_template_spec_source_helm_fileParameters(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    name: c.readOpt(obj["name"], c.checkStr),
+    path: c.readOpt(obj["path"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_scmProvider_template_spec_source_helm_parameters(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    forceString: c.readOpt(obj["forceString"], c.checkBool),
+    name: c.readOpt(obj["name"], c.checkStr),
+    value: c.readOpt(obj["value"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_scmProvider_template_spec_source_plugin_env(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    name: c.checkStr(obj["name"]),
+    value: c.checkStr(obj["value"]),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_scmProvider_template_spec_source_plugin_parameters(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    array: c.readOpt(obj["array"], x => c.readList(x, c.checkStr)),
+    map: c.readOpt(obj["map"], x => c.readMap(x, c.checkStr)),
+    name: c.readOpt(obj["name"], c.checkStr),
+    string: c.readOpt(obj["string"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_scmProvider_template_spec_sources_directory_jsonnet(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    extVars: c.readOpt(obj["extVars"], x => c.readList(x, toApplicationSet_spec_generators_merge_generators_scmProvider_template_spec_sources_directory_jsonnet_extVars)),
+    libs: c.readOpt(obj["libs"], x => c.readList(x, c.checkStr)),
+    tlas: c.readOpt(obj["tlas"], x => c.readList(x, toApplicationSet_spec_generators_merge_generators_scmProvider_template_spec_sources_directory_jsonnet_tlas)),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_scmProvider_template_spec_sources_helm_fileParameters(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    name: c.readOpt(obj["name"], c.checkStr),
+    path: c.readOpt(obj["path"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_scmProvider_template_spec_sources_helm_parameters(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    forceString: c.readOpt(obj["forceString"], c.checkBool),
+    name: c.readOpt(obj["name"], c.checkStr),
+    value: c.readOpt(obj["value"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_scmProvider_template_spec_sources_plugin_env(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    name: c.checkStr(obj["name"]),
+    value: c.checkStr(obj["value"]),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_scmProvider_template_spec_sources_plugin_parameters(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    array: c.readOpt(obj["array"], x => c.readList(x, c.checkStr)),
+    map: c.readOpt(obj["map"], x => c.readMap(x, c.checkStr)),
+    name: c.readOpt(obj["name"], c.checkStr),
+    string: c.readOpt(obj["string"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_scmProvider_template_spec_syncPolicy_retry_backoff(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    duration: c.readOpt(obj["duration"], c.checkStr),
+    factor: c.readOpt(obj["factor"], c.checkNum),
+    maxDuration: c.readOpt(obj["maxDuration"], c.checkStr),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_clusterDecisionResource_template_spec_source_directory_jsonnet_extVars(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    code: c.readOpt(obj["code"], c.checkBool),
+    name: c.checkStr(obj["name"]),
+    value: c.checkStr(obj["value"]),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_clusterDecisionResource_template_spec_source_directory_jsonnet_tlas(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    code: c.readOpt(obj["code"], c.checkBool),
+    name: c.checkStr(obj["name"]),
+    value: c.checkStr(obj["value"]),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_clusterDecisionResource_template_spec_sources_directory_jsonnet_extVars(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    code: c.readOpt(obj["code"], c.checkBool),
+    name: c.checkStr(obj["name"]),
+    value: c.checkStr(obj["value"]),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_clusterDecisionResource_template_spec_sources_directory_jsonnet_tlas(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    code: c.readOpt(obj["code"], c.checkBool),
+    name: c.checkStr(obj["name"]),
+    value: c.checkStr(obj["value"]),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_clusters_template_spec_source_directory_jsonnet_extVars(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    code: c.readOpt(obj["code"], c.checkBool),
+    name: c.checkStr(obj["name"]),
+    value: c.checkStr(obj["value"]),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_clusters_template_spec_source_directory_jsonnet_tlas(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    code: c.readOpt(obj["code"], c.checkBool),
+    name: c.checkStr(obj["name"]),
+    value: c.checkStr(obj["value"]),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_clusters_template_spec_sources_directory_jsonnet_extVars(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    code: c.readOpt(obj["code"], c.checkBool),
+    name: c.checkStr(obj["name"]),
+    value: c.checkStr(obj["value"]),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_clusters_template_spec_sources_directory_jsonnet_tlas(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    code: c.readOpt(obj["code"], c.checkBool),
+    name: c.checkStr(obj["name"]),
+    value: c.checkStr(obj["value"]),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_git_template_spec_source_directory_jsonnet_extVars(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    code: c.readOpt(obj["code"], c.checkBool),
+    name: c.checkStr(obj["name"]),
+    value: c.checkStr(obj["value"]),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_git_template_spec_source_directory_jsonnet_tlas(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    code: c.readOpt(obj["code"], c.checkBool),
+    name: c.checkStr(obj["name"]),
+    value: c.checkStr(obj["value"]),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_git_template_spec_sources_directory_jsonnet_extVars(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    code: c.readOpt(obj["code"], c.checkBool),
+    name: c.checkStr(obj["name"]),
+    value: c.checkStr(obj["value"]),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_git_template_spec_sources_directory_jsonnet_tlas(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    code: c.readOpt(obj["code"], c.checkBool),
+    name: c.checkStr(obj["name"]),
+    value: c.checkStr(obj["value"]),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_list_template_spec_source_directory_jsonnet_extVars(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    code: c.readOpt(obj["code"], c.checkBool),
+    name: c.checkStr(obj["name"]),
+    value: c.checkStr(obj["value"]),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_list_template_spec_source_directory_jsonnet_tlas(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    code: c.readOpt(obj["code"], c.checkBool),
+    name: c.checkStr(obj["name"]),
+    value: c.checkStr(obj["value"]),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_list_template_spec_sources_directory_jsonnet_extVars(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    code: c.readOpt(obj["code"], c.checkBool),
+    name: c.checkStr(obj["name"]),
+    value: c.checkStr(obj["value"]),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_list_template_spec_sources_directory_jsonnet_tlas(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    code: c.readOpt(obj["code"], c.checkBool),
+    name: c.checkStr(obj["name"]),
+    value: c.checkStr(obj["value"]),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_pullRequest_template_spec_source_directory_jsonnet_extVars(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    code: c.readOpt(obj["code"], c.checkBool),
+    name: c.checkStr(obj["name"]),
+    value: c.checkStr(obj["value"]),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_pullRequest_template_spec_source_directory_jsonnet_tlas(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    code: c.readOpt(obj["code"], c.checkBool),
+    name: c.checkStr(obj["name"]),
+    value: c.checkStr(obj["value"]),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_pullRequest_template_spec_sources_directory_jsonnet_extVars(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    code: c.readOpt(obj["code"], c.checkBool),
+    name: c.checkStr(obj["name"]),
+    value: c.checkStr(obj["value"]),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_pullRequest_template_spec_sources_directory_jsonnet_tlas(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    code: c.readOpt(obj["code"], c.checkBool),
+    name: c.checkStr(obj["name"]),
+    value: c.checkStr(obj["value"]),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_scmProvider_template_spec_source_directory_jsonnet_extVars(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    code: c.readOpt(obj["code"], c.checkBool),
+    name: c.checkStr(obj["name"]),
+    value: c.checkStr(obj["value"]),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_scmProvider_template_spec_source_directory_jsonnet_tlas(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    code: c.readOpt(obj["code"], c.checkBool),
+    name: c.checkStr(obj["name"]),
+    value: c.checkStr(obj["value"]),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_scmProvider_template_spec_sources_directory_jsonnet_extVars(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    code: c.readOpt(obj["code"], c.checkBool),
+    name: c.checkStr(obj["name"]),
+    value: c.checkStr(obj["value"]),
+  }}
+export function toApplicationSet_spec_generators_matrix_generators_scmProvider_template_spec_sources_directory_jsonnet_tlas(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    code: c.readOpt(obj["code"], c.checkBool),
+    name: c.checkStr(obj["name"]),
+    value: c.checkStr(obj["value"]),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_clusterDecisionResource_template_spec_source_directory_jsonnet_extVars(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    code: c.readOpt(obj["code"], c.checkBool),
+    name: c.checkStr(obj["name"]),
+    value: c.checkStr(obj["value"]),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_clusterDecisionResource_template_spec_source_directory_jsonnet_tlas(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    code: c.readOpt(obj["code"], c.checkBool),
+    name: c.checkStr(obj["name"]),
+    value: c.checkStr(obj["value"]),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_clusterDecisionResource_template_spec_sources_directory_jsonnet_extVars(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    code: c.readOpt(obj["code"], c.checkBool),
+    name: c.checkStr(obj["name"]),
+    value: c.checkStr(obj["value"]),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_clusterDecisionResource_template_spec_sources_directory_jsonnet_tlas(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    code: c.readOpt(obj["code"], c.checkBool),
+    name: c.checkStr(obj["name"]),
+    value: c.checkStr(obj["value"]),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_clusters_template_spec_source_directory_jsonnet_extVars(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    code: c.readOpt(obj["code"], c.checkBool),
+    name: c.checkStr(obj["name"]),
+    value: c.checkStr(obj["value"]),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_clusters_template_spec_source_directory_jsonnet_tlas(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    code: c.readOpt(obj["code"], c.checkBool),
+    name: c.checkStr(obj["name"]),
+    value: c.checkStr(obj["value"]),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_clusters_template_spec_sources_directory_jsonnet_extVars(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    code: c.readOpt(obj["code"], c.checkBool),
+    name: c.checkStr(obj["name"]),
+    value: c.checkStr(obj["value"]),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_clusters_template_spec_sources_directory_jsonnet_tlas(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    code: c.readOpt(obj["code"], c.checkBool),
+    name: c.checkStr(obj["name"]),
+    value: c.checkStr(obj["value"]),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_git_template_spec_source_directory_jsonnet_extVars(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    code: c.readOpt(obj["code"], c.checkBool),
+    name: c.checkStr(obj["name"]),
+    value: c.checkStr(obj["value"]),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_git_template_spec_source_directory_jsonnet_tlas(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    code: c.readOpt(obj["code"], c.checkBool),
+    name: c.checkStr(obj["name"]),
+    value: c.checkStr(obj["value"]),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_git_template_spec_sources_directory_jsonnet_extVars(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    code: c.readOpt(obj["code"], c.checkBool),
+    name: c.checkStr(obj["name"]),
+    value: c.checkStr(obj["value"]),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_git_template_spec_sources_directory_jsonnet_tlas(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    code: c.readOpt(obj["code"], c.checkBool),
+    name: c.checkStr(obj["name"]),
+    value: c.checkStr(obj["value"]),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_list_template_spec_source_directory_jsonnet_extVars(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    code: c.readOpt(obj["code"], c.checkBool),
+    name: c.checkStr(obj["name"]),
+    value: c.checkStr(obj["value"]),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_list_template_spec_source_directory_jsonnet_tlas(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    code: c.readOpt(obj["code"], c.checkBool),
+    name: c.checkStr(obj["name"]),
+    value: c.checkStr(obj["value"]),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_list_template_spec_sources_directory_jsonnet_extVars(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    code: c.readOpt(obj["code"], c.checkBool),
+    name: c.checkStr(obj["name"]),
+    value: c.checkStr(obj["value"]),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_list_template_spec_sources_directory_jsonnet_tlas(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    code: c.readOpt(obj["code"], c.checkBool),
+    name: c.checkStr(obj["name"]),
+    value: c.checkStr(obj["value"]),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_pullRequest_template_spec_source_directory_jsonnet_extVars(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    code: c.readOpt(obj["code"], c.checkBool),
+    name: c.checkStr(obj["name"]),
+    value: c.checkStr(obj["value"]),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_pullRequest_template_spec_source_directory_jsonnet_tlas(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    code: c.readOpt(obj["code"], c.checkBool),
+    name: c.checkStr(obj["name"]),
+    value: c.checkStr(obj["value"]),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_pullRequest_template_spec_sources_directory_jsonnet_extVars(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    code: c.readOpt(obj["code"], c.checkBool),
+    name: c.checkStr(obj["name"]),
+    value: c.checkStr(obj["value"]),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_pullRequest_template_spec_sources_directory_jsonnet_tlas(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    code: c.readOpt(obj["code"], c.checkBool),
+    name: c.checkStr(obj["name"]),
+    value: c.checkStr(obj["value"]),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_scmProvider_template_spec_source_directory_jsonnet_extVars(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    code: c.readOpt(obj["code"], c.checkBool),
+    name: c.checkStr(obj["name"]),
+    value: c.checkStr(obj["value"]),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_scmProvider_template_spec_source_directory_jsonnet_tlas(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    code: c.readOpt(obj["code"], c.checkBool),
+    name: c.checkStr(obj["name"]),
+    value: c.checkStr(obj["value"]),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_scmProvider_template_spec_sources_directory_jsonnet_extVars(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    code: c.readOpt(obj["code"], c.checkBool),
+    name: c.checkStr(obj["name"]),
+    value: c.checkStr(obj["value"]),
+  }}
+export function toApplicationSet_spec_generators_merge_generators_scmProvider_template_spec_sources_directory_jsonnet_tlas(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    code: c.readOpt(obj["code"], c.checkBool),
+    name: c.checkStr(obj["name"]),
+    value: c.checkStr(obj["value"]),
+  }}
+
+export interface ApplicationSetList extends ListOf<ApplicationSet> {
+  apiVersion?: "argoproj.io/v1alpha1";
+  kind?: "ApplicationSetList";
+};
+export function toApplicationSetList(input: c.JSONValue): ApplicationSetList & c.ApiKind {
+  const obj = c.checkObj(input);
+  return {
+    ...c.assertOrAddApiVersionAndKind(obj, "argoproj.io/v1alpha1", "ApplicationSetList"),
+    metadata: MetaV1.toListMeta(obj.metadata),
+    items: c.readList(obj.items, toApplicationSet),
   }}
 
 /** AppProject provides a logical grouping of applications, providing controls for: * where the apps may deploy to (cluster whitelist) * what may be deployed (repository whitelist, resource whitelist/blacklist) * who can access these applications (roles, OIDC group claims bindings) * and what they can do (RBAC policies) * automation access to these roles (JWT tokens) */
@@ -1590,6 +14069,7 @@ export interface AppProject {
       }> | null;
       warn?: boolean | null;
     } | null;
+    permitOnlyProjectScopedClusters?: boolean | null;
     roles?: Array<{
       description?: string | null;
       groups?: Array<string> | null;
@@ -1604,6 +14084,7 @@ export interface AppProject {
     signatureKeys?: Array<{
       keyID: string;
     }> | null;
+    sourceNamespaces?: Array<string> | null;
     sourceRepos?: Array<string> | null;
     syncWindows?: Array<{
       applications?: Array<string> | null;
@@ -1613,6 +14094,7 @@ export interface AppProject {
       manualSync?: boolean | null;
       namespaces?: Array<string> | null;
       schedule?: string | null;
+      timeZone?: string | null;
     }> | null;
   };
   status?: {
@@ -1649,8 +14131,10 @@ export function toAppProject_spec(input: c.JSONValue) {
     namespaceResourceBlacklist: c.readOpt(obj["namespaceResourceBlacklist"], x => c.readList(x, toAppProject_spec_namespaceResourceBlacklist)),
     namespaceResourceWhitelist: c.readOpt(obj["namespaceResourceWhitelist"], x => c.readList(x, toAppProject_spec_namespaceResourceWhitelist)),
     orphanedResources: c.readOpt(obj["orphanedResources"], toAppProject_spec_orphanedResources),
+    permitOnlyProjectScopedClusters: c.readOpt(obj["permitOnlyProjectScopedClusters"], c.checkBool),
     roles: c.readOpt(obj["roles"], x => c.readList(x, toAppProject_spec_roles)),
     signatureKeys: c.readOpt(obj["signatureKeys"], x => c.readList(x, toAppProject_spec_signatureKeys)),
+    sourceNamespaces: c.readOpt(obj["sourceNamespaces"], x => c.readList(x, c.checkStr)),
     sourceRepos: c.readOpt(obj["sourceRepos"], x => c.readList(x, c.checkStr)),
     syncWindows: c.readOpt(obj["syncWindows"], x => c.readList(x, toAppProject_spec_syncWindows)),
   }}
@@ -1720,6 +14204,7 @@ export function toAppProject_spec_syncWindows(input: c.JSONValue) {
     manualSync: c.readOpt(obj["manualSync"], c.checkBool),
     namespaces: c.readOpt(obj["namespaces"], x => c.readList(x, c.checkStr)),
     schedule: c.readOpt(obj["schedule"], c.checkStr),
+    timeZone: c.readOpt(obj["timeZone"], c.checkStr),
   }}
 export function toAppProject_status_jwtTokensByRole(input: c.JSONValue) {
   const obj = c.checkObj(input);

@@ -13,12 +13,11 @@ jobs:
     strategy:
       matrix:
         deno-version:
-        - v1.11
-        - v1.12
-        - v1.13
-        - v1.14
-        - v1.15
-        - v1.16
+        - v1.22
+        - v1.24
+        - v1.26
+        - v1.28
+        - v1.30
         - canary
       fail-fast: false # run each branch to completion
 
@@ -41,13 +40,13 @@ jobs:
         restore-keys: deno-https/v1-
 
     - name: Check generation/mod.ts
-      run: time deno cache generation/mod.ts
+      run: time deno check generation/mod.ts
 
     - name: Check lib/builtin/*/mod.ts
-      run: time deno cache lib/builtin/*/mod.ts
+      run: time deno check lib/builtin/*/mod.ts
 
     - name: Check lib/*/*/mod.ts
-      run: time deno cache lib/*/*/mod.ts
+      run: time deno check lib/*/*/mod.ts
 
     - name: Check lib/examples/*.ts
-      run: time deno cache lib/examples/*.ts
+      run: time deno check lib/examples/*.ts

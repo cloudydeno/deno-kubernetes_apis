@@ -36,6 +36,7 @@ export interface CSIDriverSpec {
   fsGroupPolicy?: string | null;
   podInfoOnMount?: boolean | null;
   requiresRepublish?: boolean | null;
+  seLinuxMount?: boolean | null;
   storageCapacity?: boolean | null;
   tokenRequests?: Array<TokenRequest> | null;
   volumeLifecycleModes?: Array<string> | null;
@@ -47,6 +48,7 @@ export function toCSIDriverSpec(input: c.JSONValue): CSIDriverSpec {
     fsGroupPolicy: c.readOpt(obj["fsGroupPolicy"], c.checkStr),
     podInfoOnMount: c.readOpt(obj["podInfoOnMount"], c.checkBool),
     requiresRepublish: c.readOpt(obj["requiresRepublish"], c.checkBool),
+    seLinuxMount: c.readOpt(obj["seLinuxMount"], c.checkBool),
     storageCapacity: c.readOpt(obj["storageCapacity"], c.checkBool),
     tokenRequests: c.readOpt(obj["tokenRequests"], x => c.readList(x, toTokenRequest)),
     volumeLifecycleModes: c.readOpt(obj["volumeLifecycleModes"], x => c.readList(x, c.checkStr)),
@@ -169,6 +171,57 @@ export function toCSINodeList(input: c.JSONValue): CSINodeList & c.ApiKind {
     ...c.assertOrAddApiVersionAndKind(obj, "storage.k8s.io/v1", "CSINodeList"),
     metadata: MetaV1.toListMeta(obj.metadata),
     items: c.readList(obj.items, toCSINode),
+  }}
+
+/** CSIStorageCapacity stores the result of one CSI GetCapacity call. For a given StorageClass, this describes the available capacity in a particular topology segment.  This can be used when considering where to instantiate new PersistentVolumes.
+
+For example this can express things like: - StorageClass "standard" has "1234 GiB" available in "topology.kubernetes.io/zone=us-east1" - StorageClass "localssd" has "10 GiB" available in "kubernetes.io/hostname=knode-abc123"
+
+The following three cases all imply that no capacity is available for a certain combination: - no object exists with suitable topology and storage class name - such an object exists, but the capacity is unset - such an object exists, but the capacity is zero
+
+The producer of these objects can decide which approach is more suitable.
+
+They are consumed by the kube-scheduler when a CSI driver opts into capacity-aware scheduling with CSIDriverSpec.StorageCapacity. The scheduler compares the MaximumVolumeSize against the requested size of pending volumes to filter out unsuitable nodes. If MaximumVolumeSize is unset, it falls back to a comparison against the less precise Capacity. If that is also unset, the scheduler assumes that capacity is insufficient and tries some other node. */
+export interface CSIStorageCapacity {
+  apiVersion?: "storage.k8s.io/v1";
+  kind?: "CSIStorageCapacity";
+  capacity?: c.Quantity | null;
+  maximumVolumeSize?: c.Quantity | null;
+  metadata?: MetaV1.ObjectMeta | null;
+  nodeTopology?: MetaV1.LabelSelector | null;
+  storageClassName: string;
+}
+export function toCSIStorageCapacity(input: c.JSONValue): CSIStorageCapacity & c.ApiKind {
+  const obj = c.checkObj(input);
+  return {
+    ...c.assertOrAddApiVersionAndKind(obj, "storage.k8s.io/v1", "CSIStorageCapacity"),
+    capacity: c.readOpt(obj["capacity"], c.toQuantity),
+    maximumVolumeSize: c.readOpt(obj["maximumVolumeSize"], c.toQuantity),
+    metadata: c.readOpt(obj["metadata"], MetaV1.toObjectMeta),
+    nodeTopology: c.readOpt(obj["nodeTopology"], MetaV1.toLabelSelector),
+    storageClassName: c.checkStr(obj["storageClassName"]),
+  }}
+export function fromCSIStorageCapacity(input: CSIStorageCapacity): c.JSONValue {
+  return {
+    ...c.assertOrAddApiVersionAndKind(input, "storage.k8s.io/v1", "CSIStorageCapacity"),
+    ...input,
+    capacity: input.capacity != null ? c.fromQuantity(input.capacity) : undefined,
+    maximumVolumeSize: input.maximumVolumeSize != null ? c.fromQuantity(input.maximumVolumeSize) : undefined,
+    metadata: input.metadata != null ? MetaV1.fromObjectMeta(input.metadata) : undefined,
+    nodeTopology: input.nodeTopology != null ? MetaV1.fromLabelSelector(input.nodeTopology) : undefined,
+  }}
+
+/** CSIStorageCapacityList is a collection of CSIStorageCapacity objects. */
+export interface CSIStorageCapacityList extends ListOf<CSIStorageCapacity> {
+  apiVersion?: "storage.k8s.io/v1";
+  kind?: "CSIStorageCapacityList";
+};
+export function toCSIStorageCapacityList(input: c.JSONValue): CSIStorageCapacityList & c.ApiKind {
+  const obj = c.checkObj(input);
+  return {
+    ...c.assertOrAddApiVersionAndKind(obj, "storage.k8s.io/v1", "CSIStorageCapacityList"),
+    metadata: MetaV1.toListMeta(obj.metadata),
+    items: c.readList(obj.items, toCSIStorageCapacity),
   }}
 
 /** StorageClass describes the parameters for a class of storage for which PersistentVolumes can be dynamically provisioned.
