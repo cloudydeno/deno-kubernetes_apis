@@ -1,5 +1,5 @@
 import { YAML, ApiKind, JSONValue } from "./deps.ts";
-import type { OpenAPI2SchemaObject, OpenAPI2Methods } from './openapi.ts';
+import type { OpenAPI2SchemaObject, OpenAPI2Methods, OpenAPI2PathMethod } from './openapi.ts';
 import { writeApiModule } from "./codegen.ts";
 import { SurfaceMap, SurfaceApi, OpScope } from "./describe-surface.ts";
 import { ShapeLibrary } from "./describe-shapes.ts";
@@ -224,8 +224,8 @@ function processCRD({apiGroup, apiVersion, schema, names, scope, subResources}: 
     schemes: ['https'],
     operationId: 'faked',
   }
-  function addOp(operationName: string, scope: OpScope, method: OpenAPI2Methods, opts: {
-    subPath?: string
+  function addOp(operationName: string, scope: OpScope, method: OpenAPI2Methods, action: OpenAPI2PathMethod['x-kubernetes-action'], opts: {
+    subPath?: string;
     reqKind?: string;
     respKind?: string;
     knownOpts?: string;
@@ -233,6 +233,7 @@ function processCRD({apiGroup, apiVersion, schema, names, scope, subResources}: 
   }) {
     api.operations.push({
       ...opBoilerPlate,
+      "x-kubernetes-action": action,
       method: method,
       operationName: operationName,
       scope: scope,
@@ -256,43 +257,43 @@ function processCRD({apiGroup, apiVersion, schema, names, scope, subResources}: 
   }
 
   function addCrdOps(scope: OpScope) {
-    addOp(`get${names.kind}List`, scope, 'get', {
+    addOp(`get${names.kind}List`, scope, 'get', 'list', {
       respKind: `${api.shapePrefix}${names.kind}List`,
       knownOpts: knownOpts.GetListOpts,
     });
-    addOp(`watch${names.kind}List`, scope, 'get', {
+    addOp(`watch${names.kind}List`, scope, 'get', 'watchlist', {
       respKind: `${api.shapePrefix}${names.kind}List`,
       knownOpts: knownOpts.WatchListOpts,
     });
-    addOp(`create${names.kind}`, scope, 'post', {
+    addOp(`create${names.kind}`, scope, 'post', 'post', {
       reqKind: `${api.shapePrefix}${names.kind}`,
       respKind: `${api.shapePrefix}${names.kind}`,
       knownOpts: knownOpts.PutOpts,
     });
-    addOp(`delete${names.kind}List`, scope, 'delete', {
+    addOp(`delete${names.kind}List`, scope, 'delete', 'deletecollection', {
       reqKind: `io.k8s.apimachinery.pkg.apis.meta.v1.DeleteOptions`,
-      respKind: `${api.shapePrefix}${names.kind}List`, // TODO: check!
+      respKind: `${api.shapePrefix}${names.kind}List`,
       knownOpts: knownOpts.DeleteListOpts,
     });
 
-    addOp(`get${names.kind}`, scope, 'get', {
+    addOp(`get${names.kind}`, scope, 'get', 'get', {
       respKind: `${api.shapePrefix}${names.kind}`,
       knownOpts: knownOpts.GetOpts,
       subPath: '/{name}',
     });
-    addOp(`delete${names.kind}`, scope, 'delete', {
+    addOp(`delete${names.kind}`, scope, 'delete', 'delete', {
       reqKind: `io.k8s.apimachinery.pkg.apis.meta.v1.DeleteOptions`,
-      respKind: `io.k8s.apimachinery.pkg.apis.meta.v1.Status`,
+      respKind: `${api.shapePrefix}${names.kind}`, // or io.k8s.apimachinery.pkg.apis.meta.v1.Status
       knownOpts: knownOpts.DeleteOpts,
       subPath: '/{name}',
     });
-    addOp(`replace${names.kind}`, scope, 'put', {
+    addOp(`replace${names.kind}`, scope, 'put', 'put', {
       reqKind: `${api.shapePrefix}${names.kind}`,
       respKind: `${api.shapePrefix}${names.kind}`,
       knownOpts: knownOpts.PutOpts,
       subPath: '/{name}',
     });
-    addOp(`patch${names.kind}`, scope, 'patch', {
+    addOp(`patch${names.kind}`, scope, 'patch', 'patch', {
       reqKind: `${api.shapePrefix}${names.kind}`,
       respKind: `${api.shapePrefix}${names.kind}`,
       knownOpts: knownOpts.PatchOpts,
@@ -301,18 +302,18 @@ function processCRD({apiGroup, apiVersion, schema, names, scope, subResources}: 
 
     if (subResources.status) {
 
-      addOp(`get${names.kind}Status`, scope, 'get', {
+      addOp(`get${names.kind}Status`, scope, 'get', 'get', {
         respKind: `${api.shapePrefix}${names.kind}`,
         knownOpts: knownOpts.GetOpts,
         subPath: '/{name}/status',
       });
-      addOp(`replace${names.kind}Status`, scope, 'put', {
+      addOp(`replace${names.kind}Status`, scope, 'put', 'put', {
         reqKind: `${api.shapePrefix}${names.kind}`,
         respKind: `${api.shapePrefix}${names.kind}`,
         knownOpts: knownOpts.PutOpts,
         subPath: '/{name}/status',
       });
-      addOp(`patch${names.kind}Status`, scope, 'patch', {
+      addOp(`patch${names.kind}Status`, scope, 'patch', 'patch', {
         reqKind: `${api.shapePrefix}${names.kind}`,
         respKind: `${api.shapePrefix}${names.kind}`,
         knownOpts: knownOpts.PatchOpts,
@@ -322,18 +323,18 @@ function processCRD({apiGroup, apiVersion, schema, names, scope, subResources}: 
     }
     if (subResources.scale) {
 
-      addOp(`get${names.kind}Scale`, scope, 'get', {
+      addOp(`get${names.kind}Scale`, scope, 'get', 'get', {
         respKind: `io.k8s.api.autoscaling.v1.Scale`,
         knownOpts: knownOpts.GetOpts,
         subPath: '/{name}/scale',
       });
-      addOp(`replace${names.kind}Scale`, scope, 'put', {
+      addOp(`replace${names.kind}Scale`, scope, 'put', 'put', {
         reqKind: `io.k8s.api.autoscaling.v1.Scale`,
         respKind: `io.k8s.api.autoscaling.v1.Scale`,
         knownOpts: knownOpts.PutOpts,
         subPath: '/{name}/scale',
       });
-      addOp(`patch${names.kind}Scale`, scope, 'patch', {
+      addOp(`patch${names.kind}Scale`, scope, 'patch', 'patch', {
         reqKind: `io.k8s.api.autoscaling.v1.Scale`,
         respKind: `io.k8s.api.autoscaling.v1.Scale`,
         knownOpts: knownOpts.PatchOpts,
@@ -345,11 +346,11 @@ function processCRD({apiGroup, apiVersion, schema, names, scope, subResources}: 
 
   if (scope === 'Namespaced') {
 
-    addOp(`get${names.kind}ListForAllNamespaces`, 'AllNamespaces', 'get', {
+    addOp(`get${names.kind}ListForAllNamespaces`, 'AllNamespaces', 'get', 'list', {
       respKind: `${api.shapePrefix}${names.kind}List`,
       knownOpts: knownOpts.GetListOpts,
     });
-    addOp(`watch${names.kind}ListForAllNamespaces`, 'AllNamespaces', 'get', {
+    addOp(`watch${names.kind}ListForAllNamespaces`, 'AllNamespaces', 'get', 'watchlist', {
       respKind: `${api.shapePrefix}${names.kind}List`,
       knownOpts: knownOpts.WatchListOpts,
     });

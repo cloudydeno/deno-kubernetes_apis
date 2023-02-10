@@ -118,7 +118,8 @@ export class CoordinationV1NamespacedApi {
       querystring: operations.formatDeleteOpts(opts),
       abortSignal: opts.abortSignal,
     });
-    return MetaV1.toStatus(resp);
+    if (c.isStatusKind(resp)) return MetaV1.toStatus(resp);
+    return CoordinationV1.toLease(resp);
   }
 
   async replaceLease(name: string, body: CoordinationV1.Lease, opts: operations.PutOpts = {}) {

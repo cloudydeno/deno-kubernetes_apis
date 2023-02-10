@@ -118,7 +118,8 @@ export class PolicyV1NamespacedApi {
       querystring: operations.formatDeleteOpts(opts),
       abortSignal: opts.abortSignal,
     });
-    return MetaV1.toStatus(resp);
+    if (c.isStatusKind(resp)) return MetaV1.toStatus(resp);
+    return PolicyV1.toPodDisruptionBudget(resp);
   }
 
   async replacePodDisruptionBudget(name: string, body: PolicyV1.PodDisruptionBudget, opts: operations.PutOpts = {}) {

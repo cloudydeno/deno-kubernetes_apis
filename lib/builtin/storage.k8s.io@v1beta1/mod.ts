@@ -118,7 +118,8 @@ export class StorageV1beta1NamespacedApi {
       querystring: operations.formatDeleteOpts(opts),
       abortSignal: opts.abortSignal,
     });
-    return MetaV1.toStatus(resp);
+    if (c.isStatusKind(resp)) return MetaV1.toStatus(resp);
+    return StorageV1beta1.toCSIStorageCapacity(resp);
   }
 
   async replaceCSIStorageCapacity(name: string, body: StorageV1beta1.CSIStorageCapacity, opts: operations.PutOpts = {}) {

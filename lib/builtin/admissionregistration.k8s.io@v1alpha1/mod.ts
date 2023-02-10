@@ -77,7 +77,8 @@ export class AdmissionregistrationV1alpha1Api {
       querystring: operations.formatDeleteOpts(opts),
       abortSignal: opts.abortSignal,
     });
-    return MetaV1.toStatus(resp);
+    if (c.isStatusKind(resp)) return MetaV1.toStatus(resp);
+    return AdmissionregistrationV1alpha1.toValidatingAdmissionPolicy(resp);
   }
 
   async replaceValidatingAdmissionPolicy(name: string, body: AdmissionregistrationV1alpha1.ValidatingAdmissionPolicy, opts: operations.PutOpts = {}) {
@@ -169,7 +170,8 @@ export class AdmissionregistrationV1alpha1Api {
       querystring: operations.formatDeleteOpts(opts),
       abortSignal: opts.abortSignal,
     });
-    return MetaV1.toStatus(resp);
+    if (c.isStatusKind(resp)) return MetaV1.toStatus(resp);
+    return AdmissionregistrationV1alpha1.toValidatingAdmissionPolicyBinding(resp);
   }
 
   async replaceValidatingAdmissionPolicyBinding(name: string, body: AdmissionregistrationV1alpha1.ValidatingAdmissionPolicyBinding, opts: operations.PutOpts = {}) {

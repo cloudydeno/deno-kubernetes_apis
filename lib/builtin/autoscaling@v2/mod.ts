@@ -118,7 +118,8 @@ export class AutoscalingV2NamespacedApi {
       querystring: operations.formatDeleteOpts(opts),
       abortSignal: opts.abortSignal,
     });
-    return MetaV1.toStatus(resp);
+    if (c.isStatusKind(resp)) return MetaV1.toStatus(resp);
+    return AutoscalingV2.toHorizontalPodAutoscaler(resp);
   }
 
   async replaceHorizontalPodAutoscaler(name: string, body: AutoscalingV2.HorizontalPodAutoscaler, opts: operations.PutOpts = {}) {

@@ -141,7 +141,8 @@ export class AcmeCertManagerIoV1NamespacedApi {
       querystring: operations.formatDeleteOpts(opts),
       abortSignal: opts.abortSignal,
     });
-    return MetaV1.toStatus(resp);
+    if (c.isStatusKind(resp)) return MetaV1.toStatus(resp);
+    return AcmeCertManagerIoV1.toChallenge(resp);
   }
 
   async replaceChallenge(name: string, body: AcmeCertManagerIoV1.Challenge, opts: operations.PutOpts = {}) {
@@ -268,7 +269,8 @@ export class AcmeCertManagerIoV1NamespacedApi {
       querystring: operations.formatDeleteOpts(opts),
       abortSignal: opts.abortSignal,
     });
-    return MetaV1.toStatus(resp);
+    if (c.isStatusKind(resp)) return MetaV1.toStatus(resp);
+    return AcmeCertManagerIoV1.toOrder(resp);
   }
 
   async replaceOrder(name: string, body: AcmeCertManagerIoV1.Order, opts: operations.PutOpts = {}) {

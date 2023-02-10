@@ -13,11 +13,6 @@ const knownOpts: Record<string,string|undefined> = {
   'dryRun,gracePeriodSeconds,orphanDependents,propagationPolicy': 'DeleteOpts',
 };
 
-// Known remaining instances of https://github.com/kubernetes/kubernetes/issues/59501
-const returnOnDeleteOps = new Set([
-  'batch/deleteJob',
-]);
-
 export function generateModuleTypescript(surface: SurfaceMap, api: SurfaceApi): string {
   const chunks = new Array<string>();
   chunks.push(`export * from "./structs.ts";`);
@@ -225,7 +220,11 @@ export function generateModuleTypescript(surface: SurfaceMap, api: SurfaceApi): 
     chunks.push(`    });`);
 
     if (isStream) {
-      chunks.push(`    return resp.pipeThrough(new TextDecoderStream('utf-8'));`);
+      if (accept === 'text/plain') {
+        chunks.push(`    return resp.pipeThrough(new TextDecoderStream('utf-8'));`);
+      } else {
+        chunks.push(`    return resp;`);
+      }
       chunks.push(`  }\n`);
       return;
     }
@@ -238,19 +237,22 @@ export function generateModuleTypescript(surface: SurfaceMap, api: SurfaceApi): 
     if (outShape) {
       let shape = outShape;
 
-      // QUIRK: sometimes deletes return what was deleted, not a boring Status
-      // actually depends on the API, some are Status, some are what's deleted
+      // QUIRK: individual deletes can either return a Status or the 'lastExisting' resource
+      // (also depends on which API, some _always_ return a Status)
+      // We workaround by telling the codegen to always return the resource,
+      //   and then adding a conditional to allow MetaV1.Status as well.
       // https://github.com/kubernetes/kubernetes/issues/59501
-      // for the most part, lists return the things and by-names do not
+      // https://github.com/cloudydeno/deno-kubernetes_apis/issues/4
+      // Note that "delete collection" functions are not involved. They _always_ return a resource list.
       if (shape.type === 'foreign' &&
           shape.api.apiGroup === 'meta' &&
           shape.name === 'Status' &&
-          op.method === 'delete' &&
-          (
-            !op.subPath.includes('{name}') ||
-            returnOnDeleteOps.has(`${api.apiGroup}/${op.operationName}`)
-          )) {
+          op.method === 'delete') {
         shape = api.shapes.shapes.get(op.operationName.replace(/^delete/, ''))!;
+      }
+
+      if (op["x-kubernetes-action"] == 'delete') {
+        chunks.push(`    if (c.isStatusKind(resp)) return MetaV1.toStatus(resp);`);
       }
 
       if (shape.type === 'foreign') {

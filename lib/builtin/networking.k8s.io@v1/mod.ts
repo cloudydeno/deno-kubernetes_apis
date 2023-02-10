@@ -85,7 +85,8 @@ export class NetworkingV1Api {
       querystring: operations.formatDeleteOpts(opts),
       abortSignal: opts.abortSignal,
     });
-    return MetaV1.toStatus(resp);
+    if (c.isStatusKind(resp)) return MetaV1.toStatus(resp);
+    return NetworkingV1.toIngressClass(resp);
   }
 
   async replaceIngressClass(name: string, body: NetworkingV1.IngressClass, opts: operations.PutOpts = {}) {
@@ -233,7 +234,8 @@ export class NetworkingV1NamespacedApi {
       querystring: operations.formatDeleteOpts(opts),
       abortSignal: opts.abortSignal,
     });
-    return MetaV1.toStatus(resp);
+    if (c.isStatusKind(resp)) return MetaV1.toStatus(resp);
+    return NetworkingV1.toIngress(resp);
   }
 
   async replaceIngress(name: string, body: NetworkingV1.Ingress, opts: operations.PutOpts = {}) {
@@ -360,7 +362,8 @@ export class NetworkingV1NamespacedApi {
       querystring: operations.formatDeleteOpts(opts),
       abortSignal: opts.abortSignal,
     });
-    return MetaV1.toStatus(resp);
+    if (c.isStatusKind(resp)) return MetaV1.toStatus(resp);
+    return NetworkingV1.toNetworkPolicy(resp);
   }
 
   async replaceNetworkPolicy(name: string, body: NetworkingV1.NetworkPolicy, opts: operations.PutOpts = {}) {

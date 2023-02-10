@@ -190,7 +190,8 @@ export class CoreV1Api {
       querystring: operations.formatDeleteOpts(opts),
       abortSignal: opts.abortSignal,
     });
-    return MetaV1.toStatus(resp);
+    if (c.isStatusKind(resp)) return MetaV1.toStatus(resp);
+    return CoreV1.toNamespace(resp);
   }
 
   async replaceNamespace(name: string, body: CoreV1.Namespace, opts: operations.PutOpts = {}) {
@@ -329,7 +330,8 @@ export class CoreV1Api {
       querystring: operations.formatDeleteOpts(opts),
       abortSignal: opts.abortSignal,
     });
-    return MetaV1.toStatus(resp);
+    if (c.isStatusKind(resp)) return MetaV1.toStatus(resp);
+    return CoreV1.toNode(resp);
   }
 
   async replaceNode(name: string, body: CoreV1.Node, opts: operations.PutOpts = {}) {
@@ -490,6 +492,7 @@ export class CoreV1Api {
       querystring: operations.formatDeleteOpts(opts),
       abortSignal: opts.abortSignal,
     });
+    if (c.isStatusKind(resp)) return MetaV1.toStatus(resp);
     return CoreV1.toPersistentVolume(resp);
   }
 
@@ -800,7 +803,8 @@ export class CoreV1NamespacedApi {
       querystring: operations.formatDeleteOpts(opts),
       abortSignal: opts.abortSignal,
     });
-    return MetaV1.toStatus(resp);
+    if (c.isStatusKind(resp)) return MetaV1.toStatus(resp);
+    return CoreV1.toConfigMap(resp);
   }
 
   async replaceConfigMap(name: string, body: CoreV1.ConfigMap, opts: operations.PutOpts = {}) {
@@ -892,7 +896,8 @@ export class CoreV1NamespacedApi {
       querystring: operations.formatDeleteOpts(opts),
       abortSignal: opts.abortSignal,
     });
-    return MetaV1.toStatus(resp);
+    if (c.isStatusKind(resp)) return MetaV1.toStatus(resp);
+    return CoreV1.toEndpoints(resp);
   }
 
   async replaceEndpoints(name: string, body: CoreV1.Endpoints, opts: operations.PutOpts = {}) {
@@ -984,7 +989,8 @@ export class CoreV1NamespacedApi {
       querystring: operations.formatDeleteOpts(opts),
       abortSignal: opts.abortSignal,
     });
-    return MetaV1.toStatus(resp);
+    if (c.isStatusKind(resp)) return MetaV1.toStatus(resp);
+    return CoreV1.toEvent(resp);
   }
 
   async replaceEvent(name: string, body: CoreV1.Event, opts: operations.PutOpts = {}) {
@@ -1076,7 +1082,8 @@ export class CoreV1NamespacedApi {
       querystring: operations.formatDeleteOpts(opts),
       abortSignal: opts.abortSignal,
     });
-    return MetaV1.toStatus(resp);
+    if (c.isStatusKind(resp)) return MetaV1.toStatus(resp);
+    return CoreV1.toLimitRange(resp);
   }
 
   async replaceLimitRange(name: string, body: CoreV1.LimitRange, opts: operations.PutOpts = {}) {
@@ -1168,6 +1175,7 @@ export class CoreV1NamespacedApi {
       querystring: operations.formatDeleteOpts(opts),
       abortSignal: opts.abortSignal,
     });
+    if (c.isStatusKind(resp)) return MetaV1.toStatus(resp);
     return CoreV1.toPersistentVolumeClaim(resp);
   }
 
@@ -1295,6 +1303,7 @@ export class CoreV1NamespacedApi {
       querystring: operations.formatDeleteOpts(opts),
       abortSignal: opts.abortSignal,
     });
+    if (c.isStatusKind(resp)) return MetaV1.toStatus(resp);
     return CoreV1.toPod(resp);
   }
 
@@ -1675,6 +1684,7 @@ export class CoreV1NamespacedApi {
       querystring: operations.formatDeleteOpts(opts),
       abortSignal: opts.abortSignal,
     });
+    if (c.isStatusKind(resp)) return MetaV1.toStatus(resp);
     return CoreV1.toPodTemplate(resp);
   }
 
@@ -1767,7 +1777,8 @@ export class CoreV1NamespacedApi {
       querystring: operations.formatDeleteOpts(opts),
       abortSignal: opts.abortSignal,
     });
-    return MetaV1.toStatus(resp);
+    if (c.isStatusKind(resp)) return MetaV1.toStatus(resp);
+    return CoreV1.toReplicationController(resp);
   }
 
   async replaceReplicationController(name: string, body: CoreV1.ReplicationController, opts: operations.PutOpts = {}) {
@@ -1929,6 +1940,7 @@ export class CoreV1NamespacedApi {
       querystring: operations.formatDeleteOpts(opts),
       abortSignal: opts.abortSignal,
     });
+    if (c.isStatusKind(resp)) return MetaV1.toStatus(resp);
     return CoreV1.toResourceQuota(resp);
   }
 
@@ -2056,7 +2068,8 @@ export class CoreV1NamespacedApi {
       querystring: operations.formatDeleteOpts(opts),
       abortSignal: opts.abortSignal,
     });
-    return MetaV1.toStatus(resp);
+    if (c.isStatusKind(resp)) return MetaV1.toStatus(resp);
+    return CoreV1.toSecret(resp);
   }
 
   async replaceSecret(name: string, body: CoreV1.Secret, opts: operations.PutOpts = {}) {
@@ -2148,6 +2161,7 @@ export class CoreV1NamespacedApi {
       querystring: operations.formatDeleteOpts(opts),
       abortSignal: opts.abortSignal,
     });
+    if (c.isStatusKind(resp)) return MetaV1.toStatus(resp);
     return CoreV1.toServiceAccount(resp);
   }
 
@@ -2252,6 +2266,7 @@ export class CoreV1NamespacedApi {
       querystring: operations.formatDeleteOpts(opts),
       abortSignal: opts.abortSignal,
     });
+    if (c.isStatusKind(resp)) return MetaV1.toStatus(resp);
     return CoreV1.toService(resp);
   }
 

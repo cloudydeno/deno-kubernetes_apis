@@ -77,7 +77,8 @@ export class ApiregistrationV1Api {
       querystring: operations.formatDeleteOpts(opts),
       abortSignal: opts.abortSignal,
     });
-    return MetaV1.toStatus(resp);
+    if (c.isStatusKind(resp)) return MetaV1.toStatus(resp);
+    return ApiregistrationV1.toAPIService(resp);
   }
 
   async replaceAPIService(name: string, body: ApiregistrationV1.APIService, opts: operations.PutOpts = {}) {

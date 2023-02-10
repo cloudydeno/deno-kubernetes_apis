@@ -118,7 +118,8 @@ export class EventsV1NamespacedApi {
       querystring: operations.formatDeleteOpts(opts),
       abortSignal: opts.abortSignal,
     });
-    return MetaV1.toStatus(resp);
+    if (c.isStatusKind(resp)) return MetaV1.toStatus(resp);
+    return EventsV1.toEvent(resp);
   }
 
   async replaceEvent(name: string, body: EventsV1.Event, opts: operations.PutOpts = {}) {

@@ -131,7 +131,8 @@ export class CertManagerIoV1Api {
       querystring: operations.formatDeleteOpts(opts),
       abortSignal: opts.abortSignal,
     });
-    return MetaV1.toStatus(resp);
+    if (c.isStatusKind(resp)) return MetaV1.toStatus(resp);
+    return CertManagerIoV1.toClusterIssuer(resp);
   }
 
   async replaceClusterIssuer(name: string, body: CertManagerIoV1.ClusterIssuer, opts: operations.PutOpts = {}) {
@@ -291,7 +292,8 @@ export class CertManagerIoV1NamespacedApi {
       querystring: operations.formatDeleteOpts(opts),
       abortSignal: opts.abortSignal,
     });
-    return MetaV1.toStatus(resp);
+    if (c.isStatusKind(resp)) return MetaV1.toStatus(resp);
+    return CertManagerIoV1.toCertificateRequest(resp);
   }
 
   async replaceCertificateRequest(name: string, body: CertManagerIoV1.CertificateRequest, opts: operations.PutOpts = {}) {
@@ -418,7 +420,8 @@ export class CertManagerIoV1NamespacedApi {
       querystring: operations.formatDeleteOpts(opts),
       abortSignal: opts.abortSignal,
     });
-    return MetaV1.toStatus(resp);
+    if (c.isStatusKind(resp)) return MetaV1.toStatus(resp);
+    return CertManagerIoV1.toCertificate(resp);
   }
 
   async replaceCertificate(name: string, body: CertManagerIoV1.Certificate, opts: operations.PutOpts = {}) {
@@ -545,7 +548,8 @@ export class CertManagerIoV1NamespacedApi {
       querystring: operations.formatDeleteOpts(opts),
       abortSignal: opts.abortSignal,
     });
-    return MetaV1.toStatus(resp);
+    if (c.isStatusKind(resp)) return MetaV1.toStatus(resp);
+    return CertManagerIoV1.toIssuer(resp);
   }
 
   async replaceIssuer(name: string, body: CertManagerIoV1.Issuer, opts: operations.PutOpts = {}) {

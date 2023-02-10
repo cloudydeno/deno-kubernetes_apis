@@ -211,7 +211,8 @@ export class AppsV1NamespacedApi {
       querystring: operations.formatDeleteOpts(opts),
       abortSignal: opts.abortSignal,
     });
-    return MetaV1.toStatus(resp);
+    if (c.isStatusKind(resp)) return MetaV1.toStatus(resp);
+    return AppsV1.toControllerRevision(resp);
   }
 
   async replaceControllerRevision(name: string, body: AppsV1.ControllerRevision, opts: operations.PutOpts = {}) {
@@ -303,7 +304,8 @@ export class AppsV1NamespacedApi {
       querystring: operations.formatDeleteOpts(opts),
       abortSignal: opts.abortSignal,
     });
-    return MetaV1.toStatus(resp);
+    if (c.isStatusKind(resp)) return MetaV1.toStatus(resp);
+    return AppsV1.toDaemonSet(resp);
   }
 
   async replaceDaemonSet(name: string, body: AppsV1.DaemonSet, opts: operations.PutOpts = {}) {
@@ -430,7 +432,8 @@ export class AppsV1NamespacedApi {
       querystring: operations.formatDeleteOpts(opts),
       abortSignal: opts.abortSignal,
     });
-    return MetaV1.toStatus(resp);
+    if (c.isStatusKind(resp)) return MetaV1.toStatus(resp);
+    return AppsV1.toDeployment(resp);
   }
 
   async replaceDeployment(name: string, body: AppsV1.Deployment, opts: operations.PutOpts = {}) {
@@ -592,7 +595,8 @@ export class AppsV1NamespacedApi {
       querystring: operations.formatDeleteOpts(opts),
       abortSignal: opts.abortSignal,
     });
-    return MetaV1.toStatus(resp);
+    if (c.isStatusKind(resp)) return MetaV1.toStatus(resp);
+    return AppsV1.toReplicaSet(resp);
   }
 
   async replaceReplicaSet(name: string, body: AppsV1.ReplicaSet, opts: operations.PutOpts = {}) {
@@ -754,7 +758,8 @@ export class AppsV1NamespacedApi {
       querystring: operations.formatDeleteOpts(opts),
       abortSignal: opts.abortSignal,
     });
-    return MetaV1.toStatus(resp);
+    if (c.isStatusKind(resp)) return MetaV1.toStatus(resp);
+    return AppsV1.toStatefulSet(resp);
   }
 
   async replaceStatefulSet(name: string, body: AppsV1.StatefulSet, opts: operations.PutOpts = {}) {

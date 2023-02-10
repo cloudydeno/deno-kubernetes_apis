@@ -118,7 +118,8 @@ export class DiscoveryV1NamespacedApi {
       querystring: operations.formatDeleteOpts(opts),
       abortSignal: opts.abortSignal,
     });
-    return MetaV1.toStatus(resp);
+    if (c.isStatusKind(resp)) return MetaV1.toStatus(resp);
+    return DiscoveryV1.toEndpointSlice(resp);
   }
 
   async replaceEndpointSlice(name: string, body: DiscoveryV1.EndpointSlice, opts: operations.PutOpts = {}) {

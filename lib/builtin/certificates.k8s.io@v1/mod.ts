@@ -77,7 +77,8 @@ export class CertificatesV1Api {
       querystring: operations.formatDeleteOpts(opts),
       abortSignal: opts.abortSignal,
     });
-    return MetaV1.toStatus(resp);
+    if (c.isStatusKind(resp)) return MetaV1.toStatus(resp);
+    return CertificatesV1.toCertificateSigningRequest(resp);
   }
 
   async replaceCertificateSigningRequest(name: string, body: CertificatesV1.CertificateSigningRequest, opts: operations.PutOpts = {}) {

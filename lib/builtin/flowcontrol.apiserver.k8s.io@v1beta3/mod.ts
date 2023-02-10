@@ -77,7 +77,8 @@ export class FlowcontrolApiserverV1beta3Api {
       querystring: operations.formatDeleteOpts(opts),
       abortSignal: opts.abortSignal,
     });
-    return MetaV1.toStatus(resp);
+    if (c.isStatusKind(resp)) return MetaV1.toStatus(resp);
+    return FlowcontrolApiserverV1beta3.toFlowSchema(resp);
   }
 
   async replaceFlowSchema(name: string, body: FlowcontrolApiserverV1beta3.FlowSchema, opts: operations.PutOpts = {}) {
@@ -204,7 +205,8 @@ export class FlowcontrolApiserverV1beta3Api {
       querystring: operations.formatDeleteOpts(opts),
       abortSignal: opts.abortSignal,
     });
-    return MetaV1.toStatus(resp);
+    if (c.isStatusKind(resp)) return MetaV1.toStatus(resp);
+    return FlowcontrolApiserverV1beta3.toPriorityLevelConfiguration(resp);
   }
 
   async replacePriorityLevelConfiguration(name: string, body: FlowcontrolApiserverV1beta3.PriorityLevelConfiguration, opts: operations.PutOpts = {}) {

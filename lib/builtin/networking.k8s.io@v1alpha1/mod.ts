@@ -77,7 +77,8 @@ export class NetworkingV1alpha1Api {
       querystring: operations.formatDeleteOpts(opts),
       abortSignal: opts.abortSignal,
     });
-    return MetaV1.toStatus(resp);
+    if (c.isStatusKind(resp)) return MetaV1.toStatus(resp);
+    return NetworkingV1alpha1.toClusterCIDR(resp);
   }
 
   async replaceClusterCIDR(name: string, body: NetworkingV1alpha1.ClusterCIDR, opts: operations.PutOpts = {}) {

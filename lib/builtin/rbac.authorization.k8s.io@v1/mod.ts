@@ -85,7 +85,8 @@ export class RbacAuthorizationV1Api {
       querystring: operations.formatDeleteOpts(opts),
       abortSignal: opts.abortSignal,
     });
-    return MetaV1.toStatus(resp);
+    if (c.isStatusKind(resp)) return MetaV1.toStatus(resp);
+    return RbacAuthorizationV1.toClusterRoleBinding(resp);
   }
 
   async replaceClusterRoleBinding(name: string, body: RbacAuthorizationV1.ClusterRoleBinding, opts: operations.PutOpts = {}) {
@@ -177,7 +178,8 @@ export class RbacAuthorizationV1Api {
       querystring: operations.formatDeleteOpts(opts),
       abortSignal: opts.abortSignal,
     });
-    return MetaV1.toStatus(resp);
+    if (c.isStatusKind(resp)) return MetaV1.toStatus(resp);
+    return RbacAuthorizationV1.toClusterRole(resp);
   }
 
   async replaceClusterRole(name: string, body: RbacAuthorizationV1.ClusterRole, opts: operations.PutOpts = {}) {
@@ -325,7 +327,8 @@ export class RbacAuthorizationV1NamespacedApi {
       querystring: operations.formatDeleteOpts(opts),
       abortSignal: opts.abortSignal,
     });
-    return MetaV1.toStatus(resp);
+    if (c.isStatusKind(resp)) return MetaV1.toStatus(resp);
+    return RbacAuthorizationV1.toRoleBinding(resp);
   }
 
   async replaceRoleBinding(name: string, body: RbacAuthorizationV1.RoleBinding, opts: operations.PutOpts = {}) {
@@ -417,7 +420,8 @@ export class RbacAuthorizationV1NamespacedApi {
       querystring: operations.formatDeleteOpts(opts),
       abortSignal: opts.abortSignal,
     });
-    return MetaV1.toStatus(resp);
+    if (c.isStatusKind(resp)) return MetaV1.toStatus(resp);
+    return RbacAuthorizationV1.toRole(resp);
   }
 
   async replaceRole(name: string, body: RbacAuthorizationV1.Role, opts: operations.PutOpts = {}) {

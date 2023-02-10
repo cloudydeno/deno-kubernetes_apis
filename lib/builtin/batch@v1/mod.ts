@@ -141,7 +141,8 @@ export class BatchV1NamespacedApi {
       querystring: operations.formatDeleteOpts(opts),
       abortSignal: opts.abortSignal,
     });
-    return MetaV1.toStatus(resp);
+    if (c.isStatusKind(resp)) return MetaV1.toStatus(resp);
+    return BatchV1.toCronJob(resp);
   }
 
   async replaceCronJob(name: string, body: BatchV1.CronJob, opts: operations.PutOpts = {}) {
@@ -268,6 +269,7 @@ export class BatchV1NamespacedApi {
       querystring: operations.formatDeleteOpts(opts),
       abortSignal: opts.abortSignal,
     });
+    if (c.isStatusKind(resp)) return MetaV1.toStatus(resp);
     return BatchV1.toJob(resp);
   }
 

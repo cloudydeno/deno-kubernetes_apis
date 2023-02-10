@@ -77,7 +77,8 @@ export class ApiextensionsV1Api {
       querystring: operations.formatDeleteOpts(opts),
       abortSignal: opts.abortSignal,
     });
-    return MetaV1.toStatus(resp);
+    if (c.isStatusKind(resp)) return MetaV1.toStatus(resp);
+    return ApiextensionsV1.toCustomResourceDefinition(resp);
   }
 
   async replaceCustomResourceDefinition(name: string, body: ApiextensionsV1.CustomResourceDefinition, opts: operations.PutOpts = {}) {

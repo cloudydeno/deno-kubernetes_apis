@@ -77,7 +77,8 @@ export class AdmissionregistrationV1Api {
       querystring: operations.formatDeleteOpts(opts),
       abortSignal: opts.abortSignal,
     });
-    return MetaV1.toStatus(resp);
+    if (c.isStatusKind(resp)) return MetaV1.toStatus(resp);
+    return AdmissionregistrationV1.toMutatingWebhookConfiguration(resp);
   }
 
   async replaceMutatingWebhookConfiguration(name: string, body: AdmissionregistrationV1.MutatingWebhookConfiguration, opts: operations.PutOpts = {}) {
@@ -169,7 +170,8 @@ export class AdmissionregistrationV1Api {
       querystring: operations.formatDeleteOpts(opts),
       abortSignal: opts.abortSignal,
     });
-    return MetaV1.toStatus(resp);
+    if (c.isStatusKind(resp)) return MetaV1.toStatus(resp);
+    return AdmissionregistrationV1.toValidatingWebhookConfiguration(resp);
   }
 
   async replaceValidatingWebhookConfiguration(name: string, body: AdmissionregistrationV1.ValidatingWebhookConfiguration, opts: operations.PutOpts = {}) {

@@ -164,7 +164,8 @@ export class ArgoprojIoV1alpha1NamespacedApi {
       querystring: operations.formatDeleteOpts(opts),
       abortSignal: opts.abortSignal,
     });
-    return MetaV1.toStatus(resp);
+    if (c.isStatusKind(resp)) return MetaV1.toStatus(resp);
+    return ArgoprojIoV1alpha1.toApplication(resp);
   }
 
   async replaceApplication(name: string, body: ArgoprojIoV1alpha1.Application, opts: operations.PutOpts = {}) {
@@ -256,7 +257,8 @@ export class ArgoprojIoV1alpha1NamespacedApi {
       querystring: operations.formatDeleteOpts(opts),
       abortSignal: opts.abortSignal,
     });
-    return MetaV1.toStatus(resp);
+    if (c.isStatusKind(resp)) return MetaV1.toStatus(resp);
+    return ArgoprojIoV1alpha1.toApplicationSet(resp);
   }
 
   async replaceApplicationSet(name: string, body: ArgoprojIoV1alpha1.ApplicationSet, opts: operations.PutOpts = {}) {
@@ -383,7 +385,8 @@ export class ArgoprojIoV1alpha1NamespacedApi {
       querystring: operations.formatDeleteOpts(opts),
       abortSignal: opts.abortSignal,
     });
-    return MetaV1.toStatus(resp);
+    if (c.isStatusKind(resp)) return MetaV1.toStatus(resp);
+    return ArgoprojIoV1alpha1.toAppProject(resp);
   }
 
   async replaceAppProject(name: string, body: ArgoprojIoV1alpha1.AppProject, opts: operations.PutOpts = {}) {

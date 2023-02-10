@@ -77,7 +77,8 @@ export class NodeV1Api {
       querystring: operations.formatDeleteOpts(opts),
       abortSignal: opts.abortSignal,
     });
-    return MetaV1.toStatus(resp);
+    if (c.isStatusKind(resp)) return MetaV1.toStatus(resp);
+    return NodeV1.toRuntimeClass(resp);
   }
 
   async replaceRuntimeClass(name: string, body: NodeV1.RuntimeClass, opts: operations.PutOpts = {}) {

@@ -85,6 +85,7 @@ export class StorageV1Api {
       querystring: operations.formatDeleteOpts(opts),
       abortSignal: opts.abortSignal,
     });
+    if (c.isStatusKind(resp)) return MetaV1.toStatus(resp);
     return StorageV1.toCSIDriver(resp);
   }
 
@@ -177,6 +178,7 @@ export class StorageV1Api {
       querystring: operations.formatDeleteOpts(opts),
       abortSignal: opts.abortSignal,
     });
+    if (c.isStatusKind(resp)) return MetaV1.toStatus(resp);
     return StorageV1.toCSINode(resp);
   }
 
@@ -292,6 +294,7 @@ export class StorageV1Api {
       querystring: operations.formatDeleteOpts(opts),
       abortSignal: opts.abortSignal,
     });
+    if (c.isStatusKind(resp)) return MetaV1.toStatus(resp);
     return StorageV1.toStorageClass(resp);
   }
 
@@ -384,6 +387,7 @@ export class StorageV1Api {
       querystring: operations.formatDeleteOpts(opts),
       abortSignal: opts.abortSignal,
     });
+    if (c.isStatusKind(resp)) return MetaV1.toStatus(resp);
     return StorageV1.toVolumeAttachment(resp);
   }
 
@@ -521,7 +525,8 @@ export class StorageV1NamespacedApi {
       querystring: operations.formatDeleteOpts(opts),
       abortSignal: opts.abortSignal,
     });
-    return MetaV1.toStatus(resp);
+    if (c.isStatusKind(resp)) return MetaV1.toStatus(resp);
+    return StorageV1.toCSIStorageCapacity(resp);
   }
 
   async replaceCSIStorageCapacity(name: string, body: StorageV1.CSIStorageCapacity, opts: operations.PutOpts = {}) {

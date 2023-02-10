@@ -4,6 +4,7 @@
 
 import { toStatus } from './builtin/meta@v1/structs.ts';
 import {
+  ApiKind,
   JSONObject, JSONValue,
   RequestOptions,
 } from "https://deno.land/x/kubernetes_client@v0.5.0/lib/contract.ts";
@@ -55,6 +56,12 @@ export function assertOrAddApiVersionAndKind<
   const expected = JSON.stringify(`${output.apiVersion}/${output.kind}`);
   throw new Error(`Kubernetes Resource Mistype: `+
     `Expected ${expected}, but was given ${given}. ${libBug}`);
+}
+
+export function isStatusKind(input: JSONValue) {
+  if (!input || typeof input !== 'object') return false;
+  const res = input as ApiKind;
+  return res.apiVersion === 'v1' && res.kind === 'Status';
 }
 
 

@@ -77,7 +77,8 @@ export class InternalApiserverV1alpha1Api {
       querystring: operations.formatDeleteOpts(opts),
       abortSignal: opts.abortSignal,
     });
-    return MetaV1.toStatus(resp);
+    if (c.isStatusKind(resp)) return MetaV1.toStatus(resp);
+    return InternalApiserverV1alpha1.toStorageVersion(resp);
   }
 
   async replaceStorageVersion(name: string, body: InternalApiserverV1alpha1.StorageVersion, opts: operations.PutOpts = {}) {

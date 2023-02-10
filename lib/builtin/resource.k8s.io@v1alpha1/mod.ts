@@ -154,6 +154,7 @@ export class ResourceV1alpha1Api {
       querystring: operations.formatDeleteOpts(opts),
       abortSignal: opts.abortSignal,
     });
+    if (c.isStatusKind(resp)) return MetaV1.toStatus(resp);
     return ResourceV1alpha1.toResourceClass(resp);
   }
 
@@ -256,6 +257,7 @@ export class ResourceV1alpha1NamespacedApi {
       querystring: operations.formatDeleteOpts(opts),
       abortSignal: opts.abortSignal,
     });
+    if (c.isStatusKind(resp)) return MetaV1.toStatus(resp);
     return ResourceV1alpha1.toPodScheduling(resp);
   }
 
@@ -383,6 +385,7 @@ export class ResourceV1alpha1NamespacedApi {
       querystring: operations.formatDeleteOpts(opts),
       abortSignal: opts.abortSignal,
     });
+    if (c.isStatusKind(resp)) return MetaV1.toStatus(resp);
     return ResourceV1alpha1.toResourceClaim(resp);
   }
 
@@ -510,6 +513,7 @@ export class ResourceV1alpha1NamespacedApi {
       querystring: operations.formatDeleteOpts(opts),
       abortSignal: opts.abortSignal,
     });
+    if (c.isStatusKind(resp)) return MetaV1.toStatus(resp);
     return ResourceV1alpha1.toResourceClaimTemplate(resp);
   }
 

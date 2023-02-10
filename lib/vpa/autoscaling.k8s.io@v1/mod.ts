@@ -141,7 +141,8 @@ export class AutoscalingV1NamespacedApi {
       querystring: operations.formatDeleteOpts(opts),
       abortSignal: opts.abortSignal,
     });
-    return MetaV1.toStatus(resp);
+    if (c.isStatusKind(resp)) return MetaV1.toStatus(resp);
+    return AutoscalingV1.toVerticalPodAutoscalerCheckpoint(resp);
   }
 
   async replaceVerticalPodAutoscalerCheckpoint(name: string, body: AutoscalingV1.VerticalPodAutoscalerCheckpoint, opts: operations.PutOpts = {}) {
@@ -233,7 +234,8 @@ export class AutoscalingV1NamespacedApi {
       querystring: operations.formatDeleteOpts(opts),
       abortSignal: opts.abortSignal,
     });
-    return MetaV1.toStatus(resp);
+    if (c.isStatusKind(resp)) return MetaV1.toStatus(resp);
+    return AutoscalingV1.toVerticalPodAutoscaler(resp);
   }
 
   async replaceVerticalPodAutoscaler(name: string, body: AutoscalingV1.VerticalPodAutoscaler, opts: operations.PutOpts = {}) {
