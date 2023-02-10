@@ -377,6 +377,40 @@ function fixupSchema(schema: OpenAPI2SchemaObject, shapePrefix: string, defMap: 
     for (const [key, val] of Object.entries(schema.properties)) {
       const newPath = [...path, key];
 
+      // ArgoCD
+      if (shapePrefix.startsWith('argoproj.io.')) {
+
+        if (newPath.slice(-1)[0] == 'template') {
+          schema.properties[key] = {
+            description: val.description,
+            $ref: `#/definitions/${shapePrefix}ApplicationTemplate`,
+          };
+          if (!defMap.has('ApplicationTemplate')) {
+            defMap.set('ApplicationTemplate', val);
+          } else continue;
+        }
+
+        if (newPath.slice(-1)[0] == 'source') {
+          schema.properties[key] = {
+            description: val.description,
+            $ref: `#/definitions/${shapePrefix}ApplicationSource`,
+          };
+          if (!defMap.has('ApplicationSource') && newPath[0] == 'Application') {
+            defMap.set('ApplicationSource', val);
+          } else continue;
+        }
+
+        if (['selector', 'labelSelector'].includes(newPath.slice(-1)[0])) {
+          if (Object.keys(val.properties ?? {}).sort().join(',') == 'matchExpressions,matchLabels') {
+            schema.properties[key] = {
+              description: val.description,
+              $ref: "#/definitions/io.k8s.apimachinery.pkg.apis.meta.v1.LabelSelector",
+            };
+            continue;
+          }
+        }
+      }
+
       if (newPath.slice(-3).join('.') === 'podTemplate.spec.affinity') {
         schema.properties[key] = {
           $ref: "#/definitions/io.k8s.api.core.v1.Affinity",
@@ -424,16 +458,39 @@ function fixupSchema(schema: OpenAPI2SchemaObject, shapePrefix: string, defMap: 
     }
 
   } else if (schema.items) {
+    const originalItems = schema.items;
 
-    fixupSchema(schema.items, shapePrefix, defMap, [...path, '*']);
+    if (shapePrefix.startsWith('argoproj.io.')) {
+
+      // Generators are actually recursive, apparently
+      if (path.slice(-1)[0] == 'generators') {
+        schema.items = {
+          description: originalItems.description,
+          $ref: `#/definitions/${shapePrefix}ApplicationSetGenerator`,
+        };
+        if (!defMap.has('ApplicationSetGenerator')) {
+          defMap.set('ApplicationSetGenerator', originalItems);
+        } else return;
+      }
+
+      if (path.slice(-1)[0] == 'sources') {
+        schema.items = {
+          description: originalItems.description,
+          $ref: `#/definitions/${shapePrefix}ApplicationSource`,
+        };
+        return;
+      }
+    }
+    
+    fixupSchema(originalItems, shapePrefix, defMap, [...path, '*']);
 
     if (path.join('.').endsWith('Issuer.spec.acme.solvers')) {
-      if (!defMap.has('SolverSpec') && shapePrefix === mainPrefix) {
-        defMap.set('SolverSpec', schema.items);
-      }
       schema.items = {
         $ref: `#/definitions/${shapePrefix}SolverSpec`,
       };
+      if (!defMap.has('SolverSpec') && shapePrefix === mainPrefix) {
+        defMap.set('SolverSpec', originalItems);
+      } else return;
     }
   }
 
