@@ -11,3 +11,6 @@
 
 # https://github.com/kubernetes-sigs/external-dns/releases
 ./generation/sources/external-dns.sh v0.13.2
+
+# https://github.com/kubernetes/autoscaler/releases?q=vertical
+./generation/sources/vpa.sh 0.13.0

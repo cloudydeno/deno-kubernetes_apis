@@ -1,18 +1,16 @@
 #!/bin/sh -eux
 
 gitapi="https://api.github.com"
-upstream="jetstack/cert-manager"
-crdpath="deploy/crds"
-projectname="cert-manager"
+upstream="kubernetes/autoscaler"
+crdpath="vertical-pod-autoscaler/deploy/vpa-v1-crd-gen.yaml"
+projectname="vpa"
 specdir="generation/api-specs/$projectname-$1"
 
-if [ ! -d "$specdir" ]
-then {
-  echo 'mkdir '"$specdir"
-  echo 'cd '"$specdir"
-  wget -O - "$gitapi/repos/$upstream/contents/$crdpath?ref=$1" \
-  | jq -r '.[] | select(.name | startswith("crd-")) | "wget \(.download_url)"'
-} | sh -eux
+mkdir -p "$specdir"
+if [ ! -f generation/api-specs/$projectname-"$1"/crd.yaml ]
+then wget \
+  "https://github.com/$upstream/raw/vertical-pod-autoscaler-$1/$crdpath" \
+  -O "$specdir/crd.yaml"
 fi
 
 mkdir -p "lib/$projectname"
@@ -25,6 +23,9 @@ deno run \
   generation/run-on-crds.ts \
   "$specdir" \
   "$projectname"
+
+# Let's not hang on to previous versions
+rm -r "lib/$projectname"/*@v1beta2
 
 deno check "lib/$projectname"/*/mod.ts
 git status "lib/$projectname"

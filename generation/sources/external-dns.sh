@@ -26,5 +26,5 @@ deno run \
   "$specdir" \
   "$projectname"
 
-deno cache "lib/$projectname"/*/mod.ts
+deno check "lib/$projectname"/*/mod.ts
 git status "lib/$projectname"

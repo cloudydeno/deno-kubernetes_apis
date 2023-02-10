@@ -11,6 +11,6 @@ deno run \
   "generation/api-specs/from-cluster.json" \
   "builtin"
 
-# deno cache lib/builtin/*/structs.ts
+# deno check lib/builtin/*/structs.ts
 
 git status lib/builtin
