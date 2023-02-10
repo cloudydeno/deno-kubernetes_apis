@@ -402,22 +402,21 @@ export function fromPatch(input: Patch): c.JSONValue {
 
 /** Status is a return value for calls that don't return other objects. */
 export interface Status {
-  apiVersion?: string | null;
+  apiVersion?: "v1";
+  kind?: "Status";
   code?: number | null;
   details?: StatusDetails | null;
-  kind?: string | null;
   message?: string | null;
   metadata?: ListMeta | null;
   reason?: string | null;
   status?: string | null;
 }
-export function toStatus(input: c.JSONValue): Status {
+export function toStatus(input: c.JSONValue): Status & c.ApiKind {
   const obj = c.checkObj(input);
   return {
-    apiVersion: c.readOpt(obj["apiVersion"], c.checkStr),
+    ...c.assertOrAddApiVersionAndKind(obj, "v1", "Status"),
     code: c.readOpt(obj["code"], c.checkNum),
     details: c.readOpt(obj["details"], toStatusDetails),
-    kind: c.readOpt(obj["kind"], c.checkStr),
     message: c.readOpt(obj["message"], c.checkStr),
     metadata: c.readOpt(obj["metadata"], toListMeta),
     reason: c.readOpt(obj["reason"], c.checkStr),
@@ -425,6 +424,7 @@ export function toStatus(input: c.JSONValue): Status {
   }}
 export function fromStatus(input: Status): c.JSONValue {
   return {
+    ...c.assertOrAddApiVersionAndKind(input, "v1", "Status"),
     ...input,
     details: input.details != null ? fromStatusDetails(input.details) : undefined,
     metadata: input.metadata != null ? fromListMeta(input.metadata) : undefined,

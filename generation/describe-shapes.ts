@@ -214,9 +214,8 @@ export class ShapeLibrary {
 
     this.shapes.set(defName, shape);
 
-    const kinds = definition["x-kubernetes-group-version-kind"]
-    if (kinds?.length === 1) {
-      const [kind] = kinds;
+    const [kind] = definition["x-kubernetes-group-version-kind"] ?? [];
+    if (kind) {
       shape.kind = kind;
     }
 
