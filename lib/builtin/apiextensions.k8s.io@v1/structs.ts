@@ -332,7 +332,7 @@ export function fromJSONSchemaProps(input: JSONSchemaProps): c.JSONValue {
     oneOf: input.oneOf?.map(fromJSONSchemaProps),
     patternProperties: c.writeMap(input.patternProperties, fromJSONSchemaProps),
     properties: c.writeMap(input.properties, fromJSONSchemaProps),
-    'x-kubernetes-validations': input.x-kubernetes-validations?.map(fromValidationRule),
+    'x-kubernetes-validations': input['x-kubernetes-validations']?.map(fromValidationRule),
   }}
 
 /** JSONSchemaPropsOrBool represents JSONSchemaProps or a boolean value. Defaults to true for the boolean property. */
