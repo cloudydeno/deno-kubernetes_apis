@@ -34,6 +34,7 @@ see `/x/kubernetes_client` for more information.
 
 * Unreleased:
   * Updating `/x/kubernetes_client` API contract to `v0.5.0`.
+  * Add `streamPodLogs` to allow fetching pod logs as a `ReadableStream<string>`.
 
 * `v0.3.2` on `2021-12-02`:
   * Updating `/x/kubernetes_client` API contract to `v0.3.2`.

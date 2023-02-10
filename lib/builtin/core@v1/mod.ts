@@ -1478,7 +1478,7 @@ export class CoreV1NamespacedApi {
     });
   }
 
-  async getPodLog(name: string, opts: {
+  async streamPodLog(name: string, opts: {
     container?: string;
     follow?: boolean;
     insecureSkipTLSVerifyBackend?: boolean;
@@ -1492,6 +1492,34 @@ export class CoreV1NamespacedApi {
     const query = new URLSearchParams;
     if (opts["container"] != null) query.append("container", opts["container"]);
     if (opts["follow"] != null) query.append("follow", opts["follow"] ? '1' : '0');
+    if (opts["insecureSkipTLSVerifyBackend"] != null) query.append("insecureSkipTLSVerifyBackend", opts["insecureSkipTLSVerifyBackend"] ? '1' : '0');
+    if (opts["limitBytes"] != null) query.append("limitBytes", String(opts["limitBytes"]));
+    if (opts["previous"] != null) query.append("previous", opts["previous"] ? '1' : '0');
+    if (opts["sinceSeconds"] != null) query.append("sinceSeconds", String(opts["sinceSeconds"]));
+    if (opts["tailLines"] != null) query.append("tailLines", String(opts["tailLines"]));
+    if (opts["timestamps"] != null) query.append("timestamps", opts["timestamps"] ? '1' : '0');
+    const resp = await this.#client.performRequest({
+      method: "GET",
+      path: `${this.#root}pods/${name}/log`,
+      expectStream: true,
+      querystring: query,
+      abortSignal: opts.abortSignal,
+    });
+    return resp.pipeThrough(new TextDecoderStream('utf-8'));
+  }
+
+  async getPodLog(name: string, opts: {
+    container?: string;
+    insecureSkipTLSVerifyBackend?: boolean;
+    limitBytes?: number;
+    previous?: boolean;
+    sinceSeconds?: number;
+    tailLines?: number;
+    timestamps?: boolean;
+    abortSignal?: AbortSignal;
+  } = {}) {
+    const query = new URLSearchParams;
+    if (opts["container"] != null) query.append("container", opts["container"]);
     if (opts["insecureSkipTLSVerifyBackend"] != null) query.append("insecureSkipTLSVerifyBackend", opts["insecureSkipTLSVerifyBackend"] ? '1' : '0');
     if (opts["limitBytes"] != null) query.append("limitBytes", String(opts["limitBytes"]));
     if (opts["previous"] != null) query.append("previous", opts["previous"] ? '1' : '0');

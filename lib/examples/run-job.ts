@@ -14,6 +14,7 @@ const job = await batchApi.createJob({
     generateName: 'deno-example-',
   },
   spec: {
+    ttlSecondsAfterFinished: 60 * 60,
     parallelism: 1,
     completions: 1,
     template: {

@@ -174,6 +174,20 @@ export function describeSurface(wholeSpec: OpenAPI2) {
         const allParams = new Array<OpenAPI2RequestParameter>()
           .concat(methodObj.parameters ?? [], pathObj.parameters ?? []);
 
+        if (opName == 'getPodLog') {
+          // Add a streaming variant for pod logs
+          api.operations.push({
+            ...methodObj,
+            parameters: allParams.filter(x => !['allowWatchBookmarks', 'watch', 'pretty'].includes(x.name)),
+            subPath: subPath,
+            method: method,
+            operationName: 'streamPodLog', // triggers special codegen logic
+            scope: scope,
+          });
+          // Remove "follow" from the non-stream variant
+          allParams.splice(allParams.findIndex(x => x.name == 'follow'), 1);
+        }
+
         api.operations.push({
           ...methodObj,
           parameters: allParams.filter(x => !['allowWatchBookmarks', 'watch', 'pretty'].includes(x.name)),

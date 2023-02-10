@@ -165,6 +165,7 @@ export function generateModuleTypescript(surface: SurfaceMap, api: SurfaceApi): 
 
     chunks.push(`  async ${op.operationName}(${writeSig(args, opts, '  ')}) {`);
     const isWatch = op.operationName.startsWith('watch');
+    const isStream = op.operationName.startsWith('stream');
 
     const allOptKeys = opts.map(x => x[0].name).sort().join(',');
     const knownOptShape = knownOpts[allOptKeys];
@@ -202,7 +203,7 @@ export function generateModuleTypescript(surface: SurfaceMap, api: SurfaceApi): 
     if (accept === 'application/json') {
       chunks.push(`      expectJson: true,`);
     }
-    if (isWatch) {
+    if (isWatch || isStream) {
       chunks.push(`      expectStream: true,`);
     }
     if (knownOptShape !== 'NoOpts') {
@@ -223,6 +224,11 @@ export function generateModuleTypescript(surface: SurfaceMap, api: SurfaceApi): 
     chunks.push(`      abortSignal: opts.abortSignal,`);
     chunks.push(`    });`);
 
+    if (isStream) {
+      chunks.push(`    return resp.pipeThrough(new TextDecoderStream('utf-8'));`);
+      chunks.push(`  }\n`);
+      return;
+    }
     if (accept === 'text/plain') {
       chunks.push(`    return new TextDecoder('utf-8').decode(resp);`);
       chunks.push(`  }\n`);
