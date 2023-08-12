@@ -174,6 +174,18 @@ export function describeSurface(wholeSpec: OpenAPI2) {
         const allParams = new Array<OpenAPI2RequestParameter>()
           .concat(methodObj.parameters ?? [], pathObj.parameters ?? []);
 
+        // Special-case for PodExec/PodAttach which do not type 'command' as a list.
+        const commandArg = allParams.find(x => x.name == 'command' && x.description?.includes('argv array'));
+        if (commandArg) {
+          commandArg.schema = {
+            type: 'array',
+            items: {
+              type: 'string',
+            },
+          };
+          commandArg.type = undefined;
+        }
+
         if (opName == 'getPodLog') {
           // Add a streaming variant for pod logs
           api.operations.push({

@@ -1438,7 +1438,7 @@ export class CoreV1NamespacedApi {
   }
 
   async connectGetPodExec(name: string, opts: {
-    command?: string;
+    command?: Array<string>;
     container?: string;
     stderr?: boolean;
     stdin?: boolean;
@@ -1447,7 +1447,9 @@ export class CoreV1NamespacedApi {
     abortSignal?: AbortSignal;
   } = {}) {
     const query = new URLSearchParams;
-    if (opts["command"] != null) query.append("command", opts["command"]);
+    for (const item of opts["command"] ?? []) {
+      query.append("command", item);
+    }
     if (opts["container"] != null) query.append("container", opts["container"]);
     if (opts["stderr"] != null) query.append("stderr", opts["stderr"] ? '1' : '0');
     if (opts["stdin"] != null) query.append("stdin", opts["stdin"] ? '1' : '0');
@@ -1463,7 +1465,7 @@ export class CoreV1NamespacedApi {
   }
 
   async connectPostPodExec(name: string, opts: {
-    command?: string;
+    command?: Array<string>;
     container?: string;
     stderr?: boolean;
     stdin?: boolean;
@@ -1472,7 +1474,9 @@ export class CoreV1NamespacedApi {
     abortSignal?: AbortSignal;
   } = {}) {
     const query = new URLSearchParams;
-    if (opts["command"] != null) query.append("command", opts["command"]);
+    for (const item of opts["command"] ?? []) {
+      query.append("command", item);
+    }
     if (opts["container"] != null) query.append("container", opts["container"]);
     if (opts["stderr"] != null) query.append("stderr", opts["stderr"] ? '1' : '0');
     if (opts["stdin"] != null) query.append("stdin", opts["stdin"] ? '1' : '0');

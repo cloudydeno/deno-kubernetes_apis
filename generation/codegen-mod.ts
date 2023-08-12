@@ -186,6 +186,14 @@ export function generateModuleTypescript(surface: SurfaceMap, api: SurfaceApi): 
           case 'number':
             chunks.push(`    ${maybeIf}query.append(${idStr}, String(opts[${idStr}]));`);
             break;
+          case 'list':
+            if (opt[1].inner.type == 'string') {
+              chunks.push(`    for (const item of opts[${idStr}]${opt[0].required ? '' : ' ?? []'}) {`);
+              chunks.push(`      query.append(${idStr}, item);`);
+              chunks.push(`    }`);
+              break;
+            }
+            /* falls through */
           default:
             chunks.push(`    // TODO: ${opt[0].in} ${opt[0].name} ${opt[0].required} ${opt[0].type} ${JSON.stringify(opt[1])}`);
         }
@@ -285,6 +293,8 @@ export function generateModuleTypescript(surface: SurfaceMap, api: SurfaceApi): 
         return `${api.friendlyName}.${shape.reference}`;
       case 'foreign':
         return `${shape.api.friendlyName}.${shape.name}`;
+      case 'list':
+        return `Array<${writeType(shape.inner)}>`;
       case 'special':
         return `c.${shape.name}`;
     }
