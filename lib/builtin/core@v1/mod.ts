@@ -367,7 +367,7 @@ export class CoreV1Api {
     if (opts.path && !opts.path.startsWith('/')) throw new Error("Proxy path cannot be relative");
     const name = (opts.port != null) ? `${nodeName}:${opts.port}` : nodeName;
     const path = `${this.#root}nodes/${name}/proxy${opts.path || ''}`;
-    return this.#client.performRequest({ ...opts, path });
+    return await this.#client.performRequest({ ...opts, path });
   }
 
   async getNodeStatus(name: string, opts: operations.NoOpts = {}) {
@@ -1582,7 +1582,7 @@ export class CoreV1NamespacedApi {
     if (opts.path && !opts.path.startsWith('/')) throw new Error("Proxy path cannot be relative");
     const name = (opts.port != null) ? `${podName}:${opts.port}` : podName;
     const path = `${this.#root}pods/${name}/proxy${opts.path || ''}`;
-    return this.#client.performRequest({ ...opts, path });
+    return await this.#client.performRequest({ ...opts, path });
   }
 
   async getPodStatus(name: string, opts: operations.NoOpts = {}) {
@@ -2303,7 +2303,7 @@ export class CoreV1NamespacedApi {
     if (opts.path && !opts.path.startsWith('/')) throw new Error("Proxy path cannot be relative");
     const name = (opts.port != null) ? `${serviceName}:${opts.port}` : serviceName;
     const path = `${this.#root}services/${name}/proxy${opts.path || ''}`;
-    return this.#client.performRequest({ ...opts, path });
+    return await this.#client.performRequest({ ...opts, path });
   }
 
   async getServiceStatus(name: string, opts: operations.NoOpts = {}) {
