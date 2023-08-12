@@ -793,6 +793,7 @@ export interface Container {
   name: string;
   ports?: Array<ContainerPort> | null;
   readinessProbe?: Probe | null;
+  resizePolicy?: Array<ContainerResizePolicy> | null;
   resources?: ResourceRequirements | null;
   securityContext?: SecurityContext | null;
   startupProbe?: Probe | null;
@@ -819,6 +820,7 @@ export function toContainer(input: c.JSONValue): Container {
     name: c.checkStr(obj["name"]),
     ports: c.readOpt(obj["ports"], x => c.readList(x, toContainerPort)),
     readinessProbe: c.readOpt(obj["readinessProbe"], toProbe),
+    resizePolicy: c.readOpt(obj["resizePolicy"], x => c.readList(x, toContainerResizePolicy)),
     resources: c.readOpt(obj["resources"], toResourceRequirements),
     securityContext: c.readOpt(obj["securityContext"], toSecurityContext),
     startupProbe: c.readOpt(obj["startupProbe"], toProbe),
@@ -840,6 +842,7 @@ export function fromContainer(input: Container): c.JSONValue {
     livenessProbe: input.livenessProbe != null ? fromProbe(input.livenessProbe) : undefined,
     ports: input.ports?.map(fromContainerPort),
     readinessProbe: input.readinessProbe != null ? fromProbe(input.readinessProbe) : undefined,
+    resizePolicy: input.resizePolicy?.map(fromContainerResizePolicy),
     resources: input.resources != null ? fromResourceRequirements(input.resources) : undefined,
     securityContext: input.securityContext != null ? fromSecurityContext(input.securityContext) : undefined,
     startupProbe: input.startupProbe != null ? fromProbe(input.startupProbe) : undefined,
@@ -1162,6 +1165,22 @@ export function fromContainerPort(input: ContainerPort): c.JSONValue {
     ...input,
   }}
 
+/** ContainerResizePolicy represents resource resize policy for the container. */
+export interface ContainerResizePolicy {
+  resourceName: string;
+  restartPolicy: string;
+}
+export function toContainerResizePolicy(input: c.JSONValue): ContainerResizePolicy {
+  const obj = c.checkObj(input);
+  return {
+    resourceName: c.checkStr(obj["resourceName"]),
+    restartPolicy: c.checkStr(obj["restartPolicy"]),
+  }}
+export function fromContainerResizePolicy(input: ContainerResizePolicy): c.JSONValue {
+  return {
+    ...input,
+  }}
+
 /** ResourceRequirements describes the compute resource requirements. */
 export interface ResourceRequirements {
   claims?: Array<ResourceClaim> | null;
@@ -1429,12 +1448,14 @@ export function fromContainerStateWaiting(input: ContainerStateWaiting): c.JSONV
 
 /** ContainerStatus contains details for the current status of this container. */
 export interface ContainerStatus {
+  allocatedResources?: Record<string,c.Quantity> | null;
   containerID?: string | null;
   image: string;
   imageID: string;
   lastState?: ContainerState | null;
   name: string;
   ready: boolean;
+  resources?: ResourceRequirements | null;
   restartCount: number;
   started?: boolean | null;
   state?: ContainerState | null;
@@ -1442,12 +1463,14 @@ export interface ContainerStatus {
 export function toContainerStatus(input: c.JSONValue): ContainerStatus {
   const obj = c.checkObj(input);
   return {
+    allocatedResources: c.readOpt(obj["allocatedResources"], x => c.readMap(x, c.toQuantity)),
     containerID: c.readOpt(obj["containerID"], c.checkStr),
     image: c.checkStr(obj["image"]),
     imageID: c.checkStr(obj["imageID"]),
     lastState: c.readOpt(obj["lastState"], toContainerState),
     name: c.checkStr(obj["name"]),
     ready: c.checkBool(obj["ready"]),
+    resources: c.readOpt(obj["resources"], toResourceRequirements),
     restartCount: c.checkNum(obj["restartCount"]),
     started: c.readOpt(obj["started"], c.checkBool),
     state: c.readOpt(obj["state"], toContainerState),
@@ -1455,7 +1478,9 @@ export function toContainerStatus(input: c.JSONValue): ContainerStatus {
 export function fromContainerStatus(input: ContainerStatus): c.JSONValue {
   return {
     ...input,
+    allocatedResources: c.writeMap(input.allocatedResources, c.fromQuantity),
     lastState: input.lastState != null ? fromContainerState(input.lastState) : undefined,
+    resources: input.resources != null ? fromResourceRequirements(input.resources) : undefined,
     state: input.state != null ? fromContainerState(input.state) : undefined,
   }}
 
@@ -1678,6 +1703,7 @@ export interface EphemeralContainer {
   name: string;
   ports?: Array<ContainerPort> | null;
   readinessProbe?: Probe | null;
+  resizePolicy?: Array<ContainerResizePolicy> | null;
   resources?: ResourceRequirements | null;
   securityContext?: SecurityContext | null;
   startupProbe?: Probe | null;
@@ -1705,6 +1731,7 @@ export function toEphemeralContainer(input: c.JSONValue): EphemeralContainer {
     name: c.checkStr(obj["name"]),
     ports: c.readOpt(obj["ports"], x => c.readList(x, toContainerPort)),
     readinessProbe: c.readOpt(obj["readinessProbe"], toProbe),
+    resizePolicy: c.readOpt(obj["resizePolicy"], x => c.readList(x, toContainerResizePolicy)),
     resources: c.readOpt(obj["resources"], toResourceRequirements),
     securityContext: c.readOpt(obj["securityContext"], toSecurityContext),
     startupProbe: c.readOpt(obj["startupProbe"], toProbe),
@@ -1727,6 +1754,7 @@ export function fromEphemeralContainer(input: EphemeralContainer): c.JSONValue {
     livenessProbe: input.livenessProbe != null ? fromProbe(input.livenessProbe) : undefined,
     ports: input.ports?.map(fromContainerPort),
     readinessProbe: input.readinessProbe != null ? fromProbe(input.readinessProbe) : undefined,
+    resizePolicy: input.resizePolicy?.map(fromContainerResizePolicy),
     resources: input.resources != null ? fromResourceRequirements(input.resources) : undefined,
     securityContext: input.securityContext != null ? fromSecurityContext(input.securityContext) : undefined,
     startupProbe: input.startupProbe != null ? fromProbe(input.startupProbe) : undefined,
@@ -3085,7 +3113,7 @@ export function fromPersistentVolumeClaimStatus(input: PersistentVolumeClaimStat
     conditions: input.conditions?.map(fromPersistentVolumeClaimCondition),
   }}
 
-/** PersistentVolumeClaimCondition contails details about state of pvc */
+/** PersistentVolumeClaimCondition contains details about state of pvc */
 export interface PersistentVolumeClaimCondition {
   lastProbeTime?: c.Time | null;
   lastTransitionTime?: c.Time | null;
@@ -3784,6 +3812,7 @@ export interface PodStatus {
   podIPs?: Array<PodIP> | null;
   qosClass?: string | null;
   reason?: string | null;
+  resize?: string | null;
   startTime?: c.Time | null;
 }
 export function toPodStatus(input: c.JSONValue): PodStatus {
@@ -3801,6 +3830,7 @@ export function toPodStatus(input: c.JSONValue): PodStatus {
     podIPs: c.readOpt(obj["podIPs"], x => c.readList(x, toPodIP)),
     qosClass: c.readOpt(obj["qosClass"], c.checkStr),
     reason: c.readOpt(obj["reason"], c.checkStr),
+    resize: c.readOpt(obj["resize"], c.checkStr),
     startTime: c.readOpt(obj["startTime"], c.toTime),
   }}
 export function fromPodStatus(input: PodStatus): c.JSONValue {

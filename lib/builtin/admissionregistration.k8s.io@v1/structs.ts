@@ -7,11 +7,28 @@ type ListOf<T> = {
   items: Array<T>;
 };
 
+/** MatchCondition represents a condition which must by fulfilled for a request to be sent to a webhook. */
+export interface MatchCondition {
+  expression: string;
+  name: string;
+}
+export function toMatchCondition(input: c.JSONValue): MatchCondition {
+  const obj = c.checkObj(input);
+  return {
+    expression: c.checkStr(obj["expression"]),
+    name: c.checkStr(obj["name"]),
+  }}
+export function fromMatchCondition(input: MatchCondition): c.JSONValue {
+  return {
+    ...input,
+  }}
+
 /** MutatingWebhook describes an admission webhook and the resources and operations it applies to. */
 export interface MutatingWebhook {
   admissionReviewVersions: Array<string>;
   clientConfig: WebhookClientConfig;
   failurePolicy?: string | null;
+  matchConditions?: Array<MatchCondition> | null;
   matchPolicy?: string | null;
   name: string;
   namespaceSelector?: MetaV1.LabelSelector | null;
@@ -27,6 +44,7 @@ export function toMutatingWebhook(input: c.JSONValue): MutatingWebhook {
     admissionReviewVersions: c.readList(obj["admissionReviewVersions"], c.checkStr),
     clientConfig: toWebhookClientConfig(obj["clientConfig"]),
     failurePolicy: c.readOpt(obj["failurePolicy"], c.checkStr),
+    matchConditions: c.readOpt(obj["matchConditions"], x => c.readList(x, toMatchCondition)),
     matchPolicy: c.readOpt(obj["matchPolicy"], c.checkStr),
     name: c.checkStr(obj["name"]),
     namespaceSelector: c.readOpt(obj["namespaceSelector"], MetaV1.toLabelSelector),
@@ -40,6 +58,7 @@ export function fromMutatingWebhook(input: MutatingWebhook): c.JSONValue {
   return {
     ...input,
     clientConfig: input.clientConfig != null ? fromWebhookClientConfig(input.clientConfig) : undefined,
+    matchConditions: input.matchConditions?.map(fromMatchCondition),
     namespaceSelector: input.namespaceSelector != null ? MetaV1.fromLabelSelector(input.namespaceSelector) : undefined,
     objectSelector: input.objectSelector != null ? MetaV1.fromLabelSelector(input.objectSelector) : undefined,
     rules: input.rules?.map(fromRuleWithOperations),
@@ -146,6 +165,7 @@ export interface ValidatingWebhook {
   admissionReviewVersions: Array<string>;
   clientConfig: WebhookClientConfig;
   failurePolicy?: string | null;
+  matchConditions?: Array<MatchCondition> | null;
   matchPolicy?: string | null;
   name: string;
   namespaceSelector?: MetaV1.LabelSelector | null;
@@ -160,6 +180,7 @@ export function toValidatingWebhook(input: c.JSONValue): ValidatingWebhook {
     admissionReviewVersions: c.readList(obj["admissionReviewVersions"], c.checkStr),
     clientConfig: toWebhookClientConfig(obj["clientConfig"]),
     failurePolicy: c.readOpt(obj["failurePolicy"], c.checkStr),
+    matchConditions: c.readOpt(obj["matchConditions"], x => c.readList(x, toMatchCondition)),
     matchPolicy: c.readOpt(obj["matchPolicy"], c.checkStr),
     name: c.checkStr(obj["name"]),
     namespaceSelector: c.readOpt(obj["namespaceSelector"], MetaV1.toLabelSelector),
@@ -172,6 +193,7 @@ export function fromValidatingWebhook(input: ValidatingWebhook): c.JSONValue {
   return {
     ...input,
     clientConfig: input.clientConfig != null ? fromWebhookClientConfig(input.clientConfig) : undefined,
+    matchConditions: input.matchConditions?.map(fromMatchCondition),
     namespaceSelector: input.namespaceSelector != null ? MetaV1.fromLabelSelector(input.namespaceSelector) : undefined,
     objectSelector: input.objectSelector != null ? MetaV1.fromLabelSelector(input.objectSelector) : undefined,
     rules: input.rules?.map(fromRuleWithOperations),

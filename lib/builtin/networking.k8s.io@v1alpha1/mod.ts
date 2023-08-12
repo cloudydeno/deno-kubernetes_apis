@@ -106,4 +106,97 @@ export class NetworkingV1alpha1Api {
     return NetworkingV1alpha1.toClusterCIDR(resp);
   }
 
+  async getIPAddressList(opts: operations.GetListOpts = {}) {
+    const resp = await this.#client.performRequest({
+      method: "GET",
+      path: `${this.#root}ipaddresses`,
+      expectJson: true,
+      querystring: operations.formatGetListOpts(opts),
+      abortSignal: opts.abortSignal,
+    });
+    return NetworkingV1alpha1.toIPAddressList(resp);
+  }
+
+  async watchIPAddressList(opts: operations.WatchListOpts = {}) {
+    const resp = await this.#client.performRequest({
+      method: "GET",
+      path: `${this.#root}ipaddresses`,
+      expectJson: true,
+      expectStream: true,
+      querystring: operations.formatWatchListOpts(opts),
+      abortSignal: opts.abortSignal,
+    });
+    return resp.pipeThrough(new c.WatchEventTransformer(NetworkingV1alpha1.toIPAddress, MetaV1.toStatus));
+  }
+
+  async createIPAddress(body: NetworkingV1alpha1.IPAddress, opts: operations.PutOpts = {}) {
+    const resp = await this.#client.performRequest({
+      method: "POST",
+      path: `${this.#root}ipaddresses`,
+      expectJson: true,
+      querystring: operations.formatPutOpts(opts),
+      bodyJson: NetworkingV1alpha1.fromIPAddress(body),
+      abortSignal: opts.abortSignal,
+    });
+    return NetworkingV1alpha1.toIPAddress(resp);
+  }
+
+  async deleteIPAddressList(opts: operations.DeleteListOpts = {}) {
+    const resp = await this.#client.performRequest({
+      method: "DELETE",
+      path: `${this.#root}ipaddresses`,
+      expectJson: true,
+      querystring: operations.formatDeleteListOpts(opts),
+      abortSignal: opts.abortSignal,
+    });
+    return NetworkingV1alpha1.toIPAddressList(resp);
+  }
+
+  async getIPAddress(name: string, opts: operations.NoOpts = {}) {
+    const resp = await this.#client.performRequest({
+      method: "GET",
+      path: `${this.#root}ipaddresses/${name}`,
+      expectJson: true,
+      abortSignal: opts.abortSignal,
+    });
+    return NetworkingV1alpha1.toIPAddress(resp);
+  }
+
+  async deleteIPAddress(name: string, opts: operations.DeleteOpts = {}) {
+    const resp = await this.#client.performRequest({
+      method: "DELETE",
+      path: `${this.#root}ipaddresses/${name}`,
+      expectJson: true,
+      querystring: operations.formatDeleteOpts(opts),
+      abortSignal: opts.abortSignal,
+    });
+    if (c.isStatusKind(resp)) return MetaV1.toStatus(resp);
+    return NetworkingV1alpha1.toIPAddress(resp);
+  }
+
+  async replaceIPAddress(name: string, body: NetworkingV1alpha1.IPAddress, opts: operations.PutOpts = {}) {
+    const resp = await this.#client.performRequest({
+      method: "PUT",
+      path: `${this.#root}ipaddresses/${name}`,
+      expectJson: true,
+      querystring: operations.formatPutOpts(opts),
+      bodyJson: NetworkingV1alpha1.fromIPAddress(body),
+      abortSignal: opts.abortSignal,
+    });
+    return NetworkingV1alpha1.toIPAddress(resp);
+  }
+
+  async patchIPAddress(name: string, type: c.PatchType, body: NetworkingV1alpha1.IPAddress | c.JsonPatch, opts: operations.PatchOpts = {}) {
+    const resp = await this.#client.performRequest({
+      method: "PATCH",
+      path: `${this.#root}ipaddresses/${name}`,
+      expectJson: true,
+      querystring: operations.formatPatchOpts(opts),
+      contentType: c.getPatchContentType(type),
+      bodyJson: Array.isArray(body) ? body : NetworkingV1alpha1.fromIPAddress(body),
+      abortSignal: opts.abortSignal,
+    });
+    return NetworkingV1alpha1.toIPAddress(resp);
+  }
+
 }

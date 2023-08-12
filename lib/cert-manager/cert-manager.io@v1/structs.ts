@@ -397,7 +397,10 @@ export interface IssuerSpec {
       kubernetes?: {
         mountPath?: string | null;
         role: string;
-        secretRef: SecretRef;
+        secretRef?: SecretRef | null;
+        serviceAccountRef?: {
+          name: string;
+        } | null;
       } | null;
       tokenSecretRef?: SecretRef | null;
     };
@@ -549,9 +552,15 @@ export function toIssuerSpec_vault_auth_kubernetes(input: c.JSONValue) {
   return {
     mountPath: c.readOpt(obj["mountPath"], c.checkStr),
     role: c.checkStr(obj["role"]),
-    secretRef: toSecretRef(obj["secretRef"]),
+    secretRef: c.readOpt(obj["secretRef"], toSecretRef),
+    serviceAccountRef: c.readOpt(obj["serviceAccountRef"], toIssuerSpec_vault_auth_kubernetes_serviceAccountRef),
   }}
 export function toIssuerSpec_venafi_tpp_credentialsRef(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    name: c.checkStr(obj["name"]),
+  }}
+export function toIssuerSpec_vault_auth_kubernetes_serviceAccountRef(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     name: c.checkStr(obj["name"]),
@@ -632,6 +641,7 @@ export interface SolverSpec {
     } | null;
     ingress?: {
       class?: string | null;
+      ingressClassName?: string | null;
       ingressTemplate?: {
         metadata?: {
           annotations?: Record<string,string> | null;
@@ -646,6 +656,9 @@ export interface SolverSpec {
         } | null;
         spec?: {
           affinity?: CoreV1.Affinity | null;
+          imagePullSecrets?: Array<{
+            name?: string | null;
+          }> | null;
           nodeSelector?: Record<string,string> | null;
           priorityClassName?: string | null;
           serviceAccountName?: string | null;
@@ -838,6 +851,7 @@ export function toSolverSpec_http01_ingress(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     class: c.readOpt(obj["class"], c.checkStr),
+    ingressClassName: c.readOpt(obj["ingressClassName"], c.checkStr),
     ingressTemplate: c.readOpt(obj["ingressTemplate"], toSolverSpec_http01_ingress_ingressTemplate),
     name: c.readOpt(obj["name"], c.checkStr),
     podTemplate: c.readOpt(obj["podTemplate"], toSolverSpec_http01_ingress_podTemplate),
@@ -886,10 +900,16 @@ export function toSolverSpec_http01_ingress_podTemplate_spec(input: c.JSONValue)
   const obj = c.checkObj(input);
   return {
     affinity: c.readOpt(obj["affinity"], CoreV1.toAffinity),
+    imagePullSecrets: c.readOpt(obj["imagePullSecrets"], x => c.readList(x, toSolverSpec_http01_ingress_podTemplate_spec_imagePullSecrets)),
     nodeSelector: c.readOpt(obj["nodeSelector"], x => c.readMap(x, c.checkStr)),
     priorityClassName: c.readOpt(obj["priorityClassName"], c.checkStr),
     serviceAccountName: c.readOpt(obj["serviceAccountName"], c.checkStr),
     tolerations: c.readOpt(obj["tolerations"], x => c.readList(x, toSolverSpec_http01_ingress_podTemplate_spec_tolerations)),
+  }}
+export function toSolverSpec_http01_ingress_podTemplate_spec_imagePullSecrets(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    name: c.readOpt(obj["name"], c.checkStr),
   }}
 export function toSolverSpec_http01_ingress_podTemplate_spec_tolerations(input: c.JSONValue) {
   const obj = c.checkObj(input);
@@ -904,6 +924,7 @@ export function toSolverSpec_http01_ingress_podTemplate_spec_tolerations(input: 
 /** Status of the Issuer or ClusterIssuer. This is set and managed automatically. */
 export interface IssuerStatus {
   acme?: {
+    lastPrivateKeyHash?: string | null;
     lastRegisteredEmail?: string | null;
     uri?: string | null;
   } | null;
@@ -933,6 +954,7 @@ export function fromIssuerStatus(input: IssuerStatus): c.JSONValue {
 export function toIssuerStatus_acme(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
+    lastPrivateKeyHash: c.readOpt(obj["lastPrivateKeyHash"], c.checkStr),
     lastRegisteredEmail: c.readOpt(obj["lastRegisteredEmail"], c.checkStr),
     uri: c.readOpt(obj["uri"], c.checkStr),
   }}

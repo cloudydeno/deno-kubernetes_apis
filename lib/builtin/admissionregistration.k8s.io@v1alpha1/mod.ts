@@ -106,6 +106,41 @@ export class AdmissionregistrationV1alpha1Api {
     return AdmissionregistrationV1alpha1.toValidatingAdmissionPolicy(resp);
   }
 
+  async getValidatingAdmissionPolicyStatus(name: string, opts: operations.NoOpts = {}) {
+    const resp = await this.#client.performRequest({
+      method: "GET",
+      path: `${this.#root}validatingadmissionpolicies/${name}/status`,
+      expectJson: true,
+      abortSignal: opts.abortSignal,
+    });
+    return AdmissionregistrationV1alpha1.toValidatingAdmissionPolicy(resp);
+  }
+
+  async replaceValidatingAdmissionPolicyStatus(name: string, body: AdmissionregistrationV1alpha1.ValidatingAdmissionPolicy, opts: operations.PutOpts = {}) {
+    const resp = await this.#client.performRequest({
+      method: "PUT",
+      path: `${this.#root}validatingadmissionpolicies/${name}/status`,
+      expectJson: true,
+      querystring: operations.formatPutOpts(opts),
+      bodyJson: AdmissionregistrationV1alpha1.fromValidatingAdmissionPolicy(body),
+      abortSignal: opts.abortSignal,
+    });
+    return AdmissionregistrationV1alpha1.toValidatingAdmissionPolicy(resp);
+  }
+
+  async patchValidatingAdmissionPolicyStatus(name: string, type: c.PatchType, body: AdmissionregistrationV1alpha1.ValidatingAdmissionPolicy | c.JsonPatch, opts: operations.PatchOpts = {}) {
+    const resp = await this.#client.performRequest({
+      method: "PATCH",
+      path: `${this.#root}validatingadmissionpolicies/${name}/status`,
+      expectJson: true,
+      querystring: operations.formatPatchOpts(opts),
+      contentType: c.getPatchContentType(type),
+      bodyJson: Array.isArray(body) ? body : AdmissionregistrationV1alpha1.fromValidatingAdmissionPolicy(body),
+      abortSignal: opts.abortSignal,
+    });
+    return AdmissionregistrationV1alpha1.toValidatingAdmissionPolicy(resp);
+  }
+
   async getValidatingAdmissionPolicyBindingList(opts: operations.GetListOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "GET",

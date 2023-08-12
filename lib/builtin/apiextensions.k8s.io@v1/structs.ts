@@ -366,12 +366,14 @@ export type JSONSchemaPropsOrArray = c.JSONValue;
 /** ValidationRule describes a validation rule written in the CEL expression language. */
 export interface ValidationRule {
   message?: string | null;
+  messageExpression?: string | null;
   rule: string;
 }
 export function toValidationRule(input: c.JSONValue): ValidationRule {
   const obj = c.checkObj(input);
   return {
     message: c.readOpt(obj["message"], c.checkStr),
+    messageExpression: c.readOpt(obj["messageExpression"], c.checkStr),
     rule: c.checkStr(obj["rule"]),
   }}
 export function fromValidationRule(input: ValidationRule): c.JSONValue {

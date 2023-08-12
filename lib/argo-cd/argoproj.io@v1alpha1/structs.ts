@@ -44,16 +44,24 @@ export interface ApplicationSource {
     skipCrds?: boolean | null;
     valueFiles?: Array<string> | null;
     values?: string | null;
+    valuesObject?: {
+    } | null;
     version?: string | null;
   } | null;
   kustomize?: {
     commonAnnotations?: Record<string,string> | null;
+    commonAnnotationsEnvsubst?: boolean | null;
     commonLabels?: Record<string,string> | null;
     forceCommonAnnotations?: boolean | null;
     forceCommonLabels?: boolean | null;
     images?: Array<string> | null;
     namePrefix?: string | null;
     nameSuffix?: string | null;
+    namespace?: string | null;
+    replicas?: Array<{
+      count: c.IntOrString;
+      name: string;
+    }> | null;
     version?: string | null;
   } | null;
   path?: string | null;
@@ -110,18 +118,22 @@ export function toApplicationSource_helm(input: c.JSONValue) {
     skipCrds: c.readOpt(obj["skipCrds"], c.checkBool),
     valueFiles: c.readOpt(obj["valueFiles"], x => c.readList(x, c.checkStr)),
     values: c.readOpt(obj["values"], c.checkStr),
+    valuesObject: c.readOpt(obj["valuesObject"], toApplicationSource_helm_valuesObject),
     version: c.readOpt(obj["version"], c.checkStr),
   }}
 export function toApplicationSource_kustomize(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     commonAnnotations: c.readOpt(obj["commonAnnotations"], x => c.readMap(x, c.checkStr)),
+    commonAnnotationsEnvsubst: c.readOpt(obj["commonAnnotationsEnvsubst"], c.checkBool),
     commonLabels: c.readOpt(obj["commonLabels"], x => c.readMap(x, c.checkStr)),
     forceCommonAnnotations: c.readOpt(obj["forceCommonAnnotations"], c.checkBool),
     forceCommonLabels: c.readOpt(obj["forceCommonLabels"], c.checkBool),
     images: c.readOpt(obj["images"], x => c.readList(x, c.checkStr)),
     namePrefix: c.readOpt(obj["namePrefix"], c.checkStr),
     nameSuffix: c.readOpt(obj["nameSuffix"], c.checkStr),
+    namespace: c.readOpt(obj["namespace"], c.checkStr),
+    replicas: c.readOpt(obj["replicas"], x => c.readList(x, toApplicationSource_kustomize_replicas)),
     version: c.readOpt(obj["version"], c.checkStr),
   }}
 export function toApplicationSource_plugin(input: c.JSONValue) {
@@ -150,6 +162,16 @@ export function toApplicationSource_helm_parameters(input: c.JSONValue) {
     forceString: c.readOpt(obj["forceString"], c.checkBool),
     name: c.readOpt(obj["name"], c.checkStr),
     value: c.readOpt(obj["value"], c.checkStr),
+  }}
+export function toApplicationSource_helm_valuesObject(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+  }}
+export function toApplicationSource_kustomize_replicas(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    count: c.toIntOrString(obj["count"]),
+    name: c.checkStr(obj["name"]),
   }}
 export function toApplicationSource_plugin_env(input: c.JSONValue) {
   const obj = c.checkObj(input);
@@ -277,6 +299,7 @@ export interface Application {
       message: string;
       type: string;
     }> | null;
+    controllerNamespace?: string | null;
     health?: {
       message?: string | null;
       status?: string | null;
@@ -340,6 +363,10 @@ export interface Application {
       retryCount?: number | null;
       startedAt: c.Time;
       syncResult?: {
+        managedNamespaceMetadata?: {
+          annotations?: Record<string,string> | null;
+          labels?: Record<string,string> | null;
+        } | null;
         resources?: Array<{
           group: string;
           hookPhase?: string | null;
@@ -388,6 +415,15 @@ export interface Application {
           namespace?: string | null;
           server?: string | null;
         };
+        ignoreDifferences?: Array<{
+          group?: string | null;
+          jqPathExpressions?: Array<string> | null;
+          jsonPointers?: Array<string> | null;
+          kind: string;
+          managedFieldsManagers?: Array<string> | null;
+          name?: string | null;
+          namespace?: string | null;
+        }> | null;
         source?: ApplicationSource | null;
         sources?: Array<ApplicationSource> | null;
       } | null;
@@ -491,6 +527,7 @@ export function toApplication_status(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     conditions: c.readOpt(obj["conditions"], x => c.readList(x, toApplication_status_conditions)),
+    controllerNamespace: c.readOpt(obj["controllerNamespace"], c.checkStr),
     health: c.readOpt(obj["health"], toApplication_status_health),
     history: c.readOpt(obj["history"], x => c.readList(x, toApplication_status_history)),
     observedAt: c.readOpt(obj["observedAt"], c.toTime),
@@ -681,6 +718,7 @@ export function toApplication_status_operationState_operation(input: c.JSONValue
 export function toApplication_status_operationState_syncResult(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
+    managedNamespaceMetadata: c.readOpt(obj["managedNamespaceMetadata"], toApplication_status_operationState_syncResult_managedNamespaceMetadata),
     resources: c.readOpt(obj["resources"], x => c.readList(x, toApplication_status_operationState_syncResult_resources)),
     revision: c.checkStr(obj["revision"]),
     revisions: c.readOpt(obj["revisions"], x => c.readList(x, c.checkStr)),
@@ -697,6 +735,7 @@ export function toApplication_status_sync_comparedTo(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     destination: toApplication_status_sync_comparedTo_destination(obj["destination"]),
+    ignoreDifferences: c.readOpt(obj["ignoreDifferences"], x => c.readList(x, toApplication_status_sync_comparedTo_ignoreDifferences)),
     source: c.readOpt(obj["source"], toApplicationSource),
     sources: c.readOpt(obj["sources"], x => c.readList(x, toApplicationSource)),
   }}
@@ -749,6 +788,12 @@ export function toApplication_status_operationState_operation_sync(input: c.JSON
     syncOptions: c.readOpt(obj["syncOptions"], x => c.readList(x, c.checkStr)),
     syncStrategy: c.readOpt(obj["syncStrategy"], toApplication_status_operationState_operation_sync_syncStrategy),
   }}
+export function toApplication_status_operationState_syncResult_managedNamespaceMetadata(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    annotations: c.readOpt(obj["annotations"], x => c.readMap(x, c.checkStr)),
+    labels: c.readOpt(obj["labels"], x => c.readMap(x, c.checkStr)),
+  }}
 export function toApplication_status_operationState_syncResult_resources(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
@@ -769,6 +814,17 @@ export function toApplication_status_sync_comparedTo_destination(input: c.JSONVa
     name: c.readOpt(obj["name"], c.checkStr),
     namespace: c.readOpt(obj["namespace"], c.checkStr),
     server: c.readOpt(obj["server"], c.checkStr),
+  }}
+export function toApplication_status_sync_comparedTo_ignoreDifferences(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    group: c.readOpt(obj["group"], c.checkStr),
+    jqPathExpressions: c.readOpt(obj["jqPathExpressions"], x => c.readList(x, c.checkStr)),
+    jsonPointers: c.readOpt(obj["jsonPointers"], x => c.readList(x, c.checkStr)),
+    kind: c.checkStr(obj["kind"]),
+    managedFieldsManagers: c.readOpt(obj["managedFieldsManagers"], x => c.readList(x, c.checkStr)),
+    name: c.readOpt(obj["name"], c.checkStr),
+    namespace: c.readOpt(obj["namespace"], c.checkStr),
   }}
 export function toApplication_status_operationState_operation_retry_backoff(input: c.JSONValue) {
   const obj = c.checkObj(input);
@@ -841,9 +897,11 @@ export interface ApplicationSetGenerator {
     requeueAfterSeconds?: number | null;
     revision: string;
     template?: ApplicationTemplate | null;
+    values?: Record<string,string> | null;
   } | null;
   list?: {
     elements: Array<c.JSONValue>;
+    elementsYaml?: string | null;
     template?: ApplicationTemplate | null;
   } | null;
   matrix?: {
@@ -855,7 +913,47 @@ export interface ApplicationSetGenerator {
     mergeKeys: Array<string>;
     template?: ApplicationTemplate | null;
   } | null;
+  plugin?: {
+    configMapRef: {
+      name: string;
+    };
+    input?: {
+      parameters?: Record<string,c.JSONValue> | null;
+    } | null;
+    requeueAfterSeconds?: number | null;
+    template?: ApplicationTemplate | null;
+    values?: Record<string,string> | null;
+  } | null;
   pullRequest?: {
+    azuredevops?: {
+      api?: string | null;
+      labels?: Array<string> | null;
+      organization: string;
+      project: string;
+      repo: string;
+      tokenRef?: {
+        key: string;
+        secretName: string;
+      } | null;
+    } | null;
+    bitbucket?: {
+      api?: string | null;
+      basicAuth?: {
+        passwordRef: {
+          key: string;
+          secretName: string;
+        };
+        username: string;
+      } | null;
+      bearerToken?: {
+        tokenRef: {
+          key: string;
+          secretName: string;
+        };
+      } | null;
+      owner: string;
+      repo: string;
+    } | null;
     bitbucketServer?: {
       api: string;
       basicAuth?: {
@@ -870,6 +968,7 @@ export interface ApplicationSetGenerator {
     } | null;
     filters?: Array<{
       branchMatch?: string | null;
+      targetBranchMatch?: string | null;
     }> | null;
     gitea?: {
       api: string;
@@ -894,6 +993,7 @@ export interface ApplicationSetGenerator {
     } | null;
     gitlab?: {
       api?: string | null;
+      insecure?: boolean | null;
       labels?: Array<string> | null;
       project: string;
       pullRequestState?: string | null;
@@ -906,6 +1006,15 @@ export interface ApplicationSetGenerator {
     template?: ApplicationTemplate | null;
   } | null;
   scmProvider?: {
+    awsCodeCommit?: {
+      allBranches?: boolean | null;
+      region?: string | null;
+      role?: string | null;
+      tagFilters?: Array<{
+        key: string;
+        value?: string | null;
+      }> | null;
+    } | null;
     azureDevOps?: {
       accessTokenRef: {
         key: string;
@@ -970,6 +1079,7 @@ export interface ApplicationSetGenerator {
       api?: string | null;
       group: string;
       includeSubgroups?: boolean | null;
+      insecure?: boolean | null;
       tokenRef?: {
         key: string;
         secretName: string;
@@ -977,6 +1087,7 @@ export interface ApplicationSetGenerator {
     } | null;
     requeueAfterSeconds?: number | null;
     template?: ApplicationTemplate | null;
+    values?: Record<string,string> | null;
   } | null;
   selector?: MetaV1.LabelSelector | null;
 }
@@ -989,6 +1100,7 @@ export function toApplicationSetGenerator(input: c.JSONValue): ApplicationSetGen
     list: c.readOpt(obj["list"], toApplicationSetGenerator_list),
     matrix: c.readOpt(obj["matrix"], toApplicationSetGenerator_matrix),
     merge: c.readOpt(obj["merge"], toApplicationSetGenerator_merge),
+    plugin: c.readOpt(obj["plugin"], toApplicationSetGenerator_plugin),
     pullRequest: c.readOpt(obj["pullRequest"], toApplicationSetGenerator_pullRequest),
     scmProvider: c.readOpt(obj["scmProvider"], toApplicationSetGenerator_scmProvider),
     selector: c.readOpt(obj["selector"], MetaV1.toLabelSelector),
@@ -1023,6 +1135,10 @@ export function fromApplicationSetGenerator(input: ApplicationSetGenerator): c.J
       ...input.merge,
       generators: input.merge.generators?.map(fromApplicationSetGenerator),
       template: input.merge.template != null ? fromApplicationTemplate(input.merge.template) : undefined,
+    } : undefined,
+    plugin: input.plugin != null ? {
+      ...input.plugin,
+      template: input.plugin.template != null ? fromApplicationTemplate(input.plugin.template) : undefined,
     } : undefined,
     pullRequest: input.pullRequest != null ? {
       ...input.pullRequest,
@@ -1061,11 +1177,13 @@ export function toApplicationSetGenerator_git(input: c.JSONValue) {
     requeueAfterSeconds: c.readOpt(obj["requeueAfterSeconds"], c.checkNum),
     revision: c.checkStr(obj["revision"]),
     template: c.readOpt(obj["template"], toApplicationTemplate),
+    values: c.readOpt(obj["values"], x => c.readMap(x, c.checkStr)),
   }}
 export function toApplicationSetGenerator_list(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     elements: c.readList(obj["elements"], c.identity),
+    elementsYaml: c.readOpt(obj["elementsYaml"], c.checkStr),
     template: c.readOpt(obj["template"], toApplicationTemplate),
   }}
 export function toApplicationSetGenerator_matrix(input: c.JSONValue) {
@@ -1081,9 +1199,20 @@ export function toApplicationSetGenerator_merge(input: c.JSONValue) {
     mergeKeys: c.readList(obj["mergeKeys"], c.checkStr),
     template: c.readOpt(obj["template"], toApplicationTemplate),
   }}
+export function toApplicationSetGenerator_plugin(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    configMapRef: toApplicationSetGenerator_plugin_configMapRef(obj["configMapRef"]),
+    input: c.readOpt(obj["input"], toApplicationSetGenerator_plugin_input),
+    requeueAfterSeconds: c.readOpt(obj["requeueAfterSeconds"], c.checkNum),
+    template: c.readOpt(obj["template"], toApplicationTemplate),
+    values: c.readOpt(obj["values"], x => c.readMap(x, c.checkStr)),
+  }}
 export function toApplicationSetGenerator_pullRequest(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
+    azuredevops: c.readOpt(obj["azuredevops"], toApplicationSetGenerator_pullRequest_azuredevops),
+    bitbucket: c.readOpt(obj["bitbucket"], toApplicationSetGenerator_pullRequest_bitbucket),
     bitbucketServer: c.readOpt(obj["bitbucketServer"], toApplicationSetGenerator_pullRequest_bitbucketServer),
     filters: c.readOpt(obj["filters"], x => c.readList(x, toApplicationSetGenerator_pullRequest_filters)),
     gitea: c.readOpt(obj["gitea"], toApplicationSetGenerator_pullRequest_gitea),
@@ -1095,6 +1224,7 @@ export function toApplicationSetGenerator_pullRequest(input: c.JSONValue) {
 export function toApplicationSetGenerator_scmProvider(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
+    awsCodeCommit: c.readOpt(obj["awsCodeCommit"], toApplicationSetGenerator_scmProvider_awsCodeCommit),
     azureDevOps: c.readOpt(obj["azureDevOps"], toApplicationSetGenerator_scmProvider_azureDevOps),
     bitbucket: c.readOpt(obj["bitbucket"], toApplicationSetGenerator_scmProvider_bitbucket),
     bitbucketServer: c.readOpt(obj["bitbucketServer"], toApplicationSetGenerator_scmProvider_bitbucketServer),
@@ -1105,6 +1235,7 @@ export function toApplicationSetGenerator_scmProvider(input: c.JSONValue) {
     gitlab: c.readOpt(obj["gitlab"], toApplicationSetGenerator_scmProvider_gitlab),
     requeueAfterSeconds: c.readOpt(obj["requeueAfterSeconds"], c.checkNum),
     template: c.readOpt(obj["template"], toApplicationTemplate),
+    values: c.readOpt(obj["values"], x => c.readMap(x, c.checkStr)),
   }}
 export function toApplicationSetGenerator_git_directories(input: c.JSONValue) {
   const obj = c.checkObj(input);
@@ -1116,6 +1247,35 @@ export function toApplicationSetGenerator_git_files(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     path: c.checkStr(obj["path"]),
+  }}
+export function toApplicationSetGenerator_plugin_configMapRef(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    name: c.checkStr(obj["name"]),
+  }}
+export function toApplicationSetGenerator_plugin_input(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    parameters: c.readOpt(obj["parameters"], x => c.readMap(x, c.identity)),
+  }}
+export function toApplicationSetGenerator_pullRequest_azuredevops(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    api: c.readOpt(obj["api"], c.checkStr),
+    labels: c.readOpt(obj["labels"], x => c.readList(x, c.checkStr)),
+    organization: c.checkStr(obj["organization"]),
+    project: c.checkStr(obj["project"]),
+    repo: c.checkStr(obj["repo"]),
+    tokenRef: c.readOpt(obj["tokenRef"], toApplicationSetGenerator_pullRequest_azuredevops_tokenRef),
+  }}
+export function toApplicationSetGenerator_pullRequest_bitbucket(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    api: c.readOpt(obj["api"], c.checkStr),
+    basicAuth: c.readOpt(obj["basicAuth"], toApplicationSetGenerator_pullRequest_bitbucket_basicAuth),
+    bearerToken: c.readOpt(obj["bearerToken"], toApplicationSetGenerator_pullRequest_bitbucket_bearerToken),
+    owner: c.checkStr(obj["owner"]),
+    repo: c.checkStr(obj["repo"]),
   }}
 export function toApplicationSetGenerator_pullRequest_bitbucketServer(input: c.JSONValue) {
   const obj = c.checkObj(input);
@@ -1129,6 +1289,7 @@ export function toApplicationSetGenerator_pullRequest_filters(input: c.JSONValue
   const obj = c.checkObj(input);
   return {
     branchMatch: c.readOpt(obj["branchMatch"], c.checkStr),
+    targetBranchMatch: c.readOpt(obj["targetBranchMatch"], c.checkStr),
   }}
 export function toApplicationSetGenerator_pullRequest_gitea(input: c.JSONValue) {
   const obj = c.checkObj(input);
@@ -1153,10 +1314,19 @@ export function toApplicationSetGenerator_pullRequest_gitlab(input: c.JSONValue)
   const obj = c.checkObj(input);
   return {
     api: c.readOpt(obj["api"], c.checkStr),
+    insecure: c.readOpt(obj["insecure"], c.checkBool),
     labels: c.readOpt(obj["labels"], x => c.readList(x, c.checkStr)),
     project: c.checkStr(obj["project"]),
     pullRequestState: c.readOpt(obj["pullRequestState"], c.checkStr),
     tokenRef: c.readOpt(obj["tokenRef"], toApplicationSetGenerator_pullRequest_gitlab_tokenRef),
+  }}
+export function toApplicationSetGenerator_scmProvider_awsCodeCommit(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    allBranches: c.readOpt(obj["allBranches"], c.checkBool),
+    region: c.readOpt(obj["region"], c.checkStr),
+    role: c.readOpt(obj["role"], c.checkStr),
+    tagFilters: c.readOpt(obj["tagFilters"], x => c.readList(x, toApplicationSetGenerator_scmProvider_awsCodeCommit_tagFilters)),
   }}
 export function toApplicationSetGenerator_scmProvider_azureDevOps(input: c.JSONValue) {
   const obj = c.checkObj(input);
@@ -1217,7 +1387,25 @@ export function toApplicationSetGenerator_scmProvider_gitlab(input: c.JSONValue)
     api: c.readOpt(obj["api"], c.checkStr),
     group: c.checkStr(obj["group"]),
     includeSubgroups: c.readOpt(obj["includeSubgroups"], c.checkBool),
+    insecure: c.readOpt(obj["insecure"], c.checkBool),
     tokenRef: c.readOpt(obj["tokenRef"], toApplicationSetGenerator_scmProvider_gitlab_tokenRef),
+  }}
+export function toApplicationSetGenerator_pullRequest_azuredevops_tokenRef(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    key: c.checkStr(obj["key"]),
+    secretName: c.checkStr(obj["secretName"]),
+  }}
+export function toApplicationSetGenerator_pullRequest_bitbucket_basicAuth(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    passwordRef: toApplicationSetGenerator_pullRequest_bitbucket_basicAuth_passwordRef(obj["passwordRef"]),
+    username: c.checkStr(obj["username"]),
+  }}
+export function toApplicationSetGenerator_pullRequest_bitbucket_bearerToken(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    tokenRef: toApplicationSetGenerator_pullRequest_bitbucket_bearerToken_tokenRef(obj["tokenRef"]),
   }}
 export function toApplicationSetGenerator_pullRequest_bitbucketServer_basicAuth(input: c.JSONValue) {
   const obj = c.checkObj(input);
@@ -1242,6 +1430,12 @@ export function toApplicationSetGenerator_pullRequest_gitlab_tokenRef(input: c.J
   return {
     key: c.checkStr(obj["key"]),
     secretName: c.checkStr(obj["secretName"]),
+  }}
+export function toApplicationSetGenerator_scmProvider_awsCodeCommit_tagFilters(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    key: c.checkStr(obj["key"]),
+    value: c.readOpt(obj["value"], c.checkStr),
   }}
 export function toApplicationSetGenerator_scmProvider_azureDevOps_accessTokenRef(input: c.JSONValue) {
   const obj = c.checkObj(input);
@@ -1274,6 +1468,18 @@ export function toApplicationSetGenerator_scmProvider_github_tokenRef(input: c.J
     secretName: c.checkStr(obj["secretName"]),
   }}
 export function toApplicationSetGenerator_scmProvider_gitlab_tokenRef(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    key: c.checkStr(obj["key"]),
+    secretName: c.checkStr(obj["secretName"]),
+  }}
+export function toApplicationSetGenerator_pullRequest_bitbucket_basicAuth_passwordRef(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    key: c.checkStr(obj["key"]),
+    secretName: c.checkStr(obj["secretName"]),
+  }}
+export function toApplicationSetGenerator_pullRequest_bitbucket_bearerToken_tokenRef(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     key: c.checkStr(obj["key"]),
@@ -1445,8 +1651,13 @@ export interface ApplicationSet {
   kind?: "ApplicationSet";
   metadata: MetaV1.ObjectMeta;
   spec: {
+    applyNestedSelectors?: boolean | null;
     generators: Array<ApplicationSetGenerator>;
     goTemplate?: boolean | null;
+    goTemplateOptions?: Array<string> | null;
+    preservedFields?: {
+      annotations?: Array<string> | null;
+    } | null;
     strategy?: {
       rollingSync?: {
         steps?: Array<{
@@ -1461,6 +1672,7 @@ export interface ApplicationSet {
       type?: string | null;
     } | null;
     syncPolicy?: {
+      applicationsSync?: "create-only" | "create-update" | "create-delete" | "sync" | c.UnexpectedEnumValue | null;
       preserveResourcesOnDeletion?: boolean | null;
     } | null;
     template: ApplicationTemplate;
@@ -1515,8 +1727,11 @@ export function fromApplicationSet(input: ApplicationSet): c.JSONValue {
 export function toApplicationSet_spec(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
+    applyNestedSelectors: c.readOpt(obj["applyNestedSelectors"], c.checkBool),
     generators: c.readList(obj["generators"], toApplicationSetGenerator),
     goTemplate: c.readOpt(obj["goTemplate"], c.checkBool),
+    goTemplateOptions: c.readOpt(obj["goTemplateOptions"], x => c.readList(x, c.checkStr)),
+    preservedFields: c.readOpt(obj["preservedFields"], toApplicationSet_spec_preservedFields),
     strategy: c.readOpt(obj["strategy"], toApplicationSet_spec_strategy),
     syncPolicy: c.readOpt(obj["syncPolicy"], toApplicationSet_spec_syncPolicy),
     template: toApplicationTemplate(obj["template"]),
@@ -1527,6 +1742,11 @@ export function toApplicationSet_status(input: c.JSONValue) {
     applicationStatus: c.readOpt(obj["applicationStatus"], x => c.readList(x, toApplicationSet_status_applicationStatus)),
     conditions: c.readOpt(obj["conditions"], x => c.readList(x, toApplicationSet_status_conditions)),
   }}
+export function toApplicationSet_spec_preservedFields(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    annotations: c.readOpt(obj["annotations"], x => c.readList(x, c.checkStr)),
+  }}
 export function toApplicationSet_spec_strategy(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
@@ -1536,6 +1756,7 @@ export function toApplicationSet_spec_strategy(input: c.JSONValue) {
 export function toApplicationSet_spec_syncPolicy(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
+    applicationsSync: c.readOpt(obj["applicationsSync"], (x => c.readEnum<"create-only" | "create-update" | "create-delete" | "sync" | c.UnexpectedEnumValue>(x))),
     preserveResourcesOnDeletion: c.readOpt(obj["preserveResourcesOnDeletion"], c.checkBool),
   }}
 export function toApplicationSet_status_applicationStatus(input: c.JSONValue) {

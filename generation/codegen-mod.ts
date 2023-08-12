@@ -4,10 +4,10 @@ import { ApiShape } from "./describe-shapes.ts";
 
 const knownOpts: Record<string,string|undefined> = {
   '': 'NoOpts',
-  'continue,fieldSelector,labelSelector,limit,resourceVersion,resourceVersionMatch,timeoutSeconds': 'GetListOpts',
-  'allowWatchBookmarks,fieldSelector,labelSelector,resourceVersion,resourceVersionMatch,timeoutSeconds': 'WatchListOpts',
+  'continue,fieldSelector,labelSelector,limit,resourceVersion,resourceVersionMatch,sendInitialEvents,timeoutSeconds': 'GetListOpts',
+  'allowWatchBookmarks,fieldSelector,labelSelector,resourceVersion,resourceVersionMatch,sendInitialEvents,timeoutSeconds': 'WatchListOpts',
   'dryRun,fieldManager,fieldValidation': 'PutOpts', // both CreateOpts and ReplaceOpts
-  'continue,dryRun,fieldSelector,gracePeriodSeconds,labelSelector,limit,orphanDependents,propagationPolicy,resourceVersion,resourceVersionMatch,timeoutSeconds': 'DeleteListOpts',
+  'continue,dryRun,fieldSelector,gracePeriodSeconds,labelSelector,limit,orphanDependents,propagationPolicy,resourceVersion,resourceVersionMatch,sendInitialEvents,timeoutSeconds': 'DeleteListOpts',
   'dryRun,fieldManager,fieldValidation,force': 'PatchOpts',
   'exact,export': 'GetOpts',
   'dryRun,gracePeriodSeconds,orphanDependents,propagationPolicy': 'DeleteOpts',

@@ -63,3 +63,75 @@ export function toClusterCIDRList(input: c.JSONValue): ClusterCIDRList & c.ApiKi
     metadata: MetaV1.toListMeta(obj.metadata),
     items: c.readList(obj.items, toClusterCIDR),
   }}
+
+/** IPAddress represents a single IP of a single IP Family. The object is designed to be used by APIs that operate on IP addresses. The object is used by the Service core API for allocation of IP addresses. An IP address can be represented in different formats, to guarantee the uniqueness of the IP, the name of the object is the IP address in canonical format, four decimal digits separated by dots suppressing leading zeros for IPv4 and the representation defined by RFC 5952 for IPv6. Valid: 192.168.1.5 or 2001:db8::1 or 2001:db8:aaaa:bbbb:cccc:dddd:eeee:1 Invalid: 10.01.2.3 or 2001:db8:0:0:0::1 */
+export interface IPAddress {
+  apiVersion?: "networking.k8s.io/v1alpha1";
+  kind?: "IPAddress";
+  metadata?: MetaV1.ObjectMeta | null;
+  spec?: IPAddressSpec | null;
+}
+export function toIPAddress(input: c.JSONValue): IPAddress & c.ApiKind {
+  const obj = c.checkObj(input);
+  return {
+    ...c.assertOrAddApiVersionAndKind(obj, "networking.k8s.io/v1alpha1", "IPAddress"),
+    metadata: c.readOpt(obj["metadata"], MetaV1.toObjectMeta),
+    spec: c.readOpt(obj["spec"], toIPAddressSpec),
+  }}
+export function fromIPAddress(input: IPAddress): c.JSONValue {
+  return {
+    ...c.assertOrAddApiVersionAndKind(input, "networking.k8s.io/v1alpha1", "IPAddress"),
+    ...input,
+    metadata: input.metadata != null ? MetaV1.fromObjectMeta(input.metadata) : undefined,
+    spec: input.spec != null ? fromIPAddressSpec(input.spec) : undefined,
+  }}
+
+/** IPAddressSpec describe the attributes in an IP Address. */
+export interface IPAddressSpec {
+  parentRef?: ParentReference | null;
+}
+export function toIPAddressSpec(input: c.JSONValue): IPAddressSpec {
+  const obj = c.checkObj(input);
+  return {
+    parentRef: c.readOpt(obj["parentRef"], toParentReference),
+  }}
+export function fromIPAddressSpec(input: IPAddressSpec): c.JSONValue {
+  return {
+    ...input,
+    parentRef: input.parentRef != null ? fromParentReference(input.parentRef) : undefined,
+  }}
+
+/** ParentReference describes a reference to a parent object. */
+export interface ParentReference {
+  group?: string | null;
+  name?: string | null;
+  namespace?: string | null;
+  resource?: string | null;
+  uid?: string | null;
+}
+export function toParentReference(input: c.JSONValue): ParentReference {
+  const obj = c.checkObj(input);
+  return {
+    group: c.readOpt(obj["group"], c.checkStr),
+    name: c.readOpt(obj["name"], c.checkStr),
+    namespace: c.readOpt(obj["namespace"], c.checkStr),
+    resource: c.readOpt(obj["resource"], c.checkStr),
+    uid: c.readOpt(obj["uid"], c.checkStr),
+  }}
+export function fromParentReference(input: ParentReference): c.JSONValue {
+  return {
+    ...input,
+  }}
+
+/** IPAddressList contains a list of IPAddress. */
+export interface IPAddressList extends ListOf<IPAddress> {
+  apiVersion?: "networking.k8s.io/v1alpha1";
+  kind?: "IPAddressList";
+};
+export function toIPAddressList(input: c.JSONValue): IPAddressList & c.ApiKind {
+  const obj = c.checkObj(input);
+  return {
+    ...c.assertOrAddApiVersionAndKind(obj, "networking.k8s.io/v1alpha1", "IPAddressList"),
+    metadata: MetaV1.toListMeta(obj.metadata),
+    items: c.readList(obj.items, toIPAddress),
+  }}

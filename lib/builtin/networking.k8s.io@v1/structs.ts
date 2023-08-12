@@ -174,7 +174,7 @@ export function fromIngressRule(input: IngressRule): c.JSONValue {
     http: input.http != null ? fromHTTPIngressRuleValue(input.http) : undefined,
   }}
 
-/** IngressTLS describes the transport layer security associated with an Ingress. */
+/** IngressTLS describes the transport layer security associated with an ingress. */
 export interface IngressTLS {
   hosts?: Array<string> | null;
   secretName?: string | null;
@@ -467,7 +467,7 @@ export function fromNetworkPolicyIngressRule(input: NetworkPolicyIngressRule): c
     ports: input.ports?.map(fromNetworkPolicyPort),
   }}
 
-/** NetworkPolicyStatus describe the current state of the NetworkPolicy. */
+/** NetworkPolicyStatus describes the current state of the NetworkPolicy. */
 export interface NetworkPolicyStatus {
   conditions?: Array<MetaV1.Condition> | null;
 }

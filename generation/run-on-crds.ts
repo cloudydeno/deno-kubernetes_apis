@@ -12,10 +12,10 @@ import {
 } from "../lib/builtin/apiextensions.k8s.io@v1/structs.ts";
 
 const knownOpts = {
-  GetListOpts: 'continue,fieldSelector,labelSelector,limit,resourceVersion,resourceVersionMatch,timeoutSeconds',
-  WatchListOpts: 'allowWatchBookmarks,fieldSelector,labelSelector,resourceVersion,resourceVersionMatch,timeoutSeconds',
+  GetListOpts: 'continue,fieldSelector,labelSelector,limit,resourceVersion,resourceVersionMatch,sendInitialEvents,timeoutSeconds',
+  WatchListOpts: 'allowWatchBookmarks,fieldSelector,labelSelector,resourceVersion,resourceVersionMatch,sendInitialEvents,timeoutSeconds',
   PutOpts: 'dryRun,fieldManager,fieldValidation', // both CreateOpts and ReplaceOpts
-  DeleteListOpts: 'continue,dryRun,fieldSelector,gracePeriodSeconds,labelSelector,limit,orphanDependents,propagationPolicy,resourceVersion,resourceVersionMatch,timeoutSeconds',
+  DeleteListOpts: 'continue,dryRun,fieldSelector,gracePeriodSeconds,labelSelector,limit,orphanDependents,propagationPolicy,resourceVersion,resourceVersionMatch,sendInitialEvents,timeoutSeconds',
   PatchOpts: 'dryRun,fieldManager,fieldValidation,force',
   GetOpts: '',
   DeleteOpts: 'dryRun,gracePeriodSeconds,orphanDependents,propagationPolicy',

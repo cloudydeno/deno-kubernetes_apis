@@ -132,7 +132,7 @@ export function fromPodFailurePolicy(input: PodFailurePolicy): c.JSONValue {
     rules: input.rules?.map(fromPodFailurePolicyRule),
   }}
 
-/** PodFailurePolicyRule describes how a pod failure is handled when the requirements are met. One of OnExitCodes and onPodConditions, but not both, can be used in each rule. */
+/** PodFailurePolicyRule describes how a pod failure is handled when the requirements are met. One of onExitCodes and onPodConditions, but not both, can be used in each rule. */
 export interface PodFailurePolicyRule {
   action: string;
   onExitCodes?: PodFailurePolicyOnExitCodesRequirement | null;

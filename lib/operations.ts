@@ -9,6 +9,7 @@ export interface GetListOpts {
   limit?: number;
   resourceVersion?: string;
   resourceVersionMatch?: "Exact" | "NotOlderThan";
+  sendInitialEvents?: boolean;
   timeoutSeconds?: number;
   abortSignal?: AbortSignal;
 };
@@ -20,6 +21,7 @@ export function formatGetListOpts(opts: GetListOpts): URLSearchParams {
   if (opts["limit"] != null) query.append("limit", String(opts["limit"]));
   if (opts["resourceVersion"] != null) query.append("resourceVersion", opts["resourceVersion"]);
   if (opts["resourceVersionMatch"] != null) query.append("resourceVersionMatch", opts["resourceVersionMatch"]);
+  if (opts["sendInitialEvents"] != null) query.append("sendInitialEvents", opts["sendInitialEvents"] ? '1' : '0');
   if (opts["timeoutSeconds"] != null) query.append("timeoutSeconds", String(opts["timeoutSeconds"]));
   return query;
 }
@@ -30,6 +32,7 @@ export interface WatchListOpts {
   labelSelector?: string;
   resourceVersion?: string;
   resourceVersionMatch?: "Exact" | "NotOlderThan";
+  sendInitialEvents?: boolean;
   timeoutSeconds?: number;
   abortSignal?: AbortSignal;
 };
@@ -40,6 +43,7 @@ export function formatWatchListOpts(opts: WatchListOpts): URLSearchParams {
   if (opts["labelSelector"] != null) query.append("labelSelector", opts["labelSelector"]);
   if (opts["resourceVersion"] != null) query.append("resourceVersion", opts["resourceVersion"]);
   if (opts["resourceVersionMatch"] != null) query.append("resourceVersionMatch", opts["resourceVersionMatch"]);
+  if (opts["sendInitialEvents"] != null) query.append("sendInitialEvents", opts["sendInitialEvents"] ? '1' : '0');
   if (opts["timeoutSeconds"] != null) query.append("timeoutSeconds", String(opts["timeoutSeconds"]));
   return query;
 }
@@ -69,6 +73,7 @@ export interface DeleteListOpts {
   propagationPolicy?: string;
   resourceVersion?: string;
   resourceVersionMatch?: "Exact" | "NotOlderThan";
+  sendInitialEvents?: boolean;
   timeoutSeconds?: number;
   abortSignal?: AbortSignal;
 };
@@ -84,6 +89,7 @@ export function formatDeleteListOpts(opts: DeleteListOpts): URLSearchParams {
   if (opts["propagationPolicy"] != null) query.append("propagationPolicy", opts["propagationPolicy"]);
   if (opts["resourceVersion"] != null) query.append("resourceVersion", opts["resourceVersion"]);
   if (opts["resourceVersionMatch"] != null) query.append("resourceVersionMatch", opts["resourceVersionMatch"]);
+  if (opts["sendInitialEvents"] != null) query.append("sendInitialEvents", opts["sendInitialEvents"] ? '1' : '0');
   if (opts["timeoutSeconds"] != null) query.append("timeoutSeconds", String(opts["timeoutSeconds"]));
   return query;
 }
