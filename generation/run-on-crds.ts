@@ -45,6 +45,9 @@ for await (const dirEntry of Deno.readDir(Deno.args[0])) {
   }
 }
 
+// Sort CRDs by name, to ensure we use a stable order
+v1CRDs.sort((a,b) => a.metadata!.name!.localeCompare(b.metadata!.name!));
+
 const apiMap = new SurfaceMap({
   paths: {},
   definitions: {},
@@ -482,7 +485,7 @@ function fixupSchema(schema: OpenAPI2SchemaObject, shapePrefix: string, defMap: 
         return;
       }
     }
-    
+
     fixupSchema(originalItems, shapePrefix, defMap, [...path, '*']);
 
     if (path.join('.').endsWith('Issuer.spec.acme.solvers')) {
