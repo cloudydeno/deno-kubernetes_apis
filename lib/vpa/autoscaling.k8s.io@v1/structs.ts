@@ -18,8 +18,7 @@ export interface VerticalPodAutoscalerCheckpoint {
   } | null;
   status?: {
     cpuHistogram?: {
-      bucketWeights?: {
-      } | null;
+      bucketWeights?: c.JSONValue | null;
       referenceTimestamp?: c.Time | null;
       totalWeight?: number | null;
     } | null;
@@ -27,8 +26,7 @@ export interface VerticalPodAutoscalerCheckpoint {
     lastSampleStart?: c.Time | null;
     lastUpdateTime?: c.Time | null;
     memoryHistogram?: {
-      bucketWeights?: {
-      } | null;
+      bucketWeights?: c.JSONValue | null;
       referenceTimestamp?: c.Time | null;
       totalWeight?: number | null;
     } | null;
@@ -84,24 +82,16 @@ export function toVerticalPodAutoscalerCheckpoint_status(input: c.JSONValue) {
 export function toVerticalPodAutoscalerCheckpoint_status_cpuHistogram(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
-    bucketWeights: c.readOpt(obj["bucketWeights"], toVerticalPodAutoscalerCheckpoint_status_cpuHistogram_bucketWeights),
+    bucketWeights: c.readOpt(obj["bucketWeights"], c.identity),
     referenceTimestamp: c.readOpt(obj["referenceTimestamp"], c.toTime),
     totalWeight: c.readOpt(obj["totalWeight"], c.checkNum),
   }}
 export function toVerticalPodAutoscalerCheckpoint_status_memoryHistogram(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
-    bucketWeights: c.readOpt(obj["bucketWeights"], toVerticalPodAutoscalerCheckpoint_status_memoryHistogram_bucketWeights),
+    bucketWeights: c.readOpt(obj["bucketWeights"], c.identity),
     referenceTimestamp: c.readOpt(obj["referenceTimestamp"], c.toTime),
     totalWeight: c.readOpt(obj["totalWeight"], c.checkNum),
-  }}
-export function toVerticalPodAutoscalerCheckpoint_status_cpuHistogram_bucketWeights(input: c.JSONValue) {
-  const obj = c.checkObj(input);
-  return {
-  }}
-export function toVerticalPodAutoscalerCheckpoint_status_memoryHistogram_bucketWeights(input: c.JSONValue) {
-  const obj = c.checkObj(input);
-  return {
   }}
 
 export interface VerticalPodAutoscalerCheckpointList extends ListOf<VerticalPodAutoscalerCheckpoint> {

@@ -44,8 +44,7 @@ export interface ApplicationSource {
     skipCrds?: boolean | null;
     valueFiles?: Array<string> | null;
     values?: string | null;
-    valuesObject?: {
-    } | null;
+    valuesObject?: c.JSONValue | null;
     version?: string | null;
   } | null;
   kustomize?: {
@@ -118,7 +117,7 @@ export function toApplicationSource_helm(input: c.JSONValue) {
     skipCrds: c.readOpt(obj["skipCrds"], c.checkBool),
     valueFiles: c.readOpt(obj["valueFiles"], x => c.readList(x, c.checkStr)),
     values: c.readOpt(obj["values"], c.checkStr),
-    valuesObject: c.readOpt(obj["valuesObject"], toApplicationSource_helm_valuesObject),
+    valuesObject: c.readOpt(obj["valuesObject"], c.identity),
     version: c.readOpt(obj["version"], c.checkStr),
   }}
 export function toApplicationSource_kustomize(input: c.JSONValue) {
@@ -162,10 +161,6 @@ export function toApplicationSource_helm_parameters(input: c.JSONValue) {
     forceString: c.readOpt(obj["forceString"], c.checkBool),
     name: c.readOpt(obj["name"], c.checkStr),
     value: c.readOpt(obj["value"], c.checkStr),
-  }}
-export function toApplicationSource_helm_valuesObject(input: c.JSONValue) {
-  const obj = c.checkObj(input);
-  return {
   }}
 export function toApplicationSource_kustomize_replicas(input: c.JSONValue) {
   const obj = c.checkObj(input);

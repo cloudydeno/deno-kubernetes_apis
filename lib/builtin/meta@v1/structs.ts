@@ -224,16 +224,7 @@ export function fromPreconditions(input: Preconditions): c.JSONValue {
 Each key is either a '.' representing the field itself, and will always map to an empty set, or a string representing a sub-field or item. The string will follow one of these four formats: 'f:<name>', where <name> is the name of a field in a struct, or key in a map 'v:<value>', where <value> is the exact json formatted value of a list item 'i:<index>', where <index> is position of a item in a list 'k:<keys>', where <keys> is a map of  a list item's key fields to their unique values If a key maps to an empty Fields value, the field that key represents is part of the set.
 
 The exact format is defined in sigs.k8s.io/structured-merge-diff */
-export interface FieldsV1 {
-}
-export function toFieldsV1(input: c.JSONValue): FieldsV1 {
-  const obj = c.checkObj(input);
-  return {
-  }}
-export function fromFieldsV1(input: FieldsV1): c.JSONValue {
-  return {
-    ...input,
-  }}
+export type FieldsV1 = c.JSONValue;
 
 /** A label selector is a label query over a set of resources. The result of matchLabels and matchExpressions are ANDed. An empty label selector matches all objects. A null label selector matches no objects. */
 export interface LabelSelector {
@@ -305,7 +296,7 @@ export function toManagedFieldsEntry(input: c.JSONValue): ManagedFieldsEntry {
   return {
     apiVersion: c.readOpt(obj["apiVersion"], c.checkStr),
     fieldsType: c.readOpt(obj["fieldsType"], c.checkStr),
-    fieldsV1: c.readOpt(obj["fieldsV1"], toFieldsV1),
+    fieldsV1: c.readOpt(obj["fieldsV1"], c.identity),
     manager: c.readOpt(obj["manager"], c.checkStr),
     operation: c.readOpt(obj["operation"], c.checkStr),
     subresource: c.readOpt(obj["subresource"], c.checkStr),
@@ -314,7 +305,6 @@ export function toManagedFieldsEntry(input: c.JSONValue): ManagedFieldsEntry {
 export function fromManagedFieldsEntry(input: ManagedFieldsEntry): c.JSONValue {
   return {
     ...input,
-    fieldsV1: input.fieldsV1 != null ? fromFieldsV1(input.fieldsV1) : undefined,
     time: input.time != null ? c.fromTime(input.time) : undefined,
   }}
 

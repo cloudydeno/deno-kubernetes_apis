@@ -68,6 +68,13 @@ export class ShapeLibrary {
         inner: this.readSchema(schema.additionalProperties, null),
       };
 
+    } else if (schema['x-kubernetes-preserve-unknown-fields'] || localName == 'FieldsV1') {
+      return {
+        type: 'any',
+        reference: 'unknown',
+        description: schema.description ?? undefined,
+      };
+
     } else if (schema.type === 'object') {
       return {
         type: 'structure',
@@ -124,13 +131,6 @@ export class ShapeLibrary {
       return {
         type: 'special',
         name: 'IntOrString',
-        description: schema.description ?? undefined,
-      };
-
-    } else if (schema['x-kubernetes-preserve-unknown-fields']) {
-      return {
-        type: 'any',
-        reference: 'unknown',
         description: schema.description ?? undefined,
       };
 
