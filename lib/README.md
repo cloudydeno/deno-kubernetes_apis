@@ -14,7 +14,7 @@ Here's a basic request, listing all Pods in the `default` namespace.
 It uses the `autoDetectClient()` entrypoint which returns the first usable client.
 
 ```ts
-import { autoDetectClient } from 'https://deno.land/x/kubernetes_client@v0.5.0/mod.ts';
+import { autoDetectClient } from 'https://deno.land/x/kubernetes_client@v0.6.0/mod.ts';
 import { CoreV1Api } from 'https://deno.land/x/kubernetes_apis/builtin/core@v1/mod.ts';
 
 const kubernetes = await autoDetectClient();
@@ -31,6 +31,9 @@ For a container being deployed onto a cluster, there's more flags to provide ins
 see `/x/kubernetes_client` for more information.
 
 ## Changelog
+
+* `v0.5.0` on `2023-08-??`:
+  * Updating `/x/kubernetes_client` API contract to `v0.6.0`.
 
 * `v0.4.0` on `2023-02-10`:
   * Updating `/x/kubernetes_client` API contract to `v0.5.0`.
