@@ -186,14 +186,13 @@ export function generateModuleTypescript(surface: SurfaceMap, api: SurfaceApi): 
           case 'number':
             chunks.push(`    ${maybeIf}query.append(${idStr}, String(opts[${idStr}]));`);
             break;
-          case 'list':
+          case 'list': {
+            const loop = `for (const item of opts[${idStr}]${opt[0].required ? '' : ' ?? []'}) `;
             if (opt[1].inner.type == 'string') {
-              chunks.push(`    for (const item of opts[${idStr}]${opt[0].required ? '' : ' ?? []'}) {`);
-              chunks.push(`      query.append(${idStr}, item);`);
-              chunks.push(`    }`);
+              chunks.push(`    ${loop}query.append(${idStr}, item);`);
               break;
             }
-            /* falls through */
+          } /* falls through */
           default:
             chunks.push(`    // TODO: ${opt[0].in} ${opt[0].name} ${opt[0].required} ${opt[0].type} ${JSON.stringify(opt[1])}`);
         }

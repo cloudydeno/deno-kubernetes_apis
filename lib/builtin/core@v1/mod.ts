@@ -1447,9 +1447,7 @@ export class CoreV1NamespacedApi {
     abortSignal?: AbortSignal;
   } = {}) {
     const query = new URLSearchParams;
-    for (const item of opts["command"] ?? []) {
-      query.append("command", item);
-    }
+    for (const item of opts["command"] ?? []) query.append("command", item);
     if (opts["container"] != null) query.append("container", opts["container"]);
     if (opts["stderr"] != null) query.append("stderr", opts["stderr"] ? '1' : '0');
     if (opts["stdin"] != null) query.append("stdin", opts["stdin"] ? '1' : '0');
@@ -1474,9 +1472,7 @@ export class CoreV1NamespacedApi {
     abortSignal?: AbortSignal;
   } = {}) {
     const query = new URLSearchParams;
-    for (const item of opts["command"] ?? []) {
-      query.append("command", item);
-    }
+    for (const item of opts["command"] ?? []) query.append("command", item);
     if (opts["container"] != null) query.append("container", opts["container"]);
     if (opts["stderr"] != null) query.append("stderr", opts["stderr"] ? '1' : '0');
     if (opts["stdin"] != null) query.append("stdin", opts["stdin"] ? '1' : '0');
