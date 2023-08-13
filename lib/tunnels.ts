@@ -216,11 +216,13 @@ export class PortforwardTunnel {
       // TODO: implement websocket - using originalParams to know which websocket ports we expect
       tunnel.stop();
       throw new Error(`Kubernetes PortForwarding is too limited on WebSocket and is not implemented here. Try SPDY instead.`);
-    } else {
-      tunnel.ready();
     }
   }
   private nextRequestId = 0;
+
+  get ready() {
+    return this.tunnel.ready();
+  }
 
   async connectToPort(port: number) {
     const requestID = this.nextRequestId++;
