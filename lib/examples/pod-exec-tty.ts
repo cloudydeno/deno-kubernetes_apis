@@ -1,14 +1,10 @@
 #!/usr/bin/env -S deno run --unstable --allow-env --allow-read --allow-net
 
-// Note: We can't use autoDetectClient until it supports using tunnel-capable clients
-// import { autoDetectClient } from '../client.ts';
-// const restClient = await autoDetectClient();
-
-import { WebsocketRestClient } from "https://deno.land/x/kubernetes_client@v0.6.0/tunnel-beta/via-websocket.ts";
+import { tunnelBeta, makeClientProviderChain } from '../client.ts';
 import { CoreV1Api } from '../builtin/core@v1/mod.ts';
 
-// Set up a client which can use Websockets
-const client = await WebsocketRestClient.forInCluster();
+// Set up an experimental client which can use Websockets
+const client = await makeClientProviderChain(tunnelBeta.WebsocketRestClient).getClient();
 const coreApi = new CoreV1Api(client);
 
 // Launch a process into a particular container

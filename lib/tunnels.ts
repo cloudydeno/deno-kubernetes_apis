@@ -58,7 +58,7 @@ export class ChannelTunnel {
       originalParams.get('stdout') == '1' ? getReadable(1, 'stdout') : null,
       originalParams.get('stderr') == '1' ? getReadable(2, 'stderr') : null,
       getReadable(3, 'error'),
-      originalParams.get('tty') == '1' ? getWritable(4, 'resize') : null,
+      (originalParams.get('tty') == '1' && this.channelVersion >= 3) ? getWritable(4, 'resize') : null,
     ]).then(streams => {
       this.#stdin = streams[0];
       this.#stdout = streams[1];
