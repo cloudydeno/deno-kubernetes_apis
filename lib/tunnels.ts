@@ -1,9 +1,8 @@
 import type { KubernetesTunnel } from "./common.ts";
 
-
 export type TerminalSize = {
-  Width: number;
-  Height: number;
+  columns: number;
+  rows: number;
 }
 
 export type ExecStatus = {
@@ -69,11 +68,23 @@ export class ChannelTunnel {
           ? addExitCode(JSON.parse(text))
           : { status: 'Failure', message: text });
       this.#resize = streams[4] ? wrapResizeStream(streams[4]) : null;
+
+      if (this.#stdin && originalParams.get('tty') == '1') {
+        const writer = this.#stdinWriter = this.#stdin.getWriter();
+        // TODO: check if this breaks stdin backpressure
+        this.#stdin = new WritableStream({
+          write(chunk) { return writer.write(chunk); },
+          abort(reason) { return writer.abort(reason); },
+          close() { return writer.close(); },
+        });
+      }
+
       return tunnel.ready();
     });
   }
   readonly channelVersion: number;
   #stdin: WritableStream<Uint8Array> | null = null;
+  #stdinWriter: WritableStreamDefaultWriter<Uint8Array> | null = null;
   #stdout: ReadableStream<Uint8Array> | null = null;
   #stderr: ReadableStream<Uint8Array> | null = null;
   #resize: WritableStream<TerminalSize> | null = null;
@@ -94,12 +105,33 @@ export class ChannelTunnel {
     if (!this.#stderr) throw new TypeError("stderr was not requested");
     return this.#stderr;
   }
-  get ttyResize() {
+  /** If tty was requested, an outbound stream for dynamically changing the TTY dimensions */
+  get ttyResizeStream() {
     if (!this.#resize) throw new TypeError("tty was not requested");
     return this.#resize;
   }
 
+  /** Shorthand for injecting Ctrl-C and others when running an interactive TTY */
+  async ttyWriteSignal(signal: 'INTR' | 'QUIT' | 'SUSP') {
+    if (!this.#stdinWriter) throw new TypeError("tty and stdin were not requested together, cannot write signals");
+    switch (signal) {
+      // via https://man7.org/linux/man-pages/man3/termios.3.html
+      case 'INTR': await this.#stdinWriter.write(new Uint8Array([0o003])); break;
+      case 'QUIT': await this.#stdinWriter.write(new Uint8Array([0o034])); break;
+      case 'SUSP': await this.#stdinWriter.write(new Uint8Array([0o032])); break;
+      default: throw new TypeError(`cannot write unrecognized signal ${signal}`);
+    }
+  }
+
+  /** Shorthand for writing to the tty resize stream, especially useful for setting an initial size */
+  async ttySetSize(size: TerminalSize) {
+    const sizeWriter = this.ttyResizeStream.getWriter();
+    await sizeWriter.write(size);
+    sizeWriter.releaseLock();
+  }
+
   // Based on https://github.com/denoland/deno/blob/ca9ba87d9956e3f940e0116866e19461f008390b/runtime/js/40_process.js#L282C1-L319C1
+  /** Buffers all data for stdout and/or stderr and returns the buffers when the remote command exits. */
   async output() {
     if (this.#stdout?.locked) {
       throw new TypeError(
@@ -131,6 +163,7 @@ export class ChannelTunnel {
     };
   }
 
+  /** Immediately disconnects the network tunnel, likely dropping any in-flight data. */
   kill() {
     this.tunnel.stop();
   }
@@ -147,7 +180,10 @@ function wrapResizeStream(byteStream: WritableStream<Uint8Array>) {
       await writer.close();
     },
     async write(chunk) {
-      const bytes = new TextEncoder().encode(JSON.stringify(chunk));
+      const bytes = new TextEncoder().encode(JSON.stringify({
+        Width: chunk.columns,
+        Height: chunk.rows,
+      }));
       await writer.write(bytes);
     },
   });

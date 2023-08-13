@@ -20,11 +20,11 @@ const tunnel = await coreApi
     stderr: true,
   });
 
-// Wait for & print the output
+// Buffer & print the contents of stdout
 const output = await tunnel.output();
 console.log(new TextDecoder().decode(output.stdout).trimEnd());
 
-// Let's print any error too
+// Print any error that occurred
 if (output.status !== 'Success') {
   console.error(output.message);
 }
