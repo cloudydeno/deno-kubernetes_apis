@@ -1333,7 +1333,7 @@ export class CoreV1NamespacedApi {
     return CoreV1.toPod(resp);
   }
 
-  async podAttach(name: string, opts: {
+  async tunnelPodAttach(name: string, opts: {
     container?: string;
     stderr?: boolean;
     stdin?: boolean;
@@ -1419,7 +1419,7 @@ export class CoreV1NamespacedApi {
     return PolicyV1.toEviction(resp);
   }
 
-  async podExec(name: string, opts: {
+  async tunnelPodExec(name: string, opts: {
     command: Array<string>;
     container?: string;
     stderr?: boolean;
@@ -1505,7 +1505,7 @@ export class CoreV1NamespacedApi {
     return new TextDecoder('utf-8').decode(resp);
   }
 
-  async podPortforward(name: string, opts: {
+  async tunnelPodPortforward(name: string, opts: {
     ports?: number;
     abortSignal?: AbortSignal;
   } = {}) {

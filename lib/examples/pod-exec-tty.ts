@@ -10,7 +10,7 @@ const coreApi = new CoreV1Api(client);
 // Launch a process into a particular container
 const tunnel = await coreApi
   .namespace('media')
-  .podExec('sabnzbd-srv-0', {
+  .tunnelPodExec('sabnzbd-srv-0', {
     command: ['bash', '-i'],
     stdin: true,
     stdout: true,

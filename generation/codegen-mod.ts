@@ -145,9 +145,9 @@ export function generateModuleTypescript(surface: SurfaceMap, api: SurfaceApi): 
       if (op.method !== 'get') return; // only emit the GET function, method doesn't matter at this level
 
       const middleName = op.operationName.slice('connectGet'.length);
-      funcName = `${middleName[0].toLowerCase()}${middleName.slice(1)}`;
+      funcName = `tunnel${middleName}`;
 
-      if (funcName == 'podAttach' || funcName == 'podExec') {
+      if (middleName == 'PodAttach' || middleName == 'PodExec') {
         expectsTunnel = 'ChannelTunnel';
         // Make several extra params required
         const commandArg = opts.find(x => x[0].name == 'command');
@@ -155,7 +155,7 @@ export function generateModuleTypescript(surface: SurfaceMap, api: SurfaceApi): 
         const stdoutArg = opts.find(x => x[0].name == 'stdout');
         if (stdoutArg) stdoutArg[0].required = true;
       }
-      if (funcName == 'podPortforward') {
+      if (middleName == 'PodPortforward') {
         expectsTunnel = 'PortforwardTunnel';
       }
 
