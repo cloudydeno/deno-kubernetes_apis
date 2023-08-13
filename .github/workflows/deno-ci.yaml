@@ -13,7 +13,6 @@ jobs:
     strategy:
       matrix:
         deno-version:
-        - v1.22
         - v1.28
         - v1.32
         - v1.36
