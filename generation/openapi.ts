@@ -86,6 +86,7 @@ export interface OpenAPI2PathObject {
 }
 
 export interface OpenAPI2RequestParameter {
+  $ref?: string;
   uniqueItems?: boolean; // set-like
   type?: OpenAPI2Type;
   schema?: OpenAPI2SchemaObject;
