@@ -12,6 +12,7 @@ export interface ServerStorageVersion {
   apiServerID?: string | null;
   decodableVersions?: Array<string> | null;
   encodingVersion?: string | null;
+  servedVersions?: Array<string> | null;
 }
 export function toServerStorageVersion(input: c.JSONValue): ServerStorageVersion {
   const obj = c.checkObj(input);
@@ -19,6 +20,7 @@ export function toServerStorageVersion(input: c.JSONValue): ServerStorageVersion
     apiServerID: c.readOpt(obj["apiServerID"], c.checkStr),
     decodableVersions: c.readOpt(obj["decodableVersions"], x => c.readList(x, c.checkStr)),
     encodingVersion: c.readOpt(obj["encodingVersion"], c.checkStr),
+    servedVersions: c.readOpt(obj["servedVersions"], x => c.readList(x, c.checkStr)),
   }}
 export function fromServerStorageVersion(input: ServerStorageVersion): c.JSONValue {
   return {

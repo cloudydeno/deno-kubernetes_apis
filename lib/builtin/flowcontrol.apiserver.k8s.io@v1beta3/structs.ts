@@ -7,6 +7,22 @@ type ListOf<T> = {
   items: Array<T>;
 };
 
+/** ExemptPriorityLevelConfiguration describes the configurable aspects of the handling of exempt requests. In the mandatory exempt configuration object the values in the fields here can be modified by authorized users, unlike the rest of the `spec`. */
+export interface ExemptPriorityLevelConfiguration {
+  lendablePercent?: number | null;
+  nominalConcurrencyShares?: number | null;
+}
+export function toExemptPriorityLevelConfiguration(input: c.JSONValue): ExemptPriorityLevelConfiguration {
+  const obj = c.checkObj(input);
+  return {
+    lendablePercent: c.readOpt(obj["lendablePercent"], c.checkNum),
+    nominalConcurrencyShares: c.readOpt(obj["nominalConcurrencyShares"], c.checkNum),
+  }}
+export function fromExemptPriorityLevelConfiguration(input: ExemptPriorityLevelConfiguration): c.JSONValue {
+  return {
+    ...input,
+  }}
+
 /** FlowDistinguisherMethod specifies the method of a flow distinguisher. */
 export interface FlowDistinguisherMethod {
   type: string;
@@ -345,18 +361,21 @@ export function fromPriorityLevelConfiguration(input: PriorityLevelConfiguration
 
 /** PriorityLevelConfigurationSpec specifies the configuration of a priority level. */
 export interface PriorityLevelConfigurationSpec {
+  exempt?: ExemptPriorityLevelConfiguration | null;
   limited?: LimitedPriorityLevelConfiguration | null;
   type: string;
 }
 export function toPriorityLevelConfigurationSpec(input: c.JSONValue): PriorityLevelConfigurationSpec {
   const obj = c.checkObj(input);
   return {
+    exempt: c.readOpt(obj["exempt"], toExemptPriorityLevelConfiguration),
     limited: c.readOpt(obj["limited"], toLimitedPriorityLevelConfiguration),
     type: c.checkStr(obj["type"]),
   }}
 export function fromPriorityLevelConfigurationSpec(input: PriorityLevelConfigurationSpec): c.JSONValue {
   return {
     ...input,
+    exempt: input.exempt != null ? fromExemptPriorityLevelConfiguration(input.exempt) : undefined,
     limited: input.limited != null ? fromLimitedPriorityLevelConfiguration(input.limited) : undefined,
   }}
 

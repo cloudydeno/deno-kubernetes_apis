@@ -13,6 +13,18 @@ export class AuthenticationV1Api {
     this.#client = client;
   }
 
+  async createSelfSubjectReview(body: AuthenticationV1.SelfSubjectReview, opts: operations.PutOpts = {}) {
+    const resp = await this.#client.performRequest({
+      method: "POST",
+      path: `${this.#root}selfsubjectreviews`,
+      expectJson: true,
+      querystring: operations.formatPutOpts(opts),
+      bodyJson: AuthenticationV1.fromSelfSubjectReview(body),
+      abortSignal: opts.abortSignal,
+    });
+    return AuthenticationV1.toSelfSubjectReview(resp);
+  }
+
   async createTokenReview(body: AuthenticationV1.TokenReview, opts: operations.PutOpts = {}) {
     const resp = await this.#client.performRequest({
       method: "POST",
