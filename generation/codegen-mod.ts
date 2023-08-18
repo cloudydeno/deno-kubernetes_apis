@@ -219,6 +219,10 @@ export function generateModuleTypescript(surface: SurfaceMap, api: SurfaceApi): 
               chunks.push(`    ${loop}query.append(${idStr}, item);`);
               break;
             }
+            if (opt[1].inner.type == 'number') {
+              chunks.push(`    ${loop}query.append(${idStr}, String(item));`);
+              break;
+            }
           } /* falls through */
           default:
             chunks.push(`    // TODO: ${opt[0].in} ${opt[0].name} ${opt[0].required} ${opt[0].type} ${JSON.stringify(opt[1])}`);

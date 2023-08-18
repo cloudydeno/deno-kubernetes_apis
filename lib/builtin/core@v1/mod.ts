@@ -1506,11 +1506,11 @@ export class CoreV1NamespacedApi {
   }
 
   async tunnelPodPortforward(name: string, opts: {
-    ports?: number;
+    ports?: Array<number>;
     abortSignal?: AbortSignal;
   } = {}) {
     const query = new URLSearchParams;
-    if (opts["ports"] != null) query.append("ports", String(opts["ports"]));
+    for (const item of opts["ports"] ?? []) query.append("ports", String(item));
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}pods/${name}/portforward`,

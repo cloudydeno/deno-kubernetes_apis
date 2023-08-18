@@ -185,6 +185,16 @@ export function describeSurface(wholeSpec: OpenAPI2) {
           };
           commandArg.type = undefined;
         }
+        const portArg = allParams.find(x => x.name == 'ports' && x.description?.includes('List of ports'));
+        if (portArg) {
+          portArg.schema = {
+            type: 'array',
+            items: {
+              type: 'number',
+            },
+          };
+          portArg.type = undefined;
+        }
 
         if (opName == 'getPodLog') {
           // Add a streaming variant for pod logs
