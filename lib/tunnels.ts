@@ -205,60 +205,80 @@ function addExitCode(status: ExecStatus) {
 
 export class PortforwardTunnel {
   static readonly supportedProtocols = [
-    'portforward.k8s.io',
+    // Apparently this differs between SPDY and WebSocket.
+    // TODO: get to the bottom of that.
+    'portforward.k8s.io', // SPDY - dynamic multi-port multiplexing
+    'v4.channel.k8s.io', // WebSocket - static based on 'ports' param
   ];
 
   constructor(
     private tunnel: KubernetesTunnel,
     originalParams: URLSearchParams,
   ) {
-    if (tunnel.transportProtocol == 'WebSocket') {
-      // TODO: implement websocket - using originalParams to know which websocket ports we expect
-      tunnel.stop();
-      throw new Error(`Kubernetes PortForwarding is too limited on WebSocket and is not implemented here. Try SPDY instead.`);
+    if (tunnel.subProtocol !== 'portforward.k8s.io') {
+      const requestedPorts = originalParams.getAll('ports').map(x => parseInt(x));
+      if (requestedPorts.length > 0) {
+        this.remainingPorts = requestedPorts;
+      } else {
+        tunnel.stop();
+        throw new Error(`Kubernetes PortForwarding can only use WebSocket with a predefined list of ports. For dynamic multiplexing, try a SPDY client instead.`);
+      }
     }
   }
   private nextRequestId = 0;
+  private remainingPorts = new Array<number | false>;
 
   get ready() {
     return this.tunnel.ready();
   }
 
   async connectToPort(port: number) {
+    let dataIdx: number | undefined = undefined;
+    let errorIdx: number | undefined = undefined;
+
+    if (this.remainingPorts) {
+      const nextAvailableIdx = this.remainingPorts.findIndex(x => x == port);
+      if (nextAvailableIdx < 0) throw new Error(`No remaining pre-established connections to port ${port}.`);
+      this.remainingPorts[nextAvailableIdx] = false;
+
+      dataIdx = nextAvailableIdx*2;
+      errorIdx = dataIdx + 1;
+    }
+
     const requestID = this.nextRequestId++;
-    const [errorStream, stream] = await Promise.all([
-      this.tunnel.getChannel({
-        spdyHeaders: {
-          streamType: 'error',
-          port,
-          requestID,
-        },
-        writable: false,
-        readable: true,
-      }),
+    const [dataStream, errorStream] = await Promise.all([
       this.tunnel.getChannel({
         spdyHeaders: {
           streamType: 'data',
           port,
           requestID,
         },
+        streamIndex: dataIdx,
         readable: true,
         writable: true,
       }),
+      this.tunnel.getChannel({
+        spdyHeaders: {
+          streamType: 'error',
+          port,
+          requestID,
+        },
+        streamIndex: errorIdx,
+        writable: false,
+        readable: true,
+      }),
     ]);
-    console.error('Got streams');
+    // console.error('Got streams');
 
-    const errorBody = new Response(errorStream.readable).text();
-    errorBody.then(text => {
-      if (text.length > 0) {
-        console.error("Received portforward error response:", text);
-      }
-    });
+    const errorBody = new Response(errorStream.readable.pipeThrough(new DropPrefix(port))).text();
 
     return {
-      result: errorBody,
-      stream,
-    }
+      result: errorBody.then(x => x
+        ? Promise.reject(new Error(`Portforward stream failed. ${x}`))
+        : null),
+      readable: dataStream.readable.pipeThrough(new DropPrefix(port)),
+      writable: dataStream.writable,
+    };
   }
 
   servePortforward(opts: Deno.ListenOptions & {
@@ -266,13 +286,12 @@ export class PortforwardTunnel {
   }) {
     const listener = Deno.listen(opts);
     (async () => {
-      for await (const conn of listener) {
-        const {stream, result} = await this.connectToPort(opts.targetPort);
-        console.error('Client connection opened');
+      for await (const downstream of listener) {
+        const upstream = await this.connectToPort(opts.targetPort);
+        console.error(`Client connection opened to ${opts.targetPort}`);
         Promise.all([
-          result,
-          conn.readable.pipeTo(stream.writable),
-          stream.readable.pipeTo(conn.writable),
+          upstream.result,
+          downstream.readable.pipeThrough(upstream).pipeTo(downstream.writable),
         ]).then(x => {
           console.error('Client connection closed.', x[0]);
         }).catch(err => {
@@ -285,5 +304,25 @@ export class PortforwardTunnel {
 
   disconnect() {
     this.tunnel.stop();
+  }
+}
+
+class DropPrefix extends TransformStream<Uint8Array, Uint8Array> {
+  constructor(expectedPort: number) {
+    let remaining = 2;
+    super({
+      transform(chunk, ctlr) {
+        if (remaining > 0) {
+          if (chunk.byteLength > remaining) {
+            ctlr.enqueue(chunk.slice(remaining));
+            remaining = 0;
+          } else {
+            remaining -= chunk.byteLength;
+          }
+        } else {
+          ctlr.enqueue(chunk);
+        }
+      },
+    });
   }
 }
