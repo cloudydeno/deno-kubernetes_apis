@@ -32,8 +32,13 @@ see `/x/kubernetes_client` for more information.
 
 ## Changelog
 
-* `v0.5.0` on `2023-08-??`:
-  * Updating `/x/kubernetes_client` API contract to `v0.6.0`.
+* `v0.5.0` on `2023-08-19`:
+  * Updating `/x/kubernetes_client` API contract to `v0.7.0`.
+  * Actually implement PodExec, PodAttach, PodPortForward APIs with a new tunnel implementation.
+  * Includes 'builtin' APIs generated from K8s `v1.28.0`.
+    * New APIs: `admissionregistration.k8s.io/v1beta1`, `certificates.k8s.io/v1alpha1`.
+    * Also, API additions for sidecar containers and `SelfSubjectReview`.
+  * Fix several structures incorrectly typed as `{}` instead of `JSONValue`.
 
 * `v0.4.0` on `2023-02-10`:
   * Updating `/x/kubernetes_client` API contract to `v0.5.0`.
