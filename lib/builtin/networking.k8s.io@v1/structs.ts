@@ -350,7 +350,6 @@ export interface NetworkPolicy {
   kind?: "NetworkPolicy";
   metadata?: MetaV1.ObjectMeta | null;
   spec?: NetworkPolicySpec | null;
-  status?: NetworkPolicyStatus | null;
 }
 export function toNetworkPolicy(input: c.JSONValue): NetworkPolicy & c.ApiKind {
   const obj = c.checkObj(input);
@@ -358,7 +357,6 @@ export function toNetworkPolicy(input: c.JSONValue): NetworkPolicy & c.ApiKind {
     ...c.assertOrAddApiVersionAndKind(obj, "networking.k8s.io/v1", "NetworkPolicy"),
     metadata: c.readOpt(obj["metadata"], MetaV1.toObjectMeta),
     spec: c.readOpt(obj["spec"], toNetworkPolicySpec),
-    status: c.readOpt(obj["status"], toNetworkPolicyStatus),
   }}
 export function fromNetworkPolicy(input: NetworkPolicy): c.JSONValue {
   return {
@@ -366,7 +364,6 @@ export function fromNetworkPolicy(input: NetworkPolicy): c.JSONValue {
     ...input,
     metadata: input.metadata != null ? MetaV1.fromObjectMeta(input.metadata) : undefined,
     spec: input.spec != null ? fromNetworkPolicySpec(input.spec) : undefined,
-    status: input.status != null ? fromNetworkPolicyStatus(input.status) : undefined,
   }}
 
 /** NetworkPolicySpec provides the specification of a NetworkPolicy */
@@ -465,21 +462,6 @@ export function fromNetworkPolicyIngressRule(input: NetworkPolicyIngressRule): c
     ...input,
     from: input.from?.map(fromNetworkPolicyPeer),
     ports: input.ports?.map(fromNetworkPolicyPort),
-  }}
-
-/** NetworkPolicyStatus describes the current state of the NetworkPolicy. */
-export interface NetworkPolicyStatus {
-  conditions?: Array<MetaV1.Condition> | null;
-}
-export function toNetworkPolicyStatus(input: c.JSONValue): NetworkPolicyStatus {
-  const obj = c.checkObj(input);
-  return {
-    conditions: c.readOpt(obj["conditions"], x => c.readList(x, MetaV1.toCondition)),
-  }}
-export function fromNetworkPolicyStatus(input: NetworkPolicyStatus): c.JSONValue {
-  return {
-    ...input,
-    conditions: input.conditions?.map(MetaV1.fromCondition),
   }}
 
 /** NetworkPolicyList is a list of NetworkPolicy objects. */

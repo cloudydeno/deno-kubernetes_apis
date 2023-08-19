@@ -795,6 +795,7 @@ export interface Container {
   readinessProbe?: Probe | null;
   resizePolicy?: Array<ContainerResizePolicy> | null;
   resources?: ResourceRequirements | null;
+  restartPolicy?: string | null;
   securityContext?: SecurityContext | null;
   startupProbe?: Probe | null;
   stdin?: boolean | null;
@@ -822,6 +823,7 @@ export function toContainer(input: c.JSONValue): Container {
     readinessProbe: c.readOpt(obj["readinessProbe"], toProbe),
     resizePolicy: c.readOpt(obj["resizePolicy"], x => c.readList(x, toContainerResizePolicy)),
     resources: c.readOpt(obj["resources"], toResourceRequirements),
+    restartPolicy: c.readOpt(obj["restartPolicy"], c.checkStr),
     securityContext: c.readOpt(obj["securityContext"], toSecurityContext),
     startupProbe: c.readOpt(obj["startupProbe"], toProbe),
     stdin: c.readOpt(obj["stdin"], c.checkBool),
@@ -1705,6 +1707,7 @@ export interface EphemeralContainer {
   readinessProbe?: Probe | null;
   resizePolicy?: Array<ContainerResizePolicy> | null;
   resources?: ResourceRequirements | null;
+  restartPolicy?: string | null;
   securityContext?: SecurityContext | null;
   startupProbe?: Probe | null;
   stdin?: boolean | null;
@@ -1733,6 +1736,7 @@ export function toEphemeralContainer(input: c.JSONValue): EphemeralContainer {
     readinessProbe: c.readOpt(obj["readinessProbe"], toProbe),
     resizePolicy: c.readOpt(obj["resizePolicy"], x => c.readList(x, toContainerResizePolicy)),
     resources: c.readOpt(obj["resources"], toResourceRequirements),
+    restartPolicy: c.readOpt(obj["restartPolicy"], c.checkStr),
     securityContext: c.readOpt(obj["securityContext"], toSecurityContext),
     startupProbe: c.readOpt(obj["startupProbe"], toProbe),
     stdin: c.readOpt(obj["stdin"], c.checkBool),
@@ -2140,6 +2144,20 @@ export function toHostAlias(input: c.JSONValue): HostAlias {
     ip: c.readOpt(obj["ip"], c.checkStr),
   }}
 export function fromHostAlias(input: HostAlias): c.JSONValue {
+  return {
+    ...input,
+  }}
+
+/** HostIP represents a single IP address allocated to the host. */
+export interface HostIP {
+  ip?: string | null;
+}
+export function toHostIP(input: c.JSONValue): HostIP {
+  const obj = c.checkObj(input);
+  return {
+    ip: c.readOpt(obj["ip"], c.checkStr),
+  }}
+export function fromHostIP(input: HostIP): c.JSONValue {
   return {
     ...input,
   }}
@@ -3045,6 +3063,7 @@ export function fromVsphereVirtualDiskVolumeSource(input: VsphereVirtualDiskVolu
 
 /** PersistentVolumeStatus is the current status of a persistent volume. */
 export interface PersistentVolumeStatus {
+  lastPhaseTransitionTime?: c.Time | null;
   message?: string | null;
   phase?: string | null;
   reason?: string | null;
@@ -3052,6 +3071,7 @@ export interface PersistentVolumeStatus {
 export function toPersistentVolumeStatus(input: c.JSONValue): PersistentVolumeStatus {
   const obj = c.checkObj(input);
   return {
+    lastPhaseTransitionTime: c.readOpt(obj["lastPhaseTransitionTime"], c.toTime),
     message: c.readOpt(obj["message"], c.checkStr),
     phase: c.readOpt(obj["phase"], c.checkStr),
     reason: c.readOpt(obj["reason"], c.checkStr),
@@ -3059,6 +3079,7 @@ export function toPersistentVolumeStatus(input: c.JSONValue): PersistentVolumeSt
 export function fromPersistentVolumeStatus(input: PersistentVolumeStatus): c.JSONValue {
   return {
     ...input,
+    lastPhaseTransitionTime: input.lastPhaseTransitionTime != null ? c.fromTime(input.lastPhaseTransitionTime) : undefined,
   }}
 
 /** PersistentVolumeClaim is a user's request for and claim to a persistent volume */
@@ -3089,21 +3110,21 @@ export function fromPersistentVolumeClaim(input: PersistentVolumeClaim): c.JSONV
 /** PersistentVolumeClaimStatus is the current status of a persistent volume claim. */
 export interface PersistentVolumeClaimStatus {
   accessModes?: Array<string> | null;
+  allocatedResourceStatuses?: Record<string,string> | null;
   allocatedResources?: Record<string,c.Quantity> | null;
   capacity?: Record<string,c.Quantity> | null;
   conditions?: Array<PersistentVolumeClaimCondition> | null;
   phase?: string | null;
-  resizeStatus?: string | null;
 }
 export function toPersistentVolumeClaimStatus(input: c.JSONValue): PersistentVolumeClaimStatus {
   const obj = c.checkObj(input);
   return {
     accessModes: c.readOpt(obj["accessModes"], x => c.readList(x, c.checkStr)),
+    allocatedResourceStatuses: c.readOpt(obj["allocatedResourceStatuses"], x => c.readMap(x, c.checkStr)),
     allocatedResources: c.readOpt(obj["allocatedResources"], x => c.readMap(x, c.toQuantity)),
     capacity: c.readOpt(obj["capacity"], x => c.readMap(x, c.toQuantity)),
     conditions: c.readOpt(obj["conditions"], x => c.readList(x, toPersistentVolumeClaimCondition)),
     phase: c.readOpt(obj["phase"], c.checkStr),
-    resizeStatus: c.readOpt(obj["resizeStatus"], c.checkStr),
   }}
 export function fromPersistentVolumeClaimStatus(input: PersistentVolumeClaimStatus): c.JSONValue {
   return {
@@ -3804,6 +3825,7 @@ export interface PodStatus {
   containerStatuses?: Array<ContainerStatus> | null;
   ephemeralContainerStatuses?: Array<ContainerStatus> | null;
   hostIP?: string | null;
+  hostIPs?: Array<HostIP> | null;
   initContainerStatuses?: Array<ContainerStatus> | null;
   message?: string | null;
   nominatedNodeName?: string | null;
@@ -3813,6 +3835,7 @@ export interface PodStatus {
   qosClass?: string | null;
   reason?: string | null;
   resize?: string | null;
+  resourceClaimStatuses?: Array<PodResourceClaimStatus> | null;
   startTime?: c.Time | null;
 }
 export function toPodStatus(input: c.JSONValue): PodStatus {
@@ -3822,6 +3845,7 @@ export function toPodStatus(input: c.JSONValue): PodStatus {
     containerStatuses: c.readOpt(obj["containerStatuses"], x => c.readList(x, toContainerStatus)),
     ephemeralContainerStatuses: c.readOpt(obj["ephemeralContainerStatuses"], x => c.readList(x, toContainerStatus)),
     hostIP: c.readOpt(obj["hostIP"], c.checkStr),
+    hostIPs: c.readOpt(obj["hostIPs"], x => c.readList(x, toHostIP)),
     initContainerStatuses: c.readOpt(obj["initContainerStatuses"], x => c.readList(x, toContainerStatus)),
     message: c.readOpt(obj["message"], c.checkStr),
     nominatedNodeName: c.readOpt(obj["nominatedNodeName"], c.checkStr),
@@ -3831,6 +3855,7 @@ export function toPodStatus(input: c.JSONValue): PodStatus {
     qosClass: c.readOpt(obj["qosClass"], c.checkStr),
     reason: c.readOpt(obj["reason"], c.checkStr),
     resize: c.readOpt(obj["resize"], c.checkStr),
+    resourceClaimStatuses: c.readOpt(obj["resourceClaimStatuses"], x => c.readList(x, toPodResourceClaimStatus)),
     startTime: c.readOpt(obj["startTime"], c.toTime),
   }}
 export function fromPodStatus(input: PodStatus): c.JSONValue {
@@ -3839,8 +3864,10 @@ export function fromPodStatus(input: PodStatus): c.JSONValue {
     conditions: input.conditions?.map(fromPodCondition),
     containerStatuses: input.containerStatuses?.map(fromContainerStatus),
     ephemeralContainerStatuses: input.ephemeralContainerStatuses?.map(fromContainerStatus),
+    hostIPs: input.hostIPs?.map(fromHostIP),
     initContainerStatuses: input.initContainerStatuses?.map(fromContainerStatus),
     podIPs: input.podIPs?.map(fromPodIP),
+    resourceClaimStatuses: input.resourceClaimStatuses?.map(fromPodResourceClaimStatus),
     startTime: input.startTime != null ? c.fromTime(input.startTime) : undefined,
   }}
 
@@ -3870,9 +3897,7 @@ export function fromPodCondition(input: PodCondition): c.JSONValue {
     lastTransitionTime: input.lastTransitionTime != null ? c.fromTime(input.lastTransitionTime) : undefined,
   }}
 
-/** IP address information for entries in the (plural) PodIPs field. Each entry includes:
-
-	IP: An IP address allocated to the pod. Routable at least within the cluster. */
+/** PodIP represents a single IP address allocated to the pod. */
 export interface PodIP {
   ip?: string | null;
 }
@@ -3882,6 +3907,22 @@ export function toPodIP(input: c.JSONValue): PodIP {
     ip: c.readOpt(obj["ip"], c.checkStr),
   }}
 export function fromPodIP(input: PodIP): c.JSONValue {
+  return {
+    ...input,
+  }}
+
+/** PodResourceClaimStatus is stored in the PodStatus for each PodResourceClaim which references a ResourceClaimTemplate. It stores the generated name for the corresponding ResourceClaim. */
+export interface PodResourceClaimStatus {
+  name: string;
+  resourceClaimName?: string | null;
+}
+export function toPodResourceClaimStatus(input: c.JSONValue): PodResourceClaimStatus {
+  const obj = c.checkObj(input);
+  return {
+    name: c.checkStr(obj["name"]),
+    resourceClaimName: c.readOpt(obj["resourceClaimName"], c.checkStr),
+  }}
+export function fromPodResourceClaimStatus(input: PodResourceClaimStatus): c.JSONValue {
   return {
     ...input,
   }}

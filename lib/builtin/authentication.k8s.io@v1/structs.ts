@@ -27,6 +27,63 @@ export function fromBoundObjectReference(input: BoundObjectReference): c.JSONVal
     ...input,
   }}
 
+/** SelfSubjectReview contains the user information that the kube-apiserver has about the user making this request. When using impersonation, users will receive the user info of the user being impersonated.  If impersonation or request header authentication is used, any extra keys will have their case ignored and returned as lowercase. */
+export interface SelfSubjectReview {
+  apiVersion?: "authentication.k8s.io/v1";
+  kind?: "SelfSubjectReview";
+  metadata?: MetaV1.ObjectMeta | null;
+  status?: SelfSubjectReviewStatus | null;
+}
+export function toSelfSubjectReview(input: c.JSONValue): SelfSubjectReview & c.ApiKind {
+  const obj = c.checkObj(input);
+  return {
+    ...c.assertOrAddApiVersionAndKind(obj, "authentication.k8s.io/v1", "SelfSubjectReview"),
+    metadata: c.readOpt(obj["metadata"], MetaV1.toObjectMeta),
+    status: c.readOpt(obj["status"], toSelfSubjectReviewStatus),
+  }}
+export function fromSelfSubjectReview(input: SelfSubjectReview): c.JSONValue {
+  return {
+    ...c.assertOrAddApiVersionAndKind(input, "authentication.k8s.io/v1", "SelfSubjectReview"),
+    ...input,
+    metadata: input.metadata != null ? MetaV1.fromObjectMeta(input.metadata) : undefined,
+    status: input.status != null ? fromSelfSubjectReviewStatus(input.status) : undefined,
+  }}
+
+/** SelfSubjectReviewStatus is filled by the kube-apiserver and sent back to a user. */
+export interface SelfSubjectReviewStatus {
+  userInfo?: UserInfo | null;
+}
+export function toSelfSubjectReviewStatus(input: c.JSONValue): SelfSubjectReviewStatus {
+  const obj = c.checkObj(input);
+  return {
+    userInfo: c.readOpt(obj["userInfo"], toUserInfo),
+  }}
+export function fromSelfSubjectReviewStatus(input: SelfSubjectReviewStatus): c.JSONValue {
+  return {
+    ...input,
+    userInfo: input.userInfo != null ? fromUserInfo(input.userInfo) : undefined,
+  }}
+
+/** UserInfo holds the information about the user needed to implement the user.Info interface. */
+export interface UserInfo {
+  extra?: Record<string,Array<string>> | null;
+  groups?: Array<string> | null;
+  uid?: string | null;
+  username?: string | null;
+}
+export function toUserInfo(input: c.JSONValue): UserInfo {
+  const obj = c.checkObj(input);
+  return {
+    extra: c.readOpt(obj["extra"], y => c.readMap(y, x => c.readList(x, c.checkStr))),
+    groups: c.readOpt(obj["groups"], x => c.readList(x, c.checkStr)),
+    uid: c.readOpt(obj["uid"], c.checkStr),
+    username: c.readOpt(obj["username"], c.checkStr),
+  }}
+export function fromUserInfo(input: UserInfo): c.JSONValue {
+  return {
+    ...input,
+  }}
+
 /** TokenRequest requests a token for a given service account. */
 export interface TokenRequest {
   apiVersion?: string | null;
@@ -148,24 +205,4 @@ export function fromTokenReviewStatus(input: TokenReviewStatus): c.JSONValue {
   return {
     ...input,
     user: input.user != null ? fromUserInfo(input.user) : undefined,
-  }}
-
-/** UserInfo holds the information about the user needed to implement the user.Info interface. */
-export interface UserInfo {
-  extra?: Record<string,Array<string>> | null;
-  groups?: Array<string> | null;
-  uid?: string | null;
-  username?: string | null;
-}
-export function toUserInfo(input: c.JSONValue): UserInfo {
-  const obj = c.checkObj(input);
-  return {
-    extra: c.readOpt(obj["extra"], y => c.readMap(y, x => c.readList(x, c.checkStr))),
-    groups: c.readOpt(obj["groups"], x => c.readList(x, c.checkStr)),
-    uid: c.readOpt(obj["uid"], c.checkStr),
-    username: c.readOpt(obj["username"], c.checkStr),
-  }}
-export function fromUserInfo(input: UserInfo): c.JSONValue {
-  return {
-    ...input,
   }}

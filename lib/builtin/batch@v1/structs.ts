@@ -84,11 +84,14 @@ export function fromJobTemplateSpec(input: JobTemplateSpec): c.JSONValue {
 export interface JobSpec {
   activeDeadlineSeconds?: number | null;
   backoffLimit?: number | null;
+  backoffLimitPerIndex?: number | null;
   completionMode?: string | null;
   completions?: number | null;
   manualSelector?: boolean | null;
+  maxFailedIndexes?: number | null;
   parallelism?: number | null;
   podFailurePolicy?: PodFailurePolicy | null;
+  podReplacementPolicy?: string | null;
   selector?: MetaV1.LabelSelector | null;
   suspend?: boolean | null;
   template: CoreV1.PodTemplateSpec;
@@ -99,11 +102,14 @@ export function toJobSpec(input: c.JSONValue): JobSpec {
   return {
     activeDeadlineSeconds: c.readOpt(obj["activeDeadlineSeconds"], c.checkNum),
     backoffLimit: c.readOpt(obj["backoffLimit"], c.checkNum),
+    backoffLimitPerIndex: c.readOpt(obj["backoffLimitPerIndex"], c.checkNum),
     completionMode: c.readOpt(obj["completionMode"], c.checkStr),
     completions: c.readOpt(obj["completions"], c.checkNum),
     manualSelector: c.readOpt(obj["manualSelector"], c.checkBool),
+    maxFailedIndexes: c.readOpt(obj["maxFailedIndexes"], c.checkNum),
     parallelism: c.readOpt(obj["parallelism"], c.checkNum),
     podFailurePolicy: c.readOpt(obj["podFailurePolicy"], toPodFailurePolicy),
+    podReplacementPolicy: c.readOpt(obj["podReplacementPolicy"], c.checkStr),
     selector: c.readOpt(obj["selector"], MetaV1.toLabelSelector),
     suspend: c.readOpt(obj["suspend"], c.checkBool),
     template: CoreV1.toPodTemplateSpec(obj["template"]),
@@ -252,9 +258,11 @@ export interface JobStatus {
   completionTime?: c.Time | null;
   conditions?: Array<JobCondition> | null;
   failed?: number | null;
+  failedIndexes?: string | null;
   ready?: number | null;
   startTime?: c.Time | null;
   succeeded?: number | null;
+  terminating?: number | null;
   uncountedTerminatedPods?: UncountedTerminatedPods | null;
 }
 export function toJobStatus(input: c.JSONValue): JobStatus {
@@ -265,9 +273,11 @@ export function toJobStatus(input: c.JSONValue): JobStatus {
     completionTime: c.readOpt(obj["completionTime"], c.toTime),
     conditions: c.readOpt(obj["conditions"], x => c.readList(x, toJobCondition)),
     failed: c.readOpt(obj["failed"], c.checkNum),
+    failedIndexes: c.readOpt(obj["failedIndexes"], c.checkStr),
     ready: c.readOpt(obj["ready"], c.checkNum),
     startTime: c.readOpt(obj["startTime"], c.toTime),
     succeeded: c.readOpt(obj["succeeded"], c.checkNum),
+    terminating: c.readOpt(obj["terminating"], c.checkNum),
     uncountedTerminatedPods: c.readOpt(obj["uncountedTerminatedPods"], toUncountedTerminatedPods),
   }}
 export function fromJobStatus(input: JobStatus): c.JSONValue {
