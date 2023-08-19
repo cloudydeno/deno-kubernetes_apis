@@ -15,7 +15,7 @@ Deno.test('stdiotunnel output buffering', async () => {
             if (opts.streamIndex == 3) {
               ctlr.enqueue(JSON.stringify({
                 status: 'Success',
-              } satisfies ExecStatus));
+              } as ExecStatus)); // TODO: satisfies (since one of deno 1.29-1.32)
             }
             ctlr.close();
           },
