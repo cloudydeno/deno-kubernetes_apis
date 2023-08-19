@@ -1350,12 +1350,12 @@ export class CoreV1NamespacedApi {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}pods/${name}/attach`,
-      expectTunnel: tunnels.ChannelTunnel.supportedProtocols,
+      expectTunnel: tunnels.StdioTunnel.supportedProtocols,
       querystring: query,
       abortSignal: opts.abortSignal,
     });
 
-    const tunnel = new tunnels.ChannelTunnel(resp, query);
+    const tunnel = new tunnels.StdioTunnel(resp, query);
     await tunnel.ready;
     return tunnel;
   }
@@ -1438,12 +1438,12 @@ export class CoreV1NamespacedApi {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}pods/${name}/exec`,
-      expectTunnel: tunnels.ChannelTunnel.supportedProtocols,
+      expectTunnel: tunnels.StdioTunnel.supportedProtocols,
       querystring: query,
       abortSignal: opts.abortSignal,
     });
 
-    const tunnel = new tunnels.ChannelTunnel(resp, query);
+    const tunnel = new tunnels.StdioTunnel(resp, query);
     await tunnel.ready;
     return tunnel;
   }

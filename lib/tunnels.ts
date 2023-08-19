@@ -17,7 +17,7 @@ export type ExecStatus = {
   }> };
 }
 
-export class ChannelTunnel {
+export class StdioTunnel {
   static readonly supportedProtocols = [
     // proposed v5: adds stdin closing
     'v4.channel.k8s.io', // v4: switches error stream to JSON

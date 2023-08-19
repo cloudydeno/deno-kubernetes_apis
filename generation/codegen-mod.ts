@@ -116,7 +116,7 @@ export function generateModuleTypescript(surface: SurfaceMap, api: SurfaceApi): 
     }
 
     let funcName = op.operationName;
-    let expectsTunnel: 'PortforwardTunnel' | 'ChannelTunnel' | null = null;
+    let expectsTunnel: 'PortforwardTunnel' | 'StdioTunnel' | null = null;
 
     // Entirely specialcase and collapse each method's proxy functions into one
     if (op['x-kubernetes-action'] === 'connect' && op.operationName.endsWith('Proxy')) {
@@ -148,7 +148,7 @@ export function generateModuleTypescript(surface: SurfaceMap, api: SurfaceApi): 
       funcName = `tunnel${middleName}`;
 
       if (middleName == 'PodAttach' || middleName == 'PodExec') {
-        expectsTunnel = 'ChannelTunnel';
+        expectsTunnel = 'StdioTunnel';
         // Make several extra params required
         const commandArg = opts.find(x => x[0].name == 'command');
         if (commandArg) commandArg[0].required = true;
