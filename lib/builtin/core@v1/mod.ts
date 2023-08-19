@@ -8,6 +8,7 @@ import * as AutoscalingV1 from "../autoscaling@v1/structs.ts";
 import * as PolicyV1 from "../policy@v1/structs.ts";
 import * as MetaV1 from "../meta@v1/structs.ts";
 import * as CoreV1 from "./structs.ts";
+import * as tunnels from "../../tunnels.ts";
 
 export class CoreV1Api {
   #client: c.RestClient;
@@ -1332,50 +1333,31 @@ export class CoreV1NamespacedApi {
     return CoreV1.toPod(resp);
   }
 
-  async connectGetPodAttach(name: string, opts: {
+  async tunnelPodAttach(name: string, opts: {
     container?: string;
     stderr?: boolean;
     stdin?: boolean;
-    stdout?: boolean;
+    stdout: boolean;
     tty?: boolean;
     abortSignal?: AbortSignal;
-  } = {}) {
+  }) {
     const query = new URLSearchParams;
     if (opts["container"] != null) query.append("container", opts["container"]);
     if (opts["stderr"] != null) query.append("stderr", opts["stderr"] ? '1' : '0');
     if (opts["stdin"] != null) query.append("stdin", opts["stdin"] ? '1' : '0');
-    if (opts["stdout"] != null) query.append("stdout", opts["stdout"] ? '1' : '0');
+    query.append("stdout", opts["stdout"] ? '1' : '0');
     if (opts["tty"] != null) query.append("tty", opts["tty"] ? '1' : '0');
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}pods/${name}/attach`,
-      expectJson: true,
+      expectTunnel: tunnels.StdioTunnel.supportedProtocols,
       querystring: query,
       abortSignal: opts.abortSignal,
     });
-  }
 
-  async connectPostPodAttach(name: string, opts: {
-    container?: string;
-    stderr?: boolean;
-    stdin?: boolean;
-    stdout?: boolean;
-    tty?: boolean;
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
-    if (opts["container"] != null) query.append("container", opts["container"]);
-    if (opts["stderr"] != null) query.append("stderr", opts["stderr"] ? '1' : '0');
-    if (opts["stdin"] != null) query.append("stdin", opts["stdin"] ? '1' : '0');
-    if (opts["stdout"] != null) query.append("stdout", opts["stdout"] ? '1' : '0');
-    if (opts["tty"] != null) query.append("tty", opts["tty"] ? '1' : '0');
-    const resp = await this.#client.performRequest({
-      method: "POST",
-      path: `${this.#root}pods/${name}/attach`,
-      expectJson: true,
-      querystring: query,
-      abortSignal: opts.abortSignal,
-    });
+    const tunnel = new tunnels.StdioTunnel(resp, query);
+    await tunnel.ready;
+    return tunnel;
   }
 
   async createPodBinding(name: string, body: CoreV1.Binding, opts: operations.PutOpts = {}) {
@@ -1437,54 +1419,33 @@ export class CoreV1NamespacedApi {
     return PolicyV1.toEviction(resp);
   }
 
-  async connectGetPodExec(name: string, opts: {
-    command?: string;
+  async tunnelPodExec(name: string, opts: {
+    command: Array<string>;
     container?: string;
     stderr?: boolean;
     stdin?: boolean;
-    stdout?: boolean;
+    stdout: boolean;
     tty?: boolean;
     abortSignal?: AbortSignal;
-  } = {}) {
+  }) {
     const query = new URLSearchParams;
-    if (opts["command"] != null) query.append("command", opts["command"]);
+    for (const item of opts["command"]) query.append("command", item);
     if (opts["container"] != null) query.append("container", opts["container"]);
     if (opts["stderr"] != null) query.append("stderr", opts["stderr"] ? '1' : '0');
     if (opts["stdin"] != null) query.append("stdin", opts["stdin"] ? '1' : '0');
-    if (opts["stdout"] != null) query.append("stdout", opts["stdout"] ? '1' : '0');
+    query.append("stdout", opts["stdout"] ? '1' : '0');
     if (opts["tty"] != null) query.append("tty", opts["tty"] ? '1' : '0');
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}pods/${name}/exec`,
-      expectJson: true,
+      expectTunnel: tunnels.StdioTunnel.supportedProtocols,
       querystring: query,
       abortSignal: opts.abortSignal,
     });
-  }
 
-  async connectPostPodExec(name: string, opts: {
-    command?: string;
-    container?: string;
-    stderr?: boolean;
-    stdin?: boolean;
-    stdout?: boolean;
-    tty?: boolean;
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
-    if (opts["command"] != null) query.append("command", opts["command"]);
-    if (opts["container"] != null) query.append("container", opts["container"]);
-    if (opts["stderr"] != null) query.append("stderr", opts["stderr"] ? '1' : '0');
-    if (opts["stdin"] != null) query.append("stdin", opts["stdin"] ? '1' : '0');
-    if (opts["stdout"] != null) query.append("stdout", opts["stdout"] ? '1' : '0');
-    if (opts["tty"] != null) query.append("tty", opts["tty"] ? '1' : '0');
-    const resp = await this.#client.performRequest({
-      method: "POST",
-      path: `${this.#root}pods/${name}/exec`,
-      expectJson: true,
-      querystring: query,
-      abortSignal: opts.abortSignal,
-    });
+    const tunnel = new tunnels.StdioTunnel(resp, query);
+    await tunnel.ready;
+    return tunnel;
   }
 
   async streamPodLog(name: string, opts: {
@@ -1544,34 +1505,23 @@ export class CoreV1NamespacedApi {
     return new TextDecoder('utf-8').decode(resp);
   }
 
-  async connectGetPodPortforward(name: string, opts: {
-    ports?: number;
+  async tunnelPodPortforward(name: string, opts: {
+    ports?: Array<number>;
     abortSignal?: AbortSignal;
   } = {}) {
     const query = new URLSearchParams;
-    if (opts["ports"] != null) query.append("ports", String(opts["ports"]));
+    for (const item of opts["ports"] ?? []) query.append("ports", String(item));
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}pods/${name}/portforward`,
-      expectJson: true,
+      expectTunnel: tunnels.PortforwardTunnel.supportedProtocols,
       querystring: query,
       abortSignal: opts.abortSignal,
     });
-  }
 
-  async connectPostPodPortforward(name: string, opts: {
-    ports?: number;
-    abortSignal?: AbortSignal;
-  } = {}) {
-    const query = new URLSearchParams;
-    if (opts["ports"] != null) query.append("ports", String(opts["ports"]));
-    const resp = await this.#client.performRequest({
-      method: "POST",
-      path: `${this.#root}pods/${name}/portforward`,
-      expectJson: true,
-      querystring: query,
-      abortSignal: opts.abortSignal,
-    });
+    const tunnel = new tunnels.PortforwardTunnel(resp, query);
+    await tunnel.ready;
+    return tunnel;
   }
 
   proxyPodRequest(podName: string, opts: c.ProxyOptions & {expectStream: true; expectJson: true}): Promise<ReadableStream<c.JSONValue>>;

@@ -21,6 +21,7 @@ export function generateModuleTypescript(surface: SurfaceMap, api: SurfaceApi): 
   chunks.push(`import * as c from "../../common.ts";`);
   chunks.push(`import * as operations from "../../operations.ts";`);
   chunks.push(`import * as ${api.friendlyName} from "./structs.ts";`);
+  const tunnelsImport = `import * as tunnels from "../../tunnels.ts";`;
   chunks.push('');
 
   const foreignApis = new Set<SurfaceApi>();
@@ -114,6 +115,9 @@ export function generateModuleTypescript(surface: SurfaceMap, api: SurfaceApi): 
       } else throw new Error(`Unknown param.in ${param.in}`);
     }
 
+    let funcName = op.operationName;
+    let expectsTunnel: 'PortforwardTunnel' | 'StdioTunnel' | null = null;
+
     // Entirely specialcase and collapse each method's proxy functions into one
     if (op['x-kubernetes-action'] === 'connect' && op.operationName.endsWith('Proxy')) {
       if (op.method !== 'get') return; // only emit the GET function, and make it generic
@@ -135,6 +139,29 @@ export function generateModuleTypescript(surface: SurfaceMap, api: SurfaceApi): 
       chunks.push(`    return await this.#client.performRequest({ ...opts, path });`);
       chunks.push(`  }\n`);
       return;
+
+    // Specialcase bidirectionally-tunneled APIs (these use either SPDY/3.1 or WebSockets)
+    } else if (op['x-kubernetes-action'] === 'connect') {
+      if (op.method !== 'get') return; // only emit the GET function, method doesn't matter at this level
+
+      const middleName = op.operationName.slice('connectGet'.length);
+      funcName = `tunnel${middleName}`;
+
+      if (middleName == 'PodAttach' || middleName == 'PodExec') {
+        expectsTunnel = 'StdioTunnel';
+        // Make several extra params required
+        const commandArg = opts.find(x => x[0].name == 'command');
+        if (commandArg) commandArg[0].required = true;
+        const stdoutArg = opts.find(x => x[0].name == 'stdout');
+        if (stdoutArg) stdoutArg[0].required = true;
+      }
+      if (middleName == 'PodPortforward') {
+        expectsTunnel = 'PortforwardTunnel';
+      }
+
+      if (!expectsTunnel) {
+        throw new Error(`TODO: connect action was unexpected: ${funcName}`);
+      }
     }
 
     let accept = 'application/json';
@@ -158,7 +185,7 @@ export function generateModuleTypescript(surface: SurfaceMap, api: SurfaceApi): 
     //   return AcmeCertManagerIoV1.toOrder(resp);
     // }
 
-    chunks.push(`  async ${op.operationName}(${writeSig(args, opts, '  ')}) {`);
+    chunks.push(`  async ${funcName}(${writeSig(args, opts, '  ')}) {`);
     const isWatch = op.operationName.startsWith('watch');
     const isStream = op.operationName.startsWith('stream');
 
@@ -186,6 +213,17 @@ export function generateModuleTypescript(surface: SurfaceMap, api: SurfaceApi): 
           case 'number':
             chunks.push(`    ${maybeIf}query.append(${idStr}, String(opts[${idStr}]));`);
             break;
+          case 'list': {
+            const loop = `for (const item of opts[${idStr}]${opt[0].required ? '' : ' ?? []'}) `;
+            if (opt[1].inner.type == 'string') {
+              chunks.push(`    ${loop}query.append(${idStr}, item);`);
+              break;
+            }
+            if (opt[1].inner.type == 'number') {
+              chunks.push(`    ${loop}query.append(${idStr}, String(item));`);
+              break;
+            }
+          } /* falls through */
           default:
             chunks.push(`    // TODO: ${opt[0].in} ${opt[0].name} ${opt[0].required} ${opt[0].type} ${JSON.stringify(opt[1])}`);
         }
@@ -195,7 +233,10 @@ export function generateModuleTypescript(surface: SurfaceMap, api: SurfaceApi): 
     chunks.push(`    const resp = await this.#client.performRequest({`);
     chunks.push(`      method: ${JSON.stringify(op.method.toUpperCase())},`);
     chunks.push(`      path: \`\${this.#root}${JSON.stringify(opPath).slice(1,-1).replace(/{/g, '${')}\`,`);
-    if (accept === 'application/json') {
+    if (expectsTunnel) {
+      if (!chunks.includes(tunnelsImport)) chunks.splice(6, 0, tunnelsImport);
+      chunks.push(`      expectTunnel: tunnels.${expectsTunnel}.supportedProtocols,`);
+    } else if (accept === 'application/json') {
       chunks.push(`      expectJson: true,`);
     }
     if (isWatch || isStream) {
@@ -219,6 +260,13 @@ export function generateModuleTypescript(surface: SurfaceMap, api: SurfaceApi): 
     chunks.push(`      abortSignal: opts.abortSignal,`);
     chunks.push(`    });`);
 
+    if (expectsTunnel) {
+      chunks.push(`\n    const tunnel = new tunnels.${expectsTunnel}(resp, query);`);
+      chunks.push(`    await tunnel.ready;`);
+      chunks.push(`    return tunnel;`);
+      chunks.push(`  }\n`);
+      return;
+    }
     if (isStream) {
       if (accept === 'text/plain') {
         chunks.push(`    return resp.pipeThrough(new TextDecoderStream('utf-8'));`);
@@ -285,6 +333,8 @@ export function generateModuleTypescript(surface: SurfaceMap, api: SurfaceApi): 
         return `${api.friendlyName}.${shape.reference}`;
       case 'foreign':
         return `${shape.api.friendlyName}.${shape.name}`;
+      case 'list':
+        return `Array<${writeType(shape.inner)}>`;
       case 'special':
         return `c.${shape.name}`;
     }

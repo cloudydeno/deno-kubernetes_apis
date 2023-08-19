@@ -13,7 +13,6 @@ jobs:
     strategy:
       matrix:
         deno-version:
-        - v1.22
         - v1.28
         - v1.32
         - v1.36
@@ -49,3 +48,6 @@ jobs:
 
     - name: Check lib/examples/*.ts
       run: time deno check lib/examples/*.ts
+
+    - name: Test
+      run: time deno test
