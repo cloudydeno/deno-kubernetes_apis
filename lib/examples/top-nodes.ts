@@ -46,9 +46,9 @@ for (const node of nodeList.items) {
 
     printStats(summary);
 
-  } catch (err) {
+  } catch (err: unknown) {
     console.log(nodeName, ':');
-    console.log('  -', 'Failed:', err.message);
+    console.log('  -', 'Failed:', (err as Error).message);
   }
 }
 
