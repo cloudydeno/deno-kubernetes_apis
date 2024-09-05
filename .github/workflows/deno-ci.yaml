@@ -21,7 +21,7 @@ jobs:
 
     steps:
     - name: Checkout source
-      uses: actions/checkout@v2
+      uses: actions/checkout@v4
 
     - name: Use Deno ${{ matrix.deno-version }}
       uses: denoland/setup-deno@v1
