@@ -87,12 +87,14 @@ export interface JobSpec {
   backoffLimitPerIndex?: number | null;
   completionMode?: string | null;
   completions?: number | null;
+  managedBy?: string | null;
   manualSelector?: boolean | null;
   maxFailedIndexes?: number | null;
   parallelism?: number | null;
   podFailurePolicy?: PodFailurePolicy | null;
   podReplacementPolicy?: string | null;
   selector?: MetaV1.LabelSelector | null;
+  successPolicy?: SuccessPolicy | null;
   suspend?: boolean | null;
   template: CoreV1.PodTemplateSpec;
   ttlSecondsAfterFinished?: number | null;
@@ -105,12 +107,14 @@ export function toJobSpec(input: c.JSONValue): JobSpec {
     backoffLimitPerIndex: c.readOpt(obj["backoffLimitPerIndex"], c.checkNum),
     completionMode: c.readOpt(obj["completionMode"], c.checkStr),
     completions: c.readOpt(obj["completions"], c.checkNum),
+    managedBy: c.readOpt(obj["managedBy"], c.checkStr),
     manualSelector: c.readOpt(obj["manualSelector"], c.checkBool),
     maxFailedIndexes: c.readOpt(obj["maxFailedIndexes"], c.checkNum),
     parallelism: c.readOpt(obj["parallelism"], c.checkNum),
     podFailurePolicy: c.readOpt(obj["podFailurePolicy"], toPodFailurePolicy),
     podReplacementPolicy: c.readOpt(obj["podReplacementPolicy"], c.checkStr),
     selector: c.readOpt(obj["selector"], MetaV1.toLabelSelector),
+    successPolicy: c.readOpt(obj["successPolicy"], toSuccessPolicy),
     suspend: c.readOpt(obj["suspend"], c.checkBool),
     template: CoreV1.toPodTemplateSpec(obj["template"]),
     ttlSecondsAfterFinished: c.readOpt(obj["ttlSecondsAfterFinished"], c.checkNum),
@@ -120,6 +124,7 @@ export function fromJobSpec(input: JobSpec): c.JSONValue {
     ...input,
     podFailurePolicy: input.podFailurePolicy != null ? fromPodFailurePolicy(input.podFailurePolicy) : undefined,
     selector: input.selector != null ? MetaV1.fromLabelSelector(input.selector) : undefined,
+    successPolicy: input.successPolicy != null ? fromSuccessPolicy(input.successPolicy) : undefined,
     template: input.template != null ? CoreV1.fromPodTemplateSpec(input.template) : undefined,
   }}
 
@@ -142,14 +147,14 @@ export function fromPodFailurePolicy(input: PodFailurePolicy): c.JSONValue {
 export interface PodFailurePolicyRule {
   action: string;
   onExitCodes?: PodFailurePolicyOnExitCodesRequirement | null;
-  onPodConditions: Array<PodFailurePolicyOnPodConditionsPattern>;
+  onPodConditions?: Array<PodFailurePolicyOnPodConditionsPattern> | null;
 }
 export function toPodFailurePolicyRule(input: c.JSONValue): PodFailurePolicyRule {
   const obj = c.checkObj(input);
   return {
     action: c.checkStr(obj["action"]),
     onExitCodes: c.readOpt(obj["onExitCodes"], toPodFailurePolicyOnExitCodesRequirement),
-    onPodConditions: c.readList(obj["onPodConditions"], toPodFailurePolicyOnPodConditionsPattern),
+    onPodConditions: c.readOpt(obj["onPodConditions"], x => c.readList(x, toPodFailurePolicyOnPodConditionsPattern)),
   }}
 export function fromPodFailurePolicyRule(input: PodFailurePolicyRule): c.JSONValue {
   return {
@@ -188,6 +193,37 @@ export function toPodFailurePolicyOnPodConditionsPattern(input: c.JSONValue): Po
     type: c.checkStr(obj["type"]),
   }}
 export function fromPodFailurePolicyOnPodConditionsPattern(input: PodFailurePolicyOnPodConditionsPattern): c.JSONValue {
+  return {
+    ...input,
+  }}
+
+/** SuccessPolicy describes when a Job can be declared as succeeded based on the success of some indexes. */
+export interface SuccessPolicy {
+  rules: Array<SuccessPolicyRule>;
+}
+export function toSuccessPolicy(input: c.JSONValue): SuccessPolicy {
+  const obj = c.checkObj(input);
+  return {
+    rules: c.readList(obj["rules"], toSuccessPolicyRule),
+  }}
+export function fromSuccessPolicy(input: SuccessPolicy): c.JSONValue {
+  return {
+    ...input,
+    rules: input.rules?.map(fromSuccessPolicyRule),
+  }}
+
+/** SuccessPolicyRule describes rule for declaring a Job as succeeded. Each rule must have at least one of the "succeededIndexes" or "succeededCount" specified. */
+export interface SuccessPolicyRule {
+  succeededCount?: number | null;
+  succeededIndexes?: string | null;
+}
+export function toSuccessPolicyRule(input: c.JSONValue): SuccessPolicyRule {
+  const obj = c.checkObj(input);
+  return {
+    succeededCount: c.readOpt(obj["succeededCount"], c.checkNum),
+    succeededIndexes: c.readOpt(obj["succeededIndexes"], c.checkStr),
+  }}
+export function fromSuccessPolicyRule(input: SuccessPolicyRule): c.JSONValue {
   return {
     ...input,
   }}

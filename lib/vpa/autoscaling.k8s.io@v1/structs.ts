@@ -131,6 +131,10 @@ export interface VerticalPodAutoscaler {
       name: string;
     };
     updatePolicy?: {
+      evictionRequirements?: Array<{
+        changeRequirement: "TargetHigherThanRequests" | "TargetLowerThanRequests" | c.UnexpectedEnumValue;
+        resources: Array<string>;
+      }> | null;
       minReplicas?: number | null;
       updateMode?: "Off" | "Initial" | "Recreate" | "Auto" | c.UnexpectedEnumValue | null;
     } | null;
@@ -209,6 +213,7 @@ export function toVerticalPodAutoscaler_spec_targetRef(input: c.JSONValue) {
 export function toVerticalPodAutoscaler_spec_updatePolicy(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
+    evictionRequirements: c.readOpt(obj["evictionRequirements"], x => c.readList(x, toVerticalPodAutoscaler_spec_updatePolicy_evictionRequirements)),
     minReplicas: c.readOpt(obj["minReplicas"], c.checkNum),
     updateMode: c.readOpt(obj["updateMode"], (x => c.readEnum<"Off" | "Initial" | "Recreate" | "Auto" | c.UnexpectedEnumValue>(x))),
   }}
@@ -235,6 +240,12 @@ export function toVerticalPodAutoscaler_spec_resourcePolicy_containerPolicies(in
     maxAllowed: c.readOpt(obj["maxAllowed"], x => c.readMap(x, c.toIntOrString)),
     minAllowed: c.readOpt(obj["minAllowed"], x => c.readMap(x, c.toIntOrString)),
     mode: c.readOpt(obj["mode"], (x => c.readEnum<"Auto" | "Off" | c.UnexpectedEnumValue>(x))),
+  }}
+export function toVerticalPodAutoscaler_spec_updatePolicy_evictionRequirements(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    changeRequirement: (x => c.readEnum<"TargetHigherThanRequests" | "TargetLowerThanRequests" | c.UnexpectedEnumValue>(x))(obj["changeRequirement"]),
+    resources: c.readList(obj["resources"], c.checkStr),
   }}
 export function toVerticalPodAutoscaler_status_recommendation_containerRecommendations(input: c.JSONValue) {
   const obj = c.checkObj(input);

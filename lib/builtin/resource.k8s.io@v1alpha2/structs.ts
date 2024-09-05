@@ -32,16 +32,226 @@ export function fromAllocationResult(input: AllocationResult): c.JSONValue {
 export interface ResourceHandle {
   data?: string | null;
   driverName?: string | null;
+  structuredData?: StructuredResourceHandle | null;
 }
 export function toResourceHandle(input: c.JSONValue): ResourceHandle {
   const obj = c.checkObj(input);
   return {
     data: c.readOpt(obj["data"], c.checkStr),
     driverName: c.readOpt(obj["driverName"], c.checkStr),
+    structuredData: c.readOpt(obj["structuredData"], toStructuredResourceHandle),
   }}
 export function fromResourceHandle(input: ResourceHandle): c.JSONValue {
   return {
     ...input,
+    structuredData: input.structuredData != null ? fromStructuredResourceHandle(input.structuredData) : undefined,
+  }}
+
+/** StructuredResourceHandle is the in-tree representation of the allocation result. */
+export interface StructuredResourceHandle {
+  nodeName?: string | null;
+  results: Array<DriverAllocationResult>;
+  vendorClaimParameters?: c.JSONValue | null;
+  vendorClassParameters?: c.JSONValue | null;
+}
+export function toStructuredResourceHandle(input: c.JSONValue): StructuredResourceHandle {
+  const obj = c.checkObj(input);
+  return {
+    nodeName: c.readOpt(obj["nodeName"], c.checkStr),
+    results: c.readList(obj["results"], toDriverAllocationResult),
+    vendorClaimParameters: c.readOpt(obj["vendorClaimParameters"], c.identity),
+    vendorClassParameters: c.readOpt(obj["vendorClassParameters"], c.identity),
+  }}
+export function fromStructuredResourceHandle(input: StructuredResourceHandle): c.JSONValue {
+  return {
+    ...input,
+    results: input.results?.map(fromDriverAllocationResult),
+  }}
+
+/** DriverAllocationResult contains vendor parameters and the allocation result for one request. */
+export interface DriverAllocationResult {
+  namedResources?: NamedResourcesAllocationResult | null;
+  vendorRequestParameters?: c.JSONValue | null;
+}
+export function toDriverAllocationResult(input: c.JSONValue): DriverAllocationResult {
+  const obj = c.checkObj(input);
+  return {
+    namedResources: c.readOpt(obj["namedResources"], toNamedResourcesAllocationResult),
+    vendorRequestParameters: c.readOpt(obj["vendorRequestParameters"], c.identity),
+  }}
+export function fromDriverAllocationResult(input: DriverAllocationResult): c.JSONValue {
+  return {
+    ...input,
+    namedResources: input.namedResources != null ? fromNamedResourcesAllocationResult(input.namedResources) : undefined,
+  }}
+
+/** NamedResourcesAllocationResult is used in AllocationResultModel. */
+export interface NamedResourcesAllocationResult {
+  name: string;
+}
+export function toNamedResourcesAllocationResult(input: c.JSONValue): NamedResourcesAllocationResult {
+  const obj = c.checkObj(input);
+  return {
+    name: c.checkStr(obj["name"]),
+  }}
+export function fromNamedResourcesAllocationResult(input: NamedResourcesAllocationResult): c.JSONValue {
+  return {
+    ...input,
+  }}
+
+/** DriverRequests describes all resources that are needed from one particular driver. */
+export interface DriverRequests {
+  driverName?: string | null;
+  requests?: Array<ResourceRequest> | null;
+  vendorParameters?: c.JSONValue | null;
+}
+export function toDriverRequests(input: c.JSONValue): DriverRequests {
+  const obj = c.checkObj(input);
+  return {
+    driverName: c.readOpt(obj["driverName"], c.checkStr),
+    requests: c.readOpt(obj["requests"], x => c.readList(x, toResourceRequest)),
+    vendorParameters: c.readOpt(obj["vendorParameters"], c.identity),
+  }}
+export function fromDriverRequests(input: DriverRequests): c.JSONValue {
+  return {
+    ...input,
+    requests: input.requests?.map(fromResourceRequest),
+  }}
+
+/** ResourceRequest is a request for resources from one particular driver. */
+export interface ResourceRequest {
+  namedResources?: NamedResourcesRequest | null;
+  vendorParameters?: c.JSONValue | null;
+}
+export function toResourceRequest(input: c.JSONValue): ResourceRequest {
+  const obj = c.checkObj(input);
+  return {
+    namedResources: c.readOpt(obj["namedResources"], toNamedResourcesRequest),
+    vendorParameters: c.readOpt(obj["vendorParameters"], c.identity),
+  }}
+export function fromResourceRequest(input: ResourceRequest): c.JSONValue {
+  return {
+    ...input,
+    namedResources: input.namedResources != null ? fromNamedResourcesRequest(input.namedResources) : undefined,
+  }}
+
+/** NamedResourcesRequest is used in ResourceRequestModel. */
+export interface NamedResourcesRequest {
+  selector: string;
+}
+export function toNamedResourcesRequest(input: c.JSONValue): NamedResourcesRequest {
+  const obj = c.checkObj(input);
+  return {
+    selector: c.checkStr(obj["selector"]),
+  }}
+export function fromNamedResourcesRequest(input: NamedResourcesRequest): c.JSONValue {
+  return {
+    ...input,
+  }}
+
+/** NamedResourcesAttribute is a combination of an attribute name and its value. */
+export interface NamedResourcesAttribute {
+  bool?: boolean | null;
+  int?: number | null;
+  intSlice?: NamedResourcesIntSlice | null;
+  name: string;
+  quantity?: c.Quantity | null;
+  string?: string | null;
+  stringSlice?: NamedResourcesStringSlice | null;
+  version?: string | null;
+}
+export function toNamedResourcesAttribute(input: c.JSONValue): NamedResourcesAttribute {
+  const obj = c.checkObj(input);
+  return {
+    bool: c.readOpt(obj["bool"], c.checkBool),
+    int: c.readOpt(obj["int"], c.checkNum),
+    intSlice: c.readOpt(obj["intSlice"], toNamedResourcesIntSlice),
+    name: c.checkStr(obj["name"]),
+    quantity: c.readOpt(obj["quantity"], c.toQuantity),
+    string: c.readOpt(obj["string"], c.checkStr),
+    stringSlice: c.readOpt(obj["stringSlice"], toNamedResourcesStringSlice),
+    version: c.readOpt(obj["version"], c.checkStr),
+  }}
+export function fromNamedResourcesAttribute(input: NamedResourcesAttribute): c.JSONValue {
+  return {
+    ...input,
+    intSlice: input.intSlice != null ? fromNamedResourcesIntSlice(input.intSlice) : undefined,
+    quantity: input.quantity != null ? c.fromQuantity(input.quantity) : undefined,
+    stringSlice: input.stringSlice != null ? fromNamedResourcesStringSlice(input.stringSlice) : undefined,
+  }}
+
+/** NamedResourcesIntSlice contains a slice of 64-bit integers. */
+export interface NamedResourcesIntSlice {
+  ints: Array<number>;
+}
+export function toNamedResourcesIntSlice(input: c.JSONValue): NamedResourcesIntSlice {
+  const obj = c.checkObj(input);
+  return {
+    ints: c.readList(obj["ints"], c.checkNum),
+  }}
+export function fromNamedResourcesIntSlice(input: NamedResourcesIntSlice): c.JSONValue {
+  return {
+    ...input,
+  }}
+
+/** NamedResourcesStringSlice contains a slice of strings. */
+export interface NamedResourcesStringSlice {
+  strings: Array<string>;
+}
+export function toNamedResourcesStringSlice(input: c.JSONValue): NamedResourcesStringSlice {
+  const obj = c.checkObj(input);
+  return {
+    strings: c.readList(obj["strings"], c.checkStr),
+  }}
+export function fromNamedResourcesStringSlice(input: NamedResourcesStringSlice): c.JSONValue {
+  return {
+    ...input,
+  }}
+
+/** NamedResourcesFilter is used in ResourceFilterModel. */
+export interface NamedResourcesFilter {
+  selector: string;
+}
+export function toNamedResourcesFilter(input: c.JSONValue): NamedResourcesFilter {
+  const obj = c.checkObj(input);
+  return {
+    selector: c.checkStr(obj["selector"]),
+  }}
+export function fromNamedResourcesFilter(input: NamedResourcesFilter): c.JSONValue {
+  return {
+    ...input,
+  }}
+
+/** NamedResourcesInstance represents one individual hardware instance that can be selected based on its attributes. */
+export interface NamedResourcesInstance {
+  attributes?: Array<NamedResourcesAttribute> | null;
+  name: string;
+}
+export function toNamedResourcesInstance(input: c.JSONValue): NamedResourcesInstance {
+  const obj = c.checkObj(input);
+  return {
+    attributes: c.readOpt(obj["attributes"], x => c.readList(x, toNamedResourcesAttribute)),
+    name: c.checkStr(obj["name"]),
+  }}
+export function fromNamedResourcesInstance(input: NamedResourcesInstance): c.JSONValue {
+  return {
+    ...input,
+    attributes: input.attributes?.map(fromNamedResourcesAttribute),
+  }}
+
+/** NamedResourcesResources is used in ResourceModel. */
+export interface NamedResourcesResources {
+  instances: Array<NamedResourcesInstance>;
+}
+export function toNamedResourcesResources(input: c.JSONValue): NamedResourcesResources {
+  const obj = c.checkObj(input);
+  return {
+    instances: c.readList(obj["instances"], toNamedResourcesInstance),
+  }}
+export function fromNamedResourcesResources(input: NamedResourcesResources): c.JSONValue {
+  return {
+    ...input,
+    instances: input.instances?.map(fromNamedResourcesInstance),
   }}
 
 /** PodSchedulingContext objects hold information that is needed to schedule a Pod with ResourceClaims that use "WaitForFirstConsumer" allocation mode.
@@ -250,6 +460,46 @@ export function toResourceClaimList(input: c.JSONValue): ResourceClaimList & c.A
     items: c.readList(obj.items, toResourceClaim),
   }}
 
+/** ResourceClaimParameters defines resource requests for a ResourceClaim in an in-tree format understood by Kubernetes. */
+export interface ResourceClaimParameters {
+  apiVersion?: "resource.k8s.io/v1alpha2";
+  kind?: "ResourceClaimParameters";
+  driverRequests?: Array<DriverRequests> | null;
+  generatedFrom?: ResourceClaimParametersReference | null;
+  metadata?: MetaV1.ObjectMeta | null;
+  shareable?: boolean | null;
+}
+export function toResourceClaimParameters(input: c.JSONValue): ResourceClaimParameters & c.ApiKind {
+  const obj = c.checkObj(input);
+  return {
+    ...c.assertOrAddApiVersionAndKind(obj, "resource.k8s.io/v1alpha2", "ResourceClaimParameters"),
+    driverRequests: c.readOpt(obj["driverRequests"], x => c.readList(x, toDriverRequests)),
+    generatedFrom: c.readOpt(obj["generatedFrom"], toResourceClaimParametersReference),
+    metadata: c.readOpt(obj["metadata"], MetaV1.toObjectMeta),
+    shareable: c.readOpt(obj["shareable"], c.checkBool),
+  }}
+export function fromResourceClaimParameters(input: ResourceClaimParameters): c.JSONValue {
+  return {
+    ...c.assertOrAddApiVersionAndKind(input, "resource.k8s.io/v1alpha2", "ResourceClaimParameters"),
+    ...input,
+    driverRequests: input.driverRequests?.map(fromDriverRequests),
+    generatedFrom: input.generatedFrom != null ? fromResourceClaimParametersReference(input.generatedFrom) : undefined,
+    metadata: input.metadata != null ? MetaV1.fromObjectMeta(input.metadata) : undefined,
+  }}
+
+/** ResourceClaimParametersList is a collection of ResourceClaimParameters. */
+export interface ResourceClaimParametersList extends ListOf<ResourceClaimParameters> {
+  apiVersion?: "resource.k8s.io/v1alpha2";
+  kind?: "ResourceClaimParametersList";
+};
+export function toResourceClaimParametersList(input: c.JSONValue): ResourceClaimParametersList & c.ApiKind {
+  const obj = c.checkObj(input);
+  return {
+    ...c.assertOrAddApiVersionAndKind(obj, "resource.k8s.io/v1alpha2", "ResourceClaimParametersList"),
+    metadata: MetaV1.toListMeta(obj.metadata),
+    items: c.readList(obj.items, toResourceClaimParameters),
+  }}
+
 /** ResourceClaimTemplate is used to produce ResourceClaim objects. */
 export interface ResourceClaimTemplate {
   apiVersion?: "resource.k8s.io/v1alpha2";
@@ -312,6 +562,7 @@ export interface ResourceClass {
   driverName: string;
   metadata?: MetaV1.ObjectMeta | null;
   parametersRef?: ResourceClassParametersReference | null;
+  structuredParameters?: boolean | null;
   suitableNodes?: CoreV1.NodeSelector | null;
 }
 export function toResourceClass(input: c.JSONValue): ResourceClass & c.ApiKind {
@@ -321,6 +572,7 @@ export function toResourceClass(input: c.JSONValue): ResourceClass & c.ApiKind {
     driverName: c.checkStr(obj["driverName"]),
     metadata: c.readOpt(obj["metadata"], MetaV1.toObjectMeta),
     parametersRef: c.readOpt(obj["parametersRef"], toResourceClassParametersReference),
+    structuredParameters: c.readOpt(obj["structuredParameters"], c.checkBool),
     suitableNodes: c.readOpt(obj["suitableNodes"], CoreV1.toNodeSelector),
   }}
 export function fromResourceClass(input: ResourceClass): c.JSONValue {
@@ -363,4 +615,117 @@ export function toResourceClassList(input: c.JSONValue): ResourceClassList & c.A
     ...c.assertOrAddApiVersionAndKind(obj, "resource.k8s.io/v1alpha2", "ResourceClassList"),
     metadata: MetaV1.toListMeta(obj.metadata),
     items: c.readList(obj.items, toResourceClass),
+  }}
+
+/** ResourceClassParameters defines resource requests for a ResourceClass in an in-tree format understood by Kubernetes. */
+export interface ResourceClassParameters {
+  apiVersion?: "resource.k8s.io/v1alpha2";
+  kind?: "ResourceClassParameters";
+  filters?: Array<ResourceFilter> | null;
+  generatedFrom?: ResourceClassParametersReference | null;
+  metadata?: MetaV1.ObjectMeta | null;
+  vendorParameters?: Array<VendorParameters> | null;
+}
+export function toResourceClassParameters(input: c.JSONValue): ResourceClassParameters & c.ApiKind {
+  const obj = c.checkObj(input);
+  return {
+    ...c.assertOrAddApiVersionAndKind(obj, "resource.k8s.io/v1alpha2", "ResourceClassParameters"),
+    filters: c.readOpt(obj["filters"], x => c.readList(x, toResourceFilter)),
+    generatedFrom: c.readOpt(obj["generatedFrom"], toResourceClassParametersReference),
+    metadata: c.readOpt(obj["metadata"], MetaV1.toObjectMeta),
+    vendorParameters: c.readOpt(obj["vendorParameters"], x => c.readList(x, toVendorParameters)),
+  }}
+export function fromResourceClassParameters(input: ResourceClassParameters): c.JSONValue {
+  return {
+    ...c.assertOrAddApiVersionAndKind(input, "resource.k8s.io/v1alpha2", "ResourceClassParameters"),
+    ...input,
+    filters: input.filters?.map(fromResourceFilter),
+    generatedFrom: input.generatedFrom != null ? fromResourceClassParametersReference(input.generatedFrom) : undefined,
+    metadata: input.metadata != null ? MetaV1.fromObjectMeta(input.metadata) : undefined,
+    vendorParameters: input.vendorParameters?.map(fromVendorParameters),
+  }}
+
+/** ResourceFilter is a filter for resources from one particular driver. */
+export interface ResourceFilter {
+  driverName?: string | null;
+  namedResources?: NamedResourcesFilter | null;
+}
+export function toResourceFilter(input: c.JSONValue): ResourceFilter {
+  const obj = c.checkObj(input);
+  return {
+    driverName: c.readOpt(obj["driverName"], c.checkStr),
+    namedResources: c.readOpt(obj["namedResources"], toNamedResourcesFilter),
+  }}
+export function fromResourceFilter(input: ResourceFilter): c.JSONValue {
+  return {
+    ...input,
+    namedResources: input.namedResources != null ? fromNamedResourcesFilter(input.namedResources) : undefined,
+  }}
+
+/** VendorParameters are opaque parameters for one particular driver. */
+export interface VendorParameters {
+  driverName?: string | null;
+  parameters?: c.JSONValue | null;
+}
+export function toVendorParameters(input: c.JSONValue): VendorParameters {
+  const obj = c.checkObj(input);
+  return {
+    driverName: c.readOpt(obj["driverName"], c.checkStr),
+    parameters: c.readOpt(obj["parameters"], c.identity),
+  }}
+export function fromVendorParameters(input: VendorParameters): c.JSONValue {
+  return {
+    ...input,
+  }}
+
+/** ResourceClassParametersList is a collection of ResourceClassParameters. */
+export interface ResourceClassParametersList extends ListOf<ResourceClassParameters> {
+  apiVersion?: "resource.k8s.io/v1alpha2";
+  kind?: "ResourceClassParametersList";
+};
+export function toResourceClassParametersList(input: c.JSONValue): ResourceClassParametersList & c.ApiKind {
+  const obj = c.checkObj(input);
+  return {
+    ...c.assertOrAddApiVersionAndKind(obj, "resource.k8s.io/v1alpha2", "ResourceClassParametersList"),
+    metadata: MetaV1.toListMeta(obj.metadata),
+    items: c.readList(obj.items, toResourceClassParameters),
+  }}
+
+/** ResourceSlice provides information about available resources on individual nodes. */
+export interface ResourceSlice {
+  apiVersion?: "resource.k8s.io/v1alpha2";
+  kind?: "ResourceSlice";
+  driverName: string;
+  metadata?: MetaV1.ObjectMeta | null;
+  namedResources?: NamedResourcesResources | null;
+  nodeName?: string | null;
+}
+export function toResourceSlice(input: c.JSONValue): ResourceSlice & c.ApiKind {
+  const obj = c.checkObj(input);
+  return {
+    ...c.assertOrAddApiVersionAndKind(obj, "resource.k8s.io/v1alpha2", "ResourceSlice"),
+    driverName: c.checkStr(obj["driverName"]),
+    metadata: c.readOpt(obj["metadata"], MetaV1.toObjectMeta),
+    namedResources: c.readOpt(obj["namedResources"], toNamedResourcesResources),
+    nodeName: c.readOpt(obj["nodeName"], c.checkStr),
+  }}
+export function fromResourceSlice(input: ResourceSlice): c.JSONValue {
+  return {
+    ...c.assertOrAddApiVersionAndKind(input, "resource.k8s.io/v1alpha2", "ResourceSlice"),
+    ...input,
+    metadata: input.metadata != null ? MetaV1.fromObjectMeta(input.metadata) : undefined,
+    namedResources: input.namedResources != null ? fromNamedResourcesResources(input.namedResources) : undefined,
+  }}
+
+/** ResourceSliceList is a collection of ResourceSlices. */
+export interface ResourceSliceList extends ListOf<ResourceSlice> {
+  apiVersion?: "resource.k8s.io/v1alpha2";
+  kind?: "ResourceSliceList";
+};
+export function toResourceSliceList(input: c.JSONValue): ResourceSliceList & c.ApiKind {
+  const obj = c.checkObj(input);
+  return {
+    ...c.assertOrAddApiVersionAndKind(obj, "resource.k8s.io/v1alpha2", "ResourceSliceList"),
+    metadata: MetaV1.toListMeta(obj.metadata),
+    items: c.readList(obj.items, toResourceSlice),
   }}

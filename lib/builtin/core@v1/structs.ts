@@ -174,6 +174,8 @@ export function fromWeightedPodAffinityTerm(input: WeightedPodAffinityTerm): c.J
 /** Defines a set of pods (namely those matching the labelSelector relative to the given namespace(s)) that this pod should be co-located (affinity) or not co-located (anti-affinity) with, where co-located is defined as running on a node whose value of the label with key <topologyKey> matches that of any node on which a pod of the set of pods is running */
 export interface PodAffinityTerm {
   labelSelector?: MetaV1.LabelSelector | null;
+  matchLabelKeys?: Array<string> | null;
+  mismatchLabelKeys?: Array<string> | null;
   namespaceSelector?: MetaV1.LabelSelector | null;
   namespaces?: Array<string> | null;
   topologyKey: string;
@@ -182,6 +184,8 @@ export function toPodAffinityTerm(input: c.JSONValue): PodAffinityTerm {
   const obj = c.checkObj(input);
   return {
     labelSelector: c.readOpt(obj["labelSelector"], MetaV1.toLabelSelector),
+    matchLabelKeys: c.readOpt(obj["matchLabelKeys"], x => c.readList(x, c.checkStr)),
+    mismatchLabelKeys: c.readOpt(obj["mismatchLabelKeys"], x => c.readList(x, c.checkStr)),
     namespaceSelector: c.readOpt(obj["namespaceSelector"], MetaV1.toLabelSelector),
     namespaces: c.readOpt(obj["namespaces"], x => c.readList(x, c.checkStr)),
     topologyKey: c.checkStr(obj["topologyKey"]),
@@ -209,6 +213,22 @@ export function fromPodAntiAffinity(input: PodAntiAffinity): c.JSONValue {
     ...input,
     preferredDuringSchedulingIgnoredDuringExecution: input.preferredDuringSchedulingIgnoredDuringExecution?.map(fromWeightedPodAffinityTerm),
     requiredDuringSchedulingIgnoredDuringExecution: input.requiredDuringSchedulingIgnoredDuringExecution?.map(fromPodAffinityTerm),
+  }}
+
+/** AppArmorProfile defines a pod or container's AppArmor settings. */
+export interface AppArmorProfile {
+  localhostProfile?: string | null;
+  type: string;
+}
+export function toAppArmorProfile(input: c.JSONValue): AppArmorProfile {
+  const obj = c.checkObj(input);
+  return {
+    localhostProfile: c.readOpt(obj["localhostProfile"], c.checkStr),
+    type: c.checkStr(obj["type"]),
+  }}
+export function fromAppArmorProfile(input: AppArmorProfile): c.JSONValue {
+  return {
+    ...input,
   }}
 
 /** AttachedVolume describes a volume attached to a node */
@@ -565,6 +585,29 @@ export function toClientIPConfig(input: c.JSONValue): ClientIPConfig {
 export function fromClientIPConfig(input: ClientIPConfig): c.JSONValue {
   return {
     ...input,
+  }}
+
+/** ClusterTrustBundleProjection describes how to select a set of ClusterTrustBundle objects and project their contents into the pod filesystem. */
+export interface ClusterTrustBundleProjection {
+  labelSelector?: MetaV1.LabelSelector | null;
+  name?: string | null;
+  optional?: boolean | null;
+  path: string;
+  signerName?: string | null;
+}
+export function toClusterTrustBundleProjection(input: c.JSONValue): ClusterTrustBundleProjection {
+  const obj = c.checkObj(input);
+  return {
+    labelSelector: c.readOpt(obj["labelSelector"], MetaV1.toLabelSelector),
+    name: c.readOpt(obj["name"], c.checkStr),
+    optional: c.readOpt(obj["optional"], c.checkBool),
+    path: c.checkStr(obj["path"]),
+    signerName: c.readOpt(obj["signerName"], c.checkStr),
+  }}
+export function fromClusterTrustBundleProjection(input: ClusterTrustBundleProjection): c.JSONValue {
+  return {
+    ...input,
+    labelSelector: input.labelSelector != null ? MetaV1.fromLabelSelector(input.labelSelector) : undefined,
   }}
 
 /** Information about the condition of a component. */
@@ -1008,6 +1051,7 @@ export function fromLifecycle(input: Lifecycle): c.JSONValue {
 export interface LifecycleHandler {
   exec?: ExecAction | null;
   httpGet?: HTTPGetAction | null;
+  sleep?: SleepAction | null;
   tcpSocket?: TCPSocketAction | null;
 }
 export function toLifecycleHandler(input: c.JSONValue): LifecycleHandler {
@@ -1015,6 +1059,7 @@ export function toLifecycleHandler(input: c.JSONValue): LifecycleHandler {
   return {
     exec: c.readOpt(obj["exec"], toExecAction),
     httpGet: c.readOpt(obj["httpGet"], toHTTPGetAction),
+    sleep: c.readOpt(obj["sleep"], toSleepAction),
     tcpSocket: c.readOpt(obj["tcpSocket"], toTCPSocketAction),
   }}
 export function fromLifecycleHandler(input: LifecycleHandler): c.JSONValue {
@@ -1022,6 +1067,7 @@ export function fromLifecycleHandler(input: LifecycleHandler): c.JSONValue {
     ...input,
     exec: input.exec != null ? fromExecAction(input.exec) : undefined,
     httpGet: input.httpGet != null ? fromHTTPGetAction(input.httpGet) : undefined,
+    sleep: input.sleep != null ? fromSleepAction(input.sleep) : undefined,
     tcpSocket: input.tcpSocket != null ? fromTCPSocketAction(input.tcpSocket) : undefined,
   }}
 
@@ -1074,6 +1120,20 @@ export function toHTTPHeader(input: c.JSONValue): HTTPHeader {
     value: c.checkStr(obj["value"]),
   }}
 export function fromHTTPHeader(input: HTTPHeader): c.JSONValue {
+  return {
+    ...input,
+  }}
+
+/** SleepAction describes a "sleep" action. */
+export interface SleepAction {
+  seconds: number;
+}
+export function toSleepAction(input: c.JSONValue): SleepAction {
+  const obj = c.checkObj(input);
+  return {
+    seconds: c.checkNum(obj["seconds"]),
+  }}
+export function fromSleepAction(input: SleepAction): c.JSONValue {
   return {
     ...input,
   }}
@@ -1221,6 +1281,7 @@ export function fromResourceClaim(input: ResourceClaim): c.JSONValue {
 /** SecurityContext holds security configuration that will be applied to a container. Some fields are present in both SecurityContext and PodSecurityContext.  When both are set, the values in SecurityContext take precedence. */
 export interface SecurityContext {
   allowPrivilegeEscalation?: boolean | null;
+  appArmorProfile?: AppArmorProfile | null;
   capabilities?: Capabilities | null;
   privileged?: boolean | null;
   procMount?: string | null;
@@ -1236,6 +1297,7 @@ export function toSecurityContext(input: c.JSONValue): SecurityContext {
   const obj = c.checkObj(input);
   return {
     allowPrivilegeEscalation: c.readOpt(obj["allowPrivilegeEscalation"], c.checkBool),
+    appArmorProfile: c.readOpt(obj["appArmorProfile"], toAppArmorProfile),
     capabilities: c.readOpt(obj["capabilities"], toCapabilities),
     privileged: c.readOpt(obj["privileged"], c.checkBool),
     procMount: c.readOpt(obj["procMount"], c.checkStr),
@@ -1250,6 +1312,7 @@ export function toSecurityContext(input: c.JSONValue): SecurityContext {
 export function fromSecurityContext(input: SecurityContext): c.JSONValue {
   return {
     ...input,
+    appArmorProfile: input.appArmorProfile != null ? fromAppArmorProfile(input.appArmorProfile) : undefined,
     capabilities: input.capabilities != null ? fromCapabilities(input.capabilities) : undefined,
     seLinuxOptions: input.seLinuxOptions != null ? fromSELinuxOptions(input.seLinuxOptions) : undefined,
     seccompProfile: input.seccompProfile != null ? fromSeccompProfile(input.seccompProfile) : undefined,
@@ -1334,6 +1397,7 @@ export interface VolumeMount {
   mountPropagation?: string | null;
   name: string;
   readOnly?: boolean | null;
+  recursiveReadOnly?: string | null;
   subPath?: string | null;
   subPathExpr?: string | null;
 }
@@ -1344,6 +1408,7 @@ export function toVolumeMount(input: c.JSONValue): VolumeMount {
     mountPropagation: c.readOpt(obj["mountPropagation"], c.checkStr),
     name: c.checkStr(obj["name"]),
     readOnly: c.readOpt(obj["readOnly"], c.checkBool),
+    recursiveReadOnly: c.readOpt(obj["recursiveReadOnly"], c.checkStr),
     subPath: c.readOpt(obj["subPath"], c.checkStr),
     subPathExpr: c.readOpt(obj["subPathExpr"], c.checkStr),
   }}
@@ -1461,6 +1526,7 @@ export interface ContainerStatus {
   restartCount: number;
   started?: boolean | null;
   state?: ContainerState | null;
+  volumeMounts?: Array<VolumeMountStatus> | null;
 }
 export function toContainerStatus(input: c.JSONValue): ContainerStatus {
   const obj = c.checkObj(input);
@@ -1476,6 +1542,7 @@ export function toContainerStatus(input: c.JSONValue): ContainerStatus {
     restartCount: c.checkNum(obj["restartCount"]),
     started: c.readOpt(obj["started"], c.checkBool),
     state: c.readOpt(obj["state"], toContainerState),
+    volumeMounts: c.readOpt(obj["volumeMounts"], x => c.readList(x, toVolumeMountStatus)),
   }}
 export function fromContainerStatus(input: ContainerStatus): c.JSONValue {
   return {
@@ -1484,6 +1551,27 @@ export function fromContainerStatus(input: ContainerStatus): c.JSONValue {
     lastState: input.lastState != null ? fromContainerState(input.lastState) : undefined,
     resources: input.resources != null ? fromResourceRequirements(input.resources) : undefined,
     state: input.state != null ? fromContainerState(input.state) : undefined,
+    volumeMounts: input.volumeMounts?.map(fromVolumeMountStatus),
+  }}
+
+/** VolumeMountStatus shows status of volume mounts. */
+export interface VolumeMountStatus {
+  mountPath: string;
+  name: string;
+  readOnly?: boolean | null;
+  recursiveReadOnly?: string | null;
+}
+export function toVolumeMountStatus(input: c.JSONValue): VolumeMountStatus {
+  const obj = c.checkObj(input);
+  return {
+    mountPath: c.checkStr(obj["mountPath"]),
+    name: c.checkStr(obj["name"]),
+    readOnly: c.readOpt(obj["readOnly"], c.checkBool),
+    recursiveReadOnly: c.readOpt(obj["recursiveReadOnly"], c.checkStr),
+  }}
+export function fromVolumeMountStatus(input: VolumeMountStatus): c.JSONValue {
+  return {
+    ...input,
   }}
 
 /** DaemonEndpoint contains information about a single Daemon endpoint. */
@@ -1804,9 +1892,10 @@ export interface PersistentVolumeClaimSpec {
   accessModes?: Array<string> | null;
   dataSource?: TypedLocalObjectReference | null;
   dataSourceRef?: TypedObjectReference | null;
-  resources?: ResourceRequirements | null;
+  resources?: VolumeResourceRequirements | null;
   selector?: MetaV1.LabelSelector | null;
   storageClassName?: string | null;
+  volumeAttributesClassName?: string | null;
   volumeMode?: string | null;
   volumeName?: string | null;
 }
@@ -1816,9 +1905,10 @@ export function toPersistentVolumeClaimSpec(input: c.JSONValue): PersistentVolum
     accessModes: c.readOpt(obj["accessModes"], x => c.readList(x, c.checkStr)),
     dataSource: c.readOpt(obj["dataSource"], toTypedLocalObjectReference),
     dataSourceRef: c.readOpt(obj["dataSourceRef"], toTypedObjectReference),
-    resources: c.readOpt(obj["resources"], toResourceRequirements),
+    resources: c.readOpt(obj["resources"], toVolumeResourceRequirements),
     selector: c.readOpt(obj["selector"], MetaV1.toLabelSelector),
     storageClassName: c.readOpt(obj["storageClassName"], c.checkStr),
+    volumeAttributesClassName: c.readOpt(obj["volumeAttributesClassName"], c.checkStr),
     volumeMode: c.readOpt(obj["volumeMode"], c.checkStr),
     volumeName: c.readOpt(obj["volumeName"], c.checkStr),
   }}
@@ -1827,7 +1917,7 @@ export function fromPersistentVolumeClaimSpec(input: PersistentVolumeClaimSpec):
     ...input,
     dataSource: input.dataSource != null ? fromTypedLocalObjectReference(input.dataSource) : undefined,
     dataSourceRef: input.dataSourceRef != null ? fromTypedObjectReference(input.dataSourceRef) : undefined,
-    resources: input.resources != null ? fromResourceRequirements(input.resources) : undefined,
+    resources: input.resources != null ? fromVolumeResourceRequirements(input.resources) : undefined,
     selector: input.selector != null ? MetaV1.fromLabelSelector(input.selector) : undefined,
   }}
 
@@ -1866,6 +1956,24 @@ export function toTypedObjectReference(input: c.JSONValue): TypedObjectReference
 export function fromTypedObjectReference(input: TypedObjectReference): c.JSONValue {
   return {
     ...input,
+  }}
+
+/** VolumeResourceRequirements describes the storage resource requirements for a volume. */
+export interface VolumeResourceRequirements {
+  limits?: Record<string,c.Quantity> | null;
+  requests?: Record<string,c.Quantity> | null;
+}
+export function toVolumeResourceRequirements(input: c.JSONValue): VolumeResourceRequirements {
+  const obj = c.checkObj(input);
+  return {
+    limits: c.readOpt(obj["limits"], x => c.readMap(x, c.toQuantity)),
+    requests: c.readOpt(obj["requests"], x => c.readMap(x, c.toQuantity)),
+  }}
+export function fromVolumeResourceRequirements(input: VolumeResourceRequirements): c.JSONValue {
+  return {
+    ...input,
+    limits: c.writeMap(input.limits, c.fromQuantity),
+    requests: c.writeMap(input.requests, c.fromQuantity),
   }}
 
 /** Event is a report of an event somewhere in the cluster.  Events have a limited retention time and triggers and messages may evolve with time.  Event consumers should not rely on the timing of an event with a given Reason reflecting a consistent underlying trigger, or the continued existence of events with that Reason.  Events should be treated as informative, best-effort, supplemental data. */
@@ -2135,13 +2243,13 @@ export function fromGlusterfsVolumeSource(input: GlusterfsVolumeSource): c.JSONV
 /** HostAlias holds the mapping between IP and hostnames that will be injected as an entry in the pod's hosts file. */
 export interface HostAlias {
   hostnames?: Array<string> | null;
-  ip?: string | null;
+  ip: string;
 }
 export function toHostAlias(input: c.JSONValue): HostAlias {
   const obj = c.checkObj(input);
   return {
     hostnames: c.readOpt(obj["hostnames"], x => c.readList(x, c.checkStr)),
-    ip: c.readOpt(obj["ip"], c.checkStr),
+    ip: c.checkStr(obj["ip"]),
   }}
 export function fromHostAlias(input: HostAlias): c.JSONValue {
   return {
@@ -2331,6 +2439,7 @@ export function toLimitRangeList(input: c.JSONValue): LimitRangeList & c.ApiKind
 export interface LoadBalancerIngress {
   hostname?: string | null;
   ip?: string | null;
+  ipMode?: string | null;
   ports?: Array<PortStatus> | null;
 }
 export function toLoadBalancerIngress(input: c.JSONValue): LoadBalancerIngress {
@@ -2338,6 +2447,7 @@ export function toLoadBalancerIngress(input: c.JSONValue): LoadBalancerIngress {
   return {
     hostname: c.readOpt(obj["hostname"], c.checkStr),
     ip: c.readOpt(obj["ip"], c.checkStr),
+    ipMode: c.readOpt(obj["ipMode"], c.checkStr),
     ports: c.readOpt(obj["ports"], x => c.readList(x, toPortStatus)),
   }}
 export function fromLoadBalancerIngress(input: LoadBalancerIngress): c.JSONValue {
@@ -2390,6 +2500,22 @@ export function toLocalVolumeSource(input: c.JSONValue): LocalVolumeSource {
     path: c.checkStr(obj["path"]),
   }}
 export function fromLocalVolumeSource(input: LocalVolumeSource): c.JSONValue {
+  return {
+    ...input,
+  }}
+
+/** ModifyVolumeStatus represents the status object of ControllerModifyVolume operation */
+export interface ModifyVolumeStatus {
+  status: string;
+  targetVolumeAttributesClassName?: string | null;
+}
+export function toModifyVolumeStatus(input: c.JSONValue): ModifyVolumeStatus {
+  const obj = c.checkObj(input);
+  return {
+    status: c.checkStr(obj["status"]),
+    targetVolumeAttributesClassName: c.readOpt(obj["targetVolumeAttributesClassName"], c.checkStr),
+  }}
+export function fromModifyVolumeStatus(input: ModifyVolumeStatus): c.JSONValue {
   return {
     ...input,
   }}
@@ -2604,6 +2730,7 @@ export interface NodeStatus {
   images?: Array<ContainerImage> | null;
   nodeInfo?: NodeSystemInfo | null;
   phase?: string | null;
+  runtimeHandlers?: Array<NodeRuntimeHandler> | null;
   volumesAttached?: Array<AttachedVolume> | null;
   volumesInUse?: Array<string> | null;
 }
@@ -2619,6 +2746,7 @@ export function toNodeStatus(input: c.JSONValue): NodeStatus {
     images: c.readOpt(obj["images"], x => c.readList(x, toContainerImage)),
     nodeInfo: c.readOpt(obj["nodeInfo"], toNodeSystemInfo),
     phase: c.readOpt(obj["phase"], c.checkStr),
+    runtimeHandlers: c.readOpt(obj["runtimeHandlers"], x => c.readList(x, toNodeRuntimeHandler)),
     volumesAttached: c.readOpt(obj["volumesAttached"], x => c.readList(x, toAttachedVolume)),
     volumesInUse: c.readOpt(obj["volumesInUse"], x => c.readList(x, c.checkStr)),
   }}
@@ -2633,6 +2761,7 @@ export function fromNodeStatus(input: NodeStatus): c.JSONValue {
     daemonEndpoints: input.daemonEndpoints != null ? fromNodeDaemonEndpoints(input.daemonEndpoints) : undefined,
     images: input.images?.map(fromContainerImage),
     nodeInfo: input.nodeInfo != null ? fromNodeSystemInfo(input.nodeInfo) : undefined,
+    runtimeHandlers: input.runtimeHandlers?.map(fromNodeRuntimeHandler),
     volumesAttached: input.volumesAttached?.map(fromAttachedVolume),
   }}
 
@@ -2748,6 +2877,37 @@ export function fromNodeSystemInfo(input: NodeSystemInfo): c.JSONValue {
     ...input,
   }}
 
+/** NodeRuntimeHandler is a set of runtime handler information. */
+export interface NodeRuntimeHandler {
+  features?: NodeRuntimeHandlerFeatures | null;
+  name?: string | null;
+}
+export function toNodeRuntimeHandler(input: c.JSONValue): NodeRuntimeHandler {
+  const obj = c.checkObj(input);
+  return {
+    features: c.readOpt(obj["features"], toNodeRuntimeHandlerFeatures),
+    name: c.readOpt(obj["name"], c.checkStr),
+  }}
+export function fromNodeRuntimeHandler(input: NodeRuntimeHandler): c.JSONValue {
+  return {
+    ...input,
+    features: input.features != null ? fromNodeRuntimeHandlerFeatures(input.features) : undefined,
+  }}
+
+/** NodeRuntimeHandlerFeatures is a set of runtime features. */
+export interface NodeRuntimeHandlerFeatures {
+  recursiveReadOnlyMounts?: boolean | null;
+}
+export function toNodeRuntimeHandlerFeatures(input: c.JSONValue): NodeRuntimeHandlerFeatures {
+  const obj = c.checkObj(input);
+  return {
+    recursiveReadOnlyMounts: c.readOpt(obj["recursiveReadOnlyMounts"], c.checkBool),
+  }}
+export function fromNodeRuntimeHandlerFeatures(input: NodeRuntimeHandlerFeatures): c.JSONValue {
+  return {
+    ...input,
+  }}
+
 /** NodeList is the whole list of all Nodes which have been registered with master. */
 export interface NodeList extends ListOf<Node> {
   apiVersion?: "v1";
@@ -2816,6 +2976,7 @@ export interface PersistentVolumeSpec {
   scaleIO?: ScaleIOPersistentVolumeSource | null;
   storageClassName?: string | null;
   storageos?: StorageOSPersistentVolumeSource | null;
+  volumeAttributesClassName?: string | null;
   volumeMode?: string | null;
   vsphereVolume?: VsphereVirtualDiskVolumeSource | null;
 }
@@ -2850,6 +3011,7 @@ export function toPersistentVolumeSpec(input: c.JSONValue): PersistentVolumeSpec
     scaleIO: c.readOpt(obj["scaleIO"], toScaleIOPersistentVolumeSource),
     storageClassName: c.readOpt(obj["storageClassName"], c.checkStr),
     storageos: c.readOpt(obj["storageos"], toStorageOSPersistentVolumeSource),
+    volumeAttributesClassName: c.readOpt(obj["volumeAttributesClassName"], c.checkStr),
     volumeMode: c.readOpt(obj["volumeMode"], c.checkStr),
     vsphereVolume: c.readOpt(obj["vsphereVolume"], toVsphereVirtualDiskVolumeSource),
   }}
@@ -3114,6 +3276,8 @@ export interface PersistentVolumeClaimStatus {
   allocatedResources?: Record<string,c.Quantity> | null;
   capacity?: Record<string,c.Quantity> | null;
   conditions?: Array<PersistentVolumeClaimCondition> | null;
+  currentVolumeAttributesClassName?: string | null;
+  modifyVolumeStatus?: ModifyVolumeStatus | null;
   phase?: string | null;
 }
 export function toPersistentVolumeClaimStatus(input: c.JSONValue): PersistentVolumeClaimStatus {
@@ -3124,6 +3288,8 @@ export function toPersistentVolumeClaimStatus(input: c.JSONValue): PersistentVol
     allocatedResources: c.readOpt(obj["allocatedResources"], x => c.readMap(x, c.toQuantity)),
     capacity: c.readOpt(obj["capacity"], x => c.readMap(x, c.toQuantity)),
     conditions: c.readOpt(obj["conditions"], x => c.readList(x, toPersistentVolumeClaimCondition)),
+    currentVolumeAttributesClassName: c.readOpt(obj["currentVolumeAttributesClassName"], c.checkStr),
+    modifyVolumeStatus: c.readOpt(obj["modifyVolumeStatus"], toModifyVolumeStatus),
     phase: c.readOpt(obj["phase"], c.checkStr),
   }}
 export function fromPersistentVolumeClaimStatus(input: PersistentVolumeClaimStatus): c.JSONValue {
@@ -3132,6 +3298,7 @@ export function fromPersistentVolumeClaimStatus(input: PersistentVolumeClaimStat
     allocatedResources: c.writeMap(input.allocatedResources, c.fromQuantity),
     capacity: c.writeMap(input.capacity, c.fromQuantity),
     conditions: input.conditions?.map(fromPersistentVolumeClaimCondition),
+    modifyVolumeStatus: input.modifyVolumeStatus != null ? fromModifyVolumeStatus(input.modifyVolumeStatus) : undefined,
   }}
 
 /** PersistentVolumeClaimCondition contains details about state of pvc */
@@ -3429,6 +3596,7 @@ export function fromPodSchedulingGate(input: PodSchedulingGate): c.JSONValue {
 
 /** PodSecurityContext holds pod-level security attributes and common container settings. Some fields are also present in container.securityContext.  Field values of container.securityContext take precedence over field values of PodSecurityContext. */
 export interface PodSecurityContext {
+  appArmorProfile?: AppArmorProfile | null;
   fsGroup?: number | null;
   fsGroupChangePolicy?: string | null;
   runAsGroup?: number | null;
@@ -3443,6 +3611,7 @@ export interface PodSecurityContext {
 export function toPodSecurityContext(input: c.JSONValue): PodSecurityContext {
   const obj = c.checkObj(input);
   return {
+    appArmorProfile: c.readOpt(obj["appArmorProfile"], toAppArmorProfile),
     fsGroup: c.readOpt(obj["fsGroup"], c.checkNum),
     fsGroupChangePolicy: c.readOpt(obj["fsGroupChangePolicy"], c.checkStr),
     runAsGroup: c.readOpt(obj["runAsGroup"], c.checkNum),
@@ -3457,6 +3626,7 @@ export function toPodSecurityContext(input: c.JSONValue): PodSecurityContext {
 export function fromPodSecurityContext(input: PodSecurityContext): c.JSONValue {
   return {
     ...input,
+    appArmorProfile: input.appArmorProfile != null ? fromAppArmorProfile(input.appArmorProfile) : undefined,
     seLinuxOptions: input.seLinuxOptions != null ? fromSELinuxOptions(input.seLinuxOptions) : undefined,
     seccompProfile: input.seccompProfile != null ? fromSeccompProfile(input.seccompProfile) : undefined,
     sysctls: input.sysctls?.map(fromSysctl),
@@ -3650,6 +3820,7 @@ export function fromProjectedVolumeSource(input: ProjectedVolumeSource): c.JSONV
 
 /** Projection that may be projected along with other supported volume types */
 export interface VolumeProjection {
+  clusterTrustBundle?: ClusterTrustBundleProjection | null;
   configMap?: ConfigMapProjection | null;
   downwardAPI?: DownwardAPIProjection | null;
   secret?: SecretProjection | null;
@@ -3658,6 +3829,7 @@ export interface VolumeProjection {
 export function toVolumeProjection(input: c.JSONValue): VolumeProjection {
   const obj = c.checkObj(input);
   return {
+    clusterTrustBundle: c.readOpt(obj["clusterTrustBundle"], toClusterTrustBundleProjection),
     configMap: c.readOpt(obj["configMap"], toConfigMapProjection),
     downwardAPI: c.readOpt(obj["downwardAPI"], toDownwardAPIProjection),
     secret: c.readOpt(obj["secret"], toSecretProjection),
@@ -3666,6 +3838,7 @@ export function toVolumeProjection(input: c.JSONValue): VolumeProjection {
 export function fromVolumeProjection(input: VolumeProjection): c.JSONValue {
   return {
     ...input,
+    clusterTrustBundle: input.clusterTrustBundle != null ? fromClusterTrustBundleProjection(input.clusterTrustBundle) : undefined,
     configMap: input.configMap != null ? fromConfigMapProjection(input.configMap) : undefined,
     downwardAPI: input.downwardAPI != null ? fromDownwardAPIProjection(input.downwardAPI) : undefined,
     secret: input.secret != null ? fromSecretProjection(input.secret) : undefined,
@@ -4294,6 +4467,7 @@ export interface ServiceSpec {
   selector?: Record<string,string> | null;
   sessionAffinity?: string | null;
   sessionAffinityConfig?: SessionAffinityConfig | null;
+  trafficDistribution?: string | null;
   type?: string | null;
 }
 export function toServiceSpec(input: c.JSONValue): ServiceSpec {
@@ -4317,6 +4491,7 @@ export function toServiceSpec(input: c.JSONValue): ServiceSpec {
     selector: c.readOpt(obj["selector"], x => c.readMap(x, c.checkStr)),
     sessionAffinity: c.readOpt(obj["sessionAffinity"], c.checkStr),
     sessionAffinityConfig: c.readOpt(obj["sessionAffinityConfig"], toSessionAffinityConfig),
+    trafficDistribution: c.readOpt(obj["trafficDistribution"], c.checkStr),
     type: c.readOpt(obj["type"], c.checkStr),
   }}
 export function fromServiceSpec(input: ServiceSpec): c.JSONValue {
