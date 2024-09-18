@@ -1,4 +1,4 @@
-import type { KubernetesTunnel } from "./common.ts";
+import type { KubernetesTunnel } from "./deps.ts";
 
 export type TerminalSize = {
   columns: number;

@@ -1,6 +1,6 @@
 #!/usr/bin/env -S deno run --allow-net --allow-read --allow-env --allow-run --unstable
 
-import { autoDetectClient, readAllItems } from '../client.ts';
+import { autoDetectClient, readAllItems } from '../deps.ts';
 import { ArgoprojIoV1alpha1NamespacedApi } from "../argo-cd/argoproj.io@v1alpha1/mod.ts";
 
 const restClient = await autoDetectClient();

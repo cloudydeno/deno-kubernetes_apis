@@ -1,6 +1,6 @@
 #!/usr/bin/env -S deno run --allow-net --allow-read --allow-env --unstable
 
-import { tunnelBeta, makeClientProviderChain } from '../client.ts';
+import { tunnelBeta, makeClientProviderChain } from '../deps.ts';
 import { CoreV1Api } from '../builtin/core@v1/mod.ts';
 
 // Set up an experimental client which can use Websockets
