@@ -126,7 +126,7 @@ export function generateModuleTypescript(surface: SurfaceMap, api: SurfaceApi): 
       const funcName = `proxy${middleName}Request`;
 
       args.push([{name: 'opts', in: 'path'}, {type: 'special', name: 'ProxyOptions'}]);
-      const baseSignature = `${funcName}(${writeSig(args, false, '    ')}`.replace('(name:', `(${nameArgName}:`);
+      const baseSignature = `${funcName}(${writeSig(args, false, '    ')}`.replace('name:', `${nameArgName}:`);
 
       chunks.push(`  ${baseSignature} & {expectStream: true; expectJson: true},\n  ): Promise<ReadableStream<c.JSONValue>>;`);
       chunks.push(`  ${baseSignature} & {expectStream: true},\n  ): Promise<ReadableStream<Uint8Array>>;`);

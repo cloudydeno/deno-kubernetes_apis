@@ -444,23 +444,23 @@ export class CoreV1Api {
   }
 
   proxyNodeRequest(
-    name: string,
+    nodeName: string,
     opts: c.ProxyOptions & {expectStream: true; expectJson: true},
   ): Promise<ReadableStream<c.JSONValue>>;
   proxyNodeRequest(
-    name: string,
+    nodeName: string,
     opts: c.ProxyOptions & {expectStream: true},
   ): Promise<ReadableStream<Uint8Array>>;
   proxyNodeRequest(
-    name: string,
+    nodeName: string,
     opts: c.ProxyOptions & {expectJson: true},
   ): Promise<c.JSONValue>;
   proxyNodeRequest(
-    name: string,
+    nodeName: string,
     opts: c.ProxyOptions,
   ): Promise<Uint8Array>;
   async proxyNodeRequest(
-    name: string,
+    nodeName: string,
     opts: c.ProxyOptions,
   ): Promise<unknown> {
     if (opts.path && !opts.path.startsWith('/')) throw new Error("Proxy path cannot be relative");
@@ -1897,23 +1897,23 @@ export class CoreV1NamespacedApi {
   }
 
   proxyPodRequest(
-    name: string,
+    podName: string,
     opts: c.ProxyOptions & {expectStream: true; expectJson: true},
   ): Promise<ReadableStream<c.JSONValue>>;
   proxyPodRequest(
-    name: string,
+    podName: string,
     opts: c.ProxyOptions & {expectStream: true},
   ): Promise<ReadableStream<Uint8Array>>;
   proxyPodRequest(
-    name: string,
+    podName: string,
     opts: c.ProxyOptions & {expectJson: true},
   ): Promise<c.JSONValue>;
   proxyPodRequest(
-    name: string,
+    podName: string,
     opts: c.ProxyOptions,
   ): Promise<Uint8Array>;
   async proxyPodRequest(
-    name: string,
+    podName: string,
     opts: c.ProxyOptions,
   ): Promise<unknown> {
     if (opts.path && !opts.path.startsWith('/')) throw new Error("Proxy path cannot be relative");
@@ -2829,23 +2829,23 @@ export class CoreV1NamespacedApi {
   }
 
   proxyServiceRequest(
-    name: string,
+    serviceName: string,
     opts: c.ProxyOptions & {expectStream: true; expectJson: true},
   ): Promise<ReadableStream<c.JSONValue>>;
   proxyServiceRequest(
-    name: string,
+    serviceName: string,
     opts: c.ProxyOptions & {expectStream: true},
   ): Promise<ReadableStream<Uint8Array>>;
   proxyServiceRequest(
-    name: string,
+    serviceName: string,
     opts: c.ProxyOptions & {expectJson: true},
   ): Promise<c.JSONValue>;
   proxyServiceRequest(
-    name: string,
+    serviceName: string,
     opts: c.ProxyOptions,
   ): Promise<Uint8Array>;
   async proxyServiceRequest(
-    name: string,
+    serviceName: string,
     opts: c.ProxyOptions,
   ): Promise<unknown> {
     if (opts.path && !opts.path.startsWith('/')) throw new Error("Proxy path cannot be relative");
