@@ -13,15 +13,15 @@ export class AuthorizationV1Api {
     this.#client = client;
   }
 
-  namespace(name: string) {
+  namespace(name: string): AuthorizationV1NamespacedApi {
     return new AuthorizationV1NamespacedApi(this.#client, name);
   }
-  myNamespace() {
+  myNamespace(): AuthorizationV1NamespacedApi {
     if (!this.#client.defaultNamespace) throw new Error("No current namespace is set");
     return new AuthorizationV1NamespacedApi(this.#client, this.#client.defaultNamespace);
   }
 
-  async createSelfSubjectAccessReview(body: AuthorizationV1.SelfSubjectAccessReview, opts: operations.PutOpts = {}) {
+  async createSelfSubjectAccessReview(body: AuthorizationV1.SelfSubjectAccessReview, opts: operations.PutOpts = {}): Promise<AuthorizationV1.SelfSubjectAccessReview> {
     const resp = await this.#client.performRequest({
       method: "POST",
       path: `${this.#root}selfsubjectaccessreviews`,
@@ -33,7 +33,7 @@ export class AuthorizationV1Api {
     return AuthorizationV1.toSelfSubjectAccessReview(resp);
   }
 
-  async createSelfSubjectRulesReview(body: AuthorizationV1.SelfSubjectRulesReview, opts: operations.PutOpts = {}) {
+  async createSelfSubjectRulesReview(body: AuthorizationV1.SelfSubjectRulesReview, opts: operations.PutOpts = {}): Promise<AuthorizationV1.SelfSubjectRulesReview> {
     const resp = await this.#client.performRequest({
       method: "POST",
       path: `${this.#root}selfsubjectrulesreviews`,
@@ -45,7 +45,7 @@ export class AuthorizationV1Api {
     return AuthorizationV1.toSelfSubjectRulesReview(resp);
   }
 
-  async createSubjectAccessReview(body: AuthorizationV1.SubjectAccessReview, opts: operations.PutOpts = {}) {
+  async createSubjectAccessReview(body: AuthorizationV1.SubjectAccessReview, opts: operations.PutOpts = {}): Promise<AuthorizationV1.SubjectAccessReview> {
     const resp = await this.#client.performRequest({
       method: "POST",
       path: `${this.#root}subjectaccessreviews`,
@@ -67,7 +67,7 @@ export class AuthorizationV1NamespacedApi {
     this.#root = `/apis/authorization.k8s.io/v1/namespaces/${namespace}/`;
   }
 
-  async createLocalSubjectAccessReview(body: AuthorizationV1.LocalSubjectAccessReview, opts: operations.PutOpts = {}) {
+  async createLocalSubjectAccessReview(body: AuthorizationV1.LocalSubjectAccessReview, opts: operations.PutOpts = {}): Promise<AuthorizationV1.LocalSubjectAccessReview> {
     const resp = await this.#client.performRequest({
       method: "POST",
       path: `${this.#root}localsubjectaccessreviews`,

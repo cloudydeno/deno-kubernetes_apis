@@ -65,7 +65,7 @@ export function fromCertificateRequest(input: CertificateRequest): c.JSONValue {
       failureTime: input.status.failureTime != null ? c.fromTime(input.status.failureTime) : undefined,
     } : undefined,
   }}
-export function toCertificateRequest_spec(input: c.JSONValue) {
+function toCertificateRequest_spec(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     duration: c.readOpt(obj["duration"], c.checkStr),
@@ -78,7 +78,7 @@ export function toCertificateRequest_spec(input: c.JSONValue) {
     usages: c.readOpt(obj["usages"], x => c.readList(x, (x => c.readEnum<"signing" | "digital signature" | "content commitment" | "key encipherment" | "key agreement" | "data encipherment" | "cert sign" | "crl sign" | "encipher only" | "decipher only" | "any" | "server auth" | "client auth" | "code signing" | "email protection" | "s/mime" | "ipsec end system" | "ipsec tunnel" | "ipsec user" | "timestamping" | "ocsp signing" | "microsoft sgc" | "netscape sgc" | c.UnexpectedEnumValue>(x)))),
     username: c.readOpt(obj["username"], c.checkStr),
   }}
-export function toCertificateRequest_status(input: c.JSONValue) {
+function toCertificateRequest_status(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     ca: c.readOpt(obj["ca"], c.checkStr),
@@ -86,14 +86,14 @@ export function toCertificateRequest_status(input: c.JSONValue) {
     conditions: c.readOpt(obj["conditions"], x => c.readList(x, toCertificateRequest_status_conditions)),
     failureTime: c.readOpt(obj["failureTime"], c.toTime),
   }}
-export function toCertificateRequest_spec_issuerRef(input: c.JSONValue) {
+function toCertificateRequest_spec_issuerRef(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     group: c.readOpt(obj["group"], c.checkStr),
     kind: c.readOpt(obj["kind"], c.checkStr),
     name: c.checkStr(obj["name"]),
   }}
-export function toCertificateRequest_status_conditions(input: c.JSONValue) {
+function toCertificateRequest_status_conditions(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     lastTransitionTime: c.readOpt(obj["lastTransitionTime"], c.toTime),
@@ -247,7 +247,7 @@ export function fromCertificate(input: Certificate): c.JSONValue {
       renewalTime: input.status.renewalTime != null ? c.fromTime(input.status.renewalTime) : undefined,
     } : undefined,
   }}
-export function toCertificate_spec(input: c.JSONValue) {
+function toCertificate_spec(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     additionalOutputFormats: c.readOpt(obj["additionalOutputFormats"], x => c.readList(x, toCertificate_spec_additionalOutputFormats)),
@@ -270,7 +270,7 @@ export function toCertificate_spec(input: c.JSONValue) {
     uris: c.readOpt(obj["uris"], x => c.readList(x, c.checkStr)),
     usages: c.readOpt(obj["usages"], x => c.readList(x, (x => c.readEnum<"signing" | "digital signature" | "content commitment" | "key encipherment" | "key agreement" | "data encipherment" | "cert sign" | "crl sign" | "encipher only" | "decipher only" | "any" | "server auth" | "client auth" | "code signing" | "email protection" | "s/mime" | "ipsec end system" | "ipsec tunnel" | "ipsec user" | "timestamping" | "ocsp signing" | "microsoft sgc" | "netscape sgc" | c.UnexpectedEnumValue>(x)))),
   }}
-export function toCertificate_status(input: c.JSONValue) {
+function toCertificate_status(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     conditions: c.readOpt(obj["conditions"], x => c.readList(x, toCertificate_status_conditions)),
@@ -282,25 +282,25 @@ export function toCertificate_status(input: c.JSONValue) {
     renewalTime: c.readOpt(obj["renewalTime"], c.toTime),
     revision: c.readOpt(obj["revision"], c.checkNum),
   }}
-export function toCertificate_spec_additionalOutputFormats(input: c.JSONValue) {
+function toCertificate_spec_additionalOutputFormats(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     type: (x => c.readEnum<"DER" | "CombinedPEM" | c.UnexpectedEnumValue>(x))(obj["type"]),
   }}
-export function toCertificate_spec_issuerRef(input: c.JSONValue) {
+function toCertificate_spec_issuerRef(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     group: c.readOpt(obj["group"], c.checkStr),
     kind: c.readOpt(obj["kind"], c.checkStr),
     name: c.checkStr(obj["name"]),
   }}
-export function toCertificate_spec_keystores(input: c.JSONValue) {
+function toCertificate_spec_keystores(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     jks: c.readOpt(obj["jks"], toCertificate_spec_keystores_jks),
     pkcs12: c.readOpt(obj["pkcs12"], toCertificate_spec_keystores_pkcs12),
   }}
-export function toCertificate_spec_privateKey(input: c.JSONValue) {
+function toCertificate_spec_privateKey(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     algorithm: c.readOpt(obj["algorithm"], (x => c.readEnum<"RSA" | "ECDSA" | "Ed25519" | c.UnexpectedEnumValue>(x))),
@@ -308,13 +308,13 @@ export function toCertificate_spec_privateKey(input: c.JSONValue) {
     rotationPolicy: c.readOpt(obj["rotationPolicy"], (x => c.readEnum<"Never" | "Always" | c.UnexpectedEnumValue>(x))),
     size: c.readOpt(obj["size"], c.checkNum),
   }}
-export function toCertificate_spec_secretTemplate(input: c.JSONValue) {
+function toCertificate_spec_secretTemplate(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     annotations: c.readOpt(obj["annotations"], x => c.readMap(x, c.checkStr)),
     labels: c.readOpt(obj["labels"], x => c.readMap(x, c.checkStr)),
   }}
-export function toCertificate_spec_subject(input: c.JSONValue) {
+function toCertificate_spec_subject(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     countries: c.readOpt(obj["countries"], x => c.readList(x, c.checkStr)),
@@ -326,7 +326,7 @@ export function toCertificate_spec_subject(input: c.JSONValue) {
     serialNumber: c.readOpt(obj["serialNumber"], c.checkStr),
     streetAddresses: c.readOpt(obj["streetAddresses"], x => c.readList(x, c.checkStr)),
   }}
-export function toCertificate_status_conditions(input: c.JSONValue) {
+function toCertificate_status_conditions(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     lastTransitionTime: c.readOpt(obj["lastTransitionTime"], c.toTime),
@@ -336,13 +336,13 @@ export function toCertificate_status_conditions(input: c.JSONValue) {
     status: (x => c.readEnum<"True" | "False" | "Unknown" | c.UnexpectedEnumValue>(x))(obj["status"]),
     type: c.checkStr(obj["type"]),
   }}
-export function toCertificate_spec_keystores_jks(input: c.JSONValue) {
+function toCertificate_spec_keystores_jks(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     create: c.checkBool(obj["create"]),
     passwordSecretRef: toSecretRef(obj["passwordSecretRef"]),
   }}
-export function toCertificate_spec_keystores_pkcs12(input: c.JSONValue) {
+function toCertificate_spec_keystores_pkcs12(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     create: c.checkBool(obj["create"]),
@@ -470,7 +470,7 @@ export function fromIssuerSpec(input: IssuerSpec): c.JSONValue {
       } : undefined,
     } : undefined,
   }}
-export function toIssuerSpec_acme(input: c.JSONValue) {
+function toIssuerSpec_acme(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     caBundle: c.readOpt(obj["caBundle"], c.checkStr),
@@ -484,19 +484,19 @@ export function toIssuerSpec_acme(input: c.JSONValue) {
     skipTLSVerify: c.readOpt(obj["skipTLSVerify"], c.checkBool),
     solvers: c.readOpt(obj["solvers"], x => c.readList(x, toSolverSpec)),
   }}
-export function toIssuerSpec_ca(input: c.JSONValue) {
+function toIssuerSpec_ca(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     crlDistributionPoints: c.readOpt(obj["crlDistributionPoints"], x => c.readList(x, c.checkStr)),
     ocspServers: c.readOpt(obj["ocspServers"], x => c.readList(x, c.checkStr)),
     secretName: c.checkStr(obj["secretName"]),
   }}
-export function toIssuerSpec_selfSigned(input: c.JSONValue) {
+function toIssuerSpec_selfSigned(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     crlDistributionPoints: c.readOpt(obj["crlDistributionPoints"], x => c.readList(x, c.checkStr)),
   }}
-export function toIssuerSpec_vault(input: c.JSONValue) {
+function toIssuerSpec_vault(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     auth: toIssuerSpec_vault_auth(obj["auth"]),
@@ -506,48 +506,48 @@ export function toIssuerSpec_vault(input: c.JSONValue) {
     path: c.checkStr(obj["path"]),
     server: c.checkStr(obj["server"]),
   }}
-export function toIssuerSpec_venafi(input: c.JSONValue) {
+function toIssuerSpec_venafi(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     cloud: c.readOpt(obj["cloud"], toIssuerSpec_venafi_cloud),
     tpp: c.readOpt(obj["tpp"], toIssuerSpec_venafi_tpp),
     zone: c.checkStr(obj["zone"]),
   }}
-export function toIssuerSpec_acme_externalAccountBinding(input: c.JSONValue) {
+function toIssuerSpec_acme_externalAccountBinding(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     keyAlgorithm: c.readOpt(obj["keyAlgorithm"], (x => c.readEnum<"HS256" | "HS384" | "HS512" | c.UnexpectedEnumValue>(x))),
     keyID: c.checkStr(obj["keyID"]),
     keySecretRef: toSecretRef(obj["keySecretRef"]),
   }}
-export function toIssuerSpec_vault_auth(input: c.JSONValue) {
+function toIssuerSpec_vault_auth(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     appRole: c.readOpt(obj["appRole"], toIssuerSpec_vault_auth_appRole),
     kubernetes: c.readOpt(obj["kubernetes"], toIssuerSpec_vault_auth_kubernetes),
     tokenSecretRef: c.readOpt(obj["tokenSecretRef"], toSecretRef),
   }}
-export function toIssuerSpec_venafi_cloud(input: c.JSONValue) {
+function toIssuerSpec_venafi_cloud(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     apiTokenSecretRef: toSecretRef(obj["apiTokenSecretRef"]),
     url: c.readOpt(obj["url"], c.checkStr),
   }}
-export function toIssuerSpec_venafi_tpp(input: c.JSONValue) {
+function toIssuerSpec_venafi_tpp(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     caBundle: c.readOpt(obj["caBundle"], c.checkStr),
     credentialsRef: toIssuerSpec_venafi_tpp_credentialsRef(obj["credentialsRef"]),
     url: c.checkStr(obj["url"]),
   }}
-export function toIssuerSpec_vault_auth_appRole(input: c.JSONValue) {
+function toIssuerSpec_vault_auth_appRole(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     path: c.checkStr(obj["path"]),
     roleId: c.checkStr(obj["roleId"]),
     secretRef: toSecretRef(obj["secretRef"]),
   }}
-export function toIssuerSpec_vault_auth_kubernetes(input: c.JSONValue) {
+function toIssuerSpec_vault_auth_kubernetes(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     mountPath: c.readOpt(obj["mountPath"], c.checkStr),
@@ -555,12 +555,12 @@ export function toIssuerSpec_vault_auth_kubernetes(input: c.JSONValue) {
     secretRef: c.readOpt(obj["secretRef"], toSecretRef),
     serviceAccountRef: c.readOpt(obj["serviceAccountRef"], toIssuerSpec_vault_auth_kubernetes_serviceAccountRef),
   }}
-export function toIssuerSpec_venafi_tpp_credentialsRef(input: c.JSONValue) {
+function toIssuerSpec_venafi_tpp_credentialsRef(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     name: c.checkStr(obj["name"]),
   }}
-export function toIssuerSpec_vault_auth_kubernetes_serviceAccountRef(input: c.JSONValue) {
+function toIssuerSpec_vault_auth_kubernetes_serviceAccountRef(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     name: c.checkStr(obj["name"]),
@@ -743,7 +743,7 @@ export function fromSolverSpec(input: SolverSpec): c.JSONValue {
       } : undefined,
     } : undefined,
   }}
-export function toSolverSpec_dns01(input: c.JSONValue) {
+function toSolverSpec_dns01(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     acmeDNS: c.readOpt(obj["acmeDNS"], toSolverSpec_dns01_acmeDNS),
@@ -757,26 +757,26 @@ export function toSolverSpec_dns01(input: c.JSONValue) {
     route53: c.readOpt(obj["route53"], toSolverSpec_dns01_route53),
     webhook: c.readOpt(obj["webhook"], toSolverSpec_dns01_webhook),
   }}
-export function toSolverSpec_http01(input: c.JSONValue) {
+function toSolverSpec_http01(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     gatewayHTTPRoute: c.readOpt(obj["gatewayHTTPRoute"], toSolverSpec_http01_gatewayHTTPRoute),
     ingress: c.readOpt(obj["ingress"], toSolverSpec_http01_ingress),
   }}
-export function toSolverSpec_selector(input: c.JSONValue) {
+function toSolverSpec_selector(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     dnsNames: c.readOpt(obj["dnsNames"], x => c.readList(x, c.checkStr)),
     dnsZones: c.readOpt(obj["dnsZones"], x => c.readList(x, c.checkStr)),
     matchLabels: c.readOpt(obj["matchLabels"], x => c.readMap(x, c.checkStr)),
   }}
-export function toSolverSpec_dns01_acmeDNS(input: c.JSONValue) {
+function toSolverSpec_dns01_acmeDNS(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     accountSecretRef: toSecretRef(obj["accountSecretRef"]),
     host: c.checkStr(obj["host"]),
   }}
-export function toSolverSpec_dns01_akamai(input: c.JSONValue) {
+function toSolverSpec_dns01_akamai(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     accessTokenSecretRef: toSecretRef(obj["accessTokenSecretRef"]),
@@ -784,7 +784,7 @@ export function toSolverSpec_dns01_akamai(input: c.JSONValue) {
     clientTokenSecretRef: toSecretRef(obj["clientTokenSecretRef"]),
     serviceConsumerDomain: c.checkStr(obj["serviceConsumerDomain"]),
   }}
-export function toSolverSpec_dns01_azureDNS(input: c.JSONValue) {
+function toSolverSpec_dns01_azureDNS(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     clientID: c.readOpt(obj["clientID"], c.checkStr),
@@ -796,26 +796,26 @@ export function toSolverSpec_dns01_azureDNS(input: c.JSONValue) {
     subscriptionID: c.checkStr(obj["subscriptionID"]),
     tenantID: c.readOpt(obj["tenantID"], c.checkStr),
   }}
-export function toSolverSpec_dns01_cloudDNS(input: c.JSONValue) {
+function toSolverSpec_dns01_cloudDNS(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     hostedZoneName: c.readOpt(obj["hostedZoneName"], c.checkStr),
     project: c.checkStr(obj["project"]),
     serviceAccountSecretRef: c.readOpt(obj["serviceAccountSecretRef"], toSecretRef),
   }}
-export function toSolverSpec_dns01_cloudflare(input: c.JSONValue) {
+function toSolverSpec_dns01_cloudflare(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     apiKeySecretRef: c.readOpt(obj["apiKeySecretRef"], toSecretRef),
     apiTokenSecretRef: c.readOpt(obj["apiTokenSecretRef"], toSecretRef),
     email: c.readOpt(obj["email"], c.checkStr),
   }}
-export function toSolverSpec_dns01_digitalocean(input: c.JSONValue) {
+function toSolverSpec_dns01_digitalocean(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     tokenSecretRef: toSecretRef(obj["tokenSecretRef"]),
   }}
-export function toSolverSpec_dns01_rfc2136(input: c.JSONValue) {
+function toSolverSpec_dns01_rfc2136(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     nameserver: c.checkStr(obj["nameserver"]),
@@ -823,7 +823,7 @@ export function toSolverSpec_dns01_rfc2136(input: c.JSONValue) {
     tsigKeyName: c.readOpt(obj["tsigKeyName"], c.checkStr),
     tsigSecretSecretRef: c.readOpt(obj["tsigSecretSecretRef"], toSecretRef),
   }}
-export function toSolverSpec_dns01_route53(input: c.JSONValue) {
+function toSolverSpec_dns01_route53(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     accessKeyID: c.readOpt(obj["accessKeyID"], c.checkStr),
@@ -833,21 +833,21 @@ export function toSolverSpec_dns01_route53(input: c.JSONValue) {
     role: c.readOpt(obj["role"], c.checkStr),
     secretAccessKeySecretRef: c.readOpt(obj["secretAccessKeySecretRef"], toSecretRef),
   }}
-export function toSolverSpec_dns01_webhook(input: c.JSONValue) {
+function toSolverSpec_dns01_webhook(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     config: c.readOpt(obj["config"], c.identity),
     groupName: c.checkStr(obj["groupName"]),
     solverName: c.checkStr(obj["solverName"]),
   }}
-export function toSolverSpec_http01_gatewayHTTPRoute(input: c.JSONValue) {
+function toSolverSpec_http01_gatewayHTTPRoute(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     labels: c.readOpt(obj["labels"], x => c.readMap(x, c.checkStr)),
     parentRefs: c.readOpt(obj["parentRefs"], x => c.readList(x, toSolverSpec_http01_gatewayHTTPRoute_parentRefs)),
     serviceType: c.readOpt(obj["serviceType"], c.checkStr),
   }}
-export function toSolverSpec_http01_ingress(input: c.JSONValue) {
+function toSolverSpec_http01_ingress(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     class: c.readOpt(obj["class"], c.checkStr),
@@ -857,13 +857,13 @@ export function toSolverSpec_http01_ingress(input: c.JSONValue) {
     podTemplate: c.readOpt(obj["podTemplate"], toSolverSpec_http01_ingress_podTemplate),
     serviceType: c.readOpt(obj["serviceType"], c.checkStr),
   }}
-export function toSolverSpec_dns01_azureDNS_managedIdentity(input: c.JSONValue) {
+function toSolverSpec_dns01_azureDNS_managedIdentity(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     clientID: c.readOpt(obj["clientID"], c.checkStr),
     resourceID: c.readOpt(obj["resourceID"], c.checkStr),
   }}
-export function toSolverSpec_http01_gatewayHTTPRoute_parentRefs(input: c.JSONValue) {
+function toSolverSpec_http01_gatewayHTTPRoute_parentRefs(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     group: c.readOpt(obj["group"], c.checkStr),
@@ -873,30 +873,30 @@ export function toSolverSpec_http01_gatewayHTTPRoute_parentRefs(input: c.JSONVal
     port: c.readOpt(obj["port"], c.checkNum),
     sectionName: c.readOpt(obj["sectionName"], c.checkStr),
   }}
-export function toSolverSpec_http01_ingress_ingressTemplate(input: c.JSONValue) {
+function toSolverSpec_http01_ingress_ingressTemplate(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     metadata: c.readOpt(obj["metadata"], toSolverSpec_http01_ingress_ingressTemplate_metadata),
   }}
-export function toSolverSpec_http01_ingress_podTemplate(input: c.JSONValue) {
+function toSolverSpec_http01_ingress_podTemplate(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     metadata: c.readOpt(obj["metadata"], toSolverSpec_http01_ingress_podTemplate_metadata),
     spec: c.readOpt(obj["spec"], toSolverSpec_http01_ingress_podTemplate_spec),
   }}
-export function toSolverSpec_http01_ingress_ingressTemplate_metadata(input: c.JSONValue) {
+function toSolverSpec_http01_ingress_ingressTemplate_metadata(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     annotations: c.readOpt(obj["annotations"], x => c.readMap(x, c.checkStr)),
     labels: c.readOpt(obj["labels"], x => c.readMap(x, c.checkStr)),
   }}
-export function toSolverSpec_http01_ingress_podTemplate_metadata(input: c.JSONValue) {
+function toSolverSpec_http01_ingress_podTemplate_metadata(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     annotations: c.readOpt(obj["annotations"], x => c.readMap(x, c.checkStr)),
     labels: c.readOpt(obj["labels"], x => c.readMap(x, c.checkStr)),
   }}
-export function toSolverSpec_http01_ingress_podTemplate_spec(input: c.JSONValue) {
+function toSolverSpec_http01_ingress_podTemplate_spec(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     affinity: c.readOpt(obj["affinity"], CoreV1.toAffinity),
@@ -906,12 +906,12 @@ export function toSolverSpec_http01_ingress_podTemplate_spec(input: c.JSONValue)
     serviceAccountName: c.readOpt(obj["serviceAccountName"], c.checkStr),
     tolerations: c.readOpt(obj["tolerations"], x => c.readList(x, toSolverSpec_http01_ingress_podTemplate_spec_tolerations)),
   }}
-export function toSolverSpec_http01_ingress_podTemplate_spec_imagePullSecrets(input: c.JSONValue) {
+function toSolverSpec_http01_ingress_podTemplate_spec_imagePullSecrets(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     name: c.readOpt(obj["name"], c.checkStr),
   }}
-export function toSolverSpec_http01_ingress_podTemplate_spec_tolerations(input: c.JSONValue) {
+function toSolverSpec_http01_ingress_podTemplate_spec_tolerations(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     effect: c.readOpt(obj["effect"], c.checkStr),
@@ -951,14 +951,14 @@ export function fromIssuerStatus(input: IssuerStatus): c.JSONValue {
       lastTransitionTime: x.lastTransitionTime != null ? c.fromTime(x.lastTransitionTime) : undefined,
     })),
   }}
-export function toIssuerStatus_acme(input: c.JSONValue) {
+function toIssuerStatus_acme(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     lastPrivateKeyHash: c.readOpt(obj["lastPrivateKeyHash"], c.checkStr),
     lastRegisteredEmail: c.readOpt(obj["lastRegisteredEmail"], c.checkStr),
     uri: c.readOpt(obj["uri"], c.checkStr),
   }}
-export function toIssuerStatus_conditions(input: c.JSONValue) {
+function toIssuerStatus_conditions(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     lastTransitionTime: c.readOpt(obj["lastTransitionTime"], c.toTime),

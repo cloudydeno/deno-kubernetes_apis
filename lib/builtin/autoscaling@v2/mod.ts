@@ -13,15 +13,15 @@ export class AutoscalingV2Api {
     this.#client = client;
   }
 
-  namespace(name: string) {
+  namespace(name: string): AutoscalingV2NamespacedApi {
     return new AutoscalingV2NamespacedApi(this.#client, name);
   }
-  myNamespace() {
+  myNamespace(): AutoscalingV2NamespacedApi {
     if (!this.#client.defaultNamespace) throw new Error("No current namespace is set");
     return new AutoscalingV2NamespacedApi(this.#client, this.#client.defaultNamespace);
   }
 
-  async getHorizontalPodAutoscalerListForAllNamespaces(opts: operations.GetListOpts = {}) {
+  async getHorizontalPodAutoscalerListForAllNamespaces(opts: operations.GetListOpts = {}): Promise<AutoscalingV2.HorizontalPodAutoscalerList> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}horizontalpodautoscalers`,
@@ -32,7 +32,7 @@ export class AutoscalingV2Api {
     return AutoscalingV2.toHorizontalPodAutoscalerList(resp);
   }
 
-  async watchHorizontalPodAutoscalerListForAllNamespaces(opts: operations.WatchListOpts = {}) {
+  async watchHorizontalPodAutoscalerListForAllNamespaces(opts: operations.WatchListOpts = {}): Promise<ReadableStream<c.WatchEvent<AutoscalingV2.HorizontalPodAutoscaler & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}horizontalpodautoscalers`,
@@ -54,7 +54,7 @@ export class AutoscalingV2NamespacedApi {
     this.#root = `/apis/autoscaling/v2/namespaces/${namespace}/`;
   }
 
-  async getHorizontalPodAutoscalerList(opts: operations.GetListOpts = {}) {
+  async getHorizontalPodAutoscalerList(opts: operations.GetListOpts = {}): Promise<AutoscalingV2.HorizontalPodAutoscalerList> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}horizontalpodautoscalers`,
@@ -65,7 +65,7 @@ export class AutoscalingV2NamespacedApi {
     return AutoscalingV2.toHorizontalPodAutoscalerList(resp);
   }
 
-  async watchHorizontalPodAutoscalerList(opts: operations.WatchListOpts = {}) {
+  async watchHorizontalPodAutoscalerList(opts: operations.WatchListOpts = {}): Promise<ReadableStream<c.WatchEvent<AutoscalingV2.HorizontalPodAutoscaler & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}horizontalpodautoscalers`,
@@ -77,7 +77,7 @@ export class AutoscalingV2NamespacedApi {
     return resp.pipeThrough(new c.WatchEventTransformer(AutoscalingV2.toHorizontalPodAutoscaler, MetaV1.toStatus));
   }
 
-  async createHorizontalPodAutoscaler(body: AutoscalingV2.HorizontalPodAutoscaler, opts: operations.PutOpts = {}) {
+  async createHorizontalPodAutoscaler(body: AutoscalingV2.HorizontalPodAutoscaler, opts: operations.PutOpts = {}): Promise<AutoscalingV2.HorizontalPodAutoscaler> {
     const resp = await this.#client.performRequest({
       method: "POST",
       path: `${this.#root}horizontalpodautoscalers`,
@@ -89,7 +89,7 @@ export class AutoscalingV2NamespacedApi {
     return AutoscalingV2.toHorizontalPodAutoscaler(resp);
   }
 
-  async deleteHorizontalPodAutoscalerList(opts: operations.DeleteListOpts = {}) {
+  async deleteHorizontalPodAutoscalerList(opts: operations.DeleteListOpts = {}): Promise<AutoscalingV2.HorizontalPodAutoscalerList> {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}horizontalpodautoscalers`,
@@ -100,7 +100,7 @@ export class AutoscalingV2NamespacedApi {
     return AutoscalingV2.toHorizontalPodAutoscalerList(resp);
   }
 
-  async getHorizontalPodAutoscaler(name: string, opts: operations.NoOpts = {}) {
+  async getHorizontalPodAutoscaler(name: string, opts: operations.NoOpts = {}): Promise<AutoscalingV2.HorizontalPodAutoscaler> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}horizontalpodautoscalers/${name}`,
@@ -110,7 +110,7 @@ export class AutoscalingV2NamespacedApi {
     return AutoscalingV2.toHorizontalPodAutoscaler(resp);
   }
 
-  async deleteHorizontalPodAutoscaler(name: string, opts: operations.DeleteOpts = {}) {
+  async deleteHorizontalPodAutoscaler(name: string, opts: operations.DeleteOpts = {}): Promise<AutoscalingV2.HorizontalPodAutoscaler | MetaV1.Status> {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}horizontalpodautoscalers/${name}`,
@@ -122,7 +122,7 @@ export class AutoscalingV2NamespacedApi {
     return AutoscalingV2.toHorizontalPodAutoscaler(resp);
   }
 
-  async replaceHorizontalPodAutoscaler(name: string, body: AutoscalingV2.HorizontalPodAutoscaler, opts: operations.PutOpts = {}) {
+  async replaceHorizontalPodAutoscaler(name: string, body: AutoscalingV2.HorizontalPodAutoscaler, opts: operations.PutOpts = {}): Promise<AutoscalingV2.HorizontalPodAutoscaler> {
     const resp = await this.#client.performRequest({
       method: "PUT",
       path: `${this.#root}horizontalpodautoscalers/${name}`,
@@ -134,7 +134,7 @@ export class AutoscalingV2NamespacedApi {
     return AutoscalingV2.toHorizontalPodAutoscaler(resp);
   }
 
-  async patchHorizontalPodAutoscaler(name: string, type: c.PatchType, body: AutoscalingV2.HorizontalPodAutoscaler | c.JsonPatch, opts: operations.PatchOpts = {}) {
+  async patchHorizontalPodAutoscaler(name: string, type: c.PatchType, body: AutoscalingV2.HorizontalPodAutoscaler | c.JsonPatch, opts: operations.PatchOpts = {}): Promise<AutoscalingV2.HorizontalPodAutoscaler> {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}horizontalpodautoscalers/${name}`,
@@ -147,7 +147,7 @@ export class AutoscalingV2NamespacedApi {
     return AutoscalingV2.toHorizontalPodAutoscaler(resp);
   }
 
-  async getHorizontalPodAutoscalerStatus(name: string, opts: operations.NoOpts = {}) {
+  async getHorizontalPodAutoscalerStatus(name: string, opts: operations.NoOpts = {}): Promise<AutoscalingV2.HorizontalPodAutoscaler> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}horizontalpodautoscalers/${name}/status`,
@@ -157,7 +157,7 @@ export class AutoscalingV2NamespacedApi {
     return AutoscalingV2.toHorizontalPodAutoscaler(resp);
   }
 
-  async replaceHorizontalPodAutoscalerStatus(name: string, body: AutoscalingV2.HorizontalPodAutoscaler, opts: operations.PutOpts = {}) {
+  async replaceHorizontalPodAutoscalerStatus(name: string, body: AutoscalingV2.HorizontalPodAutoscaler, opts: operations.PutOpts = {}): Promise<AutoscalingV2.HorizontalPodAutoscaler> {
     const resp = await this.#client.performRequest({
       method: "PUT",
       path: `${this.#root}horizontalpodautoscalers/${name}/status`,
@@ -169,7 +169,7 @@ export class AutoscalingV2NamespacedApi {
     return AutoscalingV2.toHorizontalPodAutoscaler(resp);
   }
 
-  async patchHorizontalPodAutoscalerStatus(name: string, type: c.PatchType, body: AutoscalingV2.HorizontalPodAutoscaler | c.JsonPatch, opts: operations.PatchOpts = {}) {
+  async patchHorizontalPodAutoscalerStatus(name: string, type: c.PatchType, body: AutoscalingV2.HorizontalPodAutoscaler | c.JsonPatch, opts: operations.PatchOpts = {}): Promise<AutoscalingV2.HorizontalPodAutoscaler> {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}horizontalpodautoscalers/${name}/status`,

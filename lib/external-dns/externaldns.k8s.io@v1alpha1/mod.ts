@@ -13,15 +13,15 @@ export class ExternaldnsV1alpha1Api {
     this.#client = client;
   }
 
-  namespace(name: string) {
+  namespace(name: string): ExternaldnsV1alpha1NamespacedApi {
     return new ExternaldnsV1alpha1NamespacedApi(this.#client, name);
   }
-  myNamespace() {
+  myNamespace(): ExternaldnsV1alpha1NamespacedApi {
     if (!this.#client.defaultNamespace) throw new Error("No current namespace is set");
     return new ExternaldnsV1alpha1NamespacedApi(this.#client, this.#client.defaultNamespace);
   }
 
-  async getDNSEndpointListForAllNamespaces(opts: operations.GetListOpts = {}) {
+  async getDNSEndpointListForAllNamespaces(opts: operations.GetListOpts = {}): Promise<ExternaldnsV1alpha1.DNSEndpointList> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}dnsendpoints`,
@@ -32,7 +32,7 @@ export class ExternaldnsV1alpha1Api {
     return ExternaldnsV1alpha1.toDNSEndpointList(resp);
   }
 
-  async watchDNSEndpointListForAllNamespaces(opts: operations.WatchListOpts = {}) {
+  async watchDNSEndpointListForAllNamespaces(opts: operations.WatchListOpts = {}): Promise<ReadableStream<c.WatchEvent<ExternaldnsV1alpha1.DNSEndpoint & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}dnsendpoints`,
@@ -54,7 +54,7 @@ export class ExternaldnsV1alpha1NamespacedApi {
     this.#root = `/apis/externaldns.k8s.io/v1alpha1/namespaces/${namespace}/`;
   }
 
-  async getDNSEndpointList(opts: operations.GetListOpts = {}) {
+  async getDNSEndpointList(opts: operations.GetListOpts = {}): Promise<ExternaldnsV1alpha1.DNSEndpointList> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}dnsendpoints`,
@@ -65,7 +65,7 @@ export class ExternaldnsV1alpha1NamespacedApi {
     return ExternaldnsV1alpha1.toDNSEndpointList(resp);
   }
 
-  async watchDNSEndpointList(opts: operations.WatchListOpts = {}) {
+  async watchDNSEndpointList(opts: operations.WatchListOpts = {}): Promise<ReadableStream<c.WatchEvent<ExternaldnsV1alpha1.DNSEndpoint & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}dnsendpoints`,
@@ -77,7 +77,7 @@ export class ExternaldnsV1alpha1NamespacedApi {
     return resp.pipeThrough(new c.WatchEventTransformer(ExternaldnsV1alpha1.toDNSEndpoint, MetaV1.toStatus));
   }
 
-  async createDNSEndpoint(body: ExternaldnsV1alpha1.DNSEndpoint, opts: operations.PutOpts = {}) {
+  async createDNSEndpoint(body: ExternaldnsV1alpha1.DNSEndpoint, opts: operations.PutOpts = {}): Promise<ExternaldnsV1alpha1.DNSEndpoint> {
     const resp = await this.#client.performRequest({
       method: "POST",
       path: `${this.#root}dnsendpoints`,
@@ -89,7 +89,7 @@ export class ExternaldnsV1alpha1NamespacedApi {
     return ExternaldnsV1alpha1.toDNSEndpoint(resp);
   }
 
-  async deleteDNSEndpointList(opts: operations.DeleteListOpts = {}) {
+  async deleteDNSEndpointList(opts: operations.DeleteListOpts = {}): Promise<ExternaldnsV1alpha1.DNSEndpointList> {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}dnsendpoints`,
@@ -100,7 +100,7 @@ export class ExternaldnsV1alpha1NamespacedApi {
     return ExternaldnsV1alpha1.toDNSEndpointList(resp);
   }
 
-  async getDNSEndpoint(name: string, opts: operations.NoOpts = {}) {
+  async getDNSEndpoint(name: string, opts: operations.NoOpts = {}): Promise<ExternaldnsV1alpha1.DNSEndpoint> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}dnsendpoints/${name}`,
@@ -110,7 +110,7 @@ export class ExternaldnsV1alpha1NamespacedApi {
     return ExternaldnsV1alpha1.toDNSEndpoint(resp);
   }
 
-  async deleteDNSEndpoint(name: string, opts: operations.DeleteOpts = {}) {
+  async deleteDNSEndpoint(name: string, opts: operations.DeleteOpts = {}): Promise<ExternaldnsV1alpha1.DNSEndpoint | MetaV1.Status> {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}dnsendpoints/${name}`,
@@ -122,7 +122,7 @@ export class ExternaldnsV1alpha1NamespacedApi {
     return ExternaldnsV1alpha1.toDNSEndpoint(resp);
   }
 
-  async replaceDNSEndpoint(name: string, body: ExternaldnsV1alpha1.DNSEndpoint, opts: operations.PutOpts = {}) {
+  async replaceDNSEndpoint(name: string, body: ExternaldnsV1alpha1.DNSEndpoint, opts: operations.PutOpts = {}): Promise<ExternaldnsV1alpha1.DNSEndpoint> {
     const resp = await this.#client.performRequest({
       method: "PUT",
       path: `${this.#root}dnsendpoints/${name}`,
@@ -134,7 +134,7 @@ export class ExternaldnsV1alpha1NamespacedApi {
     return ExternaldnsV1alpha1.toDNSEndpoint(resp);
   }
 
-  async patchDNSEndpoint(name: string, type: c.PatchType, body: ExternaldnsV1alpha1.DNSEndpoint | c.JsonPatch, opts: operations.PatchOpts = {}) {
+  async patchDNSEndpoint(name: string, type: c.PatchType, body: ExternaldnsV1alpha1.DNSEndpoint | c.JsonPatch, opts: operations.PatchOpts = {}): Promise<ExternaldnsV1alpha1.DNSEndpoint> {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}dnsendpoints/${name}`,
@@ -147,7 +147,7 @@ export class ExternaldnsV1alpha1NamespacedApi {
     return ExternaldnsV1alpha1.toDNSEndpoint(resp);
   }
 
-  async getDNSEndpointStatus(name: string, opts: operations.NoOpts = {}) {
+  async getDNSEndpointStatus(name: string, opts: operations.NoOpts = {}): Promise<ExternaldnsV1alpha1.DNSEndpoint> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}dnsendpoints/${name}/status`,
@@ -157,7 +157,7 @@ export class ExternaldnsV1alpha1NamespacedApi {
     return ExternaldnsV1alpha1.toDNSEndpoint(resp);
   }
 
-  async replaceDNSEndpointStatus(name: string, body: ExternaldnsV1alpha1.DNSEndpoint, opts: operations.PutOpts = {}) {
+  async replaceDNSEndpointStatus(name: string, body: ExternaldnsV1alpha1.DNSEndpoint, opts: operations.PutOpts = {}): Promise<ExternaldnsV1alpha1.DNSEndpoint> {
     const resp = await this.#client.performRequest({
       method: "PUT",
       path: `${this.#root}dnsendpoints/${name}/status`,
@@ -169,7 +169,7 @@ export class ExternaldnsV1alpha1NamespacedApi {
     return ExternaldnsV1alpha1.toDNSEndpoint(resp);
   }
 
-  async patchDNSEndpointStatus(name: string, type: c.PatchType, body: ExternaldnsV1alpha1.DNSEndpoint | c.JsonPatch, opts: operations.PatchOpts = {}) {
+  async patchDNSEndpointStatus(name: string, type: c.PatchType, body: ExternaldnsV1alpha1.DNSEndpoint | c.JsonPatch, opts: operations.PatchOpts = {}): Promise<ExternaldnsV1alpha1.DNSEndpoint> {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}dnsendpoints/${name}/status`,

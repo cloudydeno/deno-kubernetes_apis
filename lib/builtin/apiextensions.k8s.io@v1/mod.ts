@@ -13,7 +13,7 @@ export class ApiextensionsV1Api {
     this.#client = client;
   }
 
-  async getCustomResourceDefinitionList(opts: operations.GetListOpts = {}) {
+  async getCustomResourceDefinitionList(opts: operations.GetListOpts = {}): Promise<ApiextensionsV1.CustomResourceDefinitionList> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}customresourcedefinitions`,
@@ -24,7 +24,7 @@ export class ApiextensionsV1Api {
     return ApiextensionsV1.toCustomResourceDefinitionList(resp);
   }
 
-  async watchCustomResourceDefinitionList(opts: operations.WatchListOpts = {}) {
+  async watchCustomResourceDefinitionList(opts: operations.WatchListOpts = {}): Promise<ReadableStream<c.WatchEvent<ApiextensionsV1.CustomResourceDefinition & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}customresourcedefinitions`,
@@ -36,7 +36,7 @@ export class ApiextensionsV1Api {
     return resp.pipeThrough(new c.WatchEventTransformer(ApiextensionsV1.toCustomResourceDefinition, MetaV1.toStatus));
   }
 
-  async createCustomResourceDefinition(body: ApiextensionsV1.CustomResourceDefinition, opts: operations.PutOpts = {}) {
+  async createCustomResourceDefinition(body: ApiextensionsV1.CustomResourceDefinition, opts: operations.PutOpts = {}): Promise<ApiextensionsV1.CustomResourceDefinition> {
     const resp = await this.#client.performRequest({
       method: "POST",
       path: `${this.#root}customresourcedefinitions`,
@@ -48,7 +48,7 @@ export class ApiextensionsV1Api {
     return ApiextensionsV1.toCustomResourceDefinition(resp);
   }
 
-  async deleteCustomResourceDefinitionList(opts: operations.DeleteListOpts = {}) {
+  async deleteCustomResourceDefinitionList(opts: operations.DeleteListOpts = {}): Promise<ApiextensionsV1.CustomResourceDefinitionList> {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}customresourcedefinitions`,
@@ -59,7 +59,7 @@ export class ApiextensionsV1Api {
     return ApiextensionsV1.toCustomResourceDefinitionList(resp);
   }
 
-  async getCustomResourceDefinition(name: string, opts: operations.NoOpts = {}) {
+  async getCustomResourceDefinition(name: string, opts: operations.NoOpts = {}): Promise<ApiextensionsV1.CustomResourceDefinition> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}customresourcedefinitions/${name}`,
@@ -69,7 +69,7 @@ export class ApiextensionsV1Api {
     return ApiextensionsV1.toCustomResourceDefinition(resp);
   }
 
-  async deleteCustomResourceDefinition(name: string, opts: operations.DeleteOpts = {}) {
+  async deleteCustomResourceDefinition(name: string, opts: operations.DeleteOpts = {}): Promise<ApiextensionsV1.CustomResourceDefinition | MetaV1.Status> {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}customresourcedefinitions/${name}`,
@@ -81,7 +81,7 @@ export class ApiextensionsV1Api {
     return ApiextensionsV1.toCustomResourceDefinition(resp);
   }
 
-  async replaceCustomResourceDefinition(name: string, body: ApiextensionsV1.CustomResourceDefinition, opts: operations.PutOpts = {}) {
+  async replaceCustomResourceDefinition(name: string, body: ApiextensionsV1.CustomResourceDefinition, opts: operations.PutOpts = {}): Promise<ApiextensionsV1.CustomResourceDefinition> {
     const resp = await this.#client.performRequest({
       method: "PUT",
       path: `${this.#root}customresourcedefinitions/${name}`,
@@ -93,7 +93,7 @@ export class ApiextensionsV1Api {
     return ApiextensionsV1.toCustomResourceDefinition(resp);
   }
 
-  async patchCustomResourceDefinition(name: string, type: c.PatchType, body: ApiextensionsV1.CustomResourceDefinition | c.JsonPatch, opts: operations.PatchOpts = {}) {
+  async patchCustomResourceDefinition(name: string, type: c.PatchType, body: ApiextensionsV1.CustomResourceDefinition | c.JsonPatch, opts: operations.PatchOpts = {}): Promise<ApiextensionsV1.CustomResourceDefinition> {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}customresourcedefinitions/${name}`,
@@ -106,7 +106,7 @@ export class ApiextensionsV1Api {
     return ApiextensionsV1.toCustomResourceDefinition(resp);
   }
 
-  async getCustomResourceDefinitionStatus(name: string, opts: operations.NoOpts = {}) {
+  async getCustomResourceDefinitionStatus(name: string, opts: operations.NoOpts = {}): Promise<ApiextensionsV1.CustomResourceDefinition> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}customresourcedefinitions/${name}/status`,
@@ -116,7 +116,7 @@ export class ApiextensionsV1Api {
     return ApiextensionsV1.toCustomResourceDefinition(resp);
   }
 
-  async replaceCustomResourceDefinitionStatus(name: string, body: ApiextensionsV1.CustomResourceDefinition, opts: operations.PutOpts = {}) {
+  async replaceCustomResourceDefinitionStatus(name: string, body: ApiextensionsV1.CustomResourceDefinition, opts: operations.PutOpts = {}): Promise<ApiextensionsV1.CustomResourceDefinition> {
     const resp = await this.#client.performRequest({
       method: "PUT",
       path: `${this.#root}customresourcedefinitions/${name}/status`,
@@ -128,7 +128,7 @@ export class ApiextensionsV1Api {
     return ApiextensionsV1.toCustomResourceDefinition(resp);
   }
 
-  async patchCustomResourceDefinitionStatus(name: string, type: c.PatchType, body: ApiextensionsV1.CustomResourceDefinition | c.JsonPatch, opts: operations.PatchOpts = {}) {
+  async patchCustomResourceDefinitionStatus(name: string, type: c.PatchType, body: ApiextensionsV1.CustomResourceDefinition | c.JsonPatch, opts: operations.PatchOpts = {}): Promise<ApiextensionsV1.CustomResourceDefinition> {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}customresourcedefinitions/${name}/status`,

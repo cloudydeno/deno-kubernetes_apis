@@ -13,15 +13,15 @@ export class DiscoveryV1Api {
     this.#client = client;
   }
 
-  namespace(name: string) {
+  namespace(name: string): DiscoveryV1NamespacedApi {
     return new DiscoveryV1NamespacedApi(this.#client, name);
   }
-  myNamespace() {
+  myNamespace(): DiscoveryV1NamespacedApi {
     if (!this.#client.defaultNamespace) throw new Error("No current namespace is set");
     return new DiscoveryV1NamespacedApi(this.#client, this.#client.defaultNamespace);
   }
 
-  async getEndpointSliceListForAllNamespaces(opts: operations.GetListOpts = {}) {
+  async getEndpointSliceListForAllNamespaces(opts: operations.GetListOpts = {}): Promise<DiscoveryV1.EndpointSliceList> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}endpointslices`,
@@ -32,7 +32,7 @@ export class DiscoveryV1Api {
     return DiscoveryV1.toEndpointSliceList(resp);
   }
 
-  async watchEndpointSliceListForAllNamespaces(opts: operations.WatchListOpts = {}) {
+  async watchEndpointSliceListForAllNamespaces(opts: operations.WatchListOpts = {}): Promise<ReadableStream<c.WatchEvent<DiscoveryV1.EndpointSlice & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}endpointslices`,
@@ -54,7 +54,7 @@ export class DiscoveryV1NamespacedApi {
     this.#root = `/apis/discovery.k8s.io/v1/namespaces/${namespace}/`;
   }
 
-  async getEndpointSliceList(opts: operations.GetListOpts = {}) {
+  async getEndpointSliceList(opts: operations.GetListOpts = {}): Promise<DiscoveryV1.EndpointSliceList> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}endpointslices`,
@@ -65,7 +65,7 @@ export class DiscoveryV1NamespacedApi {
     return DiscoveryV1.toEndpointSliceList(resp);
   }
 
-  async watchEndpointSliceList(opts: operations.WatchListOpts = {}) {
+  async watchEndpointSliceList(opts: operations.WatchListOpts = {}): Promise<ReadableStream<c.WatchEvent<DiscoveryV1.EndpointSlice & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}endpointslices`,
@@ -77,7 +77,7 @@ export class DiscoveryV1NamespacedApi {
     return resp.pipeThrough(new c.WatchEventTransformer(DiscoveryV1.toEndpointSlice, MetaV1.toStatus));
   }
 
-  async createEndpointSlice(body: DiscoveryV1.EndpointSlice, opts: operations.PutOpts = {}) {
+  async createEndpointSlice(body: DiscoveryV1.EndpointSlice, opts: operations.PutOpts = {}): Promise<DiscoveryV1.EndpointSlice> {
     const resp = await this.#client.performRequest({
       method: "POST",
       path: `${this.#root}endpointslices`,
@@ -89,7 +89,7 @@ export class DiscoveryV1NamespacedApi {
     return DiscoveryV1.toEndpointSlice(resp);
   }
 
-  async deleteEndpointSliceList(opts: operations.DeleteListOpts = {}) {
+  async deleteEndpointSliceList(opts: operations.DeleteListOpts = {}): Promise<DiscoveryV1.EndpointSliceList> {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}endpointslices`,
@@ -100,7 +100,7 @@ export class DiscoveryV1NamespacedApi {
     return DiscoveryV1.toEndpointSliceList(resp);
   }
 
-  async getEndpointSlice(name: string, opts: operations.NoOpts = {}) {
+  async getEndpointSlice(name: string, opts: operations.NoOpts = {}): Promise<DiscoveryV1.EndpointSlice> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}endpointslices/${name}`,
@@ -110,7 +110,7 @@ export class DiscoveryV1NamespacedApi {
     return DiscoveryV1.toEndpointSlice(resp);
   }
 
-  async deleteEndpointSlice(name: string, opts: operations.DeleteOpts = {}) {
+  async deleteEndpointSlice(name: string, opts: operations.DeleteOpts = {}): Promise<DiscoveryV1.EndpointSlice | MetaV1.Status> {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}endpointslices/${name}`,
@@ -122,7 +122,7 @@ export class DiscoveryV1NamespacedApi {
     return DiscoveryV1.toEndpointSlice(resp);
   }
 
-  async replaceEndpointSlice(name: string, body: DiscoveryV1.EndpointSlice, opts: operations.PutOpts = {}) {
+  async replaceEndpointSlice(name: string, body: DiscoveryV1.EndpointSlice, opts: operations.PutOpts = {}): Promise<DiscoveryV1.EndpointSlice> {
     const resp = await this.#client.performRequest({
       method: "PUT",
       path: `${this.#root}endpointslices/${name}`,
@@ -134,7 +134,7 @@ export class DiscoveryV1NamespacedApi {
     return DiscoveryV1.toEndpointSlice(resp);
   }
 
-  async patchEndpointSlice(name: string, type: c.PatchType, body: DiscoveryV1.EndpointSlice | c.JsonPatch, opts: operations.PatchOpts = {}) {
+  async patchEndpointSlice(name: string, type: c.PatchType, body: DiscoveryV1.EndpointSlice | c.JsonPatch, opts: operations.PatchOpts = {}): Promise<DiscoveryV1.EndpointSlice> {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}endpointslices/${name}`,

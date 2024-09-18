@@ -7,5 +7,5 @@ export * as tunnelBeta from "https://deno.land/x/kubernetes_client@v0.7.0/tunnel
 
 export * from "https://deno.land/x/kubernetes_client@v0.7.0/lib/contract.ts";
 export {
-  WatchEventTransformer
+  WatchEventTransformer,
 } from "https://deno.land/x/kubernetes_client@v0.7.0/lib/stream-transformers.ts";

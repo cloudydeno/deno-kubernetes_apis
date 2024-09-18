@@ -13,7 +13,7 @@ export class SchedulingV1Api {
     this.#client = client;
   }
 
-  async getPriorityClassList(opts: operations.GetListOpts = {}) {
+  async getPriorityClassList(opts: operations.GetListOpts = {}): Promise<SchedulingV1.PriorityClassList> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}priorityclasses`,
@@ -24,7 +24,7 @@ export class SchedulingV1Api {
     return SchedulingV1.toPriorityClassList(resp);
   }
 
-  async watchPriorityClassList(opts: operations.WatchListOpts = {}) {
+  async watchPriorityClassList(opts: operations.WatchListOpts = {}): Promise<ReadableStream<c.WatchEvent<SchedulingV1.PriorityClass & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}priorityclasses`,
@@ -36,7 +36,7 @@ export class SchedulingV1Api {
     return resp.pipeThrough(new c.WatchEventTransformer(SchedulingV1.toPriorityClass, MetaV1.toStatus));
   }
 
-  async createPriorityClass(body: SchedulingV1.PriorityClass, opts: operations.PutOpts = {}) {
+  async createPriorityClass(body: SchedulingV1.PriorityClass, opts: operations.PutOpts = {}): Promise<SchedulingV1.PriorityClass> {
     const resp = await this.#client.performRequest({
       method: "POST",
       path: `${this.#root}priorityclasses`,
@@ -48,7 +48,7 @@ export class SchedulingV1Api {
     return SchedulingV1.toPriorityClass(resp);
   }
 
-  async deletePriorityClassList(opts: operations.DeleteListOpts = {}) {
+  async deletePriorityClassList(opts: operations.DeleteListOpts = {}): Promise<SchedulingV1.PriorityClassList> {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}priorityclasses`,
@@ -59,7 +59,7 @@ export class SchedulingV1Api {
     return SchedulingV1.toPriorityClassList(resp);
   }
 
-  async getPriorityClass(name: string, opts: operations.NoOpts = {}) {
+  async getPriorityClass(name: string, opts: operations.NoOpts = {}): Promise<SchedulingV1.PriorityClass> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}priorityclasses/${name}`,
@@ -69,7 +69,7 @@ export class SchedulingV1Api {
     return SchedulingV1.toPriorityClass(resp);
   }
 
-  async deletePriorityClass(name: string, opts: operations.DeleteOpts = {}) {
+  async deletePriorityClass(name: string, opts: operations.DeleteOpts = {}): Promise<SchedulingV1.PriorityClass | MetaV1.Status> {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}priorityclasses/${name}`,
@@ -81,7 +81,7 @@ export class SchedulingV1Api {
     return SchedulingV1.toPriorityClass(resp);
   }
 
-  async replacePriorityClass(name: string, body: SchedulingV1.PriorityClass, opts: operations.PutOpts = {}) {
+  async replacePriorityClass(name: string, body: SchedulingV1.PriorityClass, opts: operations.PutOpts = {}): Promise<SchedulingV1.PriorityClass> {
     const resp = await this.#client.performRequest({
       method: "PUT",
       path: `${this.#root}priorityclasses/${name}`,
@@ -93,7 +93,7 @@ export class SchedulingV1Api {
     return SchedulingV1.toPriorityClass(resp);
   }
 
-  async patchPriorityClass(name: string, type: c.PatchType, body: SchedulingV1.PriorityClass | c.JsonPatch, opts: operations.PatchOpts = {}) {
+  async patchPriorityClass(name: string, type: c.PatchType, body: SchedulingV1.PriorityClass | c.JsonPatch, opts: operations.PatchOpts = {}): Promise<SchedulingV1.PriorityClass> {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}priorityclasses/${name}`,

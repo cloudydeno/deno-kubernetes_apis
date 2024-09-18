@@ -13,7 +13,7 @@ export class CertificatesV1Api {
     this.#client = client;
   }
 
-  async getCertificateSigningRequestList(opts: operations.GetListOpts = {}) {
+  async getCertificateSigningRequestList(opts: operations.GetListOpts = {}): Promise<CertificatesV1.CertificateSigningRequestList> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}certificatesigningrequests`,
@@ -24,7 +24,7 @@ export class CertificatesV1Api {
     return CertificatesV1.toCertificateSigningRequestList(resp);
   }
 
-  async watchCertificateSigningRequestList(opts: operations.WatchListOpts = {}) {
+  async watchCertificateSigningRequestList(opts: operations.WatchListOpts = {}): Promise<ReadableStream<c.WatchEvent<CertificatesV1.CertificateSigningRequest & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}certificatesigningrequests`,
@@ -36,7 +36,7 @@ export class CertificatesV1Api {
     return resp.pipeThrough(new c.WatchEventTransformer(CertificatesV1.toCertificateSigningRequest, MetaV1.toStatus));
   }
 
-  async createCertificateSigningRequest(body: CertificatesV1.CertificateSigningRequest, opts: operations.PutOpts = {}) {
+  async createCertificateSigningRequest(body: CertificatesV1.CertificateSigningRequest, opts: operations.PutOpts = {}): Promise<CertificatesV1.CertificateSigningRequest> {
     const resp = await this.#client.performRequest({
       method: "POST",
       path: `${this.#root}certificatesigningrequests`,
@@ -48,7 +48,7 @@ export class CertificatesV1Api {
     return CertificatesV1.toCertificateSigningRequest(resp);
   }
 
-  async deleteCertificateSigningRequestList(opts: operations.DeleteListOpts = {}) {
+  async deleteCertificateSigningRequestList(opts: operations.DeleteListOpts = {}): Promise<CertificatesV1.CertificateSigningRequestList> {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}certificatesigningrequests`,
@@ -59,7 +59,7 @@ export class CertificatesV1Api {
     return CertificatesV1.toCertificateSigningRequestList(resp);
   }
 
-  async getCertificateSigningRequest(name: string, opts: operations.NoOpts = {}) {
+  async getCertificateSigningRequest(name: string, opts: operations.NoOpts = {}): Promise<CertificatesV1.CertificateSigningRequest> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}certificatesigningrequests/${name}`,
@@ -69,7 +69,7 @@ export class CertificatesV1Api {
     return CertificatesV1.toCertificateSigningRequest(resp);
   }
 
-  async deleteCertificateSigningRequest(name: string, opts: operations.DeleteOpts = {}) {
+  async deleteCertificateSigningRequest(name: string, opts: operations.DeleteOpts = {}): Promise<CertificatesV1.CertificateSigningRequest | MetaV1.Status> {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}certificatesigningrequests/${name}`,
@@ -81,7 +81,7 @@ export class CertificatesV1Api {
     return CertificatesV1.toCertificateSigningRequest(resp);
   }
 
-  async replaceCertificateSigningRequest(name: string, body: CertificatesV1.CertificateSigningRequest, opts: operations.PutOpts = {}) {
+  async replaceCertificateSigningRequest(name: string, body: CertificatesV1.CertificateSigningRequest, opts: operations.PutOpts = {}): Promise<CertificatesV1.CertificateSigningRequest> {
     const resp = await this.#client.performRequest({
       method: "PUT",
       path: `${this.#root}certificatesigningrequests/${name}`,
@@ -93,7 +93,7 @@ export class CertificatesV1Api {
     return CertificatesV1.toCertificateSigningRequest(resp);
   }
 
-  async patchCertificateSigningRequest(name: string, type: c.PatchType, body: CertificatesV1.CertificateSigningRequest | c.JsonPatch, opts: operations.PatchOpts = {}) {
+  async patchCertificateSigningRequest(name: string, type: c.PatchType, body: CertificatesV1.CertificateSigningRequest | c.JsonPatch, opts: operations.PatchOpts = {}): Promise<CertificatesV1.CertificateSigningRequest> {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}certificatesigningrequests/${name}`,
@@ -106,7 +106,7 @@ export class CertificatesV1Api {
     return CertificatesV1.toCertificateSigningRequest(resp);
   }
 
-  async getCertificateSigningRequestApproval(name: string, opts: operations.NoOpts = {}) {
+  async getCertificateSigningRequestApproval(name: string, opts: operations.NoOpts = {}): Promise<CertificatesV1.CertificateSigningRequest> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}certificatesigningrequests/${name}/approval`,
@@ -116,7 +116,7 @@ export class CertificatesV1Api {
     return CertificatesV1.toCertificateSigningRequest(resp);
   }
 
-  async replaceCertificateSigningRequestApproval(name: string, body: CertificatesV1.CertificateSigningRequest, opts: operations.PutOpts = {}) {
+  async replaceCertificateSigningRequestApproval(name: string, body: CertificatesV1.CertificateSigningRequest, opts: operations.PutOpts = {}): Promise<CertificatesV1.CertificateSigningRequest> {
     const resp = await this.#client.performRequest({
       method: "PUT",
       path: `${this.#root}certificatesigningrequests/${name}/approval`,
@@ -128,7 +128,7 @@ export class CertificatesV1Api {
     return CertificatesV1.toCertificateSigningRequest(resp);
   }
 
-  async patchCertificateSigningRequestApproval(name: string, type: c.PatchType, body: CertificatesV1.CertificateSigningRequest | c.JsonPatch, opts: operations.PatchOpts = {}) {
+  async patchCertificateSigningRequestApproval(name: string, type: c.PatchType, body: CertificatesV1.CertificateSigningRequest | c.JsonPatch, opts: operations.PatchOpts = {}): Promise<CertificatesV1.CertificateSigningRequest> {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}certificatesigningrequests/${name}/approval`,
@@ -141,7 +141,7 @@ export class CertificatesV1Api {
     return CertificatesV1.toCertificateSigningRequest(resp);
   }
 
-  async getCertificateSigningRequestStatus(name: string, opts: operations.NoOpts = {}) {
+  async getCertificateSigningRequestStatus(name: string, opts: operations.NoOpts = {}): Promise<CertificatesV1.CertificateSigningRequest> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}certificatesigningrequests/${name}/status`,
@@ -151,7 +151,7 @@ export class CertificatesV1Api {
     return CertificatesV1.toCertificateSigningRequest(resp);
   }
 
-  async replaceCertificateSigningRequestStatus(name: string, body: CertificatesV1.CertificateSigningRequest, opts: operations.PutOpts = {}) {
+  async replaceCertificateSigningRequestStatus(name: string, body: CertificatesV1.CertificateSigningRequest, opts: operations.PutOpts = {}): Promise<CertificatesV1.CertificateSigningRequest> {
     const resp = await this.#client.performRequest({
       method: "PUT",
       path: `${this.#root}certificatesigningrequests/${name}/status`,
@@ -163,7 +163,7 @@ export class CertificatesV1Api {
     return CertificatesV1.toCertificateSigningRequest(resp);
   }
 
-  async patchCertificateSigningRequestStatus(name: string, type: c.PatchType, body: CertificatesV1.CertificateSigningRequest | c.JsonPatch, opts: operations.PatchOpts = {}) {
+  async patchCertificateSigningRequestStatus(name: string, type: c.PatchType, body: CertificatesV1.CertificateSigningRequest | c.JsonPatch, opts: operations.PatchOpts = {}): Promise<CertificatesV1.CertificateSigningRequest> {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}certificatesigningrequests/${name}/status`,

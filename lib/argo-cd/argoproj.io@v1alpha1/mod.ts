@@ -13,15 +13,15 @@ export class ArgoprojIoV1alpha1Api {
     this.#client = client;
   }
 
-  namespace(name: string) {
+  namespace(name: string): ArgoprojIoV1alpha1NamespacedApi {
     return new ArgoprojIoV1alpha1NamespacedApi(this.#client, name);
   }
-  myNamespace() {
+  myNamespace(): ArgoprojIoV1alpha1NamespacedApi {
     if (!this.#client.defaultNamespace) throw new Error("No current namespace is set");
     return new ArgoprojIoV1alpha1NamespacedApi(this.#client, this.#client.defaultNamespace);
   }
 
-  async getApplicationListForAllNamespaces(opts: operations.GetListOpts = {}) {
+  async getApplicationListForAllNamespaces(opts: operations.GetListOpts = {}): Promise<ArgoprojIoV1alpha1.ApplicationList> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}applications`,
@@ -32,7 +32,7 @@ export class ArgoprojIoV1alpha1Api {
     return ArgoprojIoV1alpha1.toApplicationList(resp);
   }
 
-  async watchApplicationListForAllNamespaces(opts: operations.WatchListOpts = {}) {
+  async watchApplicationListForAllNamespaces(opts: operations.WatchListOpts = {}): Promise<ReadableStream<c.WatchEvent<ArgoprojIoV1alpha1.Application & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}applications`,
@@ -44,7 +44,7 @@ export class ArgoprojIoV1alpha1Api {
     return resp.pipeThrough(new c.WatchEventTransformer(ArgoprojIoV1alpha1.toApplication, MetaV1.toStatus));
   }
 
-  async getApplicationSetListForAllNamespaces(opts: operations.GetListOpts = {}) {
+  async getApplicationSetListForAllNamespaces(opts: operations.GetListOpts = {}): Promise<ArgoprojIoV1alpha1.ApplicationSetList> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}applicationsets`,
@@ -55,7 +55,7 @@ export class ArgoprojIoV1alpha1Api {
     return ArgoprojIoV1alpha1.toApplicationSetList(resp);
   }
 
-  async watchApplicationSetListForAllNamespaces(opts: operations.WatchListOpts = {}) {
+  async watchApplicationSetListForAllNamespaces(opts: operations.WatchListOpts = {}): Promise<ReadableStream<c.WatchEvent<ArgoprojIoV1alpha1.ApplicationSet & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}applicationsets`,
@@ -67,7 +67,7 @@ export class ArgoprojIoV1alpha1Api {
     return resp.pipeThrough(new c.WatchEventTransformer(ArgoprojIoV1alpha1.toApplicationSet, MetaV1.toStatus));
   }
 
-  async getAppProjectListForAllNamespaces(opts: operations.GetListOpts = {}) {
+  async getAppProjectListForAllNamespaces(opts: operations.GetListOpts = {}): Promise<ArgoprojIoV1alpha1.AppProjectList> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}appprojects`,
@@ -78,7 +78,7 @@ export class ArgoprojIoV1alpha1Api {
     return ArgoprojIoV1alpha1.toAppProjectList(resp);
   }
 
-  async watchAppProjectListForAllNamespaces(opts: operations.WatchListOpts = {}) {
+  async watchAppProjectListForAllNamespaces(opts: operations.WatchListOpts = {}): Promise<ReadableStream<c.WatchEvent<ArgoprojIoV1alpha1.AppProject & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}appprojects`,
@@ -100,7 +100,7 @@ export class ArgoprojIoV1alpha1NamespacedApi {
     this.#root = `/apis/argoproj.io/v1alpha1/namespaces/${namespace}/`;
   }
 
-  async getApplicationList(opts: operations.GetListOpts = {}) {
+  async getApplicationList(opts: operations.GetListOpts = {}): Promise<ArgoprojIoV1alpha1.ApplicationList> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}applications`,
@@ -111,7 +111,7 @@ export class ArgoprojIoV1alpha1NamespacedApi {
     return ArgoprojIoV1alpha1.toApplicationList(resp);
   }
 
-  async watchApplicationList(opts: operations.WatchListOpts = {}) {
+  async watchApplicationList(opts: operations.WatchListOpts = {}): Promise<ReadableStream<c.WatchEvent<ArgoprojIoV1alpha1.Application & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}applications`,
@@ -123,7 +123,7 @@ export class ArgoprojIoV1alpha1NamespacedApi {
     return resp.pipeThrough(new c.WatchEventTransformer(ArgoprojIoV1alpha1.toApplication, MetaV1.toStatus));
   }
 
-  async createApplication(body: ArgoprojIoV1alpha1.Application, opts: operations.PutOpts = {}) {
+  async createApplication(body: ArgoprojIoV1alpha1.Application, opts: operations.PutOpts = {}): Promise<ArgoprojIoV1alpha1.Application> {
     const resp = await this.#client.performRequest({
       method: "POST",
       path: `${this.#root}applications`,
@@ -135,7 +135,7 @@ export class ArgoprojIoV1alpha1NamespacedApi {
     return ArgoprojIoV1alpha1.toApplication(resp);
   }
 
-  async deleteApplicationList(opts: operations.DeleteListOpts = {}) {
+  async deleteApplicationList(opts: operations.DeleteListOpts = {}): Promise<ArgoprojIoV1alpha1.ApplicationList> {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}applications`,
@@ -146,7 +146,7 @@ export class ArgoprojIoV1alpha1NamespacedApi {
     return ArgoprojIoV1alpha1.toApplicationList(resp);
   }
 
-  async getApplication(name: string, opts: operations.NoOpts = {}) {
+  async getApplication(name: string, opts: operations.NoOpts = {}): Promise<ArgoprojIoV1alpha1.Application> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}applications/${name}`,
@@ -156,7 +156,7 @@ export class ArgoprojIoV1alpha1NamespacedApi {
     return ArgoprojIoV1alpha1.toApplication(resp);
   }
 
-  async deleteApplication(name: string, opts: operations.DeleteOpts = {}) {
+  async deleteApplication(name: string, opts: operations.DeleteOpts = {}): Promise<ArgoprojIoV1alpha1.Application | MetaV1.Status> {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}applications/${name}`,
@@ -168,7 +168,7 @@ export class ArgoprojIoV1alpha1NamespacedApi {
     return ArgoprojIoV1alpha1.toApplication(resp);
   }
 
-  async replaceApplication(name: string, body: ArgoprojIoV1alpha1.Application, opts: operations.PutOpts = {}) {
+  async replaceApplication(name: string, body: ArgoprojIoV1alpha1.Application, opts: operations.PutOpts = {}): Promise<ArgoprojIoV1alpha1.Application> {
     const resp = await this.#client.performRequest({
       method: "PUT",
       path: `${this.#root}applications/${name}`,
@@ -180,7 +180,7 @@ export class ArgoprojIoV1alpha1NamespacedApi {
     return ArgoprojIoV1alpha1.toApplication(resp);
   }
 
-  async patchApplication(name: string, type: c.PatchType, body: ArgoprojIoV1alpha1.Application | c.JsonPatch, opts: operations.PatchOpts = {}) {
+  async patchApplication(name: string, type: c.PatchType, body: ArgoprojIoV1alpha1.Application | c.JsonPatch, opts: operations.PatchOpts = {}): Promise<ArgoprojIoV1alpha1.Application> {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}applications/${name}`,
@@ -193,7 +193,7 @@ export class ArgoprojIoV1alpha1NamespacedApi {
     return ArgoprojIoV1alpha1.toApplication(resp);
   }
 
-  async getApplicationSetList(opts: operations.GetListOpts = {}) {
+  async getApplicationSetList(opts: operations.GetListOpts = {}): Promise<ArgoprojIoV1alpha1.ApplicationSetList> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}applicationsets`,
@@ -204,7 +204,7 @@ export class ArgoprojIoV1alpha1NamespacedApi {
     return ArgoprojIoV1alpha1.toApplicationSetList(resp);
   }
 
-  async watchApplicationSetList(opts: operations.WatchListOpts = {}) {
+  async watchApplicationSetList(opts: operations.WatchListOpts = {}): Promise<ReadableStream<c.WatchEvent<ArgoprojIoV1alpha1.ApplicationSet & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}applicationsets`,
@@ -216,7 +216,7 @@ export class ArgoprojIoV1alpha1NamespacedApi {
     return resp.pipeThrough(new c.WatchEventTransformer(ArgoprojIoV1alpha1.toApplicationSet, MetaV1.toStatus));
   }
 
-  async createApplicationSet(body: ArgoprojIoV1alpha1.ApplicationSet, opts: operations.PutOpts = {}) {
+  async createApplicationSet(body: ArgoprojIoV1alpha1.ApplicationSet, opts: operations.PutOpts = {}): Promise<ArgoprojIoV1alpha1.ApplicationSet> {
     const resp = await this.#client.performRequest({
       method: "POST",
       path: `${this.#root}applicationsets`,
@@ -228,7 +228,7 @@ export class ArgoprojIoV1alpha1NamespacedApi {
     return ArgoprojIoV1alpha1.toApplicationSet(resp);
   }
 
-  async deleteApplicationSetList(opts: operations.DeleteListOpts = {}) {
+  async deleteApplicationSetList(opts: operations.DeleteListOpts = {}): Promise<ArgoprojIoV1alpha1.ApplicationSetList> {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}applicationsets`,
@@ -239,7 +239,7 @@ export class ArgoprojIoV1alpha1NamespacedApi {
     return ArgoprojIoV1alpha1.toApplicationSetList(resp);
   }
 
-  async getApplicationSet(name: string, opts: operations.NoOpts = {}) {
+  async getApplicationSet(name: string, opts: operations.NoOpts = {}): Promise<ArgoprojIoV1alpha1.ApplicationSet> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}applicationsets/${name}`,
@@ -249,7 +249,7 @@ export class ArgoprojIoV1alpha1NamespacedApi {
     return ArgoprojIoV1alpha1.toApplicationSet(resp);
   }
 
-  async deleteApplicationSet(name: string, opts: operations.DeleteOpts = {}) {
+  async deleteApplicationSet(name: string, opts: operations.DeleteOpts = {}): Promise<ArgoprojIoV1alpha1.ApplicationSet | MetaV1.Status> {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}applicationsets/${name}`,
@@ -261,7 +261,7 @@ export class ArgoprojIoV1alpha1NamespacedApi {
     return ArgoprojIoV1alpha1.toApplicationSet(resp);
   }
 
-  async replaceApplicationSet(name: string, body: ArgoprojIoV1alpha1.ApplicationSet, opts: operations.PutOpts = {}) {
+  async replaceApplicationSet(name: string, body: ArgoprojIoV1alpha1.ApplicationSet, opts: operations.PutOpts = {}): Promise<ArgoprojIoV1alpha1.ApplicationSet> {
     const resp = await this.#client.performRequest({
       method: "PUT",
       path: `${this.#root}applicationsets/${name}`,
@@ -273,7 +273,7 @@ export class ArgoprojIoV1alpha1NamespacedApi {
     return ArgoprojIoV1alpha1.toApplicationSet(resp);
   }
 
-  async patchApplicationSet(name: string, type: c.PatchType, body: ArgoprojIoV1alpha1.ApplicationSet | c.JsonPatch, opts: operations.PatchOpts = {}) {
+  async patchApplicationSet(name: string, type: c.PatchType, body: ArgoprojIoV1alpha1.ApplicationSet | c.JsonPatch, opts: operations.PatchOpts = {}): Promise<ArgoprojIoV1alpha1.ApplicationSet> {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}applicationsets/${name}`,
@@ -286,7 +286,7 @@ export class ArgoprojIoV1alpha1NamespacedApi {
     return ArgoprojIoV1alpha1.toApplicationSet(resp);
   }
 
-  async getApplicationSetStatus(name: string, opts: operations.NoOpts = {}) {
+  async getApplicationSetStatus(name: string, opts: operations.NoOpts = {}): Promise<ArgoprojIoV1alpha1.ApplicationSet> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}applicationsets/${name}/status`,
@@ -296,7 +296,7 @@ export class ArgoprojIoV1alpha1NamespacedApi {
     return ArgoprojIoV1alpha1.toApplicationSet(resp);
   }
 
-  async replaceApplicationSetStatus(name: string, body: ArgoprojIoV1alpha1.ApplicationSet, opts: operations.PutOpts = {}) {
+  async replaceApplicationSetStatus(name: string, body: ArgoprojIoV1alpha1.ApplicationSet, opts: operations.PutOpts = {}): Promise<ArgoprojIoV1alpha1.ApplicationSet> {
     const resp = await this.#client.performRequest({
       method: "PUT",
       path: `${this.#root}applicationsets/${name}/status`,
@@ -308,7 +308,7 @@ export class ArgoprojIoV1alpha1NamespacedApi {
     return ArgoprojIoV1alpha1.toApplicationSet(resp);
   }
 
-  async patchApplicationSetStatus(name: string, type: c.PatchType, body: ArgoprojIoV1alpha1.ApplicationSet | c.JsonPatch, opts: operations.PatchOpts = {}) {
+  async patchApplicationSetStatus(name: string, type: c.PatchType, body: ArgoprojIoV1alpha1.ApplicationSet | c.JsonPatch, opts: operations.PatchOpts = {}): Promise<ArgoprojIoV1alpha1.ApplicationSet> {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}applicationsets/${name}/status`,
@@ -321,7 +321,7 @@ export class ArgoprojIoV1alpha1NamespacedApi {
     return ArgoprojIoV1alpha1.toApplicationSet(resp);
   }
 
-  async getAppProjectList(opts: operations.GetListOpts = {}) {
+  async getAppProjectList(opts: operations.GetListOpts = {}): Promise<ArgoprojIoV1alpha1.AppProjectList> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}appprojects`,
@@ -332,7 +332,7 @@ export class ArgoprojIoV1alpha1NamespacedApi {
     return ArgoprojIoV1alpha1.toAppProjectList(resp);
   }
 
-  async watchAppProjectList(opts: operations.WatchListOpts = {}) {
+  async watchAppProjectList(opts: operations.WatchListOpts = {}): Promise<ReadableStream<c.WatchEvent<ArgoprojIoV1alpha1.AppProject & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}appprojects`,
@@ -344,7 +344,7 @@ export class ArgoprojIoV1alpha1NamespacedApi {
     return resp.pipeThrough(new c.WatchEventTransformer(ArgoprojIoV1alpha1.toAppProject, MetaV1.toStatus));
   }
 
-  async createAppProject(body: ArgoprojIoV1alpha1.AppProject, opts: operations.PutOpts = {}) {
+  async createAppProject(body: ArgoprojIoV1alpha1.AppProject, opts: operations.PutOpts = {}): Promise<ArgoprojIoV1alpha1.AppProject> {
     const resp = await this.#client.performRequest({
       method: "POST",
       path: `${this.#root}appprojects`,
@@ -356,7 +356,7 @@ export class ArgoprojIoV1alpha1NamespacedApi {
     return ArgoprojIoV1alpha1.toAppProject(resp);
   }
 
-  async deleteAppProjectList(opts: operations.DeleteListOpts = {}) {
+  async deleteAppProjectList(opts: operations.DeleteListOpts = {}): Promise<ArgoprojIoV1alpha1.AppProjectList> {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}appprojects`,
@@ -367,7 +367,7 @@ export class ArgoprojIoV1alpha1NamespacedApi {
     return ArgoprojIoV1alpha1.toAppProjectList(resp);
   }
 
-  async getAppProject(name: string, opts: operations.NoOpts = {}) {
+  async getAppProject(name: string, opts: operations.NoOpts = {}): Promise<ArgoprojIoV1alpha1.AppProject> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}appprojects/${name}`,
@@ -377,7 +377,7 @@ export class ArgoprojIoV1alpha1NamespacedApi {
     return ArgoprojIoV1alpha1.toAppProject(resp);
   }
 
-  async deleteAppProject(name: string, opts: operations.DeleteOpts = {}) {
+  async deleteAppProject(name: string, opts: operations.DeleteOpts = {}): Promise<ArgoprojIoV1alpha1.AppProject | MetaV1.Status> {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}appprojects/${name}`,
@@ -389,7 +389,7 @@ export class ArgoprojIoV1alpha1NamespacedApi {
     return ArgoprojIoV1alpha1.toAppProject(resp);
   }
 
-  async replaceAppProject(name: string, body: ArgoprojIoV1alpha1.AppProject, opts: operations.PutOpts = {}) {
+  async replaceAppProject(name: string, body: ArgoprojIoV1alpha1.AppProject, opts: operations.PutOpts = {}): Promise<ArgoprojIoV1alpha1.AppProject> {
     const resp = await this.#client.performRequest({
       method: "PUT",
       path: `${this.#root}appprojects/${name}`,
@@ -401,7 +401,7 @@ export class ArgoprojIoV1alpha1NamespacedApi {
     return ArgoprojIoV1alpha1.toAppProject(resp);
   }
 
-  async patchAppProject(name: string, type: c.PatchType, body: ArgoprojIoV1alpha1.AppProject | c.JsonPatch, opts: operations.PatchOpts = {}) {
+  async patchAppProject(name: string, type: c.PatchType, body: ArgoprojIoV1alpha1.AppProject | c.JsonPatch, opts: operations.PatchOpts = {}): Promise<ArgoprojIoV1alpha1.AppProject> {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}appprojects/${name}`,

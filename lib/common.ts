@@ -14,6 +14,7 @@ export {
   type JSONValue,
   type RestClient,
   WatchEventTransformer,
+  type WatchEvent,
 } from "./deps.ts";
 
 // Helpers used to validate/transform structures from or for the wire

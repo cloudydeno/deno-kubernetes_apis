@@ -13,15 +13,15 @@ export class PolicyV1Api {
     this.#client = client;
   }
 
-  namespace(name: string) {
+  namespace(name: string): PolicyV1NamespacedApi {
     return new PolicyV1NamespacedApi(this.#client, name);
   }
-  myNamespace() {
+  myNamespace(): PolicyV1NamespacedApi {
     if (!this.#client.defaultNamespace) throw new Error("No current namespace is set");
     return new PolicyV1NamespacedApi(this.#client, this.#client.defaultNamespace);
   }
 
-  async getPodDisruptionBudgetListForAllNamespaces(opts: operations.GetListOpts = {}) {
+  async getPodDisruptionBudgetListForAllNamespaces(opts: operations.GetListOpts = {}): Promise<PolicyV1.PodDisruptionBudgetList> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}poddisruptionbudgets`,
@@ -32,7 +32,7 @@ export class PolicyV1Api {
     return PolicyV1.toPodDisruptionBudgetList(resp);
   }
 
-  async watchPodDisruptionBudgetListForAllNamespaces(opts: operations.WatchListOpts = {}) {
+  async watchPodDisruptionBudgetListForAllNamespaces(opts: operations.WatchListOpts = {}): Promise<ReadableStream<c.WatchEvent<PolicyV1.PodDisruptionBudget & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}poddisruptionbudgets`,
@@ -54,7 +54,7 @@ export class PolicyV1NamespacedApi {
     this.#root = `/apis/policy/v1/namespaces/${namespace}/`;
   }
 
-  async getPodDisruptionBudgetList(opts: operations.GetListOpts = {}) {
+  async getPodDisruptionBudgetList(opts: operations.GetListOpts = {}): Promise<PolicyV1.PodDisruptionBudgetList> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}poddisruptionbudgets`,
@@ -65,7 +65,7 @@ export class PolicyV1NamespacedApi {
     return PolicyV1.toPodDisruptionBudgetList(resp);
   }
 
-  async watchPodDisruptionBudgetList(opts: operations.WatchListOpts = {}) {
+  async watchPodDisruptionBudgetList(opts: operations.WatchListOpts = {}): Promise<ReadableStream<c.WatchEvent<PolicyV1.PodDisruptionBudget & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}poddisruptionbudgets`,
@@ -77,7 +77,7 @@ export class PolicyV1NamespacedApi {
     return resp.pipeThrough(new c.WatchEventTransformer(PolicyV1.toPodDisruptionBudget, MetaV1.toStatus));
   }
 
-  async createPodDisruptionBudget(body: PolicyV1.PodDisruptionBudget, opts: operations.PutOpts = {}) {
+  async createPodDisruptionBudget(body: PolicyV1.PodDisruptionBudget, opts: operations.PutOpts = {}): Promise<PolicyV1.PodDisruptionBudget> {
     const resp = await this.#client.performRequest({
       method: "POST",
       path: `${this.#root}poddisruptionbudgets`,
@@ -89,7 +89,7 @@ export class PolicyV1NamespacedApi {
     return PolicyV1.toPodDisruptionBudget(resp);
   }
 
-  async deletePodDisruptionBudgetList(opts: operations.DeleteListOpts = {}) {
+  async deletePodDisruptionBudgetList(opts: operations.DeleteListOpts = {}): Promise<PolicyV1.PodDisruptionBudgetList> {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}poddisruptionbudgets`,
@@ -100,7 +100,7 @@ export class PolicyV1NamespacedApi {
     return PolicyV1.toPodDisruptionBudgetList(resp);
   }
 
-  async getPodDisruptionBudget(name: string, opts: operations.NoOpts = {}) {
+  async getPodDisruptionBudget(name: string, opts: operations.NoOpts = {}): Promise<PolicyV1.PodDisruptionBudget> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}poddisruptionbudgets/${name}`,
@@ -110,7 +110,7 @@ export class PolicyV1NamespacedApi {
     return PolicyV1.toPodDisruptionBudget(resp);
   }
 
-  async deletePodDisruptionBudget(name: string, opts: operations.DeleteOpts = {}) {
+  async deletePodDisruptionBudget(name: string, opts: operations.DeleteOpts = {}): Promise<PolicyV1.PodDisruptionBudget | MetaV1.Status> {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}poddisruptionbudgets/${name}`,
@@ -122,7 +122,7 @@ export class PolicyV1NamespacedApi {
     return PolicyV1.toPodDisruptionBudget(resp);
   }
 
-  async replacePodDisruptionBudget(name: string, body: PolicyV1.PodDisruptionBudget, opts: operations.PutOpts = {}) {
+  async replacePodDisruptionBudget(name: string, body: PolicyV1.PodDisruptionBudget, opts: operations.PutOpts = {}): Promise<PolicyV1.PodDisruptionBudget> {
     const resp = await this.#client.performRequest({
       method: "PUT",
       path: `${this.#root}poddisruptionbudgets/${name}`,
@@ -134,7 +134,7 @@ export class PolicyV1NamespacedApi {
     return PolicyV1.toPodDisruptionBudget(resp);
   }
 
-  async patchPodDisruptionBudget(name: string, type: c.PatchType, body: PolicyV1.PodDisruptionBudget | c.JsonPatch, opts: operations.PatchOpts = {}) {
+  async patchPodDisruptionBudget(name: string, type: c.PatchType, body: PolicyV1.PodDisruptionBudget | c.JsonPatch, opts: operations.PatchOpts = {}): Promise<PolicyV1.PodDisruptionBudget> {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}poddisruptionbudgets/${name}`,
@@ -147,7 +147,7 @@ export class PolicyV1NamespacedApi {
     return PolicyV1.toPodDisruptionBudget(resp);
   }
 
-  async getPodDisruptionBudgetStatus(name: string, opts: operations.NoOpts = {}) {
+  async getPodDisruptionBudgetStatus(name: string, opts: operations.NoOpts = {}): Promise<PolicyV1.PodDisruptionBudget> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}poddisruptionbudgets/${name}/status`,
@@ -157,7 +157,7 @@ export class PolicyV1NamespacedApi {
     return PolicyV1.toPodDisruptionBudget(resp);
   }
 
-  async replacePodDisruptionBudgetStatus(name: string, body: PolicyV1.PodDisruptionBudget, opts: operations.PutOpts = {}) {
+  async replacePodDisruptionBudgetStatus(name: string, body: PolicyV1.PodDisruptionBudget, opts: operations.PutOpts = {}): Promise<PolicyV1.PodDisruptionBudget> {
     const resp = await this.#client.performRequest({
       method: "PUT",
       path: `${this.#root}poddisruptionbudgets/${name}/status`,
@@ -169,7 +169,7 @@ export class PolicyV1NamespacedApi {
     return PolicyV1.toPodDisruptionBudget(resp);
   }
 
-  async patchPodDisruptionBudgetStatus(name: string, type: c.PatchType, body: PolicyV1.PodDisruptionBudget | c.JsonPatch, opts: operations.PatchOpts = {}) {
+  async patchPodDisruptionBudgetStatus(name: string, type: c.PatchType, body: PolicyV1.PodDisruptionBudget | c.JsonPatch, opts: operations.PatchOpts = {}): Promise<PolicyV1.PodDisruptionBudget> {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}poddisruptionbudgets/${name}/status`,

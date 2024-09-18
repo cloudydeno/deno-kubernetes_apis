@@ -13,15 +13,15 @@ export class EventsV1Api {
     this.#client = client;
   }
 
-  namespace(name: string) {
+  namespace(name: string): EventsV1NamespacedApi {
     return new EventsV1NamespacedApi(this.#client, name);
   }
-  myNamespace() {
+  myNamespace(): EventsV1NamespacedApi {
     if (!this.#client.defaultNamespace) throw new Error("No current namespace is set");
     return new EventsV1NamespacedApi(this.#client, this.#client.defaultNamespace);
   }
 
-  async getEventListForAllNamespaces(opts: operations.GetListOpts = {}) {
+  async getEventListForAllNamespaces(opts: operations.GetListOpts = {}): Promise<EventsV1.EventList> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}events`,
@@ -32,7 +32,7 @@ export class EventsV1Api {
     return EventsV1.toEventList(resp);
   }
 
-  async watchEventListForAllNamespaces(opts: operations.WatchListOpts = {}) {
+  async watchEventListForAllNamespaces(opts: operations.WatchListOpts = {}): Promise<ReadableStream<c.WatchEvent<EventsV1.Event & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}events`,
@@ -54,7 +54,7 @@ export class EventsV1NamespacedApi {
     this.#root = `/apis/events.k8s.io/v1/namespaces/${namespace}/`;
   }
 
-  async getEventList(opts: operations.GetListOpts = {}) {
+  async getEventList(opts: operations.GetListOpts = {}): Promise<EventsV1.EventList> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}events`,
@@ -65,7 +65,7 @@ export class EventsV1NamespacedApi {
     return EventsV1.toEventList(resp);
   }
 
-  async watchEventList(opts: operations.WatchListOpts = {}) {
+  async watchEventList(opts: operations.WatchListOpts = {}): Promise<ReadableStream<c.WatchEvent<EventsV1.Event & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}events`,
@@ -77,7 +77,7 @@ export class EventsV1NamespacedApi {
     return resp.pipeThrough(new c.WatchEventTransformer(EventsV1.toEvent, MetaV1.toStatus));
   }
 
-  async createEvent(body: EventsV1.Event, opts: operations.PutOpts = {}) {
+  async createEvent(body: EventsV1.Event, opts: operations.PutOpts = {}): Promise<EventsV1.Event> {
     const resp = await this.#client.performRequest({
       method: "POST",
       path: `${this.#root}events`,
@@ -89,7 +89,7 @@ export class EventsV1NamespacedApi {
     return EventsV1.toEvent(resp);
   }
 
-  async deleteEventList(opts: operations.DeleteListOpts = {}) {
+  async deleteEventList(opts: operations.DeleteListOpts = {}): Promise<EventsV1.EventList> {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}events`,
@@ -100,7 +100,7 @@ export class EventsV1NamespacedApi {
     return EventsV1.toEventList(resp);
   }
 
-  async getEvent(name: string, opts: operations.NoOpts = {}) {
+  async getEvent(name: string, opts: operations.NoOpts = {}): Promise<EventsV1.Event> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}events/${name}`,
@@ -110,7 +110,7 @@ export class EventsV1NamespacedApi {
     return EventsV1.toEvent(resp);
   }
 
-  async deleteEvent(name: string, opts: operations.DeleteOpts = {}) {
+  async deleteEvent(name: string, opts: operations.DeleteOpts = {}): Promise<EventsV1.Event | MetaV1.Status> {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}events/${name}`,
@@ -122,7 +122,7 @@ export class EventsV1NamespacedApi {
     return EventsV1.toEvent(resp);
   }
 
-  async replaceEvent(name: string, body: EventsV1.Event, opts: operations.PutOpts = {}) {
+  async replaceEvent(name: string, body: EventsV1.Event, opts: operations.PutOpts = {}): Promise<EventsV1.Event> {
     const resp = await this.#client.performRequest({
       method: "PUT",
       path: `${this.#root}events/${name}`,
@@ -134,7 +134,7 @@ export class EventsV1NamespacedApi {
     return EventsV1.toEvent(resp);
   }
 
-  async patchEvent(name: string, type: c.PatchType, body: EventsV1.Event | c.JsonPatch, opts: operations.PatchOpts = {}) {
+  async patchEvent(name: string, type: c.PatchType, body: EventsV1.Event | c.JsonPatch, opts: operations.PatchOpts = {}): Promise<EventsV1.Event> {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}events/${name}`,

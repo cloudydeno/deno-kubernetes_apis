@@ -17,15 +17,15 @@ export class CoreV1Api {
     this.#client = client;
   }
 
-  namespace(name: string) {
+  namespace(name: string): CoreV1NamespacedApi {
     return new CoreV1NamespacedApi(this.#client, name);
   }
-  myNamespace() {
+  myNamespace(): CoreV1NamespacedApi {
     if (!this.#client.defaultNamespace) throw new Error("No current namespace is set");
     return new CoreV1NamespacedApi(this.#client, this.#client.defaultNamespace);
   }
 
-  async getComponentStatusList(opts: operations.GetListOpts = {}) {
+  async getComponentStatusList(opts: operations.GetListOpts = {}): Promise<CoreV1.ComponentStatusList> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}componentstatuses`,
@@ -36,7 +36,7 @@ export class CoreV1Api {
     return CoreV1.toComponentStatusList(resp);
   }
 
-  async getComponentStatus(name: string, opts: operations.NoOpts = {}) {
+  async getComponentStatus(name: string, opts: operations.NoOpts = {}): Promise<CoreV1.ComponentStatus> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}componentstatuses/${name}`,
@@ -46,7 +46,7 @@ export class CoreV1Api {
     return CoreV1.toComponentStatus(resp);
   }
 
-  async getConfigMapListForAllNamespaces(opts: operations.GetListOpts = {}) {
+  async getConfigMapListForAllNamespaces(opts: operations.GetListOpts = {}): Promise<CoreV1.ConfigMapList> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}configmaps`,
@@ -57,7 +57,7 @@ export class CoreV1Api {
     return CoreV1.toConfigMapList(resp);
   }
 
-  async watchConfigMapListForAllNamespaces(opts: operations.WatchListOpts = {}) {
+  async watchConfigMapListForAllNamespaces(opts: operations.WatchListOpts = {}): Promise<ReadableStream<c.WatchEvent<CoreV1.ConfigMap & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}configmaps`,
@@ -69,7 +69,7 @@ export class CoreV1Api {
     return resp.pipeThrough(new c.WatchEventTransformer(CoreV1.toConfigMap, MetaV1.toStatus));
   }
 
-  async getEndpointsListForAllNamespaces(opts: operations.GetListOpts = {}) {
+  async getEndpointsListForAllNamespaces(opts: operations.GetListOpts = {}): Promise<CoreV1.EndpointsList> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}endpoints`,
@@ -80,7 +80,7 @@ export class CoreV1Api {
     return CoreV1.toEndpointsList(resp);
   }
 
-  async watchEndpointsListForAllNamespaces(opts: operations.WatchListOpts = {}) {
+  async watchEndpointsListForAllNamespaces(opts: operations.WatchListOpts = {}): Promise<ReadableStream<c.WatchEvent<CoreV1.Endpoints & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}endpoints`,
@@ -92,7 +92,7 @@ export class CoreV1Api {
     return resp.pipeThrough(new c.WatchEventTransformer(CoreV1.toEndpoints, MetaV1.toStatus));
   }
 
-  async getEventListForAllNamespaces(opts: operations.GetListOpts = {}) {
+  async getEventListForAllNamespaces(opts: operations.GetListOpts = {}): Promise<CoreV1.EventList> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}events`,
@@ -103,7 +103,7 @@ export class CoreV1Api {
     return CoreV1.toEventList(resp);
   }
 
-  async watchEventListForAllNamespaces(opts: operations.WatchListOpts = {}) {
+  async watchEventListForAllNamespaces(opts: operations.WatchListOpts = {}): Promise<ReadableStream<c.WatchEvent<CoreV1.Event & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}events`,
@@ -115,7 +115,7 @@ export class CoreV1Api {
     return resp.pipeThrough(new c.WatchEventTransformer(CoreV1.toEvent, MetaV1.toStatus));
   }
 
-  async getLimitRangeListForAllNamespaces(opts: operations.GetListOpts = {}) {
+  async getLimitRangeListForAllNamespaces(opts: operations.GetListOpts = {}): Promise<CoreV1.LimitRangeList> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}limitranges`,
@@ -126,7 +126,7 @@ export class CoreV1Api {
     return CoreV1.toLimitRangeList(resp);
   }
 
-  async watchLimitRangeListForAllNamespaces(opts: operations.WatchListOpts = {}) {
+  async watchLimitRangeListForAllNamespaces(opts: operations.WatchListOpts = {}): Promise<ReadableStream<c.WatchEvent<CoreV1.LimitRange & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}limitranges`,
@@ -138,7 +138,7 @@ export class CoreV1Api {
     return resp.pipeThrough(new c.WatchEventTransformer(CoreV1.toLimitRange, MetaV1.toStatus));
   }
 
-  async getNamespaceList(opts: operations.GetListOpts = {}) {
+  async getNamespaceList(opts: operations.GetListOpts = {}): Promise<CoreV1.NamespaceList> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}namespaces`,
@@ -149,7 +149,7 @@ export class CoreV1Api {
     return CoreV1.toNamespaceList(resp);
   }
 
-  async watchNamespaceList(opts: operations.WatchListOpts = {}) {
+  async watchNamespaceList(opts: operations.WatchListOpts = {}): Promise<ReadableStream<c.WatchEvent<CoreV1.Namespace & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}namespaces`,
@@ -161,7 +161,7 @@ export class CoreV1Api {
     return resp.pipeThrough(new c.WatchEventTransformer(CoreV1.toNamespace, MetaV1.toStatus));
   }
 
-  async createNamespace(body: CoreV1.Namespace, opts: operations.PutOpts = {}) {
+  async createNamespace(body: CoreV1.Namespace, opts: operations.PutOpts = {}): Promise<CoreV1.Namespace> {
     const resp = await this.#client.performRequest({
       method: "POST",
       path: `${this.#root}namespaces`,
@@ -173,7 +173,7 @@ export class CoreV1Api {
     return CoreV1.toNamespace(resp);
   }
 
-  async getNamespace(name: string, opts: operations.NoOpts = {}) {
+  async getNamespace(name: string, opts: operations.NoOpts = {}): Promise<CoreV1.Namespace> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}namespaces/${name}`,
@@ -183,7 +183,7 @@ export class CoreV1Api {
     return CoreV1.toNamespace(resp);
   }
 
-  async deleteNamespace(name: string, opts: operations.DeleteOpts = {}) {
+  async deleteNamespace(name: string, opts: operations.DeleteOpts = {}): Promise<CoreV1.Namespace | MetaV1.Status> {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}namespaces/${name}`,
@@ -195,7 +195,7 @@ export class CoreV1Api {
     return CoreV1.toNamespace(resp);
   }
 
-  async replaceNamespace(name: string, body: CoreV1.Namespace, opts: operations.PutOpts = {}) {
+  async replaceNamespace(name: string, body: CoreV1.Namespace, opts: operations.PutOpts = {}): Promise<CoreV1.Namespace> {
     const resp = await this.#client.performRequest({
       method: "PUT",
       path: `${this.#root}namespaces/${name}`,
@@ -207,7 +207,7 @@ export class CoreV1Api {
     return CoreV1.toNamespace(resp);
   }
 
-  async patchNamespace(name: string, type: c.PatchType, body: CoreV1.Namespace | c.JsonPatch, opts: operations.PatchOpts = {}) {
+  async patchNamespace(name: string, type: c.PatchType, body: CoreV1.Namespace | c.JsonPatch, opts: operations.PatchOpts = {}): Promise<CoreV1.Namespace> {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}namespaces/${name}`,
@@ -220,7 +220,7 @@ export class CoreV1Api {
     return CoreV1.toNamespace(resp);
   }
 
-  async replaceNamespaceFinalize(name: string, body: CoreV1.Namespace, opts: operations.PutOpts = {}) {
+  async replaceNamespaceFinalize(name: string, body: CoreV1.Namespace, opts: operations.PutOpts = {}): Promise<CoreV1.Namespace> {
     const resp = await this.#client.performRequest({
       method: "PUT",
       path: `${this.#root}namespaces/${name}/finalize`,
@@ -232,7 +232,7 @@ export class CoreV1Api {
     return CoreV1.toNamespace(resp);
   }
 
-  async getNamespaceStatus(name: string, opts: operations.NoOpts = {}) {
+  async getNamespaceStatus(name: string, opts: operations.NoOpts = {}): Promise<CoreV1.Namespace> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}namespaces/${name}/status`,
@@ -242,7 +242,7 @@ export class CoreV1Api {
     return CoreV1.toNamespace(resp);
   }
 
-  async replaceNamespaceStatus(name: string, body: CoreV1.Namespace, opts: operations.PutOpts = {}) {
+  async replaceNamespaceStatus(name: string, body: CoreV1.Namespace, opts: operations.PutOpts = {}): Promise<CoreV1.Namespace> {
     const resp = await this.#client.performRequest({
       method: "PUT",
       path: `${this.#root}namespaces/${name}/status`,
@@ -254,7 +254,7 @@ export class CoreV1Api {
     return CoreV1.toNamespace(resp);
   }
 
-  async patchNamespaceStatus(name: string, type: c.PatchType, body: CoreV1.Namespace | c.JsonPatch, opts: operations.PatchOpts = {}) {
+  async patchNamespaceStatus(name: string, type: c.PatchType, body: CoreV1.Namespace | c.JsonPatch, opts: operations.PatchOpts = {}): Promise<CoreV1.Namespace> {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}namespaces/${name}/status`,
@@ -267,7 +267,7 @@ export class CoreV1Api {
     return CoreV1.toNamespace(resp);
   }
 
-  async getNodeList(opts: operations.GetListOpts = {}) {
+  async getNodeList(opts: operations.GetListOpts = {}): Promise<CoreV1.NodeList> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}nodes`,
@@ -278,7 +278,7 @@ export class CoreV1Api {
     return CoreV1.toNodeList(resp);
   }
 
-  async watchNodeList(opts: operations.WatchListOpts = {}) {
+  async watchNodeList(opts: operations.WatchListOpts = {}): Promise<ReadableStream<c.WatchEvent<CoreV1.Node & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}nodes`,
@@ -290,7 +290,7 @@ export class CoreV1Api {
     return resp.pipeThrough(new c.WatchEventTransformer(CoreV1.toNode, MetaV1.toStatus));
   }
 
-  async createNode(body: CoreV1.Node, opts: operations.PutOpts = {}) {
+  async createNode(body: CoreV1.Node, opts: operations.PutOpts = {}): Promise<CoreV1.Node> {
     const resp = await this.#client.performRequest({
       method: "POST",
       path: `${this.#root}nodes`,
@@ -302,7 +302,7 @@ export class CoreV1Api {
     return CoreV1.toNode(resp);
   }
 
-  async deleteNodeList(opts: operations.DeleteListOpts = {}) {
+  async deleteNodeList(opts: operations.DeleteListOpts = {}): Promise<CoreV1.NodeList> {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}nodes`,
@@ -313,7 +313,7 @@ export class CoreV1Api {
     return CoreV1.toNodeList(resp);
   }
 
-  async getNode(name: string, opts: operations.NoOpts = {}) {
+  async getNode(name: string, opts: operations.NoOpts = {}): Promise<CoreV1.Node> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}nodes/${name}`,
@@ -323,7 +323,7 @@ export class CoreV1Api {
     return CoreV1.toNode(resp);
   }
 
-  async deleteNode(name: string, opts: operations.DeleteOpts = {}) {
+  async deleteNode(name: string, opts: operations.DeleteOpts = {}): Promise<CoreV1.Node | MetaV1.Status> {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}nodes/${name}`,
@@ -335,7 +335,7 @@ export class CoreV1Api {
     return CoreV1.toNode(resp);
   }
 
-  async replaceNode(name: string, body: CoreV1.Node, opts: operations.PutOpts = {}) {
+  async replaceNode(name: string, body: CoreV1.Node, opts: operations.PutOpts = {}): Promise<CoreV1.Node> {
     const resp = await this.#client.performRequest({
       method: "PUT",
       path: `${this.#root}nodes/${name}`,
@@ -347,7 +347,7 @@ export class CoreV1Api {
     return CoreV1.toNode(resp);
   }
 
-  async patchNode(name: string, type: c.PatchType, body: CoreV1.Node | c.JsonPatch, opts: operations.PatchOpts = {}) {
+  async patchNode(name: string, type: c.PatchType, body: CoreV1.Node | c.JsonPatch, opts: operations.PatchOpts = {}): Promise<CoreV1.Node> {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}nodes/${name}`,
@@ -371,7 +371,7 @@ export class CoreV1Api {
     return await this.#client.performRequest({ ...opts, path });
   }
 
-  async getNodeStatus(name: string, opts: operations.NoOpts = {}) {
+  async getNodeStatus(name: string, opts: operations.NoOpts = {}): Promise<CoreV1.Node> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}nodes/${name}/status`,
@@ -381,7 +381,7 @@ export class CoreV1Api {
     return CoreV1.toNode(resp);
   }
 
-  async replaceNodeStatus(name: string, body: CoreV1.Node, opts: operations.PutOpts = {}) {
+  async replaceNodeStatus(name: string, body: CoreV1.Node, opts: operations.PutOpts = {}): Promise<CoreV1.Node> {
     const resp = await this.#client.performRequest({
       method: "PUT",
       path: `${this.#root}nodes/${name}/status`,
@@ -393,7 +393,7 @@ export class CoreV1Api {
     return CoreV1.toNode(resp);
   }
 
-  async patchNodeStatus(name: string, type: c.PatchType, body: CoreV1.Node | c.JsonPatch, opts: operations.PatchOpts = {}) {
+  async patchNodeStatus(name: string, type: c.PatchType, body: CoreV1.Node | c.JsonPatch, opts: operations.PatchOpts = {}): Promise<CoreV1.Node> {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}nodes/${name}/status`,
@@ -406,7 +406,7 @@ export class CoreV1Api {
     return CoreV1.toNode(resp);
   }
 
-  async getPersistentVolumeClaimListForAllNamespaces(opts: operations.GetListOpts = {}) {
+  async getPersistentVolumeClaimListForAllNamespaces(opts: operations.GetListOpts = {}): Promise<CoreV1.PersistentVolumeClaimList> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}persistentvolumeclaims`,
@@ -417,7 +417,7 @@ export class CoreV1Api {
     return CoreV1.toPersistentVolumeClaimList(resp);
   }
 
-  async watchPersistentVolumeClaimListForAllNamespaces(opts: operations.WatchListOpts = {}) {
+  async watchPersistentVolumeClaimListForAllNamespaces(opts: operations.WatchListOpts = {}): Promise<ReadableStream<c.WatchEvent<CoreV1.PersistentVolumeClaim & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}persistentvolumeclaims`,
@@ -429,7 +429,7 @@ export class CoreV1Api {
     return resp.pipeThrough(new c.WatchEventTransformer(CoreV1.toPersistentVolumeClaim, MetaV1.toStatus));
   }
 
-  async getPersistentVolumeList(opts: operations.GetListOpts = {}) {
+  async getPersistentVolumeList(opts: operations.GetListOpts = {}): Promise<CoreV1.PersistentVolumeList> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}persistentvolumes`,
@@ -440,7 +440,7 @@ export class CoreV1Api {
     return CoreV1.toPersistentVolumeList(resp);
   }
 
-  async watchPersistentVolumeList(opts: operations.WatchListOpts = {}) {
+  async watchPersistentVolumeList(opts: operations.WatchListOpts = {}): Promise<ReadableStream<c.WatchEvent<CoreV1.PersistentVolume & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}persistentvolumes`,
@@ -452,7 +452,7 @@ export class CoreV1Api {
     return resp.pipeThrough(new c.WatchEventTransformer(CoreV1.toPersistentVolume, MetaV1.toStatus));
   }
 
-  async createPersistentVolume(body: CoreV1.PersistentVolume, opts: operations.PutOpts = {}) {
+  async createPersistentVolume(body: CoreV1.PersistentVolume, opts: operations.PutOpts = {}): Promise<CoreV1.PersistentVolume> {
     const resp = await this.#client.performRequest({
       method: "POST",
       path: `${this.#root}persistentvolumes`,
@@ -464,7 +464,7 @@ export class CoreV1Api {
     return CoreV1.toPersistentVolume(resp);
   }
 
-  async deletePersistentVolumeList(opts: operations.DeleteListOpts = {}) {
+  async deletePersistentVolumeList(opts: operations.DeleteListOpts = {}): Promise<CoreV1.PersistentVolumeList> {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}persistentvolumes`,
@@ -475,7 +475,7 @@ export class CoreV1Api {
     return CoreV1.toPersistentVolumeList(resp);
   }
 
-  async getPersistentVolume(name: string, opts: operations.NoOpts = {}) {
+  async getPersistentVolume(name: string, opts: operations.NoOpts = {}): Promise<CoreV1.PersistentVolume> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}persistentvolumes/${name}`,
@@ -485,7 +485,7 @@ export class CoreV1Api {
     return CoreV1.toPersistentVolume(resp);
   }
 
-  async deletePersistentVolume(name: string, opts: operations.DeleteOpts = {}) {
+  async deletePersistentVolume(name: string, opts: operations.DeleteOpts = {}): Promise<CoreV1.PersistentVolume | MetaV1.Status> {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}persistentvolumes/${name}`,
@@ -497,7 +497,7 @@ export class CoreV1Api {
     return CoreV1.toPersistentVolume(resp);
   }
 
-  async replacePersistentVolume(name: string, body: CoreV1.PersistentVolume, opts: operations.PutOpts = {}) {
+  async replacePersistentVolume(name: string, body: CoreV1.PersistentVolume, opts: operations.PutOpts = {}): Promise<CoreV1.PersistentVolume> {
     const resp = await this.#client.performRequest({
       method: "PUT",
       path: `${this.#root}persistentvolumes/${name}`,
@@ -509,7 +509,7 @@ export class CoreV1Api {
     return CoreV1.toPersistentVolume(resp);
   }
 
-  async patchPersistentVolume(name: string, type: c.PatchType, body: CoreV1.PersistentVolume | c.JsonPatch, opts: operations.PatchOpts = {}) {
+  async patchPersistentVolume(name: string, type: c.PatchType, body: CoreV1.PersistentVolume | c.JsonPatch, opts: operations.PatchOpts = {}): Promise<CoreV1.PersistentVolume> {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}persistentvolumes/${name}`,
@@ -522,7 +522,7 @@ export class CoreV1Api {
     return CoreV1.toPersistentVolume(resp);
   }
 
-  async getPersistentVolumeStatus(name: string, opts: operations.NoOpts = {}) {
+  async getPersistentVolumeStatus(name: string, opts: operations.NoOpts = {}): Promise<CoreV1.PersistentVolume> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}persistentvolumes/${name}/status`,
@@ -532,7 +532,7 @@ export class CoreV1Api {
     return CoreV1.toPersistentVolume(resp);
   }
 
-  async replacePersistentVolumeStatus(name: string, body: CoreV1.PersistentVolume, opts: operations.PutOpts = {}) {
+  async replacePersistentVolumeStatus(name: string, body: CoreV1.PersistentVolume, opts: operations.PutOpts = {}): Promise<CoreV1.PersistentVolume> {
     const resp = await this.#client.performRequest({
       method: "PUT",
       path: `${this.#root}persistentvolumes/${name}/status`,
@@ -544,7 +544,7 @@ export class CoreV1Api {
     return CoreV1.toPersistentVolume(resp);
   }
 
-  async patchPersistentVolumeStatus(name: string, type: c.PatchType, body: CoreV1.PersistentVolume | c.JsonPatch, opts: operations.PatchOpts = {}) {
+  async patchPersistentVolumeStatus(name: string, type: c.PatchType, body: CoreV1.PersistentVolume | c.JsonPatch, opts: operations.PatchOpts = {}): Promise<CoreV1.PersistentVolume> {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}persistentvolumes/${name}/status`,
@@ -557,7 +557,7 @@ export class CoreV1Api {
     return CoreV1.toPersistentVolume(resp);
   }
 
-  async getPodListForAllNamespaces(opts: operations.GetListOpts = {}) {
+  async getPodListForAllNamespaces(opts: operations.GetListOpts = {}): Promise<CoreV1.PodList> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}pods`,
@@ -568,7 +568,7 @@ export class CoreV1Api {
     return CoreV1.toPodList(resp);
   }
 
-  async watchPodListForAllNamespaces(opts: operations.WatchListOpts = {}) {
+  async watchPodListForAllNamespaces(opts: operations.WatchListOpts = {}): Promise<ReadableStream<c.WatchEvent<CoreV1.Pod & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}pods`,
@@ -580,7 +580,7 @@ export class CoreV1Api {
     return resp.pipeThrough(new c.WatchEventTransformer(CoreV1.toPod, MetaV1.toStatus));
   }
 
-  async getPodTemplateListForAllNamespaces(opts: operations.GetListOpts = {}) {
+  async getPodTemplateListForAllNamespaces(opts: operations.GetListOpts = {}): Promise<CoreV1.PodTemplateList> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}podtemplates`,
@@ -591,7 +591,7 @@ export class CoreV1Api {
     return CoreV1.toPodTemplateList(resp);
   }
 
-  async watchPodTemplateListForAllNamespaces(opts: operations.WatchListOpts = {}) {
+  async watchPodTemplateListForAllNamespaces(opts: operations.WatchListOpts = {}): Promise<ReadableStream<c.WatchEvent<CoreV1.PodTemplate & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}podtemplates`,
@@ -603,7 +603,7 @@ export class CoreV1Api {
     return resp.pipeThrough(new c.WatchEventTransformer(CoreV1.toPodTemplate, MetaV1.toStatus));
   }
 
-  async getReplicationControllerListForAllNamespaces(opts: operations.GetListOpts = {}) {
+  async getReplicationControllerListForAllNamespaces(opts: operations.GetListOpts = {}): Promise<CoreV1.ReplicationControllerList> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}replicationcontrollers`,
@@ -614,7 +614,7 @@ export class CoreV1Api {
     return CoreV1.toReplicationControllerList(resp);
   }
 
-  async watchReplicationControllerListForAllNamespaces(opts: operations.WatchListOpts = {}) {
+  async watchReplicationControllerListForAllNamespaces(opts: operations.WatchListOpts = {}): Promise<ReadableStream<c.WatchEvent<CoreV1.ReplicationController & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}replicationcontrollers`,
@@ -626,7 +626,7 @@ export class CoreV1Api {
     return resp.pipeThrough(new c.WatchEventTransformer(CoreV1.toReplicationController, MetaV1.toStatus));
   }
 
-  async getResourceQuotaListForAllNamespaces(opts: operations.GetListOpts = {}) {
+  async getResourceQuotaListForAllNamespaces(opts: operations.GetListOpts = {}): Promise<CoreV1.ResourceQuotaList> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}resourcequotas`,
@@ -637,7 +637,7 @@ export class CoreV1Api {
     return CoreV1.toResourceQuotaList(resp);
   }
 
-  async watchResourceQuotaListForAllNamespaces(opts: operations.WatchListOpts = {}) {
+  async watchResourceQuotaListForAllNamespaces(opts: operations.WatchListOpts = {}): Promise<ReadableStream<c.WatchEvent<CoreV1.ResourceQuota & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}resourcequotas`,
@@ -649,7 +649,7 @@ export class CoreV1Api {
     return resp.pipeThrough(new c.WatchEventTransformer(CoreV1.toResourceQuota, MetaV1.toStatus));
   }
 
-  async getSecretListForAllNamespaces(opts: operations.GetListOpts = {}) {
+  async getSecretListForAllNamespaces(opts: operations.GetListOpts = {}): Promise<CoreV1.SecretList> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}secrets`,
@@ -660,7 +660,7 @@ export class CoreV1Api {
     return CoreV1.toSecretList(resp);
   }
 
-  async watchSecretListForAllNamespaces(opts: operations.WatchListOpts = {}) {
+  async watchSecretListForAllNamespaces(opts: operations.WatchListOpts = {}): Promise<ReadableStream<c.WatchEvent<CoreV1.Secret & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}secrets`,
@@ -672,7 +672,7 @@ export class CoreV1Api {
     return resp.pipeThrough(new c.WatchEventTransformer(CoreV1.toSecret, MetaV1.toStatus));
   }
 
-  async getServiceAccountListForAllNamespaces(opts: operations.GetListOpts = {}) {
+  async getServiceAccountListForAllNamespaces(opts: operations.GetListOpts = {}): Promise<CoreV1.ServiceAccountList> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}serviceaccounts`,
@@ -683,7 +683,7 @@ export class CoreV1Api {
     return CoreV1.toServiceAccountList(resp);
   }
 
-  async watchServiceAccountListForAllNamespaces(opts: operations.WatchListOpts = {}) {
+  async watchServiceAccountListForAllNamespaces(opts: operations.WatchListOpts = {}): Promise<ReadableStream<c.WatchEvent<CoreV1.ServiceAccount & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}serviceaccounts`,
@@ -695,7 +695,7 @@ export class CoreV1Api {
     return resp.pipeThrough(new c.WatchEventTransformer(CoreV1.toServiceAccount, MetaV1.toStatus));
   }
 
-  async getServiceListForAllNamespaces(opts: operations.GetListOpts = {}) {
+  async getServiceListForAllNamespaces(opts: operations.GetListOpts = {}): Promise<CoreV1.ServiceList> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}services`,
@@ -706,7 +706,7 @@ export class CoreV1Api {
     return CoreV1.toServiceList(resp);
   }
 
-  async watchServiceListForAllNamespaces(opts: operations.WatchListOpts = {}) {
+  async watchServiceListForAllNamespaces(opts: operations.WatchListOpts = {}): Promise<ReadableStream<c.WatchEvent<CoreV1.Service & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}services`,
@@ -728,7 +728,7 @@ export class CoreV1NamespacedApi {
     this.#root = `/api/v1/namespaces/${namespace}/`;
   }
 
-  async createBinding(body: CoreV1.Binding, opts: operations.PutOpts = {}) {
+  async createBinding(body: CoreV1.Binding, opts: operations.PutOpts = {}): Promise<CoreV1.Binding> {
     const resp = await this.#client.performRequest({
       method: "POST",
       path: `${this.#root}bindings`,
@@ -740,7 +740,7 @@ export class CoreV1NamespacedApi {
     return CoreV1.toBinding(resp);
   }
 
-  async getConfigMapList(opts: operations.GetListOpts = {}) {
+  async getConfigMapList(opts: operations.GetListOpts = {}): Promise<CoreV1.ConfigMapList> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}configmaps`,
@@ -751,7 +751,7 @@ export class CoreV1NamespacedApi {
     return CoreV1.toConfigMapList(resp);
   }
 
-  async watchConfigMapList(opts: operations.WatchListOpts = {}) {
+  async watchConfigMapList(opts: operations.WatchListOpts = {}): Promise<ReadableStream<c.WatchEvent<CoreV1.ConfigMap & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}configmaps`,
@@ -763,7 +763,7 @@ export class CoreV1NamespacedApi {
     return resp.pipeThrough(new c.WatchEventTransformer(CoreV1.toConfigMap, MetaV1.toStatus));
   }
 
-  async createConfigMap(body: CoreV1.ConfigMap, opts: operations.PutOpts = {}) {
+  async createConfigMap(body: CoreV1.ConfigMap, opts: operations.PutOpts = {}): Promise<CoreV1.ConfigMap> {
     const resp = await this.#client.performRequest({
       method: "POST",
       path: `${this.#root}configmaps`,
@@ -775,7 +775,7 @@ export class CoreV1NamespacedApi {
     return CoreV1.toConfigMap(resp);
   }
 
-  async deleteConfigMapList(opts: operations.DeleteListOpts = {}) {
+  async deleteConfigMapList(opts: operations.DeleteListOpts = {}): Promise<CoreV1.ConfigMapList> {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}configmaps`,
@@ -786,7 +786,7 @@ export class CoreV1NamespacedApi {
     return CoreV1.toConfigMapList(resp);
   }
 
-  async getConfigMap(name: string, opts: operations.NoOpts = {}) {
+  async getConfigMap(name: string, opts: operations.NoOpts = {}): Promise<CoreV1.ConfigMap> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}configmaps/${name}`,
@@ -796,7 +796,7 @@ export class CoreV1NamespacedApi {
     return CoreV1.toConfigMap(resp);
   }
 
-  async deleteConfigMap(name: string, opts: operations.DeleteOpts = {}) {
+  async deleteConfigMap(name: string, opts: operations.DeleteOpts = {}): Promise<CoreV1.ConfigMap | MetaV1.Status> {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}configmaps/${name}`,
@@ -808,7 +808,7 @@ export class CoreV1NamespacedApi {
     return CoreV1.toConfigMap(resp);
   }
 
-  async replaceConfigMap(name: string, body: CoreV1.ConfigMap, opts: operations.PutOpts = {}) {
+  async replaceConfigMap(name: string, body: CoreV1.ConfigMap, opts: operations.PutOpts = {}): Promise<CoreV1.ConfigMap> {
     const resp = await this.#client.performRequest({
       method: "PUT",
       path: `${this.#root}configmaps/${name}`,
@@ -820,7 +820,7 @@ export class CoreV1NamespacedApi {
     return CoreV1.toConfigMap(resp);
   }
 
-  async patchConfigMap(name: string, type: c.PatchType, body: CoreV1.ConfigMap | c.JsonPatch, opts: operations.PatchOpts = {}) {
+  async patchConfigMap(name: string, type: c.PatchType, body: CoreV1.ConfigMap | c.JsonPatch, opts: operations.PatchOpts = {}): Promise<CoreV1.ConfigMap> {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}configmaps/${name}`,
@@ -833,7 +833,7 @@ export class CoreV1NamespacedApi {
     return CoreV1.toConfigMap(resp);
   }
 
-  async getEndpointsList(opts: operations.GetListOpts = {}) {
+  async getEndpointsList(opts: operations.GetListOpts = {}): Promise<CoreV1.EndpointsList> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}endpoints`,
@@ -844,7 +844,7 @@ export class CoreV1NamespacedApi {
     return CoreV1.toEndpointsList(resp);
   }
 
-  async watchEndpointsList(opts: operations.WatchListOpts = {}) {
+  async watchEndpointsList(opts: operations.WatchListOpts = {}): Promise<ReadableStream<c.WatchEvent<CoreV1.Endpoints & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}endpoints`,
@@ -856,7 +856,7 @@ export class CoreV1NamespacedApi {
     return resp.pipeThrough(new c.WatchEventTransformer(CoreV1.toEndpoints, MetaV1.toStatus));
   }
 
-  async createEndpoints(body: CoreV1.Endpoints, opts: operations.PutOpts = {}) {
+  async createEndpoints(body: CoreV1.Endpoints, opts: operations.PutOpts = {}): Promise<CoreV1.Endpoints> {
     const resp = await this.#client.performRequest({
       method: "POST",
       path: `${this.#root}endpoints`,
@@ -868,7 +868,7 @@ export class CoreV1NamespacedApi {
     return CoreV1.toEndpoints(resp);
   }
 
-  async deleteEndpointsList(opts: operations.DeleteListOpts = {}) {
+  async deleteEndpointsList(opts: operations.DeleteListOpts = {}): Promise<CoreV1.EndpointsList> {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}endpoints`,
@@ -879,7 +879,7 @@ export class CoreV1NamespacedApi {
     return CoreV1.toEndpointsList(resp);
   }
 
-  async getEndpoints(name: string, opts: operations.NoOpts = {}) {
+  async getEndpoints(name: string, opts: operations.NoOpts = {}): Promise<CoreV1.Endpoints> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}endpoints/${name}`,
@@ -889,7 +889,7 @@ export class CoreV1NamespacedApi {
     return CoreV1.toEndpoints(resp);
   }
 
-  async deleteEndpoints(name: string, opts: operations.DeleteOpts = {}) {
+  async deleteEndpoints(name: string, opts: operations.DeleteOpts = {}): Promise<CoreV1.Endpoints | MetaV1.Status> {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}endpoints/${name}`,
@@ -901,7 +901,7 @@ export class CoreV1NamespacedApi {
     return CoreV1.toEndpoints(resp);
   }
 
-  async replaceEndpoints(name: string, body: CoreV1.Endpoints, opts: operations.PutOpts = {}) {
+  async replaceEndpoints(name: string, body: CoreV1.Endpoints, opts: operations.PutOpts = {}): Promise<CoreV1.Endpoints> {
     const resp = await this.#client.performRequest({
       method: "PUT",
       path: `${this.#root}endpoints/${name}`,
@@ -913,7 +913,7 @@ export class CoreV1NamespacedApi {
     return CoreV1.toEndpoints(resp);
   }
 
-  async patchEndpoints(name: string, type: c.PatchType, body: CoreV1.Endpoints | c.JsonPatch, opts: operations.PatchOpts = {}) {
+  async patchEndpoints(name: string, type: c.PatchType, body: CoreV1.Endpoints | c.JsonPatch, opts: operations.PatchOpts = {}): Promise<CoreV1.Endpoints> {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}endpoints/${name}`,
@@ -926,7 +926,7 @@ export class CoreV1NamespacedApi {
     return CoreV1.toEndpoints(resp);
   }
 
-  async getEventList(opts: operations.GetListOpts = {}) {
+  async getEventList(opts: operations.GetListOpts = {}): Promise<CoreV1.EventList> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}events`,
@@ -937,7 +937,7 @@ export class CoreV1NamespacedApi {
     return CoreV1.toEventList(resp);
   }
 
-  async watchEventList(opts: operations.WatchListOpts = {}) {
+  async watchEventList(opts: operations.WatchListOpts = {}): Promise<ReadableStream<c.WatchEvent<CoreV1.Event & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}events`,
@@ -949,7 +949,7 @@ export class CoreV1NamespacedApi {
     return resp.pipeThrough(new c.WatchEventTransformer(CoreV1.toEvent, MetaV1.toStatus));
   }
 
-  async createEvent(body: CoreV1.Event, opts: operations.PutOpts = {}) {
+  async createEvent(body: CoreV1.Event, opts: operations.PutOpts = {}): Promise<CoreV1.Event> {
     const resp = await this.#client.performRequest({
       method: "POST",
       path: `${this.#root}events`,
@@ -961,7 +961,7 @@ export class CoreV1NamespacedApi {
     return CoreV1.toEvent(resp);
   }
 
-  async deleteEventList(opts: operations.DeleteListOpts = {}) {
+  async deleteEventList(opts: operations.DeleteListOpts = {}): Promise<CoreV1.EventList> {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}events`,
@@ -972,7 +972,7 @@ export class CoreV1NamespacedApi {
     return CoreV1.toEventList(resp);
   }
 
-  async getEvent(name: string, opts: operations.NoOpts = {}) {
+  async getEvent(name: string, opts: operations.NoOpts = {}): Promise<CoreV1.Event> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}events/${name}`,
@@ -982,7 +982,7 @@ export class CoreV1NamespacedApi {
     return CoreV1.toEvent(resp);
   }
 
-  async deleteEvent(name: string, opts: operations.DeleteOpts = {}) {
+  async deleteEvent(name: string, opts: operations.DeleteOpts = {}): Promise<CoreV1.Event | MetaV1.Status> {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}events/${name}`,
@@ -994,7 +994,7 @@ export class CoreV1NamespacedApi {
     return CoreV1.toEvent(resp);
   }
 
-  async replaceEvent(name: string, body: CoreV1.Event, opts: operations.PutOpts = {}) {
+  async replaceEvent(name: string, body: CoreV1.Event, opts: operations.PutOpts = {}): Promise<CoreV1.Event> {
     const resp = await this.#client.performRequest({
       method: "PUT",
       path: `${this.#root}events/${name}`,
@@ -1006,7 +1006,7 @@ export class CoreV1NamespacedApi {
     return CoreV1.toEvent(resp);
   }
 
-  async patchEvent(name: string, type: c.PatchType, body: CoreV1.Event | c.JsonPatch, opts: operations.PatchOpts = {}) {
+  async patchEvent(name: string, type: c.PatchType, body: CoreV1.Event | c.JsonPatch, opts: operations.PatchOpts = {}): Promise<CoreV1.Event> {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}events/${name}`,
@@ -1019,7 +1019,7 @@ export class CoreV1NamespacedApi {
     return CoreV1.toEvent(resp);
   }
 
-  async getLimitRangeList(opts: operations.GetListOpts = {}) {
+  async getLimitRangeList(opts: operations.GetListOpts = {}): Promise<CoreV1.LimitRangeList> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}limitranges`,
@@ -1030,7 +1030,7 @@ export class CoreV1NamespacedApi {
     return CoreV1.toLimitRangeList(resp);
   }
 
-  async watchLimitRangeList(opts: operations.WatchListOpts = {}) {
+  async watchLimitRangeList(opts: operations.WatchListOpts = {}): Promise<ReadableStream<c.WatchEvent<CoreV1.LimitRange & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}limitranges`,
@@ -1042,7 +1042,7 @@ export class CoreV1NamespacedApi {
     return resp.pipeThrough(new c.WatchEventTransformer(CoreV1.toLimitRange, MetaV1.toStatus));
   }
 
-  async createLimitRange(body: CoreV1.LimitRange, opts: operations.PutOpts = {}) {
+  async createLimitRange(body: CoreV1.LimitRange, opts: operations.PutOpts = {}): Promise<CoreV1.LimitRange> {
     const resp = await this.#client.performRequest({
       method: "POST",
       path: `${this.#root}limitranges`,
@@ -1054,7 +1054,7 @@ export class CoreV1NamespacedApi {
     return CoreV1.toLimitRange(resp);
   }
 
-  async deleteLimitRangeList(opts: operations.DeleteListOpts = {}) {
+  async deleteLimitRangeList(opts: operations.DeleteListOpts = {}): Promise<CoreV1.LimitRangeList> {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}limitranges`,
@@ -1065,7 +1065,7 @@ export class CoreV1NamespacedApi {
     return CoreV1.toLimitRangeList(resp);
   }
 
-  async getLimitRange(name: string, opts: operations.NoOpts = {}) {
+  async getLimitRange(name: string, opts: operations.NoOpts = {}): Promise<CoreV1.LimitRange> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}limitranges/${name}`,
@@ -1075,7 +1075,7 @@ export class CoreV1NamespacedApi {
     return CoreV1.toLimitRange(resp);
   }
 
-  async deleteLimitRange(name: string, opts: operations.DeleteOpts = {}) {
+  async deleteLimitRange(name: string, opts: operations.DeleteOpts = {}): Promise<CoreV1.LimitRange | MetaV1.Status> {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}limitranges/${name}`,
@@ -1087,7 +1087,7 @@ export class CoreV1NamespacedApi {
     return CoreV1.toLimitRange(resp);
   }
 
-  async replaceLimitRange(name: string, body: CoreV1.LimitRange, opts: operations.PutOpts = {}) {
+  async replaceLimitRange(name: string, body: CoreV1.LimitRange, opts: operations.PutOpts = {}): Promise<CoreV1.LimitRange> {
     const resp = await this.#client.performRequest({
       method: "PUT",
       path: `${this.#root}limitranges/${name}`,
@@ -1099,7 +1099,7 @@ export class CoreV1NamespacedApi {
     return CoreV1.toLimitRange(resp);
   }
 
-  async patchLimitRange(name: string, type: c.PatchType, body: CoreV1.LimitRange | c.JsonPatch, opts: operations.PatchOpts = {}) {
+  async patchLimitRange(name: string, type: c.PatchType, body: CoreV1.LimitRange | c.JsonPatch, opts: operations.PatchOpts = {}): Promise<CoreV1.LimitRange> {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}limitranges/${name}`,
@@ -1112,7 +1112,7 @@ export class CoreV1NamespacedApi {
     return CoreV1.toLimitRange(resp);
   }
 
-  async getPersistentVolumeClaimList(opts: operations.GetListOpts = {}) {
+  async getPersistentVolumeClaimList(opts: operations.GetListOpts = {}): Promise<CoreV1.PersistentVolumeClaimList> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}persistentvolumeclaims`,
@@ -1123,7 +1123,7 @@ export class CoreV1NamespacedApi {
     return CoreV1.toPersistentVolumeClaimList(resp);
   }
 
-  async watchPersistentVolumeClaimList(opts: operations.WatchListOpts = {}) {
+  async watchPersistentVolumeClaimList(opts: operations.WatchListOpts = {}): Promise<ReadableStream<c.WatchEvent<CoreV1.PersistentVolumeClaim & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}persistentvolumeclaims`,
@@ -1135,7 +1135,7 @@ export class CoreV1NamespacedApi {
     return resp.pipeThrough(new c.WatchEventTransformer(CoreV1.toPersistentVolumeClaim, MetaV1.toStatus));
   }
 
-  async createPersistentVolumeClaim(body: CoreV1.PersistentVolumeClaim, opts: operations.PutOpts = {}) {
+  async createPersistentVolumeClaim(body: CoreV1.PersistentVolumeClaim, opts: operations.PutOpts = {}): Promise<CoreV1.PersistentVolumeClaim> {
     const resp = await this.#client.performRequest({
       method: "POST",
       path: `${this.#root}persistentvolumeclaims`,
@@ -1147,7 +1147,7 @@ export class CoreV1NamespacedApi {
     return CoreV1.toPersistentVolumeClaim(resp);
   }
 
-  async deletePersistentVolumeClaimList(opts: operations.DeleteListOpts = {}) {
+  async deletePersistentVolumeClaimList(opts: operations.DeleteListOpts = {}): Promise<CoreV1.PersistentVolumeClaimList> {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}persistentvolumeclaims`,
@@ -1158,7 +1158,7 @@ export class CoreV1NamespacedApi {
     return CoreV1.toPersistentVolumeClaimList(resp);
   }
 
-  async getPersistentVolumeClaim(name: string, opts: operations.NoOpts = {}) {
+  async getPersistentVolumeClaim(name: string, opts: operations.NoOpts = {}): Promise<CoreV1.PersistentVolumeClaim> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}persistentvolumeclaims/${name}`,
@@ -1168,7 +1168,7 @@ export class CoreV1NamespacedApi {
     return CoreV1.toPersistentVolumeClaim(resp);
   }
 
-  async deletePersistentVolumeClaim(name: string, opts: operations.DeleteOpts = {}) {
+  async deletePersistentVolumeClaim(name: string, opts: operations.DeleteOpts = {}): Promise<CoreV1.PersistentVolumeClaim | MetaV1.Status> {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}persistentvolumeclaims/${name}`,
@@ -1180,7 +1180,7 @@ export class CoreV1NamespacedApi {
     return CoreV1.toPersistentVolumeClaim(resp);
   }
 
-  async replacePersistentVolumeClaim(name: string, body: CoreV1.PersistentVolumeClaim, opts: operations.PutOpts = {}) {
+  async replacePersistentVolumeClaim(name: string, body: CoreV1.PersistentVolumeClaim, opts: operations.PutOpts = {}): Promise<CoreV1.PersistentVolumeClaim> {
     const resp = await this.#client.performRequest({
       method: "PUT",
       path: `${this.#root}persistentvolumeclaims/${name}`,
@@ -1192,7 +1192,7 @@ export class CoreV1NamespacedApi {
     return CoreV1.toPersistentVolumeClaim(resp);
   }
 
-  async patchPersistentVolumeClaim(name: string, type: c.PatchType, body: CoreV1.PersistentVolumeClaim | c.JsonPatch, opts: operations.PatchOpts = {}) {
+  async patchPersistentVolumeClaim(name: string, type: c.PatchType, body: CoreV1.PersistentVolumeClaim | c.JsonPatch, opts: operations.PatchOpts = {}): Promise<CoreV1.PersistentVolumeClaim> {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}persistentvolumeclaims/${name}`,
@@ -1205,7 +1205,7 @@ export class CoreV1NamespacedApi {
     return CoreV1.toPersistentVolumeClaim(resp);
   }
 
-  async getPersistentVolumeClaimStatus(name: string, opts: operations.NoOpts = {}) {
+  async getPersistentVolumeClaimStatus(name: string, opts: operations.NoOpts = {}): Promise<CoreV1.PersistentVolumeClaim> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}persistentvolumeclaims/${name}/status`,
@@ -1215,7 +1215,7 @@ export class CoreV1NamespacedApi {
     return CoreV1.toPersistentVolumeClaim(resp);
   }
 
-  async replacePersistentVolumeClaimStatus(name: string, body: CoreV1.PersistentVolumeClaim, opts: operations.PutOpts = {}) {
+  async replacePersistentVolumeClaimStatus(name: string, body: CoreV1.PersistentVolumeClaim, opts: operations.PutOpts = {}): Promise<CoreV1.PersistentVolumeClaim> {
     const resp = await this.#client.performRequest({
       method: "PUT",
       path: `${this.#root}persistentvolumeclaims/${name}/status`,
@@ -1227,7 +1227,7 @@ export class CoreV1NamespacedApi {
     return CoreV1.toPersistentVolumeClaim(resp);
   }
 
-  async patchPersistentVolumeClaimStatus(name: string, type: c.PatchType, body: CoreV1.PersistentVolumeClaim | c.JsonPatch, opts: operations.PatchOpts = {}) {
+  async patchPersistentVolumeClaimStatus(name: string, type: c.PatchType, body: CoreV1.PersistentVolumeClaim | c.JsonPatch, opts: operations.PatchOpts = {}): Promise<CoreV1.PersistentVolumeClaim> {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}persistentvolumeclaims/${name}/status`,
@@ -1240,7 +1240,7 @@ export class CoreV1NamespacedApi {
     return CoreV1.toPersistentVolumeClaim(resp);
   }
 
-  async getPodList(opts: operations.GetListOpts = {}) {
+  async getPodList(opts: operations.GetListOpts = {}): Promise<CoreV1.PodList> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}pods`,
@@ -1251,7 +1251,7 @@ export class CoreV1NamespacedApi {
     return CoreV1.toPodList(resp);
   }
 
-  async watchPodList(opts: operations.WatchListOpts = {}) {
+  async watchPodList(opts: operations.WatchListOpts = {}): Promise<ReadableStream<c.WatchEvent<CoreV1.Pod & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}pods`,
@@ -1263,7 +1263,7 @@ export class CoreV1NamespacedApi {
     return resp.pipeThrough(new c.WatchEventTransformer(CoreV1.toPod, MetaV1.toStatus));
   }
 
-  async createPod(body: CoreV1.Pod, opts: operations.PutOpts = {}) {
+  async createPod(body: CoreV1.Pod, opts: operations.PutOpts = {}): Promise<CoreV1.Pod> {
     const resp = await this.#client.performRequest({
       method: "POST",
       path: `${this.#root}pods`,
@@ -1275,7 +1275,7 @@ export class CoreV1NamespacedApi {
     return CoreV1.toPod(resp);
   }
 
-  async deletePodList(opts: operations.DeleteListOpts = {}) {
+  async deletePodList(opts: operations.DeleteListOpts = {}): Promise<CoreV1.PodList> {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}pods`,
@@ -1286,7 +1286,7 @@ export class CoreV1NamespacedApi {
     return CoreV1.toPodList(resp);
   }
 
-  async getPod(name: string, opts: operations.NoOpts = {}) {
+  async getPod(name: string, opts: operations.NoOpts = {}): Promise<CoreV1.Pod> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}pods/${name}`,
@@ -1296,7 +1296,7 @@ export class CoreV1NamespacedApi {
     return CoreV1.toPod(resp);
   }
 
-  async deletePod(name: string, opts: operations.DeleteOpts = {}) {
+  async deletePod(name: string, opts: operations.DeleteOpts = {}): Promise<CoreV1.Pod | MetaV1.Status> {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}pods/${name}`,
@@ -1308,7 +1308,7 @@ export class CoreV1NamespacedApi {
     return CoreV1.toPod(resp);
   }
 
-  async replacePod(name: string, body: CoreV1.Pod, opts: operations.PutOpts = {}) {
+  async replacePod(name: string, body: CoreV1.Pod, opts: operations.PutOpts = {}): Promise<CoreV1.Pod> {
     const resp = await this.#client.performRequest({
       method: "PUT",
       path: `${this.#root}pods/${name}`,
@@ -1320,7 +1320,7 @@ export class CoreV1NamespacedApi {
     return CoreV1.toPod(resp);
   }
 
-  async patchPod(name: string, type: c.PatchType, body: CoreV1.Pod | c.JsonPatch, opts: operations.PatchOpts = {}) {
+  async patchPod(name: string, type: c.PatchType, body: CoreV1.Pod | c.JsonPatch, opts: operations.PatchOpts = {}): Promise<CoreV1.Pod> {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}pods/${name}`,
@@ -1340,7 +1340,7 @@ export class CoreV1NamespacedApi {
     stdout: boolean;
     tty?: boolean;
     abortSignal?: AbortSignal;
-  }) {
+  }): Promise<tunnels.StdioTunnel> {
     const query = new URLSearchParams;
     if (opts["container"] != null) query.append("container", opts["container"]);
     if (opts["stderr"] != null) query.append("stderr", opts["stderr"] ? '1' : '0');
@@ -1360,7 +1360,7 @@ export class CoreV1NamespacedApi {
     return tunnel;
   }
 
-  async createPodBinding(name: string, body: CoreV1.Binding, opts: operations.PutOpts = {}) {
+  async createPodBinding(name: string, body: CoreV1.Binding, opts: operations.PutOpts = {}): Promise<CoreV1.Binding> {
     const resp = await this.#client.performRequest({
       method: "POST",
       path: `${this.#root}pods/${name}/binding`,
@@ -1372,7 +1372,7 @@ export class CoreV1NamespacedApi {
     return CoreV1.toBinding(resp);
   }
 
-  async getPodEphemeralcontainers(name: string, opts: operations.NoOpts = {}) {
+  async getPodEphemeralcontainers(name: string, opts: operations.NoOpts = {}): Promise<CoreV1.Pod> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}pods/${name}/ephemeralcontainers`,
@@ -1382,7 +1382,7 @@ export class CoreV1NamespacedApi {
     return CoreV1.toPod(resp);
   }
 
-  async replacePodEphemeralcontainers(name: string, body: CoreV1.Pod, opts: operations.PutOpts = {}) {
+  async replacePodEphemeralcontainers(name: string, body: CoreV1.Pod, opts: operations.PutOpts = {}): Promise<CoreV1.Pod> {
     const resp = await this.#client.performRequest({
       method: "PUT",
       path: `${this.#root}pods/${name}/ephemeralcontainers`,
@@ -1394,7 +1394,7 @@ export class CoreV1NamespacedApi {
     return CoreV1.toPod(resp);
   }
 
-  async patchPodEphemeralcontainers(name: string, type: c.PatchType, body: CoreV1.Pod | c.JsonPatch, opts: operations.PatchOpts = {}) {
+  async patchPodEphemeralcontainers(name: string, type: c.PatchType, body: CoreV1.Pod | c.JsonPatch, opts: operations.PatchOpts = {}): Promise<CoreV1.Pod> {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}pods/${name}/ephemeralcontainers`,
@@ -1407,7 +1407,7 @@ export class CoreV1NamespacedApi {
     return CoreV1.toPod(resp);
   }
 
-  async createPodEviction(name: string, body: PolicyV1.Eviction, opts: operations.PutOpts = {}) {
+  async createPodEviction(name: string, body: PolicyV1.Eviction, opts: operations.PutOpts = {}): Promise<PolicyV1.Eviction> {
     const resp = await this.#client.performRequest({
       method: "POST",
       path: `${this.#root}pods/${name}/eviction`,
@@ -1427,7 +1427,7 @@ export class CoreV1NamespacedApi {
     stdout: boolean;
     tty?: boolean;
     abortSignal?: AbortSignal;
-  }) {
+  }): Promise<tunnels.StdioTunnel> {
     const query = new URLSearchParams;
     for (const item of opts["command"]) query.append("command", item);
     if (opts["container"] != null) query.append("container", opts["container"]);
@@ -1458,7 +1458,7 @@ export class CoreV1NamespacedApi {
     tailLines?: number;
     timestamps?: boolean;
     abortSignal?: AbortSignal;
-  } = {}) {
+  } = {}): Promise<ReadableStream<string>> {
     const query = new URLSearchParams;
     if (opts["container"] != null) query.append("container", opts["container"]);
     if (opts["follow"] != null) query.append("follow", opts["follow"] ? '1' : '0');
@@ -1487,7 +1487,7 @@ export class CoreV1NamespacedApi {
     tailLines?: number;
     timestamps?: boolean;
     abortSignal?: AbortSignal;
-  } = {}) {
+  } = {}): Promise<string> {
     const query = new URLSearchParams;
     if (opts["container"] != null) query.append("container", opts["container"]);
     if (opts["insecureSkipTLSVerifyBackend"] != null) query.append("insecureSkipTLSVerifyBackend", opts["insecureSkipTLSVerifyBackend"] ? '1' : '0');
@@ -1508,7 +1508,7 @@ export class CoreV1NamespacedApi {
   async tunnelPodPortforward(name: string, opts: {
     ports?: Array<number>;
     abortSignal?: AbortSignal;
-  } = {}) {
+  } = {}): Promise<tunnels.PortforwardTunnel> {
     const query = new URLSearchParams;
     for (const item of opts["ports"] ?? []) query.append("ports", String(item));
     const resp = await this.#client.performRequest({
@@ -1535,7 +1535,7 @@ export class CoreV1NamespacedApi {
     return await this.#client.performRequest({ ...opts, path });
   }
 
-  async getPodStatus(name: string, opts: operations.NoOpts = {}) {
+  async getPodStatus(name: string, opts: operations.NoOpts = {}): Promise<CoreV1.Pod> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}pods/${name}/status`,
@@ -1545,7 +1545,7 @@ export class CoreV1NamespacedApi {
     return CoreV1.toPod(resp);
   }
 
-  async replacePodStatus(name: string, body: CoreV1.Pod, opts: operations.PutOpts = {}) {
+  async replacePodStatus(name: string, body: CoreV1.Pod, opts: operations.PutOpts = {}): Promise<CoreV1.Pod> {
     const resp = await this.#client.performRequest({
       method: "PUT",
       path: `${this.#root}pods/${name}/status`,
@@ -1557,7 +1557,7 @@ export class CoreV1NamespacedApi {
     return CoreV1.toPod(resp);
   }
 
-  async patchPodStatus(name: string, type: c.PatchType, body: CoreV1.Pod | c.JsonPatch, opts: operations.PatchOpts = {}) {
+  async patchPodStatus(name: string, type: c.PatchType, body: CoreV1.Pod | c.JsonPatch, opts: operations.PatchOpts = {}): Promise<CoreV1.Pod> {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}pods/${name}/status`,
@@ -1570,7 +1570,7 @@ export class CoreV1NamespacedApi {
     return CoreV1.toPod(resp);
   }
 
-  async getPodTemplateList(opts: operations.GetListOpts = {}) {
+  async getPodTemplateList(opts: operations.GetListOpts = {}): Promise<CoreV1.PodTemplateList> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}podtemplates`,
@@ -1581,7 +1581,7 @@ export class CoreV1NamespacedApi {
     return CoreV1.toPodTemplateList(resp);
   }
 
-  async watchPodTemplateList(opts: operations.WatchListOpts = {}) {
+  async watchPodTemplateList(opts: operations.WatchListOpts = {}): Promise<ReadableStream<c.WatchEvent<CoreV1.PodTemplate & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}podtemplates`,
@@ -1593,7 +1593,7 @@ export class CoreV1NamespacedApi {
     return resp.pipeThrough(new c.WatchEventTransformer(CoreV1.toPodTemplate, MetaV1.toStatus));
   }
 
-  async createPodTemplate(body: CoreV1.PodTemplate, opts: operations.PutOpts = {}) {
+  async createPodTemplate(body: CoreV1.PodTemplate, opts: operations.PutOpts = {}): Promise<CoreV1.PodTemplate> {
     const resp = await this.#client.performRequest({
       method: "POST",
       path: `${this.#root}podtemplates`,
@@ -1605,7 +1605,7 @@ export class CoreV1NamespacedApi {
     return CoreV1.toPodTemplate(resp);
   }
 
-  async deletePodTemplateList(opts: operations.DeleteListOpts = {}) {
+  async deletePodTemplateList(opts: operations.DeleteListOpts = {}): Promise<CoreV1.PodTemplateList> {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}podtemplates`,
@@ -1616,7 +1616,7 @@ export class CoreV1NamespacedApi {
     return CoreV1.toPodTemplateList(resp);
   }
 
-  async getPodTemplate(name: string, opts: operations.NoOpts = {}) {
+  async getPodTemplate(name: string, opts: operations.NoOpts = {}): Promise<CoreV1.PodTemplate> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}podtemplates/${name}`,
@@ -1626,7 +1626,7 @@ export class CoreV1NamespacedApi {
     return CoreV1.toPodTemplate(resp);
   }
 
-  async deletePodTemplate(name: string, opts: operations.DeleteOpts = {}) {
+  async deletePodTemplate(name: string, opts: operations.DeleteOpts = {}): Promise<CoreV1.PodTemplate | MetaV1.Status> {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}podtemplates/${name}`,
@@ -1638,7 +1638,7 @@ export class CoreV1NamespacedApi {
     return CoreV1.toPodTemplate(resp);
   }
 
-  async replacePodTemplate(name: string, body: CoreV1.PodTemplate, opts: operations.PutOpts = {}) {
+  async replacePodTemplate(name: string, body: CoreV1.PodTemplate, opts: operations.PutOpts = {}): Promise<CoreV1.PodTemplate> {
     const resp = await this.#client.performRequest({
       method: "PUT",
       path: `${this.#root}podtemplates/${name}`,
@@ -1650,7 +1650,7 @@ export class CoreV1NamespacedApi {
     return CoreV1.toPodTemplate(resp);
   }
 
-  async patchPodTemplate(name: string, type: c.PatchType, body: CoreV1.PodTemplate | c.JsonPatch, opts: operations.PatchOpts = {}) {
+  async patchPodTemplate(name: string, type: c.PatchType, body: CoreV1.PodTemplate | c.JsonPatch, opts: operations.PatchOpts = {}): Promise<CoreV1.PodTemplate> {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}podtemplates/${name}`,
@@ -1663,7 +1663,7 @@ export class CoreV1NamespacedApi {
     return CoreV1.toPodTemplate(resp);
   }
 
-  async getReplicationControllerList(opts: operations.GetListOpts = {}) {
+  async getReplicationControllerList(opts: operations.GetListOpts = {}): Promise<CoreV1.ReplicationControllerList> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}replicationcontrollers`,
@@ -1674,7 +1674,7 @@ export class CoreV1NamespacedApi {
     return CoreV1.toReplicationControllerList(resp);
   }
 
-  async watchReplicationControllerList(opts: operations.WatchListOpts = {}) {
+  async watchReplicationControllerList(opts: operations.WatchListOpts = {}): Promise<ReadableStream<c.WatchEvent<CoreV1.ReplicationController & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}replicationcontrollers`,
@@ -1686,7 +1686,7 @@ export class CoreV1NamespacedApi {
     return resp.pipeThrough(new c.WatchEventTransformer(CoreV1.toReplicationController, MetaV1.toStatus));
   }
 
-  async createReplicationController(body: CoreV1.ReplicationController, opts: operations.PutOpts = {}) {
+  async createReplicationController(body: CoreV1.ReplicationController, opts: operations.PutOpts = {}): Promise<CoreV1.ReplicationController> {
     const resp = await this.#client.performRequest({
       method: "POST",
       path: `${this.#root}replicationcontrollers`,
@@ -1698,7 +1698,7 @@ export class CoreV1NamespacedApi {
     return CoreV1.toReplicationController(resp);
   }
 
-  async deleteReplicationControllerList(opts: operations.DeleteListOpts = {}) {
+  async deleteReplicationControllerList(opts: operations.DeleteListOpts = {}): Promise<CoreV1.ReplicationControllerList> {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}replicationcontrollers`,
@@ -1709,7 +1709,7 @@ export class CoreV1NamespacedApi {
     return CoreV1.toReplicationControllerList(resp);
   }
 
-  async getReplicationController(name: string, opts: operations.NoOpts = {}) {
+  async getReplicationController(name: string, opts: operations.NoOpts = {}): Promise<CoreV1.ReplicationController> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}replicationcontrollers/${name}`,
@@ -1719,7 +1719,7 @@ export class CoreV1NamespacedApi {
     return CoreV1.toReplicationController(resp);
   }
 
-  async deleteReplicationController(name: string, opts: operations.DeleteOpts = {}) {
+  async deleteReplicationController(name: string, opts: operations.DeleteOpts = {}): Promise<CoreV1.ReplicationController | MetaV1.Status> {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}replicationcontrollers/${name}`,
@@ -1731,7 +1731,7 @@ export class CoreV1NamespacedApi {
     return CoreV1.toReplicationController(resp);
   }
 
-  async replaceReplicationController(name: string, body: CoreV1.ReplicationController, opts: operations.PutOpts = {}) {
+  async replaceReplicationController(name: string, body: CoreV1.ReplicationController, opts: operations.PutOpts = {}): Promise<CoreV1.ReplicationController> {
     const resp = await this.#client.performRequest({
       method: "PUT",
       path: `${this.#root}replicationcontrollers/${name}`,
@@ -1743,7 +1743,7 @@ export class CoreV1NamespacedApi {
     return CoreV1.toReplicationController(resp);
   }
 
-  async patchReplicationController(name: string, type: c.PatchType, body: CoreV1.ReplicationController | c.JsonPatch, opts: operations.PatchOpts = {}) {
+  async patchReplicationController(name: string, type: c.PatchType, body: CoreV1.ReplicationController | c.JsonPatch, opts: operations.PatchOpts = {}): Promise<CoreV1.ReplicationController> {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}replicationcontrollers/${name}`,
@@ -1756,7 +1756,7 @@ export class CoreV1NamespacedApi {
     return CoreV1.toReplicationController(resp);
   }
 
-  async getReplicationControllerScale(name: string, opts: operations.NoOpts = {}) {
+  async getReplicationControllerScale(name: string, opts: operations.NoOpts = {}): Promise<AutoscalingV1.Scale> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}replicationcontrollers/${name}/scale`,
@@ -1766,7 +1766,7 @@ export class CoreV1NamespacedApi {
     return AutoscalingV1.toScale(resp);
   }
 
-  async replaceReplicationControllerScale(name: string, body: AutoscalingV1.Scale, opts: operations.PutOpts = {}) {
+  async replaceReplicationControllerScale(name: string, body: AutoscalingV1.Scale, opts: operations.PutOpts = {}): Promise<AutoscalingV1.Scale> {
     const resp = await this.#client.performRequest({
       method: "PUT",
       path: `${this.#root}replicationcontrollers/${name}/scale`,
@@ -1778,7 +1778,7 @@ export class CoreV1NamespacedApi {
     return AutoscalingV1.toScale(resp);
   }
 
-  async patchReplicationControllerScale(name: string, type: c.PatchType, body: AutoscalingV1.Scale | c.JsonPatch, opts: operations.PatchOpts = {}) {
+  async patchReplicationControllerScale(name: string, type: c.PatchType, body: AutoscalingV1.Scale | c.JsonPatch, opts: operations.PatchOpts = {}): Promise<AutoscalingV1.Scale> {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}replicationcontrollers/${name}/scale`,
@@ -1791,7 +1791,7 @@ export class CoreV1NamespacedApi {
     return AutoscalingV1.toScale(resp);
   }
 
-  async getReplicationControllerStatus(name: string, opts: operations.NoOpts = {}) {
+  async getReplicationControllerStatus(name: string, opts: operations.NoOpts = {}): Promise<CoreV1.ReplicationController> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}replicationcontrollers/${name}/status`,
@@ -1801,7 +1801,7 @@ export class CoreV1NamespacedApi {
     return CoreV1.toReplicationController(resp);
   }
 
-  async replaceReplicationControllerStatus(name: string, body: CoreV1.ReplicationController, opts: operations.PutOpts = {}) {
+  async replaceReplicationControllerStatus(name: string, body: CoreV1.ReplicationController, opts: operations.PutOpts = {}): Promise<CoreV1.ReplicationController> {
     const resp = await this.#client.performRequest({
       method: "PUT",
       path: `${this.#root}replicationcontrollers/${name}/status`,
@@ -1813,7 +1813,7 @@ export class CoreV1NamespacedApi {
     return CoreV1.toReplicationController(resp);
   }
 
-  async patchReplicationControllerStatus(name: string, type: c.PatchType, body: CoreV1.ReplicationController | c.JsonPatch, opts: operations.PatchOpts = {}) {
+  async patchReplicationControllerStatus(name: string, type: c.PatchType, body: CoreV1.ReplicationController | c.JsonPatch, opts: operations.PatchOpts = {}): Promise<CoreV1.ReplicationController> {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}replicationcontrollers/${name}/status`,
@@ -1826,7 +1826,7 @@ export class CoreV1NamespacedApi {
     return CoreV1.toReplicationController(resp);
   }
 
-  async getResourceQuotaList(opts: operations.GetListOpts = {}) {
+  async getResourceQuotaList(opts: operations.GetListOpts = {}): Promise<CoreV1.ResourceQuotaList> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}resourcequotas`,
@@ -1837,7 +1837,7 @@ export class CoreV1NamespacedApi {
     return CoreV1.toResourceQuotaList(resp);
   }
 
-  async watchResourceQuotaList(opts: operations.WatchListOpts = {}) {
+  async watchResourceQuotaList(opts: operations.WatchListOpts = {}): Promise<ReadableStream<c.WatchEvent<CoreV1.ResourceQuota & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}resourcequotas`,
@@ -1849,7 +1849,7 @@ export class CoreV1NamespacedApi {
     return resp.pipeThrough(new c.WatchEventTransformer(CoreV1.toResourceQuota, MetaV1.toStatus));
   }
 
-  async createResourceQuota(body: CoreV1.ResourceQuota, opts: operations.PutOpts = {}) {
+  async createResourceQuota(body: CoreV1.ResourceQuota, opts: operations.PutOpts = {}): Promise<CoreV1.ResourceQuota> {
     const resp = await this.#client.performRequest({
       method: "POST",
       path: `${this.#root}resourcequotas`,
@@ -1861,7 +1861,7 @@ export class CoreV1NamespacedApi {
     return CoreV1.toResourceQuota(resp);
   }
 
-  async deleteResourceQuotaList(opts: operations.DeleteListOpts = {}) {
+  async deleteResourceQuotaList(opts: operations.DeleteListOpts = {}): Promise<CoreV1.ResourceQuotaList> {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}resourcequotas`,
@@ -1872,7 +1872,7 @@ export class CoreV1NamespacedApi {
     return CoreV1.toResourceQuotaList(resp);
   }
 
-  async getResourceQuota(name: string, opts: operations.NoOpts = {}) {
+  async getResourceQuota(name: string, opts: operations.NoOpts = {}): Promise<CoreV1.ResourceQuota> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}resourcequotas/${name}`,
@@ -1882,7 +1882,7 @@ export class CoreV1NamespacedApi {
     return CoreV1.toResourceQuota(resp);
   }
 
-  async deleteResourceQuota(name: string, opts: operations.DeleteOpts = {}) {
+  async deleteResourceQuota(name: string, opts: operations.DeleteOpts = {}): Promise<CoreV1.ResourceQuota | MetaV1.Status> {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}resourcequotas/${name}`,
@@ -1894,7 +1894,7 @@ export class CoreV1NamespacedApi {
     return CoreV1.toResourceQuota(resp);
   }
 
-  async replaceResourceQuota(name: string, body: CoreV1.ResourceQuota, opts: operations.PutOpts = {}) {
+  async replaceResourceQuota(name: string, body: CoreV1.ResourceQuota, opts: operations.PutOpts = {}): Promise<CoreV1.ResourceQuota> {
     const resp = await this.#client.performRequest({
       method: "PUT",
       path: `${this.#root}resourcequotas/${name}`,
@@ -1906,7 +1906,7 @@ export class CoreV1NamespacedApi {
     return CoreV1.toResourceQuota(resp);
   }
 
-  async patchResourceQuota(name: string, type: c.PatchType, body: CoreV1.ResourceQuota | c.JsonPatch, opts: operations.PatchOpts = {}) {
+  async patchResourceQuota(name: string, type: c.PatchType, body: CoreV1.ResourceQuota | c.JsonPatch, opts: operations.PatchOpts = {}): Promise<CoreV1.ResourceQuota> {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}resourcequotas/${name}`,
@@ -1919,7 +1919,7 @@ export class CoreV1NamespacedApi {
     return CoreV1.toResourceQuota(resp);
   }
 
-  async getResourceQuotaStatus(name: string, opts: operations.NoOpts = {}) {
+  async getResourceQuotaStatus(name: string, opts: operations.NoOpts = {}): Promise<CoreV1.ResourceQuota> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}resourcequotas/${name}/status`,
@@ -1929,7 +1929,7 @@ export class CoreV1NamespacedApi {
     return CoreV1.toResourceQuota(resp);
   }
 
-  async replaceResourceQuotaStatus(name: string, body: CoreV1.ResourceQuota, opts: operations.PutOpts = {}) {
+  async replaceResourceQuotaStatus(name: string, body: CoreV1.ResourceQuota, opts: operations.PutOpts = {}): Promise<CoreV1.ResourceQuota> {
     const resp = await this.#client.performRequest({
       method: "PUT",
       path: `${this.#root}resourcequotas/${name}/status`,
@@ -1941,7 +1941,7 @@ export class CoreV1NamespacedApi {
     return CoreV1.toResourceQuota(resp);
   }
 
-  async patchResourceQuotaStatus(name: string, type: c.PatchType, body: CoreV1.ResourceQuota | c.JsonPatch, opts: operations.PatchOpts = {}) {
+  async patchResourceQuotaStatus(name: string, type: c.PatchType, body: CoreV1.ResourceQuota | c.JsonPatch, opts: operations.PatchOpts = {}): Promise<CoreV1.ResourceQuota> {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}resourcequotas/${name}/status`,
@@ -1954,7 +1954,7 @@ export class CoreV1NamespacedApi {
     return CoreV1.toResourceQuota(resp);
   }
 
-  async getSecretList(opts: operations.GetListOpts = {}) {
+  async getSecretList(opts: operations.GetListOpts = {}): Promise<CoreV1.SecretList> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}secrets`,
@@ -1965,7 +1965,7 @@ export class CoreV1NamespacedApi {
     return CoreV1.toSecretList(resp);
   }
 
-  async watchSecretList(opts: operations.WatchListOpts = {}) {
+  async watchSecretList(opts: operations.WatchListOpts = {}): Promise<ReadableStream<c.WatchEvent<CoreV1.Secret & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}secrets`,
@@ -1977,7 +1977,7 @@ export class CoreV1NamespacedApi {
     return resp.pipeThrough(new c.WatchEventTransformer(CoreV1.toSecret, MetaV1.toStatus));
   }
 
-  async createSecret(body: CoreV1.Secret, opts: operations.PutOpts = {}) {
+  async createSecret(body: CoreV1.Secret, opts: operations.PutOpts = {}): Promise<CoreV1.Secret> {
     const resp = await this.#client.performRequest({
       method: "POST",
       path: `${this.#root}secrets`,
@@ -1989,7 +1989,7 @@ export class CoreV1NamespacedApi {
     return CoreV1.toSecret(resp);
   }
 
-  async deleteSecretList(opts: operations.DeleteListOpts = {}) {
+  async deleteSecretList(opts: operations.DeleteListOpts = {}): Promise<CoreV1.SecretList> {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}secrets`,
@@ -2000,7 +2000,7 @@ export class CoreV1NamespacedApi {
     return CoreV1.toSecretList(resp);
   }
 
-  async getSecret(name: string, opts: operations.NoOpts = {}) {
+  async getSecret(name: string, opts: operations.NoOpts = {}): Promise<CoreV1.Secret> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}secrets/${name}`,
@@ -2010,7 +2010,7 @@ export class CoreV1NamespacedApi {
     return CoreV1.toSecret(resp);
   }
 
-  async deleteSecret(name: string, opts: operations.DeleteOpts = {}) {
+  async deleteSecret(name: string, opts: operations.DeleteOpts = {}): Promise<CoreV1.Secret | MetaV1.Status> {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}secrets/${name}`,
@@ -2022,7 +2022,7 @@ export class CoreV1NamespacedApi {
     return CoreV1.toSecret(resp);
   }
 
-  async replaceSecret(name: string, body: CoreV1.Secret, opts: operations.PutOpts = {}) {
+  async replaceSecret(name: string, body: CoreV1.Secret, opts: operations.PutOpts = {}): Promise<CoreV1.Secret> {
     const resp = await this.#client.performRequest({
       method: "PUT",
       path: `${this.#root}secrets/${name}`,
@@ -2034,7 +2034,7 @@ export class CoreV1NamespacedApi {
     return CoreV1.toSecret(resp);
   }
 
-  async patchSecret(name: string, type: c.PatchType, body: CoreV1.Secret | c.JsonPatch, opts: operations.PatchOpts = {}) {
+  async patchSecret(name: string, type: c.PatchType, body: CoreV1.Secret | c.JsonPatch, opts: operations.PatchOpts = {}): Promise<CoreV1.Secret> {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}secrets/${name}`,
@@ -2047,7 +2047,7 @@ export class CoreV1NamespacedApi {
     return CoreV1.toSecret(resp);
   }
 
-  async getServiceAccountList(opts: operations.GetListOpts = {}) {
+  async getServiceAccountList(opts: operations.GetListOpts = {}): Promise<CoreV1.ServiceAccountList> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}serviceaccounts`,
@@ -2058,7 +2058,7 @@ export class CoreV1NamespacedApi {
     return CoreV1.toServiceAccountList(resp);
   }
 
-  async watchServiceAccountList(opts: operations.WatchListOpts = {}) {
+  async watchServiceAccountList(opts: operations.WatchListOpts = {}): Promise<ReadableStream<c.WatchEvent<CoreV1.ServiceAccount & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}serviceaccounts`,
@@ -2070,7 +2070,7 @@ export class CoreV1NamespacedApi {
     return resp.pipeThrough(new c.WatchEventTransformer(CoreV1.toServiceAccount, MetaV1.toStatus));
   }
 
-  async createServiceAccount(body: CoreV1.ServiceAccount, opts: operations.PutOpts = {}) {
+  async createServiceAccount(body: CoreV1.ServiceAccount, opts: operations.PutOpts = {}): Promise<CoreV1.ServiceAccount> {
     const resp = await this.#client.performRequest({
       method: "POST",
       path: `${this.#root}serviceaccounts`,
@@ -2082,7 +2082,7 @@ export class CoreV1NamespacedApi {
     return CoreV1.toServiceAccount(resp);
   }
 
-  async deleteServiceAccountList(opts: operations.DeleteListOpts = {}) {
+  async deleteServiceAccountList(opts: operations.DeleteListOpts = {}): Promise<CoreV1.ServiceAccountList> {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}serviceaccounts`,
@@ -2093,7 +2093,7 @@ export class CoreV1NamespacedApi {
     return CoreV1.toServiceAccountList(resp);
   }
 
-  async getServiceAccount(name: string, opts: operations.NoOpts = {}) {
+  async getServiceAccount(name: string, opts: operations.NoOpts = {}): Promise<CoreV1.ServiceAccount> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}serviceaccounts/${name}`,
@@ -2103,7 +2103,7 @@ export class CoreV1NamespacedApi {
     return CoreV1.toServiceAccount(resp);
   }
 
-  async deleteServiceAccount(name: string, opts: operations.DeleteOpts = {}) {
+  async deleteServiceAccount(name: string, opts: operations.DeleteOpts = {}): Promise<CoreV1.ServiceAccount | MetaV1.Status> {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}serviceaccounts/${name}`,
@@ -2115,7 +2115,7 @@ export class CoreV1NamespacedApi {
     return CoreV1.toServiceAccount(resp);
   }
 
-  async replaceServiceAccount(name: string, body: CoreV1.ServiceAccount, opts: operations.PutOpts = {}) {
+  async replaceServiceAccount(name: string, body: CoreV1.ServiceAccount, opts: operations.PutOpts = {}): Promise<CoreV1.ServiceAccount> {
     const resp = await this.#client.performRequest({
       method: "PUT",
       path: `${this.#root}serviceaccounts/${name}`,
@@ -2127,7 +2127,7 @@ export class CoreV1NamespacedApi {
     return CoreV1.toServiceAccount(resp);
   }
 
-  async patchServiceAccount(name: string, type: c.PatchType, body: CoreV1.ServiceAccount | c.JsonPatch, opts: operations.PatchOpts = {}) {
+  async patchServiceAccount(name: string, type: c.PatchType, body: CoreV1.ServiceAccount | c.JsonPatch, opts: operations.PatchOpts = {}): Promise<CoreV1.ServiceAccount> {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}serviceaccounts/${name}`,
@@ -2140,7 +2140,7 @@ export class CoreV1NamespacedApi {
     return CoreV1.toServiceAccount(resp);
   }
 
-  async createServiceAccountToken(name: string, body: AuthenticationV1.TokenRequest, opts: operations.PutOpts = {}) {
+  async createServiceAccountToken(name: string, body: AuthenticationV1.TokenRequest, opts: operations.PutOpts = {}): Promise<AuthenticationV1.TokenRequest> {
     const resp = await this.#client.performRequest({
       method: "POST",
       path: `${this.#root}serviceaccounts/${name}/token`,
@@ -2152,7 +2152,7 @@ export class CoreV1NamespacedApi {
     return AuthenticationV1.toTokenRequest(resp);
   }
 
-  async getServiceList(opts: operations.GetListOpts = {}) {
+  async getServiceList(opts: operations.GetListOpts = {}): Promise<CoreV1.ServiceList> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}services`,
@@ -2163,7 +2163,7 @@ export class CoreV1NamespacedApi {
     return CoreV1.toServiceList(resp);
   }
 
-  async watchServiceList(opts: operations.WatchListOpts = {}) {
+  async watchServiceList(opts: operations.WatchListOpts = {}): Promise<ReadableStream<c.WatchEvent<CoreV1.Service & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}services`,
@@ -2175,7 +2175,7 @@ export class CoreV1NamespacedApi {
     return resp.pipeThrough(new c.WatchEventTransformer(CoreV1.toService, MetaV1.toStatus));
   }
 
-  async createService(body: CoreV1.Service, opts: operations.PutOpts = {}) {
+  async createService(body: CoreV1.Service, opts: operations.PutOpts = {}): Promise<CoreV1.Service> {
     const resp = await this.#client.performRequest({
       method: "POST",
       path: `${this.#root}services`,
@@ -2187,7 +2187,7 @@ export class CoreV1NamespacedApi {
     return CoreV1.toService(resp);
   }
 
-  async deleteServiceList(opts: operations.DeleteListOpts = {}) {
+  async deleteServiceList(opts: operations.DeleteListOpts = {}): Promise<CoreV1.ServiceList> {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}services`,
@@ -2198,7 +2198,7 @@ export class CoreV1NamespacedApi {
     return CoreV1.toServiceList(resp);
   }
 
-  async getService(name: string, opts: operations.NoOpts = {}) {
+  async getService(name: string, opts: operations.NoOpts = {}): Promise<CoreV1.Service> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}services/${name}`,
@@ -2208,7 +2208,7 @@ export class CoreV1NamespacedApi {
     return CoreV1.toService(resp);
   }
 
-  async deleteService(name: string, opts: operations.DeleteOpts = {}) {
+  async deleteService(name: string, opts: operations.DeleteOpts = {}): Promise<CoreV1.Service | MetaV1.Status> {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}services/${name}`,
@@ -2220,7 +2220,7 @@ export class CoreV1NamespacedApi {
     return CoreV1.toService(resp);
   }
 
-  async replaceService(name: string, body: CoreV1.Service, opts: operations.PutOpts = {}) {
+  async replaceService(name: string, body: CoreV1.Service, opts: operations.PutOpts = {}): Promise<CoreV1.Service> {
     const resp = await this.#client.performRequest({
       method: "PUT",
       path: `${this.#root}services/${name}`,
@@ -2232,7 +2232,7 @@ export class CoreV1NamespacedApi {
     return CoreV1.toService(resp);
   }
 
-  async patchService(name: string, type: c.PatchType, body: CoreV1.Service | c.JsonPatch, opts: operations.PatchOpts = {}) {
+  async patchService(name: string, type: c.PatchType, body: CoreV1.Service | c.JsonPatch, opts: operations.PatchOpts = {}): Promise<CoreV1.Service> {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}services/${name}`,
@@ -2256,7 +2256,7 @@ export class CoreV1NamespacedApi {
     return await this.#client.performRequest({ ...opts, path });
   }
 
-  async getServiceStatus(name: string, opts: operations.NoOpts = {}) {
+  async getServiceStatus(name: string, opts: operations.NoOpts = {}): Promise<CoreV1.Service> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}services/${name}/status`,
@@ -2266,7 +2266,7 @@ export class CoreV1NamespacedApi {
     return CoreV1.toService(resp);
   }
 
-  async replaceServiceStatus(name: string, body: CoreV1.Service, opts: operations.PutOpts = {}) {
+  async replaceServiceStatus(name: string, body: CoreV1.Service, opts: operations.PutOpts = {}): Promise<CoreV1.Service> {
     const resp = await this.#client.performRequest({
       method: "PUT",
       path: `${this.#root}services/${name}/status`,
@@ -2278,7 +2278,7 @@ export class CoreV1NamespacedApi {
     return CoreV1.toService(resp);
   }
 
-  async patchServiceStatus(name: string, type: c.PatchType, body: CoreV1.Service | c.JsonPatch, opts: operations.PatchOpts = {}) {
+  async patchServiceStatus(name: string, type: c.PatchType, body: CoreV1.Service | c.JsonPatch, opts: operations.PatchOpts = {}): Promise<CoreV1.Service> {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}services/${name}/status`,

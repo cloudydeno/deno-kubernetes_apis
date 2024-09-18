@@ -13,7 +13,7 @@ export class ApiregistrationV1Api {
     this.#client = client;
   }
 
-  async getAPIServiceList(opts: operations.GetListOpts = {}) {
+  async getAPIServiceList(opts: operations.GetListOpts = {}): Promise<ApiregistrationV1.APIServiceList> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}apiservices`,
@@ -24,7 +24,7 @@ export class ApiregistrationV1Api {
     return ApiregistrationV1.toAPIServiceList(resp);
   }
 
-  async watchAPIServiceList(opts: operations.WatchListOpts = {}) {
+  async watchAPIServiceList(opts: operations.WatchListOpts = {}): Promise<ReadableStream<c.WatchEvent<ApiregistrationV1.APIService & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}apiservices`,
@@ -36,7 +36,7 @@ export class ApiregistrationV1Api {
     return resp.pipeThrough(new c.WatchEventTransformer(ApiregistrationV1.toAPIService, MetaV1.toStatus));
   }
 
-  async createAPIService(body: ApiregistrationV1.APIService, opts: operations.PutOpts = {}) {
+  async createAPIService(body: ApiregistrationV1.APIService, opts: operations.PutOpts = {}): Promise<ApiregistrationV1.APIService> {
     const resp = await this.#client.performRequest({
       method: "POST",
       path: `${this.#root}apiservices`,
@@ -48,7 +48,7 @@ export class ApiregistrationV1Api {
     return ApiregistrationV1.toAPIService(resp);
   }
 
-  async deleteAPIServiceList(opts: operations.DeleteListOpts = {}) {
+  async deleteAPIServiceList(opts: operations.DeleteListOpts = {}): Promise<ApiregistrationV1.APIServiceList> {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}apiservices`,
@@ -59,7 +59,7 @@ export class ApiregistrationV1Api {
     return ApiregistrationV1.toAPIServiceList(resp);
   }
 
-  async getAPIService(name: string, opts: operations.NoOpts = {}) {
+  async getAPIService(name: string, opts: operations.NoOpts = {}): Promise<ApiregistrationV1.APIService> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}apiservices/${name}`,
@@ -69,7 +69,7 @@ export class ApiregistrationV1Api {
     return ApiregistrationV1.toAPIService(resp);
   }
 
-  async deleteAPIService(name: string, opts: operations.DeleteOpts = {}) {
+  async deleteAPIService(name: string, opts: operations.DeleteOpts = {}): Promise<ApiregistrationV1.APIService | MetaV1.Status> {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}apiservices/${name}`,
@@ -81,7 +81,7 @@ export class ApiregistrationV1Api {
     return ApiregistrationV1.toAPIService(resp);
   }
 
-  async replaceAPIService(name: string, body: ApiregistrationV1.APIService, opts: operations.PutOpts = {}) {
+  async replaceAPIService(name: string, body: ApiregistrationV1.APIService, opts: operations.PutOpts = {}): Promise<ApiregistrationV1.APIService> {
     const resp = await this.#client.performRequest({
       method: "PUT",
       path: `${this.#root}apiservices/${name}`,
@@ -93,7 +93,7 @@ export class ApiregistrationV1Api {
     return ApiregistrationV1.toAPIService(resp);
   }
 
-  async patchAPIService(name: string, type: c.PatchType, body: ApiregistrationV1.APIService | c.JsonPatch, opts: operations.PatchOpts = {}) {
+  async patchAPIService(name: string, type: c.PatchType, body: ApiregistrationV1.APIService | c.JsonPatch, opts: operations.PatchOpts = {}): Promise<ApiregistrationV1.APIService> {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}apiservices/${name}`,
@@ -106,7 +106,7 @@ export class ApiregistrationV1Api {
     return ApiregistrationV1.toAPIService(resp);
   }
 
-  async getAPIServiceStatus(name: string, opts: operations.NoOpts = {}) {
+  async getAPIServiceStatus(name: string, opts: operations.NoOpts = {}): Promise<ApiregistrationV1.APIService> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}apiservices/${name}/status`,
@@ -116,7 +116,7 @@ export class ApiregistrationV1Api {
     return ApiregistrationV1.toAPIService(resp);
   }
 
-  async replaceAPIServiceStatus(name: string, body: ApiregistrationV1.APIService, opts: operations.PutOpts = {}) {
+  async replaceAPIServiceStatus(name: string, body: ApiregistrationV1.APIService, opts: operations.PutOpts = {}): Promise<ApiregistrationV1.APIService> {
     const resp = await this.#client.performRequest({
       method: "PUT",
       path: `${this.#root}apiservices/${name}/status`,
@@ -128,7 +128,7 @@ export class ApiregistrationV1Api {
     return ApiregistrationV1.toAPIService(resp);
   }
 
-  async patchAPIServiceStatus(name: string, type: c.PatchType, body: ApiregistrationV1.APIService | c.JsonPatch, opts: operations.PatchOpts = {}) {
+  async patchAPIServiceStatus(name: string, type: c.PatchType, body: ApiregistrationV1.APIService | c.JsonPatch, opts: operations.PatchOpts = {}): Promise<ApiregistrationV1.APIService> {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}apiservices/${name}/status`,

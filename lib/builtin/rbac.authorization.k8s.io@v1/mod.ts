@@ -13,15 +13,15 @@ export class RbacAuthorizationV1Api {
     this.#client = client;
   }
 
-  namespace(name: string) {
+  namespace(name: string): RbacAuthorizationV1NamespacedApi {
     return new RbacAuthorizationV1NamespacedApi(this.#client, name);
   }
-  myNamespace() {
+  myNamespace(): RbacAuthorizationV1NamespacedApi {
     if (!this.#client.defaultNamespace) throw new Error("No current namespace is set");
     return new RbacAuthorizationV1NamespacedApi(this.#client, this.#client.defaultNamespace);
   }
 
-  async getClusterRoleBindingList(opts: operations.GetListOpts = {}) {
+  async getClusterRoleBindingList(opts: operations.GetListOpts = {}): Promise<RbacAuthorizationV1.ClusterRoleBindingList> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}clusterrolebindings`,
@@ -32,7 +32,7 @@ export class RbacAuthorizationV1Api {
     return RbacAuthorizationV1.toClusterRoleBindingList(resp);
   }
 
-  async watchClusterRoleBindingList(opts: operations.WatchListOpts = {}) {
+  async watchClusterRoleBindingList(opts: operations.WatchListOpts = {}): Promise<ReadableStream<c.WatchEvent<RbacAuthorizationV1.ClusterRoleBinding & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}clusterrolebindings`,
@@ -44,7 +44,7 @@ export class RbacAuthorizationV1Api {
     return resp.pipeThrough(new c.WatchEventTransformer(RbacAuthorizationV1.toClusterRoleBinding, MetaV1.toStatus));
   }
 
-  async createClusterRoleBinding(body: RbacAuthorizationV1.ClusterRoleBinding, opts: operations.PutOpts = {}) {
+  async createClusterRoleBinding(body: RbacAuthorizationV1.ClusterRoleBinding, opts: operations.PutOpts = {}): Promise<RbacAuthorizationV1.ClusterRoleBinding> {
     const resp = await this.#client.performRequest({
       method: "POST",
       path: `${this.#root}clusterrolebindings`,
@@ -56,7 +56,7 @@ export class RbacAuthorizationV1Api {
     return RbacAuthorizationV1.toClusterRoleBinding(resp);
   }
 
-  async deleteClusterRoleBindingList(opts: operations.DeleteListOpts = {}) {
+  async deleteClusterRoleBindingList(opts: operations.DeleteListOpts = {}): Promise<RbacAuthorizationV1.ClusterRoleBindingList> {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}clusterrolebindings`,
@@ -67,7 +67,7 @@ export class RbacAuthorizationV1Api {
     return RbacAuthorizationV1.toClusterRoleBindingList(resp);
   }
 
-  async getClusterRoleBinding(name: string, opts: operations.NoOpts = {}) {
+  async getClusterRoleBinding(name: string, opts: operations.NoOpts = {}): Promise<RbacAuthorizationV1.ClusterRoleBinding> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}clusterrolebindings/${name}`,
@@ -77,7 +77,7 @@ export class RbacAuthorizationV1Api {
     return RbacAuthorizationV1.toClusterRoleBinding(resp);
   }
 
-  async deleteClusterRoleBinding(name: string, opts: operations.DeleteOpts = {}) {
+  async deleteClusterRoleBinding(name: string, opts: operations.DeleteOpts = {}): Promise<RbacAuthorizationV1.ClusterRoleBinding | MetaV1.Status> {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}clusterrolebindings/${name}`,
@@ -89,7 +89,7 @@ export class RbacAuthorizationV1Api {
     return RbacAuthorizationV1.toClusterRoleBinding(resp);
   }
 
-  async replaceClusterRoleBinding(name: string, body: RbacAuthorizationV1.ClusterRoleBinding, opts: operations.PutOpts = {}) {
+  async replaceClusterRoleBinding(name: string, body: RbacAuthorizationV1.ClusterRoleBinding, opts: operations.PutOpts = {}): Promise<RbacAuthorizationV1.ClusterRoleBinding> {
     const resp = await this.#client.performRequest({
       method: "PUT",
       path: `${this.#root}clusterrolebindings/${name}`,
@@ -101,7 +101,7 @@ export class RbacAuthorizationV1Api {
     return RbacAuthorizationV1.toClusterRoleBinding(resp);
   }
 
-  async patchClusterRoleBinding(name: string, type: c.PatchType, body: RbacAuthorizationV1.ClusterRoleBinding | c.JsonPatch, opts: operations.PatchOpts = {}) {
+  async patchClusterRoleBinding(name: string, type: c.PatchType, body: RbacAuthorizationV1.ClusterRoleBinding | c.JsonPatch, opts: operations.PatchOpts = {}): Promise<RbacAuthorizationV1.ClusterRoleBinding> {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}clusterrolebindings/${name}`,
@@ -114,7 +114,7 @@ export class RbacAuthorizationV1Api {
     return RbacAuthorizationV1.toClusterRoleBinding(resp);
   }
 
-  async getClusterRoleList(opts: operations.GetListOpts = {}) {
+  async getClusterRoleList(opts: operations.GetListOpts = {}): Promise<RbacAuthorizationV1.ClusterRoleList> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}clusterroles`,
@@ -125,7 +125,7 @@ export class RbacAuthorizationV1Api {
     return RbacAuthorizationV1.toClusterRoleList(resp);
   }
 
-  async watchClusterRoleList(opts: operations.WatchListOpts = {}) {
+  async watchClusterRoleList(opts: operations.WatchListOpts = {}): Promise<ReadableStream<c.WatchEvent<RbacAuthorizationV1.ClusterRole & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}clusterroles`,
@@ -137,7 +137,7 @@ export class RbacAuthorizationV1Api {
     return resp.pipeThrough(new c.WatchEventTransformer(RbacAuthorizationV1.toClusterRole, MetaV1.toStatus));
   }
 
-  async createClusterRole(body: RbacAuthorizationV1.ClusterRole, opts: operations.PutOpts = {}) {
+  async createClusterRole(body: RbacAuthorizationV1.ClusterRole, opts: operations.PutOpts = {}): Promise<RbacAuthorizationV1.ClusterRole> {
     const resp = await this.#client.performRequest({
       method: "POST",
       path: `${this.#root}clusterroles`,
@@ -149,7 +149,7 @@ export class RbacAuthorizationV1Api {
     return RbacAuthorizationV1.toClusterRole(resp);
   }
 
-  async deleteClusterRoleList(opts: operations.DeleteListOpts = {}) {
+  async deleteClusterRoleList(opts: operations.DeleteListOpts = {}): Promise<RbacAuthorizationV1.ClusterRoleList> {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}clusterroles`,
@@ -160,7 +160,7 @@ export class RbacAuthorizationV1Api {
     return RbacAuthorizationV1.toClusterRoleList(resp);
   }
 
-  async getClusterRole(name: string, opts: operations.NoOpts = {}) {
+  async getClusterRole(name: string, opts: operations.NoOpts = {}): Promise<RbacAuthorizationV1.ClusterRole> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}clusterroles/${name}`,
@@ -170,7 +170,7 @@ export class RbacAuthorizationV1Api {
     return RbacAuthorizationV1.toClusterRole(resp);
   }
 
-  async deleteClusterRole(name: string, opts: operations.DeleteOpts = {}) {
+  async deleteClusterRole(name: string, opts: operations.DeleteOpts = {}): Promise<RbacAuthorizationV1.ClusterRole | MetaV1.Status> {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}clusterroles/${name}`,
@@ -182,7 +182,7 @@ export class RbacAuthorizationV1Api {
     return RbacAuthorizationV1.toClusterRole(resp);
   }
 
-  async replaceClusterRole(name: string, body: RbacAuthorizationV1.ClusterRole, opts: operations.PutOpts = {}) {
+  async replaceClusterRole(name: string, body: RbacAuthorizationV1.ClusterRole, opts: operations.PutOpts = {}): Promise<RbacAuthorizationV1.ClusterRole> {
     const resp = await this.#client.performRequest({
       method: "PUT",
       path: `${this.#root}clusterroles/${name}`,
@@ -194,7 +194,7 @@ export class RbacAuthorizationV1Api {
     return RbacAuthorizationV1.toClusterRole(resp);
   }
 
-  async patchClusterRole(name: string, type: c.PatchType, body: RbacAuthorizationV1.ClusterRole | c.JsonPatch, opts: operations.PatchOpts = {}) {
+  async patchClusterRole(name: string, type: c.PatchType, body: RbacAuthorizationV1.ClusterRole | c.JsonPatch, opts: operations.PatchOpts = {}): Promise<RbacAuthorizationV1.ClusterRole> {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}clusterroles/${name}`,
@@ -207,7 +207,7 @@ export class RbacAuthorizationV1Api {
     return RbacAuthorizationV1.toClusterRole(resp);
   }
 
-  async getRoleBindingListForAllNamespaces(opts: operations.GetListOpts = {}) {
+  async getRoleBindingListForAllNamespaces(opts: operations.GetListOpts = {}): Promise<RbacAuthorizationV1.RoleBindingList> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}rolebindings`,
@@ -218,7 +218,7 @@ export class RbacAuthorizationV1Api {
     return RbacAuthorizationV1.toRoleBindingList(resp);
   }
 
-  async watchRoleBindingListForAllNamespaces(opts: operations.WatchListOpts = {}) {
+  async watchRoleBindingListForAllNamespaces(opts: operations.WatchListOpts = {}): Promise<ReadableStream<c.WatchEvent<RbacAuthorizationV1.RoleBinding & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}rolebindings`,
@@ -230,7 +230,7 @@ export class RbacAuthorizationV1Api {
     return resp.pipeThrough(new c.WatchEventTransformer(RbacAuthorizationV1.toRoleBinding, MetaV1.toStatus));
   }
 
-  async getRoleListForAllNamespaces(opts: operations.GetListOpts = {}) {
+  async getRoleListForAllNamespaces(opts: operations.GetListOpts = {}): Promise<RbacAuthorizationV1.RoleList> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}roles`,
@@ -241,7 +241,7 @@ export class RbacAuthorizationV1Api {
     return RbacAuthorizationV1.toRoleList(resp);
   }
 
-  async watchRoleListForAllNamespaces(opts: operations.WatchListOpts = {}) {
+  async watchRoleListForAllNamespaces(opts: operations.WatchListOpts = {}): Promise<ReadableStream<c.WatchEvent<RbacAuthorizationV1.Role & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}roles`,
@@ -263,7 +263,7 @@ export class RbacAuthorizationV1NamespacedApi {
     this.#root = `/apis/rbac.authorization.k8s.io/v1/namespaces/${namespace}/`;
   }
 
-  async getRoleBindingList(opts: operations.GetListOpts = {}) {
+  async getRoleBindingList(opts: operations.GetListOpts = {}): Promise<RbacAuthorizationV1.RoleBindingList> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}rolebindings`,
@@ -274,7 +274,7 @@ export class RbacAuthorizationV1NamespacedApi {
     return RbacAuthorizationV1.toRoleBindingList(resp);
   }
 
-  async watchRoleBindingList(opts: operations.WatchListOpts = {}) {
+  async watchRoleBindingList(opts: operations.WatchListOpts = {}): Promise<ReadableStream<c.WatchEvent<RbacAuthorizationV1.RoleBinding & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}rolebindings`,
@@ -286,7 +286,7 @@ export class RbacAuthorizationV1NamespacedApi {
     return resp.pipeThrough(new c.WatchEventTransformer(RbacAuthorizationV1.toRoleBinding, MetaV1.toStatus));
   }
 
-  async createRoleBinding(body: RbacAuthorizationV1.RoleBinding, opts: operations.PutOpts = {}) {
+  async createRoleBinding(body: RbacAuthorizationV1.RoleBinding, opts: operations.PutOpts = {}): Promise<RbacAuthorizationV1.RoleBinding> {
     const resp = await this.#client.performRequest({
       method: "POST",
       path: `${this.#root}rolebindings`,
@@ -298,7 +298,7 @@ export class RbacAuthorizationV1NamespacedApi {
     return RbacAuthorizationV1.toRoleBinding(resp);
   }
 
-  async deleteRoleBindingList(opts: operations.DeleteListOpts = {}) {
+  async deleteRoleBindingList(opts: operations.DeleteListOpts = {}): Promise<RbacAuthorizationV1.RoleBindingList> {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}rolebindings`,
@@ -309,7 +309,7 @@ export class RbacAuthorizationV1NamespacedApi {
     return RbacAuthorizationV1.toRoleBindingList(resp);
   }
 
-  async getRoleBinding(name: string, opts: operations.NoOpts = {}) {
+  async getRoleBinding(name: string, opts: operations.NoOpts = {}): Promise<RbacAuthorizationV1.RoleBinding> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}rolebindings/${name}`,
@@ -319,7 +319,7 @@ export class RbacAuthorizationV1NamespacedApi {
     return RbacAuthorizationV1.toRoleBinding(resp);
   }
 
-  async deleteRoleBinding(name: string, opts: operations.DeleteOpts = {}) {
+  async deleteRoleBinding(name: string, opts: operations.DeleteOpts = {}): Promise<RbacAuthorizationV1.RoleBinding | MetaV1.Status> {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}rolebindings/${name}`,
@@ -331,7 +331,7 @@ export class RbacAuthorizationV1NamespacedApi {
     return RbacAuthorizationV1.toRoleBinding(resp);
   }
 
-  async replaceRoleBinding(name: string, body: RbacAuthorizationV1.RoleBinding, opts: operations.PutOpts = {}) {
+  async replaceRoleBinding(name: string, body: RbacAuthorizationV1.RoleBinding, opts: operations.PutOpts = {}): Promise<RbacAuthorizationV1.RoleBinding> {
     const resp = await this.#client.performRequest({
       method: "PUT",
       path: `${this.#root}rolebindings/${name}`,
@@ -343,7 +343,7 @@ export class RbacAuthorizationV1NamespacedApi {
     return RbacAuthorizationV1.toRoleBinding(resp);
   }
 
-  async patchRoleBinding(name: string, type: c.PatchType, body: RbacAuthorizationV1.RoleBinding | c.JsonPatch, opts: operations.PatchOpts = {}) {
+  async patchRoleBinding(name: string, type: c.PatchType, body: RbacAuthorizationV1.RoleBinding | c.JsonPatch, opts: operations.PatchOpts = {}): Promise<RbacAuthorizationV1.RoleBinding> {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}rolebindings/${name}`,
@@ -356,7 +356,7 @@ export class RbacAuthorizationV1NamespacedApi {
     return RbacAuthorizationV1.toRoleBinding(resp);
   }
 
-  async getRoleList(opts: operations.GetListOpts = {}) {
+  async getRoleList(opts: operations.GetListOpts = {}): Promise<RbacAuthorizationV1.RoleList> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}roles`,
@@ -367,7 +367,7 @@ export class RbacAuthorizationV1NamespacedApi {
     return RbacAuthorizationV1.toRoleList(resp);
   }
 
-  async watchRoleList(opts: operations.WatchListOpts = {}) {
+  async watchRoleList(opts: operations.WatchListOpts = {}): Promise<ReadableStream<c.WatchEvent<RbacAuthorizationV1.Role & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}roles`,
@@ -379,7 +379,7 @@ export class RbacAuthorizationV1NamespacedApi {
     return resp.pipeThrough(new c.WatchEventTransformer(RbacAuthorizationV1.toRole, MetaV1.toStatus));
   }
 
-  async createRole(body: RbacAuthorizationV1.Role, opts: operations.PutOpts = {}) {
+  async createRole(body: RbacAuthorizationV1.Role, opts: operations.PutOpts = {}): Promise<RbacAuthorizationV1.Role> {
     const resp = await this.#client.performRequest({
       method: "POST",
       path: `${this.#root}roles`,
@@ -391,7 +391,7 @@ export class RbacAuthorizationV1NamespacedApi {
     return RbacAuthorizationV1.toRole(resp);
   }
 
-  async deleteRoleList(opts: operations.DeleteListOpts = {}) {
+  async deleteRoleList(opts: operations.DeleteListOpts = {}): Promise<RbacAuthorizationV1.RoleList> {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}roles`,
@@ -402,7 +402,7 @@ export class RbacAuthorizationV1NamespacedApi {
     return RbacAuthorizationV1.toRoleList(resp);
   }
 
-  async getRole(name: string, opts: operations.NoOpts = {}) {
+  async getRole(name: string, opts: operations.NoOpts = {}): Promise<RbacAuthorizationV1.Role> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}roles/${name}`,
@@ -412,7 +412,7 @@ export class RbacAuthorizationV1NamespacedApi {
     return RbacAuthorizationV1.toRole(resp);
   }
 
-  async deleteRole(name: string, opts: operations.DeleteOpts = {}) {
+  async deleteRole(name: string, opts: operations.DeleteOpts = {}): Promise<RbacAuthorizationV1.Role | MetaV1.Status> {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}roles/${name}`,
@@ -424,7 +424,7 @@ export class RbacAuthorizationV1NamespacedApi {
     return RbacAuthorizationV1.toRole(resp);
   }
 
-  async replaceRole(name: string, body: RbacAuthorizationV1.Role, opts: operations.PutOpts = {}) {
+  async replaceRole(name: string, body: RbacAuthorizationV1.Role, opts: operations.PutOpts = {}): Promise<RbacAuthorizationV1.Role> {
     const resp = await this.#client.performRequest({
       method: "PUT",
       path: `${this.#root}roles/${name}`,
@@ -436,7 +436,7 @@ export class RbacAuthorizationV1NamespacedApi {
     return RbacAuthorizationV1.toRole(resp);
   }
 
-  async patchRole(name: string, type: c.PatchType, body: RbacAuthorizationV1.Role | c.JsonPatch, opts: operations.PatchOpts = {}) {
+  async patchRole(name: string, type: c.PatchType, body: RbacAuthorizationV1.Role | c.JsonPatch, opts: operations.PatchOpts = {}): Promise<RbacAuthorizationV1.Role> {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}roles/${name}`,

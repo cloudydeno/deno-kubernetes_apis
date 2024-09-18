@@ -37,10 +37,10 @@ export function generateModuleTypescript(surface: SurfaceMap, api: SurfaceApi): 
   chunks.push(`  }\n`);
 
   if (hasNamespaced) {
-    chunks.push(`  namespace(name: string) {`);
+    chunks.push(`  namespace(name: string): ${api.friendlyName}NamespacedApi {`);
     chunks.push(`    return new ${api.friendlyName}NamespacedApi(this.#client, name);`);
     chunks.push(`  }`);
-    chunks.push(`  myNamespace() {`);
+    chunks.push(`  myNamespace(): ${api.friendlyName}NamespacedApi {`);
     chunks.push(`    if (!this.#client.defaultNamespace) throw new Error("No current namespace is set");`);
     chunks.push(`    return new ${api.friendlyName}NamespacedApi(this.#client, this.#client.defaultNamespace);`);
     chunks.push(`  }\n`);
@@ -185,9 +185,48 @@ export function generateModuleTypescript(surface: SurfaceMap, api: SurfaceApi): 
     //   return AcmeCertManagerIoV1.toOrder(resp);
     // }
 
-    chunks.push(`  async ${funcName}(${writeSig(args, opts, '  ')}) {`);
     const isWatch = op.operationName.startsWith('watch');
     const isStream = op.operationName.startsWith('stream');
+
+    let returnSig = 'unknown';
+    if (expectsTunnel) {
+      returnSig = `tunnels.${expectsTunnel}`;
+    } else if (isStream) {
+      if (accept === 'text/plain') {
+        returnSig = 'ReadableStream<string>';
+      } else {
+        returnSig = 'ReadableStream<Uint8Array>';
+      }
+    } else if (accept === 'text/plain') {
+      returnSig = 'string';
+    } else if (outShape) {
+      let shape = outShape;
+      // QUIRK: individual deletes can either return a Status or the 'lastExisting' resource
+      // More details further down in this file
+      if (shape.type === 'foreign' &&
+          shape.api.apiGroup === 'meta' &&
+          shape.name === 'Status' &&
+          op.method === 'delete') {
+        shape = api.shapes.shapes.get(op.operationName.replace(/^delete/, ''))!;
+      }
+
+      if (shape.type === 'foreign') {
+        returnSig = `${shape.api.friendlyName}.${shape.name}`;
+      } else if (shape.reference) {
+        returnSig = `${api.friendlyName}.${shape.reference}`;
+      } else throw new Error(`TODO: weird output shape on ${op.operationId}`);
+
+      if (op["x-kubernetes-action"] == 'delete') {
+        returnSig += ` | MetaV1.Status`;
+      }
+      if (isWatch) {
+        returnSig = `ReadableStream<c.WatchEvent<${returnSig.slice(0, -4)} & c.ApiKind, MetaV1.Status & c.ApiKind>>`;
+      }
+    } else {
+      // returnSig = 'void';
+    }
+
+    chunks.push(`  async ${funcName}(${writeSig(args, opts, '  ')}): Promise<${returnSig}> {`);
 
     const allOptKeys = opts.map(x => x[0].name).sort().join(',');
     const knownOptShape = knownOpts[allOptKeys];
