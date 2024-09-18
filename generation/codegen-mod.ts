@@ -220,7 +220,7 @@ export function generateModuleTypescript(surface: SurfaceMap, api: SurfaceApi): 
         returnSig += ` | MetaV1.Status`;
       }
       if (isWatch) {
-        returnSig = `ReadableStream<c.WatchEvent<${returnSig.slice(0, -4)} & c.ApiKind, MetaV1.Status & c.ApiKind>>`;
+        returnSig = `c.WatchEventStream<${returnSig.slice(0, -4)}>`;
       }
     }
 

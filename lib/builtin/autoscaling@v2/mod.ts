@@ -36,7 +36,7 @@ export class AutoscalingV2Api {
 
   async watchHorizontalPodAutoscalerListForAllNamespaces(
     opts: operations.WatchListOpts = {},
-  ): Promise<ReadableStream<c.WatchEvent<AutoscalingV2.HorizontalPodAutoscaler & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
+  ): Promise<c.WatchEventStream<AutoscalingV2.HorizontalPodAutoscaler>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}horizontalpodautoscalers`,
@@ -73,7 +73,7 @@ export class AutoscalingV2NamespacedApi {
 
   async watchHorizontalPodAutoscalerList(
     opts: operations.WatchListOpts = {},
-  ): Promise<ReadableStream<c.WatchEvent<AutoscalingV2.HorizontalPodAutoscaler & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
+  ): Promise<c.WatchEventStream<AutoscalingV2.HorizontalPodAutoscaler>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}horizontalpodautoscalers`,

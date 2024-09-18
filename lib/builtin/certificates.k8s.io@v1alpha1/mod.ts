@@ -28,7 +28,7 @@ export class CertificatesV1alpha1Api {
 
   async watchClusterTrustBundleList(
     opts: operations.WatchListOpts = {},
-  ): Promise<ReadableStream<c.WatchEvent<CertificatesV1alpha1.ClusterTrustBundle & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
+  ): Promise<c.WatchEventStream<CertificatesV1alpha1.ClusterTrustBundle>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}clustertrustbundles`,

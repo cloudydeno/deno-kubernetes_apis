@@ -28,7 +28,7 @@ export class InternalApiserverV1alpha1Api {
 
   async watchStorageVersionList(
     opts: operations.WatchListOpts = {},
-  ): Promise<ReadableStream<c.WatchEvent<InternalApiserverV1alpha1.StorageVersion & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
+  ): Promise<c.WatchEventStream<InternalApiserverV1alpha1.StorageVersion>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}storageversions`,

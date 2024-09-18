@@ -36,7 +36,7 @@ export class AcmeCertManagerIoV1Api {
 
   async watchChallengeListForAllNamespaces(
     opts: operations.WatchListOpts = {},
-  ): Promise<ReadableStream<c.WatchEvent<AcmeCertManagerIoV1.Challenge & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
+  ): Promise<c.WatchEventStream<AcmeCertManagerIoV1.Challenge>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}challenges`,
@@ -63,7 +63,7 @@ export class AcmeCertManagerIoV1Api {
 
   async watchOrderListForAllNamespaces(
     opts: operations.WatchListOpts = {},
-  ): Promise<ReadableStream<c.WatchEvent<AcmeCertManagerIoV1.Order & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
+  ): Promise<c.WatchEventStream<AcmeCertManagerIoV1.Order>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}orders`,
@@ -100,7 +100,7 @@ export class AcmeCertManagerIoV1NamespacedApi {
 
   async watchChallengeList(
     opts: operations.WatchListOpts = {},
-  ): Promise<ReadableStream<c.WatchEvent<AcmeCertManagerIoV1.Challenge & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
+  ): Promise<c.WatchEventStream<AcmeCertManagerIoV1.Challenge>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}challenges`,
@@ -264,7 +264,7 @@ export class AcmeCertManagerIoV1NamespacedApi {
 
   async watchOrderList(
     opts: operations.WatchListOpts = {},
-  ): Promise<ReadableStream<c.WatchEvent<AcmeCertManagerIoV1.Order & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
+  ): Promise<c.WatchEventStream<AcmeCertManagerIoV1.Order>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}orders`,

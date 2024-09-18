@@ -66,7 +66,7 @@ export class CoreV1Api {
 
   async watchConfigMapListForAllNamespaces(
     opts: operations.WatchListOpts = {},
-  ): Promise<ReadableStream<c.WatchEvent<CoreV1.ConfigMap & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
+  ): Promise<c.WatchEventStream<CoreV1.ConfigMap>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}configmaps`,
@@ -93,7 +93,7 @@ export class CoreV1Api {
 
   async watchEndpointsListForAllNamespaces(
     opts: operations.WatchListOpts = {},
-  ): Promise<ReadableStream<c.WatchEvent<CoreV1.Endpoints & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
+  ): Promise<c.WatchEventStream<CoreV1.Endpoints>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}endpoints`,
@@ -120,7 +120,7 @@ export class CoreV1Api {
 
   async watchEventListForAllNamespaces(
     opts: operations.WatchListOpts = {},
-  ): Promise<ReadableStream<c.WatchEvent<CoreV1.Event & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
+  ): Promise<c.WatchEventStream<CoreV1.Event>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}events`,
@@ -147,7 +147,7 @@ export class CoreV1Api {
 
   async watchLimitRangeListForAllNamespaces(
     opts: operations.WatchListOpts = {},
-  ): Promise<ReadableStream<c.WatchEvent<CoreV1.LimitRange & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
+  ): Promise<c.WatchEventStream<CoreV1.LimitRange>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}limitranges`,
@@ -174,7 +174,7 @@ export class CoreV1Api {
 
   async watchNamespaceList(
     opts: operations.WatchListOpts = {},
-  ): Promise<ReadableStream<c.WatchEvent<CoreV1.Namespace & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
+  ): Promise<c.WatchEventStream<CoreV1.Namespace>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}namespaces`,
@@ -341,7 +341,7 @@ export class CoreV1Api {
 
   async watchNodeList(
     opts: operations.WatchListOpts = {},
-  ): Promise<ReadableStream<c.WatchEvent<CoreV1.Node & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
+  ): Promise<c.WatchEventStream<CoreV1.Node>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}nodes`,
@@ -531,7 +531,7 @@ export class CoreV1Api {
 
   async watchPersistentVolumeClaimListForAllNamespaces(
     opts: operations.WatchListOpts = {},
-  ): Promise<ReadableStream<c.WatchEvent<CoreV1.PersistentVolumeClaim & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
+  ): Promise<c.WatchEventStream<CoreV1.PersistentVolumeClaim>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}persistentvolumeclaims`,
@@ -558,7 +558,7 @@ export class CoreV1Api {
 
   async watchPersistentVolumeList(
     opts: operations.WatchListOpts = {},
-  ): Promise<ReadableStream<c.WatchEvent<CoreV1.PersistentVolume & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
+  ): Promise<c.WatchEventStream<CoreV1.PersistentVolume>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}persistentvolumes`,
@@ -722,7 +722,7 @@ export class CoreV1Api {
 
   async watchPodListForAllNamespaces(
     opts: operations.WatchListOpts = {},
-  ): Promise<ReadableStream<c.WatchEvent<CoreV1.Pod & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
+  ): Promise<c.WatchEventStream<CoreV1.Pod>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}pods`,
@@ -749,7 +749,7 @@ export class CoreV1Api {
 
   async watchPodTemplateListForAllNamespaces(
     opts: operations.WatchListOpts = {},
-  ): Promise<ReadableStream<c.WatchEvent<CoreV1.PodTemplate & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
+  ): Promise<c.WatchEventStream<CoreV1.PodTemplate>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}podtemplates`,
@@ -776,7 +776,7 @@ export class CoreV1Api {
 
   async watchReplicationControllerListForAllNamespaces(
     opts: operations.WatchListOpts = {},
-  ): Promise<ReadableStream<c.WatchEvent<CoreV1.ReplicationController & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
+  ): Promise<c.WatchEventStream<CoreV1.ReplicationController>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}replicationcontrollers`,
@@ -803,7 +803,7 @@ export class CoreV1Api {
 
   async watchResourceQuotaListForAllNamespaces(
     opts: operations.WatchListOpts = {},
-  ): Promise<ReadableStream<c.WatchEvent<CoreV1.ResourceQuota & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
+  ): Promise<c.WatchEventStream<CoreV1.ResourceQuota>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}resourcequotas`,
@@ -830,7 +830,7 @@ export class CoreV1Api {
 
   async watchSecretListForAllNamespaces(
     opts: operations.WatchListOpts = {},
-  ): Promise<ReadableStream<c.WatchEvent<CoreV1.Secret & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
+  ): Promise<c.WatchEventStream<CoreV1.Secret>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}secrets`,
@@ -857,7 +857,7 @@ export class CoreV1Api {
 
   async watchServiceAccountListForAllNamespaces(
     opts: operations.WatchListOpts = {},
-  ): Promise<ReadableStream<c.WatchEvent<CoreV1.ServiceAccount & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
+  ): Promise<c.WatchEventStream<CoreV1.ServiceAccount>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}serviceaccounts`,
@@ -884,7 +884,7 @@ export class CoreV1Api {
 
   async watchServiceListForAllNamespaces(
     opts: operations.WatchListOpts = {},
-  ): Promise<ReadableStream<c.WatchEvent<CoreV1.Service & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
+  ): Promise<c.WatchEventStream<CoreV1.Service>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}services`,
@@ -936,7 +936,7 @@ export class CoreV1NamespacedApi {
 
   async watchConfigMapList(
     opts: operations.WatchListOpts = {},
-  ): Promise<ReadableStream<c.WatchEvent<CoreV1.ConfigMap & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
+  ): Promise<c.WatchEventStream<CoreV1.ConfigMap>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}configmaps`,
@@ -1053,7 +1053,7 @@ export class CoreV1NamespacedApi {
 
   async watchEndpointsList(
     opts: operations.WatchListOpts = {},
-  ): Promise<ReadableStream<c.WatchEvent<CoreV1.Endpoints & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
+  ): Promise<c.WatchEventStream<CoreV1.Endpoints>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}endpoints`,
@@ -1170,7 +1170,7 @@ export class CoreV1NamespacedApi {
 
   async watchEventList(
     opts: operations.WatchListOpts = {},
-  ): Promise<ReadableStream<c.WatchEvent<CoreV1.Event & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
+  ): Promise<c.WatchEventStream<CoreV1.Event>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}events`,
@@ -1287,7 +1287,7 @@ export class CoreV1NamespacedApi {
 
   async watchLimitRangeList(
     opts: operations.WatchListOpts = {},
-  ): Promise<ReadableStream<c.WatchEvent<CoreV1.LimitRange & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
+  ): Promise<c.WatchEventStream<CoreV1.LimitRange>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}limitranges`,
@@ -1404,7 +1404,7 @@ export class CoreV1NamespacedApi {
 
   async watchPersistentVolumeClaimList(
     opts: operations.WatchListOpts = {},
-  ): Promise<ReadableStream<c.WatchEvent<CoreV1.PersistentVolumeClaim & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
+  ): Promise<c.WatchEventStream<CoreV1.PersistentVolumeClaim>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}persistentvolumeclaims`,
@@ -1568,7 +1568,7 @@ export class CoreV1NamespacedApi {
 
   async watchPodList(
     opts: operations.WatchListOpts = {},
-  ): Promise<ReadableStream<c.WatchEvent<CoreV1.Pod & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
+  ): Promise<c.WatchEventStream<CoreV1.Pod>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}pods`,
@@ -1984,7 +1984,7 @@ export class CoreV1NamespacedApi {
 
   async watchPodTemplateList(
     opts: operations.WatchListOpts = {},
-  ): Promise<ReadableStream<c.WatchEvent<CoreV1.PodTemplate & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
+  ): Promise<c.WatchEventStream<CoreV1.PodTemplate>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}podtemplates`,
@@ -2101,7 +2101,7 @@ export class CoreV1NamespacedApi {
 
   async watchReplicationControllerList(
     opts: operations.WatchListOpts = {},
-  ): Promise<ReadableStream<c.WatchEvent<CoreV1.ReplicationController & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
+  ): Promise<c.WatchEventStream<CoreV1.ReplicationController>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}replicationcontrollers`,
@@ -2312,7 +2312,7 @@ export class CoreV1NamespacedApi {
 
   async watchResourceQuotaList(
     opts: operations.WatchListOpts = {},
-  ): Promise<ReadableStream<c.WatchEvent<CoreV1.ResourceQuota & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
+  ): Promise<c.WatchEventStream<CoreV1.ResourceQuota>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}resourcequotas`,
@@ -2476,7 +2476,7 @@ export class CoreV1NamespacedApi {
 
   async watchSecretList(
     opts: operations.WatchListOpts = {},
-  ): Promise<ReadableStream<c.WatchEvent<CoreV1.Secret & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
+  ): Promise<c.WatchEventStream<CoreV1.Secret>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}secrets`,
@@ -2593,7 +2593,7 @@ export class CoreV1NamespacedApi {
 
   async watchServiceAccountList(
     opts: operations.WatchListOpts = {},
-  ): Promise<ReadableStream<c.WatchEvent<CoreV1.ServiceAccount & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
+  ): Promise<c.WatchEventStream<CoreV1.ServiceAccount>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}serviceaccounts`,
@@ -2726,7 +2726,7 @@ export class CoreV1NamespacedApi {
 
   async watchServiceList(
     opts: operations.WatchListOpts = {},
-  ): Promise<ReadableStream<c.WatchEvent<CoreV1.Service & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
+  ): Promise<c.WatchEventStream<CoreV1.Service>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}services`,

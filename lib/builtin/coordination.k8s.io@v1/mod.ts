@@ -36,7 +36,7 @@ export class CoordinationV1Api {
 
   async watchLeaseListForAllNamespaces(
     opts: operations.WatchListOpts = {},
-  ): Promise<ReadableStream<c.WatchEvent<CoordinationV1.Lease & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
+  ): Promise<c.WatchEventStream<CoordinationV1.Lease>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}leases`,
@@ -73,7 +73,7 @@ export class CoordinationV1NamespacedApi {
 
   async watchLeaseList(
     opts: operations.WatchListOpts = {},
-  ): Promise<ReadableStream<c.WatchEvent<CoordinationV1.Lease & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
+  ): Promise<c.WatchEventStream<CoordinationV1.Lease>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}leases`,

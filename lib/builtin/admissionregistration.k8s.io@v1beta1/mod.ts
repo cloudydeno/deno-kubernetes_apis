@@ -28,7 +28,7 @@ export class AdmissionregistrationV1beta1Api {
 
   async watchValidatingAdmissionPolicyList(
     opts: operations.WatchListOpts = {},
-  ): Promise<ReadableStream<c.WatchEvent<AdmissionregistrationV1beta1.ValidatingAdmissionPolicy & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
+  ): Promise<c.WatchEventStream<AdmissionregistrationV1beta1.ValidatingAdmissionPolicy>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}validatingadmissionpolicies`,
@@ -192,7 +192,7 @@ export class AdmissionregistrationV1beta1Api {
 
   async watchValidatingAdmissionPolicyBindingList(
     opts: operations.WatchListOpts = {},
-  ): Promise<ReadableStream<c.WatchEvent<AdmissionregistrationV1beta1.ValidatingAdmissionPolicyBinding & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
+  ): Promise<c.WatchEventStream<AdmissionregistrationV1beta1.ValidatingAdmissionPolicyBinding>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}validatingadmissionpolicybindings`,

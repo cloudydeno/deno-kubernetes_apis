@@ -28,7 +28,7 @@ export class ApiregistrationV1Api {
 
   async watchAPIServiceList(
     opts: operations.WatchListOpts = {},
-  ): Promise<ReadableStream<c.WatchEvent<ApiregistrationV1.APIService & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
+  ): Promise<c.WatchEventStream<ApiregistrationV1.APIService>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}apiservices`,

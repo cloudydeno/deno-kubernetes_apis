@@ -36,7 +36,7 @@ export class CertManagerIoV1Api {
 
   async watchCertificateRequestListForAllNamespaces(
     opts: operations.WatchListOpts = {},
-  ): Promise<ReadableStream<c.WatchEvent<CertManagerIoV1.CertificateRequest & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
+  ): Promise<c.WatchEventStream<CertManagerIoV1.CertificateRequest>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}certificaterequests`,
@@ -63,7 +63,7 @@ export class CertManagerIoV1Api {
 
   async watchCertificateListForAllNamespaces(
     opts: operations.WatchListOpts = {},
-  ): Promise<ReadableStream<c.WatchEvent<CertManagerIoV1.Certificate & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
+  ): Promise<c.WatchEventStream<CertManagerIoV1.Certificate>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}certificates`,
@@ -90,7 +90,7 @@ export class CertManagerIoV1Api {
 
   async watchClusterIssuerList(
     opts: operations.WatchListOpts = {},
-  ): Promise<ReadableStream<c.WatchEvent<CertManagerIoV1.ClusterIssuer & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
+  ): Promise<c.WatchEventStream<CertManagerIoV1.ClusterIssuer>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}clusterissuers`,
@@ -254,7 +254,7 @@ export class CertManagerIoV1Api {
 
   async watchIssuerListForAllNamespaces(
     opts: operations.WatchListOpts = {},
-  ): Promise<ReadableStream<c.WatchEvent<CertManagerIoV1.Issuer & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
+  ): Promise<c.WatchEventStream<CertManagerIoV1.Issuer>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}issuers`,
@@ -291,7 +291,7 @@ export class CertManagerIoV1NamespacedApi {
 
   async watchCertificateRequestList(
     opts: operations.WatchListOpts = {},
-  ): Promise<ReadableStream<c.WatchEvent<CertManagerIoV1.CertificateRequest & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
+  ): Promise<c.WatchEventStream<CertManagerIoV1.CertificateRequest>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}certificaterequests`,
@@ -455,7 +455,7 @@ export class CertManagerIoV1NamespacedApi {
 
   async watchCertificateList(
     opts: operations.WatchListOpts = {},
-  ): Promise<ReadableStream<c.WatchEvent<CertManagerIoV1.Certificate & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
+  ): Promise<c.WatchEventStream<CertManagerIoV1.Certificate>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}certificates`,
@@ -619,7 +619,7 @@ export class CertManagerIoV1NamespacedApi {
 
   async watchIssuerList(
     opts: operations.WatchListOpts = {},
-  ): Promise<ReadableStream<c.WatchEvent<CertManagerIoV1.Issuer & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
+  ): Promise<c.WatchEventStream<CertManagerIoV1.Issuer>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}issuers`,

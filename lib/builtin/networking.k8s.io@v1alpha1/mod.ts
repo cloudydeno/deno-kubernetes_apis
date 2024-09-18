@@ -28,7 +28,7 @@ export class NetworkingV1alpha1Api {
 
   async watchClusterCIDRList(
     opts: operations.WatchListOpts = {},
-  ): Promise<ReadableStream<c.WatchEvent<NetworkingV1alpha1.ClusterCIDR & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
+  ): Promise<c.WatchEventStream<NetworkingV1alpha1.ClusterCIDR>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}clustercidrs`,
@@ -145,7 +145,7 @@ export class NetworkingV1alpha1Api {
 
   async watchIPAddressList(
     opts: operations.WatchListOpts = {},
-  ): Promise<ReadableStream<c.WatchEvent<NetworkingV1alpha1.IPAddress & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
+  ): Promise<c.WatchEventStream<NetworkingV1alpha1.IPAddress>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}ipaddresses`,

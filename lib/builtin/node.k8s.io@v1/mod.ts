@@ -28,7 +28,7 @@ export class NodeV1Api {
 
   async watchRuntimeClassList(
     opts: operations.WatchListOpts = {},
-  ): Promise<ReadableStream<c.WatchEvent<NodeV1.RuntimeClass & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
+  ): Promise<c.WatchEventStream<NodeV1.RuntimeClass>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}runtimeclasses`,

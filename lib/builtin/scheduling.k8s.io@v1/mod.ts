@@ -28,7 +28,7 @@ export class SchedulingV1Api {
 
   async watchPriorityClassList(
     opts: operations.WatchListOpts = {},
-  ): Promise<ReadableStream<c.WatchEvent<SchedulingV1.PriorityClass & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
+  ): Promise<c.WatchEventStream<SchedulingV1.PriorityClass>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}priorityclasses`,

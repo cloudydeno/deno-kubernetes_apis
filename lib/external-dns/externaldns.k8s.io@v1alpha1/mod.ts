@@ -36,7 +36,7 @@ export class ExternaldnsV1alpha1Api {
 
   async watchDNSEndpointListForAllNamespaces(
     opts: operations.WatchListOpts = {},
-  ): Promise<ReadableStream<c.WatchEvent<ExternaldnsV1alpha1.DNSEndpoint & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
+  ): Promise<c.WatchEventStream<ExternaldnsV1alpha1.DNSEndpoint>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}dnsendpoints`,
@@ -73,7 +73,7 @@ export class ExternaldnsV1alpha1NamespacedApi {
 
   async watchDNSEndpointList(
     opts: operations.WatchListOpts = {},
-  ): Promise<ReadableStream<c.WatchEvent<ExternaldnsV1alpha1.DNSEndpoint & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
+  ): Promise<c.WatchEventStream<ExternaldnsV1alpha1.DNSEndpoint>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}dnsendpoints`,

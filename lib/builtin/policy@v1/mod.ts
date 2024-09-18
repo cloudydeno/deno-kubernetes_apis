@@ -36,7 +36,7 @@ export class PolicyV1Api {
 
   async watchPodDisruptionBudgetListForAllNamespaces(
     opts: operations.WatchListOpts = {},
-  ): Promise<ReadableStream<c.WatchEvent<PolicyV1.PodDisruptionBudget & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
+  ): Promise<c.WatchEventStream<PolicyV1.PodDisruptionBudget>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}poddisruptionbudgets`,
@@ -73,7 +73,7 @@ export class PolicyV1NamespacedApi {
 
   async watchPodDisruptionBudgetList(
     opts: operations.WatchListOpts = {},
-  ): Promise<ReadableStream<c.WatchEvent<PolicyV1.PodDisruptionBudget & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
+  ): Promise<c.WatchEventStream<PolicyV1.PodDisruptionBudget>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}poddisruptionbudgets`,

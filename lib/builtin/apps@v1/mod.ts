@@ -37,7 +37,7 @@ export class AppsV1Api {
 
   async watchControllerRevisionListForAllNamespaces(
     opts: operations.WatchListOpts = {},
-  ): Promise<ReadableStream<c.WatchEvent<AppsV1.ControllerRevision & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
+  ): Promise<c.WatchEventStream<AppsV1.ControllerRevision>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}controllerrevisions`,
@@ -64,7 +64,7 @@ export class AppsV1Api {
 
   async watchDaemonSetListForAllNamespaces(
     opts: operations.WatchListOpts = {},
-  ): Promise<ReadableStream<c.WatchEvent<AppsV1.DaemonSet & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
+  ): Promise<c.WatchEventStream<AppsV1.DaemonSet>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}daemonsets`,
@@ -91,7 +91,7 @@ export class AppsV1Api {
 
   async watchDeploymentListForAllNamespaces(
     opts: operations.WatchListOpts = {},
-  ): Promise<ReadableStream<c.WatchEvent<AppsV1.Deployment & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
+  ): Promise<c.WatchEventStream<AppsV1.Deployment>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}deployments`,
@@ -118,7 +118,7 @@ export class AppsV1Api {
 
   async watchReplicaSetListForAllNamespaces(
     opts: operations.WatchListOpts = {},
-  ): Promise<ReadableStream<c.WatchEvent<AppsV1.ReplicaSet & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
+  ): Promise<c.WatchEventStream<AppsV1.ReplicaSet>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}replicasets`,
@@ -145,7 +145,7 @@ export class AppsV1Api {
 
   async watchStatefulSetListForAllNamespaces(
     opts: operations.WatchListOpts = {},
-  ): Promise<ReadableStream<c.WatchEvent<AppsV1.StatefulSet & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
+  ): Promise<c.WatchEventStream<AppsV1.StatefulSet>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}statefulsets`,
@@ -182,7 +182,7 @@ export class AppsV1NamespacedApi {
 
   async watchControllerRevisionList(
     opts: operations.WatchListOpts = {},
-  ): Promise<ReadableStream<c.WatchEvent<AppsV1.ControllerRevision & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
+  ): Promise<c.WatchEventStream<AppsV1.ControllerRevision>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}controllerrevisions`,
@@ -299,7 +299,7 @@ export class AppsV1NamespacedApi {
 
   async watchDaemonSetList(
     opts: operations.WatchListOpts = {},
-  ): Promise<ReadableStream<c.WatchEvent<AppsV1.DaemonSet & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
+  ): Promise<c.WatchEventStream<AppsV1.DaemonSet>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}daemonsets`,
@@ -463,7 +463,7 @@ export class AppsV1NamespacedApi {
 
   async watchDeploymentList(
     opts: operations.WatchListOpts = {},
-  ): Promise<ReadableStream<c.WatchEvent<AppsV1.Deployment & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
+  ): Promise<c.WatchEventStream<AppsV1.Deployment>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}deployments`,
@@ -674,7 +674,7 @@ export class AppsV1NamespacedApi {
 
   async watchReplicaSetList(
     opts: operations.WatchListOpts = {},
-  ): Promise<ReadableStream<c.WatchEvent<AppsV1.ReplicaSet & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
+  ): Promise<c.WatchEventStream<AppsV1.ReplicaSet>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}replicasets`,
@@ -885,7 +885,7 @@ export class AppsV1NamespacedApi {
 
   async watchStatefulSetList(
     opts: operations.WatchListOpts = {},
-  ): Promise<ReadableStream<c.WatchEvent<AppsV1.StatefulSet & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
+  ): Promise<c.WatchEventStream<AppsV1.StatefulSet>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}statefulsets`,

@@ -28,7 +28,7 @@ export class ApiextensionsV1Api {
 
   async watchCustomResourceDefinitionList(
     opts: operations.WatchListOpts = {},
-  ): Promise<ReadableStream<c.WatchEvent<ApiextensionsV1.CustomResourceDefinition & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
+  ): Promise<c.WatchEventStream<ApiextensionsV1.CustomResourceDefinition>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}customresourcedefinitions`,

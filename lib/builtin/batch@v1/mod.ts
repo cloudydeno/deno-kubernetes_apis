@@ -36,7 +36,7 @@ export class BatchV1Api {
 
   async watchCronJobListForAllNamespaces(
     opts: operations.WatchListOpts = {},
-  ): Promise<ReadableStream<c.WatchEvent<BatchV1.CronJob & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
+  ): Promise<c.WatchEventStream<BatchV1.CronJob>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}cronjobs`,
@@ -63,7 +63,7 @@ export class BatchV1Api {
 
   async watchJobListForAllNamespaces(
     opts: operations.WatchListOpts = {},
-  ): Promise<ReadableStream<c.WatchEvent<BatchV1.Job & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
+  ): Promise<c.WatchEventStream<BatchV1.Job>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}jobs`,
@@ -100,7 +100,7 @@ export class BatchV1NamespacedApi {
 
   async watchCronJobList(
     opts: operations.WatchListOpts = {},
-  ): Promise<ReadableStream<c.WatchEvent<BatchV1.CronJob & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
+  ): Promise<c.WatchEventStream<BatchV1.CronJob>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}cronjobs`,
@@ -264,7 +264,7 @@ export class BatchV1NamespacedApi {
 
   async watchJobList(
     opts: operations.WatchListOpts = {},
-  ): Promise<ReadableStream<c.WatchEvent<BatchV1.Job & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
+  ): Promise<c.WatchEventStream<BatchV1.Job>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}jobs`,

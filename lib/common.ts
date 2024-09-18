@@ -2,12 +2,13 @@
 // All the generated code uses this centralized API contract,
 //   while users are free to pass in a different compatible client to actually call
 
-import { toStatus } from "./builtin/meta@v1/structs.ts";
+import { toStatus, type Status } from "./builtin/meta@v1/structs.ts";
 import {
   ApiKind,
   JSONObject,
   JSONValue,
   RequestOptions,
+  type WatchEvent
 } from "./deps.ts";
 export {
   type ApiKind,
@@ -16,6 +17,9 @@ export {
   WatchEventTransformer,
   type WatchEvent,
 } from "./deps.ts";
+
+// Shorthand for generated type signatures
+export type WatchEventStream<T> = ReadableStream<WatchEvent<T & ApiKind, Status & ApiKind>>;
 
 // Helpers used to validate/transform structures from or for the wire
 // And some other stuff :)

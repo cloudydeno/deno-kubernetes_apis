@@ -36,7 +36,7 @@ export class DiscoveryV1Api {
 
   async watchEndpointSliceListForAllNamespaces(
     opts: operations.WatchListOpts = {},
-  ): Promise<ReadableStream<c.WatchEvent<DiscoveryV1.EndpointSlice & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
+  ): Promise<c.WatchEventStream<DiscoveryV1.EndpointSlice>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}endpointslices`,
@@ -73,7 +73,7 @@ export class DiscoveryV1NamespacedApi {
 
   async watchEndpointSliceList(
     opts: operations.WatchListOpts = {},
-  ): Promise<ReadableStream<c.WatchEvent<DiscoveryV1.EndpointSlice & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
+  ): Promise<c.WatchEventStream<DiscoveryV1.EndpointSlice>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}endpointslices`,

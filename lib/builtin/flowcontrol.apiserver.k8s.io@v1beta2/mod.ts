@@ -28,7 +28,7 @@ export class FlowcontrolApiserverV1beta2Api {
 
   async watchFlowSchemaList(
     opts: operations.WatchListOpts = {},
-  ): Promise<ReadableStream<c.WatchEvent<FlowcontrolApiserverV1beta2.FlowSchema & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
+  ): Promise<c.WatchEventStream<FlowcontrolApiserverV1beta2.FlowSchema>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}flowschemas`,
@@ -192,7 +192,7 @@ export class FlowcontrolApiserverV1beta2Api {
 
   async watchPriorityLevelConfigurationList(
     opts: operations.WatchListOpts = {},
-  ): Promise<ReadableStream<c.WatchEvent<FlowcontrolApiserverV1beta2.PriorityLevelConfiguration & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
+  ): Promise<c.WatchEventStream<FlowcontrolApiserverV1beta2.PriorityLevelConfiguration>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}prioritylevelconfigurations`,

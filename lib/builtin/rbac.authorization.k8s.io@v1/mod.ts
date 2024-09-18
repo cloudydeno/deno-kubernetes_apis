@@ -36,7 +36,7 @@ export class RbacAuthorizationV1Api {
 
   async watchClusterRoleBindingList(
     opts: operations.WatchListOpts = {},
-  ): Promise<ReadableStream<c.WatchEvent<RbacAuthorizationV1.ClusterRoleBinding & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
+  ): Promise<c.WatchEventStream<RbacAuthorizationV1.ClusterRoleBinding>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}clusterrolebindings`,
@@ -153,7 +153,7 @@ export class RbacAuthorizationV1Api {
 
   async watchClusterRoleList(
     opts: operations.WatchListOpts = {},
-  ): Promise<ReadableStream<c.WatchEvent<RbacAuthorizationV1.ClusterRole & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
+  ): Promise<c.WatchEventStream<RbacAuthorizationV1.ClusterRole>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}clusterroles`,
@@ -270,7 +270,7 @@ export class RbacAuthorizationV1Api {
 
   async watchRoleBindingListForAllNamespaces(
     opts: operations.WatchListOpts = {},
-  ): Promise<ReadableStream<c.WatchEvent<RbacAuthorizationV1.RoleBinding & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
+  ): Promise<c.WatchEventStream<RbacAuthorizationV1.RoleBinding>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}rolebindings`,
@@ -297,7 +297,7 @@ export class RbacAuthorizationV1Api {
 
   async watchRoleListForAllNamespaces(
     opts: operations.WatchListOpts = {},
-  ): Promise<ReadableStream<c.WatchEvent<RbacAuthorizationV1.Role & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
+  ): Promise<c.WatchEventStream<RbacAuthorizationV1.Role>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}roles`,
@@ -334,7 +334,7 @@ export class RbacAuthorizationV1NamespacedApi {
 
   async watchRoleBindingList(
     opts: operations.WatchListOpts = {},
-  ): Promise<ReadableStream<c.WatchEvent<RbacAuthorizationV1.RoleBinding & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
+  ): Promise<c.WatchEventStream<RbacAuthorizationV1.RoleBinding>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}rolebindings`,
@@ -451,7 +451,7 @@ export class RbacAuthorizationV1NamespacedApi {
 
   async watchRoleList(
     opts: operations.WatchListOpts = {},
-  ): Promise<ReadableStream<c.WatchEvent<RbacAuthorizationV1.Role & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
+  ): Promise<c.WatchEventStream<RbacAuthorizationV1.Role>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}roles`,

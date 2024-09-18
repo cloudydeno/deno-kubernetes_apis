@@ -36,7 +36,7 @@ export class StorageV1Api {
 
   async watchCSIDriverList(
     opts: operations.WatchListOpts = {},
-  ): Promise<ReadableStream<c.WatchEvent<StorageV1.CSIDriver & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
+  ): Promise<c.WatchEventStream<StorageV1.CSIDriver>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}csidrivers`,
@@ -153,7 +153,7 @@ export class StorageV1Api {
 
   async watchCSINodeList(
     opts: operations.WatchListOpts = {},
-  ): Promise<ReadableStream<c.WatchEvent<StorageV1.CSINode & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
+  ): Promise<c.WatchEventStream<StorageV1.CSINode>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}csinodes`,
@@ -270,7 +270,7 @@ export class StorageV1Api {
 
   async watchCSIStorageCapacityListForAllNamespaces(
     opts: operations.WatchListOpts = {},
-  ): Promise<ReadableStream<c.WatchEvent<StorageV1.CSIStorageCapacity & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
+  ): Promise<c.WatchEventStream<StorageV1.CSIStorageCapacity>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}csistoragecapacities`,
@@ -297,7 +297,7 @@ export class StorageV1Api {
 
   async watchStorageClassList(
     opts: operations.WatchListOpts = {},
-  ): Promise<ReadableStream<c.WatchEvent<StorageV1.StorageClass & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
+  ): Promise<c.WatchEventStream<StorageV1.StorageClass>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}storageclasses`,
@@ -414,7 +414,7 @@ export class StorageV1Api {
 
   async watchVolumeAttachmentList(
     opts: operations.WatchListOpts = {},
-  ): Promise<ReadableStream<c.WatchEvent<StorageV1.VolumeAttachment & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
+  ): Promise<c.WatchEventStream<StorageV1.VolumeAttachment>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}volumeattachments`,
@@ -588,7 +588,7 @@ export class StorageV1NamespacedApi {
 
   async watchCSIStorageCapacityList(
     opts: operations.WatchListOpts = {},
-  ): Promise<ReadableStream<c.WatchEvent<StorageV1.CSIStorageCapacity & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
+  ): Promise<c.WatchEventStream<StorageV1.CSIStorageCapacity>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}csistoragecapacities`,

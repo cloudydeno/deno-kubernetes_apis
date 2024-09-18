@@ -36,7 +36,7 @@ export class AutoscalingV1Api {
 
   async watchVerticalPodAutoscalerCheckpointListForAllNamespaces(
     opts: operations.WatchListOpts = {},
-  ): Promise<ReadableStream<c.WatchEvent<AutoscalingV1.VerticalPodAutoscalerCheckpoint & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
+  ): Promise<c.WatchEventStream<AutoscalingV1.VerticalPodAutoscalerCheckpoint>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}verticalpodautoscalercheckpoints`,
@@ -63,7 +63,7 @@ export class AutoscalingV1Api {
 
   async watchVerticalPodAutoscalerListForAllNamespaces(
     opts: operations.WatchListOpts = {},
-  ): Promise<ReadableStream<c.WatchEvent<AutoscalingV1.VerticalPodAutoscaler & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
+  ): Promise<c.WatchEventStream<AutoscalingV1.VerticalPodAutoscaler>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}verticalpodautoscalers`,
@@ -100,7 +100,7 @@ export class AutoscalingV1NamespacedApi {
 
   async watchVerticalPodAutoscalerCheckpointList(
     opts: operations.WatchListOpts = {},
-  ): Promise<ReadableStream<c.WatchEvent<AutoscalingV1.VerticalPodAutoscalerCheckpoint & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
+  ): Promise<c.WatchEventStream<AutoscalingV1.VerticalPodAutoscalerCheckpoint>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}verticalpodautoscalercheckpoints`,
@@ -217,7 +217,7 @@ export class AutoscalingV1NamespacedApi {
 
   async watchVerticalPodAutoscalerList(
     opts: operations.WatchListOpts = {},
-  ): Promise<ReadableStream<c.WatchEvent<AutoscalingV1.VerticalPodAutoscaler & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
+  ): Promise<c.WatchEventStream<AutoscalingV1.VerticalPodAutoscaler>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}verticalpodautoscalers`,

@@ -36,7 +36,7 @@ export class NetworkingV1Api {
 
   async watchIngressClassList(
     opts: operations.WatchListOpts = {},
-  ): Promise<ReadableStream<c.WatchEvent<NetworkingV1.IngressClass & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
+  ): Promise<c.WatchEventStream<NetworkingV1.IngressClass>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}ingressclasses`,
@@ -153,7 +153,7 @@ export class NetworkingV1Api {
 
   async watchIngressListForAllNamespaces(
     opts: operations.WatchListOpts = {},
-  ): Promise<ReadableStream<c.WatchEvent<NetworkingV1.Ingress & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
+  ): Promise<c.WatchEventStream<NetworkingV1.Ingress>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}ingresses`,
@@ -180,7 +180,7 @@ export class NetworkingV1Api {
 
   async watchNetworkPolicyListForAllNamespaces(
     opts: operations.WatchListOpts = {},
-  ): Promise<ReadableStream<c.WatchEvent<NetworkingV1.NetworkPolicy & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
+  ): Promise<c.WatchEventStream<NetworkingV1.NetworkPolicy>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}networkpolicies`,
@@ -217,7 +217,7 @@ export class NetworkingV1NamespacedApi {
 
   async watchIngressList(
     opts: operations.WatchListOpts = {},
-  ): Promise<ReadableStream<c.WatchEvent<NetworkingV1.Ingress & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
+  ): Promise<c.WatchEventStream<NetworkingV1.Ingress>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}ingresses`,
@@ -381,7 +381,7 @@ export class NetworkingV1NamespacedApi {
 
   async watchNetworkPolicyList(
     opts: operations.WatchListOpts = {},
-  ): Promise<ReadableStream<c.WatchEvent<NetworkingV1.NetworkPolicy & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
+  ): Promise<c.WatchEventStream<NetworkingV1.NetworkPolicy>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}networkpolicies`,

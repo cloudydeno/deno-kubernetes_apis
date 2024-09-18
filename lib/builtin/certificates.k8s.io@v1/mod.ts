@@ -28,7 +28,7 @@ export class CertificatesV1Api {
 
   async watchCertificateSigningRequestList(
     opts: operations.WatchListOpts = {},
-  ): Promise<ReadableStream<c.WatchEvent<CertificatesV1.CertificateSigningRequest & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
+  ): Promise<c.WatchEventStream<CertificatesV1.CertificateSigningRequest>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}certificatesigningrequests`,

@@ -36,7 +36,7 @@ export class ResourceV1alpha2Api {
 
   async watchPodSchedulingContextListForAllNamespaces(
     opts: operations.WatchListOpts = {},
-  ): Promise<ReadableStream<c.WatchEvent<ResourceV1alpha2.PodSchedulingContext & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
+  ): Promise<c.WatchEventStream<ResourceV1alpha2.PodSchedulingContext>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}podschedulingcontexts`,
@@ -63,7 +63,7 @@ export class ResourceV1alpha2Api {
 
   async watchResourceClaimListForAllNamespaces(
     opts: operations.WatchListOpts = {},
-  ): Promise<ReadableStream<c.WatchEvent<ResourceV1alpha2.ResourceClaim & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
+  ): Promise<c.WatchEventStream<ResourceV1alpha2.ResourceClaim>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}resourceclaims`,
@@ -90,7 +90,7 @@ export class ResourceV1alpha2Api {
 
   async watchResourceClaimTemplateListForAllNamespaces(
     opts: operations.WatchListOpts = {},
-  ): Promise<ReadableStream<c.WatchEvent<ResourceV1alpha2.ResourceClaimTemplate & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
+  ): Promise<c.WatchEventStream<ResourceV1alpha2.ResourceClaimTemplate>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}resourceclaimtemplates`,
@@ -117,7 +117,7 @@ export class ResourceV1alpha2Api {
 
   async watchResourceClassList(
     opts: operations.WatchListOpts = {},
-  ): Promise<ReadableStream<c.WatchEvent<ResourceV1alpha2.ResourceClass & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
+  ): Promise<c.WatchEventStream<ResourceV1alpha2.ResourceClass>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}resourceclasses`,
@@ -244,7 +244,7 @@ export class ResourceV1alpha2NamespacedApi {
 
   async watchPodSchedulingContextList(
     opts: operations.WatchListOpts = {},
-  ): Promise<ReadableStream<c.WatchEvent<ResourceV1alpha2.PodSchedulingContext & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
+  ): Promise<c.WatchEventStream<ResourceV1alpha2.PodSchedulingContext>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}podschedulingcontexts`,
@@ -408,7 +408,7 @@ export class ResourceV1alpha2NamespacedApi {
 
   async watchResourceClaimList(
     opts: operations.WatchListOpts = {},
-  ): Promise<ReadableStream<c.WatchEvent<ResourceV1alpha2.ResourceClaim & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
+  ): Promise<c.WatchEventStream<ResourceV1alpha2.ResourceClaim>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}resourceclaims`,
@@ -572,7 +572,7 @@ export class ResourceV1alpha2NamespacedApi {
 
   async watchResourceClaimTemplateList(
     opts: operations.WatchListOpts = {},
-  ): Promise<ReadableStream<c.WatchEvent<ResourceV1alpha2.ResourceClaimTemplate & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
+  ): Promise<c.WatchEventStream<ResourceV1alpha2.ResourceClaimTemplate>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}resourceclaimtemplates`,

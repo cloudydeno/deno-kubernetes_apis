@@ -28,7 +28,7 @@ export class AdmissionregistrationV1Api {
 
   async watchMutatingWebhookConfigurationList(
     opts: operations.WatchListOpts = {},
-  ): Promise<ReadableStream<c.WatchEvent<AdmissionregistrationV1.MutatingWebhookConfiguration & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
+  ): Promise<c.WatchEventStream<AdmissionregistrationV1.MutatingWebhookConfiguration>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}mutatingwebhookconfigurations`,
@@ -145,7 +145,7 @@ export class AdmissionregistrationV1Api {
 
   async watchValidatingWebhookConfigurationList(
     opts: operations.WatchListOpts = {},
-  ): Promise<ReadableStream<c.WatchEvent<AdmissionregistrationV1.ValidatingWebhookConfiguration & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
+  ): Promise<c.WatchEventStream<AdmissionregistrationV1.ValidatingWebhookConfiguration>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}validatingwebhookconfigurations`,

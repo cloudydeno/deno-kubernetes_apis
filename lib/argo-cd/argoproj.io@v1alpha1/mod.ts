@@ -36,7 +36,7 @@ export class ArgoprojIoV1alpha1Api {
 
   async watchApplicationListForAllNamespaces(
     opts: operations.WatchListOpts = {},
-  ): Promise<ReadableStream<c.WatchEvent<ArgoprojIoV1alpha1.Application & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
+  ): Promise<c.WatchEventStream<ArgoprojIoV1alpha1.Application>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}applications`,
@@ -63,7 +63,7 @@ export class ArgoprojIoV1alpha1Api {
 
   async watchApplicationSetListForAllNamespaces(
     opts: operations.WatchListOpts = {},
-  ): Promise<ReadableStream<c.WatchEvent<ArgoprojIoV1alpha1.ApplicationSet & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
+  ): Promise<c.WatchEventStream<ArgoprojIoV1alpha1.ApplicationSet>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}applicationsets`,
@@ -90,7 +90,7 @@ export class ArgoprojIoV1alpha1Api {
 
   async watchAppProjectListForAllNamespaces(
     opts: operations.WatchListOpts = {},
-  ): Promise<ReadableStream<c.WatchEvent<ArgoprojIoV1alpha1.AppProject & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
+  ): Promise<c.WatchEventStream<ArgoprojIoV1alpha1.AppProject>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}appprojects`,
@@ -127,7 +127,7 @@ export class ArgoprojIoV1alpha1NamespacedApi {
 
   async watchApplicationList(
     opts: operations.WatchListOpts = {},
-  ): Promise<ReadableStream<c.WatchEvent<ArgoprojIoV1alpha1.Application & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
+  ): Promise<c.WatchEventStream<ArgoprojIoV1alpha1.Application>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}applications`,
@@ -244,7 +244,7 @@ export class ArgoprojIoV1alpha1NamespacedApi {
 
   async watchApplicationSetList(
     opts: operations.WatchListOpts = {},
-  ): Promise<ReadableStream<c.WatchEvent<ArgoprojIoV1alpha1.ApplicationSet & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
+  ): Promise<c.WatchEventStream<ArgoprojIoV1alpha1.ApplicationSet>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}applicationsets`,
@@ -408,7 +408,7 @@ export class ArgoprojIoV1alpha1NamespacedApi {
 
   async watchAppProjectList(
     opts: operations.WatchListOpts = {},
-  ): Promise<ReadableStream<c.WatchEvent<ArgoprojIoV1alpha1.AppProject & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
+  ): Promise<c.WatchEventStream<ArgoprojIoV1alpha1.AppProject>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}appprojects`,

@@ -36,7 +36,7 @@ export class EventsV1Api {
 
   async watchEventListForAllNamespaces(
     opts: operations.WatchListOpts = {},
-  ): Promise<ReadableStream<c.WatchEvent<EventsV1.Event & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
+  ): Promise<c.WatchEventStream<EventsV1.Event>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}events`,
@@ -73,7 +73,7 @@ export class EventsV1NamespacedApi {
 
   async watchEventList(
     opts: operations.WatchListOpts = {},
-  ): Promise<ReadableStream<c.WatchEvent<EventsV1.Event & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
+  ): Promise<c.WatchEventStream<EventsV1.Event>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}events`,
