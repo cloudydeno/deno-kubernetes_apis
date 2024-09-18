@@ -2,17 +2,17 @@
 // All the generated code uses this centralized API contract,
 //   while users are free to pass in a different compatible client to actually call
 
+import { toStatus } from "./builtin/meta@v1/structs.ts";
 import {
   ApiKind,
   JSONObject,
   JSONValue,
   RequestOptions,
-  toStatus,
 } from "./deps.ts";
 export {
-  type RestClient,
-  type JSONValue,
   type ApiKind,
+  type JSONValue,
+  type RestClient,
   WatchEventTransformer,
 } from "./deps.ts";
 
