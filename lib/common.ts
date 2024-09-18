@@ -2,17 +2,19 @@
 // All the generated code uses this centralized API contract,
 //   while users are free to pass in a different compatible client to actually call
 
-import { toStatus } from './builtin/meta@v1/structs.ts';
 import {
   ApiKind,
-  JSONObject, JSONValue,
+  JSONObject,
+  JSONValue,
   RequestOptions,
-} from "https://deno.land/x/kubernetes_client@v0.7.0/lib/contract.ts";
-
-export * from "https://deno.land/x/kubernetes_client@v0.7.0/lib/contract.ts";
+  toStatus,
+} from "./deps.ts";
 export {
-  WatchEventTransformer
-} from "https://deno.land/x/kubernetes_client@v0.7.0/lib/stream-transformers.ts";
+  type RestClient,
+  type JSONValue,
+  type ApiKind,
+  WatchEventTransformer,
+} from "./deps.ts";
 
 // Helpers used to validate/transform structures from or for the wire
 // And some other stuff :)
