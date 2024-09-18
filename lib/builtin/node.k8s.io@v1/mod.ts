@@ -13,7 +13,9 @@ export class NodeV1Api {
     this.#client = client;
   }
 
-  async getRuntimeClassList(opts: operations.GetListOpts = {}): Promise<NodeV1.RuntimeClassList> {
+  async getRuntimeClassList(
+    opts: operations.GetListOpts = {},
+  ): Promise<NodeV1.RuntimeClassList> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}runtimeclasses`,
@@ -24,7 +26,9 @@ export class NodeV1Api {
     return NodeV1.toRuntimeClassList(resp);
   }
 
-  async watchRuntimeClassList(opts: operations.WatchListOpts = {}): Promise<ReadableStream<c.WatchEvent<NodeV1.RuntimeClass & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
+  async watchRuntimeClassList(
+    opts: operations.WatchListOpts = {},
+  ): Promise<ReadableStream<c.WatchEvent<NodeV1.RuntimeClass & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}runtimeclasses`,
@@ -36,7 +40,10 @@ export class NodeV1Api {
     return resp.pipeThrough(new c.WatchEventTransformer(NodeV1.toRuntimeClass, MetaV1.toStatus));
   }
 
-  async createRuntimeClass(body: NodeV1.RuntimeClass, opts: operations.PutOpts = {}): Promise<NodeV1.RuntimeClass> {
+  async createRuntimeClass(
+    body: NodeV1.RuntimeClass,
+    opts: operations.PutOpts = {},
+  ): Promise<NodeV1.RuntimeClass> {
     const resp = await this.#client.performRequest({
       method: "POST",
       path: `${this.#root}runtimeclasses`,
@@ -48,7 +55,9 @@ export class NodeV1Api {
     return NodeV1.toRuntimeClass(resp);
   }
 
-  async deleteRuntimeClassList(opts: operations.DeleteListOpts = {}): Promise<NodeV1.RuntimeClassList> {
+  async deleteRuntimeClassList(
+    opts: operations.DeleteListOpts = {},
+  ): Promise<NodeV1.RuntimeClassList> {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}runtimeclasses`,
@@ -59,7 +68,10 @@ export class NodeV1Api {
     return NodeV1.toRuntimeClassList(resp);
   }
 
-  async getRuntimeClass(name: string, opts: operations.NoOpts = {}): Promise<NodeV1.RuntimeClass> {
+  async getRuntimeClass(
+    name: string,
+    opts: operations.NoOpts = {},
+  ): Promise<NodeV1.RuntimeClass> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}runtimeclasses/${name}`,
@@ -69,7 +81,10 @@ export class NodeV1Api {
     return NodeV1.toRuntimeClass(resp);
   }
 
-  async deleteRuntimeClass(name: string, opts: operations.DeleteOpts = {}): Promise<NodeV1.RuntimeClass | MetaV1.Status> {
+  async deleteRuntimeClass(
+    name: string,
+    opts: operations.DeleteOpts = {},
+  ): Promise<NodeV1.RuntimeClass | MetaV1.Status> {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}runtimeclasses/${name}`,
@@ -81,7 +96,11 @@ export class NodeV1Api {
     return NodeV1.toRuntimeClass(resp);
   }
 
-  async replaceRuntimeClass(name: string, body: NodeV1.RuntimeClass, opts: operations.PutOpts = {}): Promise<NodeV1.RuntimeClass> {
+  async replaceRuntimeClass(
+    name: string,
+    body: NodeV1.RuntimeClass,
+    opts: operations.PutOpts = {},
+  ): Promise<NodeV1.RuntimeClass> {
     const resp = await this.#client.performRequest({
       method: "PUT",
       path: `${this.#root}runtimeclasses/${name}`,
@@ -93,7 +112,12 @@ export class NodeV1Api {
     return NodeV1.toRuntimeClass(resp);
   }
 
-  async patchRuntimeClass(name: string, type: c.PatchType, body: NodeV1.RuntimeClass | c.JsonPatch, opts: operations.PatchOpts = {}): Promise<NodeV1.RuntimeClass> {
+  async patchRuntimeClass(
+    name: string,
+    type: c.PatchType,
+    body: NodeV1.RuntimeClass | c.JsonPatch,
+    opts: operations.PatchOpts = {},
+  ): Promise<NodeV1.RuntimeClass> {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}runtimeclasses/${name}`,

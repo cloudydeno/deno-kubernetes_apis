@@ -21,7 +21,9 @@ export class StorageV1Api {
     return new StorageV1NamespacedApi(this.#client, this.#client.defaultNamespace);
   }
 
-  async getCSIDriverList(opts: operations.GetListOpts = {}): Promise<StorageV1.CSIDriverList> {
+  async getCSIDriverList(
+    opts: operations.GetListOpts = {},
+  ): Promise<StorageV1.CSIDriverList> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}csidrivers`,
@@ -32,7 +34,9 @@ export class StorageV1Api {
     return StorageV1.toCSIDriverList(resp);
   }
 
-  async watchCSIDriverList(opts: operations.WatchListOpts = {}): Promise<ReadableStream<c.WatchEvent<StorageV1.CSIDriver & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
+  async watchCSIDriverList(
+    opts: operations.WatchListOpts = {},
+  ): Promise<ReadableStream<c.WatchEvent<StorageV1.CSIDriver & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}csidrivers`,
@@ -44,7 +48,10 @@ export class StorageV1Api {
     return resp.pipeThrough(new c.WatchEventTransformer(StorageV1.toCSIDriver, MetaV1.toStatus));
   }
 
-  async createCSIDriver(body: StorageV1.CSIDriver, opts: operations.PutOpts = {}): Promise<StorageV1.CSIDriver> {
+  async createCSIDriver(
+    body: StorageV1.CSIDriver,
+    opts: operations.PutOpts = {},
+  ): Promise<StorageV1.CSIDriver> {
     const resp = await this.#client.performRequest({
       method: "POST",
       path: `${this.#root}csidrivers`,
@@ -56,7 +63,9 @@ export class StorageV1Api {
     return StorageV1.toCSIDriver(resp);
   }
 
-  async deleteCSIDriverList(opts: operations.DeleteListOpts = {}): Promise<StorageV1.CSIDriverList> {
+  async deleteCSIDriverList(
+    opts: operations.DeleteListOpts = {},
+  ): Promise<StorageV1.CSIDriverList> {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}csidrivers`,
@@ -67,7 +76,10 @@ export class StorageV1Api {
     return StorageV1.toCSIDriverList(resp);
   }
 
-  async getCSIDriver(name: string, opts: operations.NoOpts = {}): Promise<StorageV1.CSIDriver> {
+  async getCSIDriver(
+    name: string,
+    opts: operations.NoOpts = {},
+  ): Promise<StorageV1.CSIDriver> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}csidrivers/${name}`,
@@ -77,7 +89,10 @@ export class StorageV1Api {
     return StorageV1.toCSIDriver(resp);
   }
 
-  async deleteCSIDriver(name: string, opts: operations.DeleteOpts = {}): Promise<StorageV1.CSIDriver | MetaV1.Status> {
+  async deleteCSIDriver(
+    name: string,
+    opts: operations.DeleteOpts = {},
+  ): Promise<StorageV1.CSIDriver | MetaV1.Status> {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}csidrivers/${name}`,
@@ -89,7 +104,11 @@ export class StorageV1Api {
     return StorageV1.toCSIDriver(resp);
   }
 
-  async replaceCSIDriver(name: string, body: StorageV1.CSIDriver, opts: operations.PutOpts = {}): Promise<StorageV1.CSIDriver> {
+  async replaceCSIDriver(
+    name: string,
+    body: StorageV1.CSIDriver,
+    opts: operations.PutOpts = {},
+  ): Promise<StorageV1.CSIDriver> {
     const resp = await this.#client.performRequest({
       method: "PUT",
       path: `${this.#root}csidrivers/${name}`,
@@ -101,7 +120,12 @@ export class StorageV1Api {
     return StorageV1.toCSIDriver(resp);
   }
 
-  async patchCSIDriver(name: string, type: c.PatchType, body: StorageV1.CSIDriver | c.JsonPatch, opts: operations.PatchOpts = {}): Promise<StorageV1.CSIDriver> {
+  async patchCSIDriver(
+    name: string,
+    type: c.PatchType,
+    body: StorageV1.CSIDriver | c.JsonPatch,
+    opts: operations.PatchOpts = {},
+  ): Promise<StorageV1.CSIDriver> {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}csidrivers/${name}`,
@@ -114,7 +138,9 @@ export class StorageV1Api {
     return StorageV1.toCSIDriver(resp);
   }
 
-  async getCSINodeList(opts: operations.GetListOpts = {}): Promise<StorageV1.CSINodeList> {
+  async getCSINodeList(
+    opts: operations.GetListOpts = {},
+  ): Promise<StorageV1.CSINodeList> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}csinodes`,
@@ -125,7 +151,9 @@ export class StorageV1Api {
     return StorageV1.toCSINodeList(resp);
   }
 
-  async watchCSINodeList(opts: operations.WatchListOpts = {}): Promise<ReadableStream<c.WatchEvent<StorageV1.CSINode & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
+  async watchCSINodeList(
+    opts: operations.WatchListOpts = {},
+  ): Promise<ReadableStream<c.WatchEvent<StorageV1.CSINode & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}csinodes`,
@@ -137,7 +165,10 @@ export class StorageV1Api {
     return resp.pipeThrough(new c.WatchEventTransformer(StorageV1.toCSINode, MetaV1.toStatus));
   }
 
-  async createCSINode(body: StorageV1.CSINode, opts: operations.PutOpts = {}): Promise<StorageV1.CSINode> {
+  async createCSINode(
+    body: StorageV1.CSINode,
+    opts: operations.PutOpts = {},
+  ): Promise<StorageV1.CSINode> {
     const resp = await this.#client.performRequest({
       method: "POST",
       path: `${this.#root}csinodes`,
@@ -149,7 +180,9 @@ export class StorageV1Api {
     return StorageV1.toCSINode(resp);
   }
 
-  async deleteCSINodeList(opts: operations.DeleteListOpts = {}): Promise<StorageV1.CSINodeList> {
+  async deleteCSINodeList(
+    opts: operations.DeleteListOpts = {},
+  ): Promise<StorageV1.CSINodeList> {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}csinodes`,
@@ -160,7 +193,10 @@ export class StorageV1Api {
     return StorageV1.toCSINodeList(resp);
   }
 
-  async getCSINode(name: string, opts: operations.NoOpts = {}): Promise<StorageV1.CSINode> {
+  async getCSINode(
+    name: string,
+    opts: operations.NoOpts = {},
+  ): Promise<StorageV1.CSINode> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}csinodes/${name}`,
@@ -170,7 +206,10 @@ export class StorageV1Api {
     return StorageV1.toCSINode(resp);
   }
 
-  async deleteCSINode(name: string, opts: operations.DeleteOpts = {}): Promise<StorageV1.CSINode | MetaV1.Status> {
+  async deleteCSINode(
+    name: string,
+    opts: operations.DeleteOpts = {},
+  ): Promise<StorageV1.CSINode | MetaV1.Status> {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}csinodes/${name}`,
@@ -182,7 +221,11 @@ export class StorageV1Api {
     return StorageV1.toCSINode(resp);
   }
 
-  async replaceCSINode(name: string, body: StorageV1.CSINode, opts: operations.PutOpts = {}): Promise<StorageV1.CSINode> {
+  async replaceCSINode(
+    name: string,
+    body: StorageV1.CSINode,
+    opts: operations.PutOpts = {},
+  ): Promise<StorageV1.CSINode> {
     const resp = await this.#client.performRequest({
       method: "PUT",
       path: `${this.#root}csinodes/${name}`,
@@ -194,7 +237,12 @@ export class StorageV1Api {
     return StorageV1.toCSINode(resp);
   }
 
-  async patchCSINode(name: string, type: c.PatchType, body: StorageV1.CSINode | c.JsonPatch, opts: operations.PatchOpts = {}): Promise<StorageV1.CSINode> {
+  async patchCSINode(
+    name: string,
+    type: c.PatchType,
+    body: StorageV1.CSINode | c.JsonPatch,
+    opts: operations.PatchOpts = {},
+  ): Promise<StorageV1.CSINode> {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}csinodes/${name}`,
@@ -207,7 +255,9 @@ export class StorageV1Api {
     return StorageV1.toCSINode(resp);
   }
 
-  async getCSIStorageCapacityListForAllNamespaces(opts: operations.GetListOpts = {}): Promise<StorageV1.CSIStorageCapacityList> {
+  async getCSIStorageCapacityListForAllNamespaces(
+    opts: operations.GetListOpts = {},
+  ): Promise<StorageV1.CSIStorageCapacityList> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}csistoragecapacities`,
@@ -218,7 +268,9 @@ export class StorageV1Api {
     return StorageV1.toCSIStorageCapacityList(resp);
   }
 
-  async watchCSIStorageCapacityListForAllNamespaces(opts: operations.WatchListOpts = {}): Promise<ReadableStream<c.WatchEvent<StorageV1.CSIStorageCapacity & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
+  async watchCSIStorageCapacityListForAllNamespaces(
+    opts: operations.WatchListOpts = {},
+  ): Promise<ReadableStream<c.WatchEvent<StorageV1.CSIStorageCapacity & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}csistoragecapacities`,
@@ -230,7 +282,9 @@ export class StorageV1Api {
     return resp.pipeThrough(new c.WatchEventTransformer(StorageV1.toCSIStorageCapacity, MetaV1.toStatus));
   }
 
-  async getStorageClassList(opts: operations.GetListOpts = {}): Promise<StorageV1.StorageClassList> {
+  async getStorageClassList(
+    opts: operations.GetListOpts = {},
+  ): Promise<StorageV1.StorageClassList> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}storageclasses`,
@@ -241,7 +295,9 @@ export class StorageV1Api {
     return StorageV1.toStorageClassList(resp);
   }
 
-  async watchStorageClassList(opts: operations.WatchListOpts = {}): Promise<ReadableStream<c.WatchEvent<StorageV1.StorageClass & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
+  async watchStorageClassList(
+    opts: operations.WatchListOpts = {},
+  ): Promise<ReadableStream<c.WatchEvent<StorageV1.StorageClass & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}storageclasses`,
@@ -253,7 +309,10 @@ export class StorageV1Api {
     return resp.pipeThrough(new c.WatchEventTransformer(StorageV1.toStorageClass, MetaV1.toStatus));
   }
 
-  async createStorageClass(body: StorageV1.StorageClass, opts: operations.PutOpts = {}): Promise<StorageV1.StorageClass> {
+  async createStorageClass(
+    body: StorageV1.StorageClass,
+    opts: operations.PutOpts = {},
+  ): Promise<StorageV1.StorageClass> {
     const resp = await this.#client.performRequest({
       method: "POST",
       path: `${this.#root}storageclasses`,
@@ -265,7 +324,9 @@ export class StorageV1Api {
     return StorageV1.toStorageClass(resp);
   }
 
-  async deleteStorageClassList(opts: operations.DeleteListOpts = {}): Promise<StorageV1.StorageClassList> {
+  async deleteStorageClassList(
+    opts: operations.DeleteListOpts = {},
+  ): Promise<StorageV1.StorageClassList> {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}storageclasses`,
@@ -276,7 +337,10 @@ export class StorageV1Api {
     return StorageV1.toStorageClassList(resp);
   }
 
-  async getStorageClass(name: string, opts: operations.NoOpts = {}): Promise<StorageV1.StorageClass> {
+  async getStorageClass(
+    name: string,
+    opts: operations.NoOpts = {},
+  ): Promise<StorageV1.StorageClass> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}storageclasses/${name}`,
@@ -286,7 +350,10 @@ export class StorageV1Api {
     return StorageV1.toStorageClass(resp);
   }
 
-  async deleteStorageClass(name: string, opts: operations.DeleteOpts = {}): Promise<StorageV1.StorageClass | MetaV1.Status> {
+  async deleteStorageClass(
+    name: string,
+    opts: operations.DeleteOpts = {},
+  ): Promise<StorageV1.StorageClass | MetaV1.Status> {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}storageclasses/${name}`,
@@ -298,7 +365,11 @@ export class StorageV1Api {
     return StorageV1.toStorageClass(resp);
   }
 
-  async replaceStorageClass(name: string, body: StorageV1.StorageClass, opts: operations.PutOpts = {}): Promise<StorageV1.StorageClass> {
+  async replaceStorageClass(
+    name: string,
+    body: StorageV1.StorageClass,
+    opts: operations.PutOpts = {},
+  ): Promise<StorageV1.StorageClass> {
     const resp = await this.#client.performRequest({
       method: "PUT",
       path: `${this.#root}storageclasses/${name}`,
@@ -310,7 +381,12 @@ export class StorageV1Api {
     return StorageV1.toStorageClass(resp);
   }
 
-  async patchStorageClass(name: string, type: c.PatchType, body: StorageV1.StorageClass | c.JsonPatch, opts: operations.PatchOpts = {}): Promise<StorageV1.StorageClass> {
+  async patchStorageClass(
+    name: string,
+    type: c.PatchType,
+    body: StorageV1.StorageClass | c.JsonPatch,
+    opts: operations.PatchOpts = {},
+  ): Promise<StorageV1.StorageClass> {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}storageclasses/${name}`,
@@ -323,7 +399,9 @@ export class StorageV1Api {
     return StorageV1.toStorageClass(resp);
   }
 
-  async getVolumeAttachmentList(opts: operations.GetListOpts = {}): Promise<StorageV1.VolumeAttachmentList> {
+  async getVolumeAttachmentList(
+    opts: operations.GetListOpts = {},
+  ): Promise<StorageV1.VolumeAttachmentList> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}volumeattachments`,
@@ -334,7 +412,9 @@ export class StorageV1Api {
     return StorageV1.toVolumeAttachmentList(resp);
   }
 
-  async watchVolumeAttachmentList(opts: operations.WatchListOpts = {}): Promise<ReadableStream<c.WatchEvent<StorageV1.VolumeAttachment & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
+  async watchVolumeAttachmentList(
+    opts: operations.WatchListOpts = {},
+  ): Promise<ReadableStream<c.WatchEvent<StorageV1.VolumeAttachment & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}volumeattachments`,
@@ -346,7 +426,10 @@ export class StorageV1Api {
     return resp.pipeThrough(new c.WatchEventTransformer(StorageV1.toVolumeAttachment, MetaV1.toStatus));
   }
 
-  async createVolumeAttachment(body: StorageV1.VolumeAttachment, opts: operations.PutOpts = {}): Promise<StorageV1.VolumeAttachment> {
+  async createVolumeAttachment(
+    body: StorageV1.VolumeAttachment,
+    opts: operations.PutOpts = {},
+  ): Promise<StorageV1.VolumeAttachment> {
     const resp = await this.#client.performRequest({
       method: "POST",
       path: `${this.#root}volumeattachments`,
@@ -358,7 +441,9 @@ export class StorageV1Api {
     return StorageV1.toVolumeAttachment(resp);
   }
 
-  async deleteVolumeAttachmentList(opts: operations.DeleteListOpts = {}): Promise<StorageV1.VolumeAttachmentList> {
+  async deleteVolumeAttachmentList(
+    opts: operations.DeleteListOpts = {},
+  ): Promise<StorageV1.VolumeAttachmentList> {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}volumeattachments`,
@@ -369,7 +454,10 @@ export class StorageV1Api {
     return StorageV1.toVolumeAttachmentList(resp);
   }
 
-  async getVolumeAttachment(name: string, opts: operations.NoOpts = {}): Promise<StorageV1.VolumeAttachment> {
+  async getVolumeAttachment(
+    name: string,
+    opts: operations.NoOpts = {},
+  ): Promise<StorageV1.VolumeAttachment> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}volumeattachments/${name}`,
@@ -379,7 +467,10 @@ export class StorageV1Api {
     return StorageV1.toVolumeAttachment(resp);
   }
 
-  async deleteVolumeAttachment(name: string, opts: operations.DeleteOpts = {}): Promise<StorageV1.VolumeAttachment | MetaV1.Status> {
+  async deleteVolumeAttachment(
+    name: string,
+    opts: operations.DeleteOpts = {},
+  ): Promise<StorageV1.VolumeAttachment | MetaV1.Status> {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}volumeattachments/${name}`,
@@ -391,7 +482,11 @@ export class StorageV1Api {
     return StorageV1.toVolumeAttachment(resp);
   }
 
-  async replaceVolumeAttachment(name: string, body: StorageV1.VolumeAttachment, opts: operations.PutOpts = {}): Promise<StorageV1.VolumeAttachment> {
+  async replaceVolumeAttachment(
+    name: string,
+    body: StorageV1.VolumeAttachment,
+    opts: operations.PutOpts = {},
+  ): Promise<StorageV1.VolumeAttachment> {
     const resp = await this.#client.performRequest({
       method: "PUT",
       path: `${this.#root}volumeattachments/${name}`,
@@ -403,7 +498,12 @@ export class StorageV1Api {
     return StorageV1.toVolumeAttachment(resp);
   }
 
-  async patchVolumeAttachment(name: string, type: c.PatchType, body: StorageV1.VolumeAttachment | c.JsonPatch, opts: operations.PatchOpts = {}): Promise<StorageV1.VolumeAttachment> {
+  async patchVolumeAttachment(
+    name: string,
+    type: c.PatchType,
+    body: StorageV1.VolumeAttachment | c.JsonPatch,
+    opts: operations.PatchOpts = {},
+  ): Promise<StorageV1.VolumeAttachment> {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}volumeattachments/${name}`,
@@ -416,7 +516,10 @@ export class StorageV1Api {
     return StorageV1.toVolumeAttachment(resp);
   }
 
-  async getVolumeAttachmentStatus(name: string, opts: operations.NoOpts = {}): Promise<StorageV1.VolumeAttachment> {
+  async getVolumeAttachmentStatus(
+    name: string,
+    opts: operations.NoOpts = {},
+  ): Promise<StorageV1.VolumeAttachment> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}volumeattachments/${name}/status`,
@@ -426,7 +529,11 @@ export class StorageV1Api {
     return StorageV1.toVolumeAttachment(resp);
   }
 
-  async replaceVolumeAttachmentStatus(name: string, body: StorageV1.VolumeAttachment, opts: operations.PutOpts = {}): Promise<StorageV1.VolumeAttachment> {
+  async replaceVolumeAttachmentStatus(
+    name: string,
+    body: StorageV1.VolumeAttachment,
+    opts: operations.PutOpts = {},
+  ): Promise<StorageV1.VolumeAttachment> {
     const resp = await this.#client.performRequest({
       method: "PUT",
       path: `${this.#root}volumeattachments/${name}/status`,
@@ -438,7 +545,12 @@ export class StorageV1Api {
     return StorageV1.toVolumeAttachment(resp);
   }
 
-  async patchVolumeAttachmentStatus(name: string, type: c.PatchType, body: StorageV1.VolumeAttachment | c.JsonPatch, opts: operations.PatchOpts = {}): Promise<StorageV1.VolumeAttachment> {
+  async patchVolumeAttachmentStatus(
+    name: string,
+    type: c.PatchType,
+    body: StorageV1.VolumeAttachment | c.JsonPatch,
+    opts: operations.PatchOpts = {},
+  ): Promise<StorageV1.VolumeAttachment> {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}volumeattachments/${name}/status`,
@@ -461,7 +573,9 @@ export class StorageV1NamespacedApi {
     this.#root = `/apis/storage.k8s.io/v1/namespaces/${namespace}/`;
   }
 
-  async getCSIStorageCapacityList(opts: operations.GetListOpts = {}): Promise<StorageV1.CSIStorageCapacityList> {
+  async getCSIStorageCapacityList(
+    opts: operations.GetListOpts = {},
+  ): Promise<StorageV1.CSIStorageCapacityList> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}csistoragecapacities`,
@@ -472,7 +586,9 @@ export class StorageV1NamespacedApi {
     return StorageV1.toCSIStorageCapacityList(resp);
   }
 
-  async watchCSIStorageCapacityList(opts: operations.WatchListOpts = {}): Promise<ReadableStream<c.WatchEvent<StorageV1.CSIStorageCapacity & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
+  async watchCSIStorageCapacityList(
+    opts: operations.WatchListOpts = {},
+  ): Promise<ReadableStream<c.WatchEvent<StorageV1.CSIStorageCapacity & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}csistoragecapacities`,
@@ -484,7 +600,10 @@ export class StorageV1NamespacedApi {
     return resp.pipeThrough(new c.WatchEventTransformer(StorageV1.toCSIStorageCapacity, MetaV1.toStatus));
   }
 
-  async createCSIStorageCapacity(body: StorageV1.CSIStorageCapacity, opts: operations.PutOpts = {}): Promise<StorageV1.CSIStorageCapacity> {
+  async createCSIStorageCapacity(
+    body: StorageV1.CSIStorageCapacity,
+    opts: operations.PutOpts = {},
+  ): Promise<StorageV1.CSIStorageCapacity> {
     const resp = await this.#client.performRequest({
       method: "POST",
       path: `${this.#root}csistoragecapacities`,
@@ -496,7 +615,9 @@ export class StorageV1NamespacedApi {
     return StorageV1.toCSIStorageCapacity(resp);
   }
 
-  async deleteCSIStorageCapacityList(opts: operations.DeleteListOpts = {}): Promise<StorageV1.CSIStorageCapacityList> {
+  async deleteCSIStorageCapacityList(
+    opts: operations.DeleteListOpts = {},
+  ): Promise<StorageV1.CSIStorageCapacityList> {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}csistoragecapacities`,
@@ -507,7 +628,10 @@ export class StorageV1NamespacedApi {
     return StorageV1.toCSIStorageCapacityList(resp);
   }
 
-  async getCSIStorageCapacity(name: string, opts: operations.NoOpts = {}): Promise<StorageV1.CSIStorageCapacity> {
+  async getCSIStorageCapacity(
+    name: string,
+    opts: operations.NoOpts = {},
+  ): Promise<StorageV1.CSIStorageCapacity> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}csistoragecapacities/${name}`,
@@ -517,7 +641,10 @@ export class StorageV1NamespacedApi {
     return StorageV1.toCSIStorageCapacity(resp);
   }
 
-  async deleteCSIStorageCapacity(name: string, opts: operations.DeleteOpts = {}): Promise<StorageV1.CSIStorageCapacity | MetaV1.Status> {
+  async deleteCSIStorageCapacity(
+    name: string,
+    opts: operations.DeleteOpts = {},
+  ): Promise<StorageV1.CSIStorageCapacity | MetaV1.Status> {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}csistoragecapacities/${name}`,
@@ -529,7 +656,11 @@ export class StorageV1NamespacedApi {
     return StorageV1.toCSIStorageCapacity(resp);
   }
 
-  async replaceCSIStorageCapacity(name: string, body: StorageV1.CSIStorageCapacity, opts: operations.PutOpts = {}): Promise<StorageV1.CSIStorageCapacity> {
+  async replaceCSIStorageCapacity(
+    name: string,
+    body: StorageV1.CSIStorageCapacity,
+    opts: operations.PutOpts = {},
+  ): Promise<StorageV1.CSIStorageCapacity> {
     const resp = await this.#client.performRequest({
       method: "PUT",
       path: `${this.#root}csistoragecapacities/${name}`,
@@ -541,7 +672,12 @@ export class StorageV1NamespacedApi {
     return StorageV1.toCSIStorageCapacity(resp);
   }
 
-  async patchCSIStorageCapacity(name: string, type: c.PatchType, body: StorageV1.CSIStorageCapacity | c.JsonPatch, opts: operations.PatchOpts = {}): Promise<StorageV1.CSIStorageCapacity> {
+  async patchCSIStorageCapacity(
+    name: string,
+    type: c.PatchType,
+    body: StorageV1.CSIStorageCapacity | c.JsonPatch,
+    opts: operations.PatchOpts = {},
+  ): Promise<StorageV1.CSIStorageCapacity> {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}csistoragecapacities/${name}`,

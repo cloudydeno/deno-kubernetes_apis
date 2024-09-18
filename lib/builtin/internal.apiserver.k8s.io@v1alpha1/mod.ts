@@ -13,7 +13,9 @@ export class InternalApiserverV1alpha1Api {
     this.#client = client;
   }
 
-  async getStorageVersionList(opts: operations.GetListOpts = {}): Promise<InternalApiserverV1alpha1.StorageVersionList> {
+  async getStorageVersionList(
+    opts: operations.GetListOpts = {},
+  ): Promise<InternalApiserverV1alpha1.StorageVersionList> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}storageversions`,
@@ -24,7 +26,9 @@ export class InternalApiserverV1alpha1Api {
     return InternalApiserverV1alpha1.toStorageVersionList(resp);
   }
 
-  async watchStorageVersionList(opts: operations.WatchListOpts = {}): Promise<ReadableStream<c.WatchEvent<InternalApiserverV1alpha1.StorageVersion & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
+  async watchStorageVersionList(
+    opts: operations.WatchListOpts = {},
+  ): Promise<ReadableStream<c.WatchEvent<InternalApiserverV1alpha1.StorageVersion & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}storageversions`,
@@ -36,7 +40,10 @@ export class InternalApiserverV1alpha1Api {
     return resp.pipeThrough(new c.WatchEventTransformer(InternalApiserverV1alpha1.toStorageVersion, MetaV1.toStatus));
   }
 
-  async createStorageVersion(body: InternalApiserverV1alpha1.StorageVersion, opts: operations.PutOpts = {}): Promise<InternalApiserverV1alpha1.StorageVersion> {
+  async createStorageVersion(
+    body: InternalApiserverV1alpha1.StorageVersion,
+    opts: operations.PutOpts = {},
+  ): Promise<InternalApiserverV1alpha1.StorageVersion> {
     const resp = await this.#client.performRequest({
       method: "POST",
       path: `${this.#root}storageversions`,
@@ -48,7 +55,9 @@ export class InternalApiserverV1alpha1Api {
     return InternalApiserverV1alpha1.toStorageVersion(resp);
   }
 
-  async deleteStorageVersionList(opts: operations.DeleteListOpts = {}): Promise<InternalApiserverV1alpha1.StorageVersionList> {
+  async deleteStorageVersionList(
+    opts: operations.DeleteListOpts = {},
+  ): Promise<InternalApiserverV1alpha1.StorageVersionList> {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}storageversions`,
@@ -59,7 +68,10 @@ export class InternalApiserverV1alpha1Api {
     return InternalApiserverV1alpha1.toStorageVersionList(resp);
   }
 
-  async getStorageVersion(name: string, opts: operations.NoOpts = {}): Promise<InternalApiserverV1alpha1.StorageVersion> {
+  async getStorageVersion(
+    name: string,
+    opts: operations.NoOpts = {},
+  ): Promise<InternalApiserverV1alpha1.StorageVersion> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}storageversions/${name}`,
@@ -69,7 +81,10 @@ export class InternalApiserverV1alpha1Api {
     return InternalApiserverV1alpha1.toStorageVersion(resp);
   }
 
-  async deleteStorageVersion(name: string, opts: operations.DeleteOpts = {}): Promise<InternalApiserverV1alpha1.StorageVersion | MetaV1.Status> {
+  async deleteStorageVersion(
+    name: string,
+    opts: operations.DeleteOpts = {},
+  ): Promise<InternalApiserverV1alpha1.StorageVersion | MetaV1.Status> {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}storageversions/${name}`,
@@ -81,7 +96,11 @@ export class InternalApiserverV1alpha1Api {
     return InternalApiserverV1alpha1.toStorageVersion(resp);
   }
 
-  async replaceStorageVersion(name: string, body: InternalApiserverV1alpha1.StorageVersion, opts: operations.PutOpts = {}): Promise<InternalApiserverV1alpha1.StorageVersion> {
+  async replaceStorageVersion(
+    name: string,
+    body: InternalApiserverV1alpha1.StorageVersion,
+    opts: operations.PutOpts = {},
+  ): Promise<InternalApiserverV1alpha1.StorageVersion> {
     const resp = await this.#client.performRequest({
       method: "PUT",
       path: `${this.#root}storageversions/${name}`,
@@ -93,7 +112,12 @@ export class InternalApiserverV1alpha1Api {
     return InternalApiserverV1alpha1.toStorageVersion(resp);
   }
 
-  async patchStorageVersion(name: string, type: c.PatchType, body: InternalApiserverV1alpha1.StorageVersion | c.JsonPatch, opts: operations.PatchOpts = {}): Promise<InternalApiserverV1alpha1.StorageVersion> {
+  async patchStorageVersion(
+    name: string,
+    type: c.PatchType,
+    body: InternalApiserverV1alpha1.StorageVersion | c.JsonPatch,
+    opts: operations.PatchOpts = {},
+  ): Promise<InternalApiserverV1alpha1.StorageVersion> {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}storageversions/${name}`,
@@ -106,7 +130,10 @@ export class InternalApiserverV1alpha1Api {
     return InternalApiserverV1alpha1.toStorageVersion(resp);
   }
 
-  async getStorageVersionStatus(name: string, opts: operations.NoOpts = {}): Promise<InternalApiserverV1alpha1.StorageVersion> {
+  async getStorageVersionStatus(
+    name: string,
+    opts: operations.NoOpts = {},
+  ): Promise<InternalApiserverV1alpha1.StorageVersion> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}storageversions/${name}/status`,
@@ -116,7 +143,11 @@ export class InternalApiserverV1alpha1Api {
     return InternalApiserverV1alpha1.toStorageVersion(resp);
   }
 
-  async replaceStorageVersionStatus(name: string, body: InternalApiserverV1alpha1.StorageVersion, opts: operations.PutOpts = {}): Promise<InternalApiserverV1alpha1.StorageVersion> {
+  async replaceStorageVersionStatus(
+    name: string,
+    body: InternalApiserverV1alpha1.StorageVersion,
+    opts: operations.PutOpts = {},
+  ): Promise<InternalApiserverV1alpha1.StorageVersion> {
     const resp = await this.#client.performRequest({
       method: "PUT",
       path: `${this.#root}storageversions/${name}/status`,
@@ -128,7 +159,12 @@ export class InternalApiserverV1alpha1Api {
     return InternalApiserverV1alpha1.toStorageVersion(resp);
   }
 
-  async patchStorageVersionStatus(name: string, type: c.PatchType, body: InternalApiserverV1alpha1.StorageVersion | c.JsonPatch, opts: operations.PatchOpts = {}): Promise<InternalApiserverV1alpha1.StorageVersion> {
+  async patchStorageVersionStatus(
+    name: string,
+    type: c.PatchType,
+    body: InternalApiserverV1alpha1.StorageVersion | c.JsonPatch,
+    opts: operations.PatchOpts = {},
+  ): Promise<InternalApiserverV1alpha1.StorageVersion> {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}storageversions/${name}/status`,

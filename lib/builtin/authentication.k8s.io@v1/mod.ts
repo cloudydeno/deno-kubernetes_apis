@@ -13,7 +13,10 @@ export class AuthenticationV1Api {
     this.#client = client;
   }
 
-  async createSelfSubjectReview(body: AuthenticationV1.SelfSubjectReview, opts: operations.PutOpts = {}): Promise<AuthenticationV1.SelfSubjectReview> {
+  async createSelfSubjectReview(
+    body: AuthenticationV1.SelfSubjectReview,
+    opts: operations.PutOpts = {},
+  ): Promise<AuthenticationV1.SelfSubjectReview> {
     const resp = await this.#client.performRequest({
       method: "POST",
       path: `${this.#root}selfsubjectreviews`,
@@ -25,7 +28,10 @@ export class AuthenticationV1Api {
     return AuthenticationV1.toSelfSubjectReview(resp);
   }
 
-  async createTokenReview(body: AuthenticationV1.TokenReview, opts: operations.PutOpts = {}): Promise<AuthenticationV1.TokenReview> {
+  async createTokenReview(
+    body: AuthenticationV1.TokenReview,
+    opts: operations.PutOpts = {},
+  ): Promise<AuthenticationV1.TokenReview> {
     const resp = await this.#client.performRequest({
       method: "POST",
       path: `${this.#root}tokenreviews`,

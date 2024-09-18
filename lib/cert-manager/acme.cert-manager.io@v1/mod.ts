@@ -21,7 +21,9 @@ export class AcmeCertManagerIoV1Api {
     return new AcmeCertManagerIoV1NamespacedApi(this.#client, this.#client.defaultNamespace);
   }
 
-  async getChallengeListForAllNamespaces(opts: operations.GetListOpts = {}): Promise<AcmeCertManagerIoV1.ChallengeList> {
+  async getChallengeListForAllNamespaces(
+    opts: operations.GetListOpts = {},
+  ): Promise<AcmeCertManagerIoV1.ChallengeList> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}challenges`,
@@ -32,7 +34,9 @@ export class AcmeCertManagerIoV1Api {
     return AcmeCertManagerIoV1.toChallengeList(resp);
   }
 
-  async watchChallengeListForAllNamespaces(opts: operations.WatchListOpts = {}): Promise<ReadableStream<c.WatchEvent<AcmeCertManagerIoV1.Challenge & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
+  async watchChallengeListForAllNamespaces(
+    opts: operations.WatchListOpts = {},
+  ): Promise<ReadableStream<c.WatchEvent<AcmeCertManagerIoV1.Challenge & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}challenges`,
@@ -44,7 +48,9 @@ export class AcmeCertManagerIoV1Api {
     return resp.pipeThrough(new c.WatchEventTransformer(AcmeCertManagerIoV1.toChallenge, MetaV1.toStatus));
   }
 
-  async getOrderListForAllNamespaces(opts: operations.GetListOpts = {}): Promise<AcmeCertManagerIoV1.OrderList> {
+  async getOrderListForAllNamespaces(
+    opts: operations.GetListOpts = {},
+  ): Promise<AcmeCertManagerIoV1.OrderList> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}orders`,
@@ -55,7 +61,9 @@ export class AcmeCertManagerIoV1Api {
     return AcmeCertManagerIoV1.toOrderList(resp);
   }
 
-  async watchOrderListForAllNamespaces(opts: operations.WatchListOpts = {}): Promise<ReadableStream<c.WatchEvent<AcmeCertManagerIoV1.Order & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
+  async watchOrderListForAllNamespaces(
+    opts: operations.WatchListOpts = {},
+  ): Promise<ReadableStream<c.WatchEvent<AcmeCertManagerIoV1.Order & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}orders`,
@@ -77,7 +85,9 @@ export class AcmeCertManagerIoV1NamespacedApi {
     this.#root = `/apis/acme.cert-manager.io/v1/namespaces/${namespace}/`;
   }
 
-  async getChallengeList(opts: operations.GetListOpts = {}): Promise<AcmeCertManagerIoV1.ChallengeList> {
+  async getChallengeList(
+    opts: operations.GetListOpts = {},
+  ): Promise<AcmeCertManagerIoV1.ChallengeList> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}challenges`,
@@ -88,7 +98,9 @@ export class AcmeCertManagerIoV1NamespacedApi {
     return AcmeCertManagerIoV1.toChallengeList(resp);
   }
 
-  async watchChallengeList(opts: operations.WatchListOpts = {}): Promise<ReadableStream<c.WatchEvent<AcmeCertManagerIoV1.Challenge & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
+  async watchChallengeList(
+    opts: operations.WatchListOpts = {},
+  ): Promise<ReadableStream<c.WatchEvent<AcmeCertManagerIoV1.Challenge & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}challenges`,
@@ -100,7 +112,10 @@ export class AcmeCertManagerIoV1NamespacedApi {
     return resp.pipeThrough(new c.WatchEventTransformer(AcmeCertManagerIoV1.toChallenge, MetaV1.toStatus));
   }
 
-  async createChallenge(body: AcmeCertManagerIoV1.Challenge, opts: operations.PutOpts = {}): Promise<AcmeCertManagerIoV1.Challenge> {
+  async createChallenge(
+    body: AcmeCertManagerIoV1.Challenge,
+    opts: operations.PutOpts = {},
+  ): Promise<AcmeCertManagerIoV1.Challenge> {
     const resp = await this.#client.performRequest({
       method: "POST",
       path: `${this.#root}challenges`,
@@ -112,7 +127,9 @@ export class AcmeCertManagerIoV1NamespacedApi {
     return AcmeCertManagerIoV1.toChallenge(resp);
   }
 
-  async deleteChallengeList(opts: operations.DeleteListOpts = {}): Promise<AcmeCertManagerIoV1.ChallengeList> {
+  async deleteChallengeList(
+    opts: operations.DeleteListOpts = {},
+  ): Promise<AcmeCertManagerIoV1.ChallengeList> {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}challenges`,
@@ -123,7 +140,10 @@ export class AcmeCertManagerIoV1NamespacedApi {
     return AcmeCertManagerIoV1.toChallengeList(resp);
   }
 
-  async getChallenge(name: string, opts: operations.NoOpts = {}): Promise<AcmeCertManagerIoV1.Challenge> {
+  async getChallenge(
+    name: string,
+    opts: operations.NoOpts = {},
+  ): Promise<AcmeCertManagerIoV1.Challenge> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}challenges/${name}`,
@@ -133,7 +153,10 @@ export class AcmeCertManagerIoV1NamespacedApi {
     return AcmeCertManagerIoV1.toChallenge(resp);
   }
 
-  async deleteChallenge(name: string, opts: operations.DeleteOpts = {}): Promise<AcmeCertManagerIoV1.Challenge | MetaV1.Status> {
+  async deleteChallenge(
+    name: string,
+    opts: operations.DeleteOpts = {},
+  ): Promise<AcmeCertManagerIoV1.Challenge | MetaV1.Status> {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}challenges/${name}`,
@@ -145,7 +168,11 @@ export class AcmeCertManagerIoV1NamespacedApi {
     return AcmeCertManagerIoV1.toChallenge(resp);
   }
 
-  async replaceChallenge(name: string, body: AcmeCertManagerIoV1.Challenge, opts: operations.PutOpts = {}): Promise<AcmeCertManagerIoV1.Challenge> {
+  async replaceChallenge(
+    name: string,
+    body: AcmeCertManagerIoV1.Challenge,
+    opts: operations.PutOpts = {},
+  ): Promise<AcmeCertManagerIoV1.Challenge> {
     const resp = await this.#client.performRequest({
       method: "PUT",
       path: `${this.#root}challenges/${name}`,
@@ -157,7 +184,12 @@ export class AcmeCertManagerIoV1NamespacedApi {
     return AcmeCertManagerIoV1.toChallenge(resp);
   }
 
-  async patchChallenge(name: string, type: c.PatchType, body: AcmeCertManagerIoV1.Challenge | c.JsonPatch, opts: operations.PatchOpts = {}): Promise<AcmeCertManagerIoV1.Challenge> {
+  async patchChallenge(
+    name: string,
+    type: c.PatchType,
+    body: AcmeCertManagerIoV1.Challenge | c.JsonPatch,
+    opts: operations.PatchOpts = {},
+  ): Promise<AcmeCertManagerIoV1.Challenge> {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}challenges/${name}`,
@@ -170,7 +202,10 @@ export class AcmeCertManagerIoV1NamespacedApi {
     return AcmeCertManagerIoV1.toChallenge(resp);
   }
 
-  async getChallengeStatus(name: string, opts: operations.NoOpts = {}): Promise<AcmeCertManagerIoV1.Challenge> {
+  async getChallengeStatus(
+    name: string,
+    opts: operations.NoOpts = {},
+  ): Promise<AcmeCertManagerIoV1.Challenge> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}challenges/${name}/status`,
@@ -180,7 +215,11 @@ export class AcmeCertManagerIoV1NamespacedApi {
     return AcmeCertManagerIoV1.toChallenge(resp);
   }
 
-  async replaceChallengeStatus(name: string, body: AcmeCertManagerIoV1.Challenge, opts: operations.PutOpts = {}): Promise<AcmeCertManagerIoV1.Challenge> {
+  async replaceChallengeStatus(
+    name: string,
+    body: AcmeCertManagerIoV1.Challenge,
+    opts: operations.PutOpts = {},
+  ): Promise<AcmeCertManagerIoV1.Challenge> {
     const resp = await this.#client.performRequest({
       method: "PUT",
       path: `${this.#root}challenges/${name}/status`,
@@ -192,7 +231,12 @@ export class AcmeCertManagerIoV1NamespacedApi {
     return AcmeCertManagerIoV1.toChallenge(resp);
   }
 
-  async patchChallengeStatus(name: string, type: c.PatchType, body: AcmeCertManagerIoV1.Challenge | c.JsonPatch, opts: operations.PatchOpts = {}): Promise<AcmeCertManagerIoV1.Challenge> {
+  async patchChallengeStatus(
+    name: string,
+    type: c.PatchType,
+    body: AcmeCertManagerIoV1.Challenge | c.JsonPatch,
+    opts: operations.PatchOpts = {},
+  ): Promise<AcmeCertManagerIoV1.Challenge> {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}challenges/${name}/status`,
@@ -205,7 +249,9 @@ export class AcmeCertManagerIoV1NamespacedApi {
     return AcmeCertManagerIoV1.toChallenge(resp);
   }
 
-  async getOrderList(opts: operations.GetListOpts = {}): Promise<AcmeCertManagerIoV1.OrderList> {
+  async getOrderList(
+    opts: operations.GetListOpts = {},
+  ): Promise<AcmeCertManagerIoV1.OrderList> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}orders`,
@@ -216,7 +262,9 @@ export class AcmeCertManagerIoV1NamespacedApi {
     return AcmeCertManagerIoV1.toOrderList(resp);
   }
 
-  async watchOrderList(opts: operations.WatchListOpts = {}): Promise<ReadableStream<c.WatchEvent<AcmeCertManagerIoV1.Order & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
+  async watchOrderList(
+    opts: operations.WatchListOpts = {},
+  ): Promise<ReadableStream<c.WatchEvent<AcmeCertManagerIoV1.Order & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}orders`,
@@ -228,7 +276,10 @@ export class AcmeCertManagerIoV1NamespacedApi {
     return resp.pipeThrough(new c.WatchEventTransformer(AcmeCertManagerIoV1.toOrder, MetaV1.toStatus));
   }
 
-  async createOrder(body: AcmeCertManagerIoV1.Order, opts: operations.PutOpts = {}): Promise<AcmeCertManagerIoV1.Order> {
+  async createOrder(
+    body: AcmeCertManagerIoV1.Order,
+    opts: operations.PutOpts = {},
+  ): Promise<AcmeCertManagerIoV1.Order> {
     const resp = await this.#client.performRequest({
       method: "POST",
       path: `${this.#root}orders`,
@@ -240,7 +291,9 @@ export class AcmeCertManagerIoV1NamespacedApi {
     return AcmeCertManagerIoV1.toOrder(resp);
   }
 
-  async deleteOrderList(opts: operations.DeleteListOpts = {}): Promise<AcmeCertManagerIoV1.OrderList> {
+  async deleteOrderList(
+    opts: operations.DeleteListOpts = {},
+  ): Promise<AcmeCertManagerIoV1.OrderList> {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}orders`,
@@ -251,7 +304,10 @@ export class AcmeCertManagerIoV1NamespacedApi {
     return AcmeCertManagerIoV1.toOrderList(resp);
   }
 
-  async getOrder(name: string, opts: operations.NoOpts = {}): Promise<AcmeCertManagerIoV1.Order> {
+  async getOrder(
+    name: string,
+    opts: operations.NoOpts = {},
+  ): Promise<AcmeCertManagerIoV1.Order> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}orders/${name}`,
@@ -261,7 +317,10 @@ export class AcmeCertManagerIoV1NamespacedApi {
     return AcmeCertManagerIoV1.toOrder(resp);
   }
 
-  async deleteOrder(name: string, opts: operations.DeleteOpts = {}): Promise<AcmeCertManagerIoV1.Order | MetaV1.Status> {
+  async deleteOrder(
+    name: string,
+    opts: operations.DeleteOpts = {},
+  ): Promise<AcmeCertManagerIoV1.Order | MetaV1.Status> {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}orders/${name}`,
@@ -273,7 +332,11 @@ export class AcmeCertManagerIoV1NamespacedApi {
     return AcmeCertManagerIoV1.toOrder(resp);
   }
 
-  async replaceOrder(name: string, body: AcmeCertManagerIoV1.Order, opts: operations.PutOpts = {}): Promise<AcmeCertManagerIoV1.Order> {
+  async replaceOrder(
+    name: string,
+    body: AcmeCertManagerIoV1.Order,
+    opts: operations.PutOpts = {},
+  ): Promise<AcmeCertManagerIoV1.Order> {
     const resp = await this.#client.performRequest({
       method: "PUT",
       path: `${this.#root}orders/${name}`,
@@ -285,7 +348,12 @@ export class AcmeCertManagerIoV1NamespacedApi {
     return AcmeCertManagerIoV1.toOrder(resp);
   }
 
-  async patchOrder(name: string, type: c.PatchType, body: AcmeCertManagerIoV1.Order | c.JsonPatch, opts: operations.PatchOpts = {}): Promise<AcmeCertManagerIoV1.Order> {
+  async patchOrder(
+    name: string,
+    type: c.PatchType,
+    body: AcmeCertManagerIoV1.Order | c.JsonPatch,
+    opts: operations.PatchOpts = {},
+  ): Promise<AcmeCertManagerIoV1.Order> {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}orders/${name}`,
@@ -298,7 +366,10 @@ export class AcmeCertManagerIoV1NamespacedApi {
     return AcmeCertManagerIoV1.toOrder(resp);
   }
 
-  async getOrderStatus(name: string, opts: operations.NoOpts = {}): Promise<AcmeCertManagerIoV1.Order> {
+  async getOrderStatus(
+    name: string,
+    opts: operations.NoOpts = {},
+  ): Promise<AcmeCertManagerIoV1.Order> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}orders/${name}/status`,
@@ -308,7 +379,11 @@ export class AcmeCertManagerIoV1NamespacedApi {
     return AcmeCertManagerIoV1.toOrder(resp);
   }
 
-  async replaceOrderStatus(name: string, body: AcmeCertManagerIoV1.Order, opts: operations.PutOpts = {}): Promise<AcmeCertManagerIoV1.Order> {
+  async replaceOrderStatus(
+    name: string,
+    body: AcmeCertManagerIoV1.Order,
+    opts: operations.PutOpts = {},
+  ): Promise<AcmeCertManagerIoV1.Order> {
     const resp = await this.#client.performRequest({
       method: "PUT",
       path: `${this.#root}orders/${name}/status`,
@@ -320,7 +395,12 @@ export class AcmeCertManagerIoV1NamespacedApi {
     return AcmeCertManagerIoV1.toOrder(resp);
   }
 
-  async patchOrderStatus(name: string, type: c.PatchType, body: AcmeCertManagerIoV1.Order | c.JsonPatch, opts: operations.PatchOpts = {}): Promise<AcmeCertManagerIoV1.Order> {
+  async patchOrderStatus(
+    name: string,
+    type: c.PatchType,
+    body: AcmeCertManagerIoV1.Order | c.JsonPatch,
+    opts: operations.PatchOpts = {},
+  ): Promise<AcmeCertManagerIoV1.Order> {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}orders/${name}/status`,

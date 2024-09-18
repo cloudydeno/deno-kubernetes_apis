@@ -126,13 +126,13 @@ export function generateModuleTypescript(surface: SurfaceMap, api: SurfaceApi): 
       const funcName = `proxy${middleName}Request`;
 
       args.push([{name: 'opts', in: 'path'}, {type: 'special', name: 'ProxyOptions'}]);
-      const baseSignature = `${funcName}(${writeSig(args, false, '  ')}`.replace('(name:', `(${nameArgName}:`);
+      const baseSignature = `${funcName}(${writeSig(args, false, '    ')}`.replace('(name:', `(${nameArgName}:`);
 
-      chunks.push(`  ${baseSignature} & {expectStream: true; expectJson: true}): Promise<ReadableStream<c.JSONValue>>;`);
-      chunks.push(`  ${baseSignature} & {expectStream: true}): Promise<ReadableStream<Uint8Array>>;`);
-      chunks.push(`  ${baseSignature} & {expectJson: true}): Promise<c.JSONValue>;`);
-      chunks.push(`  ${baseSignature}): Promise<Uint8Array>;`);
-      chunks.push(`  async ${baseSignature}): Promise<unknown> {`);
+      chunks.push(`  ${baseSignature} & {expectStream: true; expectJson: true},\n  ): Promise<ReadableStream<c.JSONValue>>;`);
+      chunks.push(`  ${baseSignature} & {expectStream: true},\n  ): Promise<ReadableStream<Uint8Array>>;`);
+      chunks.push(`  ${baseSignature} & {expectJson: true},\n  ): Promise<c.JSONValue>;`);
+      chunks.push(`  ${baseSignature},\n  ): Promise<Uint8Array>;`);
+      chunks.push(`  async ${baseSignature},\n  ): Promise<unknown> {`);
       chunks.push(`    if (opts.path && !opts.path.startsWith('/')) throw new Error("Proxy path cannot be relative");`);
       chunks.push(`    const name = (opts.port != null) ? \`\${${nameArgName}}:\${opts.port}\` : ${nameArgName};`);
       chunks.push(`    const path = \`\${this.#root}${JSON.stringify(opPath).slice(1,-1).replace(/{/g, '${')}\${opts.path || ''}\`;`);
@@ -224,7 +224,7 @@ export function generateModuleTypescript(surface: SurfaceMap, api: SurfaceApi): 
       }
     }
 
-    chunks.push(`  async ${funcName}(${writeSig(args, opts, '  ')}): Promise<${returnSig}> {`);
+    chunks.push(`  async ${funcName}(${writeSig(args, opts, '    ')},\n  ): Promise<${returnSig}> {`);
 
     const allOptKeys = opts.map(x => x[0].name).sort().join(',');
     const knownOptShape = knownOpts[allOptKeys];
@@ -379,7 +379,7 @@ export function generateModuleTypescript(surface: SurfaceMap, api: SurfaceApi): 
   }
 
   function writeSig(args: [OpenAPI2RequestParameter, ApiShape][], opts: [OpenAPI2RequestParameter, ApiShape][] | false, indent=''): string {
-    let sigs = new Array<string>();
+    const sigs = new Array<string>();
     for (const arg of args) {
       sigs.push(`${arg[0].name}: ${writeType(arg[1])}`);
     }
@@ -404,7 +404,7 @@ export function generateModuleTypescript(surface: SurfaceMap, api: SurfaceApi): 
         sigs.push(`opts: {\n${lines.join('\n')}\n}${allAreOpt ? ' = {}' : ''}`);
       }
     }
-    return sigs.join(', ').replace(/\n/g, '\n'+indent);
+    return `\n${indent}` + sigs.join(',\n').replace(/\n/g, '\n'+indent);
   }
 
 }

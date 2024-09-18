@@ -13,7 +13,9 @@ export class CertificatesV1alpha1Api {
     this.#client = client;
   }
 
-  async getClusterTrustBundleList(opts: operations.GetListOpts = {}): Promise<CertificatesV1alpha1.ClusterTrustBundleList> {
+  async getClusterTrustBundleList(
+    opts: operations.GetListOpts = {},
+  ): Promise<CertificatesV1alpha1.ClusterTrustBundleList> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}clustertrustbundles`,
@@ -24,7 +26,9 @@ export class CertificatesV1alpha1Api {
     return CertificatesV1alpha1.toClusterTrustBundleList(resp);
   }
 
-  async watchClusterTrustBundleList(opts: operations.WatchListOpts = {}): Promise<ReadableStream<c.WatchEvent<CertificatesV1alpha1.ClusterTrustBundle & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
+  async watchClusterTrustBundleList(
+    opts: operations.WatchListOpts = {},
+  ): Promise<ReadableStream<c.WatchEvent<CertificatesV1alpha1.ClusterTrustBundle & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}clustertrustbundles`,
@@ -36,7 +40,10 @@ export class CertificatesV1alpha1Api {
     return resp.pipeThrough(new c.WatchEventTransformer(CertificatesV1alpha1.toClusterTrustBundle, MetaV1.toStatus));
   }
 
-  async createClusterTrustBundle(body: CertificatesV1alpha1.ClusterTrustBundle, opts: operations.PutOpts = {}): Promise<CertificatesV1alpha1.ClusterTrustBundle> {
+  async createClusterTrustBundle(
+    body: CertificatesV1alpha1.ClusterTrustBundle,
+    opts: operations.PutOpts = {},
+  ): Promise<CertificatesV1alpha1.ClusterTrustBundle> {
     const resp = await this.#client.performRequest({
       method: "POST",
       path: `${this.#root}clustertrustbundles`,
@@ -48,7 +55,9 @@ export class CertificatesV1alpha1Api {
     return CertificatesV1alpha1.toClusterTrustBundle(resp);
   }
 
-  async deleteClusterTrustBundleList(opts: operations.DeleteListOpts = {}): Promise<CertificatesV1alpha1.ClusterTrustBundleList> {
+  async deleteClusterTrustBundleList(
+    opts: operations.DeleteListOpts = {},
+  ): Promise<CertificatesV1alpha1.ClusterTrustBundleList> {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}clustertrustbundles`,
@@ -59,7 +68,10 @@ export class CertificatesV1alpha1Api {
     return CertificatesV1alpha1.toClusterTrustBundleList(resp);
   }
 
-  async getClusterTrustBundle(name: string, opts: operations.NoOpts = {}): Promise<CertificatesV1alpha1.ClusterTrustBundle> {
+  async getClusterTrustBundle(
+    name: string,
+    opts: operations.NoOpts = {},
+  ): Promise<CertificatesV1alpha1.ClusterTrustBundle> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}clustertrustbundles/${name}`,
@@ -69,7 +81,10 @@ export class CertificatesV1alpha1Api {
     return CertificatesV1alpha1.toClusterTrustBundle(resp);
   }
 
-  async deleteClusterTrustBundle(name: string, opts: operations.DeleteOpts = {}): Promise<CertificatesV1alpha1.ClusterTrustBundle | MetaV1.Status> {
+  async deleteClusterTrustBundle(
+    name: string,
+    opts: operations.DeleteOpts = {},
+  ): Promise<CertificatesV1alpha1.ClusterTrustBundle | MetaV1.Status> {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}clustertrustbundles/${name}`,
@@ -81,7 +96,11 @@ export class CertificatesV1alpha1Api {
     return CertificatesV1alpha1.toClusterTrustBundle(resp);
   }
 
-  async replaceClusterTrustBundle(name: string, body: CertificatesV1alpha1.ClusterTrustBundle, opts: operations.PutOpts = {}): Promise<CertificatesV1alpha1.ClusterTrustBundle> {
+  async replaceClusterTrustBundle(
+    name: string,
+    body: CertificatesV1alpha1.ClusterTrustBundle,
+    opts: operations.PutOpts = {},
+  ): Promise<CertificatesV1alpha1.ClusterTrustBundle> {
     const resp = await this.#client.performRequest({
       method: "PUT",
       path: `${this.#root}clustertrustbundles/${name}`,
@@ -93,7 +112,12 @@ export class CertificatesV1alpha1Api {
     return CertificatesV1alpha1.toClusterTrustBundle(resp);
   }
 
-  async patchClusterTrustBundle(name: string, type: c.PatchType, body: CertificatesV1alpha1.ClusterTrustBundle | c.JsonPatch, opts: operations.PatchOpts = {}): Promise<CertificatesV1alpha1.ClusterTrustBundle> {
+  async patchClusterTrustBundle(
+    name: string,
+    type: c.PatchType,
+    body: CertificatesV1alpha1.ClusterTrustBundle | c.JsonPatch,
+    opts: operations.PatchOpts = {},
+  ): Promise<CertificatesV1alpha1.ClusterTrustBundle> {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}clustertrustbundles/${name}`,

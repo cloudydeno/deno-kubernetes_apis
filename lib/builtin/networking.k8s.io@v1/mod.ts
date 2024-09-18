@@ -21,7 +21,9 @@ export class NetworkingV1Api {
     return new NetworkingV1NamespacedApi(this.#client, this.#client.defaultNamespace);
   }
 
-  async getIngressClassList(opts: operations.GetListOpts = {}): Promise<NetworkingV1.IngressClassList> {
+  async getIngressClassList(
+    opts: operations.GetListOpts = {},
+  ): Promise<NetworkingV1.IngressClassList> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}ingressclasses`,
@@ -32,7 +34,9 @@ export class NetworkingV1Api {
     return NetworkingV1.toIngressClassList(resp);
   }
 
-  async watchIngressClassList(opts: operations.WatchListOpts = {}): Promise<ReadableStream<c.WatchEvent<NetworkingV1.IngressClass & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
+  async watchIngressClassList(
+    opts: operations.WatchListOpts = {},
+  ): Promise<ReadableStream<c.WatchEvent<NetworkingV1.IngressClass & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}ingressclasses`,
@@ -44,7 +48,10 @@ export class NetworkingV1Api {
     return resp.pipeThrough(new c.WatchEventTransformer(NetworkingV1.toIngressClass, MetaV1.toStatus));
   }
 
-  async createIngressClass(body: NetworkingV1.IngressClass, opts: operations.PutOpts = {}): Promise<NetworkingV1.IngressClass> {
+  async createIngressClass(
+    body: NetworkingV1.IngressClass,
+    opts: operations.PutOpts = {},
+  ): Promise<NetworkingV1.IngressClass> {
     const resp = await this.#client.performRequest({
       method: "POST",
       path: `${this.#root}ingressclasses`,
@@ -56,7 +63,9 @@ export class NetworkingV1Api {
     return NetworkingV1.toIngressClass(resp);
   }
 
-  async deleteIngressClassList(opts: operations.DeleteListOpts = {}): Promise<NetworkingV1.IngressClassList> {
+  async deleteIngressClassList(
+    opts: operations.DeleteListOpts = {},
+  ): Promise<NetworkingV1.IngressClassList> {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}ingressclasses`,
@@ -67,7 +76,10 @@ export class NetworkingV1Api {
     return NetworkingV1.toIngressClassList(resp);
   }
 
-  async getIngressClass(name: string, opts: operations.NoOpts = {}): Promise<NetworkingV1.IngressClass> {
+  async getIngressClass(
+    name: string,
+    opts: operations.NoOpts = {},
+  ): Promise<NetworkingV1.IngressClass> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}ingressclasses/${name}`,
@@ -77,7 +89,10 @@ export class NetworkingV1Api {
     return NetworkingV1.toIngressClass(resp);
   }
 
-  async deleteIngressClass(name: string, opts: operations.DeleteOpts = {}): Promise<NetworkingV1.IngressClass | MetaV1.Status> {
+  async deleteIngressClass(
+    name: string,
+    opts: operations.DeleteOpts = {},
+  ): Promise<NetworkingV1.IngressClass | MetaV1.Status> {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}ingressclasses/${name}`,
@@ -89,7 +104,11 @@ export class NetworkingV1Api {
     return NetworkingV1.toIngressClass(resp);
   }
 
-  async replaceIngressClass(name: string, body: NetworkingV1.IngressClass, opts: operations.PutOpts = {}): Promise<NetworkingV1.IngressClass> {
+  async replaceIngressClass(
+    name: string,
+    body: NetworkingV1.IngressClass,
+    opts: operations.PutOpts = {},
+  ): Promise<NetworkingV1.IngressClass> {
     const resp = await this.#client.performRequest({
       method: "PUT",
       path: `${this.#root}ingressclasses/${name}`,
@@ -101,7 +120,12 @@ export class NetworkingV1Api {
     return NetworkingV1.toIngressClass(resp);
   }
 
-  async patchIngressClass(name: string, type: c.PatchType, body: NetworkingV1.IngressClass | c.JsonPatch, opts: operations.PatchOpts = {}): Promise<NetworkingV1.IngressClass> {
+  async patchIngressClass(
+    name: string,
+    type: c.PatchType,
+    body: NetworkingV1.IngressClass | c.JsonPatch,
+    opts: operations.PatchOpts = {},
+  ): Promise<NetworkingV1.IngressClass> {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}ingressclasses/${name}`,
@@ -114,7 +138,9 @@ export class NetworkingV1Api {
     return NetworkingV1.toIngressClass(resp);
   }
 
-  async getIngressListForAllNamespaces(opts: operations.GetListOpts = {}): Promise<NetworkingV1.IngressList> {
+  async getIngressListForAllNamespaces(
+    opts: operations.GetListOpts = {},
+  ): Promise<NetworkingV1.IngressList> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}ingresses`,
@@ -125,7 +151,9 @@ export class NetworkingV1Api {
     return NetworkingV1.toIngressList(resp);
   }
 
-  async watchIngressListForAllNamespaces(opts: operations.WatchListOpts = {}): Promise<ReadableStream<c.WatchEvent<NetworkingV1.Ingress & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
+  async watchIngressListForAllNamespaces(
+    opts: operations.WatchListOpts = {},
+  ): Promise<ReadableStream<c.WatchEvent<NetworkingV1.Ingress & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}ingresses`,
@@ -137,7 +165,9 @@ export class NetworkingV1Api {
     return resp.pipeThrough(new c.WatchEventTransformer(NetworkingV1.toIngress, MetaV1.toStatus));
   }
 
-  async getNetworkPolicyListForAllNamespaces(opts: operations.GetListOpts = {}): Promise<NetworkingV1.NetworkPolicyList> {
+  async getNetworkPolicyListForAllNamespaces(
+    opts: operations.GetListOpts = {},
+  ): Promise<NetworkingV1.NetworkPolicyList> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}networkpolicies`,
@@ -148,7 +178,9 @@ export class NetworkingV1Api {
     return NetworkingV1.toNetworkPolicyList(resp);
   }
 
-  async watchNetworkPolicyListForAllNamespaces(opts: operations.WatchListOpts = {}): Promise<ReadableStream<c.WatchEvent<NetworkingV1.NetworkPolicy & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
+  async watchNetworkPolicyListForAllNamespaces(
+    opts: operations.WatchListOpts = {},
+  ): Promise<ReadableStream<c.WatchEvent<NetworkingV1.NetworkPolicy & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}networkpolicies`,
@@ -170,7 +202,9 @@ export class NetworkingV1NamespacedApi {
     this.#root = `/apis/networking.k8s.io/v1/namespaces/${namespace}/`;
   }
 
-  async getIngressList(opts: operations.GetListOpts = {}): Promise<NetworkingV1.IngressList> {
+  async getIngressList(
+    opts: operations.GetListOpts = {},
+  ): Promise<NetworkingV1.IngressList> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}ingresses`,
@@ -181,7 +215,9 @@ export class NetworkingV1NamespacedApi {
     return NetworkingV1.toIngressList(resp);
   }
 
-  async watchIngressList(opts: operations.WatchListOpts = {}): Promise<ReadableStream<c.WatchEvent<NetworkingV1.Ingress & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
+  async watchIngressList(
+    opts: operations.WatchListOpts = {},
+  ): Promise<ReadableStream<c.WatchEvent<NetworkingV1.Ingress & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}ingresses`,
@@ -193,7 +229,10 @@ export class NetworkingV1NamespacedApi {
     return resp.pipeThrough(new c.WatchEventTransformer(NetworkingV1.toIngress, MetaV1.toStatus));
   }
 
-  async createIngress(body: NetworkingV1.Ingress, opts: operations.PutOpts = {}): Promise<NetworkingV1.Ingress> {
+  async createIngress(
+    body: NetworkingV1.Ingress,
+    opts: operations.PutOpts = {},
+  ): Promise<NetworkingV1.Ingress> {
     const resp = await this.#client.performRequest({
       method: "POST",
       path: `${this.#root}ingresses`,
@@ -205,7 +244,9 @@ export class NetworkingV1NamespacedApi {
     return NetworkingV1.toIngress(resp);
   }
 
-  async deleteIngressList(opts: operations.DeleteListOpts = {}): Promise<NetworkingV1.IngressList> {
+  async deleteIngressList(
+    opts: operations.DeleteListOpts = {},
+  ): Promise<NetworkingV1.IngressList> {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}ingresses`,
@@ -216,7 +257,10 @@ export class NetworkingV1NamespacedApi {
     return NetworkingV1.toIngressList(resp);
   }
 
-  async getIngress(name: string, opts: operations.NoOpts = {}): Promise<NetworkingV1.Ingress> {
+  async getIngress(
+    name: string,
+    opts: operations.NoOpts = {},
+  ): Promise<NetworkingV1.Ingress> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}ingresses/${name}`,
@@ -226,7 +270,10 @@ export class NetworkingV1NamespacedApi {
     return NetworkingV1.toIngress(resp);
   }
 
-  async deleteIngress(name: string, opts: operations.DeleteOpts = {}): Promise<NetworkingV1.Ingress | MetaV1.Status> {
+  async deleteIngress(
+    name: string,
+    opts: operations.DeleteOpts = {},
+  ): Promise<NetworkingV1.Ingress | MetaV1.Status> {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}ingresses/${name}`,
@@ -238,7 +285,11 @@ export class NetworkingV1NamespacedApi {
     return NetworkingV1.toIngress(resp);
   }
 
-  async replaceIngress(name: string, body: NetworkingV1.Ingress, opts: operations.PutOpts = {}): Promise<NetworkingV1.Ingress> {
+  async replaceIngress(
+    name: string,
+    body: NetworkingV1.Ingress,
+    opts: operations.PutOpts = {},
+  ): Promise<NetworkingV1.Ingress> {
     const resp = await this.#client.performRequest({
       method: "PUT",
       path: `${this.#root}ingresses/${name}`,
@@ -250,7 +301,12 @@ export class NetworkingV1NamespacedApi {
     return NetworkingV1.toIngress(resp);
   }
 
-  async patchIngress(name: string, type: c.PatchType, body: NetworkingV1.Ingress | c.JsonPatch, opts: operations.PatchOpts = {}): Promise<NetworkingV1.Ingress> {
+  async patchIngress(
+    name: string,
+    type: c.PatchType,
+    body: NetworkingV1.Ingress | c.JsonPatch,
+    opts: operations.PatchOpts = {},
+  ): Promise<NetworkingV1.Ingress> {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}ingresses/${name}`,
@@ -263,7 +319,10 @@ export class NetworkingV1NamespacedApi {
     return NetworkingV1.toIngress(resp);
   }
 
-  async getIngressStatus(name: string, opts: operations.NoOpts = {}): Promise<NetworkingV1.Ingress> {
+  async getIngressStatus(
+    name: string,
+    opts: operations.NoOpts = {},
+  ): Promise<NetworkingV1.Ingress> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}ingresses/${name}/status`,
@@ -273,7 +332,11 @@ export class NetworkingV1NamespacedApi {
     return NetworkingV1.toIngress(resp);
   }
 
-  async replaceIngressStatus(name: string, body: NetworkingV1.Ingress, opts: operations.PutOpts = {}): Promise<NetworkingV1.Ingress> {
+  async replaceIngressStatus(
+    name: string,
+    body: NetworkingV1.Ingress,
+    opts: operations.PutOpts = {},
+  ): Promise<NetworkingV1.Ingress> {
     const resp = await this.#client.performRequest({
       method: "PUT",
       path: `${this.#root}ingresses/${name}/status`,
@@ -285,7 +348,12 @@ export class NetworkingV1NamespacedApi {
     return NetworkingV1.toIngress(resp);
   }
 
-  async patchIngressStatus(name: string, type: c.PatchType, body: NetworkingV1.Ingress | c.JsonPatch, opts: operations.PatchOpts = {}): Promise<NetworkingV1.Ingress> {
+  async patchIngressStatus(
+    name: string,
+    type: c.PatchType,
+    body: NetworkingV1.Ingress | c.JsonPatch,
+    opts: operations.PatchOpts = {},
+  ): Promise<NetworkingV1.Ingress> {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}ingresses/${name}/status`,
@@ -298,7 +366,9 @@ export class NetworkingV1NamespacedApi {
     return NetworkingV1.toIngress(resp);
   }
 
-  async getNetworkPolicyList(opts: operations.GetListOpts = {}): Promise<NetworkingV1.NetworkPolicyList> {
+  async getNetworkPolicyList(
+    opts: operations.GetListOpts = {},
+  ): Promise<NetworkingV1.NetworkPolicyList> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}networkpolicies`,
@@ -309,7 +379,9 @@ export class NetworkingV1NamespacedApi {
     return NetworkingV1.toNetworkPolicyList(resp);
   }
 
-  async watchNetworkPolicyList(opts: operations.WatchListOpts = {}): Promise<ReadableStream<c.WatchEvent<NetworkingV1.NetworkPolicy & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
+  async watchNetworkPolicyList(
+    opts: operations.WatchListOpts = {},
+  ): Promise<ReadableStream<c.WatchEvent<NetworkingV1.NetworkPolicy & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}networkpolicies`,
@@ -321,7 +393,10 @@ export class NetworkingV1NamespacedApi {
     return resp.pipeThrough(new c.WatchEventTransformer(NetworkingV1.toNetworkPolicy, MetaV1.toStatus));
   }
 
-  async createNetworkPolicy(body: NetworkingV1.NetworkPolicy, opts: operations.PutOpts = {}): Promise<NetworkingV1.NetworkPolicy> {
+  async createNetworkPolicy(
+    body: NetworkingV1.NetworkPolicy,
+    opts: operations.PutOpts = {},
+  ): Promise<NetworkingV1.NetworkPolicy> {
     const resp = await this.#client.performRequest({
       method: "POST",
       path: `${this.#root}networkpolicies`,
@@ -333,7 +408,9 @@ export class NetworkingV1NamespacedApi {
     return NetworkingV1.toNetworkPolicy(resp);
   }
 
-  async deleteNetworkPolicyList(opts: operations.DeleteListOpts = {}): Promise<NetworkingV1.NetworkPolicyList> {
+  async deleteNetworkPolicyList(
+    opts: operations.DeleteListOpts = {},
+  ): Promise<NetworkingV1.NetworkPolicyList> {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}networkpolicies`,
@@ -344,7 +421,10 @@ export class NetworkingV1NamespacedApi {
     return NetworkingV1.toNetworkPolicyList(resp);
   }
 
-  async getNetworkPolicy(name: string, opts: operations.NoOpts = {}): Promise<NetworkingV1.NetworkPolicy> {
+  async getNetworkPolicy(
+    name: string,
+    opts: operations.NoOpts = {},
+  ): Promise<NetworkingV1.NetworkPolicy> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}networkpolicies/${name}`,
@@ -354,7 +434,10 @@ export class NetworkingV1NamespacedApi {
     return NetworkingV1.toNetworkPolicy(resp);
   }
 
-  async deleteNetworkPolicy(name: string, opts: operations.DeleteOpts = {}): Promise<NetworkingV1.NetworkPolicy | MetaV1.Status> {
+  async deleteNetworkPolicy(
+    name: string,
+    opts: operations.DeleteOpts = {},
+  ): Promise<NetworkingV1.NetworkPolicy | MetaV1.Status> {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}networkpolicies/${name}`,
@@ -366,7 +449,11 @@ export class NetworkingV1NamespacedApi {
     return NetworkingV1.toNetworkPolicy(resp);
   }
 
-  async replaceNetworkPolicy(name: string, body: NetworkingV1.NetworkPolicy, opts: operations.PutOpts = {}): Promise<NetworkingV1.NetworkPolicy> {
+  async replaceNetworkPolicy(
+    name: string,
+    body: NetworkingV1.NetworkPolicy,
+    opts: operations.PutOpts = {},
+  ): Promise<NetworkingV1.NetworkPolicy> {
     const resp = await this.#client.performRequest({
       method: "PUT",
       path: `${this.#root}networkpolicies/${name}`,
@@ -378,7 +465,12 @@ export class NetworkingV1NamespacedApi {
     return NetworkingV1.toNetworkPolicy(resp);
   }
 
-  async patchNetworkPolicy(name: string, type: c.PatchType, body: NetworkingV1.NetworkPolicy | c.JsonPatch, opts: operations.PatchOpts = {}): Promise<NetworkingV1.NetworkPolicy> {
+  async patchNetworkPolicy(
+    name: string,
+    type: c.PatchType,
+    body: NetworkingV1.NetworkPolicy | c.JsonPatch,
+    opts: operations.PatchOpts = {},
+  ): Promise<NetworkingV1.NetworkPolicy> {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}networkpolicies/${name}`,

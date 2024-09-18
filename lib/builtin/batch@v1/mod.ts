@@ -21,7 +21,9 @@ export class BatchV1Api {
     return new BatchV1NamespacedApi(this.#client, this.#client.defaultNamespace);
   }
 
-  async getCronJobListForAllNamespaces(opts: operations.GetListOpts = {}): Promise<BatchV1.CronJobList> {
+  async getCronJobListForAllNamespaces(
+    opts: operations.GetListOpts = {},
+  ): Promise<BatchV1.CronJobList> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}cronjobs`,
@@ -32,7 +34,9 @@ export class BatchV1Api {
     return BatchV1.toCronJobList(resp);
   }
 
-  async watchCronJobListForAllNamespaces(opts: operations.WatchListOpts = {}): Promise<ReadableStream<c.WatchEvent<BatchV1.CronJob & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
+  async watchCronJobListForAllNamespaces(
+    opts: operations.WatchListOpts = {},
+  ): Promise<ReadableStream<c.WatchEvent<BatchV1.CronJob & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}cronjobs`,
@@ -44,7 +48,9 @@ export class BatchV1Api {
     return resp.pipeThrough(new c.WatchEventTransformer(BatchV1.toCronJob, MetaV1.toStatus));
   }
 
-  async getJobListForAllNamespaces(opts: operations.GetListOpts = {}): Promise<BatchV1.JobList> {
+  async getJobListForAllNamespaces(
+    opts: operations.GetListOpts = {},
+  ): Promise<BatchV1.JobList> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}jobs`,
@@ -55,7 +61,9 @@ export class BatchV1Api {
     return BatchV1.toJobList(resp);
   }
 
-  async watchJobListForAllNamespaces(opts: operations.WatchListOpts = {}): Promise<ReadableStream<c.WatchEvent<BatchV1.Job & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
+  async watchJobListForAllNamespaces(
+    opts: operations.WatchListOpts = {},
+  ): Promise<ReadableStream<c.WatchEvent<BatchV1.Job & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}jobs`,
@@ -77,7 +85,9 @@ export class BatchV1NamespacedApi {
     this.#root = `/apis/batch/v1/namespaces/${namespace}/`;
   }
 
-  async getCronJobList(opts: operations.GetListOpts = {}): Promise<BatchV1.CronJobList> {
+  async getCronJobList(
+    opts: operations.GetListOpts = {},
+  ): Promise<BatchV1.CronJobList> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}cronjobs`,
@@ -88,7 +98,9 @@ export class BatchV1NamespacedApi {
     return BatchV1.toCronJobList(resp);
   }
 
-  async watchCronJobList(opts: operations.WatchListOpts = {}): Promise<ReadableStream<c.WatchEvent<BatchV1.CronJob & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
+  async watchCronJobList(
+    opts: operations.WatchListOpts = {},
+  ): Promise<ReadableStream<c.WatchEvent<BatchV1.CronJob & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}cronjobs`,
@@ -100,7 +112,10 @@ export class BatchV1NamespacedApi {
     return resp.pipeThrough(new c.WatchEventTransformer(BatchV1.toCronJob, MetaV1.toStatus));
   }
 
-  async createCronJob(body: BatchV1.CronJob, opts: operations.PutOpts = {}): Promise<BatchV1.CronJob> {
+  async createCronJob(
+    body: BatchV1.CronJob,
+    opts: operations.PutOpts = {},
+  ): Promise<BatchV1.CronJob> {
     const resp = await this.#client.performRequest({
       method: "POST",
       path: `${this.#root}cronjobs`,
@@ -112,7 +127,9 @@ export class BatchV1NamespacedApi {
     return BatchV1.toCronJob(resp);
   }
 
-  async deleteCronJobList(opts: operations.DeleteListOpts = {}): Promise<BatchV1.CronJobList> {
+  async deleteCronJobList(
+    opts: operations.DeleteListOpts = {},
+  ): Promise<BatchV1.CronJobList> {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}cronjobs`,
@@ -123,7 +140,10 @@ export class BatchV1NamespacedApi {
     return BatchV1.toCronJobList(resp);
   }
 
-  async getCronJob(name: string, opts: operations.NoOpts = {}): Promise<BatchV1.CronJob> {
+  async getCronJob(
+    name: string,
+    opts: operations.NoOpts = {},
+  ): Promise<BatchV1.CronJob> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}cronjobs/${name}`,
@@ -133,7 +153,10 @@ export class BatchV1NamespacedApi {
     return BatchV1.toCronJob(resp);
   }
 
-  async deleteCronJob(name: string, opts: operations.DeleteOpts = {}): Promise<BatchV1.CronJob | MetaV1.Status> {
+  async deleteCronJob(
+    name: string,
+    opts: operations.DeleteOpts = {},
+  ): Promise<BatchV1.CronJob | MetaV1.Status> {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}cronjobs/${name}`,
@@ -145,7 +168,11 @@ export class BatchV1NamespacedApi {
     return BatchV1.toCronJob(resp);
   }
 
-  async replaceCronJob(name: string, body: BatchV1.CronJob, opts: operations.PutOpts = {}): Promise<BatchV1.CronJob> {
+  async replaceCronJob(
+    name: string,
+    body: BatchV1.CronJob,
+    opts: operations.PutOpts = {},
+  ): Promise<BatchV1.CronJob> {
     const resp = await this.#client.performRequest({
       method: "PUT",
       path: `${this.#root}cronjobs/${name}`,
@@ -157,7 +184,12 @@ export class BatchV1NamespacedApi {
     return BatchV1.toCronJob(resp);
   }
 
-  async patchCronJob(name: string, type: c.PatchType, body: BatchV1.CronJob | c.JsonPatch, opts: operations.PatchOpts = {}): Promise<BatchV1.CronJob> {
+  async patchCronJob(
+    name: string,
+    type: c.PatchType,
+    body: BatchV1.CronJob | c.JsonPatch,
+    opts: operations.PatchOpts = {},
+  ): Promise<BatchV1.CronJob> {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}cronjobs/${name}`,
@@ -170,7 +202,10 @@ export class BatchV1NamespacedApi {
     return BatchV1.toCronJob(resp);
   }
 
-  async getCronJobStatus(name: string, opts: operations.NoOpts = {}): Promise<BatchV1.CronJob> {
+  async getCronJobStatus(
+    name: string,
+    opts: operations.NoOpts = {},
+  ): Promise<BatchV1.CronJob> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}cronjobs/${name}/status`,
@@ -180,7 +215,11 @@ export class BatchV1NamespacedApi {
     return BatchV1.toCronJob(resp);
   }
 
-  async replaceCronJobStatus(name: string, body: BatchV1.CronJob, opts: operations.PutOpts = {}): Promise<BatchV1.CronJob> {
+  async replaceCronJobStatus(
+    name: string,
+    body: BatchV1.CronJob,
+    opts: operations.PutOpts = {},
+  ): Promise<BatchV1.CronJob> {
     const resp = await this.#client.performRequest({
       method: "PUT",
       path: `${this.#root}cronjobs/${name}/status`,
@@ -192,7 +231,12 @@ export class BatchV1NamespacedApi {
     return BatchV1.toCronJob(resp);
   }
 
-  async patchCronJobStatus(name: string, type: c.PatchType, body: BatchV1.CronJob | c.JsonPatch, opts: operations.PatchOpts = {}): Promise<BatchV1.CronJob> {
+  async patchCronJobStatus(
+    name: string,
+    type: c.PatchType,
+    body: BatchV1.CronJob | c.JsonPatch,
+    opts: operations.PatchOpts = {},
+  ): Promise<BatchV1.CronJob> {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}cronjobs/${name}/status`,
@@ -205,7 +249,9 @@ export class BatchV1NamespacedApi {
     return BatchV1.toCronJob(resp);
   }
 
-  async getJobList(opts: operations.GetListOpts = {}): Promise<BatchV1.JobList> {
+  async getJobList(
+    opts: operations.GetListOpts = {},
+  ): Promise<BatchV1.JobList> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}jobs`,
@@ -216,7 +262,9 @@ export class BatchV1NamespacedApi {
     return BatchV1.toJobList(resp);
   }
 
-  async watchJobList(opts: operations.WatchListOpts = {}): Promise<ReadableStream<c.WatchEvent<BatchV1.Job & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
+  async watchJobList(
+    opts: operations.WatchListOpts = {},
+  ): Promise<ReadableStream<c.WatchEvent<BatchV1.Job & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}jobs`,
@@ -228,7 +276,10 @@ export class BatchV1NamespacedApi {
     return resp.pipeThrough(new c.WatchEventTransformer(BatchV1.toJob, MetaV1.toStatus));
   }
 
-  async createJob(body: BatchV1.Job, opts: operations.PutOpts = {}): Promise<BatchV1.Job> {
+  async createJob(
+    body: BatchV1.Job,
+    opts: operations.PutOpts = {},
+  ): Promise<BatchV1.Job> {
     const resp = await this.#client.performRequest({
       method: "POST",
       path: `${this.#root}jobs`,
@@ -240,7 +291,9 @@ export class BatchV1NamespacedApi {
     return BatchV1.toJob(resp);
   }
 
-  async deleteJobList(opts: operations.DeleteListOpts = {}): Promise<BatchV1.JobList> {
+  async deleteJobList(
+    opts: operations.DeleteListOpts = {},
+  ): Promise<BatchV1.JobList> {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}jobs`,
@@ -251,7 +304,10 @@ export class BatchV1NamespacedApi {
     return BatchV1.toJobList(resp);
   }
 
-  async getJob(name: string, opts: operations.NoOpts = {}): Promise<BatchV1.Job> {
+  async getJob(
+    name: string,
+    opts: operations.NoOpts = {},
+  ): Promise<BatchV1.Job> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}jobs/${name}`,
@@ -261,7 +317,10 @@ export class BatchV1NamespacedApi {
     return BatchV1.toJob(resp);
   }
 
-  async deleteJob(name: string, opts: operations.DeleteOpts = {}): Promise<BatchV1.Job | MetaV1.Status> {
+  async deleteJob(
+    name: string,
+    opts: operations.DeleteOpts = {},
+  ): Promise<BatchV1.Job | MetaV1.Status> {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}jobs/${name}`,
@@ -273,7 +332,11 @@ export class BatchV1NamespacedApi {
     return BatchV1.toJob(resp);
   }
 
-  async replaceJob(name: string, body: BatchV1.Job, opts: operations.PutOpts = {}): Promise<BatchV1.Job> {
+  async replaceJob(
+    name: string,
+    body: BatchV1.Job,
+    opts: operations.PutOpts = {},
+  ): Promise<BatchV1.Job> {
     const resp = await this.#client.performRequest({
       method: "PUT",
       path: `${this.#root}jobs/${name}`,
@@ -285,7 +348,12 @@ export class BatchV1NamespacedApi {
     return BatchV1.toJob(resp);
   }
 
-  async patchJob(name: string, type: c.PatchType, body: BatchV1.Job | c.JsonPatch, opts: operations.PatchOpts = {}): Promise<BatchV1.Job> {
+  async patchJob(
+    name: string,
+    type: c.PatchType,
+    body: BatchV1.Job | c.JsonPatch,
+    opts: operations.PatchOpts = {},
+  ): Promise<BatchV1.Job> {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}jobs/${name}`,
@@ -298,7 +366,10 @@ export class BatchV1NamespacedApi {
     return BatchV1.toJob(resp);
   }
 
-  async getJobStatus(name: string, opts: operations.NoOpts = {}): Promise<BatchV1.Job> {
+  async getJobStatus(
+    name: string,
+    opts: operations.NoOpts = {},
+  ): Promise<BatchV1.Job> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}jobs/${name}/status`,
@@ -308,7 +379,11 @@ export class BatchV1NamespacedApi {
     return BatchV1.toJob(resp);
   }
 
-  async replaceJobStatus(name: string, body: BatchV1.Job, opts: operations.PutOpts = {}): Promise<BatchV1.Job> {
+  async replaceJobStatus(
+    name: string,
+    body: BatchV1.Job,
+    opts: operations.PutOpts = {},
+  ): Promise<BatchV1.Job> {
     const resp = await this.#client.performRequest({
       method: "PUT",
       path: `${this.#root}jobs/${name}/status`,
@@ -320,7 +395,12 @@ export class BatchV1NamespacedApi {
     return BatchV1.toJob(resp);
   }
 
-  async patchJobStatus(name: string, type: c.PatchType, body: BatchV1.Job | c.JsonPatch, opts: operations.PatchOpts = {}): Promise<BatchV1.Job> {
+  async patchJobStatus(
+    name: string,
+    type: c.PatchType,
+    body: BatchV1.Job | c.JsonPatch,
+    opts: operations.PatchOpts = {},
+  ): Promise<BatchV1.Job> {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}jobs/${name}/status`,

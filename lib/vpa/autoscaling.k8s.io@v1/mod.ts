@@ -21,7 +21,9 @@ export class AutoscalingV1Api {
     return new AutoscalingV1NamespacedApi(this.#client, this.#client.defaultNamespace);
   }
 
-  async getVerticalPodAutoscalerCheckpointListForAllNamespaces(opts: operations.GetListOpts = {}): Promise<AutoscalingV1.VerticalPodAutoscalerCheckpointList> {
+  async getVerticalPodAutoscalerCheckpointListForAllNamespaces(
+    opts: operations.GetListOpts = {},
+  ): Promise<AutoscalingV1.VerticalPodAutoscalerCheckpointList> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}verticalpodautoscalercheckpoints`,
@@ -32,7 +34,9 @@ export class AutoscalingV1Api {
     return AutoscalingV1.toVerticalPodAutoscalerCheckpointList(resp);
   }
 
-  async watchVerticalPodAutoscalerCheckpointListForAllNamespaces(opts: operations.WatchListOpts = {}): Promise<ReadableStream<c.WatchEvent<AutoscalingV1.VerticalPodAutoscalerCheckpoint & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
+  async watchVerticalPodAutoscalerCheckpointListForAllNamespaces(
+    opts: operations.WatchListOpts = {},
+  ): Promise<ReadableStream<c.WatchEvent<AutoscalingV1.VerticalPodAutoscalerCheckpoint & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}verticalpodautoscalercheckpoints`,
@@ -44,7 +48,9 @@ export class AutoscalingV1Api {
     return resp.pipeThrough(new c.WatchEventTransformer(AutoscalingV1.toVerticalPodAutoscalerCheckpoint, MetaV1.toStatus));
   }
 
-  async getVerticalPodAutoscalerListForAllNamespaces(opts: operations.GetListOpts = {}): Promise<AutoscalingV1.VerticalPodAutoscalerList> {
+  async getVerticalPodAutoscalerListForAllNamespaces(
+    opts: operations.GetListOpts = {},
+  ): Promise<AutoscalingV1.VerticalPodAutoscalerList> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}verticalpodautoscalers`,
@@ -55,7 +61,9 @@ export class AutoscalingV1Api {
     return AutoscalingV1.toVerticalPodAutoscalerList(resp);
   }
 
-  async watchVerticalPodAutoscalerListForAllNamespaces(opts: operations.WatchListOpts = {}): Promise<ReadableStream<c.WatchEvent<AutoscalingV1.VerticalPodAutoscaler & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
+  async watchVerticalPodAutoscalerListForAllNamespaces(
+    opts: operations.WatchListOpts = {},
+  ): Promise<ReadableStream<c.WatchEvent<AutoscalingV1.VerticalPodAutoscaler & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}verticalpodautoscalers`,
@@ -77,7 +85,9 @@ export class AutoscalingV1NamespacedApi {
     this.#root = `/apis/autoscaling.k8s.io/v1/namespaces/${namespace}/`;
   }
 
-  async getVerticalPodAutoscalerCheckpointList(opts: operations.GetListOpts = {}): Promise<AutoscalingV1.VerticalPodAutoscalerCheckpointList> {
+  async getVerticalPodAutoscalerCheckpointList(
+    opts: operations.GetListOpts = {},
+  ): Promise<AutoscalingV1.VerticalPodAutoscalerCheckpointList> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}verticalpodautoscalercheckpoints`,
@@ -88,7 +98,9 @@ export class AutoscalingV1NamespacedApi {
     return AutoscalingV1.toVerticalPodAutoscalerCheckpointList(resp);
   }
 
-  async watchVerticalPodAutoscalerCheckpointList(opts: operations.WatchListOpts = {}): Promise<ReadableStream<c.WatchEvent<AutoscalingV1.VerticalPodAutoscalerCheckpoint & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
+  async watchVerticalPodAutoscalerCheckpointList(
+    opts: operations.WatchListOpts = {},
+  ): Promise<ReadableStream<c.WatchEvent<AutoscalingV1.VerticalPodAutoscalerCheckpoint & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}verticalpodautoscalercheckpoints`,
@@ -100,7 +112,10 @@ export class AutoscalingV1NamespacedApi {
     return resp.pipeThrough(new c.WatchEventTransformer(AutoscalingV1.toVerticalPodAutoscalerCheckpoint, MetaV1.toStatus));
   }
 
-  async createVerticalPodAutoscalerCheckpoint(body: AutoscalingV1.VerticalPodAutoscalerCheckpoint, opts: operations.PutOpts = {}): Promise<AutoscalingV1.VerticalPodAutoscalerCheckpoint> {
+  async createVerticalPodAutoscalerCheckpoint(
+    body: AutoscalingV1.VerticalPodAutoscalerCheckpoint,
+    opts: operations.PutOpts = {},
+  ): Promise<AutoscalingV1.VerticalPodAutoscalerCheckpoint> {
     const resp = await this.#client.performRequest({
       method: "POST",
       path: `${this.#root}verticalpodautoscalercheckpoints`,
@@ -112,7 +127,9 @@ export class AutoscalingV1NamespacedApi {
     return AutoscalingV1.toVerticalPodAutoscalerCheckpoint(resp);
   }
 
-  async deleteVerticalPodAutoscalerCheckpointList(opts: operations.DeleteListOpts = {}): Promise<AutoscalingV1.VerticalPodAutoscalerCheckpointList> {
+  async deleteVerticalPodAutoscalerCheckpointList(
+    opts: operations.DeleteListOpts = {},
+  ): Promise<AutoscalingV1.VerticalPodAutoscalerCheckpointList> {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}verticalpodautoscalercheckpoints`,
@@ -123,7 +140,10 @@ export class AutoscalingV1NamespacedApi {
     return AutoscalingV1.toVerticalPodAutoscalerCheckpointList(resp);
   }
 
-  async getVerticalPodAutoscalerCheckpoint(name: string, opts: operations.NoOpts = {}): Promise<AutoscalingV1.VerticalPodAutoscalerCheckpoint> {
+  async getVerticalPodAutoscalerCheckpoint(
+    name: string,
+    opts: operations.NoOpts = {},
+  ): Promise<AutoscalingV1.VerticalPodAutoscalerCheckpoint> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}verticalpodautoscalercheckpoints/${name}`,
@@ -133,7 +153,10 @@ export class AutoscalingV1NamespacedApi {
     return AutoscalingV1.toVerticalPodAutoscalerCheckpoint(resp);
   }
 
-  async deleteVerticalPodAutoscalerCheckpoint(name: string, opts: operations.DeleteOpts = {}): Promise<AutoscalingV1.VerticalPodAutoscalerCheckpoint | MetaV1.Status> {
+  async deleteVerticalPodAutoscalerCheckpoint(
+    name: string,
+    opts: operations.DeleteOpts = {},
+  ): Promise<AutoscalingV1.VerticalPodAutoscalerCheckpoint | MetaV1.Status> {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}verticalpodautoscalercheckpoints/${name}`,
@@ -145,7 +168,11 @@ export class AutoscalingV1NamespacedApi {
     return AutoscalingV1.toVerticalPodAutoscalerCheckpoint(resp);
   }
 
-  async replaceVerticalPodAutoscalerCheckpoint(name: string, body: AutoscalingV1.VerticalPodAutoscalerCheckpoint, opts: operations.PutOpts = {}): Promise<AutoscalingV1.VerticalPodAutoscalerCheckpoint> {
+  async replaceVerticalPodAutoscalerCheckpoint(
+    name: string,
+    body: AutoscalingV1.VerticalPodAutoscalerCheckpoint,
+    opts: operations.PutOpts = {},
+  ): Promise<AutoscalingV1.VerticalPodAutoscalerCheckpoint> {
     const resp = await this.#client.performRequest({
       method: "PUT",
       path: `${this.#root}verticalpodautoscalercheckpoints/${name}`,
@@ -157,7 +184,12 @@ export class AutoscalingV1NamespacedApi {
     return AutoscalingV1.toVerticalPodAutoscalerCheckpoint(resp);
   }
 
-  async patchVerticalPodAutoscalerCheckpoint(name: string, type: c.PatchType, body: AutoscalingV1.VerticalPodAutoscalerCheckpoint | c.JsonPatch, opts: operations.PatchOpts = {}): Promise<AutoscalingV1.VerticalPodAutoscalerCheckpoint> {
+  async patchVerticalPodAutoscalerCheckpoint(
+    name: string,
+    type: c.PatchType,
+    body: AutoscalingV1.VerticalPodAutoscalerCheckpoint | c.JsonPatch,
+    opts: operations.PatchOpts = {},
+  ): Promise<AutoscalingV1.VerticalPodAutoscalerCheckpoint> {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}verticalpodautoscalercheckpoints/${name}`,
@@ -170,7 +202,9 @@ export class AutoscalingV1NamespacedApi {
     return AutoscalingV1.toVerticalPodAutoscalerCheckpoint(resp);
   }
 
-  async getVerticalPodAutoscalerList(opts: operations.GetListOpts = {}): Promise<AutoscalingV1.VerticalPodAutoscalerList> {
+  async getVerticalPodAutoscalerList(
+    opts: operations.GetListOpts = {},
+  ): Promise<AutoscalingV1.VerticalPodAutoscalerList> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}verticalpodautoscalers`,
@@ -181,7 +215,9 @@ export class AutoscalingV1NamespacedApi {
     return AutoscalingV1.toVerticalPodAutoscalerList(resp);
   }
 
-  async watchVerticalPodAutoscalerList(opts: operations.WatchListOpts = {}): Promise<ReadableStream<c.WatchEvent<AutoscalingV1.VerticalPodAutoscaler & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
+  async watchVerticalPodAutoscalerList(
+    opts: operations.WatchListOpts = {},
+  ): Promise<ReadableStream<c.WatchEvent<AutoscalingV1.VerticalPodAutoscaler & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}verticalpodautoscalers`,
@@ -193,7 +229,10 @@ export class AutoscalingV1NamespacedApi {
     return resp.pipeThrough(new c.WatchEventTransformer(AutoscalingV1.toVerticalPodAutoscaler, MetaV1.toStatus));
   }
 
-  async createVerticalPodAutoscaler(body: AutoscalingV1.VerticalPodAutoscaler, opts: operations.PutOpts = {}): Promise<AutoscalingV1.VerticalPodAutoscaler> {
+  async createVerticalPodAutoscaler(
+    body: AutoscalingV1.VerticalPodAutoscaler,
+    opts: operations.PutOpts = {},
+  ): Promise<AutoscalingV1.VerticalPodAutoscaler> {
     const resp = await this.#client.performRequest({
       method: "POST",
       path: `${this.#root}verticalpodautoscalers`,
@@ -205,7 +244,9 @@ export class AutoscalingV1NamespacedApi {
     return AutoscalingV1.toVerticalPodAutoscaler(resp);
   }
 
-  async deleteVerticalPodAutoscalerList(opts: operations.DeleteListOpts = {}): Promise<AutoscalingV1.VerticalPodAutoscalerList> {
+  async deleteVerticalPodAutoscalerList(
+    opts: operations.DeleteListOpts = {},
+  ): Promise<AutoscalingV1.VerticalPodAutoscalerList> {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}verticalpodautoscalers`,
@@ -216,7 +257,10 @@ export class AutoscalingV1NamespacedApi {
     return AutoscalingV1.toVerticalPodAutoscalerList(resp);
   }
 
-  async getVerticalPodAutoscaler(name: string, opts: operations.NoOpts = {}): Promise<AutoscalingV1.VerticalPodAutoscaler> {
+  async getVerticalPodAutoscaler(
+    name: string,
+    opts: operations.NoOpts = {},
+  ): Promise<AutoscalingV1.VerticalPodAutoscaler> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}verticalpodautoscalers/${name}`,
@@ -226,7 +270,10 @@ export class AutoscalingV1NamespacedApi {
     return AutoscalingV1.toVerticalPodAutoscaler(resp);
   }
 
-  async deleteVerticalPodAutoscaler(name: string, opts: operations.DeleteOpts = {}): Promise<AutoscalingV1.VerticalPodAutoscaler | MetaV1.Status> {
+  async deleteVerticalPodAutoscaler(
+    name: string,
+    opts: operations.DeleteOpts = {},
+  ): Promise<AutoscalingV1.VerticalPodAutoscaler | MetaV1.Status> {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}verticalpodautoscalers/${name}`,
@@ -238,7 +285,11 @@ export class AutoscalingV1NamespacedApi {
     return AutoscalingV1.toVerticalPodAutoscaler(resp);
   }
 
-  async replaceVerticalPodAutoscaler(name: string, body: AutoscalingV1.VerticalPodAutoscaler, opts: operations.PutOpts = {}): Promise<AutoscalingV1.VerticalPodAutoscaler> {
+  async replaceVerticalPodAutoscaler(
+    name: string,
+    body: AutoscalingV1.VerticalPodAutoscaler,
+    opts: operations.PutOpts = {},
+  ): Promise<AutoscalingV1.VerticalPodAutoscaler> {
     const resp = await this.#client.performRequest({
       method: "PUT",
       path: `${this.#root}verticalpodautoscalers/${name}`,
@@ -250,7 +301,12 @@ export class AutoscalingV1NamespacedApi {
     return AutoscalingV1.toVerticalPodAutoscaler(resp);
   }
 
-  async patchVerticalPodAutoscaler(name: string, type: c.PatchType, body: AutoscalingV1.VerticalPodAutoscaler | c.JsonPatch, opts: operations.PatchOpts = {}): Promise<AutoscalingV1.VerticalPodAutoscaler> {
+  async patchVerticalPodAutoscaler(
+    name: string,
+    type: c.PatchType,
+    body: AutoscalingV1.VerticalPodAutoscaler | c.JsonPatch,
+    opts: operations.PatchOpts = {},
+  ): Promise<AutoscalingV1.VerticalPodAutoscaler> {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}verticalpodautoscalers/${name}`,

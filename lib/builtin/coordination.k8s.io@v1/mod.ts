@@ -21,7 +21,9 @@ export class CoordinationV1Api {
     return new CoordinationV1NamespacedApi(this.#client, this.#client.defaultNamespace);
   }
 
-  async getLeaseListForAllNamespaces(opts: operations.GetListOpts = {}): Promise<CoordinationV1.LeaseList> {
+  async getLeaseListForAllNamespaces(
+    opts: operations.GetListOpts = {},
+  ): Promise<CoordinationV1.LeaseList> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}leases`,
@@ -32,7 +34,9 @@ export class CoordinationV1Api {
     return CoordinationV1.toLeaseList(resp);
   }
 
-  async watchLeaseListForAllNamespaces(opts: operations.WatchListOpts = {}): Promise<ReadableStream<c.WatchEvent<CoordinationV1.Lease & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
+  async watchLeaseListForAllNamespaces(
+    opts: operations.WatchListOpts = {},
+  ): Promise<ReadableStream<c.WatchEvent<CoordinationV1.Lease & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}leases`,
@@ -54,7 +58,9 @@ export class CoordinationV1NamespacedApi {
     this.#root = `/apis/coordination.k8s.io/v1/namespaces/${namespace}/`;
   }
 
-  async getLeaseList(opts: operations.GetListOpts = {}): Promise<CoordinationV1.LeaseList> {
+  async getLeaseList(
+    opts: operations.GetListOpts = {},
+  ): Promise<CoordinationV1.LeaseList> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}leases`,
@@ -65,7 +71,9 @@ export class CoordinationV1NamespacedApi {
     return CoordinationV1.toLeaseList(resp);
   }
 
-  async watchLeaseList(opts: operations.WatchListOpts = {}): Promise<ReadableStream<c.WatchEvent<CoordinationV1.Lease & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
+  async watchLeaseList(
+    opts: operations.WatchListOpts = {},
+  ): Promise<ReadableStream<c.WatchEvent<CoordinationV1.Lease & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}leases`,
@@ -77,7 +85,10 @@ export class CoordinationV1NamespacedApi {
     return resp.pipeThrough(new c.WatchEventTransformer(CoordinationV1.toLease, MetaV1.toStatus));
   }
 
-  async createLease(body: CoordinationV1.Lease, opts: operations.PutOpts = {}): Promise<CoordinationV1.Lease> {
+  async createLease(
+    body: CoordinationV1.Lease,
+    opts: operations.PutOpts = {},
+  ): Promise<CoordinationV1.Lease> {
     const resp = await this.#client.performRequest({
       method: "POST",
       path: `${this.#root}leases`,
@@ -89,7 +100,9 @@ export class CoordinationV1NamespacedApi {
     return CoordinationV1.toLease(resp);
   }
 
-  async deleteLeaseList(opts: operations.DeleteListOpts = {}): Promise<CoordinationV1.LeaseList> {
+  async deleteLeaseList(
+    opts: operations.DeleteListOpts = {},
+  ): Promise<CoordinationV1.LeaseList> {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}leases`,
@@ -100,7 +113,10 @@ export class CoordinationV1NamespacedApi {
     return CoordinationV1.toLeaseList(resp);
   }
 
-  async getLease(name: string, opts: operations.NoOpts = {}): Promise<CoordinationV1.Lease> {
+  async getLease(
+    name: string,
+    opts: operations.NoOpts = {},
+  ): Promise<CoordinationV1.Lease> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}leases/${name}`,
@@ -110,7 +126,10 @@ export class CoordinationV1NamespacedApi {
     return CoordinationV1.toLease(resp);
   }
 
-  async deleteLease(name: string, opts: operations.DeleteOpts = {}): Promise<CoordinationV1.Lease | MetaV1.Status> {
+  async deleteLease(
+    name: string,
+    opts: operations.DeleteOpts = {},
+  ): Promise<CoordinationV1.Lease | MetaV1.Status> {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}leases/${name}`,
@@ -122,7 +141,11 @@ export class CoordinationV1NamespacedApi {
     return CoordinationV1.toLease(resp);
   }
 
-  async replaceLease(name: string, body: CoordinationV1.Lease, opts: operations.PutOpts = {}): Promise<CoordinationV1.Lease> {
+  async replaceLease(
+    name: string,
+    body: CoordinationV1.Lease,
+    opts: operations.PutOpts = {},
+  ): Promise<CoordinationV1.Lease> {
     const resp = await this.#client.performRequest({
       method: "PUT",
       path: `${this.#root}leases/${name}`,
@@ -134,7 +157,12 @@ export class CoordinationV1NamespacedApi {
     return CoordinationV1.toLease(resp);
   }
 
-  async patchLease(name: string, type: c.PatchType, body: CoordinationV1.Lease | c.JsonPatch, opts: operations.PatchOpts = {}): Promise<CoordinationV1.Lease> {
+  async patchLease(
+    name: string,
+    type: c.PatchType,
+    body: CoordinationV1.Lease | c.JsonPatch,
+    opts: operations.PatchOpts = {},
+  ): Promise<CoordinationV1.Lease> {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}leases/${name}`,

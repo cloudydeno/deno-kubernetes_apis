@@ -13,7 +13,9 @@ export class NetworkingV1alpha1Api {
     this.#client = client;
   }
 
-  async getClusterCIDRList(opts: operations.GetListOpts = {}): Promise<NetworkingV1alpha1.ClusterCIDRList> {
+  async getClusterCIDRList(
+    opts: operations.GetListOpts = {},
+  ): Promise<NetworkingV1alpha1.ClusterCIDRList> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}clustercidrs`,
@@ -24,7 +26,9 @@ export class NetworkingV1alpha1Api {
     return NetworkingV1alpha1.toClusterCIDRList(resp);
   }
 
-  async watchClusterCIDRList(opts: operations.WatchListOpts = {}): Promise<ReadableStream<c.WatchEvent<NetworkingV1alpha1.ClusterCIDR & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
+  async watchClusterCIDRList(
+    opts: operations.WatchListOpts = {},
+  ): Promise<ReadableStream<c.WatchEvent<NetworkingV1alpha1.ClusterCIDR & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}clustercidrs`,
@@ -36,7 +40,10 @@ export class NetworkingV1alpha1Api {
     return resp.pipeThrough(new c.WatchEventTransformer(NetworkingV1alpha1.toClusterCIDR, MetaV1.toStatus));
   }
 
-  async createClusterCIDR(body: NetworkingV1alpha1.ClusterCIDR, opts: operations.PutOpts = {}): Promise<NetworkingV1alpha1.ClusterCIDR> {
+  async createClusterCIDR(
+    body: NetworkingV1alpha1.ClusterCIDR,
+    opts: operations.PutOpts = {},
+  ): Promise<NetworkingV1alpha1.ClusterCIDR> {
     const resp = await this.#client.performRequest({
       method: "POST",
       path: `${this.#root}clustercidrs`,
@@ -48,7 +55,9 @@ export class NetworkingV1alpha1Api {
     return NetworkingV1alpha1.toClusterCIDR(resp);
   }
 
-  async deleteClusterCIDRList(opts: operations.DeleteListOpts = {}): Promise<NetworkingV1alpha1.ClusterCIDRList> {
+  async deleteClusterCIDRList(
+    opts: operations.DeleteListOpts = {},
+  ): Promise<NetworkingV1alpha1.ClusterCIDRList> {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}clustercidrs`,
@@ -59,7 +68,10 @@ export class NetworkingV1alpha1Api {
     return NetworkingV1alpha1.toClusterCIDRList(resp);
   }
 
-  async getClusterCIDR(name: string, opts: operations.NoOpts = {}): Promise<NetworkingV1alpha1.ClusterCIDR> {
+  async getClusterCIDR(
+    name: string,
+    opts: operations.NoOpts = {},
+  ): Promise<NetworkingV1alpha1.ClusterCIDR> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}clustercidrs/${name}`,
@@ -69,7 +81,10 @@ export class NetworkingV1alpha1Api {
     return NetworkingV1alpha1.toClusterCIDR(resp);
   }
 
-  async deleteClusterCIDR(name: string, opts: operations.DeleteOpts = {}): Promise<NetworkingV1alpha1.ClusterCIDR | MetaV1.Status> {
+  async deleteClusterCIDR(
+    name: string,
+    opts: operations.DeleteOpts = {},
+  ): Promise<NetworkingV1alpha1.ClusterCIDR | MetaV1.Status> {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}clustercidrs/${name}`,
@@ -81,7 +96,11 @@ export class NetworkingV1alpha1Api {
     return NetworkingV1alpha1.toClusterCIDR(resp);
   }
 
-  async replaceClusterCIDR(name: string, body: NetworkingV1alpha1.ClusterCIDR, opts: operations.PutOpts = {}): Promise<NetworkingV1alpha1.ClusterCIDR> {
+  async replaceClusterCIDR(
+    name: string,
+    body: NetworkingV1alpha1.ClusterCIDR,
+    opts: operations.PutOpts = {},
+  ): Promise<NetworkingV1alpha1.ClusterCIDR> {
     const resp = await this.#client.performRequest({
       method: "PUT",
       path: `${this.#root}clustercidrs/${name}`,
@@ -93,7 +112,12 @@ export class NetworkingV1alpha1Api {
     return NetworkingV1alpha1.toClusterCIDR(resp);
   }
 
-  async patchClusterCIDR(name: string, type: c.PatchType, body: NetworkingV1alpha1.ClusterCIDR | c.JsonPatch, opts: operations.PatchOpts = {}): Promise<NetworkingV1alpha1.ClusterCIDR> {
+  async patchClusterCIDR(
+    name: string,
+    type: c.PatchType,
+    body: NetworkingV1alpha1.ClusterCIDR | c.JsonPatch,
+    opts: operations.PatchOpts = {},
+  ): Promise<NetworkingV1alpha1.ClusterCIDR> {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}clustercidrs/${name}`,
@@ -106,7 +130,9 @@ export class NetworkingV1alpha1Api {
     return NetworkingV1alpha1.toClusterCIDR(resp);
   }
 
-  async getIPAddressList(opts: operations.GetListOpts = {}): Promise<NetworkingV1alpha1.IPAddressList> {
+  async getIPAddressList(
+    opts: operations.GetListOpts = {},
+  ): Promise<NetworkingV1alpha1.IPAddressList> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}ipaddresses`,
@@ -117,7 +143,9 @@ export class NetworkingV1alpha1Api {
     return NetworkingV1alpha1.toIPAddressList(resp);
   }
 
-  async watchIPAddressList(opts: operations.WatchListOpts = {}): Promise<ReadableStream<c.WatchEvent<NetworkingV1alpha1.IPAddress & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
+  async watchIPAddressList(
+    opts: operations.WatchListOpts = {},
+  ): Promise<ReadableStream<c.WatchEvent<NetworkingV1alpha1.IPAddress & c.ApiKind, MetaV1.Status & c.ApiKind>>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}ipaddresses`,
@@ -129,7 +157,10 @@ export class NetworkingV1alpha1Api {
     return resp.pipeThrough(new c.WatchEventTransformer(NetworkingV1alpha1.toIPAddress, MetaV1.toStatus));
   }
 
-  async createIPAddress(body: NetworkingV1alpha1.IPAddress, opts: operations.PutOpts = {}): Promise<NetworkingV1alpha1.IPAddress> {
+  async createIPAddress(
+    body: NetworkingV1alpha1.IPAddress,
+    opts: operations.PutOpts = {},
+  ): Promise<NetworkingV1alpha1.IPAddress> {
     const resp = await this.#client.performRequest({
       method: "POST",
       path: `${this.#root}ipaddresses`,
@@ -141,7 +172,9 @@ export class NetworkingV1alpha1Api {
     return NetworkingV1alpha1.toIPAddress(resp);
   }
 
-  async deleteIPAddressList(opts: operations.DeleteListOpts = {}): Promise<NetworkingV1alpha1.IPAddressList> {
+  async deleteIPAddressList(
+    opts: operations.DeleteListOpts = {},
+  ): Promise<NetworkingV1alpha1.IPAddressList> {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}ipaddresses`,
@@ -152,7 +185,10 @@ export class NetworkingV1alpha1Api {
     return NetworkingV1alpha1.toIPAddressList(resp);
   }
 
-  async getIPAddress(name: string, opts: operations.NoOpts = {}): Promise<NetworkingV1alpha1.IPAddress> {
+  async getIPAddress(
+    name: string,
+    opts: operations.NoOpts = {},
+  ): Promise<NetworkingV1alpha1.IPAddress> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}ipaddresses/${name}`,
@@ -162,7 +198,10 @@ export class NetworkingV1alpha1Api {
     return NetworkingV1alpha1.toIPAddress(resp);
   }
 
-  async deleteIPAddress(name: string, opts: operations.DeleteOpts = {}): Promise<NetworkingV1alpha1.IPAddress | MetaV1.Status> {
+  async deleteIPAddress(
+    name: string,
+    opts: operations.DeleteOpts = {},
+  ): Promise<NetworkingV1alpha1.IPAddress | MetaV1.Status> {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}ipaddresses/${name}`,
@@ -174,7 +213,11 @@ export class NetworkingV1alpha1Api {
     return NetworkingV1alpha1.toIPAddress(resp);
   }
 
-  async replaceIPAddress(name: string, body: NetworkingV1alpha1.IPAddress, opts: operations.PutOpts = {}): Promise<NetworkingV1alpha1.IPAddress> {
+  async replaceIPAddress(
+    name: string,
+    body: NetworkingV1alpha1.IPAddress,
+    opts: operations.PutOpts = {},
+  ): Promise<NetworkingV1alpha1.IPAddress> {
     const resp = await this.#client.performRequest({
       method: "PUT",
       path: `${this.#root}ipaddresses/${name}`,
@@ -186,7 +229,12 @@ export class NetworkingV1alpha1Api {
     return NetworkingV1alpha1.toIPAddress(resp);
   }
 
-  async patchIPAddress(name: string, type: c.PatchType, body: NetworkingV1alpha1.IPAddress | c.JsonPatch, opts: operations.PatchOpts = {}): Promise<NetworkingV1alpha1.IPAddress> {
+  async patchIPAddress(
+    name: string,
+    type: c.PatchType,
+    body: NetworkingV1alpha1.IPAddress | c.JsonPatch,
+    opts: operations.PatchOpts = {},
+  ): Promise<NetworkingV1alpha1.IPAddress> {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}ipaddresses/${name}`,
