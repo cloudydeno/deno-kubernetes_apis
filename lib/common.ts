@@ -28,7 +28,10 @@ export function assertOrAddApiVersionAndKind<
 >(input: JSONObject | {
   apiVersion?: JSONValue;
   kind?: JSONValue;
-}, expectedVersion: T, expectedKind: U, required = false) {
+}, expectedVersion: T, expectedKind: U, required = false): {
+  apiVersion: T;
+  kind: U;
+} {
   const output = { apiVersion: expectedVersion, kind: expectedKind };
 
   // If nothing is given, we might return the expected data
@@ -61,14 +64,14 @@ export function assertOrAddApiVersionAndKind<
     `Expected ${expected}, but was given ${given}. ${libBug}`);
 }
 
-export function isStatusKind(input: JSONValue) {
+export function isStatusKind(input: JSONValue): boolean {
   if (!input || typeof input !== 'object') return false;
   const res = input as ApiKind;
   return res.apiVersion === 'v1' && res.kind === 'Status';
 }
 
 
-export function identity(input: JSONValue) {
+export function identity(input: JSONValue): JSONValue {
   return input;
 }
 
@@ -237,7 +240,7 @@ export function toIntOrString(input: JSONValue): string | number {
 // apply-patch is an up-and-coming feature "Server-Side Apply" and not enabled by default yet.
 
 export type PatchType = 'strategic-merge' | 'json-merge' | 'json-patch' | 'apply-patch';
-export function getPatchContentType(type: PatchType) {
+export function getPatchContentType(type: PatchType): string {
   switch (type) {
     case 'strategic-merge': return 'application/strategic-merge-patch+json';
     case 'json-merge': return 'application/merge-patch+json';

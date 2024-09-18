@@ -222,8 +222,6 @@ export function generateModuleTypescript(surface: SurfaceMap, api: SurfaceApi): 
       if (isWatch) {
         returnSig = `ReadableStream<c.WatchEvent<${returnSig.slice(0, -4)} & c.ApiKind, MetaV1.Status & c.ApiKind>>`;
       }
-    } else {
-      // returnSig = 'void';
     }
 
     chunks.push(`  async ${funcName}(${writeSig(args, opts, '  ')}): Promise<${returnSig}> {`);
