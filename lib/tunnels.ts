@@ -290,7 +290,7 @@ export class PortforwardTunnel {
 
   servePortforward(opts: Deno.ListenOptions & {
     targetPort: number;
-  }): Deno.TcpListener {
+  }): Deno.Listener {
     const listener = Deno.listen(opts);
     (async () => {
       for await (const downstream of listener) {
