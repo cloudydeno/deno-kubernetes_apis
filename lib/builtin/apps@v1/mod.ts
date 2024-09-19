@@ -14,15 +14,17 @@ export class AppsV1Api {
     this.#client = client;
   }
 
-  namespace(name: string) {
+  namespace(name: string): AppsV1NamespacedApi {
     return new AppsV1NamespacedApi(this.#client, name);
   }
-  myNamespace() {
+  myNamespace(): AppsV1NamespacedApi {
     if (!this.#client.defaultNamespace) throw new Error("No current namespace is set");
     return new AppsV1NamespacedApi(this.#client, this.#client.defaultNamespace);
   }
 
-  async getControllerRevisionListForAllNamespaces(opts: operations.GetListOpts = {}) {
+  async getControllerRevisionListForAllNamespaces(
+    opts: operations.GetListOpts = {},
+  ): Promise<AppsV1.ControllerRevisionList> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}controllerrevisions`,
@@ -33,7 +35,9 @@ export class AppsV1Api {
     return AppsV1.toControllerRevisionList(resp);
   }
 
-  async watchControllerRevisionListForAllNamespaces(opts: operations.WatchListOpts = {}) {
+  async watchControllerRevisionListForAllNamespaces(
+    opts: operations.WatchListOpts = {},
+  ): Promise<c.WatchEventStream<AppsV1.ControllerRevision>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}controllerrevisions`,
@@ -45,7 +49,9 @@ export class AppsV1Api {
     return resp.pipeThrough(new c.WatchEventTransformer(AppsV1.toControllerRevision, MetaV1.toStatus));
   }
 
-  async getDaemonSetListForAllNamespaces(opts: operations.GetListOpts = {}) {
+  async getDaemonSetListForAllNamespaces(
+    opts: operations.GetListOpts = {},
+  ): Promise<AppsV1.DaemonSetList> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}daemonsets`,
@@ -56,7 +62,9 @@ export class AppsV1Api {
     return AppsV1.toDaemonSetList(resp);
   }
 
-  async watchDaemonSetListForAllNamespaces(opts: operations.WatchListOpts = {}) {
+  async watchDaemonSetListForAllNamespaces(
+    opts: operations.WatchListOpts = {},
+  ): Promise<c.WatchEventStream<AppsV1.DaemonSet>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}daemonsets`,
@@ -68,7 +76,9 @@ export class AppsV1Api {
     return resp.pipeThrough(new c.WatchEventTransformer(AppsV1.toDaemonSet, MetaV1.toStatus));
   }
 
-  async getDeploymentListForAllNamespaces(opts: operations.GetListOpts = {}) {
+  async getDeploymentListForAllNamespaces(
+    opts: operations.GetListOpts = {},
+  ): Promise<AppsV1.DeploymentList> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}deployments`,
@@ -79,7 +89,9 @@ export class AppsV1Api {
     return AppsV1.toDeploymentList(resp);
   }
 
-  async watchDeploymentListForAllNamespaces(opts: operations.WatchListOpts = {}) {
+  async watchDeploymentListForAllNamespaces(
+    opts: operations.WatchListOpts = {},
+  ): Promise<c.WatchEventStream<AppsV1.Deployment>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}deployments`,
@@ -91,7 +103,9 @@ export class AppsV1Api {
     return resp.pipeThrough(new c.WatchEventTransformer(AppsV1.toDeployment, MetaV1.toStatus));
   }
 
-  async getReplicaSetListForAllNamespaces(opts: operations.GetListOpts = {}) {
+  async getReplicaSetListForAllNamespaces(
+    opts: operations.GetListOpts = {},
+  ): Promise<AppsV1.ReplicaSetList> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}replicasets`,
@@ -102,7 +116,9 @@ export class AppsV1Api {
     return AppsV1.toReplicaSetList(resp);
   }
 
-  async watchReplicaSetListForAllNamespaces(opts: operations.WatchListOpts = {}) {
+  async watchReplicaSetListForAllNamespaces(
+    opts: operations.WatchListOpts = {},
+  ): Promise<c.WatchEventStream<AppsV1.ReplicaSet>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}replicasets`,
@@ -114,7 +130,9 @@ export class AppsV1Api {
     return resp.pipeThrough(new c.WatchEventTransformer(AppsV1.toReplicaSet, MetaV1.toStatus));
   }
 
-  async getStatefulSetListForAllNamespaces(opts: operations.GetListOpts = {}) {
+  async getStatefulSetListForAllNamespaces(
+    opts: operations.GetListOpts = {},
+  ): Promise<AppsV1.StatefulSetList> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}statefulsets`,
@@ -125,7 +143,9 @@ export class AppsV1Api {
     return AppsV1.toStatefulSetList(resp);
   }
 
-  async watchStatefulSetListForAllNamespaces(opts: operations.WatchListOpts = {}) {
+  async watchStatefulSetListForAllNamespaces(
+    opts: operations.WatchListOpts = {},
+  ): Promise<c.WatchEventStream<AppsV1.StatefulSet>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}statefulsets`,
@@ -147,7 +167,9 @@ export class AppsV1NamespacedApi {
     this.#root = `/apis/apps/v1/namespaces/${namespace}/`;
   }
 
-  async getControllerRevisionList(opts: operations.GetListOpts = {}) {
+  async getControllerRevisionList(
+    opts: operations.GetListOpts = {},
+  ): Promise<AppsV1.ControllerRevisionList> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}controllerrevisions`,
@@ -158,7 +180,9 @@ export class AppsV1NamespacedApi {
     return AppsV1.toControllerRevisionList(resp);
   }
 
-  async watchControllerRevisionList(opts: operations.WatchListOpts = {}) {
+  async watchControllerRevisionList(
+    opts: operations.WatchListOpts = {},
+  ): Promise<c.WatchEventStream<AppsV1.ControllerRevision>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}controllerrevisions`,
@@ -170,7 +194,10 @@ export class AppsV1NamespacedApi {
     return resp.pipeThrough(new c.WatchEventTransformer(AppsV1.toControllerRevision, MetaV1.toStatus));
   }
 
-  async createControllerRevision(body: AppsV1.ControllerRevision, opts: operations.PutOpts = {}) {
+  async createControllerRevision(
+    body: AppsV1.ControllerRevision,
+    opts: operations.PutOpts = {},
+  ): Promise<AppsV1.ControllerRevision> {
     const resp = await this.#client.performRequest({
       method: "POST",
       path: `${this.#root}controllerrevisions`,
@@ -182,7 +209,9 @@ export class AppsV1NamespacedApi {
     return AppsV1.toControllerRevision(resp);
   }
 
-  async deleteControllerRevisionList(opts: operations.DeleteListOpts = {}) {
+  async deleteControllerRevisionList(
+    opts: operations.DeleteListOpts = {},
+  ): Promise<AppsV1.ControllerRevisionList> {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}controllerrevisions`,
@@ -193,7 +222,10 @@ export class AppsV1NamespacedApi {
     return AppsV1.toControllerRevisionList(resp);
   }
 
-  async getControllerRevision(name: string, opts: operations.NoOpts = {}) {
+  async getControllerRevision(
+    name: string,
+    opts: operations.NoOpts = {},
+  ): Promise<AppsV1.ControllerRevision> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}controllerrevisions/${name}`,
@@ -203,7 +235,10 @@ export class AppsV1NamespacedApi {
     return AppsV1.toControllerRevision(resp);
   }
 
-  async deleteControllerRevision(name: string, opts: operations.DeleteOpts = {}) {
+  async deleteControllerRevision(
+    name: string,
+    opts: operations.DeleteOpts = {},
+  ): Promise<AppsV1.ControllerRevision | MetaV1.Status> {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}controllerrevisions/${name}`,
@@ -215,7 +250,11 @@ export class AppsV1NamespacedApi {
     return AppsV1.toControllerRevision(resp);
   }
 
-  async replaceControllerRevision(name: string, body: AppsV1.ControllerRevision, opts: operations.PutOpts = {}) {
+  async replaceControllerRevision(
+    name: string,
+    body: AppsV1.ControllerRevision,
+    opts: operations.PutOpts = {},
+  ): Promise<AppsV1.ControllerRevision> {
     const resp = await this.#client.performRequest({
       method: "PUT",
       path: `${this.#root}controllerrevisions/${name}`,
@@ -227,7 +266,12 @@ export class AppsV1NamespacedApi {
     return AppsV1.toControllerRevision(resp);
   }
 
-  async patchControllerRevision(name: string, type: c.PatchType, body: AppsV1.ControllerRevision | c.JsonPatch, opts: operations.PatchOpts = {}) {
+  async patchControllerRevision(
+    name: string,
+    type: c.PatchType,
+    body: AppsV1.ControllerRevision | c.JsonPatch,
+    opts: operations.PatchOpts = {},
+  ): Promise<AppsV1.ControllerRevision> {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}controllerrevisions/${name}`,
@@ -240,7 +284,9 @@ export class AppsV1NamespacedApi {
     return AppsV1.toControllerRevision(resp);
   }
 
-  async getDaemonSetList(opts: operations.GetListOpts = {}) {
+  async getDaemonSetList(
+    opts: operations.GetListOpts = {},
+  ): Promise<AppsV1.DaemonSetList> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}daemonsets`,
@@ -251,7 +297,9 @@ export class AppsV1NamespacedApi {
     return AppsV1.toDaemonSetList(resp);
   }
 
-  async watchDaemonSetList(opts: operations.WatchListOpts = {}) {
+  async watchDaemonSetList(
+    opts: operations.WatchListOpts = {},
+  ): Promise<c.WatchEventStream<AppsV1.DaemonSet>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}daemonsets`,
@@ -263,7 +311,10 @@ export class AppsV1NamespacedApi {
     return resp.pipeThrough(new c.WatchEventTransformer(AppsV1.toDaemonSet, MetaV1.toStatus));
   }
 
-  async createDaemonSet(body: AppsV1.DaemonSet, opts: operations.PutOpts = {}) {
+  async createDaemonSet(
+    body: AppsV1.DaemonSet,
+    opts: operations.PutOpts = {},
+  ): Promise<AppsV1.DaemonSet> {
     const resp = await this.#client.performRequest({
       method: "POST",
       path: `${this.#root}daemonsets`,
@@ -275,7 +326,9 @@ export class AppsV1NamespacedApi {
     return AppsV1.toDaemonSet(resp);
   }
 
-  async deleteDaemonSetList(opts: operations.DeleteListOpts = {}) {
+  async deleteDaemonSetList(
+    opts: operations.DeleteListOpts = {},
+  ): Promise<AppsV1.DaemonSetList> {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}daemonsets`,
@@ -286,7 +339,10 @@ export class AppsV1NamespacedApi {
     return AppsV1.toDaemonSetList(resp);
   }
 
-  async getDaemonSet(name: string, opts: operations.NoOpts = {}) {
+  async getDaemonSet(
+    name: string,
+    opts: operations.NoOpts = {},
+  ): Promise<AppsV1.DaemonSet> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}daemonsets/${name}`,
@@ -296,7 +352,10 @@ export class AppsV1NamespacedApi {
     return AppsV1.toDaemonSet(resp);
   }
 
-  async deleteDaemonSet(name: string, opts: operations.DeleteOpts = {}) {
+  async deleteDaemonSet(
+    name: string,
+    opts: operations.DeleteOpts = {},
+  ): Promise<AppsV1.DaemonSet | MetaV1.Status> {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}daemonsets/${name}`,
@@ -308,7 +367,11 @@ export class AppsV1NamespacedApi {
     return AppsV1.toDaemonSet(resp);
   }
 
-  async replaceDaemonSet(name: string, body: AppsV1.DaemonSet, opts: operations.PutOpts = {}) {
+  async replaceDaemonSet(
+    name: string,
+    body: AppsV1.DaemonSet,
+    opts: operations.PutOpts = {},
+  ): Promise<AppsV1.DaemonSet> {
     const resp = await this.#client.performRequest({
       method: "PUT",
       path: `${this.#root}daemonsets/${name}`,
@@ -320,7 +383,12 @@ export class AppsV1NamespacedApi {
     return AppsV1.toDaemonSet(resp);
   }
 
-  async patchDaemonSet(name: string, type: c.PatchType, body: AppsV1.DaemonSet | c.JsonPatch, opts: operations.PatchOpts = {}) {
+  async patchDaemonSet(
+    name: string,
+    type: c.PatchType,
+    body: AppsV1.DaemonSet | c.JsonPatch,
+    opts: operations.PatchOpts = {},
+  ): Promise<AppsV1.DaemonSet> {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}daemonsets/${name}`,
@@ -333,7 +401,10 @@ export class AppsV1NamespacedApi {
     return AppsV1.toDaemonSet(resp);
   }
 
-  async getDaemonSetStatus(name: string, opts: operations.NoOpts = {}) {
+  async getDaemonSetStatus(
+    name: string,
+    opts: operations.NoOpts = {},
+  ): Promise<AppsV1.DaemonSet> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}daemonsets/${name}/status`,
@@ -343,7 +414,11 @@ export class AppsV1NamespacedApi {
     return AppsV1.toDaemonSet(resp);
   }
 
-  async replaceDaemonSetStatus(name: string, body: AppsV1.DaemonSet, opts: operations.PutOpts = {}) {
+  async replaceDaemonSetStatus(
+    name: string,
+    body: AppsV1.DaemonSet,
+    opts: operations.PutOpts = {},
+  ): Promise<AppsV1.DaemonSet> {
     const resp = await this.#client.performRequest({
       method: "PUT",
       path: `${this.#root}daemonsets/${name}/status`,
@@ -355,7 +430,12 @@ export class AppsV1NamespacedApi {
     return AppsV1.toDaemonSet(resp);
   }
 
-  async patchDaemonSetStatus(name: string, type: c.PatchType, body: AppsV1.DaemonSet | c.JsonPatch, opts: operations.PatchOpts = {}) {
+  async patchDaemonSetStatus(
+    name: string,
+    type: c.PatchType,
+    body: AppsV1.DaemonSet | c.JsonPatch,
+    opts: operations.PatchOpts = {},
+  ): Promise<AppsV1.DaemonSet> {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}daemonsets/${name}/status`,
@@ -368,7 +448,9 @@ export class AppsV1NamespacedApi {
     return AppsV1.toDaemonSet(resp);
   }
 
-  async getDeploymentList(opts: operations.GetListOpts = {}) {
+  async getDeploymentList(
+    opts: operations.GetListOpts = {},
+  ): Promise<AppsV1.DeploymentList> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}deployments`,
@@ -379,7 +461,9 @@ export class AppsV1NamespacedApi {
     return AppsV1.toDeploymentList(resp);
   }
 
-  async watchDeploymentList(opts: operations.WatchListOpts = {}) {
+  async watchDeploymentList(
+    opts: operations.WatchListOpts = {},
+  ): Promise<c.WatchEventStream<AppsV1.Deployment>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}deployments`,
@@ -391,7 +475,10 @@ export class AppsV1NamespacedApi {
     return resp.pipeThrough(new c.WatchEventTransformer(AppsV1.toDeployment, MetaV1.toStatus));
   }
 
-  async createDeployment(body: AppsV1.Deployment, opts: operations.PutOpts = {}) {
+  async createDeployment(
+    body: AppsV1.Deployment,
+    opts: operations.PutOpts = {},
+  ): Promise<AppsV1.Deployment> {
     const resp = await this.#client.performRequest({
       method: "POST",
       path: `${this.#root}deployments`,
@@ -403,7 +490,9 @@ export class AppsV1NamespacedApi {
     return AppsV1.toDeployment(resp);
   }
 
-  async deleteDeploymentList(opts: operations.DeleteListOpts = {}) {
+  async deleteDeploymentList(
+    opts: operations.DeleteListOpts = {},
+  ): Promise<AppsV1.DeploymentList> {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}deployments`,
@@ -414,7 +503,10 @@ export class AppsV1NamespacedApi {
     return AppsV1.toDeploymentList(resp);
   }
 
-  async getDeployment(name: string, opts: operations.NoOpts = {}) {
+  async getDeployment(
+    name: string,
+    opts: operations.NoOpts = {},
+  ): Promise<AppsV1.Deployment> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}deployments/${name}`,
@@ -424,7 +516,10 @@ export class AppsV1NamespacedApi {
     return AppsV1.toDeployment(resp);
   }
 
-  async deleteDeployment(name: string, opts: operations.DeleteOpts = {}) {
+  async deleteDeployment(
+    name: string,
+    opts: operations.DeleteOpts = {},
+  ): Promise<AppsV1.Deployment | MetaV1.Status> {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}deployments/${name}`,
@@ -436,7 +531,11 @@ export class AppsV1NamespacedApi {
     return AppsV1.toDeployment(resp);
   }
 
-  async replaceDeployment(name: string, body: AppsV1.Deployment, opts: operations.PutOpts = {}) {
+  async replaceDeployment(
+    name: string,
+    body: AppsV1.Deployment,
+    opts: operations.PutOpts = {},
+  ): Promise<AppsV1.Deployment> {
     const resp = await this.#client.performRequest({
       method: "PUT",
       path: `${this.#root}deployments/${name}`,
@@ -448,7 +547,12 @@ export class AppsV1NamespacedApi {
     return AppsV1.toDeployment(resp);
   }
 
-  async patchDeployment(name: string, type: c.PatchType, body: AppsV1.Deployment | c.JsonPatch, opts: operations.PatchOpts = {}) {
+  async patchDeployment(
+    name: string,
+    type: c.PatchType,
+    body: AppsV1.Deployment | c.JsonPatch,
+    opts: operations.PatchOpts = {},
+  ): Promise<AppsV1.Deployment> {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}deployments/${name}`,
@@ -461,7 +565,10 @@ export class AppsV1NamespacedApi {
     return AppsV1.toDeployment(resp);
   }
 
-  async getDeploymentScale(name: string, opts: operations.NoOpts = {}) {
+  async getDeploymentScale(
+    name: string,
+    opts: operations.NoOpts = {},
+  ): Promise<AutoscalingV1.Scale> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}deployments/${name}/scale`,
@@ -471,7 +578,11 @@ export class AppsV1NamespacedApi {
     return AutoscalingV1.toScale(resp);
   }
 
-  async replaceDeploymentScale(name: string, body: AutoscalingV1.Scale, opts: operations.PutOpts = {}) {
+  async replaceDeploymentScale(
+    name: string,
+    body: AutoscalingV1.Scale,
+    opts: operations.PutOpts = {},
+  ): Promise<AutoscalingV1.Scale> {
     const resp = await this.#client.performRequest({
       method: "PUT",
       path: `${this.#root}deployments/${name}/scale`,
@@ -483,7 +594,12 @@ export class AppsV1NamespacedApi {
     return AutoscalingV1.toScale(resp);
   }
 
-  async patchDeploymentScale(name: string, type: c.PatchType, body: AutoscalingV1.Scale | c.JsonPatch, opts: operations.PatchOpts = {}) {
+  async patchDeploymentScale(
+    name: string,
+    type: c.PatchType,
+    body: AutoscalingV1.Scale | c.JsonPatch,
+    opts: operations.PatchOpts = {},
+  ): Promise<AutoscalingV1.Scale> {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}deployments/${name}/scale`,
@@ -496,7 +612,10 @@ export class AppsV1NamespacedApi {
     return AutoscalingV1.toScale(resp);
   }
 
-  async getDeploymentStatus(name: string, opts: operations.NoOpts = {}) {
+  async getDeploymentStatus(
+    name: string,
+    opts: operations.NoOpts = {},
+  ): Promise<AppsV1.Deployment> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}deployments/${name}/status`,
@@ -506,7 +625,11 @@ export class AppsV1NamespacedApi {
     return AppsV1.toDeployment(resp);
   }
 
-  async replaceDeploymentStatus(name: string, body: AppsV1.Deployment, opts: operations.PutOpts = {}) {
+  async replaceDeploymentStatus(
+    name: string,
+    body: AppsV1.Deployment,
+    opts: operations.PutOpts = {},
+  ): Promise<AppsV1.Deployment> {
     const resp = await this.#client.performRequest({
       method: "PUT",
       path: `${this.#root}deployments/${name}/status`,
@@ -518,7 +641,12 @@ export class AppsV1NamespacedApi {
     return AppsV1.toDeployment(resp);
   }
 
-  async patchDeploymentStatus(name: string, type: c.PatchType, body: AppsV1.Deployment | c.JsonPatch, opts: operations.PatchOpts = {}) {
+  async patchDeploymentStatus(
+    name: string,
+    type: c.PatchType,
+    body: AppsV1.Deployment | c.JsonPatch,
+    opts: operations.PatchOpts = {},
+  ): Promise<AppsV1.Deployment> {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}deployments/${name}/status`,
@@ -531,7 +659,9 @@ export class AppsV1NamespacedApi {
     return AppsV1.toDeployment(resp);
   }
 
-  async getReplicaSetList(opts: operations.GetListOpts = {}) {
+  async getReplicaSetList(
+    opts: operations.GetListOpts = {},
+  ): Promise<AppsV1.ReplicaSetList> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}replicasets`,
@@ -542,7 +672,9 @@ export class AppsV1NamespacedApi {
     return AppsV1.toReplicaSetList(resp);
   }
 
-  async watchReplicaSetList(opts: operations.WatchListOpts = {}) {
+  async watchReplicaSetList(
+    opts: operations.WatchListOpts = {},
+  ): Promise<c.WatchEventStream<AppsV1.ReplicaSet>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}replicasets`,
@@ -554,7 +686,10 @@ export class AppsV1NamespacedApi {
     return resp.pipeThrough(new c.WatchEventTransformer(AppsV1.toReplicaSet, MetaV1.toStatus));
   }
 
-  async createReplicaSet(body: AppsV1.ReplicaSet, opts: operations.PutOpts = {}) {
+  async createReplicaSet(
+    body: AppsV1.ReplicaSet,
+    opts: operations.PutOpts = {},
+  ): Promise<AppsV1.ReplicaSet> {
     const resp = await this.#client.performRequest({
       method: "POST",
       path: `${this.#root}replicasets`,
@@ -566,7 +701,9 @@ export class AppsV1NamespacedApi {
     return AppsV1.toReplicaSet(resp);
   }
 
-  async deleteReplicaSetList(opts: operations.DeleteListOpts = {}) {
+  async deleteReplicaSetList(
+    opts: operations.DeleteListOpts = {},
+  ): Promise<AppsV1.ReplicaSetList> {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}replicasets`,
@@ -577,7 +714,10 @@ export class AppsV1NamespacedApi {
     return AppsV1.toReplicaSetList(resp);
   }
 
-  async getReplicaSet(name: string, opts: operations.NoOpts = {}) {
+  async getReplicaSet(
+    name: string,
+    opts: operations.NoOpts = {},
+  ): Promise<AppsV1.ReplicaSet> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}replicasets/${name}`,
@@ -587,7 +727,10 @@ export class AppsV1NamespacedApi {
     return AppsV1.toReplicaSet(resp);
   }
 
-  async deleteReplicaSet(name: string, opts: operations.DeleteOpts = {}) {
+  async deleteReplicaSet(
+    name: string,
+    opts: operations.DeleteOpts = {},
+  ): Promise<AppsV1.ReplicaSet | MetaV1.Status> {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}replicasets/${name}`,
@@ -599,7 +742,11 @@ export class AppsV1NamespacedApi {
     return AppsV1.toReplicaSet(resp);
   }
 
-  async replaceReplicaSet(name: string, body: AppsV1.ReplicaSet, opts: operations.PutOpts = {}) {
+  async replaceReplicaSet(
+    name: string,
+    body: AppsV1.ReplicaSet,
+    opts: operations.PutOpts = {},
+  ): Promise<AppsV1.ReplicaSet> {
     const resp = await this.#client.performRequest({
       method: "PUT",
       path: `${this.#root}replicasets/${name}`,
@@ -611,7 +758,12 @@ export class AppsV1NamespacedApi {
     return AppsV1.toReplicaSet(resp);
   }
 
-  async patchReplicaSet(name: string, type: c.PatchType, body: AppsV1.ReplicaSet | c.JsonPatch, opts: operations.PatchOpts = {}) {
+  async patchReplicaSet(
+    name: string,
+    type: c.PatchType,
+    body: AppsV1.ReplicaSet | c.JsonPatch,
+    opts: operations.PatchOpts = {},
+  ): Promise<AppsV1.ReplicaSet> {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}replicasets/${name}`,
@@ -624,7 +776,10 @@ export class AppsV1NamespacedApi {
     return AppsV1.toReplicaSet(resp);
   }
 
-  async getReplicaSetScale(name: string, opts: operations.NoOpts = {}) {
+  async getReplicaSetScale(
+    name: string,
+    opts: operations.NoOpts = {},
+  ): Promise<AutoscalingV1.Scale> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}replicasets/${name}/scale`,
@@ -634,7 +789,11 @@ export class AppsV1NamespacedApi {
     return AutoscalingV1.toScale(resp);
   }
 
-  async replaceReplicaSetScale(name: string, body: AutoscalingV1.Scale, opts: operations.PutOpts = {}) {
+  async replaceReplicaSetScale(
+    name: string,
+    body: AutoscalingV1.Scale,
+    opts: operations.PutOpts = {},
+  ): Promise<AutoscalingV1.Scale> {
     const resp = await this.#client.performRequest({
       method: "PUT",
       path: `${this.#root}replicasets/${name}/scale`,
@@ -646,7 +805,12 @@ export class AppsV1NamespacedApi {
     return AutoscalingV1.toScale(resp);
   }
 
-  async patchReplicaSetScale(name: string, type: c.PatchType, body: AutoscalingV1.Scale | c.JsonPatch, opts: operations.PatchOpts = {}) {
+  async patchReplicaSetScale(
+    name: string,
+    type: c.PatchType,
+    body: AutoscalingV1.Scale | c.JsonPatch,
+    opts: operations.PatchOpts = {},
+  ): Promise<AutoscalingV1.Scale> {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}replicasets/${name}/scale`,
@@ -659,7 +823,10 @@ export class AppsV1NamespacedApi {
     return AutoscalingV1.toScale(resp);
   }
 
-  async getReplicaSetStatus(name: string, opts: operations.NoOpts = {}) {
+  async getReplicaSetStatus(
+    name: string,
+    opts: operations.NoOpts = {},
+  ): Promise<AppsV1.ReplicaSet> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}replicasets/${name}/status`,
@@ -669,7 +836,11 @@ export class AppsV1NamespacedApi {
     return AppsV1.toReplicaSet(resp);
   }
 
-  async replaceReplicaSetStatus(name: string, body: AppsV1.ReplicaSet, opts: operations.PutOpts = {}) {
+  async replaceReplicaSetStatus(
+    name: string,
+    body: AppsV1.ReplicaSet,
+    opts: operations.PutOpts = {},
+  ): Promise<AppsV1.ReplicaSet> {
     const resp = await this.#client.performRequest({
       method: "PUT",
       path: `${this.#root}replicasets/${name}/status`,
@@ -681,7 +852,12 @@ export class AppsV1NamespacedApi {
     return AppsV1.toReplicaSet(resp);
   }
 
-  async patchReplicaSetStatus(name: string, type: c.PatchType, body: AppsV1.ReplicaSet | c.JsonPatch, opts: operations.PatchOpts = {}) {
+  async patchReplicaSetStatus(
+    name: string,
+    type: c.PatchType,
+    body: AppsV1.ReplicaSet | c.JsonPatch,
+    opts: operations.PatchOpts = {},
+  ): Promise<AppsV1.ReplicaSet> {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}replicasets/${name}/status`,
@@ -694,7 +870,9 @@ export class AppsV1NamespacedApi {
     return AppsV1.toReplicaSet(resp);
   }
 
-  async getStatefulSetList(opts: operations.GetListOpts = {}) {
+  async getStatefulSetList(
+    opts: operations.GetListOpts = {},
+  ): Promise<AppsV1.StatefulSetList> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}statefulsets`,
@@ -705,7 +883,9 @@ export class AppsV1NamespacedApi {
     return AppsV1.toStatefulSetList(resp);
   }
 
-  async watchStatefulSetList(opts: operations.WatchListOpts = {}) {
+  async watchStatefulSetList(
+    opts: operations.WatchListOpts = {},
+  ): Promise<c.WatchEventStream<AppsV1.StatefulSet>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}statefulsets`,
@@ -717,7 +897,10 @@ export class AppsV1NamespacedApi {
     return resp.pipeThrough(new c.WatchEventTransformer(AppsV1.toStatefulSet, MetaV1.toStatus));
   }
 
-  async createStatefulSet(body: AppsV1.StatefulSet, opts: operations.PutOpts = {}) {
+  async createStatefulSet(
+    body: AppsV1.StatefulSet,
+    opts: operations.PutOpts = {},
+  ): Promise<AppsV1.StatefulSet> {
     const resp = await this.#client.performRequest({
       method: "POST",
       path: `${this.#root}statefulsets`,
@@ -729,7 +912,9 @@ export class AppsV1NamespacedApi {
     return AppsV1.toStatefulSet(resp);
   }
 
-  async deleteStatefulSetList(opts: operations.DeleteListOpts = {}) {
+  async deleteStatefulSetList(
+    opts: operations.DeleteListOpts = {},
+  ): Promise<AppsV1.StatefulSetList> {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}statefulsets`,
@@ -740,7 +925,10 @@ export class AppsV1NamespacedApi {
     return AppsV1.toStatefulSetList(resp);
   }
 
-  async getStatefulSet(name: string, opts: operations.NoOpts = {}) {
+  async getStatefulSet(
+    name: string,
+    opts: operations.NoOpts = {},
+  ): Promise<AppsV1.StatefulSet> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}statefulsets/${name}`,
@@ -750,7 +938,10 @@ export class AppsV1NamespacedApi {
     return AppsV1.toStatefulSet(resp);
   }
 
-  async deleteStatefulSet(name: string, opts: operations.DeleteOpts = {}) {
+  async deleteStatefulSet(
+    name: string,
+    opts: operations.DeleteOpts = {},
+  ): Promise<AppsV1.StatefulSet | MetaV1.Status> {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}statefulsets/${name}`,
@@ -762,7 +953,11 @@ export class AppsV1NamespacedApi {
     return AppsV1.toStatefulSet(resp);
   }
 
-  async replaceStatefulSet(name: string, body: AppsV1.StatefulSet, opts: operations.PutOpts = {}) {
+  async replaceStatefulSet(
+    name: string,
+    body: AppsV1.StatefulSet,
+    opts: operations.PutOpts = {},
+  ): Promise<AppsV1.StatefulSet> {
     const resp = await this.#client.performRequest({
       method: "PUT",
       path: `${this.#root}statefulsets/${name}`,
@@ -774,7 +969,12 @@ export class AppsV1NamespacedApi {
     return AppsV1.toStatefulSet(resp);
   }
 
-  async patchStatefulSet(name: string, type: c.PatchType, body: AppsV1.StatefulSet | c.JsonPatch, opts: operations.PatchOpts = {}) {
+  async patchStatefulSet(
+    name: string,
+    type: c.PatchType,
+    body: AppsV1.StatefulSet | c.JsonPatch,
+    opts: operations.PatchOpts = {},
+  ): Promise<AppsV1.StatefulSet> {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}statefulsets/${name}`,
@@ -787,7 +987,10 @@ export class AppsV1NamespacedApi {
     return AppsV1.toStatefulSet(resp);
   }
 
-  async getStatefulSetScale(name: string, opts: operations.NoOpts = {}) {
+  async getStatefulSetScale(
+    name: string,
+    opts: operations.NoOpts = {},
+  ): Promise<AutoscalingV1.Scale> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}statefulsets/${name}/scale`,
@@ -797,7 +1000,11 @@ export class AppsV1NamespacedApi {
     return AutoscalingV1.toScale(resp);
   }
 
-  async replaceStatefulSetScale(name: string, body: AutoscalingV1.Scale, opts: operations.PutOpts = {}) {
+  async replaceStatefulSetScale(
+    name: string,
+    body: AutoscalingV1.Scale,
+    opts: operations.PutOpts = {},
+  ): Promise<AutoscalingV1.Scale> {
     const resp = await this.#client.performRequest({
       method: "PUT",
       path: `${this.#root}statefulsets/${name}/scale`,
@@ -809,7 +1016,12 @@ export class AppsV1NamespacedApi {
     return AutoscalingV1.toScale(resp);
   }
 
-  async patchStatefulSetScale(name: string, type: c.PatchType, body: AutoscalingV1.Scale | c.JsonPatch, opts: operations.PatchOpts = {}) {
+  async patchStatefulSetScale(
+    name: string,
+    type: c.PatchType,
+    body: AutoscalingV1.Scale | c.JsonPatch,
+    opts: operations.PatchOpts = {},
+  ): Promise<AutoscalingV1.Scale> {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}statefulsets/${name}/scale`,
@@ -822,7 +1034,10 @@ export class AppsV1NamespacedApi {
     return AutoscalingV1.toScale(resp);
   }
 
-  async getStatefulSetStatus(name: string, opts: operations.NoOpts = {}) {
+  async getStatefulSetStatus(
+    name: string,
+    opts: operations.NoOpts = {},
+  ): Promise<AppsV1.StatefulSet> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}statefulsets/${name}/status`,
@@ -832,7 +1047,11 @@ export class AppsV1NamespacedApi {
     return AppsV1.toStatefulSet(resp);
   }
 
-  async replaceStatefulSetStatus(name: string, body: AppsV1.StatefulSet, opts: operations.PutOpts = {}) {
+  async replaceStatefulSetStatus(
+    name: string,
+    body: AppsV1.StatefulSet,
+    opts: operations.PutOpts = {},
+  ): Promise<AppsV1.StatefulSet> {
     const resp = await this.#client.performRequest({
       method: "PUT",
       path: `${this.#root}statefulsets/${name}/status`,
@@ -844,7 +1063,12 @@ export class AppsV1NamespacedApi {
     return AppsV1.toStatefulSet(resp);
   }
 
-  async patchStatefulSetStatus(name: string, type: c.PatchType, body: AppsV1.StatefulSet | c.JsonPatch, opts: operations.PatchOpts = {}) {
+  async patchStatefulSetStatus(
+    name: string,
+    type: c.PatchType,
+    body: AppsV1.StatefulSet | c.JsonPatch,
+    opts: operations.PatchOpts = {},
+  ): Promise<AppsV1.StatefulSet> {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}statefulsets/${name}/status`,

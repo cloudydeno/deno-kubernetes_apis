@@ -2,17 +2,24 @@
 // All the generated code uses this centralized API contract,
 //   while users are free to pass in a different compatible client to actually call
 
-import { toStatus } from './builtin/meta@v1/structs.ts';
+import { toStatus, type Status } from "./builtin/meta@v1/structs.ts";
 import {
   ApiKind,
-  JSONObject, JSONValue,
+  JSONObject,
+  JSONValue,
   RequestOptions,
-} from "https://deno.land/x/kubernetes_client@v0.7.0/lib/contract.ts";
-
-export * from "https://deno.land/x/kubernetes_client@v0.7.0/lib/contract.ts";
+  type WatchEvent
+} from "./deps.ts";
 export {
-  WatchEventTransformer
-} from "https://deno.land/x/kubernetes_client@v0.7.0/lib/stream-transformers.ts";
+  type ApiKind,
+  type JSONValue,
+  type RestClient,
+  WatchEventTransformer,
+  type WatchEvent,
+} from "./deps.ts";
+
+// Shorthand for generated type signatures
+export type WatchEventStream<T> = ReadableStream<WatchEvent<T & ApiKind, Status & ApiKind>>;
 
 // Helpers used to validate/transform structures from or for the wire
 // And some other stuff :)
@@ -25,7 +32,10 @@ export function assertOrAddApiVersionAndKind<
 >(input: JSONObject | {
   apiVersion?: JSONValue;
   kind?: JSONValue;
-}, expectedVersion: T, expectedKind: U, required = false) {
+}, expectedVersion: T, expectedKind: U, required = false): {
+  apiVersion: T;
+  kind: U;
+} {
   const output = { apiVersion: expectedVersion, kind: expectedKind };
 
   // If nothing is given, we might return the expected data
@@ -58,14 +68,14 @@ export function assertOrAddApiVersionAndKind<
     `Expected ${expected}, but was given ${given}. ${libBug}`);
 }
 
-export function isStatusKind(input: JSONValue) {
+export function isStatusKind(input: JSONValue): boolean {
   if (!input || typeof input !== 'object') return false;
   const res = input as ApiKind;
   return res.apiVersion === 'v1' && res.kind === 'Status';
 }
 
 
-export function identity(input: JSONValue) {
+export function identity(input: JSONValue): JSONValue {
   return input;
 }
 
@@ -234,7 +244,7 @@ export function toIntOrString(input: JSONValue): string | number {
 // apply-patch is an up-and-coming feature "Server-Side Apply" and not enabled by default yet.
 
 export type PatchType = 'strategic-merge' | 'json-merge' | 'json-patch' | 'apply-patch';
-export function getPatchContentType(type: PatchType) {
+export function getPatchContentType(type: PatchType): string {
   switch (type) {
     case 'strategic-merge': return 'application/strategic-merge-patch+json';
     case 'json-merge': return 'application/merge-patch+json';

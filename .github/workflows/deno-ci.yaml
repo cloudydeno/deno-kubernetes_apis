@@ -13,9 +13,9 @@ jobs:
     strategy:
       matrix:
         deno-version:
-        - v1.28
-        - v1.32
-        - v1.36
+        - v1.41
+        - v1.43
+        - v1.45
         - canary
       fail-fast: false # run each branch to completion
 
@@ -51,3 +51,20 @@ jobs:
 
     - name: Test
       run: time deno test
+
+  audit-lib:
+    runs-on: ubuntu-latest
+    name: Audit ./lib
+
+    steps:
+    - name: Checkout source
+      uses: actions/checkout@v4
+
+    - name: Use Deno v1
+      uses: denoland/setup-deno@v1
+      with:
+        deno-version: v1
+
+    - name: Check publish rules
+      working-directory: lib
+      run: ../with-jsr-deps.sh deno publish --dry-run --allow-dirty

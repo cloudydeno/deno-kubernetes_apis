@@ -13,15 +13,17 @@ export class CertManagerIoV1Api {
     this.#client = client;
   }
 
-  namespace(name: string) {
+  namespace(name: string): CertManagerIoV1NamespacedApi {
     return new CertManagerIoV1NamespacedApi(this.#client, name);
   }
-  myNamespace() {
+  myNamespace(): CertManagerIoV1NamespacedApi {
     if (!this.#client.defaultNamespace) throw new Error("No current namespace is set");
     return new CertManagerIoV1NamespacedApi(this.#client, this.#client.defaultNamespace);
   }
 
-  async getCertificateRequestListForAllNamespaces(opts: operations.GetListOpts = {}) {
+  async getCertificateRequestListForAllNamespaces(
+    opts: operations.GetListOpts = {},
+  ): Promise<CertManagerIoV1.CertificateRequestList> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}certificaterequests`,
@@ -32,7 +34,9 @@ export class CertManagerIoV1Api {
     return CertManagerIoV1.toCertificateRequestList(resp);
   }
 
-  async watchCertificateRequestListForAllNamespaces(opts: operations.WatchListOpts = {}) {
+  async watchCertificateRequestListForAllNamespaces(
+    opts: operations.WatchListOpts = {},
+  ): Promise<c.WatchEventStream<CertManagerIoV1.CertificateRequest>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}certificaterequests`,
@@ -44,7 +48,9 @@ export class CertManagerIoV1Api {
     return resp.pipeThrough(new c.WatchEventTransformer(CertManagerIoV1.toCertificateRequest, MetaV1.toStatus));
   }
 
-  async getCertificateListForAllNamespaces(opts: operations.GetListOpts = {}) {
+  async getCertificateListForAllNamespaces(
+    opts: operations.GetListOpts = {},
+  ): Promise<CertManagerIoV1.CertificateList> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}certificates`,
@@ -55,7 +61,9 @@ export class CertManagerIoV1Api {
     return CertManagerIoV1.toCertificateList(resp);
   }
 
-  async watchCertificateListForAllNamespaces(opts: operations.WatchListOpts = {}) {
+  async watchCertificateListForAllNamespaces(
+    opts: operations.WatchListOpts = {},
+  ): Promise<c.WatchEventStream<CertManagerIoV1.Certificate>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}certificates`,
@@ -67,7 +75,9 @@ export class CertManagerIoV1Api {
     return resp.pipeThrough(new c.WatchEventTransformer(CertManagerIoV1.toCertificate, MetaV1.toStatus));
   }
 
-  async getClusterIssuerList(opts: operations.GetListOpts = {}) {
+  async getClusterIssuerList(
+    opts: operations.GetListOpts = {},
+  ): Promise<CertManagerIoV1.ClusterIssuerList> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}clusterissuers`,
@@ -78,7 +88,9 @@ export class CertManagerIoV1Api {
     return CertManagerIoV1.toClusterIssuerList(resp);
   }
 
-  async watchClusterIssuerList(opts: operations.WatchListOpts = {}) {
+  async watchClusterIssuerList(
+    opts: operations.WatchListOpts = {},
+  ): Promise<c.WatchEventStream<CertManagerIoV1.ClusterIssuer>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}clusterissuers`,
@@ -90,7 +102,10 @@ export class CertManagerIoV1Api {
     return resp.pipeThrough(new c.WatchEventTransformer(CertManagerIoV1.toClusterIssuer, MetaV1.toStatus));
   }
 
-  async createClusterIssuer(body: CertManagerIoV1.ClusterIssuer, opts: operations.PutOpts = {}) {
+  async createClusterIssuer(
+    body: CertManagerIoV1.ClusterIssuer,
+    opts: operations.PutOpts = {},
+  ): Promise<CertManagerIoV1.ClusterIssuer> {
     const resp = await this.#client.performRequest({
       method: "POST",
       path: `${this.#root}clusterissuers`,
@@ -102,7 +117,9 @@ export class CertManagerIoV1Api {
     return CertManagerIoV1.toClusterIssuer(resp);
   }
 
-  async deleteClusterIssuerList(opts: operations.DeleteListOpts = {}) {
+  async deleteClusterIssuerList(
+    opts: operations.DeleteListOpts = {},
+  ): Promise<CertManagerIoV1.ClusterIssuerList> {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}clusterissuers`,
@@ -113,7 +130,10 @@ export class CertManagerIoV1Api {
     return CertManagerIoV1.toClusterIssuerList(resp);
   }
 
-  async getClusterIssuer(name: string, opts: operations.NoOpts = {}) {
+  async getClusterIssuer(
+    name: string,
+    opts: operations.NoOpts = {},
+  ): Promise<CertManagerIoV1.ClusterIssuer> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}clusterissuers/${name}`,
@@ -123,7 +143,10 @@ export class CertManagerIoV1Api {
     return CertManagerIoV1.toClusterIssuer(resp);
   }
 
-  async deleteClusterIssuer(name: string, opts: operations.DeleteOpts = {}) {
+  async deleteClusterIssuer(
+    name: string,
+    opts: operations.DeleteOpts = {},
+  ): Promise<CertManagerIoV1.ClusterIssuer | MetaV1.Status> {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}clusterissuers/${name}`,
@@ -135,7 +158,11 @@ export class CertManagerIoV1Api {
     return CertManagerIoV1.toClusterIssuer(resp);
   }
 
-  async replaceClusterIssuer(name: string, body: CertManagerIoV1.ClusterIssuer, opts: operations.PutOpts = {}) {
+  async replaceClusterIssuer(
+    name: string,
+    body: CertManagerIoV1.ClusterIssuer,
+    opts: operations.PutOpts = {},
+  ): Promise<CertManagerIoV1.ClusterIssuer> {
     const resp = await this.#client.performRequest({
       method: "PUT",
       path: `${this.#root}clusterissuers/${name}`,
@@ -147,7 +174,12 @@ export class CertManagerIoV1Api {
     return CertManagerIoV1.toClusterIssuer(resp);
   }
 
-  async patchClusterIssuer(name: string, type: c.PatchType, body: CertManagerIoV1.ClusterIssuer | c.JsonPatch, opts: operations.PatchOpts = {}) {
+  async patchClusterIssuer(
+    name: string,
+    type: c.PatchType,
+    body: CertManagerIoV1.ClusterIssuer | c.JsonPatch,
+    opts: operations.PatchOpts = {},
+  ): Promise<CertManagerIoV1.ClusterIssuer> {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}clusterissuers/${name}`,
@@ -160,7 +192,10 @@ export class CertManagerIoV1Api {
     return CertManagerIoV1.toClusterIssuer(resp);
   }
 
-  async getClusterIssuerStatus(name: string, opts: operations.NoOpts = {}) {
+  async getClusterIssuerStatus(
+    name: string,
+    opts: operations.NoOpts = {},
+  ): Promise<CertManagerIoV1.ClusterIssuer> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}clusterissuers/${name}/status`,
@@ -170,7 +205,11 @@ export class CertManagerIoV1Api {
     return CertManagerIoV1.toClusterIssuer(resp);
   }
 
-  async replaceClusterIssuerStatus(name: string, body: CertManagerIoV1.ClusterIssuer, opts: operations.PutOpts = {}) {
+  async replaceClusterIssuerStatus(
+    name: string,
+    body: CertManagerIoV1.ClusterIssuer,
+    opts: operations.PutOpts = {},
+  ): Promise<CertManagerIoV1.ClusterIssuer> {
     const resp = await this.#client.performRequest({
       method: "PUT",
       path: `${this.#root}clusterissuers/${name}/status`,
@@ -182,7 +221,12 @@ export class CertManagerIoV1Api {
     return CertManagerIoV1.toClusterIssuer(resp);
   }
 
-  async patchClusterIssuerStatus(name: string, type: c.PatchType, body: CertManagerIoV1.ClusterIssuer | c.JsonPatch, opts: operations.PatchOpts = {}) {
+  async patchClusterIssuerStatus(
+    name: string,
+    type: c.PatchType,
+    body: CertManagerIoV1.ClusterIssuer | c.JsonPatch,
+    opts: operations.PatchOpts = {},
+  ): Promise<CertManagerIoV1.ClusterIssuer> {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}clusterissuers/${name}/status`,
@@ -195,7 +239,9 @@ export class CertManagerIoV1Api {
     return CertManagerIoV1.toClusterIssuer(resp);
   }
 
-  async getIssuerListForAllNamespaces(opts: operations.GetListOpts = {}) {
+  async getIssuerListForAllNamespaces(
+    opts: operations.GetListOpts = {},
+  ): Promise<CertManagerIoV1.IssuerList> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}issuers`,
@@ -206,7 +252,9 @@ export class CertManagerIoV1Api {
     return CertManagerIoV1.toIssuerList(resp);
   }
 
-  async watchIssuerListForAllNamespaces(opts: operations.WatchListOpts = {}) {
+  async watchIssuerListForAllNamespaces(
+    opts: operations.WatchListOpts = {},
+  ): Promise<c.WatchEventStream<CertManagerIoV1.Issuer>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}issuers`,
@@ -228,7 +276,9 @@ export class CertManagerIoV1NamespacedApi {
     this.#root = `/apis/cert-manager.io/v1/namespaces/${namespace}/`;
   }
 
-  async getCertificateRequestList(opts: operations.GetListOpts = {}) {
+  async getCertificateRequestList(
+    opts: operations.GetListOpts = {},
+  ): Promise<CertManagerIoV1.CertificateRequestList> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}certificaterequests`,
@@ -239,7 +289,9 @@ export class CertManagerIoV1NamespacedApi {
     return CertManagerIoV1.toCertificateRequestList(resp);
   }
 
-  async watchCertificateRequestList(opts: operations.WatchListOpts = {}) {
+  async watchCertificateRequestList(
+    opts: operations.WatchListOpts = {},
+  ): Promise<c.WatchEventStream<CertManagerIoV1.CertificateRequest>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}certificaterequests`,
@@ -251,7 +303,10 @@ export class CertManagerIoV1NamespacedApi {
     return resp.pipeThrough(new c.WatchEventTransformer(CertManagerIoV1.toCertificateRequest, MetaV1.toStatus));
   }
 
-  async createCertificateRequest(body: CertManagerIoV1.CertificateRequest, opts: operations.PutOpts = {}) {
+  async createCertificateRequest(
+    body: CertManagerIoV1.CertificateRequest,
+    opts: operations.PutOpts = {},
+  ): Promise<CertManagerIoV1.CertificateRequest> {
     const resp = await this.#client.performRequest({
       method: "POST",
       path: `${this.#root}certificaterequests`,
@@ -263,7 +318,9 @@ export class CertManagerIoV1NamespacedApi {
     return CertManagerIoV1.toCertificateRequest(resp);
   }
 
-  async deleteCertificateRequestList(opts: operations.DeleteListOpts = {}) {
+  async deleteCertificateRequestList(
+    opts: operations.DeleteListOpts = {},
+  ): Promise<CertManagerIoV1.CertificateRequestList> {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}certificaterequests`,
@@ -274,7 +331,10 @@ export class CertManagerIoV1NamespacedApi {
     return CertManagerIoV1.toCertificateRequestList(resp);
   }
 
-  async getCertificateRequest(name: string, opts: operations.NoOpts = {}) {
+  async getCertificateRequest(
+    name: string,
+    opts: operations.NoOpts = {},
+  ): Promise<CertManagerIoV1.CertificateRequest> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}certificaterequests/${name}`,
@@ -284,7 +344,10 @@ export class CertManagerIoV1NamespacedApi {
     return CertManagerIoV1.toCertificateRequest(resp);
   }
 
-  async deleteCertificateRequest(name: string, opts: operations.DeleteOpts = {}) {
+  async deleteCertificateRequest(
+    name: string,
+    opts: operations.DeleteOpts = {},
+  ): Promise<CertManagerIoV1.CertificateRequest | MetaV1.Status> {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}certificaterequests/${name}`,
@@ -296,7 +359,11 @@ export class CertManagerIoV1NamespacedApi {
     return CertManagerIoV1.toCertificateRequest(resp);
   }
 
-  async replaceCertificateRequest(name: string, body: CertManagerIoV1.CertificateRequest, opts: operations.PutOpts = {}) {
+  async replaceCertificateRequest(
+    name: string,
+    body: CertManagerIoV1.CertificateRequest,
+    opts: operations.PutOpts = {},
+  ): Promise<CertManagerIoV1.CertificateRequest> {
     const resp = await this.#client.performRequest({
       method: "PUT",
       path: `${this.#root}certificaterequests/${name}`,
@@ -308,7 +375,12 @@ export class CertManagerIoV1NamespacedApi {
     return CertManagerIoV1.toCertificateRequest(resp);
   }
 
-  async patchCertificateRequest(name: string, type: c.PatchType, body: CertManagerIoV1.CertificateRequest | c.JsonPatch, opts: operations.PatchOpts = {}) {
+  async patchCertificateRequest(
+    name: string,
+    type: c.PatchType,
+    body: CertManagerIoV1.CertificateRequest | c.JsonPatch,
+    opts: operations.PatchOpts = {},
+  ): Promise<CertManagerIoV1.CertificateRequest> {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}certificaterequests/${name}`,
@@ -321,7 +393,10 @@ export class CertManagerIoV1NamespacedApi {
     return CertManagerIoV1.toCertificateRequest(resp);
   }
 
-  async getCertificateRequestStatus(name: string, opts: operations.NoOpts = {}) {
+  async getCertificateRequestStatus(
+    name: string,
+    opts: operations.NoOpts = {},
+  ): Promise<CertManagerIoV1.CertificateRequest> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}certificaterequests/${name}/status`,
@@ -331,7 +406,11 @@ export class CertManagerIoV1NamespacedApi {
     return CertManagerIoV1.toCertificateRequest(resp);
   }
 
-  async replaceCertificateRequestStatus(name: string, body: CertManagerIoV1.CertificateRequest, opts: operations.PutOpts = {}) {
+  async replaceCertificateRequestStatus(
+    name: string,
+    body: CertManagerIoV1.CertificateRequest,
+    opts: operations.PutOpts = {},
+  ): Promise<CertManagerIoV1.CertificateRequest> {
     const resp = await this.#client.performRequest({
       method: "PUT",
       path: `${this.#root}certificaterequests/${name}/status`,
@@ -343,7 +422,12 @@ export class CertManagerIoV1NamespacedApi {
     return CertManagerIoV1.toCertificateRequest(resp);
   }
 
-  async patchCertificateRequestStatus(name: string, type: c.PatchType, body: CertManagerIoV1.CertificateRequest | c.JsonPatch, opts: operations.PatchOpts = {}) {
+  async patchCertificateRequestStatus(
+    name: string,
+    type: c.PatchType,
+    body: CertManagerIoV1.CertificateRequest | c.JsonPatch,
+    opts: operations.PatchOpts = {},
+  ): Promise<CertManagerIoV1.CertificateRequest> {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}certificaterequests/${name}/status`,
@@ -356,7 +440,9 @@ export class CertManagerIoV1NamespacedApi {
     return CertManagerIoV1.toCertificateRequest(resp);
   }
 
-  async getCertificateList(opts: operations.GetListOpts = {}) {
+  async getCertificateList(
+    opts: operations.GetListOpts = {},
+  ): Promise<CertManagerIoV1.CertificateList> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}certificates`,
@@ -367,7 +453,9 @@ export class CertManagerIoV1NamespacedApi {
     return CertManagerIoV1.toCertificateList(resp);
   }
 
-  async watchCertificateList(opts: operations.WatchListOpts = {}) {
+  async watchCertificateList(
+    opts: operations.WatchListOpts = {},
+  ): Promise<c.WatchEventStream<CertManagerIoV1.Certificate>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}certificates`,
@@ -379,7 +467,10 @@ export class CertManagerIoV1NamespacedApi {
     return resp.pipeThrough(new c.WatchEventTransformer(CertManagerIoV1.toCertificate, MetaV1.toStatus));
   }
 
-  async createCertificate(body: CertManagerIoV1.Certificate, opts: operations.PutOpts = {}) {
+  async createCertificate(
+    body: CertManagerIoV1.Certificate,
+    opts: operations.PutOpts = {},
+  ): Promise<CertManagerIoV1.Certificate> {
     const resp = await this.#client.performRequest({
       method: "POST",
       path: `${this.#root}certificates`,
@@ -391,7 +482,9 @@ export class CertManagerIoV1NamespacedApi {
     return CertManagerIoV1.toCertificate(resp);
   }
 
-  async deleteCertificateList(opts: operations.DeleteListOpts = {}) {
+  async deleteCertificateList(
+    opts: operations.DeleteListOpts = {},
+  ): Promise<CertManagerIoV1.CertificateList> {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}certificates`,
@@ -402,7 +495,10 @@ export class CertManagerIoV1NamespacedApi {
     return CertManagerIoV1.toCertificateList(resp);
   }
 
-  async getCertificate(name: string, opts: operations.NoOpts = {}) {
+  async getCertificate(
+    name: string,
+    opts: operations.NoOpts = {},
+  ): Promise<CertManagerIoV1.Certificate> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}certificates/${name}`,
@@ -412,7 +508,10 @@ export class CertManagerIoV1NamespacedApi {
     return CertManagerIoV1.toCertificate(resp);
   }
 
-  async deleteCertificate(name: string, opts: operations.DeleteOpts = {}) {
+  async deleteCertificate(
+    name: string,
+    opts: operations.DeleteOpts = {},
+  ): Promise<CertManagerIoV1.Certificate | MetaV1.Status> {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}certificates/${name}`,
@@ -424,7 +523,11 @@ export class CertManagerIoV1NamespacedApi {
     return CertManagerIoV1.toCertificate(resp);
   }
 
-  async replaceCertificate(name: string, body: CertManagerIoV1.Certificate, opts: operations.PutOpts = {}) {
+  async replaceCertificate(
+    name: string,
+    body: CertManagerIoV1.Certificate,
+    opts: operations.PutOpts = {},
+  ): Promise<CertManagerIoV1.Certificate> {
     const resp = await this.#client.performRequest({
       method: "PUT",
       path: `${this.#root}certificates/${name}`,
@@ -436,7 +539,12 @@ export class CertManagerIoV1NamespacedApi {
     return CertManagerIoV1.toCertificate(resp);
   }
 
-  async patchCertificate(name: string, type: c.PatchType, body: CertManagerIoV1.Certificate | c.JsonPatch, opts: operations.PatchOpts = {}) {
+  async patchCertificate(
+    name: string,
+    type: c.PatchType,
+    body: CertManagerIoV1.Certificate | c.JsonPatch,
+    opts: operations.PatchOpts = {},
+  ): Promise<CertManagerIoV1.Certificate> {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}certificates/${name}`,
@@ -449,7 +557,10 @@ export class CertManagerIoV1NamespacedApi {
     return CertManagerIoV1.toCertificate(resp);
   }
 
-  async getCertificateStatus(name: string, opts: operations.NoOpts = {}) {
+  async getCertificateStatus(
+    name: string,
+    opts: operations.NoOpts = {},
+  ): Promise<CertManagerIoV1.Certificate> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}certificates/${name}/status`,
@@ -459,7 +570,11 @@ export class CertManagerIoV1NamespacedApi {
     return CertManagerIoV1.toCertificate(resp);
   }
 
-  async replaceCertificateStatus(name: string, body: CertManagerIoV1.Certificate, opts: operations.PutOpts = {}) {
+  async replaceCertificateStatus(
+    name: string,
+    body: CertManagerIoV1.Certificate,
+    opts: operations.PutOpts = {},
+  ): Promise<CertManagerIoV1.Certificate> {
     const resp = await this.#client.performRequest({
       method: "PUT",
       path: `${this.#root}certificates/${name}/status`,
@@ -471,7 +586,12 @@ export class CertManagerIoV1NamespacedApi {
     return CertManagerIoV1.toCertificate(resp);
   }
 
-  async patchCertificateStatus(name: string, type: c.PatchType, body: CertManagerIoV1.Certificate | c.JsonPatch, opts: operations.PatchOpts = {}) {
+  async patchCertificateStatus(
+    name: string,
+    type: c.PatchType,
+    body: CertManagerIoV1.Certificate | c.JsonPatch,
+    opts: operations.PatchOpts = {},
+  ): Promise<CertManagerIoV1.Certificate> {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}certificates/${name}/status`,
@@ -484,7 +604,9 @@ export class CertManagerIoV1NamespacedApi {
     return CertManagerIoV1.toCertificate(resp);
   }
 
-  async getIssuerList(opts: operations.GetListOpts = {}) {
+  async getIssuerList(
+    opts: operations.GetListOpts = {},
+  ): Promise<CertManagerIoV1.IssuerList> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}issuers`,
@@ -495,7 +617,9 @@ export class CertManagerIoV1NamespacedApi {
     return CertManagerIoV1.toIssuerList(resp);
   }
 
-  async watchIssuerList(opts: operations.WatchListOpts = {}) {
+  async watchIssuerList(
+    opts: operations.WatchListOpts = {},
+  ): Promise<c.WatchEventStream<CertManagerIoV1.Issuer>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}issuers`,
@@ -507,7 +631,10 @@ export class CertManagerIoV1NamespacedApi {
     return resp.pipeThrough(new c.WatchEventTransformer(CertManagerIoV1.toIssuer, MetaV1.toStatus));
   }
 
-  async createIssuer(body: CertManagerIoV1.Issuer, opts: operations.PutOpts = {}) {
+  async createIssuer(
+    body: CertManagerIoV1.Issuer,
+    opts: operations.PutOpts = {},
+  ): Promise<CertManagerIoV1.Issuer> {
     const resp = await this.#client.performRequest({
       method: "POST",
       path: `${this.#root}issuers`,
@@ -519,7 +646,9 @@ export class CertManagerIoV1NamespacedApi {
     return CertManagerIoV1.toIssuer(resp);
   }
 
-  async deleteIssuerList(opts: operations.DeleteListOpts = {}) {
+  async deleteIssuerList(
+    opts: operations.DeleteListOpts = {},
+  ): Promise<CertManagerIoV1.IssuerList> {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}issuers`,
@@ -530,7 +659,10 @@ export class CertManagerIoV1NamespacedApi {
     return CertManagerIoV1.toIssuerList(resp);
   }
 
-  async getIssuer(name: string, opts: operations.NoOpts = {}) {
+  async getIssuer(
+    name: string,
+    opts: operations.NoOpts = {},
+  ): Promise<CertManagerIoV1.Issuer> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}issuers/${name}`,
@@ -540,7 +672,10 @@ export class CertManagerIoV1NamespacedApi {
     return CertManagerIoV1.toIssuer(resp);
   }
 
-  async deleteIssuer(name: string, opts: operations.DeleteOpts = {}) {
+  async deleteIssuer(
+    name: string,
+    opts: operations.DeleteOpts = {},
+  ): Promise<CertManagerIoV1.Issuer | MetaV1.Status> {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}issuers/${name}`,
@@ -552,7 +687,11 @@ export class CertManagerIoV1NamespacedApi {
     return CertManagerIoV1.toIssuer(resp);
   }
 
-  async replaceIssuer(name: string, body: CertManagerIoV1.Issuer, opts: operations.PutOpts = {}) {
+  async replaceIssuer(
+    name: string,
+    body: CertManagerIoV1.Issuer,
+    opts: operations.PutOpts = {},
+  ): Promise<CertManagerIoV1.Issuer> {
     const resp = await this.#client.performRequest({
       method: "PUT",
       path: `${this.#root}issuers/${name}`,
@@ -564,7 +703,12 @@ export class CertManagerIoV1NamespacedApi {
     return CertManagerIoV1.toIssuer(resp);
   }
 
-  async patchIssuer(name: string, type: c.PatchType, body: CertManagerIoV1.Issuer | c.JsonPatch, opts: operations.PatchOpts = {}) {
+  async patchIssuer(
+    name: string,
+    type: c.PatchType,
+    body: CertManagerIoV1.Issuer | c.JsonPatch,
+    opts: operations.PatchOpts = {},
+  ): Promise<CertManagerIoV1.Issuer> {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}issuers/${name}`,
@@ -577,7 +721,10 @@ export class CertManagerIoV1NamespacedApi {
     return CertManagerIoV1.toIssuer(resp);
   }
 
-  async getIssuerStatus(name: string, opts: operations.NoOpts = {}) {
+  async getIssuerStatus(
+    name: string,
+    opts: operations.NoOpts = {},
+  ): Promise<CertManagerIoV1.Issuer> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}issuers/${name}/status`,
@@ -587,7 +734,11 @@ export class CertManagerIoV1NamespacedApi {
     return CertManagerIoV1.toIssuer(resp);
   }
 
-  async replaceIssuerStatus(name: string, body: CertManagerIoV1.Issuer, opts: operations.PutOpts = {}) {
+  async replaceIssuerStatus(
+    name: string,
+    body: CertManagerIoV1.Issuer,
+    opts: operations.PutOpts = {},
+  ): Promise<CertManagerIoV1.Issuer> {
     const resp = await this.#client.performRequest({
       method: "PUT",
       path: `${this.#root}issuers/${name}/status`,
@@ -599,7 +750,12 @@ export class CertManagerIoV1NamespacedApi {
     return CertManagerIoV1.toIssuer(resp);
   }
 
-  async patchIssuerStatus(name: string, type: c.PatchType, body: CertManagerIoV1.Issuer | c.JsonPatch, opts: operations.PatchOpts = {}) {
+  async patchIssuerStatus(
+    name: string,
+    type: c.PatchType,
+    body: CertManagerIoV1.Issuer | c.JsonPatch,
+    opts: operations.PatchOpts = {},
+  ): Promise<CertManagerIoV1.Issuer> {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}issuers/${name}/status`,

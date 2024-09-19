@@ -1,6 +1,6 @@
 #!/usr/bin/env -S deno run --allow-net --allow-read --allow-env --allow-run --unstable
 
-import { Reflector, autoDetectClient } from "../client.ts";
+import { Reflector, autoDetectClient } from "../deps.ts";
 import { CoreV1Api } from "../builtin/core@v1/mod.ts";
 import { BatchV1Api } from "../builtin/batch@v1/mod.ts";
 import { TextLineStream } from "https://deno.land/std@0.177.0/streams/text_line_stream.ts";

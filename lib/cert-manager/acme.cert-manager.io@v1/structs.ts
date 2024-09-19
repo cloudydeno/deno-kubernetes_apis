@@ -53,7 +53,7 @@ export function fromChallenge(input: Challenge): c.JSONValue {
       solver: input.spec.solver != null ? CertManagerIoV1.fromSolverSpec(input.spec.solver) : undefined,
     } : undefined,
   }}
-export function toChallenge_spec(input: c.JSONValue) {
+function toChallenge_spec(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     authorizationURL: c.checkStr(obj["authorizationURL"]),
@@ -66,7 +66,7 @@ export function toChallenge_spec(input: c.JSONValue) {
     url: c.checkStr(obj["url"]),
     wildcard: c.readOpt(obj["wildcard"], c.checkBool),
   }}
-export function toChallenge_status(input: c.JSONValue) {
+function toChallenge_status(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     presented: c.readOpt(obj["presented"], c.checkBool),
@@ -74,7 +74,7 @@ export function toChallenge_status(input: c.JSONValue) {
     reason: c.readOpt(obj["reason"], c.checkStr),
     state: c.readOpt(obj["state"], (x => c.readEnum<"valid" | "ready" | "pending" | "processing" | "invalid" | "expired" | "errored" | c.UnexpectedEnumValue>(x))),
   }}
-export function toChallenge_spec_issuerRef(input: c.JSONValue) {
+function toChallenge_spec_issuerRef(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     group: c.readOpt(obj["group"], c.checkStr),
@@ -149,7 +149,7 @@ export function fromOrder(input: Order): c.JSONValue {
       failureTime: input.status.failureTime != null ? c.fromTime(input.status.failureTime) : undefined,
     } : undefined,
   }}
-export function toOrder_spec(input: c.JSONValue) {
+function toOrder_spec(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     commonName: c.readOpt(obj["commonName"], c.checkStr),
@@ -159,7 +159,7 @@ export function toOrder_spec(input: c.JSONValue) {
     issuerRef: toOrder_spec_issuerRef(obj["issuerRef"]),
     request: c.checkStr(obj["request"]),
   }}
-export function toOrder_status(input: c.JSONValue) {
+function toOrder_status(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     authorizations: c.readOpt(obj["authorizations"], x => c.readList(x, toOrder_status_authorizations)),
@@ -170,14 +170,14 @@ export function toOrder_status(input: c.JSONValue) {
     state: c.readOpt(obj["state"], (x => c.readEnum<"valid" | "ready" | "pending" | "processing" | "invalid" | "expired" | "errored" | c.UnexpectedEnumValue>(x))),
     url: c.readOpt(obj["url"], c.checkStr),
   }}
-export function toOrder_spec_issuerRef(input: c.JSONValue) {
+function toOrder_spec_issuerRef(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     group: c.readOpt(obj["group"], c.checkStr),
     kind: c.readOpt(obj["kind"], c.checkStr),
     name: c.checkStr(obj["name"]),
   }}
-export function toOrder_status_authorizations(input: c.JSONValue) {
+function toOrder_status_authorizations(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     challenges: c.readOpt(obj["challenges"], x => c.readList(x, toOrder_status_authorizations_challenges)),
@@ -186,7 +186,7 @@ export function toOrder_status_authorizations(input: c.JSONValue) {
     url: c.checkStr(obj["url"]),
     wildcard: c.readOpt(obj["wildcard"], c.checkBool),
   }}
-export function toOrder_status_authorizations_challenges(input: c.JSONValue) {
+function toOrder_status_authorizations_challenges(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     token: c.checkStr(obj["token"]),

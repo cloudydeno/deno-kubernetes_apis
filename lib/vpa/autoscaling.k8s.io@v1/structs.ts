@@ -62,13 +62,13 @@ export function fromVerticalPodAutoscalerCheckpoint(input: VerticalPodAutoscaler
       } : undefined,
     } : undefined,
   }}
-export function toVerticalPodAutoscalerCheckpoint_spec(input: c.JSONValue) {
+function toVerticalPodAutoscalerCheckpoint_spec(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     containerName: c.readOpt(obj["containerName"], c.checkStr),
     vpaObjectName: c.readOpt(obj["vpaObjectName"], c.checkStr),
   }}
-export function toVerticalPodAutoscalerCheckpoint_status(input: c.JSONValue) {
+function toVerticalPodAutoscalerCheckpoint_status(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     cpuHistogram: c.readOpt(obj["cpuHistogram"], toVerticalPodAutoscalerCheckpoint_status_cpuHistogram),
@@ -79,14 +79,14 @@ export function toVerticalPodAutoscalerCheckpoint_status(input: c.JSONValue) {
     totalSamplesCount: c.readOpt(obj["totalSamplesCount"], c.checkNum),
     version: c.readOpt(obj["version"], c.checkStr),
   }}
-export function toVerticalPodAutoscalerCheckpoint_status_cpuHistogram(input: c.JSONValue) {
+function toVerticalPodAutoscalerCheckpoint_status_cpuHistogram(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     bucketWeights: c.readOpt(obj["bucketWeights"], c.identity),
     referenceTimestamp: c.readOpt(obj["referenceTimestamp"], c.toTime),
     totalWeight: c.readOpt(obj["totalWeight"], c.checkNum),
   }}
-export function toVerticalPodAutoscalerCheckpoint_status_memoryHistogram(input: c.JSONValue) {
+function toVerticalPodAutoscalerCheckpoint_status_memoryHistogram(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     bucketWeights: c.readOpt(obj["bucketWeights"], c.identity),
@@ -175,7 +175,7 @@ export function fromVerticalPodAutoscaler(input: VerticalPodAutoscaler): c.JSONV
       })),
     } : undefined,
   }}
-export function toVerticalPodAutoscaler_spec(input: c.JSONValue) {
+function toVerticalPodAutoscaler_spec(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     recommenders: c.readOpt(obj["recommenders"], x => c.readList(x, toVerticalPodAutoscaler_spec_recommenders)),
@@ -183,36 +183,36 @@ export function toVerticalPodAutoscaler_spec(input: c.JSONValue) {
     targetRef: toVerticalPodAutoscaler_spec_targetRef(obj["targetRef"]),
     updatePolicy: c.readOpt(obj["updatePolicy"], toVerticalPodAutoscaler_spec_updatePolicy),
   }}
-export function toVerticalPodAutoscaler_status(input: c.JSONValue) {
+function toVerticalPodAutoscaler_status(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     conditions: c.readOpt(obj["conditions"], x => c.readList(x, toVerticalPodAutoscaler_status_conditions)),
     recommendation: c.readOpt(obj["recommendation"], toVerticalPodAutoscaler_status_recommendation),
   }}
-export function toVerticalPodAutoscaler_spec_recommenders(input: c.JSONValue) {
+function toVerticalPodAutoscaler_spec_recommenders(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     name: c.checkStr(obj["name"]),
   }}
-export function toVerticalPodAutoscaler_spec_resourcePolicy(input: c.JSONValue) {
+function toVerticalPodAutoscaler_spec_resourcePolicy(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     containerPolicies: c.readOpt(obj["containerPolicies"], x => c.readList(x, toVerticalPodAutoscaler_spec_resourcePolicy_containerPolicies)),
   }}
-export function toVerticalPodAutoscaler_spec_targetRef(input: c.JSONValue) {
+function toVerticalPodAutoscaler_spec_targetRef(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     apiVersion: c.readOpt(obj["apiVersion"], c.checkStr),
     kind: c.checkStr(obj["kind"]),
     name: c.checkStr(obj["name"]),
   }}
-export function toVerticalPodAutoscaler_spec_updatePolicy(input: c.JSONValue) {
+function toVerticalPodAutoscaler_spec_updatePolicy(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     minReplicas: c.readOpt(obj["minReplicas"], c.checkNum),
     updateMode: c.readOpt(obj["updateMode"], (x => c.readEnum<"Off" | "Initial" | "Recreate" | "Auto" | c.UnexpectedEnumValue>(x))),
   }}
-export function toVerticalPodAutoscaler_status_conditions(input: c.JSONValue) {
+function toVerticalPodAutoscaler_status_conditions(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     lastTransitionTime: c.readOpt(obj["lastTransitionTime"], c.toTime),
@@ -221,12 +221,12 @@ export function toVerticalPodAutoscaler_status_conditions(input: c.JSONValue) {
     status: c.checkStr(obj["status"]),
     type: c.checkStr(obj["type"]),
   }}
-export function toVerticalPodAutoscaler_status_recommendation(input: c.JSONValue) {
+function toVerticalPodAutoscaler_status_recommendation(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     containerRecommendations: c.readOpt(obj["containerRecommendations"], x => c.readList(x, toVerticalPodAutoscaler_status_recommendation_containerRecommendations)),
   }}
-export function toVerticalPodAutoscaler_spec_resourcePolicy_containerPolicies(input: c.JSONValue) {
+function toVerticalPodAutoscaler_spec_resourcePolicy_containerPolicies(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     containerName: c.readOpt(obj["containerName"], c.checkStr),
@@ -236,7 +236,7 @@ export function toVerticalPodAutoscaler_spec_resourcePolicy_containerPolicies(in
     minAllowed: c.readOpt(obj["minAllowed"], x => c.readMap(x, c.toIntOrString)),
     mode: c.readOpt(obj["mode"], (x => c.readEnum<"Auto" | "Off" | c.UnexpectedEnumValue>(x))),
   }}
-export function toVerticalPodAutoscaler_status_recommendation_containerRecommendations(input: c.JSONValue) {
+function toVerticalPodAutoscaler_status_recommendation_containerRecommendations(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     containerName: c.readOpt(obj["containerName"], c.checkStr),

@@ -13,7 +13,9 @@ export class FlowcontrolApiserverV1beta3Api {
     this.#client = client;
   }
 
-  async getFlowSchemaList(opts: operations.GetListOpts = {}) {
+  async getFlowSchemaList(
+    opts: operations.GetListOpts = {},
+  ): Promise<FlowcontrolApiserverV1beta3.FlowSchemaList> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}flowschemas`,
@@ -24,7 +26,9 @@ export class FlowcontrolApiserverV1beta3Api {
     return FlowcontrolApiserverV1beta3.toFlowSchemaList(resp);
   }
 
-  async watchFlowSchemaList(opts: operations.WatchListOpts = {}) {
+  async watchFlowSchemaList(
+    opts: operations.WatchListOpts = {},
+  ): Promise<c.WatchEventStream<FlowcontrolApiserverV1beta3.FlowSchema>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}flowschemas`,
@@ -36,7 +40,10 @@ export class FlowcontrolApiserverV1beta3Api {
     return resp.pipeThrough(new c.WatchEventTransformer(FlowcontrolApiserverV1beta3.toFlowSchema, MetaV1.toStatus));
   }
 
-  async createFlowSchema(body: FlowcontrolApiserverV1beta3.FlowSchema, opts: operations.PutOpts = {}) {
+  async createFlowSchema(
+    body: FlowcontrolApiserverV1beta3.FlowSchema,
+    opts: operations.PutOpts = {},
+  ): Promise<FlowcontrolApiserverV1beta3.FlowSchema> {
     const resp = await this.#client.performRequest({
       method: "POST",
       path: `${this.#root}flowschemas`,
@@ -48,7 +55,9 @@ export class FlowcontrolApiserverV1beta3Api {
     return FlowcontrolApiserverV1beta3.toFlowSchema(resp);
   }
 
-  async deleteFlowSchemaList(opts: operations.DeleteListOpts = {}) {
+  async deleteFlowSchemaList(
+    opts: operations.DeleteListOpts = {},
+  ): Promise<FlowcontrolApiserverV1beta3.FlowSchemaList> {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}flowschemas`,
@@ -59,7 +68,10 @@ export class FlowcontrolApiserverV1beta3Api {
     return FlowcontrolApiserverV1beta3.toFlowSchemaList(resp);
   }
 
-  async getFlowSchema(name: string, opts: operations.NoOpts = {}) {
+  async getFlowSchema(
+    name: string,
+    opts: operations.NoOpts = {},
+  ): Promise<FlowcontrolApiserverV1beta3.FlowSchema> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}flowschemas/${name}`,
@@ -69,7 +81,10 @@ export class FlowcontrolApiserverV1beta3Api {
     return FlowcontrolApiserverV1beta3.toFlowSchema(resp);
   }
 
-  async deleteFlowSchema(name: string, opts: operations.DeleteOpts = {}) {
+  async deleteFlowSchema(
+    name: string,
+    opts: operations.DeleteOpts = {},
+  ): Promise<FlowcontrolApiserverV1beta3.FlowSchema | MetaV1.Status> {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}flowschemas/${name}`,
@@ -81,7 +96,11 @@ export class FlowcontrolApiserverV1beta3Api {
     return FlowcontrolApiserverV1beta3.toFlowSchema(resp);
   }
 
-  async replaceFlowSchema(name: string, body: FlowcontrolApiserverV1beta3.FlowSchema, opts: operations.PutOpts = {}) {
+  async replaceFlowSchema(
+    name: string,
+    body: FlowcontrolApiserverV1beta3.FlowSchema,
+    opts: operations.PutOpts = {},
+  ): Promise<FlowcontrolApiserverV1beta3.FlowSchema> {
     const resp = await this.#client.performRequest({
       method: "PUT",
       path: `${this.#root}flowschemas/${name}`,
@@ -93,7 +112,12 @@ export class FlowcontrolApiserverV1beta3Api {
     return FlowcontrolApiserverV1beta3.toFlowSchema(resp);
   }
 
-  async patchFlowSchema(name: string, type: c.PatchType, body: FlowcontrolApiserverV1beta3.FlowSchema | c.JsonPatch, opts: operations.PatchOpts = {}) {
+  async patchFlowSchema(
+    name: string,
+    type: c.PatchType,
+    body: FlowcontrolApiserverV1beta3.FlowSchema | c.JsonPatch,
+    opts: operations.PatchOpts = {},
+  ): Promise<FlowcontrolApiserverV1beta3.FlowSchema> {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}flowschemas/${name}`,
@@ -106,7 +130,10 @@ export class FlowcontrolApiserverV1beta3Api {
     return FlowcontrolApiserverV1beta3.toFlowSchema(resp);
   }
 
-  async getFlowSchemaStatus(name: string, opts: operations.NoOpts = {}) {
+  async getFlowSchemaStatus(
+    name: string,
+    opts: operations.NoOpts = {},
+  ): Promise<FlowcontrolApiserverV1beta3.FlowSchema> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}flowschemas/${name}/status`,
@@ -116,7 +143,11 @@ export class FlowcontrolApiserverV1beta3Api {
     return FlowcontrolApiserverV1beta3.toFlowSchema(resp);
   }
 
-  async replaceFlowSchemaStatus(name: string, body: FlowcontrolApiserverV1beta3.FlowSchema, opts: operations.PutOpts = {}) {
+  async replaceFlowSchemaStatus(
+    name: string,
+    body: FlowcontrolApiserverV1beta3.FlowSchema,
+    opts: operations.PutOpts = {},
+  ): Promise<FlowcontrolApiserverV1beta3.FlowSchema> {
     const resp = await this.#client.performRequest({
       method: "PUT",
       path: `${this.#root}flowschemas/${name}/status`,
@@ -128,7 +159,12 @@ export class FlowcontrolApiserverV1beta3Api {
     return FlowcontrolApiserverV1beta3.toFlowSchema(resp);
   }
 
-  async patchFlowSchemaStatus(name: string, type: c.PatchType, body: FlowcontrolApiserverV1beta3.FlowSchema | c.JsonPatch, opts: operations.PatchOpts = {}) {
+  async patchFlowSchemaStatus(
+    name: string,
+    type: c.PatchType,
+    body: FlowcontrolApiserverV1beta3.FlowSchema | c.JsonPatch,
+    opts: operations.PatchOpts = {},
+  ): Promise<FlowcontrolApiserverV1beta3.FlowSchema> {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}flowschemas/${name}/status`,
@@ -141,7 +177,9 @@ export class FlowcontrolApiserverV1beta3Api {
     return FlowcontrolApiserverV1beta3.toFlowSchema(resp);
   }
 
-  async getPriorityLevelConfigurationList(opts: operations.GetListOpts = {}) {
+  async getPriorityLevelConfigurationList(
+    opts: operations.GetListOpts = {},
+  ): Promise<FlowcontrolApiserverV1beta3.PriorityLevelConfigurationList> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}prioritylevelconfigurations`,
@@ -152,7 +190,9 @@ export class FlowcontrolApiserverV1beta3Api {
     return FlowcontrolApiserverV1beta3.toPriorityLevelConfigurationList(resp);
   }
 
-  async watchPriorityLevelConfigurationList(opts: operations.WatchListOpts = {}) {
+  async watchPriorityLevelConfigurationList(
+    opts: operations.WatchListOpts = {},
+  ): Promise<c.WatchEventStream<FlowcontrolApiserverV1beta3.PriorityLevelConfiguration>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}prioritylevelconfigurations`,
@@ -164,7 +204,10 @@ export class FlowcontrolApiserverV1beta3Api {
     return resp.pipeThrough(new c.WatchEventTransformer(FlowcontrolApiserverV1beta3.toPriorityLevelConfiguration, MetaV1.toStatus));
   }
 
-  async createPriorityLevelConfiguration(body: FlowcontrolApiserverV1beta3.PriorityLevelConfiguration, opts: operations.PutOpts = {}) {
+  async createPriorityLevelConfiguration(
+    body: FlowcontrolApiserverV1beta3.PriorityLevelConfiguration,
+    opts: operations.PutOpts = {},
+  ): Promise<FlowcontrolApiserverV1beta3.PriorityLevelConfiguration> {
     const resp = await this.#client.performRequest({
       method: "POST",
       path: `${this.#root}prioritylevelconfigurations`,
@@ -176,7 +219,9 @@ export class FlowcontrolApiserverV1beta3Api {
     return FlowcontrolApiserverV1beta3.toPriorityLevelConfiguration(resp);
   }
 
-  async deletePriorityLevelConfigurationList(opts: operations.DeleteListOpts = {}) {
+  async deletePriorityLevelConfigurationList(
+    opts: operations.DeleteListOpts = {},
+  ): Promise<FlowcontrolApiserverV1beta3.PriorityLevelConfigurationList> {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}prioritylevelconfigurations`,
@@ -187,7 +232,10 @@ export class FlowcontrolApiserverV1beta3Api {
     return FlowcontrolApiserverV1beta3.toPriorityLevelConfigurationList(resp);
   }
 
-  async getPriorityLevelConfiguration(name: string, opts: operations.NoOpts = {}) {
+  async getPriorityLevelConfiguration(
+    name: string,
+    opts: operations.NoOpts = {},
+  ): Promise<FlowcontrolApiserverV1beta3.PriorityLevelConfiguration> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}prioritylevelconfigurations/${name}`,
@@ -197,7 +245,10 @@ export class FlowcontrolApiserverV1beta3Api {
     return FlowcontrolApiserverV1beta3.toPriorityLevelConfiguration(resp);
   }
 
-  async deletePriorityLevelConfiguration(name: string, opts: operations.DeleteOpts = {}) {
+  async deletePriorityLevelConfiguration(
+    name: string,
+    opts: operations.DeleteOpts = {},
+  ): Promise<FlowcontrolApiserverV1beta3.PriorityLevelConfiguration | MetaV1.Status> {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}prioritylevelconfigurations/${name}`,
@@ -209,7 +260,11 @@ export class FlowcontrolApiserverV1beta3Api {
     return FlowcontrolApiserverV1beta3.toPriorityLevelConfiguration(resp);
   }
 
-  async replacePriorityLevelConfiguration(name: string, body: FlowcontrolApiserverV1beta3.PriorityLevelConfiguration, opts: operations.PutOpts = {}) {
+  async replacePriorityLevelConfiguration(
+    name: string,
+    body: FlowcontrolApiserverV1beta3.PriorityLevelConfiguration,
+    opts: operations.PutOpts = {},
+  ): Promise<FlowcontrolApiserverV1beta3.PriorityLevelConfiguration> {
     const resp = await this.#client.performRequest({
       method: "PUT",
       path: `${this.#root}prioritylevelconfigurations/${name}`,
@@ -221,7 +276,12 @@ export class FlowcontrolApiserverV1beta3Api {
     return FlowcontrolApiserverV1beta3.toPriorityLevelConfiguration(resp);
   }
 
-  async patchPriorityLevelConfiguration(name: string, type: c.PatchType, body: FlowcontrolApiserverV1beta3.PriorityLevelConfiguration | c.JsonPatch, opts: operations.PatchOpts = {}) {
+  async patchPriorityLevelConfiguration(
+    name: string,
+    type: c.PatchType,
+    body: FlowcontrolApiserverV1beta3.PriorityLevelConfiguration | c.JsonPatch,
+    opts: operations.PatchOpts = {},
+  ): Promise<FlowcontrolApiserverV1beta3.PriorityLevelConfiguration> {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}prioritylevelconfigurations/${name}`,
@@ -234,7 +294,10 @@ export class FlowcontrolApiserverV1beta3Api {
     return FlowcontrolApiserverV1beta3.toPriorityLevelConfiguration(resp);
   }
 
-  async getPriorityLevelConfigurationStatus(name: string, opts: operations.NoOpts = {}) {
+  async getPriorityLevelConfigurationStatus(
+    name: string,
+    opts: operations.NoOpts = {},
+  ): Promise<FlowcontrolApiserverV1beta3.PriorityLevelConfiguration> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}prioritylevelconfigurations/${name}/status`,
@@ -244,7 +307,11 @@ export class FlowcontrolApiserverV1beta3Api {
     return FlowcontrolApiserverV1beta3.toPriorityLevelConfiguration(resp);
   }
 
-  async replacePriorityLevelConfigurationStatus(name: string, body: FlowcontrolApiserverV1beta3.PriorityLevelConfiguration, opts: operations.PutOpts = {}) {
+  async replacePriorityLevelConfigurationStatus(
+    name: string,
+    body: FlowcontrolApiserverV1beta3.PriorityLevelConfiguration,
+    opts: operations.PutOpts = {},
+  ): Promise<FlowcontrolApiserverV1beta3.PriorityLevelConfiguration> {
     const resp = await this.#client.performRequest({
       method: "PUT",
       path: `${this.#root}prioritylevelconfigurations/${name}/status`,
@@ -256,7 +323,12 @@ export class FlowcontrolApiserverV1beta3Api {
     return FlowcontrolApiserverV1beta3.toPriorityLevelConfiguration(resp);
   }
 
-  async patchPriorityLevelConfigurationStatus(name: string, type: c.PatchType, body: FlowcontrolApiserverV1beta3.PriorityLevelConfiguration | c.JsonPatch, opts: operations.PatchOpts = {}) {
+  async patchPriorityLevelConfigurationStatus(
+    name: string,
+    type: c.PatchType,
+    body: FlowcontrolApiserverV1beta3.PriorityLevelConfiguration | c.JsonPatch,
+    opts: operations.PatchOpts = {},
+  ): Promise<FlowcontrolApiserverV1beta3.PriorityLevelConfiguration> {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}prioritylevelconfigurations/${name}/status`,

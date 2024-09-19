@@ -13,15 +13,17 @@ export class ResourceV1alpha2Api {
     this.#client = client;
   }
 
-  namespace(name: string) {
+  namespace(name: string): ResourceV1alpha2NamespacedApi {
     return new ResourceV1alpha2NamespacedApi(this.#client, name);
   }
-  myNamespace() {
+  myNamespace(): ResourceV1alpha2NamespacedApi {
     if (!this.#client.defaultNamespace) throw new Error("No current namespace is set");
     return new ResourceV1alpha2NamespacedApi(this.#client, this.#client.defaultNamespace);
   }
 
-  async getPodSchedulingContextListForAllNamespaces(opts: operations.GetListOpts = {}) {
+  async getPodSchedulingContextListForAllNamespaces(
+    opts: operations.GetListOpts = {},
+  ): Promise<ResourceV1alpha2.PodSchedulingContextList> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}podschedulingcontexts`,
@@ -32,7 +34,9 @@ export class ResourceV1alpha2Api {
     return ResourceV1alpha2.toPodSchedulingContextList(resp);
   }
 
-  async watchPodSchedulingContextListForAllNamespaces(opts: operations.WatchListOpts = {}) {
+  async watchPodSchedulingContextListForAllNamespaces(
+    opts: operations.WatchListOpts = {},
+  ): Promise<c.WatchEventStream<ResourceV1alpha2.PodSchedulingContext>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}podschedulingcontexts`,
@@ -44,7 +48,9 @@ export class ResourceV1alpha2Api {
     return resp.pipeThrough(new c.WatchEventTransformer(ResourceV1alpha2.toPodSchedulingContext, MetaV1.toStatus));
   }
 
-  async getResourceClaimListForAllNamespaces(opts: operations.GetListOpts = {}) {
+  async getResourceClaimListForAllNamespaces(
+    opts: operations.GetListOpts = {},
+  ): Promise<ResourceV1alpha2.ResourceClaimList> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}resourceclaims`,
@@ -55,7 +61,9 @@ export class ResourceV1alpha2Api {
     return ResourceV1alpha2.toResourceClaimList(resp);
   }
 
-  async watchResourceClaimListForAllNamespaces(opts: operations.WatchListOpts = {}) {
+  async watchResourceClaimListForAllNamespaces(
+    opts: operations.WatchListOpts = {},
+  ): Promise<c.WatchEventStream<ResourceV1alpha2.ResourceClaim>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}resourceclaims`,
@@ -67,7 +75,9 @@ export class ResourceV1alpha2Api {
     return resp.pipeThrough(new c.WatchEventTransformer(ResourceV1alpha2.toResourceClaim, MetaV1.toStatus));
   }
 
-  async getResourceClaimTemplateListForAllNamespaces(opts: operations.GetListOpts = {}) {
+  async getResourceClaimTemplateListForAllNamespaces(
+    opts: operations.GetListOpts = {},
+  ): Promise<ResourceV1alpha2.ResourceClaimTemplateList> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}resourceclaimtemplates`,
@@ -78,7 +88,9 @@ export class ResourceV1alpha2Api {
     return ResourceV1alpha2.toResourceClaimTemplateList(resp);
   }
 
-  async watchResourceClaimTemplateListForAllNamespaces(opts: operations.WatchListOpts = {}) {
+  async watchResourceClaimTemplateListForAllNamespaces(
+    opts: operations.WatchListOpts = {},
+  ): Promise<c.WatchEventStream<ResourceV1alpha2.ResourceClaimTemplate>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}resourceclaimtemplates`,
@@ -90,7 +102,9 @@ export class ResourceV1alpha2Api {
     return resp.pipeThrough(new c.WatchEventTransformer(ResourceV1alpha2.toResourceClaimTemplate, MetaV1.toStatus));
   }
 
-  async getResourceClassList(opts: operations.GetListOpts = {}) {
+  async getResourceClassList(
+    opts: operations.GetListOpts = {},
+  ): Promise<ResourceV1alpha2.ResourceClassList> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}resourceclasses`,
@@ -101,7 +115,9 @@ export class ResourceV1alpha2Api {
     return ResourceV1alpha2.toResourceClassList(resp);
   }
 
-  async watchResourceClassList(opts: operations.WatchListOpts = {}) {
+  async watchResourceClassList(
+    opts: operations.WatchListOpts = {},
+  ): Promise<c.WatchEventStream<ResourceV1alpha2.ResourceClass>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}resourceclasses`,
@@ -113,7 +129,10 @@ export class ResourceV1alpha2Api {
     return resp.pipeThrough(new c.WatchEventTransformer(ResourceV1alpha2.toResourceClass, MetaV1.toStatus));
   }
 
-  async createResourceClass(body: ResourceV1alpha2.ResourceClass, opts: operations.PutOpts = {}) {
+  async createResourceClass(
+    body: ResourceV1alpha2.ResourceClass,
+    opts: operations.PutOpts = {},
+  ): Promise<ResourceV1alpha2.ResourceClass> {
     const resp = await this.#client.performRequest({
       method: "POST",
       path: `${this.#root}resourceclasses`,
@@ -125,7 +144,9 @@ export class ResourceV1alpha2Api {
     return ResourceV1alpha2.toResourceClass(resp);
   }
 
-  async deleteResourceClassList(opts: operations.DeleteListOpts = {}) {
+  async deleteResourceClassList(
+    opts: operations.DeleteListOpts = {},
+  ): Promise<ResourceV1alpha2.ResourceClassList> {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}resourceclasses`,
@@ -136,7 +157,10 @@ export class ResourceV1alpha2Api {
     return ResourceV1alpha2.toResourceClassList(resp);
   }
 
-  async getResourceClass(name: string, opts: operations.NoOpts = {}) {
+  async getResourceClass(
+    name: string,
+    opts: operations.NoOpts = {},
+  ): Promise<ResourceV1alpha2.ResourceClass> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}resourceclasses/${name}`,
@@ -146,7 +170,10 @@ export class ResourceV1alpha2Api {
     return ResourceV1alpha2.toResourceClass(resp);
   }
 
-  async deleteResourceClass(name: string, opts: operations.DeleteOpts = {}) {
+  async deleteResourceClass(
+    name: string,
+    opts: operations.DeleteOpts = {},
+  ): Promise<ResourceV1alpha2.ResourceClass | MetaV1.Status> {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}resourceclasses/${name}`,
@@ -158,7 +185,11 @@ export class ResourceV1alpha2Api {
     return ResourceV1alpha2.toResourceClass(resp);
   }
 
-  async replaceResourceClass(name: string, body: ResourceV1alpha2.ResourceClass, opts: operations.PutOpts = {}) {
+  async replaceResourceClass(
+    name: string,
+    body: ResourceV1alpha2.ResourceClass,
+    opts: operations.PutOpts = {},
+  ): Promise<ResourceV1alpha2.ResourceClass> {
     const resp = await this.#client.performRequest({
       method: "PUT",
       path: `${this.#root}resourceclasses/${name}`,
@@ -170,7 +201,12 @@ export class ResourceV1alpha2Api {
     return ResourceV1alpha2.toResourceClass(resp);
   }
 
-  async patchResourceClass(name: string, type: c.PatchType, body: ResourceV1alpha2.ResourceClass | c.JsonPatch, opts: operations.PatchOpts = {}) {
+  async patchResourceClass(
+    name: string,
+    type: c.PatchType,
+    body: ResourceV1alpha2.ResourceClass | c.JsonPatch,
+    opts: operations.PatchOpts = {},
+  ): Promise<ResourceV1alpha2.ResourceClass> {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}resourceclasses/${name}`,
@@ -193,7 +229,9 @@ export class ResourceV1alpha2NamespacedApi {
     this.#root = `/apis/resource.k8s.io/v1alpha2/namespaces/${namespace}/`;
   }
 
-  async getPodSchedulingContextList(opts: operations.GetListOpts = {}) {
+  async getPodSchedulingContextList(
+    opts: operations.GetListOpts = {},
+  ): Promise<ResourceV1alpha2.PodSchedulingContextList> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}podschedulingcontexts`,
@@ -204,7 +242,9 @@ export class ResourceV1alpha2NamespacedApi {
     return ResourceV1alpha2.toPodSchedulingContextList(resp);
   }
 
-  async watchPodSchedulingContextList(opts: operations.WatchListOpts = {}) {
+  async watchPodSchedulingContextList(
+    opts: operations.WatchListOpts = {},
+  ): Promise<c.WatchEventStream<ResourceV1alpha2.PodSchedulingContext>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}podschedulingcontexts`,
@@ -216,7 +256,10 @@ export class ResourceV1alpha2NamespacedApi {
     return resp.pipeThrough(new c.WatchEventTransformer(ResourceV1alpha2.toPodSchedulingContext, MetaV1.toStatus));
   }
 
-  async createPodSchedulingContext(body: ResourceV1alpha2.PodSchedulingContext, opts: operations.PutOpts = {}) {
+  async createPodSchedulingContext(
+    body: ResourceV1alpha2.PodSchedulingContext,
+    opts: operations.PutOpts = {},
+  ): Promise<ResourceV1alpha2.PodSchedulingContext> {
     const resp = await this.#client.performRequest({
       method: "POST",
       path: `${this.#root}podschedulingcontexts`,
@@ -228,7 +271,9 @@ export class ResourceV1alpha2NamespacedApi {
     return ResourceV1alpha2.toPodSchedulingContext(resp);
   }
 
-  async deletePodSchedulingContextList(opts: operations.DeleteListOpts = {}) {
+  async deletePodSchedulingContextList(
+    opts: operations.DeleteListOpts = {},
+  ): Promise<ResourceV1alpha2.PodSchedulingContextList> {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}podschedulingcontexts`,
@@ -239,7 +284,10 @@ export class ResourceV1alpha2NamespacedApi {
     return ResourceV1alpha2.toPodSchedulingContextList(resp);
   }
 
-  async getPodSchedulingContext(name: string, opts: operations.NoOpts = {}) {
+  async getPodSchedulingContext(
+    name: string,
+    opts: operations.NoOpts = {},
+  ): Promise<ResourceV1alpha2.PodSchedulingContext> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}podschedulingcontexts/${name}`,
@@ -249,7 +297,10 @@ export class ResourceV1alpha2NamespacedApi {
     return ResourceV1alpha2.toPodSchedulingContext(resp);
   }
 
-  async deletePodSchedulingContext(name: string, opts: operations.DeleteOpts = {}) {
+  async deletePodSchedulingContext(
+    name: string,
+    opts: operations.DeleteOpts = {},
+  ): Promise<ResourceV1alpha2.PodSchedulingContext | MetaV1.Status> {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}podschedulingcontexts/${name}`,
@@ -261,7 +312,11 @@ export class ResourceV1alpha2NamespacedApi {
     return ResourceV1alpha2.toPodSchedulingContext(resp);
   }
 
-  async replacePodSchedulingContext(name: string, body: ResourceV1alpha2.PodSchedulingContext, opts: operations.PutOpts = {}) {
+  async replacePodSchedulingContext(
+    name: string,
+    body: ResourceV1alpha2.PodSchedulingContext,
+    opts: operations.PutOpts = {},
+  ): Promise<ResourceV1alpha2.PodSchedulingContext> {
     const resp = await this.#client.performRequest({
       method: "PUT",
       path: `${this.#root}podschedulingcontexts/${name}`,
@@ -273,7 +328,12 @@ export class ResourceV1alpha2NamespacedApi {
     return ResourceV1alpha2.toPodSchedulingContext(resp);
   }
 
-  async patchPodSchedulingContext(name: string, type: c.PatchType, body: ResourceV1alpha2.PodSchedulingContext | c.JsonPatch, opts: operations.PatchOpts = {}) {
+  async patchPodSchedulingContext(
+    name: string,
+    type: c.PatchType,
+    body: ResourceV1alpha2.PodSchedulingContext | c.JsonPatch,
+    opts: operations.PatchOpts = {},
+  ): Promise<ResourceV1alpha2.PodSchedulingContext> {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}podschedulingcontexts/${name}`,
@@ -286,7 +346,10 @@ export class ResourceV1alpha2NamespacedApi {
     return ResourceV1alpha2.toPodSchedulingContext(resp);
   }
 
-  async getPodSchedulingContextStatus(name: string, opts: operations.NoOpts = {}) {
+  async getPodSchedulingContextStatus(
+    name: string,
+    opts: operations.NoOpts = {},
+  ): Promise<ResourceV1alpha2.PodSchedulingContext> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}podschedulingcontexts/${name}/status`,
@@ -296,7 +359,11 @@ export class ResourceV1alpha2NamespacedApi {
     return ResourceV1alpha2.toPodSchedulingContext(resp);
   }
 
-  async replacePodSchedulingContextStatus(name: string, body: ResourceV1alpha2.PodSchedulingContext, opts: operations.PutOpts = {}) {
+  async replacePodSchedulingContextStatus(
+    name: string,
+    body: ResourceV1alpha2.PodSchedulingContext,
+    opts: operations.PutOpts = {},
+  ): Promise<ResourceV1alpha2.PodSchedulingContext> {
     const resp = await this.#client.performRequest({
       method: "PUT",
       path: `${this.#root}podschedulingcontexts/${name}/status`,
@@ -308,7 +375,12 @@ export class ResourceV1alpha2NamespacedApi {
     return ResourceV1alpha2.toPodSchedulingContext(resp);
   }
 
-  async patchPodSchedulingContextStatus(name: string, type: c.PatchType, body: ResourceV1alpha2.PodSchedulingContext | c.JsonPatch, opts: operations.PatchOpts = {}) {
+  async patchPodSchedulingContextStatus(
+    name: string,
+    type: c.PatchType,
+    body: ResourceV1alpha2.PodSchedulingContext | c.JsonPatch,
+    opts: operations.PatchOpts = {},
+  ): Promise<ResourceV1alpha2.PodSchedulingContext> {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}podschedulingcontexts/${name}/status`,
@@ -321,7 +393,9 @@ export class ResourceV1alpha2NamespacedApi {
     return ResourceV1alpha2.toPodSchedulingContext(resp);
   }
 
-  async getResourceClaimList(opts: operations.GetListOpts = {}) {
+  async getResourceClaimList(
+    opts: operations.GetListOpts = {},
+  ): Promise<ResourceV1alpha2.ResourceClaimList> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}resourceclaims`,
@@ -332,7 +406,9 @@ export class ResourceV1alpha2NamespacedApi {
     return ResourceV1alpha2.toResourceClaimList(resp);
   }
 
-  async watchResourceClaimList(opts: operations.WatchListOpts = {}) {
+  async watchResourceClaimList(
+    opts: operations.WatchListOpts = {},
+  ): Promise<c.WatchEventStream<ResourceV1alpha2.ResourceClaim>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}resourceclaims`,
@@ -344,7 +420,10 @@ export class ResourceV1alpha2NamespacedApi {
     return resp.pipeThrough(new c.WatchEventTransformer(ResourceV1alpha2.toResourceClaim, MetaV1.toStatus));
   }
 
-  async createResourceClaim(body: ResourceV1alpha2.ResourceClaim, opts: operations.PutOpts = {}) {
+  async createResourceClaim(
+    body: ResourceV1alpha2.ResourceClaim,
+    opts: operations.PutOpts = {},
+  ): Promise<ResourceV1alpha2.ResourceClaim> {
     const resp = await this.#client.performRequest({
       method: "POST",
       path: `${this.#root}resourceclaims`,
@@ -356,7 +435,9 @@ export class ResourceV1alpha2NamespacedApi {
     return ResourceV1alpha2.toResourceClaim(resp);
   }
 
-  async deleteResourceClaimList(opts: operations.DeleteListOpts = {}) {
+  async deleteResourceClaimList(
+    opts: operations.DeleteListOpts = {},
+  ): Promise<ResourceV1alpha2.ResourceClaimList> {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}resourceclaims`,
@@ -367,7 +448,10 @@ export class ResourceV1alpha2NamespacedApi {
     return ResourceV1alpha2.toResourceClaimList(resp);
   }
 
-  async getResourceClaim(name: string, opts: operations.NoOpts = {}) {
+  async getResourceClaim(
+    name: string,
+    opts: operations.NoOpts = {},
+  ): Promise<ResourceV1alpha2.ResourceClaim> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}resourceclaims/${name}`,
@@ -377,7 +461,10 @@ export class ResourceV1alpha2NamespacedApi {
     return ResourceV1alpha2.toResourceClaim(resp);
   }
 
-  async deleteResourceClaim(name: string, opts: operations.DeleteOpts = {}) {
+  async deleteResourceClaim(
+    name: string,
+    opts: operations.DeleteOpts = {},
+  ): Promise<ResourceV1alpha2.ResourceClaim | MetaV1.Status> {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}resourceclaims/${name}`,
@@ -389,7 +476,11 @@ export class ResourceV1alpha2NamespacedApi {
     return ResourceV1alpha2.toResourceClaim(resp);
   }
 
-  async replaceResourceClaim(name: string, body: ResourceV1alpha2.ResourceClaim, opts: operations.PutOpts = {}) {
+  async replaceResourceClaim(
+    name: string,
+    body: ResourceV1alpha2.ResourceClaim,
+    opts: operations.PutOpts = {},
+  ): Promise<ResourceV1alpha2.ResourceClaim> {
     const resp = await this.#client.performRequest({
       method: "PUT",
       path: `${this.#root}resourceclaims/${name}`,
@@ -401,7 +492,12 @@ export class ResourceV1alpha2NamespacedApi {
     return ResourceV1alpha2.toResourceClaim(resp);
   }
 
-  async patchResourceClaim(name: string, type: c.PatchType, body: ResourceV1alpha2.ResourceClaim | c.JsonPatch, opts: operations.PatchOpts = {}) {
+  async patchResourceClaim(
+    name: string,
+    type: c.PatchType,
+    body: ResourceV1alpha2.ResourceClaim | c.JsonPatch,
+    opts: operations.PatchOpts = {},
+  ): Promise<ResourceV1alpha2.ResourceClaim> {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}resourceclaims/${name}`,
@@ -414,7 +510,10 @@ export class ResourceV1alpha2NamespacedApi {
     return ResourceV1alpha2.toResourceClaim(resp);
   }
 
-  async getResourceClaimStatus(name: string, opts: operations.NoOpts = {}) {
+  async getResourceClaimStatus(
+    name: string,
+    opts: operations.NoOpts = {},
+  ): Promise<ResourceV1alpha2.ResourceClaim> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}resourceclaims/${name}/status`,
@@ -424,7 +523,11 @@ export class ResourceV1alpha2NamespacedApi {
     return ResourceV1alpha2.toResourceClaim(resp);
   }
 
-  async replaceResourceClaimStatus(name: string, body: ResourceV1alpha2.ResourceClaim, opts: operations.PutOpts = {}) {
+  async replaceResourceClaimStatus(
+    name: string,
+    body: ResourceV1alpha2.ResourceClaim,
+    opts: operations.PutOpts = {},
+  ): Promise<ResourceV1alpha2.ResourceClaim> {
     const resp = await this.#client.performRequest({
       method: "PUT",
       path: `${this.#root}resourceclaims/${name}/status`,
@@ -436,7 +539,12 @@ export class ResourceV1alpha2NamespacedApi {
     return ResourceV1alpha2.toResourceClaim(resp);
   }
 
-  async patchResourceClaimStatus(name: string, type: c.PatchType, body: ResourceV1alpha2.ResourceClaim | c.JsonPatch, opts: operations.PatchOpts = {}) {
+  async patchResourceClaimStatus(
+    name: string,
+    type: c.PatchType,
+    body: ResourceV1alpha2.ResourceClaim | c.JsonPatch,
+    opts: operations.PatchOpts = {},
+  ): Promise<ResourceV1alpha2.ResourceClaim> {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}resourceclaims/${name}/status`,
@@ -449,7 +557,9 @@ export class ResourceV1alpha2NamespacedApi {
     return ResourceV1alpha2.toResourceClaim(resp);
   }
 
-  async getResourceClaimTemplateList(opts: operations.GetListOpts = {}) {
+  async getResourceClaimTemplateList(
+    opts: operations.GetListOpts = {},
+  ): Promise<ResourceV1alpha2.ResourceClaimTemplateList> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}resourceclaimtemplates`,
@@ -460,7 +570,9 @@ export class ResourceV1alpha2NamespacedApi {
     return ResourceV1alpha2.toResourceClaimTemplateList(resp);
   }
 
-  async watchResourceClaimTemplateList(opts: operations.WatchListOpts = {}) {
+  async watchResourceClaimTemplateList(
+    opts: operations.WatchListOpts = {},
+  ): Promise<c.WatchEventStream<ResourceV1alpha2.ResourceClaimTemplate>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}resourceclaimtemplates`,
@@ -472,7 +584,10 @@ export class ResourceV1alpha2NamespacedApi {
     return resp.pipeThrough(new c.WatchEventTransformer(ResourceV1alpha2.toResourceClaimTemplate, MetaV1.toStatus));
   }
 
-  async createResourceClaimTemplate(body: ResourceV1alpha2.ResourceClaimTemplate, opts: operations.PutOpts = {}) {
+  async createResourceClaimTemplate(
+    body: ResourceV1alpha2.ResourceClaimTemplate,
+    opts: operations.PutOpts = {},
+  ): Promise<ResourceV1alpha2.ResourceClaimTemplate> {
     const resp = await this.#client.performRequest({
       method: "POST",
       path: `${this.#root}resourceclaimtemplates`,
@@ -484,7 +599,9 @@ export class ResourceV1alpha2NamespacedApi {
     return ResourceV1alpha2.toResourceClaimTemplate(resp);
   }
 
-  async deleteResourceClaimTemplateList(opts: operations.DeleteListOpts = {}) {
+  async deleteResourceClaimTemplateList(
+    opts: operations.DeleteListOpts = {},
+  ): Promise<ResourceV1alpha2.ResourceClaimTemplateList> {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}resourceclaimtemplates`,
@@ -495,7 +612,10 @@ export class ResourceV1alpha2NamespacedApi {
     return ResourceV1alpha2.toResourceClaimTemplateList(resp);
   }
 
-  async getResourceClaimTemplate(name: string, opts: operations.NoOpts = {}) {
+  async getResourceClaimTemplate(
+    name: string,
+    opts: operations.NoOpts = {},
+  ): Promise<ResourceV1alpha2.ResourceClaimTemplate> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}resourceclaimtemplates/${name}`,
@@ -505,7 +625,10 @@ export class ResourceV1alpha2NamespacedApi {
     return ResourceV1alpha2.toResourceClaimTemplate(resp);
   }
 
-  async deleteResourceClaimTemplate(name: string, opts: operations.DeleteOpts = {}) {
+  async deleteResourceClaimTemplate(
+    name: string,
+    opts: operations.DeleteOpts = {},
+  ): Promise<ResourceV1alpha2.ResourceClaimTemplate | MetaV1.Status> {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}resourceclaimtemplates/${name}`,
@@ -517,7 +640,11 @@ export class ResourceV1alpha2NamespacedApi {
     return ResourceV1alpha2.toResourceClaimTemplate(resp);
   }
 
-  async replaceResourceClaimTemplate(name: string, body: ResourceV1alpha2.ResourceClaimTemplate, opts: operations.PutOpts = {}) {
+  async replaceResourceClaimTemplate(
+    name: string,
+    body: ResourceV1alpha2.ResourceClaimTemplate,
+    opts: operations.PutOpts = {},
+  ): Promise<ResourceV1alpha2.ResourceClaimTemplate> {
     const resp = await this.#client.performRequest({
       method: "PUT",
       path: `${this.#root}resourceclaimtemplates/${name}`,
@@ -529,7 +656,12 @@ export class ResourceV1alpha2NamespacedApi {
     return ResourceV1alpha2.toResourceClaimTemplate(resp);
   }
 
-  async patchResourceClaimTemplate(name: string, type: c.PatchType, body: ResourceV1alpha2.ResourceClaimTemplate | c.JsonPatch, opts: operations.PatchOpts = {}) {
+  async patchResourceClaimTemplate(
+    name: string,
+    type: c.PatchType,
+    body: ResourceV1alpha2.ResourceClaimTemplate | c.JsonPatch,
+    opts: operations.PatchOpts = {},
+  ): Promise<ResourceV1alpha2.ResourceClaimTemplate> {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}resourceclaimtemplates/${name}`,

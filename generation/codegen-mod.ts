@@ -37,10 +37,10 @@ export function generateModuleTypescript(surface: SurfaceMap, api: SurfaceApi): 
   chunks.push(`  }\n`);
 
   if (hasNamespaced) {
-    chunks.push(`  namespace(name: string) {`);
+    chunks.push(`  namespace(name: string): ${api.friendlyName}NamespacedApi {`);
     chunks.push(`    return new ${api.friendlyName}NamespacedApi(this.#client, name);`);
     chunks.push(`  }`);
-    chunks.push(`  myNamespace() {`);
+    chunks.push(`  myNamespace(): ${api.friendlyName}NamespacedApi {`);
     chunks.push(`    if (!this.#client.defaultNamespace) throw new Error("No current namespace is set");`);
     chunks.push(`    return new ${api.friendlyName}NamespacedApi(this.#client, this.#client.defaultNamespace);`);
     chunks.push(`  }\n`);
@@ -126,13 +126,13 @@ export function generateModuleTypescript(surface: SurfaceMap, api: SurfaceApi): 
       const funcName = `proxy${middleName}Request`;
 
       args.push([{name: 'opts', in: 'path'}, {type: 'special', name: 'ProxyOptions'}]);
-      const baseSignature = `${funcName}(${writeSig(args, false, '  ')}`.replace('(name:', `(${nameArgName}:`);
+      const baseSignature = `${funcName}(${writeSig(args, false, '    ')}`.replace('name:', `${nameArgName}:`);
 
-      chunks.push(`  ${baseSignature} & {expectStream: true; expectJson: true}): Promise<ReadableStream<c.JSONValue>>;`);
-      chunks.push(`  ${baseSignature} & {expectStream: true}): Promise<ReadableStream<Uint8Array>>;`);
-      chunks.push(`  ${baseSignature} & {expectJson: true}): Promise<c.JSONValue>;`);
-      chunks.push(`  ${baseSignature}): Promise<Uint8Array>;`);
-      chunks.push(`  async ${baseSignature}): Promise<unknown> {`);
+      chunks.push(`  ${baseSignature} & {expectStream: true; expectJson: true},\n  ): Promise<ReadableStream<c.JSONValue>>;`);
+      chunks.push(`  ${baseSignature} & {expectStream: true},\n  ): Promise<ReadableStream<Uint8Array>>;`);
+      chunks.push(`  ${baseSignature} & {expectJson: true},\n  ): Promise<c.JSONValue>;`);
+      chunks.push(`  ${baseSignature},\n  ): Promise<Uint8Array>;`);
+      chunks.push(`  async ${baseSignature},\n  ): Promise<unknown> {`);
       chunks.push(`    if (opts.path && !opts.path.startsWith('/')) throw new Error("Proxy path cannot be relative");`);
       chunks.push(`    const name = (opts.port != null) ? \`\${${nameArgName}}:\${opts.port}\` : ${nameArgName};`);
       chunks.push(`    const path = \`\${this.#root}${JSON.stringify(opPath).slice(1,-1).replace(/{/g, '${')}\${opts.path || ''}\`;`);
@@ -185,9 +185,46 @@ export function generateModuleTypescript(surface: SurfaceMap, api: SurfaceApi): 
     //   return AcmeCertManagerIoV1.toOrder(resp);
     // }
 
-    chunks.push(`  async ${funcName}(${writeSig(args, opts, '  ')}) {`);
     const isWatch = op.operationName.startsWith('watch');
     const isStream = op.operationName.startsWith('stream');
+
+    let returnSig = 'unknown';
+    if (expectsTunnel) {
+      returnSig = `tunnels.${expectsTunnel}`;
+    } else if (isStream) {
+      if (accept === 'text/plain') {
+        returnSig = 'ReadableStream<string>';
+      } else {
+        returnSig = 'ReadableStream<Uint8Array>';
+      }
+    } else if (accept === 'text/plain') {
+      returnSig = 'string';
+    } else if (outShape) {
+      let shape = outShape;
+      // QUIRK: individual deletes can either return a Status or the 'lastExisting' resource
+      // More details further down in this file
+      if (shape.type === 'foreign' &&
+          shape.api.apiGroup === 'meta' &&
+          shape.name === 'Status' &&
+          op.method === 'delete') {
+        shape = api.shapes.shapes.get(op.operationName.replace(/^delete/, ''))!;
+      }
+
+      if (shape.type === 'foreign') {
+        returnSig = `${shape.api.friendlyName}.${shape.name}`;
+      } else if (shape.reference) {
+        returnSig = `${api.friendlyName}.${shape.reference}`;
+      } else throw new Error(`TODO: weird output shape on ${op.operationId}`);
+
+      if (op["x-kubernetes-action"] == 'delete') {
+        returnSig += ` | MetaV1.Status`;
+      }
+      if (isWatch) {
+        returnSig = `c.WatchEventStream<${returnSig.slice(0, -4)}>`;
+      }
+    }
+
+    chunks.push(`  async ${funcName}(${writeSig(args, opts, '    ')},\n  ): Promise<${returnSig}> {`);
 
     const allOptKeys = opts.map(x => x[0].name).sort().join(',');
     const knownOptShape = knownOpts[allOptKeys];
@@ -342,7 +379,7 @@ export function generateModuleTypescript(surface: SurfaceMap, api: SurfaceApi): 
   }
 
   function writeSig(args: [OpenAPI2RequestParameter, ApiShape][], opts: [OpenAPI2RequestParameter, ApiShape][] | false, indent=''): string {
-    let sigs = new Array<string>();
+    const sigs = new Array<string>();
     for (const arg of args) {
       sigs.push(`${arg[0].name}: ${writeType(arg[1])}`);
     }
@@ -367,7 +404,7 @@ export function generateModuleTypescript(surface: SurfaceMap, api: SurfaceApi): 
         sigs.push(`opts: {\n${lines.join('\n')}\n}${allAreOpt ? ' = {}' : ''}`);
       }
     }
-    return sigs.join(', ').replace(/\n/g, '\n'+indent);
+    return `\n${indent}` + sigs.join(',\n').replace(/\n/g, '\n'+indent);
   }
 
 }
