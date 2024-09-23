@@ -6,7 +6,7 @@
 
 Generated, typed interfaces to make every possible Kubernetes API request and work with richer data structures.
 
-Actual request transports implemented in `/x/kubernetes_client`.
+The actual request transports are implemented in `/x/kubernetes_client`.
 
 ## Usage
 
@@ -31,6 +31,11 @@ For a container being deployed onto a cluster, there's more flags to provide ins
 see `/x/kubernetes_client` for more information.
 
 ## Changelog
+
+* `v0.5.1` on `2024-09-18`:
+  * Updating `/x/kubernetes_client` API contract to `v0.7.3`.
+  * Add [JSR publication](https://jsr.io/@cloudydeno/kubernetes-apis) of the module.
+  * Exposed API surface has been adjusted to satisfy JSR "slow types" checks. Shouldn't affect most code.
 
 * `v0.5.0` on `2023-08-19`:
   * Updating `/x/kubernetes_client` API contract to `v0.7.0`.

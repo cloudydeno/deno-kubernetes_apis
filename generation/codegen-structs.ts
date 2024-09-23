@@ -243,7 +243,7 @@ export function generateStructsTypescript(surface: SurfaceMap, apiS: SurfaceApi)
           const extraStruct = extraStructs.shift();
           if (!extraStruct) break;
 
-          chunks.push(`export function to${extraStruct.name}(input: c.JSONValue) {`);
+          chunks.push(`function to${extraStruct.name}(input: c.JSONValue) {`);
           chunks.push(`  const obj = c.checkObj(input);`);
           chunks.push(`  return {`);
           for (const [field, inner] of extraStruct.struct.fields) {

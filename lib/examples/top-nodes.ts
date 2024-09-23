@@ -23,7 +23,7 @@
  *    - pods: 18
  */
 
-import { autoDetectClient } from "../client.ts";
+import { autoDetectClient } from "../deps.ts";
 import { CoreV1Api } from "../builtin/core@v1/mod.ts";
 
 const restClient = await autoDetectClient();

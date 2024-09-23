@@ -3,7 +3,7 @@
 // Breaks up a text stream into lines
 import { TextLineStream } from "https://deno.land/std@0.177.0/streams/text_line_stream.ts";
 
-import { autoDetectClient } from '../client.ts';
+import { autoDetectClient } from '../deps.ts';
 import { CoreV1Api } from '../builtin/core@v1/mod.ts';
 
 const restClient = await autoDetectClient();

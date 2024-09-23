@@ -13,7 +13,9 @@ export class NetworkingV1alpha1Api {
     this.#client = client;
   }
 
-  async getIPAddressList(opts: operations.GetListOpts = {}) {
+  async getIPAddressList(
+    opts: operations.GetListOpts = {},
+  ): Promise<NetworkingV1alpha1.IPAddressList> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}ipaddresses`,
@@ -24,7 +26,9 @@ export class NetworkingV1alpha1Api {
     return NetworkingV1alpha1.toIPAddressList(resp);
   }
 
-  async watchIPAddressList(opts: operations.WatchListOpts = {}) {
+  async watchIPAddressList(
+    opts: operations.WatchListOpts = {},
+  ): Promise<c.WatchEventStream<NetworkingV1alpha1.IPAddress>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}ipaddresses`,
@@ -36,7 +40,10 @@ export class NetworkingV1alpha1Api {
     return resp.pipeThrough(new c.WatchEventTransformer(NetworkingV1alpha1.toIPAddress, MetaV1.toStatus));
   }
 
-  async createIPAddress(body: NetworkingV1alpha1.IPAddress, opts: operations.PutOpts = {}) {
+  async createIPAddress(
+    body: NetworkingV1alpha1.IPAddress,
+    opts: operations.PutOpts = {},
+  ): Promise<NetworkingV1alpha1.IPAddress> {
     const resp = await this.#client.performRequest({
       method: "POST",
       path: `${this.#root}ipaddresses`,
@@ -48,7 +55,9 @@ export class NetworkingV1alpha1Api {
     return NetworkingV1alpha1.toIPAddress(resp);
   }
 
-  async deleteIPAddressList(opts: operations.DeleteListOpts = {}) {
+  async deleteIPAddressList(
+    opts: operations.DeleteListOpts = {},
+  ): Promise<NetworkingV1alpha1.IPAddressList> {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}ipaddresses`,
@@ -59,7 +68,10 @@ export class NetworkingV1alpha1Api {
     return NetworkingV1alpha1.toIPAddressList(resp);
   }
 
-  async getIPAddress(name: string, opts: operations.NoOpts = {}) {
+  async getIPAddress(
+    name: string,
+    opts: operations.NoOpts = {},
+  ): Promise<NetworkingV1alpha1.IPAddress> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}ipaddresses/${name}`,
@@ -69,7 +81,10 @@ export class NetworkingV1alpha1Api {
     return NetworkingV1alpha1.toIPAddress(resp);
   }
 
-  async deleteIPAddress(name: string, opts: operations.DeleteOpts = {}) {
+  async deleteIPAddress(
+    name: string,
+    opts: operations.DeleteOpts = {},
+  ): Promise<NetworkingV1alpha1.IPAddress | MetaV1.Status> {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}ipaddresses/${name}`,
@@ -81,7 +96,11 @@ export class NetworkingV1alpha1Api {
     return NetworkingV1alpha1.toIPAddress(resp);
   }
 
-  async replaceIPAddress(name: string, body: NetworkingV1alpha1.IPAddress, opts: operations.PutOpts = {}) {
+  async replaceIPAddress(
+    name: string,
+    body: NetworkingV1alpha1.IPAddress,
+    opts: operations.PutOpts = {},
+  ): Promise<NetworkingV1alpha1.IPAddress> {
     const resp = await this.#client.performRequest({
       method: "PUT",
       path: `${this.#root}ipaddresses/${name}`,
@@ -93,7 +112,12 @@ export class NetworkingV1alpha1Api {
     return NetworkingV1alpha1.toIPAddress(resp);
   }
 
-  async patchIPAddress(name: string, type: c.PatchType, body: NetworkingV1alpha1.IPAddress | c.JsonPatch, opts: operations.PatchOpts = {}) {
+  async patchIPAddress(
+    name: string,
+    type: c.PatchType,
+    body: NetworkingV1alpha1.IPAddress | c.JsonPatch,
+    opts: operations.PatchOpts = {},
+  ): Promise<NetworkingV1alpha1.IPAddress> {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}ipaddresses/${name}`,
@@ -106,7 +130,9 @@ export class NetworkingV1alpha1Api {
     return NetworkingV1alpha1.toIPAddress(resp);
   }
 
-  async getServiceCIDRList(opts: operations.GetListOpts = {}) {
+  async getServiceCIDRList(
+    opts: operations.GetListOpts = {},
+  ): Promise<NetworkingV1alpha1.ServiceCIDRList> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}servicecidrs`,
@@ -117,7 +143,9 @@ export class NetworkingV1alpha1Api {
     return NetworkingV1alpha1.toServiceCIDRList(resp);
   }
 
-  async watchServiceCIDRList(opts: operations.WatchListOpts = {}) {
+  async watchServiceCIDRList(
+    opts: operations.WatchListOpts = {},
+  ): Promise<c.WatchEventStream<NetworkingV1alpha1.ServiceCIDR>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}servicecidrs`,
@@ -129,7 +157,10 @@ export class NetworkingV1alpha1Api {
     return resp.pipeThrough(new c.WatchEventTransformer(NetworkingV1alpha1.toServiceCIDR, MetaV1.toStatus));
   }
 
-  async createServiceCIDR(body: NetworkingV1alpha1.ServiceCIDR, opts: operations.PutOpts = {}) {
+  async createServiceCIDR(
+    body: NetworkingV1alpha1.ServiceCIDR,
+    opts: operations.PutOpts = {},
+  ): Promise<NetworkingV1alpha1.ServiceCIDR> {
     const resp = await this.#client.performRequest({
       method: "POST",
       path: `${this.#root}servicecidrs`,
@@ -141,7 +172,9 @@ export class NetworkingV1alpha1Api {
     return NetworkingV1alpha1.toServiceCIDR(resp);
   }
 
-  async deleteServiceCIDRList(opts: operations.DeleteListOpts = {}) {
+  async deleteServiceCIDRList(
+    opts: operations.DeleteListOpts = {},
+  ): Promise<NetworkingV1alpha1.ServiceCIDRList> {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}servicecidrs`,
@@ -152,7 +185,10 @@ export class NetworkingV1alpha1Api {
     return NetworkingV1alpha1.toServiceCIDRList(resp);
   }
 
-  async getServiceCIDR(name: string, opts: operations.NoOpts = {}) {
+  async getServiceCIDR(
+    name: string,
+    opts: operations.NoOpts = {},
+  ): Promise<NetworkingV1alpha1.ServiceCIDR> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}servicecidrs/${name}`,
@@ -162,7 +198,10 @@ export class NetworkingV1alpha1Api {
     return NetworkingV1alpha1.toServiceCIDR(resp);
   }
 
-  async deleteServiceCIDR(name: string, opts: operations.DeleteOpts = {}) {
+  async deleteServiceCIDR(
+    name: string,
+    opts: operations.DeleteOpts = {},
+  ): Promise<NetworkingV1alpha1.ServiceCIDR | MetaV1.Status> {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}servicecidrs/${name}`,
@@ -174,7 +213,11 @@ export class NetworkingV1alpha1Api {
     return NetworkingV1alpha1.toServiceCIDR(resp);
   }
 
-  async replaceServiceCIDR(name: string, body: NetworkingV1alpha1.ServiceCIDR, opts: operations.PutOpts = {}) {
+  async replaceServiceCIDR(
+    name: string,
+    body: NetworkingV1alpha1.ServiceCIDR,
+    opts: operations.PutOpts = {},
+  ): Promise<NetworkingV1alpha1.ServiceCIDR> {
     const resp = await this.#client.performRequest({
       method: "PUT",
       path: `${this.#root}servicecidrs/${name}`,
@@ -186,7 +229,12 @@ export class NetworkingV1alpha1Api {
     return NetworkingV1alpha1.toServiceCIDR(resp);
   }
 
-  async patchServiceCIDR(name: string, type: c.PatchType, body: NetworkingV1alpha1.ServiceCIDR | c.JsonPatch, opts: operations.PatchOpts = {}) {
+  async patchServiceCIDR(
+    name: string,
+    type: c.PatchType,
+    body: NetworkingV1alpha1.ServiceCIDR | c.JsonPatch,
+    opts: operations.PatchOpts = {},
+  ): Promise<NetworkingV1alpha1.ServiceCIDR> {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}servicecidrs/${name}`,
@@ -199,7 +247,10 @@ export class NetworkingV1alpha1Api {
     return NetworkingV1alpha1.toServiceCIDR(resp);
   }
 
-  async getServiceCIDRStatus(name: string, opts: operations.NoOpts = {}) {
+  async getServiceCIDRStatus(
+    name: string,
+    opts: operations.NoOpts = {},
+  ): Promise<NetworkingV1alpha1.ServiceCIDR> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}servicecidrs/${name}/status`,
@@ -209,7 +260,11 @@ export class NetworkingV1alpha1Api {
     return NetworkingV1alpha1.toServiceCIDR(resp);
   }
 
-  async replaceServiceCIDRStatus(name: string, body: NetworkingV1alpha1.ServiceCIDR, opts: operations.PutOpts = {}) {
+  async replaceServiceCIDRStatus(
+    name: string,
+    body: NetworkingV1alpha1.ServiceCIDR,
+    opts: operations.PutOpts = {},
+  ): Promise<NetworkingV1alpha1.ServiceCIDR> {
     const resp = await this.#client.performRequest({
       method: "PUT",
       path: `${this.#root}servicecidrs/${name}/status`,
@@ -221,7 +276,12 @@ export class NetworkingV1alpha1Api {
     return NetworkingV1alpha1.toServiceCIDR(resp);
   }
 
-  async patchServiceCIDRStatus(name: string, type: c.PatchType, body: NetworkingV1alpha1.ServiceCIDR | c.JsonPatch, opts: operations.PatchOpts = {}) {
+  async patchServiceCIDRStatus(
+    name: string,
+    type: c.PatchType,
+    body: NetworkingV1alpha1.ServiceCIDR | c.JsonPatch,
+    opts: operations.PatchOpts = {},
+  ): Promise<NetworkingV1alpha1.ServiceCIDR> {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}servicecidrs/${name}/status`,

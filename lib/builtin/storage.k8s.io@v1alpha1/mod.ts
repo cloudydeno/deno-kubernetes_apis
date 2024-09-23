@@ -13,7 +13,9 @@ export class StorageV1alpha1Api {
     this.#client = client;
   }
 
-  async getVolumeAttributesClassList(opts: operations.GetListOpts = {}) {
+  async getVolumeAttributesClassList(
+    opts: operations.GetListOpts = {},
+  ): Promise<StorageV1alpha1.VolumeAttributesClassList> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}volumeattributesclasses`,
@@ -24,7 +26,9 @@ export class StorageV1alpha1Api {
     return StorageV1alpha1.toVolumeAttributesClassList(resp);
   }
 
-  async watchVolumeAttributesClassList(opts: operations.WatchListOpts = {}) {
+  async watchVolumeAttributesClassList(
+    opts: operations.WatchListOpts = {},
+  ): Promise<c.WatchEventStream<StorageV1alpha1.VolumeAttributesClass>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}volumeattributesclasses`,
@@ -36,7 +40,10 @@ export class StorageV1alpha1Api {
     return resp.pipeThrough(new c.WatchEventTransformer(StorageV1alpha1.toVolumeAttributesClass, MetaV1.toStatus));
   }
 
-  async createVolumeAttributesClass(body: StorageV1alpha1.VolumeAttributesClass, opts: operations.PutOpts = {}) {
+  async createVolumeAttributesClass(
+    body: StorageV1alpha1.VolumeAttributesClass,
+    opts: operations.PutOpts = {},
+  ): Promise<StorageV1alpha1.VolumeAttributesClass> {
     const resp = await this.#client.performRequest({
       method: "POST",
       path: `${this.#root}volumeattributesclasses`,
@@ -48,7 +55,9 @@ export class StorageV1alpha1Api {
     return StorageV1alpha1.toVolumeAttributesClass(resp);
   }
 
-  async deleteVolumeAttributesClassList(opts: operations.DeleteListOpts = {}) {
+  async deleteVolumeAttributesClassList(
+    opts: operations.DeleteListOpts = {},
+  ): Promise<StorageV1alpha1.VolumeAttributesClassList> {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}volumeattributesclasses`,
@@ -59,7 +68,10 @@ export class StorageV1alpha1Api {
     return StorageV1alpha1.toVolumeAttributesClassList(resp);
   }
 
-  async getVolumeAttributesClass(name: string, opts: operations.NoOpts = {}) {
+  async getVolumeAttributesClass(
+    name: string,
+    opts: operations.NoOpts = {},
+  ): Promise<StorageV1alpha1.VolumeAttributesClass> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}volumeattributesclasses/${name}`,
@@ -69,7 +81,10 @@ export class StorageV1alpha1Api {
     return StorageV1alpha1.toVolumeAttributesClass(resp);
   }
 
-  async deleteVolumeAttributesClass(name: string, opts: operations.DeleteOpts = {}) {
+  async deleteVolumeAttributesClass(
+    name: string,
+    opts: operations.DeleteOpts = {},
+  ): Promise<StorageV1alpha1.VolumeAttributesClass | MetaV1.Status> {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}volumeattributesclasses/${name}`,
@@ -81,7 +96,11 @@ export class StorageV1alpha1Api {
     return StorageV1alpha1.toVolumeAttributesClass(resp);
   }
 
-  async replaceVolumeAttributesClass(name: string, body: StorageV1alpha1.VolumeAttributesClass, opts: operations.PutOpts = {}) {
+  async replaceVolumeAttributesClass(
+    name: string,
+    body: StorageV1alpha1.VolumeAttributesClass,
+    opts: operations.PutOpts = {},
+  ): Promise<StorageV1alpha1.VolumeAttributesClass> {
     const resp = await this.#client.performRequest({
       method: "PUT",
       path: `${this.#root}volumeattributesclasses/${name}`,
@@ -93,7 +112,12 @@ export class StorageV1alpha1Api {
     return StorageV1alpha1.toVolumeAttributesClass(resp);
   }
 
-  async patchVolumeAttributesClass(name: string, type: c.PatchType, body: StorageV1alpha1.VolumeAttributesClass | c.JsonPatch, opts: operations.PatchOpts = {}) {
+  async patchVolumeAttributesClass(
+    name: string,
+    type: c.PatchType,
+    body: StorageV1alpha1.VolumeAttributesClass | c.JsonPatch,
+    opts: operations.PatchOpts = {},
+  ): Promise<StorageV1alpha1.VolumeAttributesClass> {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}volumeattributesclasses/${name}`,

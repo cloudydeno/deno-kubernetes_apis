@@ -13,7 +13,9 @@ export class AdmissionregistrationV1Api {
     this.#client = client;
   }
 
-  async getMutatingWebhookConfigurationList(opts: operations.GetListOpts = {}) {
+  async getMutatingWebhookConfigurationList(
+    opts: operations.GetListOpts = {},
+  ): Promise<AdmissionregistrationV1.MutatingWebhookConfigurationList> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}mutatingwebhookconfigurations`,
@@ -24,7 +26,9 @@ export class AdmissionregistrationV1Api {
     return AdmissionregistrationV1.toMutatingWebhookConfigurationList(resp);
   }
 
-  async watchMutatingWebhookConfigurationList(opts: operations.WatchListOpts = {}) {
+  async watchMutatingWebhookConfigurationList(
+    opts: operations.WatchListOpts = {},
+  ): Promise<c.WatchEventStream<AdmissionregistrationV1.MutatingWebhookConfiguration>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}mutatingwebhookconfigurations`,
@@ -36,7 +40,10 @@ export class AdmissionregistrationV1Api {
     return resp.pipeThrough(new c.WatchEventTransformer(AdmissionregistrationV1.toMutatingWebhookConfiguration, MetaV1.toStatus));
   }
 
-  async createMutatingWebhookConfiguration(body: AdmissionregistrationV1.MutatingWebhookConfiguration, opts: operations.PutOpts = {}) {
+  async createMutatingWebhookConfiguration(
+    body: AdmissionregistrationV1.MutatingWebhookConfiguration,
+    opts: operations.PutOpts = {},
+  ): Promise<AdmissionregistrationV1.MutatingWebhookConfiguration> {
     const resp = await this.#client.performRequest({
       method: "POST",
       path: `${this.#root}mutatingwebhookconfigurations`,
@@ -48,7 +55,9 @@ export class AdmissionregistrationV1Api {
     return AdmissionregistrationV1.toMutatingWebhookConfiguration(resp);
   }
 
-  async deleteMutatingWebhookConfigurationList(opts: operations.DeleteListOpts = {}) {
+  async deleteMutatingWebhookConfigurationList(
+    opts: operations.DeleteListOpts = {},
+  ): Promise<AdmissionregistrationV1.MutatingWebhookConfigurationList> {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}mutatingwebhookconfigurations`,
@@ -59,7 +68,10 @@ export class AdmissionregistrationV1Api {
     return AdmissionregistrationV1.toMutatingWebhookConfigurationList(resp);
   }
 
-  async getMutatingWebhookConfiguration(name: string, opts: operations.NoOpts = {}) {
+  async getMutatingWebhookConfiguration(
+    name: string,
+    opts: operations.NoOpts = {},
+  ): Promise<AdmissionregistrationV1.MutatingWebhookConfiguration> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}mutatingwebhookconfigurations/${name}`,
@@ -69,7 +81,10 @@ export class AdmissionregistrationV1Api {
     return AdmissionregistrationV1.toMutatingWebhookConfiguration(resp);
   }
 
-  async deleteMutatingWebhookConfiguration(name: string, opts: operations.DeleteOpts = {}) {
+  async deleteMutatingWebhookConfiguration(
+    name: string,
+    opts: operations.DeleteOpts = {},
+  ): Promise<AdmissionregistrationV1.MutatingWebhookConfiguration | MetaV1.Status> {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}mutatingwebhookconfigurations/${name}`,
@@ -81,7 +96,11 @@ export class AdmissionregistrationV1Api {
     return AdmissionregistrationV1.toMutatingWebhookConfiguration(resp);
   }
 
-  async replaceMutatingWebhookConfiguration(name: string, body: AdmissionregistrationV1.MutatingWebhookConfiguration, opts: operations.PutOpts = {}) {
+  async replaceMutatingWebhookConfiguration(
+    name: string,
+    body: AdmissionregistrationV1.MutatingWebhookConfiguration,
+    opts: operations.PutOpts = {},
+  ): Promise<AdmissionregistrationV1.MutatingWebhookConfiguration> {
     const resp = await this.#client.performRequest({
       method: "PUT",
       path: `${this.#root}mutatingwebhookconfigurations/${name}`,
@@ -93,7 +112,12 @@ export class AdmissionregistrationV1Api {
     return AdmissionregistrationV1.toMutatingWebhookConfiguration(resp);
   }
 
-  async patchMutatingWebhookConfiguration(name: string, type: c.PatchType, body: AdmissionregistrationV1.MutatingWebhookConfiguration | c.JsonPatch, opts: operations.PatchOpts = {}) {
+  async patchMutatingWebhookConfiguration(
+    name: string,
+    type: c.PatchType,
+    body: AdmissionregistrationV1.MutatingWebhookConfiguration | c.JsonPatch,
+    opts: operations.PatchOpts = {},
+  ): Promise<AdmissionregistrationV1.MutatingWebhookConfiguration> {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}mutatingwebhookconfigurations/${name}`,
@@ -106,7 +130,9 @@ export class AdmissionregistrationV1Api {
     return AdmissionregistrationV1.toMutatingWebhookConfiguration(resp);
   }
 
-  async getValidatingAdmissionPolicyList(opts: operations.GetListOpts = {}) {
+  async getValidatingAdmissionPolicyList(
+    opts: operations.GetListOpts = {},
+  ): Promise<AdmissionregistrationV1.ValidatingAdmissionPolicyList> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}validatingadmissionpolicies`,
@@ -117,7 +143,9 @@ export class AdmissionregistrationV1Api {
     return AdmissionregistrationV1.toValidatingAdmissionPolicyList(resp);
   }
 
-  async watchValidatingAdmissionPolicyList(opts: operations.WatchListOpts = {}) {
+  async watchValidatingAdmissionPolicyList(
+    opts: operations.WatchListOpts = {},
+  ): Promise<c.WatchEventStream<AdmissionregistrationV1.ValidatingAdmissionPolicy>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}validatingadmissionpolicies`,
@@ -129,7 +157,10 @@ export class AdmissionregistrationV1Api {
     return resp.pipeThrough(new c.WatchEventTransformer(AdmissionregistrationV1.toValidatingAdmissionPolicy, MetaV1.toStatus));
   }
 
-  async createValidatingAdmissionPolicy(body: AdmissionregistrationV1.ValidatingAdmissionPolicy, opts: operations.PutOpts = {}) {
+  async createValidatingAdmissionPolicy(
+    body: AdmissionregistrationV1.ValidatingAdmissionPolicy,
+    opts: operations.PutOpts = {},
+  ): Promise<AdmissionregistrationV1.ValidatingAdmissionPolicy> {
     const resp = await this.#client.performRequest({
       method: "POST",
       path: `${this.#root}validatingadmissionpolicies`,
@@ -141,7 +172,9 @@ export class AdmissionregistrationV1Api {
     return AdmissionregistrationV1.toValidatingAdmissionPolicy(resp);
   }
 
-  async deleteValidatingAdmissionPolicyList(opts: operations.DeleteListOpts = {}) {
+  async deleteValidatingAdmissionPolicyList(
+    opts: operations.DeleteListOpts = {},
+  ): Promise<AdmissionregistrationV1.ValidatingAdmissionPolicyList> {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}validatingadmissionpolicies`,
@@ -152,7 +185,10 @@ export class AdmissionregistrationV1Api {
     return AdmissionregistrationV1.toValidatingAdmissionPolicyList(resp);
   }
 
-  async getValidatingAdmissionPolicy(name: string, opts: operations.NoOpts = {}) {
+  async getValidatingAdmissionPolicy(
+    name: string,
+    opts: operations.NoOpts = {},
+  ): Promise<AdmissionregistrationV1.ValidatingAdmissionPolicy> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}validatingadmissionpolicies/${name}`,
@@ -162,7 +198,10 @@ export class AdmissionregistrationV1Api {
     return AdmissionregistrationV1.toValidatingAdmissionPolicy(resp);
   }
 
-  async deleteValidatingAdmissionPolicy(name: string, opts: operations.DeleteOpts = {}) {
+  async deleteValidatingAdmissionPolicy(
+    name: string,
+    opts: operations.DeleteOpts = {},
+  ): Promise<AdmissionregistrationV1.ValidatingAdmissionPolicy | MetaV1.Status> {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}validatingadmissionpolicies/${name}`,
@@ -174,7 +213,11 @@ export class AdmissionregistrationV1Api {
     return AdmissionregistrationV1.toValidatingAdmissionPolicy(resp);
   }
 
-  async replaceValidatingAdmissionPolicy(name: string, body: AdmissionregistrationV1.ValidatingAdmissionPolicy, opts: operations.PutOpts = {}) {
+  async replaceValidatingAdmissionPolicy(
+    name: string,
+    body: AdmissionregistrationV1.ValidatingAdmissionPolicy,
+    opts: operations.PutOpts = {},
+  ): Promise<AdmissionregistrationV1.ValidatingAdmissionPolicy> {
     const resp = await this.#client.performRequest({
       method: "PUT",
       path: `${this.#root}validatingadmissionpolicies/${name}`,
@@ -186,7 +229,12 @@ export class AdmissionregistrationV1Api {
     return AdmissionregistrationV1.toValidatingAdmissionPolicy(resp);
   }
 
-  async patchValidatingAdmissionPolicy(name: string, type: c.PatchType, body: AdmissionregistrationV1.ValidatingAdmissionPolicy | c.JsonPatch, opts: operations.PatchOpts = {}) {
+  async patchValidatingAdmissionPolicy(
+    name: string,
+    type: c.PatchType,
+    body: AdmissionregistrationV1.ValidatingAdmissionPolicy | c.JsonPatch,
+    opts: operations.PatchOpts = {},
+  ): Promise<AdmissionregistrationV1.ValidatingAdmissionPolicy> {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}validatingadmissionpolicies/${name}`,
@@ -199,7 +247,10 @@ export class AdmissionregistrationV1Api {
     return AdmissionregistrationV1.toValidatingAdmissionPolicy(resp);
   }
 
-  async getValidatingAdmissionPolicyStatus(name: string, opts: operations.NoOpts = {}) {
+  async getValidatingAdmissionPolicyStatus(
+    name: string,
+    opts: operations.NoOpts = {},
+  ): Promise<AdmissionregistrationV1.ValidatingAdmissionPolicy> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}validatingadmissionpolicies/${name}/status`,
@@ -209,7 +260,11 @@ export class AdmissionregistrationV1Api {
     return AdmissionregistrationV1.toValidatingAdmissionPolicy(resp);
   }
 
-  async replaceValidatingAdmissionPolicyStatus(name: string, body: AdmissionregistrationV1.ValidatingAdmissionPolicy, opts: operations.PutOpts = {}) {
+  async replaceValidatingAdmissionPolicyStatus(
+    name: string,
+    body: AdmissionregistrationV1.ValidatingAdmissionPolicy,
+    opts: operations.PutOpts = {},
+  ): Promise<AdmissionregistrationV1.ValidatingAdmissionPolicy> {
     const resp = await this.#client.performRequest({
       method: "PUT",
       path: `${this.#root}validatingadmissionpolicies/${name}/status`,
@@ -221,7 +276,12 @@ export class AdmissionregistrationV1Api {
     return AdmissionregistrationV1.toValidatingAdmissionPolicy(resp);
   }
 
-  async patchValidatingAdmissionPolicyStatus(name: string, type: c.PatchType, body: AdmissionregistrationV1.ValidatingAdmissionPolicy | c.JsonPatch, opts: operations.PatchOpts = {}) {
+  async patchValidatingAdmissionPolicyStatus(
+    name: string,
+    type: c.PatchType,
+    body: AdmissionregistrationV1.ValidatingAdmissionPolicy | c.JsonPatch,
+    opts: operations.PatchOpts = {},
+  ): Promise<AdmissionregistrationV1.ValidatingAdmissionPolicy> {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}validatingadmissionpolicies/${name}/status`,
@@ -234,7 +294,9 @@ export class AdmissionregistrationV1Api {
     return AdmissionregistrationV1.toValidatingAdmissionPolicy(resp);
   }
 
-  async getValidatingAdmissionPolicyBindingList(opts: operations.GetListOpts = {}) {
+  async getValidatingAdmissionPolicyBindingList(
+    opts: operations.GetListOpts = {},
+  ): Promise<AdmissionregistrationV1.ValidatingAdmissionPolicyBindingList> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}validatingadmissionpolicybindings`,
@@ -245,7 +307,9 @@ export class AdmissionregistrationV1Api {
     return AdmissionregistrationV1.toValidatingAdmissionPolicyBindingList(resp);
   }
 
-  async watchValidatingAdmissionPolicyBindingList(opts: operations.WatchListOpts = {}) {
+  async watchValidatingAdmissionPolicyBindingList(
+    opts: operations.WatchListOpts = {},
+  ): Promise<c.WatchEventStream<AdmissionregistrationV1.ValidatingAdmissionPolicyBinding>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}validatingadmissionpolicybindings`,
@@ -257,7 +321,10 @@ export class AdmissionregistrationV1Api {
     return resp.pipeThrough(new c.WatchEventTransformer(AdmissionregistrationV1.toValidatingAdmissionPolicyBinding, MetaV1.toStatus));
   }
 
-  async createValidatingAdmissionPolicyBinding(body: AdmissionregistrationV1.ValidatingAdmissionPolicyBinding, opts: operations.PutOpts = {}) {
+  async createValidatingAdmissionPolicyBinding(
+    body: AdmissionregistrationV1.ValidatingAdmissionPolicyBinding,
+    opts: operations.PutOpts = {},
+  ): Promise<AdmissionregistrationV1.ValidatingAdmissionPolicyBinding> {
     const resp = await this.#client.performRequest({
       method: "POST",
       path: `${this.#root}validatingadmissionpolicybindings`,
@@ -269,7 +336,9 @@ export class AdmissionregistrationV1Api {
     return AdmissionregistrationV1.toValidatingAdmissionPolicyBinding(resp);
   }
 
-  async deleteValidatingAdmissionPolicyBindingList(opts: operations.DeleteListOpts = {}) {
+  async deleteValidatingAdmissionPolicyBindingList(
+    opts: operations.DeleteListOpts = {},
+  ): Promise<AdmissionregistrationV1.ValidatingAdmissionPolicyBindingList> {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}validatingadmissionpolicybindings`,
@@ -280,7 +349,10 @@ export class AdmissionregistrationV1Api {
     return AdmissionregistrationV1.toValidatingAdmissionPolicyBindingList(resp);
   }
 
-  async getValidatingAdmissionPolicyBinding(name: string, opts: operations.NoOpts = {}) {
+  async getValidatingAdmissionPolicyBinding(
+    name: string,
+    opts: operations.NoOpts = {},
+  ): Promise<AdmissionregistrationV1.ValidatingAdmissionPolicyBinding> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}validatingadmissionpolicybindings/${name}`,
@@ -290,7 +362,10 @@ export class AdmissionregistrationV1Api {
     return AdmissionregistrationV1.toValidatingAdmissionPolicyBinding(resp);
   }
 
-  async deleteValidatingAdmissionPolicyBinding(name: string, opts: operations.DeleteOpts = {}) {
+  async deleteValidatingAdmissionPolicyBinding(
+    name: string,
+    opts: operations.DeleteOpts = {},
+  ): Promise<AdmissionregistrationV1.ValidatingAdmissionPolicyBinding | MetaV1.Status> {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}validatingadmissionpolicybindings/${name}`,
@@ -302,7 +377,11 @@ export class AdmissionregistrationV1Api {
     return AdmissionregistrationV1.toValidatingAdmissionPolicyBinding(resp);
   }
 
-  async replaceValidatingAdmissionPolicyBinding(name: string, body: AdmissionregistrationV1.ValidatingAdmissionPolicyBinding, opts: operations.PutOpts = {}) {
+  async replaceValidatingAdmissionPolicyBinding(
+    name: string,
+    body: AdmissionregistrationV1.ValidatingAdmissionPolicyBinding,
+    opts: operations.PutOpts = {},
+  ): Promise<AdmissionregistrationV1.ValidatingAdmissionPolicyBinding> {
     const resp = await this.#client.performRequest({
       method: "PUT",
       path: `${this.#root}validatingadmissionpolicybindings/${name}`,
@@ -314,7 +393,12 @@ export class AdmissionregistrationV1Api {
     return AdmissionregistrationV1.toValidatingAdmissionPolicyBinding(resp);
   }
 
-  async patchValidatingAdmissionPolicyBinding(name: string, type: c.PatchType, body: AdmissionregistrationV1.ValidatingAdmissionPolicyBinding | c.JsonPatch, opts: operations.PatchOpts = {}) {
+  async patchValidatingAdmissionPolicyBinding(
+    name: string,
+    type: c.PatchType,
+    body: AdmissionregistrationV1.ValidatingAdmissionPolicyBinding | c.JsonPatch,
+    opts: operations.PatchOpts = {},
+  ): Promise<AdmissionregistrationV1.ValidatingAdmissionPolicyBinding> {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}validatingadmissionpolicybindings/${name}`,
@@ -327,7 +411,9 @@ export class AdmissionregistrationV1Api {
     return AdmissionregistrationV1.toValidatingAdmissionPolicyBinding(resp);
   }
 
-  async getValidatingWebhookConfigurationList(opts: operations.GetListOpts = {}) {
+  async getValidatingWebhookConfigurationList(
+    opts: operations.GetListOpts = {},
+  ): Promise<AdmissionregistrationV1.ValidatingWebhookConfigurationList> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}validatingwebhookconfigurations`,
@@ -338,7 +424,9 @@ export class AdmissionregistrationV1Api {
     return AdmissionregistrationV1.toValidatingWebhookConfigurationList(resp);
   }
 
-  async watchValidatingWebhookConfigurationList(opts: operations.WatchListOpts = {}) {
+  async watchValidatingWebhookConfigurationList(
+    opts: operations.WatchListOpts = {},
+  ): Promise<c.WatchEventStream<AdmissionregistrationV1.ValidatingWebhookConfiguration>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}validatingwebhookconfigurations`,
@@ -350,7 +438,10 @@ export class AdmissionregistrationV1Api {
     return resp.pipeThrough(new c.WatchEventTransformer(AdmissionregistrationV1.toValidatingWebhookConfiguration, MetaV1.toStatus));
   }
 
-  async createValidatingWebhookConfiguration(body: AdmissionregistrationV1.ValidatingWebhookConfiguration, opts: operations.PutOpts = {}) {
+  async createValidatingWebhookConfiguration(
+    body: AdmissionregistrationV1.ValidatingWebhookConfiguration,
+    opts: operations.PutOpts = {},
+  ): Promise<AdmissionregistrationV1.ValidatingWebhookConfiguration> {
     const resp = await this.#client.performRequest({
       method: "POST",
       path: `${this.#root}validatingwebhookconfigurations`,
@@ -362,7 +453,9 @@ export class AdmissionregistrationV1Api {
     return AdmissionregistrationV1.toValidatingWebhookConfiguration(resp);
   }
 
-  async deleteValidatingWebhookConfigurationList(opts: operations.DeleteListOpts = {}) {
+  async deleteValidatingWebhookConfigurationList(
+    opts: operations.DeleteListOpts = {},
+  ): Promise<AdmissionregistrationV1.ValidatingWebhookConfigurationList> {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}validatingwebhookconfigurations`,
@@ -373,7 +466,10 @@ export class AdmissionregistrationV1Api {
     return AdmissionregistrationV1.toValidatingWebhookConfigurationList(resp);
   }
 
-  async getValidatingWebhookConfiguration(name: string, opts: operations.NoOpts = {}) {
+  async getValidatingWebhookConfiguration(
+    name: string,
+    opts: operations.NoOpts = {},
+  ): Promise<AdmissionregistrationV1.ValidatingWebhookConfiguration> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}validatingwebhookconfigurations/${name}`,
@@ -383,7 +479,10 @@ export class AdmissionregistrationV1Api {
     return AdmissionregistrationV1.toValidatingWebhookConfiguration(resp);
   }
 
-  async deleteValidatingWebhookConfiguration(name: string, opts: operations.DeleteOpts = {}) {
+  async deleteValidatingWebhookConfiguration(
+    name: string,
+    opts: operations.DeleteOpts = {},
+  ): Promise<AdmissionregistrationV1.ValidatingWebhookConfiguration | MetaV1.Status> {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}validatingwebhookconfigurations/${name}`,
@@ -395,7 +494,11 @@ export class AdmissionregistrationV1Api {
     return AdmissionregistrationV1.toValidatingWebhookConfiguration(resp);
   }
 
-  async replaceValidatingWebhookConfiguration(name: string, body: AdmissionregistrationV1.ValidatingWebhookConfiguration, opts: operations.PutOpts = {}) {
+  async replaceValidatingWebhookConfiguration(
+    name: string,
+    body: AdmissionregistrationV1.ValidatingWebhookConfiguration,
+    opts: operations.PutOpts = {},
+  ): Promise<AdmissionregistrationV1.ValidatingWebhookConfiguration> {
     const resp = await this.#client.performRequest({
       method: "PUT",
       path: `${this.#root}validatingwebhookconfigurations/${name}`,
@@ -407,7 +510,12 @@ export class AdmissionregistrationV1Api {
     return AdmissionregistrationV1.toValidatingWebhookConfiguration(resp);
   }
 
-  async patchValidatingWebhookConfiguration(name: string, type: c.PatchType, body: AdmissionregistrationV1.ValidatingWebhookConfiguration | c.JsonPatch, opts: operations.PatchOpts = {}) {
+  async patchValidatingWebhookConfiguration(
+    name: string,
+    type: c.PatchType,
+    body: AdmissionregistrationV1.ValidatingWebhookConfiguration | c.JsonPatch,
+    opts: operations.PatchOpts = {},
+  ): Promise<AdmissionregistrationV1.ValidatingWebhookConfiguration> {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}validatingwebhookconfigurations/${name}`,

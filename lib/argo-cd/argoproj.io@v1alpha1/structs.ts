@@ -115,7 +115,7 @@ export function fromApplicationSource(input: ApplicationSource): c.JSONValue {
   return {
     ...input,
   }}
-export function toApplicationSource_directory(input: c.JSONValue) {
+function toApplicationSource_directory(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     exclude: c.readOpt(obj["exclude"], c.checkStr),
@@ -123,7 +123,7 @@ export function toApplicationSource_directory(input: c.JSONValue) {
     jsonnet: c.readOpt(obj["jsonnet"], toApplicationSource_directory_jsonnet),
     recurse: c.readOpt(obj["recurse"], c.checkBool),
   }}
-export function toApplicationSource_helm(input: c.JSONValue) {
+function toApplicationSource_helm(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     fileParameters: c.readOpt(obj["fileParameters"], x => c.readList(x, toApplicationSource_helm_fileParameters)),
@@ -137,7 +137,7 @@ export function toApplicationSource_helm(input: c.JSONValue) {
     valuesObject: c.readOpt(obj["valuesObject"], c.identity),
     version: c.readOpt(obj["version"], c.checkStr),
   }}
-export function toApplicationSource_kustomize(input: c.JSONValue) {
+function toApplicationSource_kustomize(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     commonAnnotations: c.readOpt(obj["commonAnnotations"], x => c.readMap(x, c.checkStr)),
@@ -155,34 +155,34 @@ export function toApplicationSource_kustomize(input: c.JSONValue) {
     replicas: c.readOpt(obj["replicas"], x => c.readList(x, toApplicationSource_kustomize_replicas)),
     version: c.readOpt(obj["version"], c.checkStr),
   }}
-export function toApplicationSource_plugin(input: c.JSONValue) {
+function toApplicationSource_plugin(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     env: c.readOpt(obj["env"], x => c.readList(x, toApplicationSource_plugin_env)),
     name: c.readOpt(obj["name"], c.checkStr),
     parameters: c.readOpt(obj["parameters"], x => c.readList(x, toApplicationSource_plugin_parameters)),
   }}
-export function toApplicationSource_directory_jsonnet(input: c.JSONValue) {
+function toApplicationSource_directory_jsonnet(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     extVars: c.readOpt(obj["extVars"], x => c.readList(x, toApplicationSource_directory_jsonnet_extVars)),
     libs: c.readOpt(obj["libs"], x => c.readList(x, c.checkStr)),
     tlas: c.readOpt(obj["tlas"], x => c.readList(x, toApplicationSource_directory_jsonnet_tlas)),
   }}
-export function toApplicationSource_helm_fileParameters(input: c.JSONValue) {
+function toApplicationSource_helm_fileParameters(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     name: c.readOpt(obj["name"], c.checkStr),
     path: c.readOpt(obj["path"], c.checkStr),
   }}
-export function toApplicationSource_helm_parameters(input: c.JSONValue) {
+function toApplicationSource_helm_parameters(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     forceString: c.readOpt(obj["forceString"], c.checkBool),
     name: c.readOpt(obj["name"], c.checkStr),
     value: c.readOpt(obj["value"], c.checkStr),
   }}
-export function toApplicationSource_kustomize_patches(input: c.JSONValue) {
+function toApplicationSource_kustomize_patches(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     options: c.readOpt(obj["options"], x => c.readMap(x, c.checkBool)),
@@ -190,19 +190,19 @@ export function toApplicationSource_kustomize_patches(input: c.JSONValue) {
     path: c.readOpt(obj["path"], c.checkStr),
     target: c.readOpt(obj["target"], toApplicationSource_kustomize_patches_target),
   }}
-export function toApplicationSource_kustomize_replicas(input: c.JSONValue) {
+function toApplicationSource_kustomize_replicas(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     count: c.toIntOrString(obj["count"]),
     name: c.checkStr(obj["name"]),
   }}
-export function toApplicationSource_plugin_env(input: c.JSONValue) {
+function toApplicationSource_plugin_env(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     name: c.checkStr(obj["name"]),
     value: c.checkStr(obj["value"]),
   }}
-export function toApplicationSource_plugin_parameters(input: c.JSONValue) {
+function toApplicationSource_plugin_parameters(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     array: c.readOpt(obj["array"], x => c.readList(x, c.checkStr)),
@@ -210,21 +210,21 @@ export function toApplicationSource_plugin_parameters(input: c.JSONValue) {
     name: c.readOpt(obj["name"], c.checkStr),
     string: c.readOpt(obj["string"], c.checkStr),
   }}
-export function toApplicationSource_directory_jsonnet_extVars(input: c.JSONValue) {
+function toApplicationSource_directory_jsonnet_extVars(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     code: c.readOpt(obj["code"], c.checkBool),
     name: c.checkStr(obj["name"]),
     value: c.checkStr(obj["value"]),
   }}
-export function toApplicationSource_directory_jsonnet_tlas(input: c.JSONValue) {
+function toApplicationSource_directory_jsonnet_tlas(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     code: c.readOpt(obj["code"], c.checkBool),
     name: c.checkStr(obj["name"]),
     value: c.checkStr(obj["value"]),
   }}
-export function toApplicationSource_kustomize_patches_target(input: c.JSONValue) {
+function toApplicationSource_kustomize_patches_target(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     annotationSelector: c.readOpt(obj["annotationSelector"], c.checkStr),
@@ -541,7 +541,7 @@ export function fromApplication(input: Application): c.JSONValue {
       } : undefined,
     } : undefined,
   }}
-export function toApplication_operation(input: c.JSONValue) {
+function toApplication_operation(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     info: c.readOpt(obj["info"], x => c.readList(x, toApplication_operation_info)),
@@ -549,7 +549,7 @@ export function toApplication_operation(input: c.JSONValue) {
     retry: c.readOpt(obj["retry"], toApplication_operation_retry),
     sync: c.readOpt(obj["sync"], toApplication_operation_sync),
   }}
-export function toApplication_spec(input: c.JSONValue) {
+function toApplication_spec(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     destination: toApplication_spec_destination(obj["destination"]),
@@ -561,7 +561,7 @@ export function toApplication_spec(input: c.JSONValue) {
     sources: c.readOpt(obj["sources"], x => c.readList(x, toApplicationSource)),
     syncPolicy: c.readOpt(obj["syncPolicy"], toApplication_spec_syncPolicy),
   }}
-export function toApplication_status(input: c.JSONValue) {
+function toApplication_status(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     conditions: c.readOpt(obj["conditions"], x => c.readList(x, toApplication_status_conditions)),
@@ -578,25 +578,25 @@ export function toApplication_status(input: c.JSONValue) {
     summary: c.readOpt(obj["summary"], toApplication_status_summary),
     sync: c.readOpt(obj["sync"], toApplication_status_sync),
   }}
-export function toApplication_operation_info(input: c.JSONValue) {
+function toApplication_operation_info(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     name: c.checkStr(obj["name"]),
     value: c.checkStr(obj["value"]),
   }}
-export function toApplication_operation_initiatedBy(input: c.JSONValue) {
+function toApplication_operation_initiatedBy(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     automated: c.readOpt(obj["automated"], c.checkBool),
     username: c.readOpt(obj["username"], c.checkStr),
   }}
-export function toApplication_operation_retry(input: c.JSONValue) {
+function toApplication_operation_retry(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     backoff: c.readOpt(obj["backoff"], toApplication_operation_retry_backoff),
     limit: c.readOpt(obj["limit"], c.checkNum),
   }}
-export function toApplication_operation_sync(input: c.JSONValue) {
+function toApplication_operation_sync(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     dryRun: c.readOpt(obj["dryRun"], c.checkBool),
@@ -610,14 +610,14 @@ export function toApplication_operation_sync(input: c.JSONValue) {
     syncOptions: c.readOpt(obj["syncOptions"], x => c.readList(x, c.checkStr)),
     syncStrategy: c.readOpt(obj["syncStrategy"], toApplication_operation_sync_syncStrategy),
   }}
-export function toApplication_spec_destination(input: c.JSONValue) {
+function toApplication_spec_destination(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     name: c.readOpt(obj["name"], c.checkStr),
     namespace: c.readOpt(obj["namespace"], c.checkStr),
     server: c.readOpt(obj["server"], c.checkStr),
   }}
-export function toApplication_spec_ignoreDifferences(input: c.JSONValue) {
+function toApplication_spec_ignoreDifferences(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     group: c.readOpt(obj["group"], c.checkStr),
@@ -628,13 +628,13 @@ export function toApplication_spec_ignoreDifferences(input: c.JSONValue) {
     name: c.readOpt(obj["name"], c.checkStr),
     namespace: c.readOpt(obj["namespace"], c.checkStr),
   }}
-export function toApplication_spec_info(input: c.JSONValue) {
+function toApplication_spec_info(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     name: c.checkStr(obj["name"]),
     value: c.checkStr(obj["value"]),
   }}
-export function toApplication_spec_syncPolicy(input: c.JSONValue) {
+function toApplication_spec_syncPolicy(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     automated: c.readOpt(obj["automated"], toApplication_spec_syncPolicy_automated),
@@ -642,20 +642,20 @@ export function toApplication_spec_syncPolicy(input: c.JSONValue) {
     retry: c.readOpt(obj["retry"], toApplication_spec_syncPolicy_retry),
     syncOptions: c.readOpt(obj["syncOptions"], x => c.readList(x, c.checkStr)),
   }}
-export function toApplication_status_conditions(input: c.JSONValue) {
+function toApplication_status_conditions(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     lastTransitionTime: c.readOpt(obj["lastTransitionTime"], c.toTime),
     message: c.checkStr(obj["message"]),
     type: c.checkStr(obj["type"]),
   }}
-export function toApplication_status_health(input: c.JSONValue) {
+function toApplication_status_health(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     message: c.readOpt(obj["message"], c.checkStr),
     status: c.readOpt(obj["status"], c.checkStr),
   }}
-export function toApplication_status_history(input: c.JSONValue) {
+function toApplication_status_history(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     deployStartedAt: c.readOpt(obj["deployStartedAt"], c.toTime),
@@ -667,7 +667,7 @@ export function toApplication_status_history(input: c.JSONValue) {
     source: c.readOpt(obj["source"], toApplicationSource),
     sources: c.readOpt(obj["sources"], x => c.readList(x, toApplicationSource)),
   }}
-export function toApplication_status_operationState(input: c.JSONValue) {
+function toApplication_status_operationState(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     finishedAt: c.readOpt(obj["finishedAt"], c.toTime),
@@ -678,7 +678,7 @@ export function toApplication_status_operationState(input: c.JSONValue) {
     startedAt: c.toTime(obj["startedAt"]),
     syncResult: c.readOpt(obj["syncResult"], toApplication_status_operationState_syncResult),
   }}
-export function toApplication_status_resources(input: c.JSONValue) {
+function toApplication_status_resources(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     group: c.readOpt(obj["group"], c.checkStr),
@@ -692,13 +692,13 @@ export function toApplication_status_resources(input: c.JSONValue) {
     syncWave: c.readOpt(obj["syncWave"], c.checkNum),
     version: c.readOpt(obj["version"], c.checkStr),
   }}
-export function toApplication_status_summary(input: c.JSONValue) {
+function toApplication_status_summary(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     externalURLs: c.readOpt(obj["externalURLs"], x => c.readList(x, c.checkStr)),
     images: c.readOpt(obj["images"], x => c.readList(x, c.checkStr)),
   }}
-export function toApplication_status_sync(input: c.JSONValue) {
+function toApplication_status_sync(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     comparedTo: c.readOpt(obj["comparedTo"], toApplication_status_sync_comparedTo),
@@ -706,14 +706,14 @@ export function toApplication_status_sync(input: c.JSONValue) {
     revisions: c.readOpt(obj["revisions"], x => c.readList(x, c.checkStr)),
     status: c.checkStr(obj["status"]),
   }}
-export function toApplication_operation_retry_backoff(input: c.JSONValue) {
+function toApplication_operation_retry_backoff(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     duration: c.readOpt(obj["duration"], c.checkStr),
     factor: c.readOpt(obj["factor"], c.checkNum),
     maxDuration: c.readOpt(obj["maxDuration"], c.checkStr),
   }}
-export function toApplication_operation_sync_resources(input: c.JSONValue) {
+function toApplication_operation_sync_resources(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     group: c.readOpt(obj["group"], c.checkStr),
@@ -721,38 +721,38 @@ export function toApplication_operation_sync_resources(input: c.JSONValue) {
     name: c.checkStr(obj["name"]),
     namespace: c.readOpt(obj["namespace"], c.checkStr),
   }}
-export function toApplication_operation_sync_syncStrategy(input: c.JSONValue) {
+function toApplication_operation_sync_syncStrategy(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     apply: c.readOpt(obj["apply"], toApplication_operation_sync_syncStrategy_apply),
     hook: c.readOpt(obj["hook"], toApplication_operation_sync_syncStrategy_hook),
   }}
-export function toApplication_spec_syncPolicy_automated(input: c.JSONValue) {
+function toApplication_spec_syncPolicy_automated(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     allowEmpty: c.readOpt(obj["allowEmpty"], c.checkBool),
     prune: c.readOpt(obj["prune"], c.checkBool),
     selfHeal: c.readOpt(obj["selfHeal"], c.checkBool),
   }}
-export function toApplication_spec_syncPolicy_managedNamespaceMetadata(input: c.JSONValue) {
+function toApplication_spec_syncPolicy_managedNamespaceMetadata(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     annotations: c.readOpt(obj["annotations"], x => c.readMap(x, c.checkStr)),
     labels: c.readOpt(obj["labels"], x => c.readMap(x, c.checkStr)),
   }}
-export function toApplication_spec_syncPolicy_retry(input: c.JSONValue) {
+function toApplication_spec_syncPolicy_retry(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     backoff: c.readOpt(obj["backoff"], toApplication_spec_syncPolicy_retry_backoff),
     limit: c.readOpt(obj["limit"], c.checkNum),
   }}
-export function toApplication_status_history_initiatedBy(input: c.JSONValue) {
+function toApplication_status_history_initiatedBy(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     automated: c.readOpt(obj["automated"], c.checkBool),
     username: c.readOpt(obj["username"], c.checkStr),
   }}
-export function toApplication_status_operationState_operation(input: c.JSONValue) {
+function toApplication_status_operationState_operation(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     info: c.readOpt(obj["info"], x => c.readList(x, toApplication_status_operationState_operation_info)),
@@ -760,7 +760,7 @@ export function toApplication_status_operationState_operation(input: c.JSONValue
     retry: c.readOpt(obj["retry"], toApplication_status_operationState_operation_retry),
     sync: c.readOpt(obj["sync"], toApplication_status_operationState_operation_sync),
   }}
-export function toApplication_status_operationState_syncResult(input: c.JSONValue) {
+function toApplication_status_operationState_syncResult(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     managedNamespaceMetadata: c.readOpt(obj["managedNamespaceMetadata"], toApplication_status_operationState_syncResult_managedNamespaceMetadata),
@@ -770,13 +770,13 @@ export function toApplication_status_operationState_syncResult(input: c.JSONValu
     source: c.readOpt(obj["source"], toApplicationSource),
     sources: c.readOpt(obj["sources"], x => c.readList(x, toApplicationSource)),
   }}
-export function toApplication_status_resources_health(input: c.JSONValue) {
+function toApplication_status_resources_health(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     message: c.readOpt(obj["message"], c.checkStr),
     status: c.readOpt(obj["status"], c.checkStr),
   }}
-export function toApplication_status_sync_comparedTo(input: c.JSONValue) {
+function toApplication_status_sync_comparedTo(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     destination: toApplication_status_sync_comparedTo_destination(obj["destination"]),
@@ -784,42 +784,42 @@ export function toApplication_status_sync_comparedTo(input: c.JSONValue) {
     source: c.readOpt(obj["source"], toApplicationSource),
     sources: c.readOpt(obj["sources"], x => c.readList(x, toApplicationSource)),
   }}
-export function toApplication_operation_sync_syncStrategy_apply(input: c.JSONValue) {
+function toApplication_operation_sync_syncStrategy_apply(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     force: c.readOpt(obj["force"], c.checkBool),
   }}
-export function toApplication_operation_sync_syncStrategy_hook(input: c.JSONValue) {
+function toApplication_operation_sync_syncStrategy_hook(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     force: c.readOpt(obj["force"], c.checkBool),
   }}
-export function toApplication_spec_syncPolicy_retry_backoff(input: c.JSONValue) {
+function toApplication_spec_syncPolicy_retry_backoff(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     duration: c.readOpt(obj["duration"], c.checkStr),
     factor: c.readOpt(obj["factor"], c.checkNum),
     maxDuration: c.readOpt(obj["maxDuration"], c.checkStr),
   }}
-export function toApplication_status_operationState_operation_info(input: c.JSONValue) {
+function toApplication_status_operationState_operation_info(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     name: c.checkStr(obj["name"]),
     value: c.checkStr(obj["value"]),
   }}
-export function toApplication_status_operationState_operation_initiatedBy(input: c.JSONValue) {
+function toApplication_status_operationState_operation_initiatedBy(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     automated: c.readOpt(obj["automated"], c.checkBool),
     username: c.readOpt(obj["username"], c.checkStr),
   }}
-export function toApplication_status_operationState_operation_retry(input: c.JSONValue) {
+function toApplication_status_operationState_operation_retry(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     backoff: c.readOpt(obj["backoff"], toApplication_status_operationState_operation_retry_backoff),
     limit: c.readOpt(obj["limit"], c.checkNum),
   }}
-export function toApplication_status_operationState_operation_sync(input: c.JSONValue) {
+function toApplication_status_operationState_operation_sync(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     dryRun: c.readOpt(obj["dryRun"], c.checkBool),
@@ -833,13 +833,13 @@ export function toApplication_status_operationState_operation_sync(input: c.JSON
     syncOptions: c.readOpt(obj["syncOptions"], x => c.readList(x, c.checkStr)),
     syncStrategy: c.readOpt(obj["syncStrategy"], toApplication_status_operationState_operation_sync_syncStrategy),
   }}
-export function toApplication_status_operationState_syncResult_managedNamespaceMetadata(input: c.JSONValue) {
+function toApplication_status_operationState_syncResult_managedNamespaceMetadata(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     annotations: c.readOpt(obj["annotations"], x => c.readMap(x, c.checkStr)),
     labels: c.readOpt(obj["labels"], x => c.readMap(x, c.checkStr)),
   }}
-export function toApplication_status_operationState_syncResult_resources(input: c.JSONValue) {
+function toApplication_status_operationState_syncResult_resources(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     group: c.checkStr(obj["group"]),
@@ -853,14 +853,14 @@ export function toApplication_status_operationState_syncResult_resources(input: 
     syncPhase: c.readOpt(obj["syncPhase"], c.checkStr),
     version: c.checkStr(obj["version"]),
   }}
-export function toApplication_status_sync_comparedTo_destination(input: c.JSONValue) {
+function toApplication_status_sync_comparedTo_destination(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     name: c.readOpt(obj["name"], c.checkStr),
     namespace: c.readOpt(obj["namespace"], c.checkStr),
     server: c.readOpt(obj["server"], c.checkStr),
   }}
-export function toApplication_status_sync_comparedTo_ignoreDifferences(input: c.JSONValue) {
+function toApplication_status_sync_comparedTo_ignoreDifferences(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     group: c.readOpt(obj["group"], c.checkStr),
@@ -871,14 +871,14 @@ export function toApplication_status_sync_comparedTo_ignoreDifferences(input: c.
     name: c.readOpt(obj["name"], c.checkStr),
     namespace: c.readOpt(obj["namespace"], c.checkStr),
   }}
-export function toApplication_status_operationState_operation_retry_backoff(input: c.JSONValue) {
+function toApplication_status_operationState_operation_retry_backoff(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     duration: c.readOpt(obj["duration"], c.checkStr),
     factor: c.readOpt(obj["factor"], c.checkNum),
     maxDuration: c.readOpt(obj["maxDuration"], c.checkStr),
   }}
-export function toApplication_status_operationState_operation_sync_resources(input: c.JSONValue) {
+function toApplication_status_operationState_operation_sync_resources(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     group: c.readOpt(obj["group"], c.checkStr),
@@ -886,18 +886,18 @@ export function toApplication_status_operationState_operation_sync_resources(inp
     name: c.checkStr(obj["name"]),
     namespace: c.readOpt(obj["namespace"], c.checkStr),
   }}
-export function toApplication_status_operationState_operation_sync_syncStrategy(input: c.JSONValue) {
+function toApplication_status_operationState_operation_sync_syncStrategy(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     apply: c.readOpt(obj["apply"], toApplication_status_operationState_operation_sync_syncStrategy_apply),
     hook: c.readOpt(obj["hook"], toApplication_status_operationState_operation_sync_syncStrategy_hook),
   }}
-export function toApplication_status_operationState_operation_sync_syncStrategy_apply(input: c.JSONValue) {
+function toApplication_status_operationState_operation_sync_syncStrategy_apply(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     force: c.readOpt(obj["force"], c.checkBool),
   }}
-export function toApplication_status_operationState_operation_sync_syncStrategy_hook(input: c.JSONValue) {
+function toApplication_status_operationState_operation_sync_syncStrategy_hook(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     force: c.readOpt(obj["force"], c.checkBool),
@@ -1197,7 +1197,7 @@ export function fromApplicationSetGenerator(input: ApplicationSetGenerator): c.J
     } : undefined,
     selector: input.selector != null ? MetaV1.fromLabelSelector(input.selector) : undefined,
   }}
-export function toApplicationSetGenerator_clusterDecisionResource(input: c.JSONValue) {
+function toApplicationSetGenerator_clusterDecisionResource(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     configMapRef: c.checkStr(obj["configMapRef"]),
@@ -1207,14 +1207,14 @@ export function toApplicationSetGenerator_clusterDecisionResource(input: c.JSONV
     template: c.readOpt(obj["template"], toApplicationTemplate),
     values: c.readOpt(obj["values"], x => c.readMap(x, c.checkStr)),
   }}
-export function toApplicationSetGenerator_clusters(input: c.JSONValue) {
+function toApplicationSetGenerator_clusters(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     selector: c.readOpt(obj["selector"], MetaV1.toLabelSelector),
     template: c.readOpt(obj["template"], toApplicationTemplate),
     values: c.readOpt(obj["values"], x => c.readMap(x, c.checkStr)),
   }}
-export function toApplicationSetGenerator_git(input: c.JSONValue) {
+function toApplicationSetGenerator_git(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     directories: c.readOpt(obj["directories"], x => c.readList(x, toApplicationSetGenerator_git_directories)),
@@ -1226,27 +1226,27 @@ export function toApplicationSetGenerator_git(input: c.JSONValue) {
     template: c.readOpt(obj["template"], toApplicationTemplate),
     values: c.readOpt(obj["values"], x => c.readMap(x, c.checkStr)),
   }}
-export function toApplicationSetGenerator_list(input: c.JSONValue) {
+function toApplicationSetGenerator_list(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     elements: c.readOpt(obj["elements"], x => c.readList(x, c.identity)),
     elementsYaml: c.readOpt(obj["elementsYaml"], c.checkStr),
     template: c.readOpt(obj["template"], toApplicationTemplate),
   }}
-export function toApplicationSetGenerator_matrix(input: c.JSONValue) {
+function toApplicationSetGenerator_matrix(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     generators: c.readList(obj["generators"], toApplicationSetGenerator),
     template: c.readOpt(obj["template"], toApplicationTemplate),
   }}
-export function toApplicationSetGenerator_merge(input: c.JSONValue) {
+function toApplicationSetGenerator_merge(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     generators: c.readList(obj["generators"], toApplicationSetGenerator),
     mergeKeys: c.readList(obj["mergeKeys"], c.checkStr),
     template: c.readOpt(obj["template"], toApplicationTemplate),
   }}
-export function toApplicationSetGenerator_plugin(input: c.JSONValue) {
+function toApplicationSetGenerator_plugin(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     configMapRef: toApplicationSetGenerator_plugin_configMapRef(obj["configMapRef"]),
@@ -1255,7 +1255,7 @@ export function toApplicationSetGenerator_plugin(input: c.JSONValue) {
     template: c.readOpt(obj["template"], toApplicationTemplate),
     values: c.readOpt(obj["values"], x => c.readMap(x, c.checkStr)),
   }}
-export function toApplicationSetGenerator_pullRequest(input: c.JSONValue) {
+function toApplicationSetGenerator_pullRequest(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     azuredevops: c.readOpt(obj["azuredevops"], toApplicationSetGenerator_pullRequest_azuredevops),
@@ -1268,7 +1268,7 @@ export function toApplicationSetGenerator_pullRequest(input: c.JSONValue) {
     requeueAfterSeconds: c.readOpt(obj["requeueAfterSeconds"], c.checkNum),
     template: c.readOpt(obj["template"], toApplicationTemplate),
   }}
-export function toApplicationSetGenerator_scmProvider(input: c.JSONValue) {
+function toApplicationSetGenerator_scmProvider(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     awsCodeCommit: c.readOpt(obj["awsCodeCommit"], toApplicationSetGenerator_scmProvider_awsCodeCommit),
@@ -1284,28 +1284,28 @@ export function toApplicationSetGenerator_scmProvider(input: c.JSONValue) {
     template: c.readOpt(obj["template"], toApplicationTemplate),
     values: c.readOpt(obj["values"], x => c.readMap(x, c.checkStr)),
   }}
-export function toApplicationSetGenerator_git_directories(input: c.JSONValue) {
+function toApplicationSetGenerator_git_directories(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     exclude: c.readOpt(obj["exclude"], c.checkBool),
     path: c.checkStr(obj["path"]),
   }}
-export function toApplicationSetGenerator_git_files(input: c.JSONValue) {
+function toApplicationSetGenerator_git_files(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     path: c.checkStr(obj["path"]),
   }}
-export function toApplicationSetGenerator_plugin_configMapRef(input: c.JSONValue) {
+function toApplicationSetGenerator_plugin_configMapRef(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     name: c.checkStr(obj["name"]),
   }}
-export function toApplicationSetGenerator_plugin_input(input: c.JSONValue) {
+function toApplicationSetGenerator_plugin_input(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     parameters: c.readOpt(obj["parameters"], x => c.readMap(x, c.identity)),
   }}
-export function toApplicationSetGenerator_pullRequest_azuredevops(input: c.JSONValue) {
+function toApplicationSetGenerator_pullRequest_azuredevops(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     api: c.readOpt(obj["api"], c.checkStr),
@@ -1315,7 +1315,7 @@ export function toApplicationSetGenerator_pullRequest_azuredevops(input: c.JSONV
     repo: c.checkStr(obj["repo"]),
     tokenRef: c.readOpt(obj["tokenRef"], toApplicationSetGenerator_pullRequest_azuredevops_tokenRef),
   }}
-export function toApplicationSetGenerator_pullRequest_bitbucket(input: c.JSONValue) {
+function toApplicationSetGenerator_pullRequest_bitbucket(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     api: c.readOpt(obj["api"], c.checkStr),
@@ -1324,7 +1324,7 @@ export function toApplicationSetGenerator_pullRequest_bitbucket(input: c.JSONVal
     owner: c.checkStr(obj["owner"]),
     repo: c.checkStr(obj["repo"]),
   }}
-export function toApplicationSetGenerator_pullRequest_bitbucketServer(input: c.JSONValue) {
+function toApplicationSetGenerator_pullRequest_bitbucketServer(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     api: c.checkStr(obj["api"]),
@@ -1332,13 +1332,13 @@ export function toApplicationSetGenerator_pullRequest_bitbucketServer(input: c.J
     project: c.checkStr(obj["project"]),
     repo: c.checkStr(obj["repo"]),
   }}
-export function toApplicationSetGenerator_pullRequest_filters(input: c.JSONValue) {
+function toApplicationSetGenerator_pullRequest_filters(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     branchMatch: c.readOpt(obj["branchMatch"], c.checkStr),
     targetBranchMatch: c.readOpt(obj["targetBranchMatch"], c.checkStr),
   }}
-export function toApplicationSetGenerator_pullRequest_gitea(input: c.JSONValue) {
+function toApplicationSetGenerator_pullRequest_gitea(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     api: c.checkStr(obj["api"]),
@@ -1347,7 +1347,7 @@ export function toApplicationSetGenerator_pullRequest_gitea(input: c.JSONValue) 
     repo: c.checkStr(obj["repo"]),
     tokenRef: c.readOpt(obj["tokenRef"], toApplicationSetGenerator_pullRequest_gitea_tokenRef),
   }}
-export function toApplicationSetGenerator_pullRequest_github(input: c.JSONValue) {
+function toApplicationSetGenerator_pullRequest_github(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     api: c.readOpt(obj["api"], c.checkStr),
@@ -1357,7 +1357,7 @@ export function toApplicationSetGenerator_pullRequest_github(input: c.JSONValue)
     repo: c.checkStr(obj["repo"]),
     tokenRef: c.readOpt(obj["tokenRef"], toApplicationSetGenerator_pullRequest_github_tokenRef),
   }}
-export function toApplicationSetGenerator_pullRequest_gitlab(input: c.JSONValue) {
+function toApplicationSetGenerator_pullRequest_gitlab(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     api: c.readOpt(obj["api"], c.checkStr),
@@ -1367,7 +1367,7 @@ export function toApplicationSetGenerator_pullRequest_gitlab(input: c.JSONValue)
     pullRequestState: c.readOpt(obj["pullRequestState"], c.checkStr),
     tokenRef: c.readOpt(obj["tokenRef"], toApplicationSetGenerator_pullRequest_gitlab_tokenRef),
   }}
-export function toApplicationSetGenerator_scmProvider_awsCodeCommit(input: c.JSONValue) {
+function toApplicationSetGenerator_scmProvider_awsCodeCommit(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     allBranches: c.readOpt(obj["allBranches"], c.checkBool),
@@ -1375,7 +1375,7 @@ export function toApplicationSetGenerator_scmProvider_awsCodeCommit(input: c.JSO
     role: c.readOpt(obj["role"], c.checkStr),
     tagFilters: c.readOpt(obj["tagFilters"], x => c.readList(x, toApplicationSetGenerator_scmProvider_awsCodeCommit_tagFilters)),
   }}
-export function toApplicationSetGenerator_scmProvider_azureDevOps(input: c.JSONValue) {
+function toApplicationSetGenerator_scmProvider_azureDevOps(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     accessTokenRef: toApplicationSetGenerator_scmProvider_azureDevOps_accessTokenRef(obj["accessTokenRef"]),
@@ -1384,7 +1384,7 @@ export function toApplicationSetGenerator_scmProvider_azureDevOps(input: c.JSONV
     organization: c.checkStr(obj["organization"]),
     teamProject: c.checkStr(obj["teamProject"]),
   }}
-export function toApplicationSetGenerator_scmProvider_bitbucket(input: c.JSONValue) {
+function toApplicationSetGenerator_scmProvider_bitbucket(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     allBranches: c.readOpt(obj["allBranches"], c.checkBool),
@@ -1392,7 +1392,7 @@ export function toApplicationSetGenerator_scmProvider_bitbucket(input: c.JSONVal
     owner: c.checkStr(obj["owner"]),
     user: c.checkStr(obj["user"]),
   }}
-export function toApplicationSetGenerator_scmProvider_bitbucketServer(input: c.JSONValue) {
+function toApplicationSetGenerator_scmProvider_bitbucketServer(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     allBranches: c.readOpt(obj["allBranches"], c.checkBool),
@@ -1400,7 +1400,7 @@ export function toApplicationSetGenerator_scmProvider_bitbucketServer(input: c.J
     basicAuth: c.readOpt(obj["basicAuth"], toApplicationSetGenerator_scmProvider_bitbucketServer_basicAuth),
     project: c.checkStr(obj["project"]),
   }}
-export function toApplicationSetGenerator_scmProvider_filters(input: c.JSONValue) {
+function toApplicationSetGenerator_scmProvider_filters(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     branchMatch: c.readOpt(obj["branchMatch"], c.checkStr),
@@ -1409,7 +1409,7 @@ export function toApplicationSetGenerator_scmProvider_filters(input: c.JSONValue
     pathsExist: c.readOpt(obj["pathsExist"], x => c.readList(x, c.checkStr)),
     repositoryMatch: c.readOpt(obj["repositoryMatch"], c.checkStr),
   }}
-export function toApplicationSetGenerator_scmProvider_gitea(input: c.JSONValue) {
+function toApplicationSetGenerator_scmProvider_gitea(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     allBranches: c.readOpt(obj["allBranches"], c.checkBool),
@@ -1418,7 +1418,7 @@ export function toApplicationSetGenerator_scmProvider_gitea(input: c.JSONValue) 
     owner: c.checkStr(obj["owner"]),
     tokenRef: c.readOpt(obj["tokenRef"], toApplicationSetGenerator_scmProvider_gitea_tokenRef),
   }}
-export function toApplicationSetGenerator_scmProvider_github(input: c.JSONValue) {
+function toApplicationSetGenerator_scmProvider_github(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     allBranches: c.readOpt(obj["allBranches"], c.checkBool),
@@ -1427,7 +1427,7 @@ export function toApplicationSetGenerator_scmProvider_github(input: c.JSONValue)
     organization: c.checkStr(obj["organization"]),
     tokenRef: c.readOpt(obj["tokenRef"], toApplicationSetGenerator_scmProvider_github_tokenRef),
   }}
-export function toApplicationSetGenerator_scmProvider_gitlab(input: c.JSONValue) {
+function toApplicationSetGenerator_scmProvider_gitlab(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     allBranches: c.readOpt(obj["allBranches"], c.checkBool),
@@ -1439,108 +1439,108 @@ export function toApplicationSetGenerator_scmProvider_gitlab(input: c.JSONValue)
     tokenRef: c.readOpt(obj["tokenRef"], toApplicationSetGenerator_scmProvider_gitlab_tokenRef),
     topic: c.readOpt(obj["topic"], c.checkStr),
   }}
-export function toApplicationSetGenerator_pullRequest_azuredevops_tokenRef(input: c.JSONValue) {
+function toApplicationSetGenerator_pullRequest_azuredevops_tokenRef(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     key: c.checkStr(obj["key"]),
     secretName: c.checkStr(obj["secretName"]),
   }}
-export function toApplicationSetGenerator_pullRequest_bitbucket_basicAuth(input: c.JSONValue) {
+function toApplicationSetGenerator_pullRequest_bitbucket_basicAuth(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     passwordRef: toApplicationSetGenerator_pullRequest_bitbucket_basicAuth_passwordRef(obj["passwordRef"]),
     username: c.checkStr(obj["username"]),
   }}
-export function toApplicationSetGenerator_pullRequest_bitbucket_bearerToken(input: c.JSONValue) {
+function toApplicationSetGenerator_pullRequest_bitbucket_bearerToken(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     tokenRef: toApplicationSetGenerator_pullRequest_bitbucket_bearerToken_tokenRef(obj["tokenRef"]),
   }}
-export function toApplicationSetGenerator_pullRequest_bitbucketServer_basicAuth(input: c.JSONValue) {
+function toApplicationSetGenerator_pullRequest_bitbucketServer_basicAuth(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     passwordRef: toApplicationSetGenerator_pullRequest_bitbucketServer_basicAuth_passwordRef(obj["passwordRef"]),
     username: c.checkStr(obj["username"]),
   }}
-export function toApplicationSetGenerator_pullRequest_gitea_tokenRef(input: c.JSONValue) {
+function toApplicationSetGenerator_pullRequest_gitea_tokenRef(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     key: c.checkStr(obj["key"]),
     secretName: c.checkStr(obj["secretName"]),
   }}
-export function toApplicationSetGenerator_pullRequest_github_tokenRef(input: c.JSONValue) {
+function toApplicationSetGenerator_pullRequest_github_tokenRef(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     key: c.checkStr(obj["key"]),
     secretName: c.checkStr(obj["secretName"]),
   }}
-export function toApplicationSetGenerator_pullRequest_gitlab_tokenRef(input: c.JSONValue) {
+function toApplicationSetGenerator_pullRequest_gitlab_tokenRef(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     key: c.checkStr(obj["key"]),
     secretName: c.checkStr(obj["secretName"]),
   }}
-export function toApplicationSetGenerator_scmProvider_awsCodeCommit_tagFilters(input: c.JSONValue) {
+function toApplicationSetGenerator_scmProvider_awsCodeCommit_tagFilters(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     key: c.checkStr(obj["key"]),
     value: c.readOpt(obj["value"], c.checkStr),
   }}
-export function toApplicationSetGenerator_scmProvider_azureDevOps_accessTokenRef(input: c.JSONValue) {
+function toApplicationSetGenerator_scmProvider_azureDevOps_accessTokenRef(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     key: c.checkStr(obj["key"]),
     secretName: c.checkStr(obj["secretName"]),
   }}
-export function toApplicationSetGenerator_scmProvider_bitbucket_appPasswordRef(input: c.JSONValue) {
+function toApplicationSetGenerator_scmProvider_bitbucket_appPasswordRef(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     key: c.checkStr(obj["key"]),
     secretName: c.checkStr(obj["secretName"]),
   }}
-export function toApplicationSetGenerator_scmProvider_bitbucketServer_basicAuth(input: c.JSONValue) {
+function toApplicationSetGenerator_scmProvider_bitbucketServer_basicAuth(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     passwordRef: toApplicationSetGenerator_scmProvider_bitbucketServer_basicAuth_passwordRef(obj["passwordRef"]),
     username: c.checkStr(obj["username"]),
   }}
-export function toApplicationSetGenerator_scmProvider_gitea_tokenRef(input: c.JSONValue) {
+function toApplicationSetGenerator_scmProvider_gitea_tokenRef(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     key: c.checkStr(obj["key"]),
     secretName: c.checkStr(obj["secretName"]),
   }}
-export function toApplicationSetGenerator_scmProvider_github_tokenRef(input: c.JSONValue) {
+function toApplicationSetGenerator_scmProvider_github_tokenRef(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     key: c.checkStr(obj["key"]),
     secretName: c.checkStr(obj["secretName"]),
   }}
-export function toApplicationSetGenerator_scmProvider_gitlab_tokenRef(input: c.JSONValue) {
+function toApplicationSetGenerator_scmProvider_gitlab_tokenRef(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     key: c.checkStr(obj["key"]),
     secretName: c.checkStr(obj["secretName"]),
   }}
-export function toApplicationSetGenerator_pullRequest_bitbucket_basicAuth_passwordRef(input: c.JSONValue) {
+function toApplicationSetGenerator_pullRequest_bitbucket_basicAuth_passwordRef(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     key: c.checkStr(obj["key"]),
     secretName: c.checkStr(obj["secretName"]),
   }}
-export function toApplicationSetGenerator_pullRequest_bitbucket_bearerToken_tokenRef(input: c.JSONValue) {
+function toApplicationSetGenerator_pullRequest_bitbucket_bearerToken_tokenRef(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     key: c.checkStr(obj["key"]),
     secretName: c.checkStr(obj["secretName"]),
   }}
-export function toApplicationSetGenerator_pullRequest_bitbucketServer_basicAuth_passwordRef(input: c.JSONValue) {
+function toApplicationSetGenerator_pullRequest_bitbucketServer_basicAuth_passwordRef(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     key: c.checkStr(obj["key"]),
     secretName: c.checkStr(obj["secretName"]),
   }}
-export function toApplicationSetGenerator_scmProvider_bitbucketServer_basicAuth_passwordRef(input: c.JSONValue) {
+function toApplicationSetGenerator_scmProvider_bitbucketServer_basicAuth_passwordRef(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     key: c.checkStr(obj["key"]),
@@ -1615,7 +1615,7 @@ export function fromApplicationTemplate(input: ApplicationTemplate): c.JSONValue
       sources: input.spec.sources?.map(fromApplicationSource),
     } : undefined,
   }}
-export function toApplicationTemplate_metadata(input: c.JSONValue) {
+function toApplicationTemplate_metadata(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     annotations: c.readOpt(obj["annotations"], x => c.readMap(x, c.checkStr)),
@@ -1624,7 +1624,7 @@ export function toApplicationTemplate_metadata(input: c.JSONValue) {
     name: c.readOpt(obj["name"], c.checkStr),
     namespace: c.readOpt(obj["namespace"], c.checkStr),
   }}
-export function toApplicationTemplate_spec(input: c.JSONValue) {
+function toApplicationTemplate_spec(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     destination: toApplicationTemplate_spec_destination(obj["destination"]),
@@ -1636,14 +1636,14 @@ export function toApplicationTemplate_spec(input: c.JSONValue) {
     sources: c.readOpt(obj["sources"], x => c.readList(x, toApplicationSource)),
     syncPolicy: c.readOpt(obj["syncPolicy"], toApplicationTemplate_spec_syncPolicy),
   }}
-export function toApplicationTemplate_spec_destination(input: c.JSONValue) {
+function toApplicationTemplate_spec_destination(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     name: c.readOpt(obj["name"], c.checkStr),
     namespace: c.readOpt(obj["namespace"], c.checkStr),
     server: c.readOpt(obj["server"], c.checkStr),
   }}
-export function toApplicationTemplate_spec_ignoreDifferences(input: c.JSONValue) {
+function toApplicationTemplate_spec_ignoreDifferences(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     group: c.readOpt(obj["group"], c.checkStr),
@@ -1654,13 +1654,13 @@ export function toApplicationTemplate_spec_ignoreDifferences(input: c.JSONValue)
     name: c.readOpt(obj["name"], c.checkStr),
     namespace: c.readOpt(obj["namespace"], c.checkStr),
   }}
-export function toApplicationTemplate_spec_info(input: c.JSONValue) {
+function toApplicationTemplate_spec_info(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     name: c.checkStr(obj["name"]),
     value: c.checkStr(obj["value"]),
   }}
-export function toApplicationTemplate_spec_syncPolicy(input: c.JSONValue) {
+function toApplicationTemplate_spec_syncPolicy(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     automated: c.readOpt(obj["automated"], toApplicationTemplate_spec_syncPolicy_automated),
@@ -1668,26 +1668,26 @@ export function toApplicationTemplate_spec_syncPolicy(input: c.JSONValue) {
     retry: c.readOpt(obj["retry"], toApplicationTemplate_spec_syncPolicy_retry),
     syncOptions: c.readOpt(obj["syncOptions"], x => c.readList(x, c.checkStr)),
   }}
-export function toApplicationTemplate_spec_syncPolicy_automated(input: c.JSONValue) {
+function toApplicationTemplate_spec_syncPolicy_automated(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     allowEmpty: c.readOpt(obj["allowEmpty"], c.checkBool),
     prune: c.readOpt(obj["prune"], c.checkBool),
     selfHeal: c.readOpt(obj["selfHeal"], c.checkBool),
   }}
-export function toApplicationTemplate_spec_syncPolicy_managedNamespaceMetadata(input: c.JSONValue) {
+function toApplicationTemplate_spec_syncPolicy_managedNamespaceMetadata(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     annotations: c.readOpt(obj["annotations"], x => c.readMap(x, c.checkStr)),
     labels: c.readOpt(obj["labels"], x => c.readMap(x, c.checkStr)),
   }}
-export function toApplicationTemplate_spec_syncPolicy_retry(input: c.JSONValue) {
+function toApplicationTemplate_spec_syncPolicy_retry(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     backoff: c.readOpt(obj["backoff"], toApplicationTemplate_spec_syncPolicy_retry_backoff),
     limit: c.readOpt(obj["limit"], c.checkNum),
   }}
-export function toApplicationTemplate_spec_syncPolicy_retry_backoff(input: c.JSONValue) {
+function toApplicationTemplate_spec_syncPolicy_retry_backoff(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     duration: c.readOpt(obj["duration"], c.checkStr),
@@ -1796,7 +1796,7 @@ export function fromApplicationSet(input: ApplicationSet): c.JSONValue {
       })),
     } : undefined,
   }}
-export function toApplicationSet_spec(input: c.JSONValue) {
+function toApplicationSet_spec(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     applyNestedSelectors: c.readOpt(obj["applyNestedSelectors"], c.checkBool),
@@ -1810,39 +1810,39 @@ export function toApplicationSet_spec(input: c.JSONValue) {
     template: toApplicationTemplate(obj["template"]),
     templatePatch: c.readOpt(obj["templatePatch"], c.checkStr),
   }}
-export function toApplicationSet_status(input: c.JSONValue) {
+function toApplicationSet_status(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     applicationStatus: c.readOpt(obj["applicationStatus"], x => c.readList(x, toApplicationSet_status_applicationStatus)),
     conditions: c.readOpt(obj["conditions"], x => c.readList(x, toApplicationSet_status_conditions)),
     resources: c.readOpt(obj["resources"], x => c.readList(x, toApplicationSet_status_resources)),
   }}
-export function toApplicationSet_spec_ignoreApplicationDifferences(input: c.JSONValue) {
+function toApplicationSet_spec_ignoreApplicationDifferences(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     jqPathExpressions: c.readOpt(obj["jqPathExpressions"], x => c.readList(x, c.checkStr)),
     jsonPointers: c.readOpt(obj["jsonPointers"], x => c.readList(x, c.checkStr)),
     name: c.readOpt(obj["name"], c.checkStr),
   }}
-export function toApplicationSet_spec_preservedFields(input: c.JSONValue) {
+function toApplicationSet_spec_preservedFields(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     annotations: c.readOpt(obj["annotations"], x => c.readList(x, c.checkStr)),
     labels: c.readOpt(obj["labels"], x => c.readList(x, c.checkStr)),
   }}
-export function toApplicationSet_spec_strategy(input: c.JSONValue) {
+function toApplicationSet_spec_strategy(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     rollingSync: c.readOpt(obj["rollingSync"], toApplicationSet_spec_strategy_rollingSync),
     type: c.readOpt(obj["type"], c.checkStr),
   }}
-export function toApplicationSet_spec_syncPolicy(input: c.JSONValue) {
+function toApplicationSet_spec_syncPolicy(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     applicationsSync: c.readOpt(obj["applicationsSync"], (x => c.readEnum<"create-only" | "create-update" | "create-delete" | "sync" | c.UnexpectedEnumValue>(x))),
     preserveResourcesOnDeletion: c.readOpt(obj["preserveResourcesOnDeletion"], c.checkBool),
   }}
-export function toApplicationSet_status_applicationStatus(input: c.JSONValue) {
+function toApplicationSet_status_applicationStatus(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     application: c.checkStr(obj["application"]),
@@ -1852,7 +1852,7 @@ export function toApplicationSet_status_applicationStatus(input: c.JSONValue) {
     step: c.checkStr(obj["step"]),
     targetRevisions: c.readList(obj["targetRevisions"], c.checkStr),
   }}
-export function toApplicationSet_status_conditions(input: c.JSONValue) {
+function toApplicationSet_status_conditions(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     lastTransitionTime: c.readOpt(obj["lastTransitionTime"], c.toTime),
@@ -1861,7 +1861,7 @@ export function toApplicationSet_status_conditions(input: c.JSONValue) {
     status: c.checkStr(obj["status"]),
     type: c.checkStr(obj["type"]),
   }}
-export function toApplicationSet_status_resources(input: c.JSONValue) {
+function toApplicationSet_status_resources(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     group: c.readOpt(obj["group"], c.checkStr),
@@ -1875,24 +1875,24 @@ export function toApplicationSet_status_resources(input: c.JSONValue) {
     syncWave: c.readOpt(obj["syncWave"], c.checkNum),
     version: c.readOpt(obj["version"], c.checkStr),
   }}
-export function toApplicationSet_spec_strategy_rollingSync(input: c.JSONValue) {
+function toApplicationSet_spec_strategy_rollingSync(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     steps: c.readOpt(obj["steps"], x => c.readList(x, toApplicationSet_spec_strategy_rollingSync_steps)),
   }}
-export function toApplicationSet_status_resources_health(input: c.JSONValue) {
+function toApplicationSet_status_resources_health(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     message: c.readOpt(obj["message"], c.checkStr),
     status: c.readOpt(obj["status"], c.checkStr),
   }}
-export function toApplicationSet_spec_strategy_rollingSync_steps(input: c.JSONValue) {
+function toApplicationSet_spec_strategy_rollingSync_steps(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     matchExpressions: c.readOpt(obj["matchExpressions"], x => c.readList(x, toApplicationSet_spec_strategy_rollingSync_steps_matchExpressions)),
     maxUpdate: c.readOpt(obj["maxUpdate"], c.toIntOrString),
   }}
-export function toApplicationSet_spec_strategy_rollingSync_steps_matchExpressions(input: c.JSONValue) {
+function toApplicationSet_spec_strategy_rollingSync_steps_matchExpressions(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     key: c.readOpt(obj["key"], c.checkStr),
@@ -2005,7 +2005,7 @@ export function fromAppProject(input: AppProject): c.JSONValue {
     ...input,
     metadata: input.metadata != null ? MetaV1.fromObjectMeta(input.metadata) : undefined,
   }}
-export function toAppProject_spec(input: c.JSONValue) {
+function toAppProject_spec(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     clusterResourceBlacklist: c.readOpt(obj["clusterResourceBlacklist"], x => c.readList(x, toAppProject_spec_clusterResourceBlacklist)),
@@ -2022,49 +2022,49 @@ export function toAppProject_spec(input: c.JSONValue) {
     sourceRepos: c.readOpt(obj["sourceRepos"], x => c.readList(x, c.checkStr)),
     syncWindows: c.readOpt(obj["syncWindows"], x => c.readList(x, toAppProject_spec_syncWindows)),
   }}
-export function toAppProject_status(input: c.JSONValue) {
+function toAppProject_status(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     jwtTokensByRole: c.readOpt(obj["jwtTokensByRole"], x => c.readMap(x, toAppProject_status_jwtTokensByRole)),
   }}
-export function toAppProject_spec_clusterResourceBlacklist(input: c.JSONValue) {
+function toAppProject_spec_clusterResourceBlacklist(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     group: c.checkStr(obj["group"]),
     kind: c.checkStr(obj["kind"]),
   }}
-export function toAppProject_spec_clusterResourceWhitelist(input: c.JSONValue) {
+function toAppProject_spec_clusterResourceWhitelist(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     group: c.checkStr(obj["group"]),
     kind: c.checkStr(obj["kind"]),
   }}
-export function toAppProject_spec_destinations(input: c.JSONValue) {
+function toAppProject_spec_destinations(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     name: c.readOpt(obj["name"], c.checkStr),
     namespace: c.readOpt(obj["namespace"], c.checkStr),
     server: c.readOpt(obj["server"], c.checkStr),
   }}
-export function toAppProject_spec_namespaceResourceBlacklist(input: c.JSONValue) {
+function toAppProject_spec_namespaceResourceBlacklist(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     group: c.checkStr(obj["group"]),
     kind: c.checkStr(obj["kind"]),
   }}
-export function toAppProject_spec_namespaceResourceWhitelist(input: c.JSONValue) {
+function toAppProject_spec_namespaceResourceWhitelist(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     group: c.checkStr(obj["group"]),
     kind: c.checkStr(obj["kind"]),
   }}
-export function toAppProject_spec_orphanedResources(input: c.JSONValue) {
+function toAppProject_spec_orphanedResources(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     ignore: c.readOpt(obj["ignore"], x => c.readList(x, toAppProject_spec_orphanedResources_ignore)),
     warn: c.readOpt(obj["warn"], c.checkBool),
   }}
-export function toAppProject_spec_roles(input: c.JSONValue) {
+function toAppProject_spec_roles(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     description: c.readOpt(obj["description"], c.checkStr),
@@ -2073,12 +2073,12 @@ export function toAppProject_spec_roles(input: c.JSONValue) {
     name: c.checkStr(obj["name"]),
     policies: c.readOpt(obj["policies"], x => c.readList(x, c.checkStr)),
   }}
-export function toAppProject_spec_signatureKeys(input: c.JSONValue) {
+function toAppProject_spec_signatureKeys(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     keyID: c.checkStr(obj["keyID"]),
   }}
-export function toAppProject_spec_syncWindows(input: c.JSONValue) {
+function toAppProject_spec_syncWindows(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     applications: c.readOpt(obj["applications"], x => c.readList(x, c.checkStr)),
@@ -2090,26 +2090,26 @@ export function toAppProject_spec_syncWindows(input: c.JSONValue) {
     schedule: c.readOpt(obj["schedule"], c.checkStr),
     timeZone: c.readOpt(obj["timeZone"], c.checkStr),
   }}
-export function toAppProject_status_jwtTokensByRole(input: c.JSONValue) {
+function toAppProject_status_jwtTokensByRole(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     items: c.readOpt(obj["items"], x => c.readList(x, toAppProject_status_jwtTokensByRole_items)),
   }}
-export function toAppProject_spec_orphanedResources_ignore(input: c.JSONValue) {
+function toAppProject_spec_orphanedResources_ignore(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     group: c.readOpt(obj["group"], c.checkStr),
     kind: c.readOpt(obj["kind"], c.checkStr),
     name: c.readOpt(obj["name"], c.checkStr),
   }}
-export function toAppProject_spec_roles_jwtTokens(input: c.JSONValue) {
+function toAppProject_spec_roles_jwtTokens(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     exp: c.readOpt(obj["exp"], c.checkNum),
     iat: c.checkNum(obj["iat"]),
     id: c.readOpt(obj["id"], c.checkStr),
   }}
-export function toAppProject_status_jwtTokensByRole_items(input: c.JSONValue) {
+function toAppProject_status_jwtTokensByRole_items(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     exp: c.readOpt(obj["exp"], c.checkNum),

@@ -1,0 +1,58 @@
+{
+  "name": "@cloudydeno/kubernetes-apis",
+  "version": "0.5.1",
+  "exports": {
+
+    "./admissionregistration.k8s.io/v1": "./builtin/admissionregistration.k8s.io@v1/mod.ts",
+    "./admissionregistration.k8s.io/v1alpha1": "./builtin/admissionregistration.k8s.io@v1alpha1/mod.ts",
+    "./admissionregistration.k8s.io/v1beta1": "./builtin/admissionregistration.k8s.io@v1beta1/mod.ts",
+    "./apiextensions.k8s.io/v1": "./builtin/apiextensions.k8s.io@v1/mod.ts",
+    "./apiregistration.k8s.io/v1": "./builtin/apiregistration.k8s.io@v1/mod.ts",
+    "./apps/v1": "./builtin/apps@v1/mod.ts",
+    "./authentication.k8s.io/v1": "./builtin/authentication.k8s.io@v1/mod.ts",
+    "./authentication.k8s.io/v1alpha1": "./builtin/authentication.k8s.io@v1alpha1/mod.ts",
+    "./authentication.k8s.io/v1beta1": "./builtin/authentication.k8s.io@v1beta1/mod.ts",
+    "./authorization.k8s.io/v1": "./builtin/authorization.k8s.io@v1/mod.ts",
+    "./autoscaling/v1": "./builtin/autoscaling@v1/mod.ts",
+    "./autoscaling/v2": "./builtin/autoscaling@v2/mod.ts",
+    "./batch/v1": "./builtin/batch@v1/mod.ts",
+    "./certificates.k8s.io/v1": "./builtin/certificates.k8s.io@v1/mod.ts",
+    "./certificates.k8s.io/v1alpha1": "./builtin/certificates.k8s.io@v1alpha1/mod.ts",
+    "./coordination.k8s.io/v1": "./builtin/coordination.k8s.io@v1/mod.ts",
+    "./core/v1": "./builtin/core@v1/mod.ts",
+    "./discovery.k8s.io/v1": "./builtin/discovery.k8s.io@v1/mod.ts",
+    "./events.k8s.io/v1": "./builtin/events.k8s.io@v1/mod.ts",
+    "./flowcontrol.apiserver.k8s.io/v1beta2": "./builtin/flowcontrol.apiserver.k8s.io@v1beta2/mod.ts",
+    "./flowcontrol.apiserver.k8s.io/v1beta3": "./builtin/flowcontrol.apiserver.k8s.io@v1beta3/mod.ts",
+    "./internal.apiserver.k8s.io/v1alpha1": "./builtin/internal.apiserver.k8s.io@v1alpha1/mod.ts",
+    "./meta/v1": "./builtin/meta@v1/structs.ts",
+    "./networking.k8s.io/v1": "./builtin/networking.k8s.io@v1/mod.ts",
+    "./networking.k8s.io/v1alpha1": "./builtin/networking.k8s.io@v1alpha1/mod.ts",
+    "./node.k8s.io/v1": "./builtin/node.k8s.io@v1/mod.ts",
+    "./policy/v1": "./builtin/policy@v1/mod.ts",
+    "./rbac.authorization.k8s.io/v1": "./builtin/rbac.authorization.k8s.io@v1/mod.ts",
+    "./resource.k8s.io/v1alpha2": "./builtin/resource.k8s.io@v1alpha2/mod.ts",
+    "./scheduling.k8s.io/v1": "./builtin/scheduling.k8s.io@v1/mod.ts",
+    "./storage.k8s.io/v1": "./builtin/storage.k8s.io@v1/mod.ts",
+
+    "./argoproj.io/v1alpha1": "./argo-cd/argoproj.io@v1alpha1/mod.ts",
+
+    "./acme.cert-manager.io/v1": "./cert-manager/acme.cert-manager.io@v1/mod.ts",
+    "./cert-manager.io/v1": "./cert-manager/cert-manager.io@v1/mod.ts",
+
+    "./externaldns.k8s.io/v1alpha1": "./external-dns/externaldns.k8s.io@v1alpha1/mod.ts",
+
+    "./autoscaling.k8s.io/v1": "./vpa/autoscaling.k8s.io@v1/mod.ts",
+
+    "./common.ts": "./common.ts",
+    "./deps.ts": "./deps.ts",
+    "./operations.ts": "./operations.ts",
+    "./tunnels.ts": "./tunnels.ts"
+  },
+  "publish": {
+    "exclude": [
+      "examples",
+      "deps_https.ts"
+    ]
+  }
+}

@@ -1,6 +1,6 @@
 #!/usr/bin/env -S deno run --allow-net --allow-read --allow-env --allow-run --unstable
 
-import { autoDetectClient, readAllItems } from '../client.ts';
+import { autoDetectClient, readAllItems } from '../deps.ts';
 import { AppsV1Api } from "../builtin/apps@v1/mod.ts";
 import { CoreV1Api } from "../builtin/core@v1/mod.ts";
 

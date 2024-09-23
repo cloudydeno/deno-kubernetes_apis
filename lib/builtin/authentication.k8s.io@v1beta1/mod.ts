@@ -13,7 +13,10 @@ export class AuthenticationV1beta1Api {
     this.#client = client;
   }
 
-  async createSelfSubjectReview(body: AuthenticationV1beta1.SelfSubjectReview, opts: operations.PutOpts = {}) {
+  async createSelfSubjectReview(
+    body: AuthenticationV1beta1.SelfSubjectReview,
+    opts: operations.PutOpts = {},
+  ): Promise<AuthenticationV1beta1.SelfSubjectReview> {
     const resp = await this.#client.performRequest({
       method: "POST",
       path: `${this.#root}selfsubjectreviews`,

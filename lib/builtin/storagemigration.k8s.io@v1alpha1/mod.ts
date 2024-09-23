@@ -13,7 +13,9 @@ export class StoragemigrationV1alpha1Api {
     this.#client = client;
   }
 
-  async getStorageVersionMigrationList(opts: operations.GetListOpts = {}) {
+  async getStorageVersionMigrationList(
+    opts: operations.GetListOpts = {},
+  ): Promise<StoragemigrationV1alpha1.StorageVersionMigrationList> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}storageversionmigrations`,
@@ -24,7 +26,9 @@ export class StoragemigrationV1alpha1Api {
     return StoragemigrationV1alpha1.toStorageVersionMigrationList(resp);
   }
 
-  async watchStorageVersionMigrationList(opts: operations.WatchListOpts = {}) {
+  async watchStorageVersionMigrationList(
+    opts: operations.WatchListOpts = {},
+  ): Promise<c.WatchEventStream<StoragemigrationV1alpha1.StorageVersionMigration>> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}storageversionmigrations`,
@@ -36,7 +40,10 @@ export class StoragemigrationV1alpha1Api {
     return resp.pipeThrough(new c.WatchEventTransformer(StoragemigrationV1alpha1.toStorageVersionMigration, MetaV1.toStatus));
   }
 
-  async createStorageVersionMigration(body: StoragemigrationV1alpha1.StorageVersionMigration, opts: operations.PutOpts = {}) {
+  async createStorageVersionMigration(
+    body: StoragemigrationV1alpha1.StorageVersionMigration,
+    opts: operations.PutOpts = {},
+  ): Promise<StoragemigrationV1alpha1.StorageVersionMigration> {
     const resp = await this.#client.performRequest({
       method: "POST",
       path: `${this.#root}storageversionmigrations`,
@@ -48,7 +55,9 @@ export class StoragemigrationV1alpha1Api {
     return StoragemigrationV1alpha1.toStorageVersionMigration(resp);
   }
 
-  async deleteStorageVersionMigrationList(opts: operations.DeleteListOpts = {}) {
+  async deleteStorageVersionMigrationList(
+    opts: operations.DeleteListOpts = {},
+  ): Promise<StoragemigrationV1alpha1.StorageVersionMigrationList> {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}storageversionmigrations`,
@@ -59,7 +68,10 @@ export class StoragemigrationV1alpha1Api {
     return StoragemigrationV1alpha1.toStorageVersionMigrationList(resp);
   }
 
-  async getStorageVersionMigration(name: string, opts: operations.NoOpts = {}) {
+  async getStorageVersionMigration(
+    name: string,
+    opts: operations.NoOpts = {},
+  ): Promise<StoragemigrationV1alpha1.StorageVersionMigration> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}storageversionmigrations/${name}`,
@@ -69,7 +81,10 @@ export class StoragemigrationV1alpha1Api {
     return StoragemigrationV1alpha1.toStorageVersionMigration(resp);
   }
 
-  async deleteStorageVersionMigration(name: string, opts: operations.DeleteOpts = {}) {
+  async deleteStorageVersionMigration(
+    name: string,
+    opts: operations.DeleteOpts = {},
+  ): Promise<StoragemigrationV1alpha1.StorageVersionMigration | MetaV1.Status> {
     const resp = await this.#client.performRequest({
       method: "DELETE",
       path: `${this.#root}storageversionmigrations/${name}`,
@@ -81,7 +96,11 @@ export class StoragemigrationV1alpha1Api {
     return StoragemigrationV1alpha1.toStorageVersionMigration(resp);
   }
 
-  async replaceStorageVersionMigration(name: string, body: StoragemigrationV1alpha1.StorageVersionMigration, opts: operations.PutOpts = {}) {
+  async replaceStorageVersionMigration(
+    name: string,
+    body: StoragemigrationV1alpha1.StorageVersionMigration,
+    opts: operations.PutOpts = {},
+  ): Promise<StoragemigrationV1alpha1.StorageVersionMigration> {
     const resp = await this.#client.performRequest({
       method: "PUT",
       path: `${this.#root}storageversionmigrations/${name}`,
@@ -93,7 +112,12 @@ export class StoragemigrationV1alpha1Api {
     return StoragemigrationV1alpha1.toStorageVersionMigration(resp);
   }
 
-  async patchStorageVersionMigration(name: string, type: c.PatchType, body: StoragemigrationV1alpha1.StorageVersionMigration | c.JsonPatch, opts: operations.PatchOpts = {}) {
+  async patchStorageVersionMigration(
+    name: string,
+    type: c.PatchType,
+    body: StoragemigrationV1alpha1.StorageVersionMigration | c.JsonPatch,
+    opts: operations.PatchOpts = {},
+  ): Promise<StoragemigrationV1alpha1.StorageVersionMigration> {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}storageversionmigrations/${name}`,
@@ -106,7 +130,10 @@ export class StoragemigrationV1alpha1Api {
     return StoragemigrationV1alpha1.toStorageVersionMigration(resp);
   }
 
-  async getStorageVersionMigrationStatus(name: string, opts: operations.NoOpts = {}) {
+  async getStorageVersionMigrationStatus(
+    name: string,
+    opts: operations.NoOpts = {},
+  ): Promise<StoragemigrationV1alpha1.StorageVersionMigration> {
     const resp = await this.#client.performRequest({
       method: "GET",
       path: `${this.#root}storageversionmigrations/${name}/status`,
@@ -116,7 +143,11 @@ export class StoragemigrationV1alpha1Api {
     return StoragemigrationV1alpha1.toStorageVersionMigration(resp);
   }
 
-  async replaceStorageVersionMigrationStatus(name: string, body: StoragemigrationV1alpha1.StorageVersionMigration, opts: operations.PutOpts = {}) {
+  async replaceStorageVersionMigrationStatus(
+    name: string,
+    body: StoragemigrationV1alpha1.StorageVersionMigration,
+    opts: operations.PutOpts = {},
+  ): Promise<StoragemigrationV1alpha1.StorageVersionMigration> {
     const resp = await this.#client.performRequest({
       method: "PUT",
       path: `${this.#root}storageversionmigrations/${name}/status`,
@@ -128,7 +159,12 @@ export class StoragemigrationV1alpha1Api {
     return StoragemigrationV1alpha1.toStorageVersionMigration(resp);
   }
 
-  async patchStorageVersionMigrationStatus(name: string, type: c.PatchType, body: StoragemigrationV1alpha1.StorageVersionMigration | c.JsonPatch, opts: operations.PatchOpts = {}) {
+  async patchStorageVersionMigrationStatus(
+    name: string,
+    type: c.PatchType,
+    body: StoragemigrationV1alpha1.StorageVersionMigration | c.JsonPatch,
+    opts: operations.PatchOpts = {},
+  ): Promise<StoragemigrationV1alpha1.StorageVersionMigration> {
     const resp = await this.#client.performRequest({
       method: "PATCH",
       path: `${this.#root}storageversionmigrations/${name}/status`,

@@ -1,4 +1,4 @@
-import type { KubernetesTunnel } from "./common.ts";
+import type { KubernetesTunnel } from "./deps.ts";
 
 export type TerminalSize = {
   columns: number;
@@ -93,26 +93,26 @@ export class StdioTunnel {
 
   // Take a cue from Deno.Command which presents the streams unconditionally
   // but throws if they are used when not configured
-  get stdin() {
+  get stdin(): WritableStream<Uint8Array> {
     if (!this.#stdin) throw new TypeError("stdin was not requested");
     return this.#stdin;
   }
-  get stdout() {
+  get stdout(): ReadableStream<Uint8Array> {
     if (!this.#stdout) throw new TypeError("stdout was not requested");
     return this.#stdout;
   }
-  get stderr() {
+  get stderr(): ReadableStream<Uint8Array> {
     if (!this.#stderr) throw new TypeError("stderr was not requested");
     return this.#stderr;
   }
   /** If tty was requested, an outbound stream for dynamically changing the TTY dimensions */
-  get ttyResizeStream() {
+  get ttyResizeStream(): WritableStream<TerminalSize> {
     if (!this.#resize) throw new TypeError("tty was not requested");
     return this.#resize;
   }
 
   /** Shorthand for injecting Ctrl-C and others when running an interactive TTY */
-  async ttyWriteSignal(signal: 'INTR' | 'QUIT' | 'SUSP') {
+  async ttyWriteSignal(signal: 'INTR' | 'QUIT' | 'SUSP'): Promise<void> {
     if (!this.#stdinWriter) throw new TypeError("tty and stdin were not requested together, cannot write signals");
     switch (signal) {
       // via https://man7.org/linux/man-pages/man3/termios.3.html
@@ -124,7 +124,7 @@ export class StdioTunnel {
   }
 
   /** Shorthand for writing to the tty resize stream, especially useful for setting an initial size */
-  async ttySetSize(size: TerminalSize) {
+  async ttySetSize(size: TerminalSize): Promise<void> {
     const sizeWriter = this.ttyResizeStream.getWriter();
     await sizeWriter.write(size);
     sizeWriter.releaseLock();
@@ -132,7 +132,10 @@ export class StdioTunnel {
 
   // Based on https://github.com/denoland/deno/blob/ca9ba87d9956e3f940e0116866e19461f008390b/runtime/js/40_process.js#L282C1-L319C1
   /** Buffers all data for stdout and/or stderr and returns the buffers when the remote command exits. */
-  async output() {
+  async output(): Promise<ExecStatus & {
+    stdout: Uint8Array;
+    stderr: Uint8Array;
+  }> {
     if (this.#stdout?.locked) {
       throw new TypeError(
         "Can't collect output because stdout is locked",
@@ -164,7 +167,7 @@ export class StdioTunnel {
   }
 
   /** Immediately disconnects the network tunnel, likely dropping any in-flight data. */
-  kill() {
+  kill(): void {
     this.tunnel.stop();
   }
 }
@@ -228,11 +231,15 @@ export class PortforwardTunnel {
   private nextRequestId = 0;
   private remainingPorts = new Array<number | false>;
 
-  get ready() {
+  get ready(): Promise<void> {
     return this.tunnel.ready();
   }
 
-  async connectToPort(port: number) {
+  async connectToPort(port: number): Promise<{
+    result: Promise<null>;
+    readable: ReadableStream<Uint8Array>;
+    writable: WritableStream<Uint8Array>;
+  }> {
     let dataIdx: number | undefined = undefined;
     let errorIdx: number | undefined = undefined;
 
@@ -283,7 +290,7 @@ export class PortforwardTunnel {
 
   servePortforward(opts: Deno.ListenOptions & {
     targetPort: number;
-  }) {
+  }): Deno.Listener {
     const listener = Deno.listen(opts);
     (async () => {
       for await (const downstream of listener) {
@@ -302,13 +309,13 @@ export class PortforwardTunnel {
     return listener;
   }
 
-  disconnect() {
+  disconnect(): void {
     this.tunnel.stop();
   }
 }
 
 class DropPrefix extends TransformStream<Uint8Array, Uint8Array> {
-  constructor(expectedPort: number) {
+  constructor(_expectedPort: number) {
     let remaining = 2;
     super({
       transform(chunk, ctlr) {

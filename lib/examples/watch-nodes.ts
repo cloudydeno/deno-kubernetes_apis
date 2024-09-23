@@ -1,6 +1,6 @@
 #!/usr/bin/env -S deno run --allow-net --allow-read --allow-env --allow-run --unstable
 
-import { autoDetectClient, Reflector } from "../client.ts";
+import { autoDetectClient, Reflector } from "../deps.ts";
 // import { CoreV1Api } from "../builtin/core@v1/mod.ts";
 import { CoordinationV1Api } from "../builtin/coordination.k8s.io@v1/mod.ts";
 

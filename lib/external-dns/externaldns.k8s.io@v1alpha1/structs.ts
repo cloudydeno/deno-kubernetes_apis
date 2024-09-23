@@ -43,17 +43,17 @@ export function fromDNSEndpoint(input: DNSEndpoint): c.JSONValue {
     ...input,
     metadata: input.metadata != null ? MetaV1.fromObjectMeta(input.metadata) : undefined,
   }}
-export function toDNSEndpoint_spec(input: c.JSONValue) {
+function toDNSEndpoint_spec(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     endpoints: c.readOpt(obj["endpoints"], x => c.readList(x, toDNSEndpoint_spec_endpoints)),
   }}
-export function toDNSEndpoint_status(input: c.JSONValue) {
+function toDNSEndpoint_status(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     observedGeneration: c.readOpt(obj["observedGeneration"], c.checkNum),
   }}
-export function toDNSEndpoint_spec_endpoints(input: c.JSONValue) {
+function toDNSEndpoint_spec_endpoints(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     dnsName: c.readOpt(obj["dnsName"], c.checkStr),
@@ -64,7 +64,7 @@ export function toDNSEndpoint_spec_endpoints(input: c.JSONValue) {
     setIdentifier: c.readOpt(obj["setIdentifier"], c.checkStr),
     targets: c.readOpt(obj["targets"], x => c.readList(x, c.checkStr)),
   }}
-export function toDNSEndpoint_spec_endpoints_providerSpecific(input: c.JSONValue) {
+function toDNSEndpoint_spec_endpoints_providerSpecific(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     name: c.readOpt(obj["name"], c.checkStr),
