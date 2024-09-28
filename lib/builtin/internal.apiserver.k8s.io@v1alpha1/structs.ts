@@ -87,7 +87,7 @@ export function fromStorageVersionStatus(input: StorageVersionStatus): c.JSONVal
 /** Describes the state of the storageVersion at a certain point. */
 export interface StorageVersionCondition {
   lastTransitionTime?: c.Time | null;
-  message?: string | null;
+  message: string;
   observedGeneration?: number | null;
   reason: string;
   status: string;
@@ -97,7 +97,7 @@ export function toStorageVersionCondition(input: c.JSONValue): StorageVersionCon
   const obj = c.checkObj(input);
   return {
     lastTransitionTime: c.readOpt(obj["lastTransitionTime"], c.toTime),
-    message: c.readOpt(obj["message"], c.checkStr),
+    message: c.checkStr(obj["message"]),
     observedGeneration: c.readOpt(obj["observedGeneration"], c.checkNum),
     reason: c.checkStr(obj["reason"]),
     status: c.checkStr(obj["status"]),

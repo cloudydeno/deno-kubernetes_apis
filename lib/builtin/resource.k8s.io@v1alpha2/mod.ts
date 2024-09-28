@@ -48,6 +48,33 @@ export class ResourceV1alpha2Api {
     return resp.pipeThrough(new c.WatchEventTransformer(ResourceV1alpha2.toPodSchedulingContext, MetaV1.toStatus));
   }
 
+  async getResourceClaimParametersListForAllNamespaces(
+    opts: operations.GetListOpts = {},
+  ): Promise<ResourceV1alpha2.ResourceClaimParametersList> {
+    const resp = await this.#client.performRequest({
+      method: "GET",
+      path: `${this.#root}resourceclaimparameters`,
+      expectJson: true,
+      querystring: operations.formatGetListOpts(opts),
+      abortSignal: opts.abortSignal,
+    });
+    return ResourceV1alpha2.toResourceClaimParametersList(resp);
+  }
+
+  async watchResourceClaimParametersListForAllNamespaces(
+    opts: operations.WatchListOpts = {},
+  ): Promise<c.WatchEventStream<ResourceV1alpha2.ResourceClaimParameters>> {
+    const resp = await this.#client.performRequest({
+      method: "GET",
+      path: `${this.#root}resourceclaimparameters`,
+      expectJson: true,
+      expectStream: true,
+      querystring: operations.formatWatchListOpts(opts),
+      abortSignal: opts.abortSignal,
+    });
+    return resp.pipeThrough(new c.WatchEventTransformer(ResourceV1alpha2.toResourceClaimParameters, MetaV1.toStatus));
+  }
+
   async getResourceClaimListForAllNamespaces(
     opts: operations.GetListOpts = {},
   ): Promise<ResourceV1alpha2.ResourceClaimList> {
@@ -217,6 +244,150 @@ export class ResourceV1alpha2Api {
       abortSignal: opts.abortSignal,
     });
     return ResourceV1alpha2.toResourceClass(resp);
+  }
+
+  async getResourceClassParametersListForAllNamespaces(
+    opts: operations.GetListOpts = {},
+  ): Promise<ResourceV1alpha2.ResourceClassParametersList> {
+    const resp = await this.#client.performRequest({
+      method: "GET",
+      path: `${this.#root}resourceclassparameters`,
+      expectJson: true,
+      querystring: operations.formatGetListOpts(opts),
+      abortSignal: opts.abortSignal,
+    });
+    return ResourceV1alpha2.toResourceClassParametersList(resp);
+  }
+
+  async watchResourceClassParametersListForAllNamespaces(
+    opts: operations.WatchListOpts = {},
+  ): Promise<c.WatchEventStream<ResourceV1alpha2.ResourceClassParameters>> {
+    const resp = await this.#client.performRequest({
+      method: "GET",
+      path: `${this.#root}resourceclassparameters`,
+      expectJson: true,
+      expectStream: true,
+      querystring: operations.formatWatchListOpts(opts),
+      abortSignal: opts.abortSignal,
+    });
+    return resp.pipeThrough(new c.WatchEventTransformer(ResourceV1alpha2.toResourceClassParameters, MetaV1.toStatus));
+  }
+
+  async getResourceSliceList(
+    opts: operations.GetListOpts = {},
+  ): Promise<ResourceV1alpha2.ResourceSliceList> {
+    const resp = await this.#client.performRequest({
+      method: "GET",
+      path: `${this.#root}resourceslices`,
+      expectJson: true,
+      querystring: operations.formatGetListOpts(opts),
+      abortSignal: opts.abortSignal,
+    });
+    return ResourceV1alpha2.toResourceSliceList(resp);
+  }
+
+  async watchResourceSliceList(
+    opts: operations.WatchListOpts = {},
+  ): Promise<c.WatchEventStream<ResourceV1alpha2.ResourceSlice>> {
+    const resp = await this.#client.performRequest({
+      method: "GET",
+      path: `${this.#root}resourceslices`,
+      expectJson: true,
+      expectStream: true,
+      querystring: operations.formatWatchListOpts(opts),
+      abortSignal: opts.abortSignal,
+    });
+    return resp.pipeThrough(new c.WatchEventTransformer(ResourceV1alpha2.toResourceSlice, MetaV1.toStatus));
+  }
+
+  async createResourceSlice(
+    body: ResourceV1alpha2.ResourceSlice,
+    opts: operations.PutOpts = {},
+  ): Promise<ResourceV1alpha2.ResourceSlice> {
+    const resp = await this.#client.performRequest({
+      method: "POST",
+      path: `${this.#root}resourceslices`,
+      expectJson: true,
+      querystring: operations.formatPutOpts(opts),
+      bodyJson: ResourceV1alpha2.fromResourceSlice(body),
+      abortSignal: opts.abortSignal,
+    });
+    return ResourceV1alpha2.toResourceSlice(resp);
+  }
+
+  async deleteResourceSliceList(
+    opts: operations.DeleteListOpts = {},
+  ): Promise<ResourceV1alpha2.ResourceSliceList> {
+    const resp = await this.#client.performRequest({
+      method: "DELETE",
+      path: `${this.#root}resourceslices`,
+      expectJson: true,
+      querystring: operations.formatDeleteListOpts(opts),
+      abortSignal: opts.abortSignal,
+    });
+    return ResourceV1alpha2.toResourceSliceList(resp);
+  }
+
+  async getResourceSlice(
+    name: string,
+    opts: operations.NoOpts = {},
+  ): Promise<ResourceV1alpha2.ResourceSlice> {
+    const resp = await this.#client.performRequest({
+      method: "GET",
+      path: `${this.#root}resourceslices/${name}`,
+      expectJson: true,
+      abortSignal: opts.abortSignal,
+    });
+    return ResourceV1alpha2.toResourceSlice(resp);
+  }
+
+  async deleteResourceSlice(
+    name: string,
+    opts: operations.DeleteOpts = {},
+  ): Promise<ResourceV1alpha2.ResourceSlice | MetaV1.Status> {
+    const resp = await this.#client.performRequest({
+      method: "DELETE",
+      path: `${this.#root}resourceslices/${name}`,
+      expectJson: true,
+      querystring: operations.formatDeleteOpts(opts),
+      abortSignal: opts.abortSignal,
+    });
+    if (c.isStatusKind(resp)) return MetaV1.toStatus(resp);
+    return ResourceV1alpha2.toResourceSlice(resp);
+  }
+
+  async replaceResourceSlice(
+    name: string,
+    body: ResourceV1alpha2.ResourceSlice,
+    opts: operations.PutOpts = {},
+  ): Promise<ResourceV1alpha2.ResourceSlice> {
+    const resp = await this.#client.performRequest({
+      method: "PUT",
+      path: `${this.#root}resourceslices/${name}`,
+      expectJson: true,
+      querystring: operations.formatPutOpts(opts),
+      bodyJson: ResourceV1alpha2.fromResourceSlice(body),
+      abortSignal: opts.abortSignal,
+    });
+    return ResourceV1alpha2.toResourceSlice(resp);
+  }
+
+  async patchResourceSlice(
+    name: string,
+    type: c.PatchType,
+    body: ResourceV1alpha2.ResourceSlice | c.JsonPatch,
+    opts: operations.PatchOpts = {},
+  ): Promise<ResourceV1alpha2.ResourceSlice> {
+    const resp = await this.#client.performRequest({
+      method: "PATCH",
+      path: `${this.#root}resourceslices/${name}`,
+      expectJson: true,
+      querystring: operations.formatPatchOpts(opts),
+      contentType: c.getPatchContentType(type),
+      bodyJson: Array.isArray(body) ? body : ResourceV1alpha2.fromResourceSlice(body),
+      abortSignal: opts.abortSignal,
+    });
+    return ResourceV1alpha2.toResourceSlice(resp);
   }
 
 }
@@ -391,6 +562,123 @@ export class ResourceV1alpha2NamespacedApi {
       abortSignal: opts.abortSignal,
     });
     return ResourceV1alpha2.toPodSchedulingContext(resp);
+  }
+
+  async getResourceClaimParametersList(
+    opts: operations.GetListOpts = {},
+  ): Promise<ResourceV1alpha2.ResourceClaimParametersList> {
+    const resp = await this.#client.performRequest({
+      method: "GET",
+      path: `${this.#root}resourceclaimparameters`,
+      expectJson: true,
+      querystring: operations.formatGetListOpts(opts),
+      abortSignal: opts.abortSignal,
+    });
+    return ResourceV1alpha2.toResourceClaimParametersList(resp);
+  }
+
+  async watchResourceClaimParametersList(
+    opts: operations.WatchListOpts = {},
+  ): Promise<c.WatchEventStream<ResourceV1alpha2.ResourceClaimParameters>> {
+    const resp = await this.#client.performRequest({
+      method: "GET",
+      path: `${this.#root}resourceclaimparameters`,
+      expectJson: true,
+      expectStream: true,
+      querystring: operations.formatWatchListOpts(opts),
+      abortSignal: opts.abortSignal,
+    });
+    return resp.pipeThrough(new c.WatchEventTransformer(ResourceV1alpha2.toResourceClaimParameters, MetaV1.toStatus));
+  }
+
+  async createResourceClaimParameters(
+    body: ResourceV1alpha2.ResourceClaimParameters,
+    opts: operations.PutOpts = {},
+  ): Promise<ResourceV1alpha2.ResourceClaimParameters> {
+    const resp = await this.#client.performRequest({
+      method: "POST",
+      path: `${this.#root}resourceclaimparameters`,
+      expectJson: true,
+      querystring: operations.formatPutOpts(opts),
+      bodyJson: ResourceV1alpha2.fromResourceClaimParameters(body),
+      abortSignal: opts.abortSignal,
+    });
+    return ResourceV1alpha2.toResourceClaimParameters(resp);
+  }
+
+  async deleteResourceClaimParametersList(
+    opts: operations.DeleteListOpts = {},
+  ): Promise<ResourceV1alpha2.ResourceClaimParametersList> {
+    const resp = await this.#client.performRequest({
+      method: "DELETE",
+      path: `${this.#root}resourceclaimparameters`,
+      expectJson: true,
+      querystring: operations.formatDeleteListOpts(opts),
+      abortSignal: opts.abortSignal,
+    });
+    return ResourceV1alpha2.toResourceClaimParametersList(resp);
+  }
+
+  async getResourceClaimParameters(
+    name: string,
+    opts: operations.NoOpts = {},
+  ): Promise<ResourceV1alpha2.ResourceClaimParameters> {
+    const resp = await this.#client.performRequest({
+      method: "GET",
+      path: `${this.#root}resourceclaimparameters/${name}`,
+      expectJson: true,
+      abortSignal: opts.abortSignal,
+    });
+    return ResourceV1alpha2.toResourceClaimParameters(resp);
+  }
+
+  async deleteResourceClaimParameters(
+    name: string,
+    opts: operations.DeleteOpts = {},
+  ): Promise<ResourceV1alpha2.ResourceClaimParameters | MetaV1.Status> {
+    const resp = await this.#client.performRequest({
+      method: "DELETE",
+      path: `${this.#root}resourceclaimparameters/${name}`,
+      expectJson: true,
+      querystring: operations.formatDeleteOpts(opts),
+      abortSignal: opts.abortSignal,
+    });
+    if (c.isStatusKind(resp)) return MetaV1.toStatus(resp);
+    return ResourceV1alpha2.toResourceClaimParameters(resp);
+  }
+
+  async replaceResourceClaimParameters(
+    name: string,
+    body: ResourceV1alpha2.ResourceClaimParameters,
+    opts: operations.PutOpts = {},
+  ): Promise<ResourceV1alpha2.ResourceClaimParameters> {
+    const resp = await this.#client.performRequest({
+      method: "PUT",
+      path: `${this.#root}resourceclaimparameters/${name}`,
+      expectJson: true,
+      querystring: operations.formatPutOpts(opts),
+      bodyJson: ResourceV1alpha2.fromResourceClaimParameters(body),
+      abortSignal: opts.abortSignal,
+    });
+    return ResourceV1alpha2.toResourceClaimParameters(resp);
+  }
+
+  async patchResourceClaimParameters(
+    name: string,
+    type: c.PatchType,
+    body: ResourceV1alpha2.ResourceClaimParameters | c.JsonPatch,
+    opts: operations.PatchOpts = {},
+  ): Promise<ResourceV1alpha2.ResourceClaimParameters> {
+    const resp = await this.#client.performRequest({
+      method: "PATCH",
+      path: `${this.#root}resourceclaimparameters/${name}`,
+      expectJson: true,
+      querystring: operations.formatPatchOpts(opts),
+      contentType: c.getPatchContentType(type),
+      bodyJson: Array.isArray(body) ? body : ResourceV1alpha2.fromResourceClaimParameters(body),
+      abortSignal: opts.abortSignal,
+    });
+    return ResourceV1alpha2.toResourceClaimParameters(resp);
   }
 
   async getResourceClaimList(
@@ -672,6 +960,123 @@ export class ResourceV1alpha2NamespacedApi {
       abortSignal: opts.abortSignal,
     });
     return ResourceV1alpha2.toResourceClaimTemplate(resp);
+  }
+
+  async getResourceClassParametersList(
+    opts: operations.GetListOpts = {},
+  ): Promise<ResourceV1alpha2.ResourceClassParametersList> {
+    const resp = await this.#client.performRequest({
+      method: "GET",
+      path: `${this.#root}resourceclassparameters`,
+      expectJson: true,
+      querystring: operations.formatGetListOpts(opts),
+      abortSignal: opts.abortSignal,
+    });
+    return ResourceV1alpha2.toResourceClassParametersList(resp);
+  }
+
+  async watchResourceClassParametersList(
+    opts: operations.WatchListOpts = {},
+  ): Promise<c.WatchEventStream<ResourceV1alpha2.ResourceClassParameters>> {
+    const resp = await this.#client.performRequest({
+      method: "GET",
+      path: `${this.#root}resourceclassparameters`,
+      expectJson: true,
+      expectStream: true,
+      querystring: operations.formatWatchListOpts(opts),
+      abortSignal: opts.abortSignal,
+    });
+    return resp.pipeThrough(new c.WatchEventTransformer(ResourceV1alpha2.toResourceClassParameters, MetaV1.toStatus));
+  }
+
+  async createResourceClassParameters(
+    body: ResourceV1alpha2.ResourceClassParameters,
+    opts: operations.PutOpts = {},
+  ): Promise<ResourceV1alpha2.ResourceClassParameters> {
+    const resp = await this.#client.performRequest({
+      method: "POST",
+      path: `${this.#root}resourceclassparameters`,
+      expectJson: true,
+      querystring: operations.formatPutOpts(opts),
+      bodyJson: ResourceV1alpha2.fromResourceClassParameters(body),
+      abortSignal: opts.abortSignal,
+    });
+    return ResourceV1alpha2.toResourceClassParameters(resp);
+  }
+
+  async deleteResourceClassParametersList(
+    opts: operations.DeleteListOpts = {},
+  ): Promise<ResourceV1alpha2.ResourceClassParametersList> {
+    const resp = await this.#client.performRequest({
+      method: "DELETE",
+      path: `${this.#root}resourceclassparameters`,
+      expectJson: true,
+      querystring: operations.formatDeleteListOpts(opts),
+      abortSignal: opts.abortSignal,
+    });
+    return ResourceV1alpha2.toResourceClassParametersList(resp);
+  }
+
+  async getResourceClassParameters(
+    name: string,
+    opts: operations.NoOpts = {},
+  ): Promise<ResourceV1alpha2.ResourceClassParameters> {
+    const resp = await this.#client.performRequest({
+      method: "GET",
+      path: `${this.#root}resourceclassparameters/${name}`,
+      expectJson: true,
+      abortSignal: opts.abortSignal,
+    });
+    return ResourceV1alpha2.toResourceClassParameters(resp);
+  }
+
+  async deleteResourceClassParameters(
+    name: string,
+    opts: operations.DeleteOpts = {},
+  ): Promise<ResourceV1alpha2.ResourceClassParameters | MetaV1.Status> {
+    const resp = await this.#client.performRequest({
+      method: "DELETE",
+      path: `${this.#root}resourceclassparameters/${name}`,
+      expectJson: true,
+      querystring: operations.formatDeleteOpts(opts),
+      abortSignal: opts.abortSignal,
+    });
+    if (c.isStatusKind(resp)) return MetaV1.toStatus(resp);
+    return ResourceV1alpha2.toResourceClassParameters(resp);
+  }
+
+  async replaceResourceClassParameters(
+    name: string,
+    body: ResourceV1alpha2.ResourceClassParameters,
+    opts: operations.PutOpts = {},
+  ): Promise<ResourceV1alpha2.ResourceClassParameters> {
+    const resp = await this.#client.performRequest({
+      method: "PUT",
+      path: `${this.#root}resourceclassparameters/${name}`,
+      expectJson: true,
+      querystring: operations.formatPutOpts(opts),
+      bodyJson: ResourceV1alpha2.fromResourceClassParameters(body),
+      abortSignal: opts.abortSignal,
+    });
+    return ResourceV1alpha2.toResourceClassParameters(resp);
+  }
+
+  async patchResourceClassParameters(
+    name: string,
+    type: c.PatchType,
+    body: ResourceV1alpha2.ResourceClassParameters | c.JsonPatch,
+    opts: operations.PatchOpts = {},
+  ): Promise<ResourceV1alpha2.ResourceClassParameters> {
+    const resp = await this.#client.performRequest({
+      method: "PATCH",
+      path: `${this.#root}resourceclassparameters/${name}`,
+      expectJson: true,
+      querystring: operations.formatPatchOpts(opts),
+      contentType: c.getPatchContentType(type),
+      bodyJson: Array.isArray(body) ? body : ResourceV1alpha2.fromResourceClassParameters(body),
+      abortSignal: opts.abortSignal,
+    });
+    return ResourceV1alpha2.toResourceClassParameters(resp);
   }
 
 }

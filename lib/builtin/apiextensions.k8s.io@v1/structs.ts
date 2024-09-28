@@ -187,6 +187,7 @@ export interface CustomResourceDefinitionVersion {
   deprecationWarning?: string | null;
   name: string;
   schema?: CustomResourceValidation | null;
+  selectableFields?: Array<SelectableField> | null;
   served: boolean;
   storage: boolean;
   subresources?: CustomResourceSubresources | null;
@@ -199,6 +200,7 @@ export function toCustomResourceDefinitionVersion(input: c.JSONValue): CustomRes
     deprecationWarning: c.readOpt(obj["deprecationWarning"], c.checkStr),
     name: c.checkStr(obj["name"]),
     schema: c.readOpt(obj["schema"], toCustomResourceValidation),
+    selectableFields: c.readOpt(obj["selectableFields"], x => c.readList(x, toSelectableField)),
     served: c.checkBool(obj["served"]),
     storage: c.checkBool(obj["storage"]),
     subresources: c.readOpt(obj["subresources"], toCustomResourceSubresources),
@@ -208,6 +210,7 @@ export function fromCustomResourceDefinitionVersion(input: CustomResourceDefinit
     ...input,
     additionalPrinterColumns: input.additionalPrinterColumns?.map(fromCustomResourceColumnDefinition),
     schema: input.schema != null ? fromCustomResourceValidation(input.schema) : undefined,
+    selectableFields: input.selectableFields?.map(fromSelectableField),
     subresources: input.subresources != null ? fromCustomResourceSubresources(input.subresources) : undefined,
   }}
 
@@ -368,6 +371,7 @@ export interface ValidationRule {
   fieldPath?: string | null;
   message?: string | null;
   messageExpression?: string | null;
+  optionalOldSelf?: boolean | null;
   reason?: string | null;
   rule: string;
 }
@@ -377,10 +381,25 @@ export function toValidationRule(input: c.JSONValue): ValidationRule {
     fieldPath: c.readOpt(obj["fieldPath"], c.checkStr),
     message: c.readOpt(obj["message"], c.checkStr),
     messageExpression: c.readOpt(obj["messageExpression"], c.checkStr),
+    optionalOldSelf: c.readOpt(obj["optionalOldSelf"], c.checkBool),
     reason: c.readOpt(obj["reason"], c.checkStr),
     rule: c.checkStr(obj["rule"]),
   }}
 export function fromValidationRule(input: ValidationRule): c.JSONValue {
+  return {
+    ...input,
+  }}
+
+/** SelectableField specifies the JSON path of a field that may be used with field selectors. */
+export interface SelectableField {
+  jsonPath: string;
+}
+export function toSelectableField(input: c.JSONValue): SelectableField {
+  const obj = c.checkObj(input);
+  return {
+    jsonPath: c.checkStr(obj["jsonPath"]),
+  }}
+export function fromSelectableField(input: SelectableField): c.JSONValue {
   return {
     ...input,
   }}

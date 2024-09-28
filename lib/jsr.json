@@ -1,6 +1,6 @@
 {
   "name": "@cloudydeno/kubernetes-apis",
-  "version": "0.5.1",
+  "version": "0.5.2",
   "exports": {
 
     "./admissionregistration.k8s.io/v1": "./builtin/admissionregistration.k8s.io@v1/mod.ts",
@@ -22,7 +22,7 @@
     "./core/v1": "./builtin/core@v1/mod.ts",
     "./discovery.k8s.io/v1": "./builtin/discovery.k8s.io@v1/mod.ts",
     "./events.k8s.io/v1": "./builtin/events.k8s.io@v1/mod.ts",
-    "./flowcontrol.apiserver.k8s.io/v1beta2": "./builtin/flowcontrol.apiserver.k8s.io@v1beta2/mod.ts",
+    "./flowcontrol.apiserver.k8s.io/v1": "./builtin/flowcontrol.apiserver.k8s.io@v1/mod.ts",
     "./flowcontrol.apiserver.k8s.io/v1beta3": "./builtin/flowcontrol.apiserver.k8s.io@v1beta3/mod.ts",
     "./internal.apiserver.k8s.io/v1alpha1": "./builtin/internal.apiserver.k8s.io@v1alpha1/mod.ts",
     "./meta/v1": "./builtin/meta@v1/structs.ts",
@@ -34,6 +34,8 @@
     "./resource.k8s.io/v1alpha2": "./builtin/resource.k8s.io@v1alpha2/mod.ts",
     "./scheduling.k8s.io/v1": "./builtin/scheduling.k8s.io@v1/mod.ts",
     "./storage.k8s.io/v1": "./builtin/storage.k8s.io@v1/mod.ts",
+    "./storage.k8s.io/v1alpha1": "./builtin/storage.k8s.io@v1alpha1/mod.ts",
+    "./storagemigration.k8s.io/v1alpha1": "./builtin/storagemigration.k8s.io@v1alpha1/mod.ts",
 
     "./argoproj.io/v1alpha1": "./argo-cd/argoproj.io@v1alpha1/mod.ts",
 

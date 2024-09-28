@@ -7,6 +7,38 @@ type ListOf<T> = {
   items: Array<T>;
 };
 
+/** AuditAnnotation describes how to produce an audit annotation for an API request. */
+export interface AuditAnnotation {
+  key: string;
+  valueExpression: string;
+}
+export function toAuditAnnotation(input: c.JSONValue): AuditAnnotation {
+  const obj = c.checkObj(input);
+  return {
+    key: c.checkStr(obj["key"]),
+    valueExpression: c.checkStr(obj["valueExpression"]),
+  }}
+export function fromAuditAnnotation(input: AuditAnnotation): c.JSONValue {
+  return {
+    ...input,
+  }}
+
+/** ExpressionWarning is a warning information that targets a specific expression. */
+export interface ExpressionWarning {
+  fieldRef: string;
+  warning: string;
+}
+export function toExpressionWarning(input: c.JSONValue): ExpressionWarning {
+  const obj = c.checkObj(input);
+  return {
+    fieldRef: c.checkStr(obj["fieldRef"]),
+    warning: c.checkStr(obj["warning"]),
+  }}
+export function fromExpressionWarning(input: ExpressionWarning): c.JSONValue {
+  return {
+    ...input,
+  }}
+
 /** MatchCondition represents a condition which must by fulfilled for a request to be sent to a webhook. */
 export interface MatchCondition {
   expression: string;
@@ -19,6 +51,56 @@ export function toMatchCondition(input: c.JSONValue): MatchCondition {
     name: c.checkStr(obj["name"]),
   }}
 export function fromMatchCondition(input: MatchCondition): c.JSONValue {
+  return {
+    ...input,
+  }}
+
+/** MatchResources decides whether to run the admission control policy on an object based on whether it meets the match criteria. The exclude rules take precedence over include rules (if a resource matches both, it is excluded) */
+export interface MatchResources {
+  excludeResourceRules?: Array<NamedRuleWithOperations> | null;
+  matchPolicy?: string | null;
+  namespaceSelector?: MetaV1.LabelSelector | null;
+  objectSelector?: MetaV1.LabelSelector | null;
+  resourceRules?: Array<NamedRuleWithOperations> | null;
+}
+export function toMatchResources(input: c.JSONValue): MatchResources {
+  const obj = c.checkObj(input);
+  return {
+    excludeResourceRules: c.readOpt(obj["excludeResourceRules"], x => c.readList(x, toNamedRuleWithOperations)),
+    matchPolicy: c.readOpt(obj["matchPolicy"], c.checkStr),
+    namespaceSelector: c.readOpt(obj["namespaceSelector"], MetaV1.toLabelSelector),
+    objectSelector: c.readOpt(obj["objectSelector"], MetaV1.toLabelSelector),
+    resourceRules: c.readOpt(obj["resourceRules"], x => c.readList(x, toNamedRuleWithOperations)),
+  }}
+export function fromMatchResources(input: MatchResources): c.JSONValue {
+  return {
+    ...input,
+    excludeResourceRules: input.excludeResourceRules?.map(fromNamedRuleWithOperations),
+    namespaceSelector: input.namespaceSelector != null ? MetaV1.fromLabelSelector(input.namespaceSelector) : undefined,
+    objectSelector: input.objectSelector != null ? MetaV1.fromLabelSelector(input.objectSelector) : undefined,
+    resourceRules: input.resourceRules?.map(fromNamedRuleWithOperations),
+  }}
+
+/** NamedRuleWithOperations is a tuple of Operations and Resources with ResourceNames. */
+export interface NamedRuleWithOperations {
+  apiGroups?: Array<string> | null;
+  apiVersions?: Array<string> | null;
+  operations?: Array<string> | null;
+  resourceNames?: Array<string> | null;
+  resources?: Array<string> | null;
+  scope?: string | null;
+}
+export function toNamedRuleWithOperations(input: c.JSONValue): NamedRuleWithOperations {
+  const obj = c.checkObj(input);
+  return {
+    apiGroups: c.readOpt(obj["apiGroups"], x => c.readList(x, c.checkStr)),
+    apiVersions: c.readOpt(obj["apiVersions"], x => c.readList(x, c.checkStr)),
+    operations: c.readOpt(obj["operations"], x => c.readList(x, c.checkStr)),
+    resourceNames: c.readOpt(obj["resourceNames"], x => c.readList(x, c.checkStr)),
+    resources: c.readOpt(obj["resources"], x => c.readList(x, c.checkStr)),
+    scope: c.readOpt(obj["scope"], c.checkStr),
+  }}
+export function fromNamedRuleWithOperations(input: NamedRuleWithOperations): c.JSONValue {
   return {
     ...input,
   }}
@@ -158,6 +240,245 @@ export function toMutatingWebhookConfigurationList(input: c.JSONValue): Mutating
     ...c.assertOrAddApiVersionAndKind(obj, "admissionregistration.k8s.io/v1", "MutatingWebhookConfigurationList"),
     metadata: MetaV1.toListMeta(obj.metadata),
     items: c.readList(obj.items, toMutatingWebhookConfiguration),
+  }}
+
+/** ParamKind is a tuple of Group Kind and Version. */
+export interface ParamKind {
+  apiVersion?: string | null;
+  kind?: string | null;
+}
+export function toParamKind(input: c.JSONValue): ParamKind {
+  const obj = c.checkObj(input);
+  return {
+    apiVersion: c.readOpt(obj["apiVersion"], c.checkStr),
+    kind: c.readOpt(obj["kind"], c.checkStr),
+  }}
+export function fromParamKind(input: ParamKind): c.JSONValue {
+  return {
+    ...input,
+  }}
+
+/** ParamRef describes how to locate the params to be used as input to expressions of rules applied by a policy binding. */
+export interface ParamRef {
+  name?: string | null;
+  namespace?: string | null;
+  parameterNotFoundAction?: string | null;
+  selector?: MetaV1.LabelSelector | null;
+}
+export function toParamRef(input: c.JSONValue): ParamRef {
+  const obj = c.checkObj(input);
+  return {
+    name: c.readOpt(obj["name"], c.checkStr),
+    namespace: c.readOpt(obj["namespace"], c.checkStr),
+    parameterNotFoundAction: c.readOpt(obj["parameterNotFoundAction"], c.checkStr),
+    selector: c.readOpt(obj["selector"], MetaV1.toLabelSelector),
+  }}
+export function fromParamRef(input: ParamRef): c.JSONValue {
+  return {
+    ...input,
+    selector: input.selector != null ? MetaV1.fromLabelSelector(input.selector) : undefined,
+  }}
+
+/** TypeChecking contains results of type checking the expressions in the ValidatingAdmissionPolicy */
+export interface TypeChecking {
+  expressionWarnings?: Array<ExpressionWarning> | null;
+}
+export function toTypeChecking(input: c.JSONValue): TypeChecking {
+  const obj = c.checkObj(input);
+  return {
+    expressionWarnings: c.readOpt(obj["expressionWarnings"], x => c.readList(x, toExpressionWarning)),
+  }}
+export function fromTypeChecking(input: TypeChecking): c.JSONValue {
+  return {
+    ...input,
+    expressionWarnings: input.expressionWarnings?.map(fromExpressionWarning),
+  }}
+
+/** ValidatingAdmissionPolicy describes the definition of an admission validation policy that accepts or rejects an object without changing it. */
+export interface ValidatingAdmissionPolicy {
+  apiVersion?: "admissionregistration.k8s.io/v1";
+  kind?: "ValidatingAdmissionPolicy";
+  metadata?: MetaV1.ObjectMeta | null;
+  spec?: ValidatingAdmissionPolicySpec | null;
+  status?: ValidatingAdmissionPolicyStatus | null;
+}
+export function toValidatingAdmissionPolicy(input: c.JSONValue): ValidatingAdmissionPolicy & c.ApiKind {
+  const obj = c.checkObj(input);
+  return {
+    ...c.assertOrAddApiVersionAndKind(obj, "admissionregistration.k8s.io/v1", "ValidatingAdmissionPolicy"),
+    metadata: c.readOpt(obj["metadata"], MetaV1.toObjectMeta),
+    spec: c.readOpt(obj["spec"], toValidatingAdmissionPolicySpec),
+    status: c.readOpt(obj["status"], toValidatingAdmissionPolicyStatus),
+  }}
+export function fromValidatingAdmissionPolicy(input: ValidatingAdmissionPolicy): c.JSONValue {
+  return {
+    ...c.assertOrAddApiVersionAndKind(input, "admissionregistration.k8s.io/v1", "ValidatingAdmissionPolicy"),
+    ...input,
+    metadata: input.metadata != null ? MetaV1.fromObjectMeta(input.metadata) : undefined,
+    spec: input.spec != null ? fromValidatingAdmissionPolicySpec(input.spec) : undefined,
+    status: input.status != null ? fromValidatingAdmissionPolicyStatus(input.status) : undefined,
+  }}
+
+/** ValidatingAdmissionPolicySpec is the specification of the desired behavior of the AdmissionPolicy. */
+export interface ValidatingAdmissionPolicySpec {
+  auditAnnotations?: Array<AuditAnnotation> | null;
+  failurePolicy?: string | null;
+  matchConditions?: Array<MatchCondition> | null;
+  matchConstraints?: MatchResources | null;
+  paramKind?: ParamKind | null;
+  validations?: Array<Validation> | null;
+  variables?: Array<Variable> | null;
+}
+export function toValidatingAdmissionPolicySpec(input: c.JSONValue): ValidatingAdmissionPolicySpec {
+  const obj = c.checkObj(input);
+  return {
+    auditAnnotations: c.readOpt(obj["auditAnnotations"], x => c.readList(x, toAuditAnnotation)),
+    failurePolicy: c.readOpt(obj["failurePolicy"], c.checkStr),
+    matchConditions: c.readOpt(obj["matchConditions"], x => c.readList(x, toMatchCondition)),
+    matchConstraints: c.readOpt(obj["matchConstraints"], toMatchResources),
+    paramKind: c.readOpt(obj["paramKind"], toParamKind),
+    validations: c.readOpt(obj["validations"], x => c.readList(x, toValidation)),
+    variables: c.readOpt(obj["variables"], x => c.readList(x, toVariable)),
+  }}
+export function fromValidatingAdmissionPolicySpec(input: ValidatingAdmissionPolicySpec): c.JSONValue {
+  return {
+    ...input,
+    auditAnnotations: input.auditAnnotations?.map(fromAuditAnnotation),
+    matchConditions: input.matchConditions?.map(fromMatchCondition),
+    matchConstraints: input.matchConstraints != null ? fromMatchResources(input.matchConstraints) : undefined,
+    paramKind: input.paramKind != null ? fromParamKind(input.paramKind) : undefined,
+    validations: input.validations?.map(fromValidation),
+    variables: input.variables?.map(fromVariable),
+  }}
+
+/** Validation specifies the CEL expression which is used to apply the validation. */
+export interface Validation {
+  expression: string;
+  message?: string | null;
+  messageExpression?: string | null;
+  reason?: string | null;
+}
+export function toValidation(input: c.JSONValue): Validation {
+  const obj = c.checkObj(input);
+  return {
+    expression: c.checkStr(obj["expression"]),
+    message: c.readOpt(obj["message"], c.checkStr),
+    messageExpression: c.readOpt(obj["messageExpression"], c.checkStr),
+    reason: c.readOpt(obj["reason"], c.checkStr),
+  }}
+export function fromValidation(input: Validation): c.JSONValue {
+  return {
+    ...input,
+  }}
+
+/** Variable is the definition of a variable that is used for composition. A variable is defined as a named expression. */
+export interface Variable {
+  expression: string;
+  name: string;
+}
+export function toVariable(input: c.JSONValue): Variable {
+  const obj = c.checkObj(input);
+  return {
+    expression: c.checkStr(obj["expression"]),
+    name: c.checkStr(obj["name"]),
+  }}
+export function fromVariable(input: Variable): c.JSONValue {
+  return {
+    ...input,
+  }}
+
+/** ValidatingAdmissionPolicyStatus represents the status of an admission validation policy. */
+export interface ValidatingAdmissionPolicyStatus {
+  conditions?: Array<MetaV1.Condition> | null;
+  observedGeneration?: number | null;
+  typeChecking?: TypeChecking | null;
+}
+export function toValidatingAdmissionPolicyStatus(input: c.JSONValue): ValidatingAdmissionPolicyStatus {
+  const obj = c.checkObj(input);
+  return {
+    conditions: c.readOpt(obj["conditions"], x => c.readList(x, MetaV1.toCondition)),
+    observedGeneration: c.readOpt(obj["observedGeneration"], c.checkNum),
+    typeChecking: c.readOpt(obj["typeChecking"], toTypeChecking),
+  }}
+export function fromValidatingAdmissionPolicyStatus(input: ValidatingAdmissionPolicyStatus): c.JSONValue {
+  return {
+    ...input,
+    conditions: input.conditions?.map(MetaV1.fromCondition),
+    typeChecking: input.typeChecking != null ? fromTypeChecking(input.typeChecking) : undefined,
+  }}
+
+/** ValidatingAdmissionPolicyBinding binds the ValidatingAdmissionPolicy with paramerized resources. ValidatingAdmissionPolicyBinding and parameter CRDs together define how cluster administrators configure policies for clusters.
+
+For a given admission request, each binding will cause its policy to be evaluated N times, where N is 1 for policies/bindings that don't use params, otherwise N is the number of parameters selected by the binding.
+
+The CEL expressions of a policy must have a computed CEL cost below the maximum CEL budget. Each evaluation of the policy is given an independent CEL cost budget. Adding/removing policies, bindings, or params can not affect whether a given (policy, binding, param) combination is within its own CEL budget. */
+export interface ValidatingAdmissionPolicyBinding {
+  apiVersion?: "admissionregistration.k8s.io/v1";
+  kind?: "ValidatingAdmissionPolicyBinding";
+  metadata?: MetaV1.ObjectMeta | null;
+  spec?: ValidatingAdmissionPolicyBindingSpec | null;
+}
+export function toValidatingAdmissionPolicyBinding(input: c.JSONValue): ValidatingAdmissionPolicyBinding & c.ApiKind {
+  const obj = c.checkObj(input);
+  return {
+    ...c.assertOrAddApiVersionAndKind(obj, "admissionregistration.k8s.io/v1", "ValidatingAdmissionPolicyBinding"),
+    metadata: c.readOpt(obj["metadata"], MetaV1.toObjectMeta),
+    spec: c.readOpt(obj["spec"], toValidatingAdmissionPolicyBindingSpec),
+  }}
+export function fromValidatingAdmissionPolicyBinding(input: ValidatingAdmissionPolicyBinding): c.JSONValue {
+  return {
+    ...c.assertOrAddApiVersionAndKind(input, "admissionregistration.k8s.io/v1", "ValidatingAdmissionPolicyBinding"),
+    ...input,
+    metadata: input.metadata != null ? MetaV1.fromObjectMeta(input.metadata) : undefined,
+    spec: input.spec != null ? fromValidatingAdmissionPolicyBindingSpec(input.spec) : undefined,
+  }}
+
+/** ValidatingAdmissionPolicyBindingSpec is the specification of the ValidatingAdmissionPolicyBinding. */
+export interface ValidatingAdmissionPolicyBindingSpec {
+  matchResources?: MatchResources | null;
+  paramRef?: ParamRef | null;
+  policyName?: string | null;
+  validationActions?: Array<string> | null;
+}
+export function toValidatingAdmissionPolicyBindingSpec(input: c.JSONValue): ValidatingAdmissionPolicyBindingSpec {
+  const obj = c.checkObj(input);
+  return {
+    matchResources: c.readOpt(obj["matchResources"], toMatchResources),
+    paramRef: c.readOpt(obj["paramRef"], toParamRef),
+    policyName: c.readOpt(obj["policyName"], c.checkStr),
+    validationActions: c.readOpt(obj["validationActions"], x => c.readList(x, c.checkStr)),
+  }}
+export function fromValidatingAdmissionPolicyBindingSpec(input: ValidatingAdmissionPolicyBindingSpec): c.JSONValue {
+  return {
+    ...input,
+    matchResources: input.matchResources != null ? fromMatchResources(input.matchResources) : undefined,
+    paramRef: input.paramRef != null ? fromParamRef(input.paramRef) : undefined,
+  }}
+
+/** ValidatingAdmissionPolicyBindingList is a list of ValidatingAdmissionPolicyBinding. */
+export interface ValidatingAdmissionPolicyBindingList extends ListOf<ValidatingAdmissionPolicyBinding> {
+  apiVersion?: "admissionregistration.k8s.io/v1";
+  kind?: "ValidatingAdmissionPolicyBindingList";
+};
+export function toValidatingAdmissionPolicyBindingList(input: c.JSONValue): ValidatingAdmissionPolicyBindingList & c.ApiKind {
+  const obj = c.checkObj(input);
+  return {
+    ...c.assertOrAddApiVersionAndKind(obj, "admissionregistration.k8s.io/v1", "ValidatingAdmissionPolicyBindingList"),
+    metadata: MetaV1.toListMeta(obj.metadata),
+    items: c.readList(obj.items, toValidatingAdmissionPolicyBinding),
+  }}
+
+/** ValidatingAdmissionPolicyList is a list of ValidatingAdmissionPolicy. */
+export interface ValidatingAdmissionPolicyList extends ListOf<ValidatingAdmissionPolicy> {
+  apiVersion?: "admissionregistration.k8s.io/v1";
+  kind?: "ValidatingAdmissionPolicyList";
+};
+export function toValidatingAdmissionPolicyList(input: c.JSONValue): ValidatingAdmissionPolicyList & c.ApiKind {
+  const obj = c.checkObj(input);
+  return {
+    ...c.assertOrAddApiVersionAndKind(obj, "admissionregistration.k8s.io/v1", "ValidatingAdmissionPolicyList"),
+    metadata: MetaV1.toListMeta(obj.metadata),
+    items: c.readList(obj.items, toValidatingAdmissionPolicy),
   }}
 
 /** ValidatingWebhook describes an admission webhook and the resources and operations it applies to. */

@@ -13,123 +13,6 @@ export class NetworkingV1alpha1Api {
     this.#client = client;
   }
 
-  async getClusterCIDRList(
-    opts: operations.GetListOpts = {},
-  ): Promise<NetworkingV1alpha1.ClusterCIDRList> {
-    const resp = await this.#client.performRequest({
-      method: "GET",
-      path: `${this.#root}clustercidrs`,
-      expectJson: true,
-      querystring: operations.formatGetListOpts(opts),
-      abortSignal: opts.abortSignal,
-    });
-    return NetworkingV1alpha1.toClusterCIDRList(resp);
-  }
-
-  async watchClusterCIDRList(
-    opts: operations.WatchListOpts = {},
-  ): Promise<c.WatchEventStream<NetworkingV1alpha1.ClusterCIDR>> {
-    const resp = await this.#client.performRequest({
-      method: "GET",
-      path: `${this.#root}clustercidrs`,
-      expectJson: true,
-      expectStream: true,
-      querystring: operations.formatWatchListOpts(opts),
-      abortSignal: opts.abortSignal,
-    });
-    return resp.pipeThrough(new c.WatchEventTransformer(NetworkingV1alpha1.toClusterCIDR, MetaV1.toStatus));
-  }
-
-  async createClusterCIDR(
-    body: NetworkingV1alpha1.ClusterCIDR,
-    opts: operations.PutOpts = {},
-  ): Promise<NetworkingV1alpha1.ClusterCIDR> {
-    const resp = await this.#client.performRequest({
-      method: "POST",
-      path: `${this.#root}clustercidrs`,
-      expectJson: true,
-      querystring: operations.formatPutOpts(opts),
-      bodyJson: NetworkingV1alpha1.fromClusterCIDR(body),
-      abortSignal: opts.abortSignal,
-    });
-    return NetworkingV1alpha1.toClusterCIDR(resp);
-  }
-
-  async deleteClusterCIDRList(
-    opts: operations.DeleteListOpts = {},
-  ): Promise<NetworkingV1alpha1.ClusterCIDRList> {
-    const resp = await this.#client.performRequest({
-      method: "DELETE",
-      path: `${this.#root}clustercidrs`,
-      expectJson: true,
-      querystring: operations.formatDeleteListOpts(opts),
-      abortSignal: opts.abortSignal,
-    });
-    return NetworkingV1alpha1.toClusterCIDRList(resp);
-  }
-
-  async getClusterCIDR(
-    name: string,
-    opts: operations.NoOpts = {},
-  ): Promise<NetworkingV1alpha1.ClusterCIDR> {
-    const resp = await this.#client.performRequest({
-      method: "GET",
-      path: `${this.#root}clustercidrs/${name}`,
-      expectJson: true,
-      abortSignal: opts.abortSignal,
-    });
-    return NetworkingV1alpha1.toClusterCIDR(resp);
-  }
-
-  async deleteClusterCIDR(
-    name: string,
-    opts: operations.DeleteOpts = {},
-  ): Promise<NetworkingV1alpha1.ClusterCIDR | MetaV1.Status> {
-    const resp = await this.#client.performRequest({
-      method: "DELETE",
-      path: `${this.#root}clustercidrs/${name}`,
-      expectJson: true,
-      querystring: operations.formatDeleteOpts(opts),
-      abortSignal: opts.abortSignal,
-    });
-    if (c.isStatusKind(resp)) return MetaV1.toStatus(resp);
-    return NetworkingV1alpha1.toClusterCIDR(resp);
-  }
-
-  async replaceClusterCIDR(
-    name: string,
-    body: NetworkingV1alpha1.ClusterCIDR,
-    opts: operations.PutOpts = {},
-  ): Promise<NetworkingV1alpha1.ClusterCIDR> {
-    const resp = await this.#client.performRequest({
-      method: "PUT",
-      path: `${this.#root}clustercidrs/${name}`,
-      expectJson: true,
-      querystring: operations.formatPutOpts(opts),
-      bodyJson: NetworkingV1alpha1.fromClusterCIDR(body),
-      abortSignal: opts.abortSignal,
-    });
-    return NetworkingV1alpha1.toClusterCIDR(resp);
-  }
-
-  async patchClusterCIDR(
-    name: string,
-    type: c.PatchType,
-    body: NetworkingV1alpha1.ClusterCIDR | c.JsonPatch,
-    opts: operations.PatchOpts = {},
-  ): Promise<NetworkingV1alpha1.ClusterCIDR> {
-    const resp = await this.#client.performRequest({
-      method: "PATCH",
-      path: `${this.#root}clustercidrs/${name}`,
-      expectJson: true,
-      querystring: operations.formatPatchOpts(opts),
-      contentType: c.getPatchContentType(type),
-      bodyJson: Array.isArray(body) ? body : NetworkingV1alpha1.fromClusterCIDR(body),
-      abortSignal: opts.abortSignal,
-    });
-    return NetworkingV1alpha1.toClusterCIDR(resp);
-  }
-
   async getIPAddressList(
     opts: operations.GetListOpts = {},
   ): Promise<NetworkingV1alpha1.IPAddressList> {
@@ -245,6 +128,170 @@ export class NetworkingV1alpha1Api {
       abortSignal: opts.abortSignal,
     });
     return NetworkingV1alpha1.toIPAddress(resp);
+  }
+
+  async getServiceCIDRList(
+    opts: operations.GetListOpts = {},
+  ): Promise<NetworkingV1alpha1.ServiceCIDRList> {
+    const resp = await this.#client.performRequest({
+      method: "GET",
+      path: `${this.#root}servicecidrs`,
+      expectJson: true,
+      querystring: operations.formatGetListOpts(opts),
+      abortSignal: opts.abortSignal,
+    });
+    return NetworkingV1alpha1.toServiceCIDRList(resp);
+  }
+
+  async watchServiceCIDRList(
+    opts: operations.WatchListOpts = {},
+  ): Promise<c.WatchEventStream<NetworkingV1alpha1.ServiceCIDR>> {
+    const resp = await this.#client.performRequest({
+      method: "GET",
+      path: `${this.#root}servicecidrs`,
+      expectJson: true,
+      expectStream: true,
+      querystring: operations.formatWatchListOpts(opts),
+      abortSignal: opts.abortSignal,
+    });
+    return resp.pipeThrough(new c.WatchEventTransformer(NetworkingV1alpha1.toServiceCIDR, MetaV1.toStatus));
+  }
+
+  async createServiceCIDR(
+    body: NetworkingV1alpha1.ServiceCIDR,
+    opts: operations.PutOpts = {},
+  ): Promise<NetworkingV1alpha1.ServiceCIDR> {
+    const resp = await this.#client.performRequest({
+      method: "POST",
+      path: `${this.#root}servicecidrs`,
+      expectJson: true,
+      querystring: operations.formatPutOpts(opts),
+      bodyJson: NetworkingV1alpha1.fromServiceCIDR(body),
+      abortSignal: opts.abortSignal,
+    });
+    return NetworkingV1alpha1.toServiceCIDR(resp);
+  }
+
+  async deleteServiceCIDRList(
+    opts: operations.DeleteListOpts = {},
+  ): Promise<NetworkingV1alpha1.ServiceCIDRList> {
+    const resp = await this.#client.performRequest({
+      method: "DELETE",
+      path: `${this.#root}servicecidrs`,
+      expectJson: true,
+      querystring: operations.formatDeleteListOpts(opts),
+      abortSignal: opts.abortSignal,
+    });
+    return NetworkingV1alpha1.toServiceCIDRList(resp);
+  }
+
+  async getServiceCIDR(
+    name: string,
+    opts: operations.NoOpts = {},
+  ): Promise<NetworkingV1alpha1.ServiceCIDR> {
+    const resp = await this.#client.performRequest({
+      method: "GET",
+      path: `${this.#root}servicecidrs/${name}`,
+      expectJson: true,
+      abortSignal: opts.abortSignal,
+    });
+    return NetworkingV1alpha1.toServiceCIDR(resp);
+  }
+
+  async deleteServiceCIDR(
+    name: string,
+    opts: operations.DeleteOpts = {},
+  ): Promise<NetworkingV1alpha1.ServiceCIDR | MetaV1.Status> {
+    const resp = await this.#client.performRequest({
+      method: "DELETE",
+      path: `${this.#root}servicecidrs/${name}`,
+      expectJson: true,
+      querystring: operations.formatDeleteOpts(opts),
+      abortSignal: opts.abortSignal,
+    });
+    if (c.isStatusKind(resp)) return MetaV1.toStatus(resp);
+    return NetworkingV1alpha1.toServiceCIDR(resp);
+  }
+
+  async replaceServiceCIDR(
+    name: string,
+    body: NetworkingV1alpha1.ServiceCIDR,
+    opts: operations.PutOpts = {},
+  ): Promise<NetworkingV1alpha1.ServiceCIDR> {
+    const resp = await this.#client.performRequest({
+      method: "PUT",
+      path: `${this.#root}servicecidrs/${name}`,
+      expectJson: true,
+      querystring: operations.formatPutOpts(opts),
+      bodyJson: NetworkingV1alpha1.fromServiceCIDR(body),
+      abortSignal: opts.abortSignal,
+    });
+    return NetworkingV1alpha1.toServiceCIDR(resp);
+  }
+
+  async patchServiceCIDR(
+    name: string,
+    type: c.PatchType,
+    body: NetworkingV1alpha1.ServiceCIDR | c.JsonPatch,
+    opts: operations.PatchOpts = {},
+  ): Promise<NetworkingV1alpha1.ServiceCIDR> {
+    const resp = await this.#client.performRequest({
+      method: "PATCH",
+      path: `${this.#root}servicecidrs/${name}`,
+      expectJson: true,
+      querystring: operations.formatPatchOpts(opts),
+      contentType: c.getPatchContentType(type),
+      bodyJson: Array.isArray(body) ? body : NetworkingV1alpha1.fromServiceCIDR(body),
+      abortSignal: opts.abortSignal,
+    });
+    return NetworkingV1alpha1.toServiceCIDR(resp);
+  }
+
+  async getServiceCIDRStatus(
+    name: string,
+    opts: operations.NoOpts = {},
+  ): Promise<NetworkingV1alpha1.ServiceCIDR> {
+    const resp = await this.#client.performRequest({
+      method: "GET",
+      path: `${this.#root}servicecidrs/${name}/status`,
+      expectJson: true,
+      abortSignal: opts.abortSignal,
+    });
+    return NetworkingV1alpha1.toServiceCIDR(resp);
+  }
+
+  async replaceServiceCIDRStatus(
+    name: string,
+    body: NetworkingV1alpha1.ServiceCIDR,
+    opts: operations.PutOpts = {},
+  ): Promise<NetworkingV1alpha1.ServiceCIDR> {
+    const resp = await this.#client.performRequest({
+      method: "PUT",
+      path: `${this.#root}servicecidrs/${name}/status`,
+      expectJson: true,
+      querystring: operations.formatPutOpts(opts),
+      bodyJson: NetworkingV1alpha1.fromServiceCIDR(body),
+      abortSignal: opts.abortSignal,
+    });
+    return NetworkingV1alpha1.toServiceCIDR(resp);
+  }
+
+  async patchServiceCIDRStatus(
+    name: string,
+    type: c.PatchType,
+    body: NetworkingV1alpha1.ServiceCIDR | c.JsonPatch,
+    opts: operations.PatchOpts = {},
+  ): Promise<NetworkingV1alpha1.ServiceCIDR> {
+    const resp = await this.#client.performRequest({
+      method: "PATCH",
+      path: `${this.#root}servicecidrs/${name}/status`,
+      expectJson: true,
+      querystring: operations.formatPatchOpts(opts),
+      contentType: c.getPatchContentType(type),
+      bodyJson: Array.isArray(body) ? body : NetworkingV1alpha1.fromServiceCIDR(body),
+      abortSignal: opts.abortSignal,
+    });
+    return NetworkingV1alpha1.toServiceCIDR(resp);
   }
 
 }

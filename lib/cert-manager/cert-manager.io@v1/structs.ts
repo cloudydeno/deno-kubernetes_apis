@@ -8,14 +8,22 @@ type ListOf<T> = {
   items: Array<T>;
 };
 
-/** A CertificateRequest is used to request a signed certificate from one of the configured issuers. 
- All fields within the CertificateRequest's `spec` are immutable after creation. A CertificateRequest will either succeed or fail, as denoted by its `status.state` field. 
- A CertificateRequest is a one-shot resource, meaning it represents a single point in time request for a certificate and cannot be re-used. */
+/** A CertificateRequest is used to request a signed certificate from one of the
+configured issuers.
+
+
+All fields within the CertificateRequest's `spec` are immutable after creation.
+A CertificateRequest will either succeed or fail, as denoted by its `Ready` status
+condition and its `status.failureTime` field.
+
+
+A CertificateRequest is a one-shot resource, meaning it represents a single
+point in time request for a certificate and cannot be re-used. */
 export interface CertificateRequest {
   apiVersion?: "cert-manager.io/v1";
   kind?: "CertificateRequest";
   metadata?: MetaV1.ObjectMeta | null;
-  spec: {
+  spec?: {
     duration?: string | null;
     extra?: Record<string,Array<string>> | null;
     groups?: Array<string> | null;
@@ -29,7 +37,7 @@ export interface CertificateRequest {
     uid?: string | null;
     usages?: Array<"signing" | "digital signature" | "content commitment" | "key encipherment" | "key agreement" | "data encipherment" | "cert sign" | "crl sign" | "encipher only" | "decipher only" | "any" | "server auth" | "client auth" | "code signing" | "email protection" | "s/mime" | "ipsec end system" | "ipsec tunnel" | "ipsec user" | "timestamping" | "ocsp signing" | "microsoft sgc" | "netscape sgc" | c.UnexpectedEnumValue> | null;
     username?: string | null;
-  };
+  } | null;
   status?: {
     ca?: string | null;
     certificate?: string | null;
@@ -48,7 +56,7 @@ export function toCertificateRequest(input: c.JSONValue): CertificateRequest & c
   return {
     ...c.assertOrAddApiVersionAndKind(obj, "cert-manager.io/v1", "CertificateRequest"),
     metadata: c.readOpt(obj["metadata"], MetaV1.toObjectMeta),
-    spec: toCertificateRequest_spec(obj["spec"]),
+    spec: c.readOpt(obj["spec"], toCertificateRequest_spec),
     status: c.readOpt(obj["status"], toCertificateRequest_status),
   }}
 export function fromCertificateRequest(input: CertificateRequest): c.JSONValue {
@@ -131,13 +139,16 @@ export function fromSecretRef(input: SecretRef): c.JSONValue {
     ...input,
   }}
 
-/** A Certificate resource should be created to ensure an up to date and signed x509 certificate is stored in the Kubernetes Secret resource named in `spec.secretName`. 
- The stored certificate will be renewed before it expires (as configured by `spec.renewBefore`). */
+/** A Certificate resource should be created to ensure an up to date and signed
+X.509 certificate is stored in the Kubernetes Secret resource named in `spec.secretName`.
+
+
+The stored certificate will be renewed before it expires (as configured by `spec.renewBefore`). */
 export interface Certificate {
   apiVersion?: "cert-manager.io/v1";
   kind?: "Certificate";
   metadata?: MetaV1.ObjectMeta | null;
-  spec: {
+  spec?: {
     additionalOutputFormats?: Array<{
       type: "DER" | "CombinedPEM" | c.UnexpectedEnumValue;
     }> | null;
@@ -155,15 +166,36 @@ export interface Certificate {
     };
     keystores?: {
       jks?: {
+        alias?: string | null;
         create: boolean;
         passwordSecretRef: SecretRef;
       } | null;
       pkcs12?: {
         create: boolean;
         passwordSecretRef: SecretRef;
+        profile?: "LegacyRC2" | "LegacyDES" | "Modern2023" | c.UnexpectedEnumValue | null;
       } | null;
     } | null;
     literalSubject?: string | null;
+    nameConstraints?: {
+      critical?: boolean | null;
+      excluded?: {
+        dnsDomains?: Array<string> | null;
+        emailAddresses?: Array<string> | null;
+        ipRanges?: Array<string> | null;
+        uriDomains?: Array<string> | null;
+      } | null;
+      permitted?: {
+        dnsDomains?: Array<string> | null;
+        emailAddresses?: Array<string> | null;
+        ipRanges?: Array<string> | null;
+        uriDomains?: Array<string> | null;
+      } | null;
+    } | null;
+    otherNames?: Array<{
+      oid?: string | null;
+      utf8Value?: string | null;
+    }> | null;
     privateKey?: {
       algorithm?: "RSA" | "ECDSA" | "Ed25519" | c.UnexpectedEnumValue | null;
       encoding?: "PKCS1" | "PKCS8" | c.UnexpectedEnumValue | null;
@@ -189,7 +221,7 @@ export interface Certificate {
     } | null;
     uris?: Array<string> | null;
     usages?: Array<"signing" | "digital signature" | "content commitment" | "key encipherment" | "key agreement" | "data encipherment" | "cert sign" | "crl sign" | "encipher only" | "decipher only" | "any" | "server auth" | "client auth" | "code signing" | "email protection" | "s/mime" | "ipsec end system" | "ipsec tunnel" | "ipsec user" | "timestamping" | "ocsp signing" | "microsoft sgc" | "netscape sgc" | c.UnexpectedEnumValue> | null;
-  };
+  } | null;
   status?: {
     conditions?: Array<{
       lastTransitionTime?: c.Time | null;
@@ -213,7 +245,7 @@ export function toCertificate(input: c.JSONValue): Certificate & c.ApiKind {
   return {
     ...c.assertOrAddApiVersionAndKind(obj, "cert-manager.io/v1", "Certificate"),
     metadata: c.readOpt(obj["metadata"], MetaV1.toObjectMeta),
-    spec: toCertificate_spec(obj["spec"]),
+    spec: c.readOpt(obj["spec"], toCertificate_spec),
     status: c.readOpt(obj["status"], toCertificate_status),
   }}
 export function fromCertificate(input: Certificate): c.JSONValue {
@@ -261,6 +293,8 @@ function toCertificate_spec(input: c.JSONValue) {
     issuerRef: toCertificate_spec_issuerRef(obj["issuerRef"]),
     keystores: c.readOpt(obj["keystores"], toCertificate_spec_keystores),
     literalSubject: c.readOpt(obj["literalSubject"], c.checkStr),
+    nameConstraints: c.readOpt(obj["nameConstraints"], toCertificate_spec_nameConstraints),
+    otherNames: c.readOpt(obj["otherNames"], x => c.readList(x, toCertificate_spec_otherNames)),
     privateKey: c.readOpt(obj["privateKey"], toCertificate_spec_privateKey),
     renewBefore: c.readOpt(obj["renewBefore"], c.checkStr),
     revisionHistoryLimit: c.readOpt(obj["revisionHistoryLimit"], c.checkNum),
@@ -299,6 +333,19 @@ function toCertificate_spec_keystores(input: c.JSONValue) {
   return {
     jks: c.readOpt(obj["jks"], toCertificate_spec_keystores_jks),
     pkcs12: c.readOpt(obj["pkcs12"], toCertificate_spec_keystores_pkcs12),
+  }}
+function toCertificate_spec_nameConstraints(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    critical: c.readOpt(obj["critical"], c.checkBool),
+    excluded: c.readOpt(obj["excluded"], toCertificate_spec_nameConstraints_excluded),
+    permitted: c.readOpt(obj["permitted"], toCertificate_spec_nameConstraints_permitted),
+  }}
+function toCertificate_spec_otherNames(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    oid: c.readOpt(obj["oid"], c.checkStr),
+    utf8Value: c.readOpt(obj["utf8Value"], c.checkStr),
   }}
 function toCertificate_spec_privateKey(input: c.JSONValue) {
   const obj = c.checkObj(input);
@@ -339,6 +386,7 @@ function toCertificate_status_conditions(input: c.JSONValue) {
 function toCertificate_spec_keystores_jks(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
+    alias: c.readOpt(obj["alias"], c.checkStr),
     create: c.checkBool(obj["create"]),
     passwordSecretRef: toSecretRef(obj["passwordSecretRef"]),
   }}
@@ -347,6 +395,23 @@ function toCertificate_spec_keystores_pkcs12(input: c.JSONValue) {
   return {
     create: c.checkBool(obj["create"]),
     passwordSecretRef: toSecretRef(obj["passwordSecretRef"]),
+    profile: c.readOpt(obj["profile"], (x => c.readEnum<"LegacyRC2" | "LegacyDES" | "Modern2023" | c.UnexpectedEnumValue>(x))),
+  }}
+function toCertificate_spec_nameConstraints_excluded(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    dnsDomains: c.readOpt(obj["dnsDomains"], x => c.readList(x, c.checkStr)),
+    emailAddresses: c.readOpt(obj["emailAddresses"], x => c.readList(x, c.checkStr)),
+    ipRanges: c.readOpt(obj["ipRanges"], x => c.readList(x, c.checkStr)),
+    uriDomains: c.readOpt(obj["uriDomains"], x => c.readList(x, c.checkStr)),
+  }}
+function toCertificate_spec_nameConstraints_permitted(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    dnsDomains: c.readOpt(obj["dnsDomains"], x => c.readList(x, c.checkStr)),
+    emailAddresses: c.readOpt(obj["emailAddresses"], x => c.readList(x, c.checkStr)),
+    ipRanges: c.readOpt(obj["ipRanges"], x => c.readList(x, c.checkStr)),
+    uriDomains: c.readOpt(obj["uriDomains"], x => c.readList(x, c.checkStr)),
   }}
 
 export interface CertificateList extends ListOf<Certificate> {
@@ -381,6 +446,7 @@ export interface IssuerSpec {
   } | null;
   ca?: {
     crlDistributionPoints?: Array<string> | null;
+    issuingCertificateURLs?: Array<string> | null;
     ocspServers?: Array<string> | null;
     secretName: string;
   } | null;
@@ -399,6 +465,7 @@ export interface IssuerSpec {
         role: string;
         secretRef?: SecretRef | null;
         serviceAccountRef?: {
+          audiences?: Array<string> | null;
           name: string;
         } | null;
       } | null;
@@ -406,6 +473,8 @@ export interface IssuerSpec {
     };
     caBundle?: string | null;
     caBundleSecretRef?: SecretRef | null;
+    clientCertSecretRef?: SecretRef | null;
+    clientKeySecretRef?: SecretRef | null;
     namespace?: string | null;
     path: string;
     server: string;
@@ -461,6 +530,8 @@ export function fromIssuerSpec(input: IssuerSpec): c.JSONValue {
         tokenSecretRef: input.vault.auth.tokenSecretRef != null ? fromSecretRef(input.vault.auth.tokenSecretRef) : undefined,
       } : undefined,
       caBundleSecretRef: input.vault.caBundleSecretRef != null ? fromSecretRef(input.vault.caBundleSecretRef) : undefined,
+      clientCertSecretRef: input.vault.clientCertSecretRef != null ? fromSecretRef(input.vault.clientCertSecretRef) : undefined,
+      clientKeySecretRef: input.vault.clientKeySecretRef != null ? fromSecretRef(input.vault.clientKeySecretRef) : undefined,
     } : undefined,
     venafi: input.venafi != null ? {
       ...input.venafi,
@@ -488,6 +559,7 @@ function toIssuerSpec_ca(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     crlDistributionPoints: c.readOpt(obj["crlDistributionPoints"], x => c.readList(x, c.checkStr)),
+    issuingCertificateURLs: c.readOpt(obj["issuingCertificateURLs"], x => c.readList(x, c.checkStr)),
     ocspServers: c.readOpt(obj["ocspServers"], x => c.readList(x, c.checkStr)),
     secretName: c.checkStr(obj["secretName"]),
   }}
@@ -502,6 +574,8 @@ function toIssuerSpec_vault(input: c.JSONValue) {
     auth: toIssuerSpec_vault_auth(obj["auth"]),
     caBundle: c.readOpt(obj["caBundle"], c.checkStr),
     caBundleSecretRef: c.readOpt(obj["caBundleSecretRef"], toSecretRef),
+    clientCertSecretRef: c.readOpt(obj["clientCertSecretRef"], toSecretRef),
+    clientKeySecretRef: c.readOpt(obj["clientKeySecretRef"], toSecretRef),
     namespace: c.readOpt(obj["namespace"], c.checkStr),
     path: c.checkStr(obj["path"]),
     server: c.checkStr(obj["server"]),
@@ -563,10 +637,13 @@ function toIssuerSpec_venafi_tpp_credentialsRef(input: c.JSONValue) {
 function toIssuerSpec_vault_auth_kubernetes_serviceAccountRef(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
+    audiences: c.readOpt(obj["audiences"], x => c.readList(x, c.checkStr)),
     name: c.checkStr(obj["name"]),
   }}
 
-/** An ACMEChallengeSolver describes how to solve ACME challenges for the issuer it is part of. A selector may be provided to use different solving strategies for different DNS names. Only one of HTTP01 or DNS01 must be provided. */
+/** An ACMEChallengeSolver describes how to solve ACME challenges for the issuer it is part of.
+A selector may be provided to use different solving strategies for different DNS names.
+Only one of HTTP01 or DNS01 must be provided. */
 export interface SolverSpec {
   dns01?: {
     acmeDNS?: {
@@ -615,6 +692,14 @@ export interface SolverSpec {
     route53?: {
       accessKeyID?: string | null;
       accessKeyIDSecretRef?: SecretRef | null;
+      auth?: {
+        kubernetes: {
+          serviceAccountRef: {
+            audiences?: Array<string> | null;
+            name: string;
+          };
+        };
+      } | null;
       hostedZoneID?: string | null;
       region: string;
       role?: string | null;
@@ -828,6 +913,7 @@ function toSolverSpec_dns01_route53(input: c.JSONValue) {
   return {
     accessKeyID: c.readOpt(obj["accessKeyID"], c.checkStr),
     accessKeyIDSecretRef: c.readOpt(obj["accessKeyIDSecretRef"], toSecretRef),
+    auth: c.readOpt(obj["auth"], toSolverSpec_dns01_route53_auth),
     hostedZoneID: c.readOpt(obj["hostedZoneID"], c.checkStr),
     region: c.checkStr(obj["region"]),
     role: c.readOpt(obj["role"], c.checkStr),
@@ -863,6 +949,11 @@ function toSolverSpec_dns01_azureDNS_managedIdentity(input: c.JSONValue) {
     clientID: c.readOpt(obj["clientID"], c.checkStr),
     resourceID: c.readOpt(obj["resourceID"], c.checkStr),
   }}
+function toSolverSpec_dns01_route53_auth(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    kubernetes: toSolverSpec_dns01_route53_auth_kubernetes(obj["kubernetes"]),
+  }}
 function toSolverSpec_http01_gatewayHTTPRoute_parentRefs(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
@@ -883,6 +974,11 @@ function toSolverSpec_http01_ingress_podTemplate(input: c.JSONValue) {
   return {
     metadata: c.readOpt(obj["metadata"], toSolverSpec_http01_ingress_podTemplate_metadata),
     spec: c.readOpt(obj["spec"], toSolverSpec_http01_ingress_podTemplate_spec),
+  }}
+function toSolverSpec_dns01_route53_auth_kubernetes(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    serviceAccountRef: toSolverSpec_dns01_route53_auth_kubernetes_serviceAccountRef(obj["serviceAccountRef"]),
   }}
 function toSolverSpec_http01_ingress_ingressTemplate_metadata(input: c.JSONValue) {
   const obj = c.checkObj(input);
@@ -905,6 +1001,12 @@ function toSolverSpec_http01_ingress_podTemplate_spec(input: c.JSONValue) {
     priorityClassName: c.readOpt(obj["priorityClassName"], c.checkStr),
     serviceAccountName: c.readOpt(obj["serviceAccountName"], c.checkStr),
     tolerations: c.readOpt(obj["tolerations"], x => c.readList(x, toSolverSpec_http01_ingress_podTemplate_spec_tolerations)),
+  }}
+function toSolverSpec_dns01_route53_auth_kubernetes_serviceAccountRef(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    audiences: c.readOpt(obj["audiences"], x => c.readList(x, c.checkStr)),
+    name: c.checkStr(obj["name"]),
   }}
 function toSolverSpec_http01_ingress_podTemplate_spec_imagePullSecrets(input: c.JSONValue) {
   const obj = c.checkObj(input);
@@ -969,7 +1071,11 @@ function toIssuerStatus_conditions(input: c.JSONValue) {
     type: c.checkStr(obj["type"]),
   }}
 
-/** A ClusterIssuer represents a certificate issuing authority which can be referenced as part of `issuerRef` fields. It is similar to an Issuer, however it is cluster-scoped and therefore can be referenced by resources that exist in *any* namespace, not just the same namespace as the referent. */
+/** A ClusterIssuer represents a certificate issuing authority which can be
+referenced as part of `issuerRef` fields.
+It is similar to an Issuer, however it is cluster-scoped and therefore can
+be referenced by resources that exist in *any* namespace, not just the same
+namespace as the referent. */
 export interface ClusterIssuer {
   apiVersion?: "cert-manager.io/v1";
   kind?: "ClusterIssuer";
@@ -1006,7 +1112,10 @@ export function toClusterIssuerList(input: c.JSONValue): ClusterIssuerList & c.A
     items: c.readList(obj.items, toClusterIssuer),
   }}
 
-/** An Issuer represents a certificate issuing authority which can be referenced as part of `issuerRef` fields. It is scoped to a single namespace and can therefore only be referenced by resources within the same namespace. */
+/** An Issuer represents a certificate issuing authority which can be
+referenced as part of `issuerRef` fields.
+It is scoped to a single namespace and can therefore only be referenced by
+resources within the same namespace. */
 export interface Issuer {
   apiVersion?: "cert-manager.io/v1";
   kind?: "Issuer";

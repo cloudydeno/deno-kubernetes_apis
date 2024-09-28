@@ -319,4 +319,51 @@ export class AutoscalingV1NamespacedApi {
     return AutoscalingV1.toVerticalPodAutoscaler(resp);
   }
 
+  async getVerticalPodAutoscalerStatus(
+    name: string,
+    opts: operations.NoOpts = {},
+  ): Promise<AutoscalingV1.VerticalPodAutoscaler> {
+    const resp = await this.#client.performRequest({
+      method: "GET",
+      path: `${this.#root}verticalpodautoscalers/${name}/status`,
+      expectJson: true,
+      abortSignal: opts.abortSignal,
+    });
+    return AutoscalingV1.toVerticalPodAutoscaler(resp);
+  }
+
+  async replaceVerticalPodAutoscalerStatus(
+    name: string,
+    body: AutoscalingV1.VerticalPodAutoscaler,
+    opts: operations.PutOpts = {},
+  ): Promise<AutoscalingV1.VerticalPodAutoscaler> {
+    const resp = await this.#client.performRequest({
+      method: "PUT",
+      path: `${this.#root}verticalpodautoscalers/${name}/status`,
+      expectJson: true,
+      querystring: operations.formatPutOpts(opts),
+      bodyJson: AutoscalingV1.fromVerticalPodAutoscaler(body),
+      abortSignal: opts.abortSignal,
+    });
+    return AutoscalingV1.toVerticalPodAutoscaler(resp);
+  }
+
+  async patchVerticalPodAutoscalerStatus(
+    name: string,
+    type: c.PatchType,
+    body: AutoscalingV1.VerticalPodAutoscaler | c.JsonPatch,
+    opts: operations.PatchOpts = {},
+  ): Promise<AutoscalingV1.VerticalPodAutoscaler> {
+    const resp = await this.#client.performRequest({
+      method: "PATCH",
+      path: `${this.#root}verticalpodautoscalers/${name}/status`,
+      expectJson: true,
+      querystring: operations.formatPatchOpts(opts),
+      contentType: c.getPatchContentType(type),
+      bodyJson: Array.isArray(body) ? body : AutoscalingV1.fromVerticalPodAutoscaler(body),
+      abortSignal: opts.abortSignal,
+    });
+    return AutoscalingV1.toVerticalPodAutoscaler(resp);
+  }
+
 }

@@ -7,7 +7,8 @@ type ListOf<T> = {
   items: Array<T>;
 };
 
-/** Source overrides the source definition set in the application. This is typically set in a Rollback operation and is nil during a Sync operation */
+/** Source overrides the source definition set in the application.
+This is typically set in a Rollback operation and is nil during a Sync operation */
 export interface ApplicationSource {
   chart?: string | null;
   directory?: {
@@ -51,12 +52,28 @@ export interface ApplicationSource {
     commonAnnotations?: Record<string,string> | null;
     commonAnnotationsEnvsubst?: boolean | null;
     commonLabels?: Record<string,string> | null;
+    components?: Array<string> | null;
     forceCommonAnnotations?: boolean | null;
     forceCommonLabels?: boolean | null;
     images?: Array<string> | null;
+    labelWithoutSelector?: boolean | null;
     namePrefix?: string | null;
     nameSuffix?: string | null;
     namespace?: string | null;
+    patches?: Array<{
+      options?: Record<string,boolean> | null;
+      patch?: string | null;
+      path?: string | null;
+      target?: {
+        annotationSelector?: string | null;
+        group?: string | null;
+        kind?: string | null;
+        labelSelector?: string | null;
+        name?: string | null;
+        namespace?: string | null;
+        version?: string | null;
+      } | null;
+    }> | null;
     replicas?: Array<{
       count: c.IntOrString;
       name: string;
@@ -126,12 +143,15 @@ function toApplicationSource_kustomize(input: c.JSONValue) {
     commonAnnotations: c.readOpt(obj["commonAnnotations"], x => c.readMap(x, c.checkStr)),
     commonAnnotationsEnvsubst: c.readOpt(obj["commonAnnotationsEnvsubst"], c.checkBool),
     commonLabels: c.readOpt(obj["commonLabels"], x => c.readMap(x, c.checkStr)),
+    components: c.readOpt(obj["components"], x => c.readList(x, c.checkStr)),
     forceCommonAnnotations: c.readOpt(obj["forceCommonAnnotations"], c.checkBool),
     forceCommonLabels: c.readOpt(obj["forceCommonLabels"], c.checkBool),
     images: c.readOpt(obj["images"], x => c.readList(x, c.checkStr)),
+    labelWithoutSelector: c.readOpt(obj["labelWithoutSelector"], c.checkBool),
     namePrefix: c.readOpt(obj["namePrefix"], c.checkStr),
     nameSuffix: c.readOpt(obj["nameSuffix"], c.checkStr),
     namespace: c.readOpt(obj["namespace"], c.checkStr),
+    patches: c.readOpt(obj["patches"], x => c.readList(x, toApplicationSource_kustomize_patches)),
     replicas: c.readOpt(obj["replicas"], x => c.readList(x, toApplicationSource_kustomize_replicas)),
     version: c.readOpt(obj["version"], c.checkStr),
   }}
@@ -161,6 +181,14 @@ function toApplicationSource_helm_parameters(input: c.JSONValue) {
     forceString: c.readOpt(obj["forceString"], c.checkBool),
     name: c.readOpt(obj["name"], c.checkStr),
     value: c.readOpt(obj["value"], c.checkStr),
+  }}
+function toApplicationSource_kustomize_patches(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    options: c.readOpt(obj["options"], x => c.readMap(x, c.checkBool)),
+    patch: c.readOpt(obj["patch"], c.checkStr),
+    path: c.readOpt(obj["path"], c.checkStr),
+    target: c.readOpt(obj["target"], toApplicationSource_kustomize_patches_target),
   }}
 function toApplicationSource_kustomize_replicas(input: c.JSONValue) {
   const obj = c.checkObj(input);
@@ -195,6 +223,17 @@ function toApplicationSource_directory_jsonnet_tlas(input: c.JSONValue) {
     code: c.readOpt(obj["code"], c.checkBool),
     name: c.checkStr(obj["name"]),
     value: c.checkStr(obj["value"]),
+  }}
+function toApplicationSource_kustomize_patches_target(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    annotationSelector: c.readOpt(obj["annotationSelector"], c.checkStr),
+    group: c.readOpt(obj["group"], c.checkStr),
+    kind: c.readOpt(obj["kind"], c.checkStr),
+    labelSelector: c.readOpt(obj["labelSelector"], c.checkStr),
+    name: c.readOpt(obj["name"], c.checkStr),
+    namespace: c.readOpt(obj["namespace"], c.checkStr),
+    version: c.readOpt(obj["version"], c.checkStr),
   }}
 
 /** Application is a definition of Application resource. */
@@ -303,6 +342,10 @@ export interface Application {
       deployStartedAt?: c.Time | null;
       deployedAt: c.Time;
       id: number;
+      initiatedBy?: {
+        automated?: boolean | null;
+        username?: string | null;
+      } | null;
       revision?: string | null;
       revisions?: Array<string> | null;
       source?: ApplicationSource | null;
@@ -618,6 +661,7 @@ function toApplication_status_history(input: c.JSONValue) {
     deployStartedAt: c.readOpt(obj["deployStartedAt"], c.toTime),
     deployedAt: c.toTime(obj["deployedAt"]),
     id: c.checkNum(obj["id"]),
+    initiatedBy: c.readOpt(obj["initiatedBy"], toApplication_status_history_initiatedBy),
     revision: c.readOpt(obj["revision"], c.checkStr),
     revisions: c.readOpt(obj["revisions"], x => c.readList(x, c.checkStr)),
     source: c.readOpt(obj["source"], toApplicationSource),
@@ -701,6 +745,12 @@ function toApplication_spec_syncPolicy_retry(input: c.JSONValue) {
   return {
     backoff: c.readOpt(obj["backoff"], toApplication_spec_syncPolicy_retry_backoff),
     limit: c.readOpt(obj["limit"], c.checkNum),
+  }}
+function toApplication_status_history_initiatedBy(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    automated: c.readOpt(obj["automated"], c.checkBool),
+    username: c.readOpt(obj["username"], c.checkStr),
   }}
 function toApplication_status_operationState_operation(input: c.JSONValue) {
   const obj = c.checkObj(input);
@@ -895,7 +945,7 @@ export interface ApplicationSetGenerator {
     values?: Record<string,string> | null;
   } | null;
   list?: {
-    elements: Array<c.JSONValue>;
+    elements?: Array<c.JSONValue> | null;
     elementsYaml?: string | null;
     template?: ApplicationTemplate | null;
   } | null;
@@ -1073,12 +1123,14 @@ export interface ApplicationSetGenerator {
       allBranches?: boolean | null;
       api?: string | null;
       group: string;
+      includeSharedProjects?: boolean | null;
       includeSubgroups?: boolean | null;
       insecure?: boolean | null;
       tokenRef?: {
         key: string;
         secretName: string;
       } | null;
+      topic?: string | null;
     } | null;
     requeueAfterSeconds?: number | null;
     template?: ApplicationTemplate | null;
@@ -1177,7 +1229,7 @@ function toApplicationSetGenerator_git(input: c.JSONValue) {
 function toApplicationSetGenerator_list(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
-    elements: c.readList(obj["elements"], c.identity),
+    elements: c.readOpt(obj["elements"], x => c.readList(x, c.identity)),
     elementsYaml: c.readOpt(obj["elementsYaml"], c.checkStr),
     template: c.readOpt(obj["template"], toApplicationTemplate),
   }}
@@ -1381,9 +1433,11 @@ function toApplicationSetGenerator_scmProvider_gitlab(input: c.JSONValue) {
     allBranches: c.readOpt(obj["allBranches"], c.checkBool),
     api: c.readOpt(obj["api"], c.checkStr),
     group: c.checkStr(obj["group"]),
+    includeSharedProjects: c.readOpt(obj["includeSharedProjects"], c.checkBool),
     includeSubgroups: c.readOpt(obj["includeSubgroups"], c.checkBool),
     insecure: c.readOpt(obj["insecure"], c.checkBool),
     tokenRef: c.readOpt(obj["tokenRef"], toApplicationSetGenerator_scmProvider_gitlab_tokenRef),
+    topic: c.readOpt(obj["topic"], c.checkStr),
   }}
 function toApplicationSetGenerator_pullRequest_azuredevops_tokenRef(input: c.JSONValue) {
   const obj = c.checkObj(input);
@@ -1650,8 +1704,14 @@ export interface ApplicationSet {
     generators: Array<ApplicationSetGenerator>;
     goTemplate?: boolean | null;
     goTemplateOptions?: Array<string> | null;
+    ignoreApplicationDifferences?: Array<{
+      jqPathExpressions?: Array<string> | null;
+      jsonPointers?: Array<string> | null;
+      name?: string | null;
+    }> | null;
     preservedFields?: {
       annotations?: Array<string> | null;
+      labels?: Array<string> | null;
     } | null;
     strategy?: {
       rollingSync?: {
@@ -1671,6 +1731,7 @@ export interface ApplicationSet {
       preserveResourcesOnDeletion?: boolean | null;
     } | null;
     template: ApplicationTemplate;
+    templatePatch?: string | null;
   };
   status?: {
     applicationStatus?: Array<{
@@ -1679,6 +1740,7 @@ export interface ApplicationSet {
       message: string;
       status: string;
       step: string;
+      targetRevisions: Array<string>;
     }> | null;
     conditions?: Array<{
       lastTransitionTime?: c.Time | null;
@@ -1686,6 +1748,21 @@ export interface ApplicationSet {
       reason: string;
       status: string;
       type: string;
+    }> | null;
+    resources?: Array<{
+      group?: string | null;
+      health?: {
+        message?: string | null;
+        status?: string | null;
+      } | null;
+      hook?: boolean | null;
+      kind?: string | null;
+      name?: string | null;
+      namespace?: string | null;
+      requiresPruning?: boolean | null;
+      status?: string | null;
+      syncWave?: number | null;
+      version?: string | null;
     }> | null;
   } | null;
 }
@@ -1726,21 +1803,32 @@ function toApplicationSet_spec(input: c.JSONValue) {
     generators: c.readList(obj["generators"], toApplicationSetGenerator),
     goTemplate: c.readOpt(obj["goTemplate"], c.checkBool),
     goTemplateOptions: c.readOpt(obj["goTemplateOptions"], x => c.readList(x, c.checkStr)),
+    ignoreApplicationDifferences: c.readOpt(obj["ignoreApplicationDifferences"], x => c.readList(x, toApplicationSet_spec_ignoreApplicationDifferences)),
     preservedFields: c.readOpt(obj["preservedFields"], toApplicationSet_spec_preservedFields),
     strategy: c.readOpt(obj["strategy"], toApplicationSet_spec_strategy),
     syncPolicy: c.readOpt(obj["syncPolicy"], toApplicationSet_spec_syncPolicy),
     template: toApplicationTemplate(obj["template"]),
+    templatePatch: c.readOpt(obj["templatePatch"], c.checkStr),
   }}
 function toApplicationSet_status(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     applicationStatus: c.readOpt(obj["applicationStatus"], x => c.readList(x, toApplicationSet_status_applicationStatus)),
     conditions: c.readOpt(obj["conditions"], x => c.readList(x, toApplicationSet_status_conditions)),
+    resources: c.readOpt(obj["resources"], x => c.readList(x, toApplicationSet_status_resources)),
+  }}
+function toApplicationSet_spec_ignoreApplicationDifferences(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    jqPathExpressions: c.readOpt(obj["jqPathExpressions"], x => c.readList(x, c.checkStr)),
+    jsonPointers: c.readOpt(obj["jsonPointers"], x => c.readList(x, c.checkStr)),
+    name: c.readOpt(obj["name"], c.checkStr),
   }}
 function toApplicationSet_spec_preservedFields(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     annotations: c.readOpt(obj["annotations"], x => c.readList(x, c.checkStr)),
+    labels: c.readOpt(obj["labels"], x => c.readList(x, c.checkStr)),
   }}
 function toApplicationSet_spec_strategy(input: c.JSONValue) {
   const obj = c.checkObj(input);
@@ -1762,6 +1850,7 @@ function toApplicationSet_status_applicationStatus(input: c.JSONValue) {
     message: c.checkStr(obj["message"]),
     status: c.checkStr(obj["status"]),
     step: c.checkStr(obj["step"]),
+    targetRevisions: c.readList(obj["targetRevisions"], c.checkStr),
   }}
 function toApplicationSet_status_conditions(input: c.JSONValue) {
   const obj = c.checkObj(input);
@@ -1772,10 +1861,30 @@ function toApplicationSet_status_conditions(input: c.JSONValue) {
     status: c.checkStr(obj["status"]),
     type: c.checkStr(obj["type"]),
   }}
+function toApplicationSet_status_resources(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    group: c.readOpt(obj["group"], c.checkStr),
+    health: c.readOpt(obj["health"], toApplicationSet_status_resources_health),
+    hook: c.readOpt(obj["hook"], c.checkBool),
+    kind: c.readOpt(obj["kind"], c.checkStr),
+    name: c.readOpt(obj["name"], c.checkStr),
+    namespace: c.readOpt(obj["namespace"], c.checkStr),
+    requiresPruning: c.readOpt(obj["requiresPruning"], c.checkBool),
+    status: c.readOpt(obj["status"], c.checkStr),
+    syncWave: c.readOpt(obj["syncWave"], c.checkNum),
+    version: c.readOpt(obj["version"], c.checkStr),
+  }}
 function toApplicationSet_spec_strategy_rollingSync(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     steps: c.readOpt(obj["steps"], x => c.readList(x, toApplicationSet_spec_strategy_rollingSync_steps)),
+  }}
+function toApplicationSet_status_resources_health(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    message: c.readOpt(obj["message"], c.checkStr),
+    status: c.readOpt(obj["status"], c.checkStr),
   }}
 function toApplicationSet_spec_strategy_rollingSync_steps(input: c.JSONValue) {
   const obj = c.checkObj(input);
@@ -1803,7 +1912,12 @@ export function toApplicationSetList(input: c.JSONValue): ApplicationSetList & c
     items: c.readList(obj.items, toApplicationSet),
   }}
 
-/** AppProject provides a logical grouping of applications, providing controls for: * where the apps may deploy to (cluster whitelist) * what may be deployed (repository whitelist, resource whitelist/blacklist) * who can access these applications (roles, OIDC group claims bindings) * and what they can do (RBAC policies) * automation access to these roles (JWT tokens) */
+/** AppProject provides a logical grouping of applications, providing controls for:
+* where the apps may deploy to (cluster whitelist)
+* what may be deployed (repository whitelist, resource whitelist/blacklist)
+* who can access these applications (roles, OIDC group claims bindings)
+* and what they can do (RBAC policies)
+* automation access to these roles (JWT tokens) */
 export interface AppProject {
   apiVersion?: "argoproj.io/v1alpha1";
   kind?: "AppProject";
