@@ -32,6 +32,13 @@ see `/x/kubernetes_client` for more information.
 
 ## Changelog
 
+* `v0.5.2` on `2024-09-28`:
+  * Includes 'builtin' APIs generated from K8s `v1.30.4`.
+    * New kinds `ValidatingAdmissionPolicy`, `ServiceCIDR`, `ResourceSlice`
+    * Several API versions changed. You may need to update imports if you used one.
+    * Further API changes are detailed in Github Releases.
+  * `cert-manager`, `argo-cd`, `external-dns`, and `vpa` CRDs have been updated.
+
 * `v0.5.1` on `2024-09-18`:
   * Updating `/x/kubernetes_client` API contract to `v0.7.3`.
   * Add [JSR publication](https://jsr.io/@cloudydeno/kubernetes-apis) of the module.
