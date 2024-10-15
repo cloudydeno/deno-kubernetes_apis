@@ -8,7 +8,17 @@ export async function writeApiModule(surface: SurfaceMap, api: SurfaceApi, categ
 
   function postProcess(text: string) {
     if (apisModuleRoot) {
-      text = text.replaceAll(/from "..\/..\//g, `from "${apisModuleRoot}`);
+      text = text.replaceAll(/from "..\/..\/([^"]+)"/g, (_, path) => {
+        if (apisModuleRoot.startsWith('jsr:')) {
+          if (path.includes('@')) {
+            return `from "${apisModuleRoot}${path.split('/')[1].replace('@', '/')}"`;
+          } else {
+            return `from "${apisModuleRoot}${path}"`;
+          }
+        } else {
+          return `from "${apisModuleRoot}${path}"`;
+        }
+      });
     }
     return text;
   }
