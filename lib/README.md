@@ -32,6 +32,9 @@ see `/x/kubernetes_client` for more information.
 
 ## Changelog
 
+* `v0.5.3` on `2024-10-16`:
+  * Fix CRD codegen issues with particular definitions and when using JSR import paths.
+
 * `v0.5.2` on `2024-09-28`:
   * Includes 'builtin' APIs generated from K8s `v1.30.4`.
     * New kinds `ValidatingAdmissionPolicy`, `ServiceCIDR`, `ResourceSlice`

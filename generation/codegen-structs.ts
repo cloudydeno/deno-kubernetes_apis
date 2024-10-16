@@ -291,7 +291,7 @@ export function generateStructsTypescript(surface: SurfaceMap, apiS: SurfaceApi)
         chunks.push('{');
         for (const [field, inner] of shape.fields) {
           const isReq = shape.required.includes(field);
-          chunks.push(`  ${field}${isReq ? '' : '?'}: ${generateType(inner)}${isReq ? '' : ' | null'};`);
+          chunks.push(`  ${maybeQuote(field)}${isReq ? '' : '?'}: ${generateType(inner)}${isReq ? '' : ' | null'};`);
         }
         chunks.push('}');
         return chunks.join('\n').replace(/\n/g, '\n  ');
