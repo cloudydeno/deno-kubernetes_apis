@@ -181,6 +181,7 @@ export interface DeleteOptions {
   apiVersion?: string | null;
   dryRun?: Array<string> | null;
   gracePeriodSeconds?: number | null;
+  ignoreStoreReadErrorWithClusterBreakingPotential?: boolean | null;
   kind?: string | null;
   orphanDependents?: boolean | null;
   preconditions?: Preconditions | null;
@@ -192,6 +193,7 @@ export function toDeleteOptions(input: c.JSONValue): DeleteOptions {
     apiVersion: c.readOpt(obj["apiVersion"], c.checkStr),
     dryRun: c.readOpt(obj["dryRun"], x => c.readList(x, c.checkStr)),
     gracePeriodSeconds: c.readOpt(obj["gracePeriodSeconds"], c.checkNum),
+    ignoreStoreReadErrorWithClusterBreakingPotential: c.readOpt(obj["ignoreStoreReadErrorWithClusterBreakingPotential"], c.checkBool),
     kind: c.readOpt(obj["kind"], c.checkStr),
     orphanDependents: c.readOpt(obj["orphanDependents"], c.checkBool),
     preconditions: c.readOpt(obj["preconditions"], toPreconditions),
@@ -215,6 +217,24 @@ export function toPreconditions(input: c.JSONValue): Preconditions {
     uid: c.readOpt(obj["uid"], c.checkStr),
   }}
 export function fromPreconditions(input: Preconditions): c.JSONValue {
+  return {
+    ...input,
+  }}
+
+/** FieldSelectorRequirement is a selector that contains values, a key, and an operator that relates the key and values. */
+export interface FieldSelectorRequirement {
+  key: string;
+  operator: string;
+  values?: Array<string> | null;
+}
+export function toFieldSelectorRequirement(input: c.JSONValue): FieldSelectorRequirement {
+  const obj = c.checkObj(input);
+  return {
+    key: c.checkStr(obj["key"]),
+    operator: c.checkStr(obj["operator"]),
+    values: c.readOpt(obj["values"], x => c.readList(x, c.checkStr)),
+  }}
+export function fromFieldSelectorRequirement(input: FieldSelectorRequirement): c.JSONValue {
   return {
     ...input,
   }}

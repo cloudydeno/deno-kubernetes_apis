@@ -35,7 +35,9 @@ export interface LeaseSpec {
   holderIdentity?: string | null;
   leaseDurationSeconds?: number | null;
   leaseTransitions?: number | null;
+  preferredHolder?: string | null;
   renewTime?: c.MicroTime | null;
+  strategy?: string | null;
 }
 export function toLeaseSpec(input: c.JSONValue): LeaseSpec {
   const obj = c.checkObj(input);
@@ -44,7 +46,9 @@ export function toLeaseSpec(input: c.JSONValue): LeaseSpec {
     holderIdentity: c.readOpt(obj["holderIdentity"], c.checkStr),
     leaseDurationSeconds: c.readOpt(obj["leaseDurationSeconds"], c.checkNum),
     leaseTransitions: c.readOpt(obj["leaseTransitions"], c.checkNum),
+    preferredHolder: c.readOpt(obj["preferredHolder"], c.checkStr),
     renewTime: c.readOpt(obj["renewTime"], c.toMicroTime),
+    strategy: c.readOpt(obj["strategy"], c.checkStr),
   }}
 export function fromLeaseSpec(input: LeaseSpec): c.JSONValue {
   return {
