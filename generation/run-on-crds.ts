@@ -3,6 +3,7 @@ import type { OpenAPI2SchemaObject, OpenAPI2Methods, OpenAPI2PathMethod } from '
 import { writeApiModule } from "./codegen.ts";
 import { SurfaceMap, SurfaceApi, OpScope } from "./describe-surface.ts";
 import { ShapeLibrary } from "./describe-shapes.ts";
+import { knownOptsForward } from "./known-opts.ts";
 
 import {
   CustomResourceDefinition as CRDv1,
@@ -11,17 +12,9 @@ import {
   CustomResourceDefinitionNames,
 } from "../lib/builtin/apiextensions.k8s.io@v1/structs.ts";
 
-const knownOpts = {
-  GetListOpts: 'continue,fieldSelector,labelSelector,limit,resourceVersion,resourceVersionMatch,sendInitialEvents,timeoutSeconds',
-  WatchListOpts: 'allowWatchBookmarks,fieldSelector,labelSelector,resourceVersion,resourceVersionMatch,sendInitialEvents,timeoutSeconds',
-  PutOpts: 'dryRun,fieldManager,fieldValidation', // both CreateOpts and ReplaceOpts
-  DeleteListOpts: 'continue,dryRun,fieldSelector,gracePeriodSeconds,labelSelector,limit,orphanDependents,propagationPolicy,resourceVersion,resourceVersionMatch,sendInitialEvents,timeoutSeconds',
-  PatchOpts: 'dryRun,fieldManager,fieldValidation,force',
-  GetOpts: '',
-  DeleteOpts: 'dryRun,gracePeriodSeconds,orphanDependents,propagationPolicy',
-};
-
 const v1CRDs = new Array<CRDv1>();
+
+const knownOpts = knownOptsForward;
 
 for await (const dirEntry of Deno.readDir(Deno.args[0])) {
   if (!dirEntry.isFile) continue;
