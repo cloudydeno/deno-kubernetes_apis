@@ -1,17 +1,9 @@
 import { SurfaceMap, SurfaceApi, SurfaceOperation } from "./describe-surface.ts";
 import { OpenAPI2RequestParameter } from "./openapi.ts";
 import { ApiShape } from "./describe-shapes.ts";
+import { knownOptsReverse } from "./known-opts.ts";
 
-const knownOpts: Record<string,string|undefined> = {
-  '': 'NoOpts',
-  'continue,fieldSelector,labelSelector,limit,resourceVersion,resourceVersionMatch,sendInitialEvents,timeoutSeconds': 'GetListOpts',
-  'allowWatchBookmarks,fieldSelector,labelSelector,resourceVersion,resourceVersionMatch,sendInitialEvents,timeoutSeconds': 'WatchListOpts',
-  'dryRun,fieldManager,fieldValidation': 'PutOpts', // both CreateOpts and ReplaceOpts
-  'continue,dryRun,fieldSelector,gracePeriodSeconds,labelSelector,limit,orphanDependents,propagationPolicy,resourceVersion,resourceVersionMatch,sendInitialEvents,timeoutSeconds': 'DeleteListOpts',
-  'dryRun,fieldManager,fieldValidation,force': 'PatchOpts',
-  'exact,export': 'GetOpts',
-  'dryRun,gracePeriodSeconds,orphanDependents,propagationPolicy': 'DeleteOpts',
-};
+const knownOpts = knownOptsReverse;
 
 export function generateModuleTypescript(surface: SurfaceMap, api: SurfaceApi): string {
   const chunks = new Array<string>();

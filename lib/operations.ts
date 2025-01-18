@@ -67,6 +67,7 @@ export interface DeleteListOpts {
   dryRun?: string;
   fieldSelector?: string;
   gracePeriodSeconds?: number;
+  ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
   labelSelector?: string;
   limit?: number;
   orphanDependents?: boolean;
@@ -83,6 +84,7 @@ export function formatDeleteListOpts(opts: DeleteListOpts): URLSearchParams {
   if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
   if (opts["fieldSelector"] != null) query.append("fieldSelector", opts["fieldSelector"]);
   if (opts["gracePeriodSeconds"] != null) query.append("gracePeriodSeconds", String(opts["gracePeriodSeconds"]));
+  if (opts["ignoreStoreReadErrorWithClusterBreakingPotential"] != null) query.append("ignoreStoreReadErrorWithClusterBreakingPotential", opts["ignoreStoreReadErrorWithClusterBreakingPotential"] ? '1' : '0');
   if (opts["labelSelector"] != null) query.append("labelSelector", opts["labelSelector"]);
   if (opts["limit"] != null) query.append("limit", String(opts["limit"]));
   if (opts["orphanDependents"] != null) query.append("orphanDependents", opts["orphanDependents"] ? '1' : '0');
@@ -126,6 +128,7 @@ export function formatGetOpts(opts: GetOpts): URLSearchParams {
 export interface DeleteOpts {
   dryRun?: string;
   gracePeriodSeconds?: number;
+  ignoreStoreReadErrorWithClusterBreakingPotential?: boolean;
   orphanDependents?: boolean;
   propagationPolicy?: string;
   abortSignal?: AbortSignal;
@@ -134,6 +137,7 @@ export function formatDeleteOpts(opts: DeleteOpts): URLSearchParams {
   const query = new URLSearchParams;
   if (opts["dryRun"] != null) query.append("dryRun", opts["dryRun"]);
   if (opts["gracePeriodSeconds"] != null) query.append("gracePeriodSeconds", String(opts["gracePeriodSeconds"]));
+  if (opts["ignoreStoreReadErrorWithClusterBreakingPotential"] != null) query.append("ignoreStoreReadErrorWithClusterBreakingPotential", opts["ignoreStoreReadErrorWithClusterBreakingPotential"] ? '1' : '0');
   if (opts["orphanDependents"] != null) query.append("orphanDependents", opts["orphanDependents"] ? '1' : '0');
   if (opts["propagationPolicy"] != null) query.append("propagationPolicy", opts["propagationPolicy"]);
   return query;

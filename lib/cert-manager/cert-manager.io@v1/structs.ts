@@ -11,11 +11,9 @@ type ListOf<T> = {
 /** A CertificateRequest is used to request a signed certificate from one of the
 configured issuers.
 
-
 All fields within the CertificateRequest's `spec` are immutable after creation.
 A CertificateRequest will either succeed or fail, as denoted by its `Ready` status
 condition and its `status.failureTime` field.
-
 
 A CertificateRequest is a one-shot resource, meaning it represents a single
 point in time request for a certificate and cannot be re-used. */
@@ -142,7 +140,6 @@ export function fromSecretRef(input: SecretRef): c.JSONValue {
 /** A Certificate resource should be created to ensure an up to date and signed
 X.509 certificate is stored in the Kubernetes Secret resource named in `spec.secretName`.
 
-
 The stored certificate will be renewed before it expires (as configured by `spec.renewBefore`). */
 export interface Certificate {
   apiVersion?: "cert-manager.io/v1";
@@ -203,6 +200,7 @@ export interface Certificate {
       size?: number | null;
     } | null;
     renewBefore?: string | null;
+    renewBeforePercentage?: number | null;
     revisionHistoryLimit?: number | null;
     secretName: string;
     secretTemplate?: {
@@ -297,6 +295,7 @@ function toCertificate_spec(input: c.JSONValue) {
     otherNames: c.readOpt(obj["otherNames"], x => c.readList(x, toCertificate_spec_otherNames)),
     privateKey: c.readOpt(obj["privateKey"], toCertificate_spec_privateKey),
     renewBefore: c.readOpt(obj["renewBefore"], c.checkStr),
+    renewBeforePercentage: c.readOpt(obj["renewBeforePercentage"], c.checkNum),
     revisionHistoryLimit: c.readOpt(obj["revisionHistoryLimit"], c.checkNum),
     secretName: c.checkStr(obj["secretName"]),
     secretTemplate: c.readOpt(obj["secretTemplate"], toCertificate_spec_secretTemplate),
@@ -460,6 +459,11 @@ export interface IssuerSpec {
         roleId: string;
         secretRef: SecretRef;
       } | null;
+      clientCertificate?: {
+        mountPath?: string | null;
+        name?: string | null;
+        secretName?: string | null;
+      } | null;
       kubernetes?: {
         mountPath?: string | null;
         role: string;
@@ -486,6 +490,7 @@ export interface IssuerSpec {
     } | null;
     tpp?: {
       caBundle?: string | null;
+      caBundleSecretRef?: SecretRef | null;
       credentialsRef: {
         name: string;
       };
@@ -538,6 +543,10 @@ export function fromIssuerSpec(input: IssuerSpec): c.JSONValue {
       cloud: input.venafi.cloud != null ? {
         ...input.venafi.cloud,
         apiTokenSecretRef: input.venafi.cloud.apiTokenSecretRef != null ? fromSecretRef(input.venafi.cloud.apiTokenSecretRef) : undefined,
+      } : undefined,
+      tpp: input.venafi.tpp != null ? {
+        ...input.venafi.tpp,
+        caBundleSecretRef: input.venafi.tpp.caBundleSecretRef != null ? fromSecretRef(input.venafi.tpp.caBundleSecretRef) : undefined,
       } : undefined,
     } : undefined,
   }}
@@ -598,6 +607,7 @@ function toIssuerSpec_vault_auth(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     appRole: c.readOpt(obj["appRole"], toIssuerSpec_vault_auth_appRole),
+    clientCertificate: c.readOpt(obj["clientCertificate"], toIssuerSpec_vault_auth_clientCertificate),
     kubernetes: c.readOpt(obj["kubernetes"], toIssuerSpec_vault_auth_kubernetes),
     tokenSecretRef: c.readOpt(obj["tokenSecretRef"], toSecretRef),
   }}
@@ -611,6 +621,7 @@ function toIssuerSpec_venafi_tpp(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     caBundle: c.readOpt(obj["caBundle"], c.checkStr),
+    caBundleSecretRef: c.readOpt(obj["caBundleSecretRef"], toSecretRef),
     credentialsRef: toIssuerSpec_venafi_tpp_credentialsRef(obj["credentialsRef"]),
     url: c.checkStr(obj["url"]),
   }}
@@ -620,6 +631,13 @@ function toIssuerSpec_vault_auth_appRole(input: c.JSONValue) {
     path: c.checkStr(obj["path"]),
     roleId: c.checkStr(obj["roleId"]),
     secretRef: toSecretRef(obj["secretRef"]),
+  }}
+function toIssuerSpec_vault_auth_clientCertificate(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    mountPath: c.readOpt(obj["mountPath"], c.checkStr),
+    name: c.readOpt(obj["name"], c.checkStr),
+    secretName: c.readOpt(obj["secretName"], c.checkStr),
   }}
 function toIssuerSpec_vault_auth_kubernetes(input: c.JSONValue) {
   const obj = c.checkObj(input);
@@ -701,7 +719,7 @@ export interface SolverSpec {
         };
       } | null;
       hostedZoneID?: string | null;
-      region: string;
+      region?: string | null;
       role?: string | null;
       secretAccessKeySecretRef?: SecretRef | null;
     } | null;
@@ -722,6 +740,50 @@ export interface SolverSpec {
         port?: number | null;
         sectionName?: string | null;
       }> | null;
+      podTemplate?: {
+        metadata?: {
+          annotations?: Record<string,string> | null;
+          labels?: Record<string,string> | null;
+        } | null;
+        spec?: {
+          affinity?: CoreV1.Affinity | null;
+          imagePullSecrets?: Array<{
+            name?: string | null;
+          }> | null;
+          nodeSelector?: Record<string,string> | null;
+          priorityClassName?: string | null;
+          securityContext?: {
+            fsGroup?: number | null;
+            fsGroupChangePolicy?: string | null;
+            runAsGroup?: number | null;
+            runAsNonRoot?: boolean | null;
+            runAsUser?: number | null;
+            seLinuxOptions?: {
+              level?: string | null;
+              role?: string | null;
+              type?: string | null;
+              user?: string | null;
+            } | null;
+            seccompProfile?: {
+              localhostProfile?: string | null;
+              type: string;
+            } | null;
+            supplementalGroups?: Array<number> | null;
+            sysctls?: Array<{
+              name: string;
+              value: string;
+            }> | null;
+          } | null;
+          serviceAccountName?: string | null;
+          tolerations?: Array<{
+            effect?: string | null;
+            key?: string | null;
+            operator?: string | null;
+            tolerationSeconds?: number | null;
+            value?: string | null;
+          }> | null;
+        } | null;
+      } | null;
       serviceType?: string | null;
     } | null;
     ingress?: {
@@ -746,6 +808,28 @@ export interface SolverSpec {
           }> | null;
           nodeSelector?: Record<string,string> | null;
           priorityClassName?: string | null;
+          securityContext?: {
+            fsGroup?: number | null;
+            fsGroupChangePolicy?: string | null;
+            runAsGroup?: number | null;
+            runAsNonRoot?: boolean | null;
+            runAsUser?: number | null;
+            seLinuxOptions?: {
+              level?: string | null;
+              role?: string | null;
+              type?: string | null;
+              user?: string | null;
+            } | null;
+            seccompProfile?: {
+              localhostProfile?: string | null;
+              type: string;
+            } | null;
+            supplementalGroups?: Array<number> | null;
+            sysctls?: Array<{
+              name: string;
+              value: string;
+            }> | null;
+          } | null;
           serviceAccountName?: string | null;
           tolerations?: Array<{
             effect?: string | null;
@@ -816,6 +900,16 @@ export function fromSolverSpec(input: SolverSpec): c.JSONValue {
     } : undefined,
     http01: input.http01 != null ? {
       ...input.http01,
+      gatewayHTTPRoute: input.http01.gatewayHTTPRoute != null ? {
+        ...input.http01.gatewayHTTPRoute,
+        podTemplate: input.http01.gatewayHTTPRoute.podTemplate != null ? {
+          ...input.http01.gatewayHTTPRoute.podTemplate,
+          spec: input.http01.gatewayHTTPRoute.podTemplate.spec != null ? {
+            ...input.http01.gatewayHTTPRoute.podTemplate.spec,
+            affinity: input.http01.gatewayHTTPRoute.podTemplate.spec.affinity != null ? CoreV1.fromAffinity(input.http01.gatewayHTTPRoute.podTemplate.spec.affinity) : undefined,
+          } : undefined,
+        } : undefined,
+      } : undefined,
       ingress: input.http01.ingress != null ? {
         ...input.http01.ingress,
         podTemplate: input.http01.ingress.podTemplate != null ? {
@@ -915,7 +1009,7 @@ function toSolverSpec_dns01_route53(input: c.JSONValue) {
     accessKeyIDSecretRef: c.readOpt(obj["accessKeyIDSecretRef"], toSecretRef),
     auth: c.readOpt(obj["auth"], toSolverSpec_dns01_route53_auth),
     hostedZoneID: c.readOpt(obj["hostedZoneID"], c.checkStr),
-    region: c.checkStr(obj["region"]),
+    region: c.readOpt(obj["region"], c.checkStr),
     role: c.readOpt(obj["role"], c.checkStr),
     secretAccessKeySecretRef: c.readOpt(obj["secretAccessKeySecretRef"], toSecretRef),
   }}
@@ -931,6 +1025,7 @@ function toSolverSpec_http01_gatewayHTTPRoute(input: c.JSONValue) {
   return {
     labels: c.readOpt(obj["labels"], x => c.readMap(x, c.checkStr)),
     parentRefs: c.readOpt(obj["parentRefs"], x => c.readList(x, toSolverSpec_http01_gatewayHTTPRoute_parentRefs)),
+    podTemplate: c.readOpt(obj["podTemplate"], toSolverSpec_http01_gatewayHTTPRoute_podTemplate),
     serviceType: c.readOpt(obj["serviceType"], c.checkStr),
   }}
 function toSolverSpec_http01_ingress(input: c.JSONValue) {
@@ -964,6 +1059,12 @@ function toSolverSpec_http01_gatewayHTTPRoute_parentRefs(input: c.JSONValue) {
     port: c.readOpt(obj["port"], c.checkNum),
     sectionName: c.readOpt(obj["sectionName"], c.checkStr),
   }}
+function toSolverSpec_http01_gatewayHTTPRoute_podTemplate(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    metadata: c.readOpt(obj["metadata"], toSolverSpec_http01_gatewayHTTPRoute_podTemplate_metadata),
+    spec: c.readOpt(obj["spec"], toSolverSpec_http01_gatewayHTTPRoute_podTemplate_spec),
+  }}
 function toSolverSpec_http01_ingress_ingressTemplate(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
@@ -979,6 +1080,23 @@ function toSolverSpec_dns01_route53_auth_kubernetes(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     serviceAccountRef: toSolverSpec_dns01_route53_auth_kubernetes_serviceAccountRef(obj["serviceAccountRef"]),
+  }}
+function toSolverSpec_http01_gatewayHTTPRoute_podTemplate_metadata(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    annotations: c.readOpt(obj["annotations"], x => c.readMap(x, c.checkStr)),
+    labels: c.readOpt(obj["labels"], x => c.readMap(x, c.checkStr)),
+  }}
+function toSolverSpec_http01_gatewayHTTPRoute_podTemplate_spec(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    affinity: c.readOpt(obj["affinity"], CoreV1.toAffinity),
+    imagePullSecrets: c.readOpt(obj["imagePullSecrets"], x => c.readList(x, toSolverSpec_http01_gatewayHTTPRoute_podTemplate_spec_imagePullSecrets)),
+    nodeSelector: c.readOpt(obj["nodeSelector"], x => c.readMap(x, c.checkStr)),
+    priorityClassName: c.readOpt(obj["priorityClassName"], c.checkStr),
+    securityContext: c.readOpt(obj["securityContext"], toSolverSpec_http01_gatewayHTTPRoute_podTemplate_spec_securityContext),
+    serviceAccountName: c.readOpt(obj["serviceAccountName"], c.checkStr),
+    tolerations: c.readOpt(obj["tolerations"], x => c.readList(x, toSolverSpec_http01_gatewayHTTPRoute_podTemplate_spec_tolerations)),
   }}
 function toSolverSpec_http01_ingress_ingressTemplate_metadata(input: c.JSONValue) {
   const obj = c.checkObj(input);
@@ -999,6 +1117,7 @@ function toSolverSpec_http01_ingress_podTemplate_spec(input: c.JSONValue) {
     imagePullSecrets: c.readOpt(obj["imagePullSecrets"], x => c.readList(x, toSolverSpec_http01_ingress_podTemplate_spec_imagePullSecrets)),
     nodeSelector: c.readOpt(obj["nodeSelector"], x => c.readMap(x, c.checkStr)),
     priorityClassName: c.readOpt(obj["priorityClassName"], c.checkStr),
+    securityContext: c.readOpt(obj["securityContext"], toSolverSpec_http01_ingress_podTemplate_spec_securityContext),
     serviceAccountName: c.readOpt(obj["serviceAccountName"], c.checkStr),
     tolerations: c.readOpt(obj["tolerations"], x => c.readList(x, toSolverSpec_http01_ingress_podTemplate_spec_tolerations)),
   }}
@@ -1008,10 +1127,50 @@ function toSolverSpec_dns01_route53_auth_kubernetes_serviceAccountRef(input: c.J
     audiences: c.readOpt(obj["audiences"], x => c.readList(x, c.checkStr)),
     name: c.checkStr(obj["name"]),
   }}
+function toSolverSpec_http01_gatewayHTTPRoute_podTemplate_spec_imagePullSecrets(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    name: c.readOpt(obj["name"], c.checkStr),
+  }}
+function toSolverSpec_http01_gatewayHTTPRoute_podTemplate_spec_securityContext(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    fsGroup: c.readOpt(obj["fsGroup"], c.checkNum),
+    fsGroupChangePolicy: c.readOpt(obj["fsGroupChangePolicy"], c.checkStr),
+    runAsGroup: c.readOpt(obj["runAsGroup"], c.checkNum),
+    runAsNonRoot: c.readOpt(obj["runAsNonRoot"], c.checkBool),
+    runAsUser: c.readOpt(obj["runAsUser"], c.checkNum),
+    seLinuxOptions: c.readOpt(obj["seLinuxOptions"], toSolverSpec_http01_gatewayHTTPRoute_podTemplate_spec_securityContext_seLinuxOptions),
+    seccompProfile: c.readOpt(obj["seccompProfile"], toSolverSpec_http01_gatewayHTTPRoute_podTemplate_spec_securityContext_seccompProfile),
+    supplementalGroups: c.readOpt(obj["supplementalGroups"], x => c.readList(x, c.checkNum)),
+    sysctls: c.readOpt(obj["sysctls"], x => c.readList(x, toSolverSpec_http01_gatewayHTTPRoute_podTemplate_spec_securityContext_sysctls)),
+  }}
+function toSolverSpec_http01_gatewayHTTPRoute_podTemplate_spec_tolerations(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    effect: c.readOpt(obj["effect"], c.checkStr),
+    key: c.readOpt(obj["key"], c.checkStr),
+    operator: c.readOpt(obj["operator"], c.checkStr),
+    tolerationSeconds: c.readOpt(obj["tolerationSeconds"], c.checkNum),
+    value: c.readOpt(obj["value"], c.checkStr),
+  }}
 function toSolverSpec_http01_ingress_podTemplate_spec_imagePullSecrets(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     name: c.readOpt(obj["name"], c.checkStr),
+  }}
+function toSolverSpec_http01_ingress_podTemplate_spec_securityContext(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    fsGroup: c.readOpt(obj["fsGroup"], c.checkNum),
+    fsGroupChangePolicy: c.readOpt(obj["fsGroupChangePolicy"], c.checkStr),
+    runAsGroup: c.readOpt(obj["runAsGroup"], c.checkNum),
+    runAsNonRoot: c.readOpt(obj["runAsNonRoot"], c.checkBool),
+    runAsUser: c.readOpt(obj["runAsUser"], c.checkNum),
+    seLinuxOptions: c.readOpt(obj["seLinuxOptions"], toSolverSpec_http01_ingress_podTemplate_spec_securityContext_seLinuxOptions),
+    seccompProfile: c.readOpt(obj["seccompProfile"], toSolverSpec_http01_ingress_podTemplate_spec_securityContext_seccompProfile),
+    supplementalGroups: c.readOpt(obj["supplementalGroups"], x => c.readList(x, c.checkNum)),
+    sysctls: c.readOpt(obj["sysctls"], x => c.readList(x, toSolverSpec_http01_ingress_podTemplate_spec_securityContext_sysctls)),
   }}
 function toSolverSpec_http01_ingress_podTemplate_spec_tolerations(input: c.JSONValue) {
   const obj = c.checkObj(input);
@@ -1021,6 +1180,46 @@ function toSolverSpec_http01_ingress_podTemplate_spec_tolerations(input: c.JSONV
     operator: c.readOpt(obj["operator"], c.checkStr),
     tolerationSeconds: c.readOpt(obj["tolerationSeconds"], c.checkNum),
     value: c.readOpt(obj["value"], c.checkStr),
+  }}
+function toSolverSpec_http01_gatewayHTTPRoute_podTemplate_spec_securityContext_seLinuxOptions(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    level: c.readOpt(obj["level"], c.checkStr),
+    role: c.readOpt(obj["role"], c.checkStr),
+    type: c.readOpt(obj["type"], c.checkStr),
+    user: c.readOpt(obj["user"], c.checkStr),
+  }}
+function toSolverSpec_http01_gatewayHTTPRoute_podTemplate_spec_securityContext_seccompProfile(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    localhostProfile: c.readOpt(obj["localhostProfile"], c.checkStr),
+    type: c.checkStr(obj["type"]),
+  }}
+function toSolverSpec_http01_gatewayHTTPRoute_podTemplate_spec_securityContext_sysctls(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    name: c.checkStr(obj["name"]),
+    value: c.checkStr(obj["value"]),
+  }}
+function toSolverSpec_http01_ingress_podTemplate_spec_securityContext_seLinuxOptions(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    level: c.readOpt(obj["level"], c.checkStr),
+    role: c.readOpt(obj["role"], c.checkStr),
+    type: c.readOpt(obj["type"], c.checkStr),
+    user: c.readOpt(obj["user"], c.checkStr),
+  }}
+function toSolverSpec_http01_ingress_podTemplate_spec_securityContext_seccompProfile(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    localhostProfile: c.readOpt(obj["localhostProfile"], c.checkStr),
+    type: c.checkStr(obj["type"]),
+  }}
+function toSolverSpec_http01_ingress_podTemplate_spec_securityContext_sysctls(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    name: c.checkStr(obj["name"]),
+    value: c.checkStr(obj["value"]),
   }}
 
 /** Status of the Issuer or ClusterIssuer. This is set and managed automatically. */

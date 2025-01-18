@@ -14,7 +14,7 @@ Here's a basic request, listing all Pods in the `default` namespace.
 It uses the `autoDetectClient()` entrypoint which returns the first usable client.
 
 ```ts
-import { autoDetectClient } from 'https://deno.land/x/kubernetes_client@v0.7.0/mod.ts';
+import { autoDetectClient } from 'https://deno.land/x/kubernetes_client@v0.7.3/mod.ts';
 import { CoreV1Api } from 'https://deno.land/x/kubernetes_apis/builtin/core@v1/mod.ts';
 
 const kubernetes = await autoDetectClient();
@@ -30,7 +30,30 @@ When running locally (with `kubectl` set up), you probably just to add `--allow-
 For a container being deployed onto a cluster, there's more flags to provide instead;
 see `/x/kubernetes_client` for more information.
 
+
+### Usage with JSR Imports
+Note that there is no default export, so you will need to
+import the particular Kubernetes API groups that you want to work with.
+This layout keeps program size smaller.
+
+```ts
+import { autoDetectClient } from "jsr:@cloudydeno/kubernetes-client@0.7.3";
+import { CoreV1Api } from "jsr:@cloudydeno/kubernetes-apis/core/v1";
+
+const kubernetes = await autoDetectClient();
+const coreApi = new CoreV1Api(kubernetes).namespace("default");
+
+const podList = await coreApi.getPodList();
+console.log(podList);
+```
+
 ## Changelog
+
+* `v0.5.4` on `2025-01-18`:
+  * Includes 'builtin' APIs generated from K8s `v1.32.0`.
+    * Several API versions were changed, removed, or added.
+    * You may need to update imports if you used a non-stable API version which has been moved.
+  * `cert-manager` and `argo-cd` CRDs have been updated.
 
 * `v0.5.3` on `2024-10-16`:
   * Fix CRD codegen issues with particular definitions and when using JSR import paths.

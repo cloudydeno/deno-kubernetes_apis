@@ -13,285 +13,238 @@ export class AdmissionregistrationV1alpha1Api {
     this.#client = client;
   }
 
-  async getValidatingAdmissionPolicyList(
+  async getMutatingAdmissionPolicyList(
     opts: operations.GetListOpts = {},
-  ): Promise<AdmissionregistrationV1alpha1.ValidatingAdmissionPolicyList> {
+  ): Promise<AdmissionregistrationV1alpha1.MutatingAdmissionPolicyList> {
     const resp = await this.#client.performRequest({
       method: "GET",
-      path: `${this.#root}validatingadmissionpolicies`,
+      path: `${this.#root}mutatingadmissionpolicies`,
       expectJson: true,
       querystring: operations.formatGetListOpts(opts),
       abortSignal: opts.abortSignal,
     });
-    return AdmissionregistrationV1alpha1.toValidatingAdmissionPolicyList(resp);
+    return AdmissionregistrationV1alpha1.toMutatingAdmissionPolicyList(resp);
   }
 
-  async watchValidatingAdmissionPolicyList(
+  async watchMutatingAdmissionPolicyList(
     opts: operations.WatchListOpts = {},
-  ): Promise<c.WatchEventStream<AdmissionregistrationV1alpha1.ValidatingAdmissionPolicy>> {
+  ): Promise<c.WatchEventStream<AdmissionregistrationV1alpha1.MutatingAdmissionPolicy>> {
     const resp = await this.#client.performRequest({
       method: "GET",
-      path: `${this.#root}validatingadmissionpolicies`,
+      path: `${this.#root}mutatingadmissionpolicies`,
       expectJson: true,
       expectStream: true,
       querystring: operations.formatWatchListOpts(opts),
       abortSignal: opts.abortSignal,
     });
-    return resp.pipeThrough(new c.WatchEventTransformer(AdmissionregistrationV1alpha1.toValidatingAdmissionPolicy, MetaV1.toStatus));
+    return resp.pipeThrough(new c.WatchEventTransformer(AdmissionregistrationV1alpha1.toMutatingAdmissionPolicy, MetaV1.toStatus));
   }
 
-  async createValidatingAdmissionPolicy(
-    body: AdmissionregistrationV1alpha1.ValidatingAdmissionPolicy,
+  async createMutatingAdmissionPolicy(
+    body: AdmissionregistrationV1alpha1.MutatingAdmissionPolicy,
     opts: operations.PutOpts = {},
-  ): Promise<AdmissionregistrationV1alpha1.ValidatingAdmissionPolicy> {
+  ): Promise<AdmissionregistrationV1alpha1.MutatingAdmissionPolicy> {
     const resp = await this.#client.performRequest({
       method: "POST",
-      path: `${this.#root}validatingadmissionpolicies`,
+      path: `${this.#root}mutatingadmissionpolicies`,
       expectJson: true,
       querystring: operations.formatPutOpts(opts),
-      bodyJson: AdmissionregistrationV1alpha1.fromValidatingAdmissionPolicy(body),
+      bodyJson: AdmissionregistrationV1alpha1.fromMutatingAdmissionPolicy(body),
       abortSignal: opts.abortSignal,
     });
-    return AdmissionregistrationV1alpha1.toValidatingAdmissionPolicy(resp);
+    return AdmissionregistrationV1alpha1.toMutatingAdmissionPolicy(resp);
   }
 
-  async deleteValidatingAdmissionPolicyList(
+  async deleteMutatingAdmissionPolicyList(
     opts: operations.DeleteListOpts = {},
-  ): Promise<AdmissionregistrationV1alpha1.ValidatingAdmissionPolicyList> {
+  ): Promise<AdmissionregistrationV1alpha1.MutatingAdmissionPolicyList> {
     const resp = await this.#client.performRequest({
       method: "DELETE",
-      path: `${this.#root}validatingadmissionpolicies`,
+      path: `${this.#root}mutatingadmissionpolicies`,
       expectJson: true,
       querystring: operations.formatDeleteListOpts(opts),
       abortSignal: opts.abortSignal,
     });
-    return AdmissionregistrationV1alpha1.toValidatingAdmissionPolicyList(resp);
+    return AdmissionregistrationV1alpha1.toMutatingAdmissionPolicyList(resp);
   }
 
-  async getValidatingAdmissionPolicy(
+  async getMutatingAdmissionPolicy(
     name: string,
     opts: operations.NoOpts = {},
-  ): Promise<AdmissionregistrationV1alpha1.ValidatingAdmissionPolicy> {
+  ): Promise<AdmissionregistrationV1alpha1.MutatingAdmissionPolicy> {
     const resp = await this.#client.performRequest({
       method: "GET",
-      path: `${this.#root}validatingadmissionpolicies/${name}`,
+      path: `${this.#root}mutatingadmissionpolicies/${name}`,
       expectJson: true,
       abortSignal: opts.abortSignal,
     });
-    return AdmissionregistrationV1alpha1.toValidatingAdmissionPolicy(resp);
+    return AdmissionregistrationV1alpha1.toMutatingAdmissionPolicy(resp);
   }
 
-  async deleteValidatingAdmissionPolicy(
+  async deleteMutatingAdmissionPolicy(
     name: string,
     opts: operations.DeleteOpts = {},
-  ): Promise<AdmissionregistrationV1alpha1.ValidatingAdmissionPolicy | MetaV1.Status> {
+  ): Promise<AdmissionregistrationV1alpha1.MutatingAdmissionPolicy | MetaV1.Status> {
     const resp = await this.#client.performRequest({
       method: "DELETE",
-      path: `${this.#root}validatingadmissionpolicies/${name}`,
+      path: `${this.#root}mutatingadmissionpolicies/${name}`,
       expectJson: true,
       querystring: operations.formatDeleteOpts(opts),
       abortSignal: opts.abortSignal,
     });
     if (c.isStatusKind(resp)) return MetaV1.toStatus(resp);
-    return AdmissionregistrationV1alpha1.toValidatingAdmissionPolicy(resp);
+    return AdmissionregistrationV1alpha1.toMutatingAdmissionPolicy(resp);
   }
 
-  async replaceValidatingAdmissionPolicy(
+  async replaceMutatingAdmissionPolicy(
     name: string,
-    body: AdmissionregistrationV1alpha1.ValidatingAdmissionPolicy,
+    body: AdmissionregistrationV1alpha1.MutatingAdmissionPolicy,
     opts: operations.PutOpts = {},
-  ): Promise<AdmissionregistrationV1alpha1.ValidatingAdmissionPolicy> {
+  ): Promise<AdmissionregistrationV1alpha1.MutatingAdmissionPolicy> {
     const resp = await this.#client.performRequest({
       method: "PUT",
-      path: `${this.#root}validatingadmissionpolicies/${name}`,
+      path: `${this.#root}mutatingadmissionpolicies/${name}`,
       expectJson: true,
       querystring: operations.formatPutOpts(opts),
-      bodyJson: AdmissionregistrationV1alpha1.fromValidatingAdmissionPolicy(body),
+      bodyJson: AdmissionregistrationV1alpha1.fromMutatingAdmissionPolicy(body),
       abortSignal: opts.abortSignal,
     });
-    return AdmissionregistrationV1alpha1.toValidatingAdmissionPolicy(resp);
+    return AdmissionregistrationV1alpha1.toMutatingAdmissionPolicy(resp);
   }
 
-  async patchValidatingAdmissionPolicy(
+  async patchMutatingAdmissionPolicy(
     name: string,
     type: c.PatchType,
-    body: AdmissionregistrationV1alpha1.ValidatingAdmissionPolicy | c.JsonPatch,
+    body: AdmissionregistrationV1alpha1.MutatingAdmissionPolicy | c.JsonPatch,
     opts: operations.PatchOpts = {},
-  ): Promise<AdmissionregistrationV1alpha1.ValidatingAdmissionPolicy> {
+  ): Promise<AdmissionregistrationV1alpha1.MutatingAdmissionPolicy> {
     const resp = await this.#client.performRequest({
       method: "PATCH",
-      path: `${this.#root}validatingadmissionpolicies/${name}`,
+      path: `${this.#root}mutatingadmissionpolicies/${name}`,
       expectJson: true,
       querystring: operations.formatPatchOpts(opts),
       contentType: c.getPatchContentType(type),
-      bodyJson: Array.isArray(body) ? body : AdmissionregistrationV1alpha1.fromValidatingAdmissionPolicy(body),
+      bodyJson: Array.isArray(body) ? body : AdmissionregistrationV1alpha1.fromMutatingAdmissionPolicy(body),
       abortSignal: opts.abortSignal,
     });
-    return AdmissionregistrationV1alpha1.toValidatingAdmissionPolicy(resp);
+    return AdmissionregistrationV1alpha1.toMutatingAdmissionPolicy(resp);
   }
 
-  async getValidatingAdmissionPolicyStatus(
-    name: string,
-    opts: operations.NoOpts = {},
-  ): Promise<AdmissionregistrationV1alpha1.ValidatingAdmissionPolicy> {
-    const resp = await this.#client.performRequest({
-      method: "GET",
-      path: `${this.#root}validatingadmissionpolicies/${name}/status`,
-      expectJson: true,
-      abortSignal: opts.abortSignal,
-    });
-    return AdmissionregistrationV1alpha1.toValidatingAdmissionPolicy(resp);
-  }
-
-  async replaceValidatingAdmissionPolicyStatus(
-    name: string,
-    body: AdmissionregistrationV1alpha1.ValidatingAdmissionPolicy,
-    opts: operations.PutOpts = {},
-  ): Promise<AdmissionregistrationV1alpha1.ValidatingAdmissionPolicy> {
-    const resp = await this.#client.performRequest({
-      method: "PUT",
-      path: `${this.#root}validatingadmissionpolicies/${name}/status`,
-      expectJson: true,
-      querystring: operations.formatPutOpts(opts),
-      bodyJson: AdmissionregistrationV1alpha1.fromValidatingAdmissionPolicy(body),
-      abortSignal: opts.abortSignal,
-    });
-    return AdmissionregistrationV1alpha1.toValidatingAdmissionPolicy(resp);
-  }
-
-  async patchValidatingAdmissionPolicyStatus(
-    name: string,
-    type: c.PatchType,
-    body: AdmissionregistrationV1alpha1.ValidatingAdmissionPolicy | c.JsonPatch,
-    opts: operations.PatchOpts = {},
-  ): Promise<AdmissionregistrationV1alpha1.ValidatingAdmissionPolicy> {
-    const resp = await this.#client.performRequest({
-      method: "PATCH",
-      path: `${this.#root}validatingadmissionpolicies/${name}/status`,
-      expectJson: true,
-      querystring: operations.formatPatchOpts(opts),
-      contentType: c.getPatchContentType(type),
-      bodyJson: Array.isArray(body) ? body : AdmissionregistrationV1alpha1.fromValidatingAdmissionPolicy(body),
-      abortSignal: opts.abortSignal,
-    });
-    return AdmissionregistrationV1alpha1.toValidatingAdmissionPolicy(resp);
-  }
-
-  async getValidatingAdmissionPolicyBindingList(
+  async getMutatingAdmissionPolicyBindingList(
     opts: operations.GetListOpts = {},
-  ): Promise<AdmissionregistrationV1alpha1.ValidatingAdmissionPolicyBindingList> {
+  ): Promise<AdmissionregistrationV1alpha1.MutatingAdmissionPolicyBindingList> {
     const resp = await this.#client.performRequest({
       method: "GET",
-      path: `${this.#root}validatingadmissionpolicybindings`,
+      path: `${this.#root}mutatingadmissionpolicybindings`,
       expectJson: true,
       querystring: operations.formatGetListOpts(opts),
       abortSignal: opts.abortSignal,
     });
-    return AdmissionregistrationV1alpha1.toValidatingAdmissionPolicyBindingList(resp);
+    return AdmissionregistrationV1alpha1.toMutatingAdmissionPolicyBindingList(resp);
   }
 
-  async watchValidatingAdmissionPolicyBindingList(
+  async watchMutatingAdmissionPolicyBindingList(
     opts: operations.WatchListOpts = {},
-  ): Promise<c.WatchEventStream<AdmissionregistrationV1alpha1.ValidatingAdmissionPolicyBinding>> {
+  ): Promise<c.WatchEventStream<AdmissionregistrationV1alpha1.MutatingAdmissionPolicyBinding>> {
     const resp = await this.#client.performRequest({
       method: "GET",
-      path: `${this.#root}validatingadmissionpolicybindings`,
+      path: `${this.#root}mutatingadmissionpolicybindings`,
       expectJson: true,
       expectStream: true,
       querystring: operations.formatWatchListOpts(opts),
       abortSignal: opts.abortSignal,
     });
-    return resp.pipeThrough(new c.WatchEventTransformer(AdmissionregistrationV1alpha1.toValidatingAdmissionPolicyBinding, MetaV1.toStatus));
+    return resp.pipeThrough(new c.WatchEventTransformer(AdmissionregistrationV1alpha1.toMutatingAdmissionPolicyBinding, MetaV1.toStatus));
   }
 
-  async createValidatingAdmissionPolicyBinding(
-    body: AdmissionregistrationV1alpha1.ValidatingAdmissionPolicyBinding,
+  async createMutatingAdmissionPolicyBinding(
+    body: AdmissionregistrationV1alpha1.MutatingAdmissionPolicyBinding,
     opts: operations.PutOpts = {},
-  ): Promise<AdmissionregistrationV1alpha1.ValidatingAdmissionPolicyBinding> {
+  ): Promise<AdmissionregistrationV1alpha1.MutatingAdmissionPolicyBinding> {
     const resp = await this.#client.performRequest({
       method: "POST",
-      path: `${this.#root}validatingadmissionpolicybindings`,
+      path: `${this.#root}mutatingadmissionpolicybindings`,
       expectJson: true,
       querystring: operations.formatPutOpts(opts),
-      bodyJson: AdmissionregistrationV1alpha1.fromValidatingAdmissionPolicyBinding(body),
+      bodyJson: AdmissionregistrationV1alpha1.fromMutatingAdmissionPolicyBinding(body),
       abortSignal: opts.abortSignal,
     });
-    return AdmissionregistrationV1alpha1.toValidatingAdmissionPolicyBinding(resp);
+    return AdmissionregistrationV1alpha1.toMutatingAdmissionPolicyBinding(resp);
   }
 
-  async deleteValidatingAdmissionPolicyBindingList(
+  async deleteMutatingAdmissionPolicyBindingList(
     opts: operations.DeleteListOpts = {},
-  ): Promise<AdmissionregistrationV1alpha1.ValidatingAdmissionPolicyBindingList> {
+  ): Promise<AdmissionregistrationV1alpha1.MutatingAdmissionPolicyBindingList> {
     const resp = await this.#client.performRequest({
       method: "DELETE",
-      path: `${this.#root}validatingadmissionpolicybindings`,
+      path: `${this.#root}mutatingadmissionpolicybindings`,
       expectJson: true,
       querystring: operations.formatDeleteListOpts(opts),
       abortSignal: opts.abortSignal,
     });
-    return AdmissionregistrationV1alpha1.toValidatingAdmissionPolicyBindingList(resp);
+    return AdmissionregistrationV1alpha1.toMutatingAdmissionPolicyBindingList(resp);
   }
 
-  async getValidatingAdmissionPolicyBinding(
+  async getMutatingAdmissionPolicyBinding(
     name: string,
     opts: operations.NoOpts = {},
-  ): Promise<AdmissionregistrationV1alpha1.ValidatingAdmissionPolicyBinding> {
+  ): Promise<AdmissionregistrationV1alpha1.MutatingAdmissionPolicyBinding> {
     const resp = await this.#client.performRequest({
       method: "GET",
-      path: `${this.#root}validatingadmissionpolicybindings/${name}`,
+      path: `${this.#root}mutatingadmissionpolicybindings/${name}`,
       expectJson: true,
       abortSignal: opts.abortSignal,
     });
-    return AdmissionregistrationV1alpha1.toValidatingAdmissionPolicyBinding(resp);
+    return AdmissionregistrationV1alpha1.toMutatingAdmissionPolicyBinding(resp);
   }
 
-  async deleteValidatingAdmissionPolicyBinding(
+  async deleteMutatingAdmissionPolicyBinding(
     name: string,
     opts: operations.DeleteOpts = {},
-  ): Promise<AdmissionregistrationV1alpha1.ValidatingAdmissionPolicyBinding | MetaV1.Status> {
+  ): Promise<AdmissionregistrationV1alpha1.MutatingAdmissionPolicyBinding | MetaV1.Status> {
     const resp = await this.#client.performRequest({
       method: "DELETE",
-      path: `${this.#root}validatingadmissionpolicybindings/${name}`,
+      path: `${this.#root}mutatingadmissionpolicybindings/${name}`,
       expectJson: true,
       querystring: operations.formatDeleteOpts(opts),
       abortSignal: opts.abortSignal,
     });
     if (c.isStatusKind(resp)) return MetaV1.toStatus(resp);
-    return AdmissionregistrationV1alpha1.toValidatingAdmissionPolicyBinding(resp);
+    return AdmissionregistrationV1alpha1.toMutatingAdmissionPolicyBinding(resp);
   }
 
-  async replaceValidatingAdmissionPolicyBinding(
+  async replaceMutatingAdmissionPolicyBinding(
     name: string,
-    body: AdmissionregistrationV1alpha1.ValidatingAdmissionPolicyBinding,
+    body: AdmissionregistrationV1alpha1.MutatingAdmissionPolicyBinding,
     opts: operations.PutOpts = {},
-  ): Promise<AdmissionregistrationV1alpha1.ValidatingAdmissionPolicyBinding> {
+  ): Promise<AdmissionregistrationV1alpha1.MutatingAdmissionPolicyBinding> {
     const resp = await this.#client.performRequest({
       method: "PUT",
-      path: `${this.#root}validatingadmissionpolicybindings/${name}`,
+      path: `${this.#root}mutatingadmissionpolicybindings/${name}`,
       expectJson: true,
       querystring: operations.formatPutOpts(opts),
-      bodyJson: AdmissionregistrationV1alpha1.fromValidatingAdmissionPolicyBinding(body),
+      bodyJson: AdmissionregistrationV1alpha1.fromMutatingAdmissionPolicyBinding(body),
       abortSignal: opts.abortSignal,
     });
-    return AdmissionregistrationV1alpha1.toValidatingAdmissionPolicyBinding(resp);
+    return AdmissionregistrationV1alpha1.toMutatingAdmissionPolicyBinding(resp);
   }
 
-  async patchValidatingAdmissionPolicyBinding(
+  async patchMutatingAdmissionPolicyBinding(
     name: string,
     type: c.PatchType,
-    body: AdmissionregistrationV1alpha1.ValidatingAdmissionPolicyBinding | c.JsonPatch,
+    body: AdmissionregistrationV1alpha1.MutatingAdmissionPolicyBinding | c.JsonPatch,
     opts: operations.PatchOpts = {},
-  ): Promise<AdmissionregistrationV1alpha1.ValidatingAdmissionPolicyBinding> {
+  ): Promise<AdmissionregistrationV1alpha1.MutatingAdmissionPolicyBinding> {
     const resp = await this.#client.performRequest({
       method: "PATCH",
-      path: `${this.#root}validatingadmissionpolicybindings/${name}`,
+      path: `${this.#root}mutatingadmissionpolicybindings/${name}`,
       expectJson: true,
       querystring: operations.formatPatchOpts(opts),
       contentType: c.getPatchContentType(type),
-      bodyJson: Array.isArray(body) ? body : AdmissionregistrationV1alpha1.fromValidatingAdmissionPolicyBinding(body),
+      bodyJson: Array.isArray(body) ? body : AdmissionregistrationV1alpha1.fromMutatingAdmissionPolicyBinding(body),
       abortSignal: opts.abortSignal,
     });
-    return AdmissionregistrationV1alpha1.toValidatingAdmissionPolicyBinding(resp);
+    return AdmissionregistrationV1alpha1.toMutatingAdmissionPolicyBinding(resp);
   }
 
 }

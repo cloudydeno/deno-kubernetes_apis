@@ -7,6 +7,40 @@ type ListOf<T> = {
   items: Array<T>;
 };
 
+/** FieldSelectorAttributes indicates a field limited access. Webhook authors are encouraged to * ensure rawSelector and requirements are not both set * consider the requirements field if set * not try to parse or consider the rawSelector field if set. This is to avoid another CVE-2022-2880 (i.e. getting different systems to agree on how exactly to parse a query is not something we want), see https://www.oxeye.io/resources/golang-parameter-smuggling-attack for more details. For the *SubjectAccessReview endpoints of the kube-apiserver: * If rawSelector is empty and requirements are empty, the request is not limited. * If rawSelector is present and requirements are empty, the rawSelector will be parsed and limited if the parsing succeeds. * If rawSelector is empty and requirements are present, the requirements should be honored * If rawSelector is present and requirements are present, the request is invalid. */
+export interface FieldSelectorAttributes {
+  rawSelector?: string | null;
+  requirements?: Array<MetaV1.FieldSelectorRequirement> | null;
+}
+export function toFieldSelectorAttributes(input: c.JSONValue): FieldSelectorAttributes {
+  const obj = c.checkObj(input);
+  return {
+    rawSelector: c.readOpt(obj["rawSelector"], c.checkStr),
+    requirements: c.readOpt(obj["requirements"], x => c.readList(x, MetaV1.toFieldSelectorRequirement)),
+  }}
+export function fromFieldSelectorAttributes(input: FieldSelectorAttributes): c.JSONValue {
+  return {
+    ...input,
+    requirements: input.requirements?.map(MetaV1.fromFieldSelectorRequirement),
+  }}
+
+/** LabelSelectorAttributes indicates a label limited access. Webhook authors are encouraged to * ensure rawSelector and requirements are not both set * consider the requirements field if set * not try to parse or consider the rawSelector field if set. This is to avoid another CVE-2022-2880 (i.e. getting different systems to agree on how exactly to parse a query is not something we want), see https://www.oxeye.io/resources/golang-parameter-smuggling-attack for more details. For the *SubjectAccessReview endpoints of the kube-apiserver: * If rawSelector is empty and requirements are empty, the request is not limited. * If rawSelector is present and requirements are empty, the rawSelector will be parsed and limited if the parsing succeeds. * If rawSelector is empty and requirements are present, the requirements should be honored * If rawSelector is present and requirements are present, the request is invalid. */
+export interface LabelSelectorAttributes {
+  rawSelector?: string | null;
+  requirements?: Array<MetaV1.LabelSelectorRequirement> | null;
+}
+export function toLabelSelectorAttributes(input: c.JSONValue): LabelSelectorAttributes {
+  const obj = c.checkObj(input);
+  return {
+    rawSelector: c.readOpt(obj["rawSelector"], c.checkStr),
+    requirements: c.readOpt(obj["requirements"], x => c.readList(x, MetaV1.toLabelSelectorRequirement)),
+  }}
+export function fromLabelSelectorAttributes(input: LabelSelectorAttributes): c.JSONValue {
+  return {
+    ...input,
+    requirements: input.requirements?.map(MetaV1.fromLabelSelectorRequirement),
+  }}
+
 /** LocalSubjectAccessReview checks whether or not a user or group can perform an action in a given namespace. Having a namespace scoped resource makes it much easier to grant namespace scoped policy that includes permissions checking. */
 export interface LocalSubjectAccessReview {
   apiVersion?: "authorization.k8s.io/v1";
@@ -76,7 +110,9 @@ export function fromNonResourceAttributes(input: NonResourceAttributes): c.JSONV
 
 /** ResourceAttributes includes the authorization attributes available for resource requests to the Authorizer interface */
 export interface ResourceAttributes {
+  fieldSelector?: FieldSelectorAttributes | null;
   group?: string | null;
+  labelSelector?: LabelSelectorAttributes | null;
   name?: string | null;
   namespace?: string | null;
   resource?: string | null;
@@ -87,7 +123,9 @@ export interface ResourceAttributes {
 export function toResourceAttributes(input: c.JSONValue): ResourceAttributes {
   const obj = c.checkObj(input);
   return {
+    fieldSelector: c.readOpt(obj["fieldSelector"], toFieldSelectorAttributes),
     group: c.readOpt(obj["group"], c.checkStr),
+    labelSelector: c.readOpt(obj["labelSelector"], toLabelSelectorAttributes),
     name: c.readOpt(obj["name"], c.checkStr),
     namespace: c.readOpt(obj["namespace"], c.checkStr),
     resource: c.readOpt(obj["resource"], c.checkStr),
@@ -98,6 +136,8 @@ export function toResourceAttributes(input: c.JSONValue): ResourceAttributes {
 export function fromResourceAttributes(input: ResourceAttributes): c.JSONValue {
   return {
     ...input,
+    fieldSelector: input.fieldSelector != null ? fromFieldSelectorAttributes(input.fieldSelector) : undefined,
+    labelSelector: input.labelSelector != null ? fromLabelSelectorAttributes(input.labelSelector) : undefined,
   }}
 
 /** SubjectAccessReviewStatus */

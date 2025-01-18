@@ -30,11 +30,14 @@ export interface ApplicationSource {
     recurse?: boolean | null;
   } | null;
   helm?: {
+    apiVersions?: Array<string> | null;
     fileParameters?: Array<{
       name?: string | null;
       path?: string | null;
     }> | null;
     ignoreMissingValueFiles?: boolean | null;
+    kubeVersion?: string | null;
+    namespace?: string | null;
     parameters?: Array<{
       forceString?: boolean | null;
       name?: string | null;
@@ -49,6 +52,7 @@ export interface ApplicationSource {
     version?: string | null;
   } | null;
   kustomize?: {
+    apiVersions?: Array<string> | null;
     commonAnnotations?: Record<string,string> | null;
     commonAnnotationsEnvsubst?: boolean | null;
     commonLabels?: Record<string,string> | null;
@@ -56,6 +60,7 @@ export interface ApplicationSource {
     forceCommonAnnotations?: boolean | null;
     forceCommonLabels?: boolean | null;
     images?: Array<string> | null;
+    kubeVersion?: string | null;
     labelWithoutSelector?: boolean | null;
     namePrefix?: string | null;
     nameSuffix?: string | null;
@@ -126,8 +131,11 @@ function toApplicationSource_directory(input: c.JSONValue) {
 function toApplicationSource_helm(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
+    apiVersions: c.readOpt(obj["apiVersions"], x => c.readList(x, c.checkStr)),
     fileParameters: c.readOpt(obj["fileParameters"], x => c.readList(x, toApplicationSource_helm_fileParameters)),
     ignoreMissingValueFiles: c.readOpt(obj["ignoreMissingValueFiles"], c.checkBool),
+    kubeVersion: c.readOpt(obj["kubeVersion"], c.checkStr),
+    namespace: c.readOpt(obj["namespace"], c.checkStr),
     parameters: c.readOpt(obj["parameters"], x => c.readList(x, toApplicationSource_helm_parameters)),
     passCredentials: c.readOpt(obj["passCredentials"], c.checkBool),
     releaseName: c.readOpt(obj["releaseName"], c.checkStr),
@@ -140,6 +148,7 @@ function toApplicationSource_helm(input: c.JSONValue) {
 function toApplicationSource_kustomize(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
+    apiVersions: c.readOpt(obj["apiVersions"], x => c.readList(x, c.checkStr)),
     commonAnnotations: c.readOpt(obj["commonAnnotations"], x => c.readMap(x, c.checkStr)),
     commonAnnotationsEnvsubst: c.readOpt(obj["commonAnnotationsEnvsubst"], c.checkBool),
     commonLabels: c.readOpt(obj["commonLabels"], x => c.readMap(x, c.checkStr)),
@@ -147,6 +156,7 @@ function toApplicationSource_kustomize(input: c.JSONValue) {
     forceCommonAnnotations: c.readOpt(obj["forceCommonAnnotations"], c.checkBool),
     forceCommonLabels: c.readOpt(obj["forceCommonLabels"], c.checkBool),
     images: c.readOpt(obj["images"], x => c.readList(x, c.checkStr)),
+    kubeVersion: c.readOpt(obj["kubeVersion"], c.checkStr),
     labelWithoutSelector: c.readOpt(obj["labelWithoutSelector"], c.checkBool),
     namePrefix: c.readOpt(obj["namePrefix"], c.checkStr),
     nameSuffix: c.readOpt(obj["nameSuffix"], c.checkStr),
@@ -259,6 +269,7 @@ export interface Application {
       limit?: number | null;
     } | null;
     sync?: {
+      autoHealAttemptsCount?: number | null;
       dryRun?: boolean | null;
       manifests?: Array<string> | null;
       prune?: boolean | null;
@@ -373,6 +384,7 @@ export interface Application {
           limit?: number | null;
         } | null;
         sync?: {
+          autoHealAttemptsCount?: number | null;
           dryRun?: boolean | null;
           manifests?: Array<string> | null;
           prune?: boolean | null;
@@ -599,6 +611,7 @@ function toApplication_operation_retry(input: c.JSONValue) {
 function toApplication_operation_sync(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
+    autoHealAttemptsCount: c.readOpt(obj["autoHealAttemptsCount"], c.checkNum),
     dryRun: c.readOpt(obj["dryRun"], c.checkBool),
     manifests: c.readOpt(obj["manifests"], x => c.readList(x, c.checkStr)),
     prune: c.readOpt(obj["prune"], c.checkBool),
@@ -822,6 +835,7 @@ function toApplication_status_operationState_operation_retry(input: c.JSONValue)
 function toApplication_status_operationState_operation_sync(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
+    autoHealAttemptsCount: c.readOpt(obj["autoHealAttemptsCount"], c.checkNum),
     dryRun: c.readOpt(obj["dryRun"], c.checkBool),
     manifests: c.readOpt(obj["manifests"], x => c.readList(x, c.checkStr)),
     prune: c.readOpt(obj["prune"], c.checkBool),
@@ -1008,6 +1022,17 @@ export interface ApplicationSetGenerator {
         };
         username: string;
       } | null;
+      bearerToken?: {
+        tokenRef: {
+          key: string;
+          secretName: string;
+        };
+      } | null;
+      caRef?: {
+        configMapName: string;
+        key: string;
+      } | null;
+      insecure?: boolean | null;
       project: string;
       repo: string;
     } | null;
@@ -1038,6 +1063,10 @@ export interface ApplicationSetGenerator {
     } | null;
     gitlab?: {
       api?: string | null;
+      caRef?: {
+        configMapName: string;
+        key: string;
+      } | null;
       insecure?: boolean | null;
       labels?: Array<string> | null;
       project: string;
@@ -1089,6 +1118,17 @@ export interface ApplicationSetGenerator {
         };
         username: string;
       } | null;
+      bearerToken?: {
+        tokenRef: {
+          key: string;
+          secretName: string;
+        };
+      } | null;
+      caRef?: {
+        configMapName: string;
+        key: string;
+      } | null;
+      insecure?: boolean | null;
       project: string;
     } | null;
     cloneProtocol?: string | null;
@@ -1122,6 +1162,10 @@ export interface ApplicationSetGenerator {
     gitlab?: {
       allBranches?: boolean | null;
       api?: string | null;
+      caRef?: {
+        configMapName: string;
+        key: string;
+      } | null;
       group: string;
       includeSharedProjects?: boolean | null;
       includeSubgroups?: boolean | null;
@@ -1329,6 +1373,9 @@ function toApplicationSetGenerator_pullRequest_bitbucketServer(input: c.JSONValu
   return {
     api: c.checkStr(obj["api"]),
     basicAuth: c.readOpt(obj["basicAuth"], toApplicationSetGenerator_pullRequest_bitbucketServer_basicAuth),
+    bearerToken: c.readOpt(obj["bearerToken"], toApplicationSetGenerator_pullRequest_bitbucketServer_bearerToken),
+    caRef: c.readOpt(obj["caRef"], toApplicationSetGenerator_pullRequest_bitbucketServer_caRef),
+    insecure: c.readOpt(obj["insecure"], c.checkBool),
     project: c.checkStr(obj["project"]),
     repo: c.checkStr(obj["repo"]),
   }}
@@ -1361,6 +1408,7 @@ function toApplicationSetGenerator_pullRequest_gitlab(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     api: c.readOpt(obj["api"], c.checkStr),
+    caRef: c.readOpt(obj["caRef"], toApplicationSetGenerator_pullRequest_gitlab_caRef),
     insecure: c.readOpt(obj["insecure"], c.checkBool),
     labels: c.readOpt(obj["labels"], x => c.readList(x, c.checkStr)),
     project: c.checkStr(obj["project"]),
@@ -1398,6 +1446,9 @@ function toApplicationSetGenerator_scmProvider_bitbucketServer(input: c.JSONValu
     allBranches: c.readOpt(obj["allBranches"], c.checkBool),
     api: c.checkStr(obj["api"]),
     basicAuth: c.readOpt(obj["basicAuth"], toApplicationSetGenerator_scmProvider_bitbucketServer_basicAuth),
+    bearerToken: c.readOpt(obj["bearerToken"], toApplicationSetGenerator_scmProvider_bitbucketServer_bearerToken),
+    caRef: c.readOpt(obj["caRef"], toApplicationSetGenerator_scmProvider_bitbucketServer_caRef),
+    insecure: c.readOpt(obj["insecure"], c.checkBool),
     project: c.checkStr(obj["project"]),
   }}
 function toApplicationSetGenerator_scmProvider_filters(input: c.JSONValue) {
@@ -1432,6 +1483,7 @@ function toApplicationSetGenerator_scmProvider_gitlab(input: c.JSONValue) {
   return {
     allBranches: c.readOpt(obj["allBranches"], c.checkBool),
     api: c.readOpt(obj["api"], c.checkStr),
+    caRef: c.readOpt(obj["caRef"], toApplicationSetGenerator_scmProvider_gitlab_caRef),
     group: c.checkStr(obj["group"]),
     includeSharedProjects: c.readOpt(obj["includeSharedProjects"], c.checkBool),
     includeSubgroups: c.readOpt(obj["includeSubgroups"], c.checkBool),
@@ -1462,6 +1514,17 @@ function toApplicationSetGenerator_pullRequest_bitbucketServer_basicAuth(input: 
     passwordRef: toApplicationSetGenerator_pullRequest_bitbucketServer_basicAuth_passwordRef(obj["passwordRef"]),
     username: c.checkStr(obj["username"]),
   }}
+function toApplicationSetGenerator_pullRequest_bitbucketServer_bearerToken(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    tokenRef: toApplicationSetGenerator_pullRequest_bitbucketServer_bearerToken_tokenRef(obj["tokenRef"]),
+  }}
+function toApplicationSetGenerator_pullRequest_bitbucketServer_caRef(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    configMapName: c.checkStr(obj["configMapName"]),
+    key: c.checkStr(obj["key"]),
+  }}
 function toApplicationSetGenerator_pullRequest_gitea_tokenRef(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
@@ -1473,6 +1536,12 @@ function toApplicationSetGenerator_pullRequest_github_tokenRef(input: c.JSONValu
   return {
     key: c.checkStr(obj["key"]),
     secretName: c.checkStr(obj["secretName"]),
+  }}
+function toApplicationSetGenerator_pullRequest_gitlab_caRef(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    configMapName: c.checkStr(obj["configMapName"]),
+    key: c.checkStr(obj["key"]),
   }}
 function toApplicationSetGenerator_pullRequest_gitlab_tokenRef(input: c.JSONValue) {
   const obj = c.checkObj(input);
@@ -1504,6 +1573,17 @@ function toApplicationSetGenerator_scmProvider_bitbucketServer_basicAuth(input: 
     passwordRef: toApplicationSetGenerator_scmProvider_bitbucketServer_basicAuth_passwordRef(obj["passwordRef"]),
     username: c.checkStr(obj["username"]),
   }}
+function toApplicationSetGenerator_scmProvider_bitbucketServer_bearerToken(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    tokenRef: toApplicationSetGenerator_scmProvider_bitbucketServer_bearerToken_tokenRef(obj["tokenRef"]),
+  }}
+function toApplicationSetGenerator_scmProvider_bitbucketServer_caRef(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    configMapName: c.checkStr(obj["configMapName"]),
+    key: c.checkStr(obj["key"]),
+  }}
 function toApplicationSetGenerator_scmProvider_gitea_tokenRef(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
@@ -1515,6 +1595,12 @@ function toApplicationSetGenerator_scmProvider_github_tokenRef(input: c.JSONValu
   return {
     key: c.checkStr(obj["key"]),
     secretName: c.checkStr(obj["secretName"]),
+  }}
+function toApplicationSetGenerator_scmProvider_gitlab_caRef(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    configMapName: c.checkStr(obj["configMapName"]),
+    key: c.checkStr(obj["key"]),
   }}
 function toApplicationSetGenerator_scmProvider_gitlab_tokenRef(input: c.JSONValue) {
   const obj = c.checkObj(input);
@@ -1540,7 +1626,19 @@ function toApplicationSetGenerator_pullRequest_bitbucketServer_basicAuth_passwor
     key: c.checkStr(obj["key"]),
     secretName: c.checkStr(obj["secretName"]),
   }}
+function toApplicationSetGenerator_pullRequest_bitbucketServer_bearerToken_tokenRef(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    key: c.checkStr(obj["key"]),
+    secretName: c.checkStr(obj["secretName"]),
+  }}
 function toApplicationSetGenerator_scmProvider_bitbucketServer_basicAuth_passwordRef(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    key: c.checkStr(obj["key"]),
+    secretName: c.checkStr(obj["secretName"]),
+  }}
+function toApplicationSetGenerator_scmProvider_bitbucketServer_bearerToken_tokenRef(input: c.JSONValue) {
   const obj = c.checkObj(input);
   return {
     key: c.checkStr(obj["key"]),
@@ -1932,6 +2030,11 @@ export interface AppProject {
       kind: string;
     }> | null;
     description?: string | null;
+    destinationServiceAccounts?: Array<{
+      defaultServiceAccount: string;
+      namespace?: string | null;
+      server: string;
+    }> | null;
     destinations?: Array<{
       name?: string | null;
       namespace?: string | null;
@@ -2011,6 +2114,7 @@ function toAppProject_spec(input: c.JSONValue) {
     clusterResourceBlacklist: c.readOpt(obj["clusterResourceBlacklist"], x => c.readList(x, toAppProject_spec_clusterResourceBlacklist)),
     clusterResourceWhitelist: c.readOpt(obj["clusterResourceWhitelist"], x => c.readList(x, toAppProject_spec_clusterResourceWhitelist)),
     description: c.readOpt(obj["description"], c.checkStr),
+    destinationServiceAccounts: c.readOpt(obj["destinationServiceAccounts"], x => c.readList(x, toAppProject_spec_destinationServiceAccounts)),
     destinations: c.readOpt(obj["destinations"], x => c.readList(x, toAppProject_spec_destinations)),
     namespaceResourceBlacklist: c.readOpt(obj["namespaceResourceBlacklist"], x => c.readList(x, toAppProject_spec_namespaceResourceBlacklist)),
     namespaceResourceWhitelist: c.readOpt(obj["namespaceResourceWhitelist"], x => c.readList(x, toAppProject_spec_namespaceResourceWhitelist)),
@@ -2038,6 +2142,13 @@ function toAppProject_spec_clusterResourceWhitelist(input: c.JSONValue) {
   return {
     group: c.checkStr(obj["group"]),
     kind: c.checkStr(obj["kind"]),
+  }}
+function toAppProject_spec_destinationServiceAccounts(input: c.JSONValue) {
+  const obj = c.checkObj(input);
+  return {
+    defaultServiceAccount: c.checkStr(obj["defaultServiceAccount"]),
+    namespace: c.readOpt(obj["namespace"], c.checkStr),
+    server: c.checkStr(obj["server"]),
   }}
 function toAppProject_spec_destinations(input: c.JSONValue) {
   const obj = c.checkObj(input);

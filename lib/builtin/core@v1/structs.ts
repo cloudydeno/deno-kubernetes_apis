@@ -309,7 +309,7 @@ export function fromAzureFileVolumeSource(input: AzureFileVolumeSource): c.JSONV
     ...input,
   }}
 
-/** Binding ties one object to another; for example, a pod is bound to a node by a scheduler. Deprecated in 1.7, please use the bindings subresource of pods instead. */
+/** Binding ties one object to another; for example, a pod is bound to a node by a scheduler. */
 export interface Binding {
   apiVersion?: "v1";
   kind?: "Binding";
@@ -357,7 +357,7 @@ export function fromObjectReference(input: ObjectReference): c.JSONValue {
     ...input,
   }}
 
-/** Represents storage that is managed by an external CSI volume driver (Beta feature) */
+/** Represents storage that is managed by an external CSI volume driver */
 export interface CSIPersistentVolumeSource {
   controllerExpandSecretRef?: SecretReference | null;
   controllerPublishSecretRef?: SecretReference | null;
@@ -553,24 +553,6 @@ export function fromCinderVolumeSource(input: CinderVolumeSource): c.JSONValue {
   return {
     ...input,
     secretRef: input.secretRef != null ? fromLocalObjectReference(input.secretRef) : undefined,
-  }}
-
-/** ClaimSource describes a reference to a ResourceClaim.
-
-Exactly one of these fields should be set.  Consumers of this type must treat an empty object as if it has an unknown value. */
-export interface ClaimSource {
-  resourceClaimName?: string | null;
-  resourceClaimTemplateName?: string | null;
-}
-export function toClaimSource(input: c.JSONValue): ClaimSource {
-  const obj = c.checkObj(input);
-  return {
-    resourceClaimName: c.readOpt(obj["resourceClaimName"], c.checkStr),
-    resourceClaimTemplateName: c.readOpt(obj["resourceClaimTemplateName"], c.checkStr),
-  }}
-export function fromClaimSource(input: ClaimSource): c.JSONValue {
-  return {
-    ...input,
   }}
 
 /** ClientIPConfig represents the configurations of Client IP based session affinity. */
@@ -1190,6 +1172,7 @@ export function fromProbe(input: Probe): c.JSONValue {
     tcpSocket: input.tcpSocket != null ? fromTCPSocketAction(input.tcpSocket) : undefined,
   }}
 
+/** GRPCAction specifies an action involving a GRPC service. */
 export interface GRPCAction {
   port: number;
   service?: string | null;
@@ -1267,11 +1250,13 @@ export function fromResourceRequirements(input: ResourceRequirements): c.JSONVal
 /** ResourceClaim references one entry in PodSpec.ResourceClaims. */
 export interface ResourceClaim {
   name: string;
+  request?: string | null;
 }
 export function toResourceClaim(input: c.JSONValue): ResourceClaim {
   const obj = c.checkObj(input);
   return {
     name: c.checkStr(obj["name"]),
+    request: c.readOpt(obj["request"], c.checkStr),
   }}
 export function fromResourceClaim(input: ResourceClaim): c.JSONValue {
   return {
@@ -1516,6 +1501,7 @@ export function fromContainerStateWaiting(input: ContainerStateWaiting): c.JSONV
 /** ContainerStatus contains details for the current status of this container. */
 export interface ContainerStatus {
   allocatedResources?: Record<string,c.Quantity> | null;
+  allocatedResourcesStatus?: Array<ResourceStatus> | null;
   containerID?: string | null;
   image: string;
   imageID: string;
@@ -1526,12 +1512,14 @@ export interface ContainerStatus {
   restartCount: number;
   started?: boolean | null;
   state?: ContainerState | null;
+  user?: ContainerUser | null;
   volumeMounts?: Array<VolumeMountStatus> | null;
 }
 export function toContainerStatus(input: c.JSONValue): ContainerStatus {
   const obj = c.checkObj(input);
   return {
     allocatedResources: c.readOpt(obj["allocatedResources"], x => c.readMap(x, c.toQuantity)),
+    allocatedResourcesStatus: c.readOpt(obj["allocatedResourcesStatus"], x => c.readList(x, toResourceStatus)),
     containerID: c.readOpt(obj["containerID"], c.checkStr),
     image: c.checkStr(obj["image"]),
     imageID: c.checkStr(obj["imageID"]),
@@ -1542,16 +1530,85 @@ export function toContainerStatus(input: c.JSONValue): ContainerStatus {
     restartCount: c.checkNum(obj["restartCount"]),
     started: c.readOpt(obj["started"], c.checkBool),
     state: c.readOpt(obj["state"], toContainerState),
+    user: c.readOpt(obj["user"], toContainerUser),
     volumeMounts: c.readOpt(obj["volumeMounts"], x => c.readList(x, toVolumeMountStatus)),
   }}
 export function fromContainerStatus(input: ContainerStatus): c.JSONValue {
   return {
     ...input,
     allocatedResources: c.writeMap(input.allocatedResources, c.fromQuantity),
+    allocatedResourcesStatus: input.allocatedResourcesStatus?.map(fromResourceStatus),
     lastState: input.lastState != null ? fromContainerState(input.lastState) : undefined,
     resources: input.resources != null ? fromResourceRequirements(input.resources) : undefined,
     state: input.state != null ? fromContainerState(input.state) : undefined,
+    user: input.user != null ? fromContainerUser(input.user) : undefined,
     volumeMounts: input.volumeMounts?.map(fromVolumeMountStatus),
+  }}
+
+/** ResourceStatus represents the status of a single resource allocated to a Pod. */
+export interface ResourceStatus {
+  name: string;
+  resources?: Array<ResourceHealth> | null;
+}
+export function toResourceStatus(input: c.JSONValue): ResourceStatus {
+  const obj = c.checkObj(input);
+  return {
+    name: c.checkStr(obj["name"]),
+    resources: c.readOpt(obj["resources"], x => c.readList(x, toResourceHealth)),
+  }}
+export function fromResourceStatus(input: ResourceStatus): c.JSONValue {
+  return {
+    ...input,
+    resources: input.resources?.map(fromResourceHealth),
+  }}
+
+/** ResourceHealth represents the health of a resource. It has the latest device health information. This is a part of KEP https://kep.k8s.io/4680. */
+export interface ResourceHealth {
+  health?: string | null;
+  resourceID: string;
+}
+export function toResourceHealth(input: c.JSONValue): ResourceHealth {
+  const obj = c.checkObj(input);
+  return {
+    health: c.readOpt(obj["health"], c.checkStr),
+    resourceID: c.checkStr(obj["resourceID"]),
+  }}
+export function fromResourceHealth(input: ResourceHealth): c.JSONValue {
+  return {
+    ...input,
+  }}
+
+/** ContainerUser represents user identity information */
+export interface ContainerUser {
+  linux?: LinuxContainerUser | null;
+}
+export function toContainerUser(input: c.JSONValue): ContainerUser {
+  const obj = c.checkObj(input);
+  return {
+    linux: c.readOpt(obj["linux"], toLinuxContainerUser),
+  }}
+export function fromContainerUser(input: ContainerUser): c.JSONValue {
+  return {
+    ...input,
+    linux: input.linux != null ? fromLinuxContainerUser(input.linux) : undefined,
+  }}
+
+/** LinuxContainerUser represents user identity information in Linux containers */
+export interface LinuxContainerUser {
+  gid: number;
+  supplementalGroups?: Array<number> | null;
+  uid: number;
+}
+export function toLinuxContainerUser(input: c.JSONValue): LinuxContainerUser {
+  const obj = c.checkObj(input);
+  return {
+    gid: c.checkNum(obj["gid"]),
+    supplementalGroups: c.readOpt(obj["supplementalGroups"], x => c.readList(x, c.checkNum)),
+    uid: c.checkNum(obj["uid"]),
+  }}
+export function fromLinuxContainerUser(input: LinuxContainerUser): c.JSONValue {
+  return {
+    ...input,
   }}
 
 /** VolumeMountStatus shows status of volume mounts. */
@@ -1939,6 +1996,7 @@ export function fromTypedLocalObjectReference(input: TypedLocalObjectReference):
     ...input,
   }}
 
+/** TypedObjectReference contains enough information to let you locate the typed referenced object */
 export interface TypedObjectReference {
   apiGroup?: string | null;
   kind: string;
@@ -2258,12 +2316,12 @@ export function fromHostAlias(input: HostAlias): c.JSONValue {
 
 /** HostIP represents a single IP address allocated to the host. */
 export interface HostIP {
-  ip?: string | null;
+  ip: string;
 }
 export function toHostIP(input: c.JSONValue): HostIP {
   const obj = c.checkObj(input);
   return {
-    ip: c.readOpt(obj["ip"], c.checkStr),
+    ip: c.checkStr(obj["ip"]),
   }}
 export function fromHostIP(input: HostIP): c.JSONValue {
   return {
@@ -2354,6 +2412,22 @@ export function fromISCSIVolumeSource(input: ISCSIVolumeSource): c.JSONValue {
   return {
     ...input,
     secretRef: input.secretRef != null ? fromLocalObjectReference(input.secretRef) : undefined,
+  }}
+
+/** ImageVolumeSource represents a image volume resource. */
+export interface ImageVolumeSource {
+  pullPolicy?: string | null;
+  reference?: string | null;
+}
+export function toImageVolumeSource(input: c.JSONValue): ImageVolumeSource {
+  const obj = c.checkObj(input);
+  return {
+    pullPolicy: c.readOpt(obj["pullPolicy"], c.checkStr),
+    reference: c.readOpt(obj["reference"], c.checkStr),
+  }}
+export function fromImageVolumeSource(input: ImageVolumeSource): c.JSONValue {
+  return {
+    ...input,
   }}
 
 /** LimitRange sets resource usage limits for each kind of resource in a Namespace. */
@@ -2456,6 +2530,7 @@ export function fromLoadBalancerIngress(input: LoadBalancerIngress): c.JSONValue
     ports: input.ports?.map(fromPortStatus),
   }}
 
+/** PortStatus represents the error condition of a service port */
 export interface PortStatus {
   error?: string | null;
   port: number;
@@ -2488,7 +2563,7 @@ export function fromLoadBalancerStatus(input: LoadBalancerStatus): c.JSONValue {
     ingress: input.ingress?.map(fromLoadBalancerIngress),
   }}
 
-/** Local represents directly-attached storage with node affinity (Beta feature) */
+/** Local represents directly-attached storage with node affinity */
 export interface LocalVolumeSource {
   fsType?: string | null;
   path: string;
@@ -2727,6 +2802,7 @@ export interface NodeStatus {
   conditions?: Array<NodeCondition> | null;
   config?: NodeConfigStatus | null;
   daemonEndpoints?: NodeDaemonEndpoints | null;
+  features?: NodeFeatures | null;
   images?: Array<ContainerImage> | null;
   nodeInfo?: NodeSystemInfo | null;
   phase?: string | null;
@@ -2743,6 +2819,7 @@ export function toNodeStatus(input: c.JSONValue): NodeStatus {
     conditions: c.readOpt(obj["conditions"], x => c.readList(x, toNodeCondition)),
     config: c.readOpt(obj["config"], toNodeConfigStatus),
     daemonEndpoints: c.readOpt(obj["daemonEndpoints"], toNodeDaemonEndpoints),
+    features: c.readOpt(obj["features"], toNodeFeatures),
     images: c.readOpt(obj["images"], x => c.readList(x, toContainerImage)),
     nodeInfo: c.readOpt(obj["nodeInfo"], toNodeSystemInfo),
     phase: c.readOpt(obj["phase"], c.checkStr),
@@ -2759,6 +2836,7 @@ export function fromNodeStatus(input: NodeStatus): c.JSONValue {
     conditions: input.conditions?.map(fromNodeCondition),
     config: input.config != null ? fromNodeConfigStatus(input.config) : undefined,
     daemonEndpoints: input.daemonEndpoints != null ? fromNodeDaemonEndpoints(input.daemonEndpoints) : undefined,
+    features: input.features != null ? fromNodeFeatures(input.features) : undefined,
     images: input.images?.map(fromContainerImage),
     nodeInfo: input.nodeInfo != null ? fromNodeSystemInfo(input.nodeInfo) : undefined,
     runtimeHandlers: input.runtimeHandlers?.map(fromNodeRuntimeHandler),
@@ -2845,6 +2923,20 @@ export function fromNodeDaemonEndpoints(input: NodeDaemonEndpoints): c.JSONValue
     kubeletEndpoint: input.kubeletEndpoint != null ? fromDaemonEndpoint(input.kubeletEndpoint) : undefined,
   }}
 
+/** NodeFeatures describes the set of features implemented by the CRI implementation. The features contained in the NodeFeatures should depend only on the cri implementation independent of runtime handlers. */
+export interface NodeFeatures {
+  supplementalGroupsPolicy?: boolean | null;
+}
+export function toNodeFeatures(input: c.JSONValue): NodeFeatures {
+  const obj = c.checkObj(input);
+  return {
+    supplementalGroupsPolicy: c.readOpt(obj["supplementalGroupsPolicy"], c.checkBool),
+  }}
+export function fromNodeFeatures(input: NodeFeatures): c.JSONValue {
+  return {
+    ...input,
+  }}
+
 /** NodeSystemInfo is a set of ids/uuids to uniquely identify the node. */
 export interface NodeSystemInfo {
   architecture: string;
@@ -2894,14 +2986,16 @@ export function fromNodeRuntimeHandler(input: NodeRuntimeHandler): c.JSONValue {
     features: input.features != null ? fromNodeRuntimeHandlerFeatures(input.features) : undefined,
   }}
 
-/** NodeRuntimeHandlerFeatures is a set of runtime features. */
+/** NodeRuntimeHandlerFeatures is a set of features implemented by the runtime handler. */
 export interface NodeRuntimeHandlerFeatures {
   recursiveReadOnlyMounts?: boolean | null;
+  userNamespaces?: boolean | null;
 }
 export function toNodeRuntimeHandlerFeatures(input: c.JSONValue): NodeRuntimeHandlerFeatures {
   const obj = c.checkObj(input);
   return {
     recursiveReadOnlyMounts: c.readOpt(obj["recursiveReadOnlyMounts"], c.checkBool),
+    userNamespaces: c.readOpt(obj["userNamespaces"], c.checkBool),
   }}
 export function fromNodeRuntimeHandlerFeatures(input: NodeRuntimeHandlerFeatures): c.JSONValue {
   return {
@@ -3421,6 +3515,7 @@ export interface PodSpec {
   priorityClassName?: string | null;
   readinessGates?: Array<PodReadinessGate> | null;
   resourceClaims?: Array<PodResourceClaim> | null;
+  resources?: ResourceRequirements | null;
   restartPolicy?: string | null;
   runtimeClassName?: string | null;
   schedulerName?: string | null;
@@ -3464,6 +3559,7 @@ export function toPodSpec(input: c.JSONValue): PodSpec {
     priorityClassName: c.readOpt(obj["priorityClassName"], c.checkStr),
     readinessGates: c.readOpt(obj["readinessGates"], x => c.readList(x, toPodReadinessGate)),
     resourceClaims: c.readOpt(obj["resourceClaims"], x => c.readList(x, toPodResourceClaim)),
+    resources: c.readOpt(obj["resources"], toResourceRequirements),
     restartPolicy: c.readOpt(obj["restartPolicy"], c.checkStr),
     runtimeClassName: c.readOpt(obj["runtimeClassName"], c.checkStr),
     schedulerName: c.readOpt(obj["schedulerName"], c.checkStr),
@@ -3493,6 +3589,7 @@ export function fromPodSpec(input: PodSpec): c.JSONValue {
     overhead: c.writeMap(input.overhead, c.fromQuantity),
     readinessGates: input.readinessGates?.map(fromPodReadinessGate),
     resourceClaims: input.resourceClaims?.map(fromPodResourceClaim),
+    resources: input.resources != null ? fromResourceRequirements(input.resources) : undefined,
     schedulingGates: input.schedulingGates?.map(fromPodSchedulingGate),
     securityContext: input.securityContext != null ? fromPodSecurityContext(input.securityContext) : undefined,
     tolerations: input.tolerations?.map(fromToleration),
@@ -3563,21 +3660,24 @@ export function fromPodReadinessGate(input: PodReadinessGate): c.JSONValue {
     ...input,
   }}
 
-/** PodResourceClaim references exactly one ResourceClaim through a ClaimSource. It adds a name to it that uniquely identifies the ResourceClaim inside the Pod. Containers that need access to the ResourceClaim reference it with this name. */
+/** PodResourceClaim references exactly one ResourceClaim, either directly or by naming a ResourceClaimTemplate which is then turned into a ResourceClaim for the pod.
+
+It adds a name to it that uniquely identifies the ResourceClaim inside the Pod. Containers that need access to the ResourceClaim reference it with this name. */
 export interface PodResourceClaim {
   name: string;
-  source?: ClaimSource | null;
+  resourceClaimName?: string | null;
+  resourceClaimTemplateName?: string | null;
 }
 export function toPodResourceClaim(input: c.JSONValue): PodResourceClaim {
   const obj = c.checkObj(input);
   return {
     name: c.checkStr(obj["name"]),
-    source: c.readOpt(obj["source"], toClaimSource),
+    resourceClaimName: c.readOpt(obj["resourceClaimName"], c.checkStr),
+    resourceClaimTemplateName: c.readOpt(obj["resourceClaimTemplateName"], c.checkStr),
   }}
 export function fromPodResourceClaim(input: PodResourceClaim): c.JSONValue {
   return {
     ...input,
-    source: input.source != null ? fromClaimSource(input.source) : undefined,
   }}
 
 /** PodSchedulingGate is associated to a Pod to guard its scheduling. */
@@ -3602,9 +3702,11 @@ export interface PodSecurityContext {
   runAsGroup?: number | null;
   runAsNonRoot?: boolean | null;
   runAsUser?: number | null;
+  seLinuxChangePolicy?: string | null;
   seLinuxOptions?: SELinuxOptions | null;
   seccompProfile?: SeccompProfile | null;
   supplementalGroups?: Array<number> | null;
+  supplementalGroupsPolicy?: string | null;
   sysctls?: Array<Sysctl> | null;
   windowsOptions?: WindowsSecurityContextOptions | null;
 }
@@ -3617,9 +3719,11 @@ export function toPodSecurityContext(input: c.JSONValue): PodSecurityContext {
     runAsGroup: c.readOpt(obj["runAsGroup"], c.checkNum),
     runAsNonRoot: c.readOpt(obj["runAsNonRoot"], c.checkBool),
     runAsUser: c.readOpt(obj["runAsUser"], c.checkNum),
+    seLinuxChangePolicy: c.readOpt(obj["seLinuxChangePolicy"], c.checkStr),
     seLinuxOptions: c.readOpt(obj["seLinuxOptions"], toSELinuxOptions),
     seccompProfile: c.readOpt(obj["seccompProfile"], toSeccompProfile),
     supplementalGroups: c.readOpt(obj["supplementalGroups"], x => c.readList(x, c.checkNum)),
+    supplementalGroupsPolicy: c.readOpt(obj["supplementalGroupsPolicy"], c.checkStr),
     sysctls: c.readOpt(obj["sysctls"], x => c.readList(x, toSysctl)),
     windowsOptions: c.readOpt(obj["windowsOptions"], toWindowsSecurityContextOptions),
   }}
@@ -3719,6 +3823,7 @@ export interface Volume {
   gitRepo?: GitRepoVolumeSource | null;
   glusterfs?: GlusterfsVolumeSource | null;
   hostPath?: HostPathVolumeSource | null;
+  image?: ImageVolumeSource | null;
   iscsi?: ISCSIVolumeSource | null;
   name: string;
   nfs?: NFSVolumeSource | null;
@@ -3753,6 +3858,7 @@ export function toVolume(input: c.JSONValue): Volume {
     gitRepo: c.readOpt(obj["gitRepo"], toGitRepoVolumeSource),
     glusterfs: c.readOpt(obj["glusterfs"], toGlusterfsVolumeSource),
     hostPath: c.readOpt(obj["hostPath"], toHostPathVolumeSource),
+    image: c.readOpt(obj["image"], toImageVolumeSource),
     iscsi: c.readOpt(obj["iscsi"], toISCSIVolumeSource),
     name: c.checkStr(obj["name"]),
     nfs: c.readOpt(obj["nfs"], toNFSVolumeSource),
@@ -3787,6 +3893,7 @@ export function fromVolume(input: Volume): c.JSONValue {
     gitRepo: input.gitRepo != null ? fromGitRepoVolumeSource(input.gitRepo) : undefined,
     glusterfs: input.glusterfs != null ? fromGlusterfsVolumeSource(input.glusterfs) : undefined,
     hostPath: input.hostPath != null ? fromHostPathVolumeSource(input.hostPath) : undefined,
+    image: input.image != null ? fromImageVolumeSource(input.image) : undefined,
     iscsi: input.iscsi != null ? fromISCSIVolumeSource(input.iscsi) : undefined,
     nfs: input.nfs != null ? fromNFSVolumeSource(input.nfs) : undefined,
     persistentVolumeClaim: input.persistentVolumeClaim != null ? fromPersistentVolumeClaimVolumeSource(input.persistentVolumeClaim) : undefined,
@@ -3818,7 +3925,7 @@ export function fromProjectedVolumeSource(input: ProjectedVolumeSource): c.JSONV
     sources: input.sources?.map(fromVolumeProjection),
   }}
 
-/** Projection that may be projected along with other supported volume types */
+/** Projection that may be projected along with other supported volume types. Exactly one of these fields must be set. */
 export interface VolumeProjection {
   clusterTrustBundle?: ClusterTrustBundleProjection | null;
   configMap?: ConfigMapProjection | null;
@@ -4072,12 +4179,12 @@ export function fromPodCondition(input: PodCondition): c.JSONValue {
 
 /** PodIP represents a single IP address allocated to the pod. */
 export interface PodIP {
-  ip?: string | null;
+  ip: string;
 }
 export function toPodIP(input: c.JSONValue): PodIP {
   const obj = c.checkObj(input);
   return {
-    ip: c.readOpt(obj["ip"], c.checkStr),
+    ip: c.checkStr(obj["ip"]),
   }}
 export function fromPodIP(input: PodIP): c.JSONValue {
   return {

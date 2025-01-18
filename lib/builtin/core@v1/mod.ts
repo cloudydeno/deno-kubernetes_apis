@@ -1820,6 +1820,7 @@ export class CoreV1NamespacedApi {
       limitBytes?: number;
       previous?: boolean;
       sinceSeconds?: number;
+      stream?: string;
       tailLines?: number;
       timestamps?: boolean;
       abortSignal?: AbortSignal;
@@ -1832,6 +1833,7 @@ export class CoreV1NamespacedApi {
     if (opts["limitBytes"] != null) query.append("limitBytes", String(opts["limitBytes"]));
     if (opts["previous"] != null) query.append("previous", opts["previous"] ? '1' : '0');
     if (opts["sinceSeconds"] != null) query.append("sinceSeconds", String(opts["sinceSeconds"]));
+    if (opts["stream"] != null) query.append("stream", opts["stream"]);
     if (opts["tailLines"] != null) query.append("tailLines", String(opts["tailLines"]));
     if (opts["timestamps"] != null) query.append("timestamps", opts["timestamps"] ? '1' : '0');
     const resp = await this.#client.performRequest({
@@ -1852,6 +1854,7 @@ export class CoreV1NamespacedApi {
       limitBytes?: number;
       previous?: boolean;
       sinceSeconds?: number;
+      stream?: string;
       tailLines?: number;
       timestamps?: boolean;
       abortSignal?: AbortSignal;
@@ -1863,6 +1866,7 @@ export class CoreV1NamespacedApi {
     if (opts["limitBytes"] != null) query.append("limitBytes", String(opts["limitBytes"]));
     if (opts["previous"] != null) query.append("previous", opts["previous"] ? '1' : '0');
     if (opts["sinceSeconds"] != null) query.append("sinceSeconds", String(opts["sinceSeconds"]));
+    if (opts["stream"] != null) query.append("stream", opts["stream"]);
     if (opts["tailLines"] != null) query.append("tailLines", String(opts["tailLines"]));
     if (opts["timestamps"] != null) query.append("timestamps", opts["timestamps"] ? '1' : '0');
     const resp = await this.#client.performRequest({
@@ -1920,6 +1924,53 @@ export class CoreV1NamespacedApi {
     const name = (opts.port != null) ? `${podName}:${opts.port}` : podName;
     const path = `${this.#root}pods/${name}/proxy${opts.path || ''}`;
     return await this.#client.performRequest({ ...opts, path });
+  }
+
+  async getPodResize(
+    name: string,
+    opts: operations.NoOpts = {},
+  ): Promise<CoreV1.Pod> {
+    const resp = await this.#client.performRequest({
+      method: "GET",
+      path: `${this.#root}pods/${name}/resize`,
+      expectJson: true,
+      abortSignal: opts.abortSignal,
+    });
+    return CoreV1.toPod(resp);
+  }
+
+  async replacePodResize(
+    name: string,
+    body: CoreV1.Pod,
+    opts: operations.PutOpts = {},
+  ): Promise<CoreV1.Pod> {
+    const resp = await this.#client.performRequest({
+      method: "PUT",
+      path: `${this.#root}pods/${name}/resize`,
+      expectJson: true,
+      querystring: operations.formatPutOpts(opts),
+      bodyJson: CoreV1.fromPod(body),
+      abortSignal: opts.abortSignal,
+    });
+    return CoreV1.toPod(resp);
+  }
+
+  async patchPodResize(
+    name: string,
+    type: c.PatchType,
+    body: CoreV1.Pod | c.JsonPatch,
+    opts: operations.PatchOpts = {},
+  ): Promise<CoreV1.Pod> {
+    const resp = await this.#client.performRequest({
+      method: "PATCH",
+      path: `${this.#root}pods/${name}/resize`,
+      expectJson: true,
+      querystring: operations.formatPatchOpts(opts),
+      contentType: c.getPatchContentType(type),
+      bodyJson: Array.isArray(body) ? body : CoreV1.fromPod(body),
+      abortSignal: opts.abortSignal,
+    });
+    return CoreV1.toPod(resp);
   }
 
   async getPodStatus(
